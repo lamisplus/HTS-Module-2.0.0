@@ -1,0 +1,17 @@
+across:
+  development:
+    active: true
+
+applicationInfo:
+  buildDate: "2022-08-17 11:40:11"
+
+server:
+  error:
+    includeStacktrace: ALWAYS
+  port: 8080
+
+spring:
+  datasource:
+    url: "jdbc:h2:./local-data/db/hts-db"
+    username: sa
+

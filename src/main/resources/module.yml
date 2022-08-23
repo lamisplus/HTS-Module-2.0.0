@@ -1,0 +1,16 @@
+basePackage: org.lamisplus.modules.hts
+name: HTS
+dependencies: {PatientModule: 1.0.0}
+store: true
+menus:
+  - icon:
+    disabled: false
+    name: hts
+    state: hts
+    url: /across/resources/static/hts/index.html
+umdLocation: /across/resources/static/hts/index.html
+webModules:
+  - breadcrumb: hts
+    name: HTS
+    path: hts
+    position: 99

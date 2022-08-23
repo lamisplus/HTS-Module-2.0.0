@@ -25,7 +25,6 @@
 		<jjwt.version>0.11.2</jjwt.version>
 		<build.revision>1.0.0</build.revision>
 		<audit4j.version>2.5.0</audit4j.version>
-		<maven.test.skip>true</maven.test.skip>
 		<maven.lamisplus-baseui.skip>true</maven.lamisplus-baseui.skip>
 		<maven.build.timestamp.format>yyyy-MM-dd'T'HH:mm:ss'Z'</maven.build.timestamp.format>
 	</properties>

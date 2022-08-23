@@ -1,10 +1,10 @@
 package it;
 
-import org.lamisplus.modules.hts.HtsApplication;
 import com.foreach.across.test.support.config.MockAcrossServletContextInitializer;
 import com.foreach.across.test.support.config.MockMvcConfiguration;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.lamisplus.modules.hts.HtsModule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -27,7 +27,7 @@ import static org.junit.Assert.assertNotNull;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
-@SpringBootTest(classes = { HtsApplication.class, MockMvcConfiguration.class })
+@SpringBootTest(classes = { HtsModule.class, MockMvcConfiguration.class })
 @ActiveProfiles("integration-test")
 @ContextConfiguration(initializers = MockAcrossServletContextInitializer.class)
 public class ITHtsApplication

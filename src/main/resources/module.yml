@@ -4,7 +4,7 @@ dependencies: {PatientModule: 1.0.0}
 menus:
   - icon:
     disabled: false
-    name: Hts
+    name: HTS
     state: hts
     url: /across/resources/static/hts/index.html
 umdLocation: /across/resources/static/hts/index.html

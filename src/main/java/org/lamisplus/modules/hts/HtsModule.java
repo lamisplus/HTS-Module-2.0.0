@@ -14,11 +14,11 @@ public class HtsModule extends AcrossModule {
 
     public HtsModule() {
         super ();
-        /*addApplicationContextConfigurer (new ComponentScanConfigurer (
-                getClass ().getPackage ().getName () + ".repositories",
+        addApplicationContextConfigurer (new ComponentScanConfigurer (
+                getClass ().getPackage ().getName () + ".repository",
                 getClass ().getPackage ().getName () + ".service",
                 getClass ().getPackage ().getName () + ".controller"
-        ));*/
+        ));
     }
 
     @Override

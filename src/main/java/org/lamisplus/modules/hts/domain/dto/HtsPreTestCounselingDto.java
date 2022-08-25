@@ -11,5 +11,4 @@ public class HtsPreTestCounselingDto {
     private  Object riskAssessment;
     private  Object tbScreening;
     private  Object stiScreening;
-
 }

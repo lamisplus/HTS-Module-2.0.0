@@ -5,6 +5,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.Type;
+import org.lamisplus.modules.base.domain.entities.ApplicationCodeSet;
+import org.lamisplus.modules.base.domain.entities.OrganisationUnit;
+import org.lamisplus.modules.base.domain.entities.User;
 import org.lamisplus.modules.patient.domain.entity.Person;
 import javax.persistence.*;
 import java.io.Serializable;
@@ -19,9 +22,15 @@ public class HtsClient extends JsonBEntity implements Serializable {
     @Column(name = "id", updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Basic
     @Column(name = "target_group")
     private Long targetGroup;
+
+    /*@ManyToOne
+    @JoinColumn(name = "target_group", referencedColumnName = "id", insertable = false, updatable = false)
+    private ApplicationCodeSet targetGroupCodeSet;*/
+
     @Basic
     @Column(name = "client_code")
     private String clientCode;
@@ -29,12 +38,25 @@ public class HtsClient extends JsonBEntity implements Serializable {
     @Column(name = "date_visit")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate dateVisit;
+
     @Basic
     @Column(name = "referred_from")
-    private String referredFrom;
+    private Long referredFrom;
+
+    /*@ManyToOne
+    @JoinColumn(name = "referred_from", referencedColumnName = "id", insertable = false, updatable = false)
+    private ApplicationCodeSet referredFromCodeSet;*/
+
+    private String capturedBy;
+
     @Basic
     @Column(name = "testing_setting")
     private Long testingSetting;
+
+    /*@ManyToOne
+    @JoinColumn(name = "testing_setting", referencedColumnName = "id", insertable = false, updatable = false)
+    private ApplicationCodeSet testingSettingCodeSet;*/
+
     @Basic
     @Column(name = "first_time_visit")
     private Boolean firstTimeVisit;
@@ -47,15 +69,27 @@ public class HtsClient extends JsonBEntity implements Serializable {
     @Basic
     @Column(name = "type_counseling")
     private Long typeCounseling;
+
+    /*@ManyToOne
+    @JoinColumn(name = "type_counseling", referencedColumnName = "id", insertable = false, updatable = false)
+    private ApplicationCodeSet typeCounselingCodeSet;*/
+
     @Basic
     @Column(name = "index_client")
     private Boolean indexClient;
+
     @Basic
     @Column(name = "previously_tested")
     private Boolean previouslyTested; //within the last 3 months
+
     @Basic
     @Column(name = "facility_id")
     private Long facilityId;
+
+    /*@ManyToOne
+    @JoinColumn(name = "facility_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private OrganisationUnit facilityIdOrganisationUnit;*/
+
     @Type(type = "jsonb")
     @Basic(fetch = FetchType.LAZY)
     @Column(name = "extra", columnDefinition = "jsonb")
@@ -73,8 +107,31 @@ public class HtsClient extends JsonBEntity implements Serializable {
     @JoinColumn(name = "person_uuid", referencedColumnName = "uuid", insertable = false, updatable = false)
     private Person person;
 
-    //PRE TEST COUNSELING
+    /*@ManyToOne
+    @JoinColumn(name = "pregnant", referencedColumnName = "id", insertable = false, updatable = false)
+    private ApplicationCodeSet pregnantCodeSet;*/
 
+    @Basic
+    @Column(name = "pregnant")
+    private Long pregnant;
+
+   /* @ManyToOne
+    @JoinColumn(name = "breast_feeding", referencedColumnName = "id", insertable = false, updatable = false)
+    private ApplicationCodeSet breastFeedingCodeSet;*/
+
+    @Basic
+    @Column(name = "breast_feeding")
+    private Long breastFeeding;
+
+    /*@ManyToOne
+    @JoinColumn(name = "relation_with_index_client", referencedColumnName = "id", insertable = false, updatable = false)
+    private ApplicationCodeSet relationWithIndexClientCodeSet;*/
+
+    @Basic
+    @Column(name = "relation_with_index_client")
+    private Long relationWithIndexClient;
+
+    //PRE TEST COUNSELING
     @Type(type = "jsonb")
     @Basic(fetch = FetchType.LAZY)
     @Column(name = "knowledge_assessment", columnDefinition = "jsonb")
@@ -95,7 +152,6 @@ public class HtsClient extends JsonBEntity implements Serializable {
     @Column(name = "sti_screening", columnDefinition = "jsonb")
     private  Object stiScreening;
 
-
     //HIV TEST RESULT
     @Type(type = "jsonb")
     @Basic(fetch = FetchType.LAZY)
@@ -114,5 +170,8 @@ public class HtsClient extends JsonBEntity implements Serializable {
 
     @Basic
     @Column(name = "hiv_test_result")
-    private Long hivTestResult;
+    private String hivTestResult;
+
+    //Recency Testing
+
 }

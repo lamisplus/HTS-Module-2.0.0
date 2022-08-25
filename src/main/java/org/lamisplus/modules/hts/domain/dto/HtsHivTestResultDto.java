@@ -1,7 +1,6 @@
 package org.lamisplus.modules.hts.domain.dto;
 
 import lombok.Data;
-
 import javax.validation.constraints.NotNull;
 
 @Data
@@ -15,5 +14,5 @@ public class HtsHivTestResultDto {
     private  final Object test1;
     private  final Object confirmatoryTest;
     private  final Object tieBreakerTest;
-    private final Long  hivTestResult;
+    private final String  hivTestResult;
 }

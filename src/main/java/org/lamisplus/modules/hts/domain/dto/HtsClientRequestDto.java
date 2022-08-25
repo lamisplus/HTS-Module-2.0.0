@@ -9,14 +9,14 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 @Data
-public class HtsClientRequestDto implements Serializable {
+public class HtsClientRequestDto {
     @NotNull(message = "targetGroup is mandatory")
     private final Long targetGroup;
     @NotBlank(message = "clientCode is mandatory")
     private final String clientCode;
     @NotNull(message = "dateVisit is mandatory")
     private final LocalDate dateVisit;
-    private final String referredFrom;
+    private final Long referredFrom;
     @NotNull(message = "testingSetting is mandatory")
     private final Long testingSetting;
     @NotNull(message = "firstTimeVisit is mandatory")
@@ -33,4 +33,7 @@ public class HtsClientRequestDto implements Serializable {
     private Long personId;
     //private final String personUuid;
     private PersonDto personDto;
+    private final Long pregnant;
+    private final Long breastFeeding;
+    private final Long relationWithIndexClient;
 }

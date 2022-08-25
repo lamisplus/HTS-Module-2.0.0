@@ -52,11 +52,17 @@ public class HtsClientService {
     }
 
     public HtsClientDto getHtsClientById(Long id){
-        HtsClient htsClient = this.getById(id);
-        HtsClientDto htsClientDto = new HtsClientDto();
-        BeanUtils.copyProperties(htsClient, htsClientDto);
-        return htsClientDto;
+        return this.htsClientToHtsClientDto(this.getById(id));
     }
+
+    public HtsClientDto getHtsClientByPersonId(Long personId){
+        Person person = personRepository.findById(personId).orElse(new Person());
+        if(person.getId() == null){
+            return new HtsClientDto();
+        }
+        return this.htsClientToHtsClientDto(htsClientRepository.findByPerson(person));
+    }
+
     private HtsClient getById(Long id){
         return htsClientRepository
                 .findById(id)
@@ -121,7 +127,7 @@ public class HtsClientService {
                 .orElseThrow (() -> new EntityNotFoundException (Person.class, "id", String.valueOf (personId)));
     }
 
-    public HtsClient htsClientRequestDtoToHtsClient(HtsClientRequestDto htsClientRequestDto) {
+    private HtsClient htsClientRequestDtoToHtsClient(HtsClientRequestDto htsClientRequestDto) {
         if ( htsClientRequestDto == null ) {
             return null;
         }
@@ -147,7 +153,7 @@ public class HtsClientService {
         return htsClient;
     }
 
-    public HtsClientDto htsClientToHtsClientDto(HtsClient htsClient) {
+    private HtsClientDto htsClientToHtsClientDto(HtsClient htsClient) {
         if ( htsClient == null ) {
             return null;
         }
@@ -166,7 +172,7 @@ public class HtsClientService {
         htsClientDto.setTypeCounseling( htsClient.getTypeCounseling() );
         htsClientDto.setIndexClient( htsClient.getIndexClient() );
         htsClientDto.setPreviouslyTested( htsClient.getPreviouslyTested() );
-        htsClientDto.setPerson( htsClient.getPerson() );
+        htsClientDto.setPersonResponseDto( personService.getDtoFromPerson(htsClient.getPerson()) );
         htsClientDto.setExtra( htsClient.getExtra() );
         htsClientDto.setPregnant( htsClient.getPregnant() );
         htsClientDto.setBreastFeeding( htsClient.getBreastFeeding() );
@@ -183,6 +189,4 @@ public class HtsClientService {
 
         return htsClientDto;
     }
-
-
 }

@@ -3,6 +3,8 @@ package org.lamisplus.modules.hts.domain.dto;
 import lombok.*;
 import org.lamisplus.modules.base.domain.entities.ApplicationCodeSet;
 import org.lamisplus.modules.base.domain.entities.User;
+import org.lamisplus.modules.patient.domain.dto.PersonDto;
+import org.lamisplus.modules.patient.domain.dto.PersonResponseDto;
 import org.lamisplus.modules.patient.domain.entity.Person;
 
 import java.io.Serializable;
@@ -31,7 +33,7 @@ public class HtsClientDto {
     private  Boolean indexClient;
     private  Boolean previouslyTested;
     private  Long personId;
-    private Person person;
+    private PersonResponseDto personResponseDto;
     private  Object extra;
     private Long pregnant;
     private Long breastFeeding;

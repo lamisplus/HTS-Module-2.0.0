@@ -16,18 +16,18 @@ import java.time.LocalDate;
 public class HtsClientDto {
     private  Long id;
     private  Long targetGroup;
-    private  ApplicationCodeSet targetGroupCodeSet;
+    //private  ApplicationCodeSet targetGroupCodeSet;
     private  String clientCode;
     private  LocalDate dateVisit;
     private  Long referredFrom;
-    private  ApplicationCodeSet referredFromCodeSet;
+    //private  ApplicationCodeSet referredFromCodeSet;
     private  Long testingSetting;
-    private  ApplicationCodeSet testingSettingCodeSet;
+    //private  ApplicationCodeSet testingSettingCodeSet;
     private  Boolean firstTimeVisit;
     private  Integer numChildren;
     private  Integer numWives;
     private  Long typeCounseling;
-    private  ApplicationCodeSet typeCounselingCodeSet;
+    //private  ApplicationCodeSet typeCounselingCodeSet;
     private  Boolean indexClient;
     private  Boolean previouslyTested;
     private  Long personId;
@@ -38,9 +38,9 @@ public class HtsClientDto {
     private Long relationWithIndexClient;
     private String capturedBy;
 
-    private ApplicationCodeSet pregnantCodeSet;
+    /*private ApplicationCodeSet pregnantCodeSet;
     private ApplicationCodeSet breastFeedingCodeSet;
-    private ApplicationCodeSet relationWithIndexClientCodeSet;
+    private ApplicationCodeSet relationWithIndexClientCodeSet;*/
 
     //PRE TEST COUNSELING
     private  Object knowledgeAssessment;

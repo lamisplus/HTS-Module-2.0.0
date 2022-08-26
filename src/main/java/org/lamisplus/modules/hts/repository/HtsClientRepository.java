@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface HtsClientRepository extends JpaRepository<HtsClient, Long> {
-    List<HtsClient> findByPerson(Person person);
+    List<HtsClient> findAllByPerson(Person person);
 
     Page<HtsClient> findAll(Pageable pageable);
 

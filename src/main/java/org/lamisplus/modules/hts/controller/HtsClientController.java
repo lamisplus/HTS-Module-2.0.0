@@ -39,7 +39,7 @@ public class HtsClientController {
         return ResponseEntity.ok(this.htsClientService.updateHivTestResult(id, htsHivTestResultDto));
     }
     @GetMapping(BASE_URL_VERSION_ONE + "/{id}")
-    public ResponseEntity<HtsClientDto> getHtsClientById(@PathVariable Long id) {
+    public ResponseEntity<HtsClientDtos> getHtsClientById(@PathVariable Long id) {
         return ResponseEntity.ok(this.htsClientService.getHtsClientById(id));
     }
     @GetMapping(BASE_URL_VERSION_ONE + "/persons/{personId}")
@@ -52,5 +52,10 @@ public class HtsClientController {
         Page<HtsClient> page = htsClientService.findHtsClientPage(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return new ResponseEntity<>(this.htsClientService.getAllHtsClientDtos(page, null), headers, HttpStatus.OK);
+    }
+
+    @GetMapping(BASE_URL_VERSION_ONE + "/persons")
+    public ResponseEntity<List<HtsClientDtos>> getAllPerson() {
+        return ResponseEntity.ok(this.htsClientService.getAllPatients());
     }
 }

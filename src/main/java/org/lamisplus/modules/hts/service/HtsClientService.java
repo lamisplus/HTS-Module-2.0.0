@@ -34,7 +34,6 @@ public class HtsClientService {
     private final PersonRepository personRepository;
     private final PersonService personService;
     private final CurrentUserOrganizationService currentUserOrganizationService;
-    private final VisitService visitService;
 
     public HtsClientDto save(HtsClientRequestDto htsClientRequestDto){
         HtsClient htsClient;
@@ -59,8 +58,10 @@ public class HtsClientService {
         return this.htsClientToHtsClientDto(htsClient);
     }
 
-    public HtsClientDto getHtsClientById(Long id){
-        return this.htsClientToHtsClientDto(this.getById(id));
+    public HtsClientDtos getHtsClientById(Long id){
+        List<HtsClient> htsClients = new ArrayList<>();
+        htsClients.add(this.getById(id));
+        return this.htsClientToHtsClientDtos(htsClients);
     }
 
     public HtsClientDtos getHtsClientByPersonId(Long personId){
@@ -68,7 +69,7 @@ public class HtsClientService {
         if(person.getId() == null){
             return new HtsClientDtos();
         }
-        return this.htsClientToHtsClientDtos(htsClientRepository.findByPerson(person));
+        return this.htsClientToHtsClientDtos(htsClientRepository.findAllByPerson(person));
     }
 
     private HtsClient getById(Long id){
@@ -235,5 +236,43 @@ public class HtsClientService {
 
     public HtsClientDtos getAllHtsClientDtos(Page<HtsClient> page) {
         return getAllHtsClientDtos(page, null);
+    }
+
+    public List<HtsClientDtos> getAllPatients(){
+        List<HtsClientDtos> htsClientDtosList = new ArrayList<>();
+        for(PersonResponseDto personResponseDto :personService.getAllPerson()){
+            Person person = this.getPerson(personResponseDto.getId());
+            List<HtsClient> clients = htsClientRepository.findAllByPerson(person);
+            HtsClientDtos htsClientDtos = new HtsClientDtos();
+            if(clients.isEmpty()){
+                htsClientDtos.setHtsClientDtoList(new ArrayList<>());
+                htsClientDtos.setHtsCount(0);
+                htsClientDtos.setPersonResponseDto(personResponseDto);
+                htsClientDtos.setPersonId(personResponseDto.getId());
+                htsClientDtosList.add(htsClientDtos);
+                LOG.info("hts client is {}", htsClientDtos.getHtsCount());
+            } else {
+                htsClientDtosList.add(htsClientToHtsClientDtos(clients));
+                LOG.info("hts client is {}", clients.size());
+            }
+
+        }
+
+        /*personService.getAllPerson().stream().map(personResponseDto -> {
+            Person person = this.getPerson(personResponseDto.getId());
+            List<HtsClient> clients = htsClientRepository.findAllByPerson(person);
+            HtsClientDtos htsClientDtos = new HtsClientDtos();
+            if(clients.isEmpty()){
+                htsClientDtos.setHtsClientDtoList(new ArrayList<>());
+                htsClientDtos.setHtsCount(0);
+                htsClientDtos.setPersonResponseDto(personResponseDto);
+                htsClientDtosList.add(htsClientDtos);
+            } else {
+                htsClientDtosList.add(htsClientToHtsClientDtos(clients));
+            }
+            return htsClientDtosList;
+            });*/
+
+        return htsClientDtosList;
     }
 }

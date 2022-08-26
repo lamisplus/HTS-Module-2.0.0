@@ -2,13 +2,18 @@ package org.lamisplus.modules.hts.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.lamisplus.modules.base.domain.dto.StandardCodesetDTO;
-import org.lamisplus.modules.hts.domain.dto.HtsClientDto;
-import org.lamisplus.modules.hts.domain.dto.HtsClientRequestDto;
-import org.lamisplus.modules.hts.domain.dto.HtsHivTestResultDto;
-import org.lamisplus.modules.hts.domain.dto.HtsPreTestCounselingDto;
+import org.lamisplus.modules.hts.domain.dto.*;
+import org.lamisplus.modules.hts.domain.entity.HtsClient;
 import org.lamisplus.modules.hts.service.HtsClientService;
+import org.lamisplus.modules.hts.util.PaginationUtil;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -38,7 +43,14 @@ public class HtsClientController {
         return ResponseEntity.ok(this.htsClientService.getHtsClientById(id));
     }
     @GetMapping(BASE_URL_VERSION_ONE + "/persons/{personId}")
-    public ResponseEntity<HtsClientDto> getHtsClientByPersonId(@PathVariable Long personId) {
+    public ResponseEntity<HtsClientDtos> getHtsClientByPersonId(@PathVariable Long personId) {
         return ResponseEntity.ok(this.htsClientService.getHtsClientByPersonId(personId));
+    }
+
+    @GetMapping(BASE_URL_VERSION_ONE)
+    public ResponseEntity<HtsClientDtos> getHtsClients(@PageableDefault(value = 50) Pageable pageable) {
+        Page<HtsClient> page = htsClientService.findHtsClientPage(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return new ResponseEntity<>(this.htsClientService.getAllHtsClientDtos(page, null), headers, HttpStatus.OK);
     }
 }

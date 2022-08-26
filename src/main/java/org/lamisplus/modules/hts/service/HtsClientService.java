@@ -5,21 +5,25 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.lamisplus.modules.base.controller.apierror.EntityNotFoundException;
 import org.lamisplus.modules.base.controller.apierror.IllegalTypeException;
-import org.lamisplus.modules.hts.domain.dto.HtsClientDto;
-import org.lamisplus.modules.hts.domain.dto.HtsClientRequestDto;
-import org.lamisplus.modules.hts.domain.dto.HtsHivTestResultDto;
-import org.lamisplus.modules.hts.domain.dto.HtsPreTestCounselingDto;
+import org.lamisplus.modules.hts.domain.dto.*;
 import org.lamisplus.modules.hts.domain.entity.HtsClient;
 import org.lamisplus.modules.hts.repository.HtsClientRepository;
 import org.lamisplus.modules.patient.domain.dto.PersonDto;
 import org.lamisplus.modules.patient.domain.dto.PersonResponseDto;
+import org.lamisplus.modules.patient.domain.dto.VisitDto;
 import org.lamisplus.modules.patient.domain.entity.Person;
 import org.lamisplus.modules.patient.repository.PersonRepository;
 import org.lamisplus.modules.patient.service.PersonService;
+import org.lamisplus.modules.patient.service.VisitService;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -30,24 +34,28 @@ public class HtsClientService {
     private final PersonRepository personRepository;
     private final PersonService personService;
     private final CurrentUserOrganizationService currentUserOrganizationService;
+    private final VisitService visitService;
 
     public HtsClientDto save(HtsClientRequestDto htsClientRequestDto){
         HtsClient htsClient;
         PersonResponseDto personResponseDto;
+        Person person;
         //when it is a new person
         if(htsClientRequestDto.getPersonId() == null){
             if(htsClientRequestDto.getPersonDto() == null) throw new EntityNotFoundException(PersonDto.class, "PersonDTO is ", " empty");
             personResponseDto = personService.createPerson(htsClientRequestDto.getPersonDto());
-            String personUuid = personRepository.findById(personResponseDto.getId()).get().getUuid();
+            person = personRepository.findById(personResponseDto.getId()).get();
+            String personUuid = person.getUuid();
             htsClient = this.htsClientRequestDtoToHtsClient(htsClientRequestDto, personUuid);
         } else {
             //already existing person
-            Person person = this.getPerson(htsClientRequestDto.getPersonId());
+            person = this.getPerson(htsClientRequestDto.getPersonId());
             htsClient = this.htsClientRequestDtoToHtsClient(htsClientRequestDto, person.getUuid());
         }
         htsClient.setFacilityId(currentUserOrganizationService.getCurrentUserOrganization());
         htsClient = htsClientRepository.save(htsClient);
-        htsClient.getPerson();
+        htsClient.setPerson(person);
+        LOG.info("Person is - {}", htsClient.getPerson());
         return this.htsClientToHtsClientDto(htsClient);
     }
 
@@ -55,12 +63,12 @@ public class HtsClientService {
         return this.htsClientToHtsClientDto(this.getById(id));
     }
 
-    public HtsClientDto getHtsClientByPersonId(Long personId){
+    public HtsClientDtos getHtsClientByPersonId(Long personId){
         Person person = personRepository.findById(personId).orElse(new Person());
         if(person.getId() == null){
-            return new HtsClientDto();
+            return new HtsClientDtos();
         }
-        return this.htsClientToHtsClientDto(htsClientRepository.findByPerson(person));
+        return this.htsClientToHtsClientDtos(htsClientRepository.findByPerson(person));
     }
 
     private HtsClient getById(Long id){
@@ -69,7 +77,7 @@ public class HtsClientService {
                 .orElseThrow(()-> new EntityNotFoundException(HtsClient.class, "id", ""+id));
     }
 
-        public HtsClientDto updatePreTestCounseling(Long id, HtsPreTestCounselingDto htsPreTestCounselingDto){
+    public HtsClientDto updatePreTestCounseling(Long id, HtsPreTestCounselingDto htsPreTestCounselingDto){
         HtsClient htsClient = this.getById(id);
         if(htsClient.getPerson().getId() != htsPreTestCounselingDto.getPersonId()) throw new IllegalTypeException(Person.class, "Person", "id not match");
         htsClient.setKnowledgeAssessment(htsPreTestCounselingDto.getKnowledgeAssessment());
@@ -153,6 +161,36 @@ public class HtsClientService {
         return htsClient;
     }
 
+    public HtsClientDtos getAllHtsClientDtos(Page<HtsClient> page, List<HtsClient> clients){
+        if(page != null && !page.isEmpty()){
+            return htsClientToHtsClientDtos(page.stream().collect(Collectors.toList()));
+        } else if(clients != null && !clients.isEmpty()){
+            return htsClientToHtsClientDtos(clients);
+        }
+        return null;
+    }
+
+    private HtsClientDtos htsClientToHtsClientDtos(List<HtsClient> clients){
+        final Long[] pId = {null};
+        final PersonResponseDto[] personResponseDto = {new PersonResponseDto()};
+        HtsClientDtos htsClientDtos = new HtsClientDtos();
+        List<HtsClientDto> htsClientDtoList =  clients
+                .stream()
+                .map(htsClient1 -> {
+                    if(pId[0] == null) {
+                        Person person = htsClient1.getPerson();
+                        pId[0] = person.getId();
+                        personResponseDto[0] = personService.getDtoFromPerson(person);
+                    }
+                    return this.htsClientToHtsClientDto(htsClient1);})
+                .collect(Collectors.toList());
+        htsClientDtos.setHtsCount(htsClientDtoList.size());
+        htsClientDtos.setHtsClientDtoList(htsClientDtoList);
+        htsClientDtos.setPersonId(pId[0]);
+        htsClientDtos.setPersonResponseDto(personResponseDto[0]);
+        return htsClientDtos;
+    }
+
     private HtsClientDto htsClientToHtsClientDto(HtsClient htsClient) {
         if ( htsClient == null ) {
             return null;
@@ -172,6 +210,7 @@ public class HtsClientService {
         htsClientDto.setTypeCounseling( htsClient.getTypeCounseling() );
         htsClientDto.setIndexClient( htsClient.getIndexClient() );
         htsClientDto.setPreviouslyTested( htsClient.getPreviouslyTested() );
+        LOG.info("Person in transform {}", htsClient.getPerson());
         htsClientDto.setPersonResponseDto( personService.getDtoFromPerson(htsClient.getPerson()) );
         htsClientDto.setExtra( htsClient.getExtra() );
         htsClientDto.setPregnant( htsClient.getPregnant() );
@@ -188,5 +227,13 @@ public class HtsClientService {
         htsClientDto.setHivTestResult( htsClient.getHivTestResult() );
 
         return htsClientDto;
+    }
+
+    public Page<HtsClient> findHtsClientPage(Pageable pageable) {
+        return htsClientRepository.findAll(pageable);
+    }
+
+    public HtsClientDtos getAllHtsClientDtos(Page<HtsClient> page) {
+        return getAllHtsClientDtos(page, null);
     }
 }

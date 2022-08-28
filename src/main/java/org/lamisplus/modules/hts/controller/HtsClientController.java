@@ -1,7 +1,6 @@
 package org.lamisplus.modules.hts.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.lamisplus.modules.base.domain.dto.StandardCodesetDTO;
 import org.lamisplus.modules.hts.domain.dto.*;
 import org.lamisplus.modules.hts.domain.entity.HtsClient;
 import org.lamisplus.modules.hts.service.HtsClientService;
@@ -22,39 +21,39 @@ import java.util.List;
 @RequiredArgsConstructor
 public class HtsClientController {
     private final HtsClientService htsClientService;
-    private final String BASE_URL_VERSION_ONE = "/api/v1/hts";
+    private final String HTS_URL_VERSION_ONE = "/api/v1/hts";
 
-    @PostMapping(BASE_URL_VERSION_ONE)
+    @PostMapping(HTS_URL_VERSION_ONE)
     public ResponseEntity<HtsClientDto> save(@Valid @RequestBody HtsClientRequestDto htsClientRequestDto) {
         return ResponseEntity.ok(this.htsClientService.save(htsClientRequestDto));
     }
 
-    @PutMapping(BASE_URL_VERSION_ONE+"/{id}/pre-test-counseling")
+    @PutMapping(HTS_URL_VERSION_ONE +"/{id}/pre-test-counseling")
     public ResponseEntity<HtsClientDto> updatePreTestCounseling(@PathVariable Long id, @Valid @RequestBody HtsPreTestCounselingDto htsPreTestCounselingDto) {
         return ResponseEntity.ok(this.htsClientService.updatePreTestCounseling(id, htsPreTestCounselingDto));
     }
 
-    @PutMapping(BASE_URL_VERSION_ONE+"/{id}/hiv-test-result")
+    @PutMapping(HTS_URL_VERSION_ONE +"/{id}/hiv-test-result")
     public ResponseEntity<HtsClientDto> updateHivTestResult(@PathVariable Long id, @Valid @RequestBody HtsHivTestResultDto htsHivTestResultDto) {
         return ResponseEntity.ok(this.htsClientService.updateHivTestResult(id, htsHivTestResultDto));
     }
-    @GetMapping(BASE_URL_VERSION_ONE + "/{id}")
+    @GetMapping(HTS_URL_VERSION_ONE + "/{id}")
     public ResponseEntity<HtsClientDtos> getHtsClientById(@PathVariable Long id) {
         return ResponseEntity.ok(this.htsClientService.getHtsClientById(id));
     }
-    @GetMapping(BASE_URL_VERSION_ONE + "/persons/{personId}")
+    @GetMapping(HTS_URL_VERSION_ONE + "/persons/{personId}")
     public ResponseEntity<HtsClientDtos> getHtsClientByPersonId(@PathVariable Long personId) {
         return ResponseEntity.ok(this.htsClientService.getHtsClientByPersonId(personId));
     }
 
-    @GetMapping(BASE_URL_VERSION_ONE)
+    @GetMapping(HTS_URL_VERSION_ONE)
     public ResponseEntity<HtsClientDtos> getHtsClients(@PageableDefault(value = 50) Pageable pageable) {
         Page<HtsClient> page = htsClientService.findHtsClientPage(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return new ResponseEntity<>(this.htsClientService.getAllHtsClientDtos(page, null), headers, HttpStatus.OK);
     }
 
-    @GetMapping(BASE_URL_VERSION_ONE + "/persons")
+    @GetMapping(HTS_URL_VERSION_ONE + "/persons")
     public ResponseEntity<List<HtsClientDtos>> getAllPerson() {
         return ResponseEntity.ok(this.htsClientService.getAllPatients());
     }

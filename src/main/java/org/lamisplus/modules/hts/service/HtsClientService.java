@@ -211,8 +211,9 @@ public class HtsClientService {
         htsClientDto.setTypeCounseling( htsClient.getTypeCounseling() );
         htsClientDto.setIndexClient( htsClient.getIndexClient() );
         htsClientDto.setPreviouslyTested( htsClient.getPreviouslyTested() );
-        LOG.info("Person in transform {}", htsClient.getPerson());
-        htsClientDto.setPersonResponseDto( personService.getDtoFromPerson(htsClient.getPerson()) );
+        //LOG.info("Person in transform {}", htsClient.getPerson());
+        PersonResponseDto personResponseDto = personService.getDtoFromPerson(htsClient.getPerson());
+        htsClientDto.setPersonResponseDto(personResponseDto);
         htsClientDto.setExtra( htsClient.getExtra() );
         htsClientDto.setPregnant( htsClient.getPregnant() );
         htsClientDto.setBreastFeeding( htsClient.getBreastFeeding() );
@@ -226,6 +227,7 @@ public class HtsClientService {
         htsClientDto.setConfirmatoryTest( htsClient.getConfirmatoryTest() );
         htsClientDto.setTieBreakerTest( htsClient.getTieBreakerTest() );
         htsClientDto.setHivTestResult( htsClient.getHivTestResult() );
+        htsClientDto.setPersonId(personResponseDto.getId());
 
         return htsClientDto;
     }
@@ -242,7 +244,7 @@ public class HtsClientService {
         List<HtsClientDtos> htsClientDtosList = new ArrayList<>();
         for(PersonResponseDto personResponseDto :personService.getAllPerson()){
             Person person = this.getPerson(personResponseDto.getId());
-            List<HtsClient> clients = htsClientRepository.findAllByPerson(person);
+            List<HtsClient> clients = htsClientRepository.findAllByPersonOrderByIdDec(person);
             HtsClientDtos htsClientDtos = new HtsClientDtos();
             if(clients.isEmpty()){
                 htsClientDtos.setHtsClientDtoList(new ArrayList<>());
@@ -250,10 +252,10 @@ public class HtsClientService {
                 htsClientDtos.setPersonResponseDto(personResponseDto);
                 htsClientDtos.setPersonId(personResponseDto.getId());
                 htsClientDtosList.add(htsClientDtos);
-                LOG.info("hts client is {}", htsClientDtos.getHtsCount());
+                //LOG.info("hts client is {}", htsClientDtos.getHtsCount());
             } else {
                 htsClientDtosList.add(htsClientToHtsClientDtos(clients));
-                LOG.info("hts client is {}", clients.size());
+                //LOG.info("hts client is {}", clients.size());
             }
 
         }

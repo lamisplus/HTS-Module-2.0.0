@@ -31,3 +31,4 @@ local-data
 .log
 .mvn
 mvnw.cmd
+/node_modules

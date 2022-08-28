@@ -11,6 +11,9 @@ import java.util.List;
 public interface HtsClientRepository extends JpaRepository<HtsClient, Long> {
     List<HtsClient> findAllByPerson(Person person);
 
+    List<HtsClient> findAllByPersonOrderByIdDec(Person person);
+
+
     Page<HtsClient> findAll(Pageable pageable);
 
 }

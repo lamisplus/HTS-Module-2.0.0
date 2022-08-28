@@ -244,7 +244,7 @@ public class HtsClientService {
         List<HtsClientDtos> htsClientDtosList = new ArrayList<>();
         for(PersonResponseDto personResponseDto :personService.getAllPerson()){
             Person person = this.getPerson(personResponseDto.getId());
-            List<HtsClient> clients = htsClientRepository.findAllByPersonOrderByIdDec(person);
+            List<HtsClient> clients = htsClientRepository.findAllByPersonOrderByIdDesc(person);
             HtsClientDtos htsClientDtos = new HtsClientDtos();
             if(clients.isEmpty()){
                 htsClientDtos.setHtsClientDtoList(new ArrayList<>());

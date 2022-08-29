@@ -22,23 +22,29 @@ const Home = () => {
 			<ol className="breadcrumb">
 				<li className="breadcrumb-item active"><h4>HTS</h4></li>
 			</ol>
-      <Link to={"register-patient"} className="float-end">
-                <Button
-                    variant="contained"
-                    color="primary"
-                    className=" float-end"
-                    startIcon={<FaUserPlus size="10"/>}
-                    style={{backgroundColor:'#014d88'}}
-                >
-                    <span style={{ textTransform: "capitalize" }}>New Patient</span>
-                </Button>
-                </Link>
+      
 		  </div>
       <Row>       
         <Col xl={12}>
-          <Card style={divStyle}>            
-            <Card.Body>
-              {/* <!-- Nav tabs --> */}
+        
+        <Card style={divStyle}>
+        <Link to={"register-patient"}>
+              <Button
+                  variant="contained"
+                  color="primary"
+                  className="mt-2 mr-3 mb-0 float-end"
+                  startIcon={<FaUserPlus size="10"/>}
+                  style={{backgroundColor:'#014d88',}}
+              >
+                  <span style={{ textTransform: "capitalize" }}>New Patient</span>
+              </Button>
+        </Link>            
+          <Card.Body>          
+          <Dashboard />
+          </Card.Body>
+        </Card>
+          {/* 
+
               <div className="custom-tab-1">
                 <Tabs
                     id="controlled-tab-example"
@@ -48,15 +54,14 @@ const Home = () => {
                 >
                   {/* <Tab eventKey="checked-in" title="Checked In Patients">                   
                     <CheckedInPatients />
-                  </Tab> */}
+                  </Tab> 
                   <Tab eventKey="home" title="Find Patients">                   
-                    <Dashboard />
+                    
                   </Tab>                    
                 </Tabs>
                 
               </div>
-            </Card.Body>
-          </Card>
+             */}
         </Col>
         
       </Row>

@@ -1,8 +1,6 @@
 import React,{useState} from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import { Link } from 'react-router-dom'
-import ButtonMui from "@material-ui/core/Button";
 import 'semantic-ui-css/semantic.min.css';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -50,7 +48,7 @@ const styles = theme => ({
 
 function PatientCard(props) {
     let history = useHistory();
-    const [key, setKey] = useState('home');
+    //const [key, setKey] = useState('home');
     const { classes } = props;
     const patientObj = history.location && history.location.state ? history.location.state.patientObj : {}
     //console.log(patientObj)
@@ -58,22 +56,8 @@ function PatientCard(props) {
     <div className={classes.root}>
       <Card >
         <CardContent>
-        <Link to={"/"} >
-            <ButtonMui
-                variant="contained"
-                color="primary"
-                className=" float-end ms-2"
-                //startIcon={<FaUserPlus size="10"/>}
-
-            >
-                <span style={{ textTransform: "capitalize" }}>Back</span>
-            </ButtonMui>
-            </Link>
-            <br/><br/>
             <PatientCardDetail patientObj={patientObj}/>
-            <br/><br/>
-            <PatientHistory />
-
+            <PatientHistory patientObj={patientObj}/>
          </CardContent>
       </Card>
     </div>

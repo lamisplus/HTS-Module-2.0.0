@@ -11,13 +11,13 @@ import {Link, useHistory, useLocation} from "react-router-dom";
 import 'react-phone-input-2/lib/style.css'
 import { Icon, Menu } from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css';
-import BasicInfo from './Enrollment/BasicInfo'
-import PreTest from './Enrollment/PreTest'
-import HivTestResult from './Enrollment/HivTestResult'
-import IndexingContactTracing from './Enrollment/IndexingContactTracing'
-import Others from './Enrollment/Others'
-import PostTest from './Enrollment/PostTest'
-import RecencyTesting from './Enrollment/RecencyTesting'
+import BasicInfo from './NewRegistration/BasicInfo'
+import PreTest from './NewRegistration/PreTest'
+import HivTestResult from './NewRegistration/HivTestResult'
+import IndexingContactTracing from './NewRegistration/IndexingContactTracing'
+import Others from './NewRegistration/Others'
+import PostTest from './NewRegistration/PostTest'
+import RecencyTesting from './NewRegistration/RecencyTesting'
 
 
 
@@ -35,8 +35,8 @@ const useStyles = makeStyles((theme) => ({
 
 
 const UserRegistration = (props) => {
+    console.log(props)
     const classes = useStyles();
-    const history = useHistory();
     const location = useLocation();
     const locationState = location.state;
 
@@ -60,9 +60,16 @@ const UserRegistration = (props) => {
             <ToastContainer autoClose={3000} hideProgressBar />
             <div className="row page-titles mx-0" style={{marginTop:"0px", marginBottom:"-10px"}}>
             <ol className="breadcrumb">
-                <li className="breadcrumb-item active"><h4>HTS / <span style={{color:"#014D88", fontSize: "1.1rem", fontWeight:"bold"}}>New HTS Client</span></h4></li>
+                <li className="breadcrumb-item active"><h4>HTS / <span style={{color:"#014D88", fontSize: "1.1rem", fontWeight:"bolder"}}>NEW HTS CLIENT</span></h4></li>
             </ol>
-                <Link to={"/"} >
+                
+            </div>
+            <Card >
+                <CardBody>
+                <form >
+                    <div className="row">
+                    <h3>HIV COUNSELLING AND TESTING
+                    <Link to={"/"} >
                             <Button
                                 variant="contained"
                                 color="primary"
@@ -73,12 +80,7 @@ const UserRegistration = (props) => {
                                 <span style={{ textTransform: "capitalize" }}>Back</span>
                             </Button>
                     </Link>
-            </div>
-            <Card >
-                <CardBody>
-                <form >
-                    <div className="row">
-                    <h3>HIV COUNSELLING AND TESTING</h3>
+                    </h3>
                         <br/>
                         <br/>
                         <div className="col-md-3 col-sm-3 col-lg-3">

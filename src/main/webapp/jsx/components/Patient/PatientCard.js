@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import classNames from 'classnames';
@@ -6,17 +6,18 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelActions from '@material-ui/core/ExpansionPanelActions';
-import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 //import Chip from '@material-ui/core/Chip';
 import Divider from '@material-ui/core/Divider';
-import { Button } from 'semantic-ui-react';
-import {Label,} from "semantic-ui-react";
+import { Link } from 'react-router-dom'
+import ButtonMui from "@material-ui/core/Button";
 import 'semantic-ui-css/semantic.min.css';
 import { Col, Row } from "reactstrap";
 import Moment from "moment";
 import momentLocalizer from "react-widgets-moment";
 import moment from "moment";
+import axios from "axios";
+import { url as baseUrl, token } from "./../../../api";
 
 //Dtate Picker package
 Moment.locale("en");
@@ -59,69 +60,92 @@ const styles = theme => ({
 
 function PatientCard(props) {
   const { classes } = props;
-  const patientObj = props.patientObj ? props.patientObj : {}
-  const [transferModal, setTransferModal] = useState(false);
-    const Transfertoggle = () => setTransferModal(!transferModal);
+  const patientCurrentStatus=props.patientObj && props.patientObj.currentStatus==="Died (Confirmed)" ? true : false ;
+  const patientObjs = props.patientObj ? props.patientObj : {}
+  const permissions= props.permissions ? props.permissions : [];
+  const [patientObj, setpatientObj] = useState(patientObjs)
+
+  useEffect(() => {
+    PatientCurrentStatus();
+  }, [props.patientObj]);
+
+
+    ///GET LIST OF Patients
+    async function PatientCurrentStatus() {
+        axios
+            .get(`${baseUrl}hiv/status/patient-current/${patientObj.id}`,
+            { headers: {"Authorization" : `Bearer ${token}`} }
+            )
+            .then((response) => {
+
+              //setHivStatus(response.data);
+            })
+            .catch((error) => {    
+            });        
+    }
+
     const calculate_age = dob => {
-    var today = new Date();
-    var dateParts = dob.split("-");
-    var dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
-    var birthDate = new Date(dateObject); // create a date object directlyfrom`dob1`argument
-    var age_now = today.getFullYear() - birthDate.getFullYear();
-    var m = today.getMonth() - birthDate.getMonth();
-        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-                age_now--;
-            }
-        if (age_now === 0) {
-                return m + " month(s)";
-            }
-            return age_now + " year(s)";
+      var today = new Date();
+      var dateParts = dob.split("-");
+      var dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
+      var birthDate = new Date(dateObject); // create a date object directlyfrom`dob1`argument
+      var age_now = today.getFullYear() - birthDate.getFullYear();
+      var m = today.getMonth() - birthDate.getMonth();
+          if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                  age_now--;
+              }
+          if (age_now === 0) {
+                  return m + " month(s)";
+              }
+              return age_now + " year(s)";
     };
-    const loadTransferModal =()=> {
-      //setpatientObj({...patientObj, ...row});
-          setTransferModal(!transferModal)
-  }
-
-  const CurrentStatus = (currentStatus)=>{
-    if(currentStatus===true){
-        return (<Label color="blue" size="mini">active</Label>);
-    }else {
-        return   (<Label color="yellow" size="mini">None</Label>);
-    }
-
-}
-
-const HIVStatus = (patient)=>{
-    //console.log(patient)
-    if(patient.vaccination_status===null){
-        return (<><Label color="teal" size="mini">HIV Status: Negative</Label></> )
-    }else if(patient.vaccination_status==="1"){
-        return (<><Label color="red" size="mini">HIV Status: Positive</Label></> )
-    }else {
-        return ""
-    }
-}
-
+    const getHospitalNumber = (identifier) => {     
+      const identifiers = identifier;
+      const hospitalNumber = identifiers.identifier.find(obj => obj.type == 'HospitalNumber');       
+      return hospitalNumber ? hospitalNumber.value : '';
+    };
+    const getPhoneNumber = (identifier) => {     
+      const identifiers = identifier;
+      const phoneNumber = identifiers.contactPoint.find(obj => obj.type == 'phone');       
+      return phoneNumber ? phoneNumber.value : '';
+    };
+    const getAddress = (identifier) => {     
+      const identifiers = identifier;
+      const address = identifiers.address.find(obj => obj.city);      
+      return address ? address.city : '';
+    };
+    
   
   return (
     <div className={classes.root}>
        <ExpansionPanel defaultExpanded>
+       <Link to={"/"}  >
+                    <ButtonMui
+                      variant="contained"
+                      color="primary"
+                      className=" float-end  mr-2 mt-2"
+                      //startIcon={<FaUserPlus size="10"/>}
+                    >
+                    <span style={{ textTransform: "capitalize" }}>Back</span>
+                    </ButtonMui>
+                  </Link>
                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
                 
                 <Row>
-                    
+                  
                     <Col md={11}>
+                      
                     <Row className={"mt-1"}>
                     <Col md={12} className={classes.root2}>
                         <b style={{fontSize: "25px"}}>
-                        {patientObj.firstname + " " + patientObj.surname }
+                        {patientObj.firstName + " " + patientObj.surname }
                         </b>
                         
                     </Col>
                     <Col md={4} className={classes.root2}>
                     <span>
                         {" "}
-                        Patient ID : <b>{patientObj.id }</b>
+                        Patient ID : <b>{getHospitalNumber(patientObj.identifier) }</b>
                     </span>
                     </Col>
 
@@ -140,38 +164,40 @@ const HIVStatus = (patient)=>{
                     <span>
                         {" "}
                         Gender :{" "}
-                        <b>{patientObj.gender===1?"Male": "Female" }</b>
+                        <b>{patientObj.sex && patientObj.sex!==null ?  patientObj.sex : '' }</b>
                     </span>
                     </Col>
                     <Col md={4} className={classes.root2}>
                     <span>
                         {" "}
-                        {/* Phone Number : <b>{patientObj.phone }</b> */}
+                        Phone Number : <b>{getPhoneNumber(patientObj.contactPoint)}</b>
                     </span>
                     </Col>
                     <Col md={4} className={classes.root2}>
                     <span>
                         {" "}
-                        Address : <b>{patientObj.address } </b>
+                        Address : <b>{getAddress(patientObj.address)} </b>
                     </span>
                     </Col>
 
                     <Col md={12}>
-                    {HIVStatus(patientObj)}
-                    {CurrentStatus(patientObj.active)}
-                    
+                     
                     </Col>
                     </Row>
                     </Col>
                 </Row>
             
                 </ExpansionPanelSummary>
-                
+                <ExpansionPanelDetails className={classes.details}>
+               
+                </ExpansionPanelDetails>
                 <Divider />
+                <ExpansionPanelActions expandIcon={<ExpandMoreIcon />}>
                 
+                </ExpansionPanelActions>
             </ExpansionPanel>
-            {/* <Vaccination toggle={toggle} showModal={modal} patientObj={patientObj}/> */}
-           
+     
+      
     </div>
   );
 }

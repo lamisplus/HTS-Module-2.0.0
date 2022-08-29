@@ -192,9 +192,10 @@ const Patients = (props) => {
                     <>
                         <Link
                             to={{
-                                pathname: "/register-patient",
+                                pathname: "/patient-history",
                                 state: {patientObj: row.personResponseDto}
                             }}
+                            
                         >
                             <ButtonGroup variant="contained" 
                                 aria-label="split button"
@@ -224,8 +225,8 @@ const Patients = (props) => {
                     <>                                 
                         <Link
                             to={{
-                                pathname: "/enroll-patient",
-                                state: { patientId : row.id, patientObj: row }
+                                pathname: "edit-patient-Registration",
+                                state: { patientId : row.id, patientObj: row.personResponseDto }
                             }}
                         >
                             <ButtonGroup variant="contained" 

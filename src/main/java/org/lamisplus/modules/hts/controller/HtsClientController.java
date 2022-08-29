@@ -40,6 +40,14 @@ public class HtsClientController {
     public ResponseEntity<HtsClientDto> updateRequestResult(@PathVariable Long id, @Valid @RequestBody HtsRequestResultDto htsRequestResultDto) {
         return ResponseEntity.ok(this.htsClientService.updateRequestResult(id, htsRequestResultDto));
     }
+    @PutMapping(HTS_URL_VERSION_ONE +"/{id}/post-test-counseling-knowledge-assessment")
+    public ResponseEntity<HtsClientDto> updatePostTestCounselingKnowledgeAssessment(@PathVariable Long id, @Valid @RequestBody PostTestCounselingDto postTestCounselingDto) {
+        return ResponseEntity.ok(this.htsClientService.updatePostTestCounselingKnowledgeAssessment(id, postTestCounselingDto));
+    }
+    @PutMapping(HTS_URL_VERSION_ONE +"/{id}/index_notification_services_elicitation")
+    public ResponseEntity<HtsClientDto> updateIndexNotificationServicesElicitation(@PathVariable Long id, @Valid @RequestBody IndexNotificationServicesElicitationDto indexNotificationServicesElicitationDto) {
+        return ResponseEntity.ok(this.htsClientService.updateIndexNotificationServicesElicitation(id, indexNotificationServicesElicitationDto));
+    }
     @GetMapping(HTS_URL_VERSION_ONE + "/{id}")
     public ResponseEntity<HtsClientDtos> getHtsClientById(@PathVariable Long id) {
         return ResponseEntity.ok(this.htsClientService.getHtsClientById(id));

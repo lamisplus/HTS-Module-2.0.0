@@ -172,6 +172,19 @@ public class HtsClient extends JsonBEntity implements Serializable {
     @Column(name = "hiv_test_result")
     private String hivTestResult;
 
-    //Recency Testing
+    @Type(type = "jsonb")
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "syphilis_testing", columnDefinition = "jsonb")
+    private Object syphilisTesting;
 
+    @Type(type = "jsonb")
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "hepatitis_b_testing", columnDefinition = "jsonb")
+    private Object hepatitisBTesting;
+
+    //Recency Testing
+    @Type(type = "jsonb")
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "recency", columnDefinition = "jsonb")
+    private Object recency;
 }

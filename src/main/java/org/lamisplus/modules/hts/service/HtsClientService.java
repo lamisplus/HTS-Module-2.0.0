@@ -10,11 +10,9 @@ import org.lamisplus.modules.hts.domain.entity.HtsClient;
 import org.lamisplus.modules.hts.repository.HtsClientRepository;
 import org.lamisplus.modules.patient.domain.dto.PersonDto;
 import org.lamisplus.modules.patient.domain.dto.PersonResponseDto;
-import org.lamisplus.modules.patient.domain.dto.VisitDto;
 import org.lamisplus.modules.patient.domain.entity.Person;
 import org.lamisplus.modules.patient.repository.PersonRepository;
 import org.lamisplus.modules.patient.service.PersonService;
-import org.lamisplus.modules.patient.service.VisitService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -92,17 +90,42 @@ public class HtsClientService {
 
     }
 
-    public HtsClientDto updateHivTestResult(Long id, HtsHivTestResultDto htsHivTestResultDto){
+    public HtsClientDto updateRequestResult(Long id, HtsRequestResultDto htsRequestResultDto){
         HtsClient htsClient = this.getById(id);
-        if(htsClient.getPerson().getId() != htsHivTestResultDto.getPersonId()) throw new IllegalTypeException(Person.class, "Person", "id not match");
-        htsClient.setTest1(htsHivTestResultDto.getTest1());
-        htsClient.setConfirmatoryTest(htsHivTestResultDto.getConfirmatoryTest());
-        htsClient.setTieBreakerTest(htsHivTestResultDto.getTieBreakerTest());
-        htsClient.setHivTestResult(htsHivTestResultDto.getHivTestResult());
+        if(htsClient.getPerson().getId() != htsRequestResultDto.getPersonId()) throw new IllegalTypeException(Person.class, "Person", "id not match");
+
+        /* htsClient.setTest1(htsRequestResultDto.getTest1());
+        htsClient.setConfirmatoryTest(htsRequestResultDto.getConfirmatoryTest());
+        htsClient.setTieBreakerTest(htsRequestResultDto.getTieBreakerTest());
+        htsClient.setHivTestResult(htsRequestResultDto.getHivTestResult());
+        htsClient.setSyphilisTesting(htsRequestResultDto.getSyphilisTesting());
+        htsClient.setHepatitisBTesting(htsRequestResultDto.getHepatitisBTesting());*/
+
+        htsClient = this.htsRequestResultDtoToHtsClient(htsClient, htsRequestResultDto);
+        HtsClientDto htsClientDto = new HtsClientDto();
+        BeanUtils.copyProperties(htsClientRepository.save(htsClient), htsClientDto);
+        return htsClientDto;
+    }
+
+    public HtsClientDto updateRecency(Long id, HtsRecencyDto htsRecencyDto){
+        HtsClient htsClient = this.getById(id);
+        if(htsClient.getPerson().getId() != htsRecencyDto.getPersonId()) throw new IllegalTypeException(Person.class, "Person", "id not match");
+        htsClient.setRecency(htsRecencyDto.getRecency());
 
         HtsClientDto htsClientDto = new HtsClientDto();
         BeanUtils.copyProperties(htsClientRepository.save(htsClient), htsClientDto);
         return htsClientDto;
+    }
+
+    public HtsClient htsRequestResultDtoToHtsClient(HtsClient updatableHtsClient, HtsRequestResultDto htsRequestResultDto){
+        updatableHtsClient.setTest1(htsRequestResultDto.getTest1());
+        updatableHtsClient.setConfirmatoryTest(htsRequestResultDto.getConfirmatoryTest());
+        updatableHtsClient.setTieBreakerTest(htsRequestResultDto.getTieBreakerTest());
+        updatableHtsClient.setHivTestResult(htsRequestResultDto.getHivTestResult());
+        updatableHtsClient.setSyphilisTesting(htsRequestResultDto.getSyphilisTesting());
+        updatableHtsClient.setHepatitisBTesting(htsRequestResultDto.getHepatitisBTesting());
+
+        return updatableHtsClient;
     }
 
     public HtsClient htsClientRequestDtoToHtsClient(HtsClientRequestDto htsClientRequestDto, @NotNull String personUuid) {

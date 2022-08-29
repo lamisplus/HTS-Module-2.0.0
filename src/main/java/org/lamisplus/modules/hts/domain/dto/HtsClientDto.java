@@ -50,9 +50,11 @@ public class HtsClientDto {
     private  Object tbScreening;
     private  Object stiScreening;
 
-    //HIV TEST RESULT
+    //Request & Result Form
     private  Object test1;
     private  Object confirmatoryTest;
     private  Object tieBreakerTest;
     private String  hivTestResult;
+    private Object syphilisTesting;
+    private Object hepatitisBTesting;
 }

@@ -16,5 +16,6 @@ public class HtsRequestResultDto {
     private  final Object tieBreakerTest;
     private final String  hivTestResult;
     private final Object syphilisTesting;
-    private final Object hepatitisBTesting;
+    private final Object hepatitisTesting;
+    private Object others;
 }

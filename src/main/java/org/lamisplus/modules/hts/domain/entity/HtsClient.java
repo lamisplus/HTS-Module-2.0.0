@@ -3,11 +3,7 @@ package org.lamisplus.modules.hts.domain.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.Type;
-import org.lamisplus.modules.base.domain.entities.ApplicationCodeSet;
-import org.lamisplus.modules.base.domain.entities.OrganisationUnit;
-import org.lamisplus.modules.base.domain.entities.User;
 import org.lamisplus.modules.patient.domain.entity.Person;
 import javax.persistence.*;
 import java.io.Serializable;
@@ -179,12 +175,29 @@ public class HtsClient extends JsonBEntity implements Serializable {
 
     @Type(type = "jsonb")
     @Basic(fetch = FetchType.LAZY)
-    @Column(name = "hepatitis_b_testing", columnDefinition = "jsonb")
-    private Object hepatitisBTesting;
+    @Column(name = "hepatitis_testing", columnDefinition = "jsonb")
+    private Object hepatitisTesting;
+
+    @Type(type = "jsonb")
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "others", columnDefinition = "jsonb")
+    private Object others;
 
     //Recency Testing
     @Type(type = "jsonb")
     @Basic(fetch = FetchType.LAZY)
     @Column(name = "recency", columnDefinition = "jsonb")
     private Object recency;
+
+    //post test counseling
+    @Type(type = "jsonb")
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "post_test_counseling_knowledge_assessment", columnDefinition = "jsonb")
+    private Object postTestCounselingKnowledgeAssessment;
+
+    //Index Notification Services - Elicitation
+    @Type(type = "jsonb")
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "index_notification_services_elicitation", columnDefinition = "jsonb")
+    private Object indexNotificationServicesElicitation;
 }

@@ -99,7 +99,7 @@ public class HtsClientService {
         htsClient.setTieBreakerTest(htsRequestResultDto.getTieBreakerTest());
         htsClient.setHivTestResult(htsRequestResultDto.getHivTestResult());
         htsClient.setSyphilisTesting(htsRequestResultDto.getSyphilisTesting());
-        htsClient.setHepatitisBTesting(htsRequestResultDto.getHepatitisBTesting());*/
+        htsClient.setHepatitisTesting(htsRequestResultDto.getHepatitisTesting());*/
 
         htsClient = this.htsRequestResultDtoToHtsClient(htsClient, htsRequestResultDto);
         HtsClientDto htsClientDto = new HtsClientDto();
@@ -123,7 +123,8 @@ public class HtsClientService {
         updatableHtsClient.setTieBreakerTest(htsRequestResultDto.getTieBreakerTest());
         updatableHtsClient.setHivTestResult(htsRequestResultDto.getHivTestResult());
         updatableHtsClient.setSyphilisTesting(htsRequestResultDto.getSyphilisTesting());
-        updatableHtsClient.setHepatitisBTesting(htsRequestResultDto.getHepatitisBTesting());
+        updatableHtsClient.setHepatitisTesting(htsRequestResultDto.getHepatitisTesting());
+        updatableHtsClient.setOthers(htsRequestResultDto.getOthers());
 
         return updatableHtsClient;
     }
@@ -299,5 +300,26 @@ public class HtsClientService {
             });*/
 
         return htsClientDtosList;
+    }
+
+    public HtsClientDto updatePostTestCounselingKnowledgeAssessment(Long id, PostTestCounselingDto postTestCounselingDto){
+        HtsClient htsClient = this.getById(id);
+        if(htsClient.getPerson().getId() != postTestCounselingDto.getPersonId()) throw new IllegalTypeException(Person.class, "Person", "id not match");
+        htsClient.setPostTestCounselingKnowledgeAssessment(postTestCounselingDto.getPostTestCounselingKnowledgeAssessment());
+
+        HtsClientDto htsClientDto = new HtsClientDto();
+        BeanUtils.copyProperties(htsClientRepository.save(htsClient), htsClientDto);
+        return htsClientDto;
+    }
+
+    public HtsClientDto updateIndexNotificationServicesElicitation(Long id, IndexNotificationServicesElicitationDto indexNotificationServicesElicitationDto){
+        HtsClient htsClient = this.getById(id);
+        if(htsClient.getPerson().getId() != indexNotificationServicesElicitationDto.getPersonId()) throw new IllegalTypeException(Person.class, "Person", "id not match");
+        htsClient.setIndexNotificationServicesElicitation(indexNotificationServicesElicitationDto
+                        .getIndexNotificationServicesElicitation());
+
+        HtsClientDto htsClientDto = new HtsClientDto();
+        BeanUtils.copyProperties(htsClientRepository.save(htsClient), htsClientDto);
+        return htsClientDto;
     }
 }

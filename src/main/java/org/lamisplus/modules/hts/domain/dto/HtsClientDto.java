@@ -1,13 +1,8 @@
 package org.lamisplus.modules.hts.domain.dto;
 
 import lombok.*;
-import org.lamisplus.modules.base.domain.entities.ApplicationCodeSet;
-import org.lamisplus.modules.base.domain.entities.User;
-import org.lamisplus.modules.patient.domain.dto.PersonDto;
 import org.lamisplus.modules.patient.domain.dto.PersonResponseDto;
-import org.lamisplus.modules.patient.domain.entity.Person;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 
 @Builder(toBuilder = true)
@@ -56,5 +51,12 @@ public class HtsClientDto {
     private  Object tieBreakerTest;
     private String  hivTestResult;
     private Object syphilisTesting;
-    private Object hepatitisBTesting;
+    private Object hepatitisTesting;
+    private Object others;
+
+    //Post Test Counseling
+    private Object postTestCounselingKnowledgeAssessment;
+
+    //index notification services - Elicitation
+    private Object indexNotificationServicesElicitation;
 }

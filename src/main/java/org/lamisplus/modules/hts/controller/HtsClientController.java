@@ -32,10 +32,13 @@ public class HtsClientController {
     public ResponseEntity<HtsClientDto> updatePreTestCounseling(@PathVariable Long id, @Valid @RequestBody HtsPreTestCounselingDto htsPreTestCounselingDto) {
         return ResponseEntity.ok(this.htsClientService.updatePreTestCounseling(id, htsPreTestCounselingDto));
     }
-
-    @PutMapping(HTS_URL_VERSION_ONE +"/{id}/hiv-test-result")
-    public ResponseEntity<HtsClientDto> updateHivTestResult(@PathVariable Long id, @Valid @RequestBody HtsHivTestResultDto htsHivTestResultDto) {
-        return ResponseEntity.ok(this.htsClientService.updateHivTestResult(id, htsHivTestResultDto));
+    @PutMapping(HTS_URL_VERSION_ONE +"/{id}/recency")
+    public ResponseEntity<HtsClientDto> updateRecency(@PathVariable Long id, @Valid @RequestBody HtsRecencyDto htsRecencyDto) {
+        return ResponseEntity.ok(this.htsClientService.updateRecency(id, htsRecencyDto));
+    }
+    @PutMapping(HTS_URL_VERSION_ONE +"/{id}/request-result")
+    public ResponseEntity<HtsClientDto> updateRequestResult(@PathVariable Long id, @Valid @RequestBody HtsRequestResultDto htsRequestResultDto) {
+        return ResponseEntity.ok(this.htsClientService.updateRequestResult(id, htsRequestResultDto));
     }
     @GetMapping(HTS_URL_VERSION_ONE + "/{id}")
     public ResponseEntity<HtsClientDtos> getHtsClientById(@PathVariable Long id) {

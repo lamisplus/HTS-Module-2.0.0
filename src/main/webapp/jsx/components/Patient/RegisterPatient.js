@@ -116,7 +116,7 @@ const UserRegistration = (props) => {
                                 style={{backgroundColor:activeItem === 'hiv-test' ? '#000': ""}}
                                 //disabled={activeItem !== 'hiv-test' ? true : false}
                             >               
-                                <span style={{color:'#fff'}}>HIV Test Result</span>
+                                <span style={{color:'#fff'}}>Request {"&"} Result Form</span>
                                 {completed.includes('hiv-test') && (
                                     <Icon name='check' color='green' />
                                 )}

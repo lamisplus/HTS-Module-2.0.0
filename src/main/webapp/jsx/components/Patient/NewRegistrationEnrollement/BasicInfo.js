@@ -83,6 +83,8 @@ const BasicInfo = (props) => {
     const [counselingType, setCounselingType] = useState([]);
     const [pregnancyStatus, setPregnancyStatus] = useState([]);
     let temp = { ...errors }
+    let patientObj = props && props.patientObj ? props.patientObj.personResponseDto :{}
+    console.log(patientObj)
     const [objValues, setObjValues]= useState(
         {
             active: true,
@@ -124,7 +126,14 @@ const BasicInfo = (props) => {
             indexClientCode:""
         }
     )
+    const handleItemClick =(page, completedMenu)=>{
+        props.handleItemClick(page)
+        if(props.completed.includes(completedMenu)) {
 
+        }else{
+            props.setCompleted([...props.completed, completedMenu])
+        }
+    }
     useEffect(() => { 
         KP(); 
         EnrollmentSetting(); 
@@ -137,24 +146,25 @@ const BasicInfo = (props) => {
         PregnancyStatus()
         if(props.patientObj){
             console.log(props.patientObj)
-            objValues.firstName=props.patientObj.firstName
-            setObjValues ({...objValues,  firstName: props.patientObj.firstName});
-            objValues.maritalStatusId=props.patientObj.maritalStatus.id
-            setObjValues ({...objValues,  maritalStatusId: props.patientObj.maritalStatus.id});
-            setObjValues ({...objValues,  surname: props.patientObj.surname});
-            objValues.surname=props.patientObj.surname
-            objValues.dateOfRegistration=props.patientObj.dateOfRegistration
-            setObjValues ({...objValues,  dateOfRegistration: props.patientObj.dateOfRegistration});
-            objValues.dob=props.patientObj.dateOfBirth
-            setObjValues ({...objValues,  dob: props.patientObj.dateOfBirth});
-            const patientAge=calculate_age(moment(props.patientObj.dateOfBirth).format("DD-MM-YYYY"))
+            objValues.firstName=props.patientObj.personResponseDto.firstName
+            setObjValues ({...objValues,  firstName: props.patientObj.personResponseDto.firstName});
+            const materialStatusId= props.patientObj && props.patientObj.personResponseDto ? props.patientObj.personResponseDto.maritalStatus.id :""
+            objValues.maritalStatusId= materialStatusId
+            setObjValues ({...objValues,  maritalStatusId: materialStatusId});
+            setObjValues ({...objValues,  surname: props.patientObj.personResponseDto.surname});
+            objValues.surname=props.patientObj.personResponseDto.surname
+            objValues.dateOfRegistration=props.patientObj.personResponseDto.dateOfRegistration
+            setObjValues ({...objValues,  dateOfRegistration:props.patientObj.personResponseDto.dateOfRegistration});
+            objValues.dob=props.patientObj.personResponseDto.dateOfBirth
+            setObjValues ({...objValues,  dob: props.patientObj.personResponseDto.dateOfBirth});
+            const patientAge=calculate_age(moment(props.patientObj.personResponseDto.dateOfBirth).format("DD-MM-YYYY"))
             objValues.age=patientAge
             setObjValues ({...objValues,  age:patientAge});
-            const contactPoint = props.patientObj.contactPoint;
-            const phone = contactPoint.contactPoint.find(obj => obj.type == 'phone');
+            const contactPoint =props.patientObj && props.patientObj.personResponseDto ? props.patientObj.personResponseDto.contactPoint : {};
+            const phone =contactPoint && contactPoint.contactPoint.find(obj => obj.type == 'phone');
             objValues.phoneNumber=phone && phone.value ? phone.value :"" 
             setObjValues ({...objValues,  phoneNumber: phone && phone.value ? phone.value :""});
-            const address = props.patientObj.address;
+            const address = props.patientObj.personResponseDto.address;
             const country = address && address.address && address.address.length > 0 ? address.address[0] : null;
             getProvincesId(country  && country.stateId ? country.stateId :"")
             objValues.address=country  && country.city ? country.city :""
@@ -164,9 +174,9 @@ const BasicInfo = (props) => {
             objValues.lga=country  && country.district ? country.district :""
             setObjValues ({...objValues,  lga: country  && country.district ? country.district :""});
             //GetSex(props.patientObj.sex)
-            objValues.sexId=props.patientObj.sex
-            setObjValues ({...objValues,  sexId: props.patientObj.sex});
-            if(props.patientObj.maritalStatus.id===5){
+            objValues.sexId=props.patientObj.personResponseDto.sex
+            setObjValues ({...objValues,  sexId: props.patientObj.personResponseDto.sex});
+            if(props.patientObj.personResponseDto.maritalStatus.id===5){
                 setHideNumChild(false)
             }
         }
@@ -440,14 +450,6 @@ const BasicInfo = (props) => {
                 setErrors({ ...temp })
         return Object.values(temp).every(x => x == "")
     }
-    const handleItemClick =(page, completedMenu)=>{
-        props.handleItemClick(page)
-        if(props.completed.includes(completedMenu)) {
-
-        }else{
-            props.setCompleted([...props.completed, completedMenu])
-        }
-    }
 
     const handleSubmit =(e)=>{
         e.preventDefault();
@@ -555,8 +557,8 @@ const BasicInfo = (props) => {
             .then(response => {
                 setSaving(false);
                 props.setPatientObj(response.data)
-                // toast.success("HTS Test successful");
-                // handleItemClick('pre-test-counsel', 'basic' )
+                toast.success("HTS Test successful");
+                handleItemClick('pre-test-counsel', 'basic' )
 
             })
             .catch(error => {

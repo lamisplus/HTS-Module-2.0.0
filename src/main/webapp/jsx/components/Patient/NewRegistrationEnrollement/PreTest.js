@@ -62,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const BasicInfo = (props) => {
+const PreTest = (props) => {
     //const classes = useStyles();
     const patientID= props.patientObj && props.patientObj.personResponseDto ? props.patientObj.personResponseDto.id : "";
     const clientId = props.patientObj && props.patientObj ? props.patientObj.id : "";
@@ -1045,4 +1045,4 @@ const BasicInfo = (props) => {
     );
 };
 
-export default BasicInfo
+export default PreTest

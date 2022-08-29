@@ -172,7 +172,7 @@ const HivTestResult = (props) => {
                         <h4 style={{color:'#fff'}}>HIV TEST RESULT</h4>
 
                         </LabelRibbon>
-                           <br/>
+
                            <div className="form-group  col-md-2"></div>
                             <h4>Initial HIV Test:</h4>
                             <div className="form-group mb-3 col-md-5">

@@ -162,10 +162,7 @@ const HivTestResult = (props) => {
             <Card >
                 <CardBody>
                
-                <h2 style={{color:'#000'}}>HIV TEST RESULT</h2>
-              
-                <br/>
-                <br/>
+                <h2 style={{color:'#000'}}>REQUEST AND RESULT FORM</h2>
                     <form >
                         <div className="row">
                         <LabelRibbon as='a' color='blue' style={{width:'106%', height:'35px'}} ribbon>
@@ -323,6 +320,146 @@ const HivTestResult = (props) => {
                                         Negative
                                     </LabelRibbon>
                                 )}
+                            </div>
+                            <LabelRibbon as='a' color='blue' style={{width:'106%', height:'35px'}} ribbon>
+                            <h5 style={{color:'#fff'}}>Syphilis Testing</h5>
+                        </LabelRibbon>
+                            <div className="form-group  col-md-4">
+                                <FormGroup>
+                                    <Label>Syphilis test result *</Label>
+                                    <select
+                                        className="form-control"
+                                        name="syphilisTestResult"
+                                        id="syphilisTestResult"
+                                        
+                                        style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                    >
+                                        <option value={""}></option>
+                                        <option value="Yes">Reactive</option>
+                                        <option value="No">Non-Reactive</option>
+                                        
+                                    </select>
+                                    
+                                </FormGroup>
+                            </div>
+                            <hr/>
+                            <br/>
+                            <LabelRibbon as='a' color='blue' style={{width:'106%', height:'35px'}} ribbon>
+                            <h5 style={{color:'#fff'}}>Hepatitis B Testing</h5>
+                            </LabelRibbon>
+                            <div className="form-group  col-md-4">
+                                <FormGroup>
+                                    <Label>Hepatitis B virus test result *</Label>
+                                    <select
+                                        className="form-control"
+                                        name="hepatitisBTestResult"
+                                        id="hepatitisBTestResult"
+                                        
+                                        style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                    >
+                                        <option value={""}></option>
+                                        <option value="Yes">Positive</option>
+                                        <option value="No">Negative</option>
+                                        
+                                    </select>
+                                    
+                                </FormGroup>
+                            </div>
+                            <div className="form-group  col-md-4">
+                                <FormGroup>
+                                    <Label>Hepatitis C virus test result *</Label>
+                                    <select
+                                        className="form-control"
+                                        name="hepatitisCTestResult"
+                                        id="hepatitisCTestResult"
+                                        
+                                        style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                    >
+                                       <option value={""}></option>
+                                        <option value="Yes">Positive</option>
+                                        <option value="No">Negative</option>
+                                        
+                                    </select>
+                                    
+                                </FormGroup>
+                            </div>
+                            <div className="form-group  col-md-4">
+                                <FormGroup>
+                                    <Label>HIV Request and Result form filled with CT Intake Form *</Label>
+                                    <select
+                                        className="form-control"
+                                        name="hivRequestResultCT"
+                                        id="hivRequestResultCT"
+                                        
+                                        style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                    >
+                                        <option value={""}></option>
+                                        <option value="Yes">Yes</option>
+                                        <option value="No">No</option>
+                                        
+                                    </select>
+                                    
+                                </FormGroup>
+                            </div>
+                            <div className="form-group mb-3 col-md-4">
+                                <FormGroup>
+                                <Label for="">Completed By</Label>
+                                <Input
+                                    type="number"
+                                    name="completedBy"
+                                    id="completedBy"
+                                    // value={objValues.lastViralLoad}
+                                    // onChange={handleInputChange}
+                                    style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
+                                   
+                                />
+                                
+                                </FormGroup>
+                            </div>
+                            <div className="form-group mb-3 col-md-4">
+                                <FormGroup>
+                                <Label for="">Longitude</Label>
+                                <Input
+                                    type="number"
+                                    name="longitude"
+                                    id="longitude"
+                                    // value={objValues.lastViralLoad}
+                                    // onChange={handleInputChange}
+                                    style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
+                                   
+                                />
+                                
+                                </FormGroup>
+                            </div>
+                            <div className="form-group mb-3 col-md-4">
+                                <FormGroup>
+                                <Label for="">Latitude</Label>
+                                <Input
+                                    type="number"
+                                    name="latitude"
+                                    id="latitude"
+                                    // value={objValues.lastViralLoad}
+                                    // onChange={handleInputChange}
+                                    style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
+                                   
+                                />
+                                
+                                </FormGroup>
+                            </div>
+                            <div className="form-group mb-3 col-md-4">
+                                <FormGroup>
+                                <Label for="">Adhoc Code</Label>
+                                <Input
+                                    type="number"
+                                    name="adhocCode"
+                                    id="adhocCode"
+                                    // value={objValues.lastViralLoad}
+                                    // onChange={handleInputChange}
+                                    style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
+                                   
+                                />
+                                
+                                </FormGroup>
                             </div>
                             
                             {saving ? <Spinner /> : ""}

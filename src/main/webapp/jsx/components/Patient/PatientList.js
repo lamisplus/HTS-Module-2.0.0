@@ -226,7 +226,7 @@ const Patients = (props) => {
                         <Link
                             to={{
                                 pathname: "edit-patient-Registration",
-                                state: { patientId : row.id, patientObj: row.personResponseDto }
+                                state: { patientId : row.id, patientObj: row }
                             }}
                         >
                             <ButtonGroup variant="contained" 

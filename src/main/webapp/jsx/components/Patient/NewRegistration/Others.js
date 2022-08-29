@@ -182,7 +182,6 @@ const BasicInfo = (props) => {
                                 
                                 </FormGroup>
                             </div>
-
                             <div className="form-group mb-3 col-md-4">
                                 <FormGroup>
                                 <Label for="">Longitude</Label>

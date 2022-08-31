@@ -264,6 +264,7 @@ public class HtsClientService {
         htsClientDto.setCd4(htsClient.getCd4());
         htsClientDto.setSexPartnerRiskAssessment(htsClient.getSexPartnerRiskAssessment());
         htsClientDto.setOthers(htsClient.getOthers());
+        htsClientDto.setHepatitisTesting(htsClient.getHepatitisTesting());
 
         return htsClientDto;
     }

@@ -24,6 +24,7 @@ const Home = () => {
 			</ol>
       
 		  </div>
+      
       <Row>       
         <Col xl={12}>
         

@@ -11,7 +11,7 @@ import "./../src/main/webapp/css/style.css";
 import 'bootstrap/dist/css/bootstrap.css';
 import Home from './main/webapp/jsx/components/Home'
 import RegisterPatient from './main/webapp/jsx/components/Patient/RegisterPatient';
-import RegisterPatientEnrollment from './main/webapp/jsx/components/Patient/RegisterPatientEnrollment';
+//import RegisterPatientEnrollment from './main/webapp/jsx/components/Patient/RegisterPatientEnrollment';
 import PatientDetail from './main/webapp/jsx/components/Patient/PatientDetail';
 
 
@@ -31,9 +31,6 @@ export default function App() {
             <RegisterPatient />
           </Route>
           
-          <Route path="/edit-patient-Registration">
-            <RegisterPatientEnrollment />
-          </Route>
           <Route path="/">
             <Home />
           </Route>

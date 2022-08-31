@@ -119,16 +119,16 @@ function PatientCard(props) {
   return (
     <div className={classes.root}>
        <ExpansionPanel defaultExpanded>
-       <Link to={"/"}  >
-                    <ButtonMui
-                      variant="contained"
-                      color="primary"
-                      className=" float-end  mr-2 mt-2"
-                      //startIcon={<FaUserPlus size="10"/>}
-                    >
-                    <span style={{ textTransform: "capitalize" }}>Back</span>
-                    </ButtonMui>
-                  </Link>
+          <Link to={"/"}  >
+            <ButtonMui
+              variant="contained"
+              color="primary"
+              className=" float-end  mr-2 mt-2"
+              //startIcon={<FaUserPlus size="10"/>}
+            >
+            <span style={{ textTransform: "capitalize" }}>Back</span>
+            </ButtonMui>
+          </Link>
                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
                 
                 <Row>

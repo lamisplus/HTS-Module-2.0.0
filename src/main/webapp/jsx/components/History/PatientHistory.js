@@ -52,7 +52,7 @@ const Home = (props) => {
                     className="mb-3"
                 >
                 <Tab eventKey="home" title="HTS HISTORY">                   
-                    <History patientObj={props.patientObj}/>
+                    <History patientObj={props.patientObj} activePage={props.activePage} setActivePage={props.setActivePage}/>
                 </Tab> 
                 <Tab eventKey="new" title="NEW HTS">                   
                     <Registration patientObj={props.patientObj}/>

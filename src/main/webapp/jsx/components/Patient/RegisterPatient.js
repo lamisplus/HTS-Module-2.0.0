@@ -14,7 +14,7 @@ import 'semantic-ui-css/semantic.min.css';
 import BasicInfo from './NewRegistration/BasicInfo'
 import PreTest from './NewRegistration/PreTest'
 import HivTestResult from './NewRegistration/HivTestResult'
-import IndexingContactTracing from './NewRegistration/IndexingContactTracing'
+import IndexingContactTracing from './NewRegistration/Elicitation/Index'
 import Others from './NewRegistration/Others'
 import PostTest from './NewRegistration/PostTest'
 import RecencyTesting from './NewRegistration/RecencyTesting'
@@ -101,7 +101,7 @@ const UserRegistration = (props) => {
                                 active={activeItem === 'pre-test-counsel'}
                                 onClick={()=>handleItemClick('pre-test-counsel')}
                                 style={{backgroundColor:activeItem === 'pre-test-counsel' ? '#000': ""}}
-                                //disabled={activeItem !== 'pre-test-counsel' ? true : false}
+                                disabled={activeItem !== 'pre-test-counsel' ? true : false}
                             >
                             {/* <Label>2</Label> */}
                             <span style={{color:'#fff'}}>Pre Test Counseling</span>
@@ -110,24 +110,25 @@ const UserRegistration = (props) => {
                             )}
                             </Menu.Item>
                             <Menu.Item
-                                name='inbox'
-                                active={activeItem === 'hiv-test'}
-                                onClick={()=>handleItemClick('hiv-test')}
-                                style={{backgroundColor:activeItem === 'hiv-test' ? '#000': ""}}
-                                //disabled={activeItem !== 'hiv-test' ? true : false}
-                            >               
-                                <span style={{color:'#fff'}}>Request {"&"} Result Form</span>
-                                {completed.includes('hiv-test') && (
-                                    <Icon name='check' color='green' />
-                                )}
-                                {/* <Label color='teal'>3</Label> */}
+                                name='spam'
+                                active={activeItem === 'post-test'}
+                                onClick={()=>handleItemClick('post-test')}
+                                style={{backgroundColor:activeItem === 'post-test' ? '#000': ""}}
+                                disabled={activeItem !== 'post-test' ? true : false}
+                            >
+                            {/* <Label>4</Label> */}
+                            <span style={{color:'#fff'}}>Post Test Counseling</span>
+                            {completed.includes('post-test') && (
+                                <Icon name='check' color='green' />
+                            )}
                             </Menu.Item>
+                            
                             <Menu.Item
                                 name='spam'
                                 active={activeItem === 'recency-testing'}
                                 onClick={()=>handleItemClick('recency-testing')}
                                 style={{backgroundColor:activeItem === 'recency-testing' ? '#000': ""}}
-                                //disabled={activeItem !== 'recency-testing' ? true : false}
+                                disabled={activeItem !== 'recency-testing' ? true : false}
                             >
                             {/* <Label>4</Label> */}
                             <span style={{color:'#fff'}}>HIV Recency Testing</span>
@@ -136,17 +137,17 @@ const UserRegistration = (props) => {
                             )}
                             </Menu.Item>
                             <Menu.Item
-                                name='spam'
-                                active={activeItem === 'post-test'}
-                                onClick={()=>handleItemClick('post-test')}
-                                style={{backgroundColor:activeItem === 'post-test' ? '#000': ""}}
-                                //disabled={activeItem !== 'post-test' ? true : false}
-                            >
-                            {/* <Label>4</Label> */}
-                            <span style={{color:'#fff'}}>Post Test Counseling</span>
-                            {completed.includes('post-test') && (
-                                <Icon name='check' color='green' />
-                            )}
+                                name='inbox'
+                                active={activeItem === 'hiv-test'}
+                                onClick={()=>handleItemClick('hiv-test')}
+                                style={{backgroundColor:activeItem === 'hiv-test' ? '#000': ""}}
+                                disabled={activeItem !== 'hiv-test' ? true : false}
+                            >               
+                                <span style={{color:'#fff'}}>Request {"&"} Result Form</span>
+                                {completed.includes('hiv-test') && (
+                                    <Icon name='check' color='green' />
+                                )}
+                                {/* <Label color='teal'>3</Label> */}
                             </Menu.Item>
                             <Menu.Item
                                 name='spam'
@@ -161,19 +162,7 @@ const UserRegistration = (props) => {
                                 <Icon name='check' color='green' />
                             )}
                             </Menu.Item>
-                            <Menu.Item
-                                name='inbox'
-                                active={activeItem === 'others'}
-                                onClick={()=>handleItemClick('others')}
-                                style={{backgroundColor:activeItem === 'others' ? '#000': ""}}
-                                disabled={activeItem !== 'others' ? true : false}
-                            >               
-                                <span style={{color:'#fff'}}> Request {"&"} Result Form</span>
-                                {completed.includes('others') && (
-                                    <Icon name='check' color='green' />
-                                )}
-                            {/* <Label color='teal'>5</Label> */}
-                            </Menu.Item>
+                           
                         </Menu>
                         </div>
                         <div className="col-md-9 col-sm-9 col-lg-9 " style={{ backgroundColor:"#fff", margingLeft:"-50px", paddingLeft:"-20px"}}>

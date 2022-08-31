@@ -1,10 +1,8 @@
 import React, {useCallback, useEffect, useState} from "react";
 import axios from "axios";
 import {FormGroup, Label , CardBody, Spinner,Input,Form} from "reactstrap";
-import * as moment from 'moment';
 import {makeStyles} from "@material-ui/core/styles";
 import {Card, CardContent} from "@material-ui/core";
-import SaveIcon from "@material-ui/icons/Save";
 // import AddIcon from "@material-ui/icons/Add";
 // import CancelIcon from "@material-ui/icons/Cancel";
 import {toast} from "react-toastify";
@@ -201,7 +199,7 @@ const BasicInfo = (props) => {
                 setSaving(false);
                 props.setPatientObj(props && props.patientObj ? props.patientObj : "")
                 toast.success("Risk Assesment successful");
-                handleItemClick('hiv-test', 'pre-test-counsel' )
+                handleItemClick('post-test', 'pre-test-counsel' )
 
             })
             .catch(error => {
@@ -223,7 +221,7 @@ const BasicInfo = (props) => {
             <Card >
                 <CardBody>
                
-                <h3>PRE TEST COUNSELING</h3>
+                <h2>PRE TEST COUNSELING</h2>
                     <form >
                         <div className="row">
 

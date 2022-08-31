@@ -188,7 +188,7 @@ const Patients = (props) => {
                 actions:
         
                 <div>
-                    {row.htsCount >0 && (
+                    {row.htsCount >=0 && (
                     <>
                         <Link
                             to={{
@@ -221,38 +221,7 @@ const Patients = (props) => {
                         </Link> 
                     </>
                     )} 
-                    {row.htsCount <=0 && (
-                    <>                                 
-                        <Link
-                            to={{
-                                pathname: "edit-patient-Registration",
-                                state: { patientId : row.id, patientObj: row }
-                            }}
-                        >
-                            <ButtonGroup variant="contained" 
-                                aria-label="split button"
-                                style={{backgroundColor:'rgb(153, 46, 98)', height:'30px',width:'215px'}}
-                                size="large"
-                            >
-                            <Button
-                            color="primary"
-                            size="small"
-                            aria-label="select merge strategy"
-                            aria-haspopup="menu"
-                            style={{backgroundColor:'rgb(153, 46, 98)'}}
-                            >
-                                <TiArrowForward />
-                            </Button>
-                            <Button 
-                            style={{backgroundColor:'rgb(153, 46, 98)'}}
-                            >
-                                <span style={{fontSize:'12px', color:'#fff', fontWeight:'bolder'}}>Enroll Patient</span>
-                            </Button>
-                            
-                            </ButtonGroup>
-                        </Link> 
-                    </>
-                    )}                                     
+                                    
                 </div>
                 
                 }))}

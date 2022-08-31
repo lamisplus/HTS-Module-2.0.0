@@ -1,23 +1,21 @@
 import React, {useCallback, useEffect, useState} from "react";
-
+import axios from "axios";
 import {FormGroup, Label , CardBody, Spinner,Input,Form} from "reactstrap";
-import * as moment from 'moment';
 import {makeStyles} from "@material-ui/core/styles";
-import {Card, CardContent} from "@material-ui/core";
+import {Card} from "@material-ui/core";
 // import AddIcon from "@material-ui/icons/Add";
 // import CancelIcon from "@material-ui/icons/Cancel";
-// import {ToastContainer, toast} from "react-toastify";
+import { toast} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
 // import {Link, useHistory, useLocation} from "react-router-dom";
 // import {TiArrowBack} from 'react-icons/ti'
-// import {token, url as baseUrl } from "../../../api";
+import {token, url as baseUrl } from "../../../../api";
 import 'react-phone-input-2/lib/style.css'
-import {Label as LabelRibbon, Button} from 'semantic-ui-react'
+import {Label as LabelRibbon, Button, Message} from 'semantic-ui-react'
 // import 'semantic-ui-css/semantic.min.css';
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
-
 
 
 const useStyles = makeStyles((theme) => ({
@@ -61,10 +59,44 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const BasicInfo = (props) => {
-    const classes = useStyles();
+const PostTest = (props) => {
+    const patientID= props.patientObj && props.patientObj.personResponseDto ? props.patientObj.personResponseDto.id : "";
+    const clientId = props.patientObj && props.patientObj ? props.patientObj.id : "";
     const [saving, setSaving] = useState(false);
-    const [errors, setErrors] = useState({});
+    ///const [errors, setErrors] = useState({});
+    const [objValues, setObjValues]= useState(
+        {
+            htsClientId: clientId,
+            postTestCounselingKnowledgeAssessment: {},
+            personId: patientID,
+        }
+    )
+    const [postTest, setPostTest]= useState(
+        {
+            hivTestResult:"", 
+            hivTestBefore:"", 
+            hivRequestResult:"", 
+            hivRequestResultCt:"",                             
+            clientReceivedHivTestResult:"", 
+            postTestCounseling:"", 
+            riskReduction:"", 
+            postTestDisclosure:"",
+            bringPartnerHivtesting:"", 
+            childrenHivtesting:"", 
+            informationFp:"", 
+            partnerFpThanCondom:"", 
+            partnerFpUseCondom:"",
+            correctCondomUse:"", 
+            condomProvidedToClient:"", 
+            unprotectedSexRegularPartnerLastThreeMonth:"", 
+            referredToServices:"",
+        }
+    )
+    const handleInputChangePostTest = e => { 
+        //setErrors({...temp, [e.target.name]:""})        
+        setPostTest ({...postTest,  [e.target.name]: e.target.value}); 
+          
+    }
     const handleItemClick =(page, completedMenu)=>{
         props.handleItemClick(page)
         if(props.completed.includes(completedMenu)) {
@@ -73,6 +105,38 @@ const BasicInfo = (props) => {
             props.setCompleted([...props.completed, completedMenu])
         }
     }
+    useEffect(() => { 
+        setPostTest({...postTest, ...props.patientObj.postTestCounselingKnowledgeAssessment}) 
+
+    }, [ props.patientObj]);
+    const handleSubmit =(e)=>{
+        e.preventDefault();
+            objValues.htsClientId= clientId
+            objValues.postTestCounselingKnowledgeAssessment= postTest
+            objValues.personId= patientID
+            axios.put(`${baseUrl}hts/${clientId}/post-test-counseling`,objValues,
+            { headers: {"Authorization" : `Bearer ${token}`}},
+            
+            )
+            .then(response => {
+                setSaving(false);
+                props.setPatientObj(props && props.patientObj ? props.patientObj : "")
+                toast.success("Risk Assesment successful");
+                handleItemClick('recency-testing', 'post-test' )
+
+            })
+            .catch(error => {
+                setSaving(false);
+                if(error.response && error.response.data){
+                    let errorMessage = error.response.data.apierror && error.response.data.apierror.message!=="" ? error.response.data.apierror.message :  "Something went wrong, please try again";
+                    toast.error(errorMessage);
+                }
+                else{
+                    toast.error("Something went wrong. Please try again...");
+                }
+            });
+            
+    }
 
     return (
         <>
@@ -80,8 +144,6 @@ const BasicInfo = (props) => {
                 <CardBody>
                
                 <h2 >POST TEST COUNSELING</h2>
-               
-                <br/>
                     <form >
                         <div className="row">
                         <LabelRibbon as='a' color='blue' style={{width:'106%', height:'35px'}} ribbon>
@@ -94,12 +156,13 @@ const BasicInfo = (props) => {
                                         className="form-control"
                                         name="hivTestResult"
                                         id="hivTestResult"
-                                        
+                                        value={postTest.hivTestResult}
+                                        onChange={handleInputChangePostTest}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>
-                                        <option value="Yes">Positive</option>
-                                        <option value="No">Negative</option>
+                                        <option value="True">Positive</option>
+                                        <option value="false">Negative</option>
                                         
                                     </select>
                                     
@@ -112,14 +175,15 @@ const BasicInfo = (props) => {
                                         className="form-control"
                                         name="hivTestBefore"
                                         id="hivTestBefore"
-                                        
+                                        value={postTest.hivTestBefore}
+                                        onChange={handleInputChangePostTest}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>
-                                        <option value="Yes">Not previously tested</option>
-                                        <option value="No">previously tested negative</option>
-                                        <option value="Yes">Previously tested positive in HIV care</option>
-                                        <option value="No">previously tested positive not in HIV care</option>
+                                        <option value="Not previously tested">Not previously tested</option>
+                                        <option value="Previously tested negative">Previously tested negative</option>
+                                        <option value="Previously tested positive in HIV care">Previously tested positive in HIV care</option>
+                                        <option value="Previously tested positive not in HIV care">Previously tested positive not in HIV care</option>
                                         
                                     </select>
                                     
@@ -132,12 +196,13 @@ const BasicInfo = (props) => {
                                         className="form-control"
                                         name="hivRequestResult"
                                         id="hivRequestResult"
-                                        
+                                        value={postTest.hivRequestResult}
+                                        onChange={handleInputChangePostTest}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>
-                                        <option value="Yes">Yes</option>
-                                        <option value="No">No</option>
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
                                         
                                     </select>
                                     
@@ -150,12 +215,13 @@ const BasicInfo = (props) => {
                                         className="form-control"
                                         name="hivRequestResultCt"
                                         id="hivRequestResultCt"
-                                        
+                                        value={postTest.hivRequestResultCt}
+                                        onChange={handleInputChangePostTest}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>
-                                        <option value="Yes">Yes</option>
-                                        <option value="No">No</option>
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
                                         
                                     </select>
                                     
@@ -168,17 +234,18 @@ const BasicInfo = (props) => {
                                         className="form-control"
                                         name="clientReceivedHivTestResult"
                                         id="clientReceivedHivTestResult"
-                                        
+                                        value={postTest.clientReceivedHivTestResult}
+                                        onChange={handleInputChangePostTest}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>
-                                        <option value="Yes">Yes</option>
-                                        <option value="No">No</option>
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
                                         
                                     </select>
                                     
                                 </FormGroup>
-                            </div>
+                            </div> 
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Post test counseling done *</Label>
@@ -186,12 +253,13 @@ const BasicInfo = (props) => {
                                         className="form-control"
                                         name="postTestCounseling"
                                         id="postTestCounseling"
-                                        
+                                        value={postTest.postTestCounseling}
+                                        onChange={handleInputChangePostTest}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>
-                                        <option value="Yes">Yes</option>
-                                        <option value="No">No</option>
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
                                         
                                     </select>
                                     
@@ -204,12 +272,13 @@ const BasicInfo = (props) => {
                                         className="form-control"
                                         name="riskReduction"
                                         id="riskReduction"
-                                        
+                                        value={postTest.riskReduction}
+                                        onChange={handleInputChangePostTest}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>
-                                        <option value="Yes">Yes</option>
-                                        <option value="No">No</option>
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
                                         
                                     </select>
                                     
@@ -223,17 +292,18 @@ const BasicInfo = (props) => {
                                         className="form-control"
                                         name="postTestDisclosure"
                                         id="postTestDisclosure"
-                                        
+                                        value={postTest.postTestDisclosure}
+                                        onChange={handleInputChangePostTest}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>
-                                        <option value="Yes">Yes</option>
-                                        <option value="No">No</option>
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
                                         
                                     </select>
                                     
                                 </FormGroup>
-                            </div>
+                            </div>                            
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Will bring partner(s) for HIV testing *</Label>
@@ -241,12 +311,13 @@ const BasicInfo = (props) => {
                                         className="form-control"
                                         name="bringPartnerHivtesting"
                                         id="bringPartnerHivtesting"
-                                        
+                                        value={postTest.bringPartnerHivtesting}
+                                        onChange={handleInputChangePostTest}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>
-                                        <option value="Yes">Yes</option>
-                                        <option value="No">No</option>
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
                                         
                                     </select>
                                     
@@ -259,12 +330,13 @@ const BasicInfo = (props) => {
                                         className="form-control"
                                         name="childrenHivtesting"
                                         id="childrenHivtesting"
-                                        
+                                        value={postTest.childrenHivtesting}
+                                        onChange={handleInputChangePostTest}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>
-                                        <option value="Yes">Yes</option>
-                                        <option value="No">No</option>
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
                                         
                                     </select>
                                     
@@ -277,12 +349,13 @@ const BasicInfo = (props) => {
                                         className="form-control"
                                         name="informationFp"
                                         id="informationFp"
-                                        
+                                        value={postTest.informationFp}
+                                        onChange={handleInputChangePostTest}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>
-                                        <option value="Yes">Yes</option>
-                                        <option value="No">No</option>
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
                                         
                                     </select>
                                     
@@ -295,18 +368,19 @@ const BasicInfo = (props) => {
                                         className="form-control"
                                         name="partnerFpThanCondom"
                                         id="partnerFpThanCondom"
-                                        
+                                        value={postTest.partnerFpThanCondom}
+                                        onChange={handleInputChangePostTest}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>
-                                        <option value="Yes">Yes</option>
-                                        <option value="No">No</option>
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
                                         
                                     </select>
                                     
                                 </FormGroup>
                             </div>
-
+                            
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Client/Partner use condoms as (one) FP method </Label>
@@ -314,12 +388,13 @@ const BasicInfo = (props) => {
                                         className="form-control"
                                         name="partnerFpUseCondom"
                                         id="partnerFpUseCondom"
-                                        
+                                        value={postTest.partnerFpUseCondom}
+                                        onChange={handleInputChangePostTest}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>
-                                        <option value="Yes">Yes</option>
-                                        <option value="No">No</option>
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
                                         
                                     </select>
                                     
@@ -332,12 +407,13 @@ const BasicInfo = (props) => {
                                         className="form-control"
                                         name="correctCondomUse"
                                         id="correctCondomUse"
-                                        
+                                        value={postTest.correctCondomUse}
+                                        onChange={handleInputChangePostTest}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>
-                                        <option value="Yes">Yes</option>
-                                        <option value="No">No</option>
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
                                         
                                     </select>
                                     
@@ -350,12 +426,13 @@ const BasicInfo = (props) => {
                                         className="form-control"
                                         name="condomProvidedToClient"
                                         id="condomProvidedToClient"
-                                        
+                                        value={postTest.condomProvidedToClient}
+                                        onChange={handleInputChangePostTest}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>
-                                        <option value="Yes">Yes</option>
-                                        <option value="No">No</option>
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
                                         
                                     </select>
                                     
@@ -368,12 +445,13 @@ const BasicInfo = (props) => {
                                         className="form-control"
                                         name="unprotectedSexRegularPartnerLastThreeMonth"
                                         id="unprotectedSexRegularPartnerLastThreeMonth"
-                                        
+                                        value={postTest.unprotectedSexRegularPartnerLastThreeMonth}
+                                        onChange={handleInputChangePostTest}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>
-                                        <option value="Yes">Yes</option>
-                                        <option value="No">No</option>
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
                                         
                                     </select>
                                     
@@ -404,24 +482,30 @@ const BasicInfo = (props) => {
                                         className="form-control"
                                         name="referredToServices"
                                         id="referredToServices"
-                                        
+                                        value={postTest.referredToServices}
+                                        onChange={handleInputChangePostTest}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>
-                                        <option value="Yes">Yes</option>
-                                        <option value="No">No</option>
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
                                         
                                     </select>
                                     
                                 </FormGroup>
                             </div>
-                                                      
+                            <Message success>
+                                <h4>If client tests HIV negative, and HIV Risk Assessment Score {">0"} or
+                                    there is evidence for a STI syndrome, recommend re-testing after 3 months</h4>
+                                
+                            </Message>
+                                                
                             {saving ? <Spinner /> : ""}
                             <br />
                             <div className="row">
                             <div className="form-group mb-3 col-md-6">
-                            <Button content='Back' icon='left arrow' labelPosition='left' style={{backgroundColor:"#992E62", color:'#fff'}} onClick={()=>handleItemClick('recency-testing', 'recency-testing')}/>
-                            <Button content='Next' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={()=>handleItemClick('indexing', 'post-test')}/>
+                                <Button content='Back' icon='left arrow' labelPosition='left' style={{backgroundColor:"#992E62", color:'#fff'}} onClick={()=>handleItemClick('pre-test-counsel', 'pre-test-counsel')}/>
+                                <Button content='Next' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
                             </div>
                             </div>
                         </div>
@@ -432,4 +516,4 @@ const BasicInfo = (props) => {
     );
 };
 
-export default BasicInfo
+export default PostTest

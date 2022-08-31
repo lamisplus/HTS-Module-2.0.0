@@ -65,7 +65,7 @@ const HivTestResult = (props) => {
     const [saving, setSaving] = useState(false);
     const [errors, setErrors] = useState({});
     let temp = { ...errors }
-    console.log(props.patientObj)
+
     const patientID= props.patientObj && props.patientObj.personResponseDto ? props.patientObj.personResponseDto.id : "";
     const clientId = props.patientObj && props.patientObj ? props.patientObj.id : "";
     const [objValues, setObjValues]= useState(
@@ -75,8 +75,10 @@ const HivTestResult = (props) => {
             htsClientId:"",
             personId: "",
             test1: {},
-            tieBreakerTest: {}
-           
+            tieBreakerTest: {},
+            syphilisTesting:{},
+            hepatitisTesting:{},
+            others:{}
         }
     )
 
@@ -110,6 +112,40 @@ const HivTestResult = (props) => {
         //setErrors({...temp, [e.target.name]:""}) 
         setTieBreakerTest ({...tieBreakerTest,  [e.target.name]: e.target.value});            
     }
+    const [syphills, setSyphills]= useState(
+        {
+            syphilisTestResult :"",
+           // result  :"",            
+        }
+    )
+    const handleInputChangeSyphills = e => { 
+        //setErrors({...temp, [e.target.name]:""}) 
+        setSyphills ({...syphills,  [e.target.name]: e.target.value});            
+    }
+    const [hepatitis, setHepatitis]= useState(
+        {
+            hepatitisCTestResult :"",
+            hepatitisBTestResult  :"", 
+            longitude:"",
+            latitude:"",
+            adhocCode :""                       
+        }
+    )
+    const handleInputChangeHepatitis = e => { 
+        //setErrors({...temp, [e.target.name]:""}) 
+        setHepatitis ({...hepatitis,  [e.target.name]: e.target.value});            
+    }
+    const [others, setOthers]= useState(
+        {
+            longitude:"",
+            latitude:"",
+            adhocCode :""                       
+        }
+    )
+    const handleInputChangeOthers = e => { 
+        //setErrors({...temp, [e.target.name]:""}) 
+        setOthers ({...others,  [e.target.name]: e.target.value});            
+    }
     const handleItemClick =(page, completedMenu)=>{
         props.handleItemClick(page)
         if(props.completed.includes(completedMenu)) {
@@ -127,6 +163,14 @@ const HivTestResult = (props) => {
                 setErrors({ ...temp })
         return Object.values(temp).every(x => x == "")
     }
+    useEffect(() => { 
+        setConfirmatoryTest ({...confirmatoryTest, ...props.patientObj.confirmatoryTest}) 
+        setInitailTest ({...initialTest, ...props.patientObj.test1}) 
+        setTieBreakerTest ({...tieBreakerTest, ...props.patientObj.tieBreakerTest}) 
+        setSyphills ({...syphills, ...props.patientObj.syphilisTesting}) 
+        setHepatitis({...hepatitis, ...props.patientObj.hepatitisTesting}) 
+
+    }, [ props.patientObj]);
     const handleSubmit =(e)=>{
         handleItemClick('recency-testing', 'hiv-test')
         e.preventDefault();
@@ -135,14 +179,15 @@ const HivTestResult = (props) => {
             objValues.personId= patientID
             objValues.test1= initialTest
             objValues.tieBreakerTest=tieBreakerTest
-            console.log(objValues)
-            axios.put(`${baseUrl}hts/${clientId}/pre-test-counseling`,objValues,
+            objValues.syphilisTesting=syphills
+            objValues.hepatitisTesting=hepatitis
+            axios.put(`${baseUrl}hts/${clientId}/request-result`,objValues,
             { headers: {"Authorization" : `Bearer ${token}`}}, )
             .then(response => {
                 setSaving(false);
                 props.setPatientObj(response.data)
                 toast.success("HIV test successful");
-                handleItemClick('recency-testing', 'hiv-test')
+                handleItemClick('indexing', 'hiv-test')
             })
             .catch(error => {
                 setSaving(false);
@@ -162,17 +207,14 @@ const HivTestResult = (props) => {
             <Card >
                 <CardBody>
                
-                <h2 style={{color:'#000'}}>HIV TEST RESULT</h2>
-              
-                <br/>
-                <br/>
+                <h2 style={{color:'#000'}}>REQUEST AND RESULT FORM</h2>
                     <form >
                         <div className="row">
                         <LabelRibbon as='a' color='blue' style={{width:'106%', height:'35px'}} ribbon>
                         <h4 style={{color:'#fff'}}>HIV TEST RESULT</h4>
 
                         </LabelRibbon>
-
+                           <br/>
                            <div className="form-group  col-md-2"></div>
                             <h4>Initial HIV Test:</h4>
                             <div className="form-group mb-3 col-md-5">
@@ -296,6 +338,26 @@ const HivTestResult = (props) => {
                             </div>
                             <div className="form-group  col-md-2"></div>
                             </>)}
+                            <div className="form-group  col-md-5">
+                                <FormGroup>
+                                    <Label>CD4 Count </Label>
+                                    <select
+                                        className="form-control"
+                                        name="result"
+                                        id="result"
+                                        value={initialTest.result}
+                                        onChange={handleInputChangeInitial}
+                                        style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                    >
+                                        <option value={""}></option>
+                                        <option value="Yes">Reactive</option>
+                                        <option value="No">Non Reactive</option>
+                                        
+                                    </select>
+                                    
+                                </FormGroup>
+                            </div>
+                            <div className="form-group  col-md-7"></div>
                             <div className="form-group  col-md-6">
                                 {initialTest.result==='No'  && (
                                     <LabelRibbon color="green" >
@@ -325,11 +387,127 @@ const HivTestResult = (props) => {
                                 )}
                             </div>
                             
+                            <LabelRibbon as='a' color='blue' style={{width:'106%', height:'35px'}} ribbon>
+                            <h5 style={{color:'#fff'}}>Syphilis Testing</h5>
+                        </LabelRibbon>
+                        <br/> <br/>
+                            <div className="form-group  col-md-4">
+                                <FormGroup>
+                                    <Label>Syphilis test result *</Label>
+                                    <select
+                                        className="form-control"
+                                        name="syphilisTestResult"
+                                        id="syphilisTestResult"
+                                        value={syphills.syphilisTestResult}
+                                        onChange={handleInputChangeSyphills}
+                                        style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                    >
+                                        <option value={""}></option>
+                                        <option value="Yes">Reactive</option>
+                                        <option value="No">Non-Reactive</option>
+                                        
+                                    </select>
+                                    
+                                </FormGroup>
+                            </div>
+ 
+                            <LabelRibbon as='a' color='blue' style={{width:'106%', height:'35px'}} ribbon>
+                            <h5 style={{color:'#fff'}}>Hepatitis Testing</h5>
+                            </LabelRibbon>
+                            <br/> <br/>
+                            <div className="form-group  col-md-4">
+                                <FormGroup>
+                                    <Label>Hepatitis B virus test result *</Label>
+                                    <select
+                                        className="form-control"
+                                        name="hepatitisBTestResult"
+                                        id="hepatitisBTestResult"
+                                        value={hepatitis.hepatitisBTestResult}
+                                        onChange={handleInputChangeHepatitis}
+                                        style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                    >
+                                        <option value={""}></option>
+                                        <option value="Yes">Positive</option>
+                                        <option value="No">Negative</option>
+                                        
+                                    </select>
+                                    
+                                </FormGroup>
+                            </div>
+                            <div className="form-group  col-md-4">
+                                <FormGroup>
+                                    <Label>Hepatitis C virus test result *</Label>
+                                    <select
+                                        className="form-control"
+                                        name="hepatitisCTestResult"
+                                        id="hepatitisCTestResult"
+                                        value={hepatitis.hepatitisCTestResult}
+                                        onChange={handleInputChangeHepatitis}
+                                        style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                    >
+                                       <option value={""}></option>
+                                        <option value="Yes">Positive</option>
+                                        <option value="No">Negative</option>
+                                        
+                                    </select>
+                                    
+                                </FormGroup>
+                            </div>
+                            <LabelRibbon as='a' color='blue' style={{width:'106%', height:'35px'}} ribbon>
+                            <h5 style={{color:'#fff'}}>Others</h5>
+                            </LabelRibbon>
+                            <br/> <br/>
+                            <div className="form-group mb-3 col-md-4">
+                                <FormGroup>
+                                <Label for="">Longitude</Label>
+                                <Input
+                                    type="number"
+                                    name="longitude"
+                                    id="longitude"
+                                    value={others.longitude}
+                                    onChange={handleInputChangeOthers}
+                                    style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
+                                   
+                                />
+                                
+                                </FormGroup>
+                            </div>
+                            <div className="form-group mb-3 col-md-4">
+                                <FormGroup>
+                                <Label for="">Latitude</Label>
+                                <Input
+                                    type="number"
+                                    name="latitude"
+                                    id="latitude"
+                                    value={others.latitude}
+                                    onChange={handleInputChangeOthers}
+                                    style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
+                                   
+                                />
+                                
+                                </FormGroup>
+                            </div>
+                            <div className="form-group mb-3 col-md-4">
+                                <FormGroup>
+                                <Label for="">Adhoc Code</Label>
+                                <Input
+                                    type="number"
+                                    name="adhocCode"
+                                    id="adhocCode"
+                                    value={others.adhocCode}
+                                    onChange={handleInputChangeOthers}
+                                    style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
+                                   
+                                />
+                                
+                                </FormGroup>
+                            </div>
+                            
                             {saving ? <Spinner /> : ""}
                             <br />
                             <div className="row">
                             <div className="form-group mb-3 col-md-6">
-                            <Button content='Back' icon='left arrow' labelPosition='left' style={{backgroundColor:"#992E62", color:'#fff'}} onClick={()=>handleItemClick('pre-test-counsel', 'pre-test-counsel')}/>
+                            <Button content='Back' icon='left arrow' labelPosition='left' style={{backgroundColor:"#992E62", color:'#fff'}} onClick={()=>handleItemClick('recency-testing', 'recency-testing')}/>
                             <Button content='Next' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
                             </div>
                             </div>

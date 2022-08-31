@@ -8,7 +8,7 @@ import PatientCardDetail from './PatientCard'
 import { useHistory } from "react-router-dom";
 import {   Tab, Tabs, } from "react-bootstrap";
 import PatientHistory from './../History/PatientHistory';
-
+import PatientHtsEnrollment from './PatientHtsEnrollment'
 
 const styles = theme => ({
   root: {
@@ -48,7 +48,7 @@ const styles = theme => ({
 
 function PatientCard(props) {
     let history = useHistory();
-    //const [key, setKey] = useState('home');
+    const [activePage, setActivePage] = useState({activePage:"home", activeObject:{}, actionType:""});
     const { classes } = props;
     const patientObj = history.location && history.location.state ? history.location.state.patientObj : {}
     //console.log(patientObj)
@@ -57,7 +57,12 @@ function PatientCard(props) {
       <Card >
         <CardContent>
             <PatientCardDetail patientObj={patientObj}/>
-            <PatientHistory patientObj={patientObj}/>
+            {activePage.activePage==="home" && (
+              <PatientHistory patientObj={patientObj} activePage={activePage} setActivePage={setActivePage}/>
+            )}
+            {activePage.activePage==="view" && (
+              <PatientHtsEnrollment patientObj={patientObj} activePage={activePage} setActivePage={setActivePage}/>
+            )}
          </CardContent>
       </Card>
     </div>

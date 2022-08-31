@@ -95,12 +95,9 @@ const useStyles = makeStyles(theme => ({
 
 
 const PatientnHistory = (props) => {
-
     const [patientList, setPatientList] = useState([])
     //const [patientObj, setpatientObj] = useState([])
     const patientId = props.patientObj && props.patientObj.id ? props.patientObj.id: null
-    const [hideNewHTSTest, setHideNewHTSTest] = useState(false)
-    const [key, setKey] = useState('home');
 
     useEffect(() => {
         patients()
@@ -118,7 +115,9 @@ const PatientnHistory = (props) => {
             .catch((error) => {    
             });        
     }
-
+const LoadViewPage =(row, actionType)=>{
+    props.setActivePage({...props.activePage, activePage:"view", activeObject:row, actionType:actionType})
+}
 
   return (
     <div> 
@@ -128,7 +127,6 @@ const PatientnHistory = (props) => {
               columns={[
               { title: "Date", field: "date" },
               {title: "Pre Test Counseling",field: "pre",},
-                { title: "HIV Test", field: "hivTest" },
                 { title: "Recency Test", field: "rencency" },
                 { title: "Post Test", field: "post" },
                 { title: "Index Notification", field: "indexNotifiation", filtering: false },  
@@ -137,12 +135,12 @@ const PatientnHistory = (props) => {
               ]}
               data={ patientList.map((row) => ({
                 date: row.dateVisit,
-                pre: (row.knowledgeAssessment !==null || row.riskAssessment !==null || row.tbScreening !==null || row.stiScreening !==null) ? "Completed":"Filled but not completed",
-                hivTest: row.participant_id,
-                rencency: row.participant_id,
-                post:"",
-                indexNotifiation:"",
-                requestResult: "",   
+                pre: row.knowledgeAssessment? "Filled":"Not Filled ",
+                requestResult:row.confirmatoryTest ? "Filled":"Not Filled ",
+                rencency: row.knowledgeAssessment ? "Filled":"Not Filled ",
+                post:row.postTestCounselingKnowledgeAssessment ? "Filled":"Not Filled ",
+                indexNotifiation:row.indexNotificationServicesElicitation ? "Filled":"Not Filled ",
+
                 actions:
             
                     <div>
@@ -153,16 +151,13 @@ const PatientnHistory = (props) => {
 
                             <Dropdown.Menu style={{ marginTop:"10px", }}>
                               <Dropdown.Item 
-                                //onClick={()=>LoadViewPage(row, 'view')}
+                                onClick={()=>LoadViewPage(row, 'view')}
                                 > <Icon name='eye' />
                                 View  
                                 </Dropdown.Item>
                                 <Dropdown.Item  
-                               // onClick={()=>LoadViewPage(row, 'update')}
+                               onClick={()=>LoadViewPage(row, 'update')}
                                 ><Icon name='edit' />Edit</Dropdown.Item>
-                             <Dropdown.Item  
-                             //onClick={()=>LoadDeletePage(row, 'delete')}
-                             > <Icon name='trash' /> Delete</Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
                             </Button>

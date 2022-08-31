@@ -16,13 +16,13 @@ import {Link, useHistory, useLocation} from "react-router-dom";
 // import {TiArrowBack} from 'react-icons/ti'
 import {token, url as baseUrl } from "../../../../api";
 import 'react-phone-input-2/lib/style.css'
-import { Button} from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css';
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
-
+import { Button} from 'semantic-ui-react'
+import {  Modal } from "react-bootstrap";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -84,6 +84,8 @@ const BasicInfo = (props) => {
     const [counselingType, setCounselingType] = useState([]);
     const [pregnancyStatus, setPregnancyStatus] = useState([]);
     let temp = { ...errors }
+    const [open, setOpen] = React.useState(false)
+    const toggle = () => setOpen(!open);
     const [objValues, setObjValues]= useState(
         {
             active: true,
@@ -136,6 +138,7 @@ const BasicInfo = (props) => {
         Sex();
         CounselingType();
         PregnancyStatus()
+        
 
     }, []);
 
@@ -318,6 +321,7 @@ const BasicInfo = (props) => {
                 age_now--;
             }
             objValues.age=age_now
+            
             //setBasicInfo({...basicInfo, age: age_now});        
         } else {
             setObjValues({...objValues, age:  ""});
@@ -325,6 +329,9 @@ const BasicInfo = (props) => {
         setObjValues ({...objValues,  [e.target.name]: e.target.value});
    
         setObjValues({...objValues, dob: e.target.value});
+        if(objValues.age!=='' && objValues.age>=85){
+            toggle()
+        }
         
     }
     const handleDateOfBirthChange = (e) => {
@@ -338,7 +345,9 @@ const BasicInfo = (props) => {
     }
     const handleAgeChange = (e) => {
         if (!ageDisabled && e.target.value) {
-            
+            if(e.target.value!=='' && e.target.value>=85){
+                toggle()
+            }
             const currentDate = new Date();
             currentDate.setDate(15);
             currentDate.setMonth(5);
@@ -549,6 +558,7 @@ const BasicInfo = (props) => {
                                     type="number"
                                     name="clientCode"
                                     id="clientCode"
+                                    min={0}
                                     value={objValues.clientCode}
                                     onChange={handleInputChange}
                                     style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
@@ -632,6 +642,7 @@ const BasicInfo = (props) => {
                                     id="dateVisit"
                                     value={objValues.dateVisit}
                                     onChange={handleInputChange}
+                                    min={objValues.dateOfRegistration}
                                     max= {moment(new Date()).format("YYYY-MM-DD") }
                                     style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
                                     
@@ -916,6 +927,7 @@ const BasicInfo = (props) => {
                                         type="number"
                                         name="numChildren"
                                         id="numChildren"
+                                        min={0}
                                         value={objValues.numChildren}
                                         onChange={handleInputChange}
                                         style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
@@ -932,6 +944,7 @@ const BasicInfo = (props) => {
                                     <Input
                                         type="number"
                                         name="numWives"
+                                        min={0}
                                         id="numWives"
                                         value={objValues.numWives}
                                         onChange={handleInputChange}
@@ -963,6 +976,7 @@ const BasicInfo = (props) => {
                                 </FormGroup>
                             </div>
                             {objValues.indexClient==='true' && (
+                            <>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Relationship of the index client</Label>
@@ -983,6 +997,22 @@ const BasicInfo = (props) => {
                                     
                                 </FormGroup>
                             </div>
+                            <div className="form-group  col-md-4">
+                            <FormGroup>
+                                <Label>Index Client Code/ID</Label>
+                                <Input
+                                    type="text"
+                                    name="indexClientCode"
+                                    id="indexClientCode"
+                                    value={objValues.indexClientCode}
+                                    onChange={handleInputChange}
+                                    style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
+                               
+                                />
+                                  
+                            </FormGroup>
+                            </div>
+                            </>
                             )}
                             {objValues.sex==='377' && (
                             <>
@@ -1029,21 +1059,7 @@ const BasicInfo = (props) => {
                             </div>
                             </>
                             )}
-                            <div className="form-group  col-md-4">
-                                <FormGroup>
-                                    <Label>Index Client Code/ID</Label>
-                                    <Input
-                                        type="text"
-                                        name="indexClientCode"
-                                        id="indexClientCode"
-                                        value={objValues.indexClientCode}
-                                        onChange={handleInputChange}
-                                        style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
-                                   
-                                    />
-                                      
-                                </FormGroup>
-                            </div>
+                            
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>First time visit</Label>
@@ -1133,8 +1149,25 @@ const BasicInfo = (props) => {
                             </div>
                         </div>
                     </form>
+                    
                 </CardBody>
-            </Card>                                 
+            </Card> 
+            <Modal show={open} toggle={toggle} className="fade" size="sm"
+                aria-labelledby="contained-modal-title-vcenter"
+                centered>
+             <Modal.Header >
+            <Modal.Title id="contained-modal-title-vcenter">
+                Notification!
+            </Modal.Title>
+            </Modal.Header>
+                <Modal.Body>
+                    <h4>Are you Sure of the Age entered?</h4>
+                    
+                </Modal.Body>
+            <Modal.Footer>
+                <Button onClick={toggle} style={{backgroundColor:"#014d88", color:"#fff"}}>Yes</Button>
+            </Modal.Footer>
+            </Modal>                             
         </>
     );
 };

@@ -1,22 +1,20 @@
 import React, {useCallback, useEffect, useState} from "react";
-
+import axios from "axios";
 import {FormGroup, Label , CardBody, Spinner,Input,Form} from "reactstrap";
 import * as moment from 'moment';
 import {makeStyles} from "@material-ui/core/styles";
 import {Card, CardContent} from "@material-ui/core";
-// import {ToastContainer, toast} from "react-toastify";
+import { toast} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
 // import {Link, useHistory, useLocation} from "react-router-dom";
 // import {TiArrowBack} from 'react-icons/ti'
-// import {token, url as baseUrl } from "../../../api";
 import 'react-phone-input-2/lib/style.css'
 import {Label as LabelRibbon, Button} from 'semantic-ui-react'
 // import 'semantic-ui-css/semantic.min.css';
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
-
-
+import {token, url as baseUrl } from "../../../../api";
 
 const useStyles = makeStyles((theme) => ({
     card: {
@@ -58,33 +56,86 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-
 const BasicInfo = (props) => {
     const classes = useStyles();
+    const patientID= props.patientObj && props.patientObj.personResponseDto ? props.patientObj.personResponseDto.id : "";
+    const clientId = props.patientObj && props.patientObj ? props.patientObj.id : "";
     const [saving, setSaving] = useState(false);
     const [errors, setErrors] = useState({});
+    
     const handleItemClick =(page, completedMenu)=>{
         props.handleItemClick(page)
         if(props.completed.includes(completedMenu)) {
-
         }else{
             props.setCompleted([...props.completed, completedMenu])
         }
     }
 
+    const [objValues, setObjValues]= useState(
+        {
+            htsClientId: clientId,
+            recency: {},
+            personId: patientID,
+        }
+    )
+    const [recency, setRecency]= useState(
+        {
+            optOutRTRI:"", 
+            optOutRTRITestName:"", 
+            optOutRTRITestDate:"", 
+            rencencyId:"",  
+            controlLine:"",  
+            verififcationLine:"", 
+            longTermLine:"",  
+            rencencyInterpretation:"", 
+            hasViralLoad:"", 
+        }
+    )
+    const handleInputChangeRecency = e => { 
+        //setErrors({...temp, [e.target.name]:""})        
+        setRecency ({...recency,  [e.target.name]: e.target.value}); 
+          
+    }
+    const handleSubmit =(e)=>{
+        e.preventDefault();
+            objValues.htsClientId= clientId
+            objValues.recency= recency
+            objValues.personId= patientID
+            axios.put(`${baseUrl}hts/${clientId}/recency`,objValues,
+            { headers: {"Authorization" : `Bearer ${token}`}},
+            
+            )
+            .then(response => {
+                setSaving(false);
+                props.setPatientObj(props && props.patientObj ? props.patientObj : "")
+                toast.success("Risk Assesment successful");
+                handleItemClick('hiv-test', 'recency-testing' )
+
+            })
+            .catch(error => {
+                setSaving(false);
+                if(error.response && error.response.data){
+                    let errorMessage = error.response.data.apierror && error.response.data.apierror.message!=="" ? error.response.data.apierror.message :  "Something went wrong, please try again";
+                    toast.error(errorMessage);
+                }
+                else{
+                    toast.error("Something went wrong. Please try again...");
+                }
+            });
+            
+    }
+
     return (
         <>
             <Card >
-                <CardBody>
-               
-                <h3>RECENCY FORM</h3>
-               
-                <br/>
+                <CardBody>               
+                <h2>RECENCY FORM</h2>
                     <form >
                         <div className="row">
                         <LabelRibbon as='a' color='blue' style={{width:'106%', height:'35px'}} ribbon>
                             <h5 style={{color:'#fff'}}>RENCENCY</h5>
                         </LabelRibbon>
+                        <br/><br/><br/>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Opt Out of RTRI?*</Label>
@@ -92,17 +143,21 @@ const BasicInfo = (props) => {
                                         className="form-control"
                                         name="optOutRTRI"
                                         id="optOutRTRI"
-                                        
+                                        value={recency.optOutRTRI}
+                                        onChange={handleInputChangeRecency}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>
-                                        <option value="Yes">Yes</option>
-                                        <option value="No">No</option>
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
                                         
                                     </select>
                                     
                                 </FormGroup>
                             </div>
+                            <div className="form-group  col-md-8"></div>
+                            {recency.optOutRTRI==='false' && (
+                            <>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Test Name *</Label>
@@ -110,7 +165,8 @@ const BasicInfo = (props) => {
                                         className="form-control"
                                         name="optOutRTRITestName"
                                         id="optOutRTRITestName"
-                                        
+                                        value={recency.optOutRTRITestName}
+                                        onChange={handleInputChangeRecency}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>
@@ -128,8 +184,8 @@ const BasicInfo = (props) => {
                                         type="date"
                                         name="optOutRTRITestDate"
                                         id="optOutRTRITestDate"
-                                        // value={objValues.dateOfEac1}
-                                        // onChange={handleInputChange}
+                                        value={recency.optOutRTRITestDate}
+                                        onChange={handleInputChangeRecency}
                                         max= {moment(new Date()).format("YYYY-MM-DD") }
                                         style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
                                     
@@ -142,14 +198,15 @@ const BasicInfo = (props) => {
                                     <Label>Recency ID *</Label>
                                     <select
                                         className="form-control"
-                                        name="RencencyId"
-                                        id="RencencyId"
-                                        
+                                        name="rencencyId"
+                                        id="rencencyId"
+                                        value={recency.rencencyId}
+                                        onChange={handleInputChangeRecency}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>
-                                        <option value="Yes">Yes</option>
-                                        <option value="No">No</option>
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
                                         
                                     </select>
                                     
@@ -162,12 +219,13 @@ const BasicInfo = (props) => {
                                         className="form-control"
                                         name="controlLine"
                                         id="controlLine"
-                                        
+                                        value={recency.controlLine}
+                                        onChange={handleInputChangeRecency}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>
-                                        <option value="Yes">Yes</option>
-                                        <option value="No">No</option>
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
                                         
                                     </select>
                                     
@@ -180,12 +238,13 @@ const BasicInfo = (props) => {
                                         className="form-control"
                                         name="verififcationLine"
                                         id="verififcationLine"
-                                        
+                                        value={recency.verififcationLine}
+                                        onChange={handleInputChangeRecency}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>
-                                        <option value="Yes">Yes</option>
-                                        <option value="No">No</option>
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
                                         
                                     </select>
                                     
@@ -198,12 +257,32 @@ const BasicInfo = (props) => {
                                         className="form-control"
                                         name="longTermLine"
                                         id="longTermLine"
-                                        
+                                        value={recency.longTermLine}
+                                        onChange={handleInputChangeRecency}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>
-                                        <option value="Yes">Yes</option>
-                                        <option value="No">No</option>
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
+                                        
+                                    </select>
+                                    
+                                </FormGroup>
+                            </div>
+                            <div className="form-group  col-md-4">
+                                <FormGroup>
+                                    <Label>Recency Interpretation *</Label>
+                                    <select
+                                        className="form-control"
+                                        name="rencencyInterpretation"
+                                        id="rencencyInterpretation"
+                                        value={recency.rencencyInterpretation}
+                                        onChange={handleInputChangeRecency}
+                                        style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                    >
+                                        <option value={""}></option>
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
                                         
                                     </select>
                                     
@@ -212,48 +291,31 @@ const BasicInfo = (props) => {
 
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Recency Interpretation *</Label>
-                                    <select
-                                        className="form-control"
-                                        name="rencencyInterpretation"
-                                        id="rencencyInterpretation"
-                                        
-                                        style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
-                                    >
-                                        <option value={""}></option>
-                                        <option value="Yes">Yes</option>
-                                        <option value="No">No</option>
-                                        
-                                    </select>
-                                    
-                                </FormGroup>
-                            </div>
-                            <div className="form-group  col-md-4">
-                                <FormGroup>
                                     <Label>Has viral load request been made? *</Label>
                                     <select
                                         className="form-control"
                                         name="hasViralLoad"
                                         id="hasViralLoad"
-                                        
+                                        value={recency.hasViralLoad}
+                                        onChange={handleInputChangeRecency}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>
-                                        <option value="Yes">Yes</option>
-                                        <option value="No">No</option>
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
                                         
                                     </select>
                                     
                                 </FormGroup>
                             </div>
-                           
+                            </>)}
                                                       
                             {saving ? <Spinner /> : ""}
                             <br />
                             <div className="row">
                             <div className="form-group mb-3 col-md-6">
-                            <Button content='Back' icon='left arrow' labelPosition='left' style={{backgroundColor:"#992E62", color:'#fff'}} onClick={()=>handleItemClick('hiv-test', 'hiv-test')}/>
-                            <Button content='Next' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={()=>handleItemClick('post-test', 'recency-testing')}/>
+                            <Button content='Back' icon='left arrow' labelPosition='left' style={{backgroundColor:"#992E62", color:'#fff'}} onClick={()=>handleItemClick('post-test','post-test')}/>
+                            <Button content='Next' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
                             </div>
                             </div>
                         </div>

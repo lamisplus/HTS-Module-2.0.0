@@ -80,7 +80,7 @@ public class HtsClientService {
 
     public HtsClientDto updatePreTestCounseling(Long id, HtsPreTestCounselingDto htsPreTestCounselingDto){
         HtsClient htsClient = this.getById(id);
-        if(htsClient.getPerson().getId() != htsPreTestCounselingDto.getPersonId()) throw new IllegalTypeException(Person.class, "Person", "id not match");
+        if(!this.getPersonId(htsClient).equals(htsPreTestCounselingDto.getPersonId())) throw new IllegalTypeException(Person.class, "Person", "id not match");
         htsClient.setKnowledgeAssessment(htsPreTestCounselingDto.getKnowledgeAssessment());
         htsClient.setRiskAssessment(htsPreTestCounselingDto.getRiskAssessment());
         htsClient.setTbScreening(htsPreTestCounselingDto.getTbScreening());
@@ -95,14 +95,9 @@ public class HtsClientService {
 
     public HtsClientDto updateRequestResult(Long id, HtsRequestResultDto htsRequestResultDto){
         HtsClient htsClient = this.getById(id);
-        if(htsClient.getPerson().getId() != htsRequestResultDto.getPersonId()) throw new IllegalTypeException(Person.class, "Person", "id not match");
-
-        /* htsClient.setTest1(htsRequestResultDto.getTest1());
-        htsClient.setConfirmatoryTest(htsRequestResultDto.getConfirmatoryTest());
-        htsClient.setTieBreakerTest(htsRequestResultDto.getTieBreakerTest());
-        htsClient.setHivTestResult(htsRequestResultDto.getHivTestResult());
-        htsClient.setSyphilisTesting(htsRequestResultDto.getSyphilisTesting());
-        htsClient.setHepatitisTesting(htsRequestResultDto.getHepatitisTesting());*/
+        if(!this.getPersonId(htsClient).equals( htsRequestResultDto.getPersonId())) {
+            throw new IllegalTypeException(Person.class, "Person", "id not match with supplied personId");
+        }
 
         htsClient = this.htsRequestResultDtoToHtsClient(htsClient, htsRequestResultDto);
         HtsClientDto htsClientDto = new HtsClientDto();

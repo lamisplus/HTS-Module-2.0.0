@@ -1,23 +1,38 @@
 package org.lamisplus.modules.hts.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.vladmihalcea.hibernate.type.array.IntArrayType;
+import com.vladmihalcea.hibernate.type.array.StringArrayType;
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
+import com.vladmihalcea.hibernate.type.json.JsonNodeBinaryType;
+import com.vladmihalcea.hibernate.type.json.JsonNodeStringType;
+import com.vladmihalcea.hibernate.type.json.JsonStringType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.hibernate.annotations.Cascade;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.Type;
-import org.lamisplus.modules.base.domain.entities.ApplicationCodeSet;
-import org.lamisplus.modules.base.domain.entities.OrganisationUnit;
-import org.lamisplus.modules.base.domain.entities.User;
+import org.hibernate.annotations.TypeDef;
+import org.hibernate.annotations.TypeDefs;
+import org.lamisplus.modules.base.domain.entities.Audit;
 import org.lamisplus.modules.patient.domain.entity.Person;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Table(name = "hts_client")
-public class HtsClient extends JsonBEntity implements Serializable {
+@TypeDefs({
+        @TypeDef(name = "string-array", typeClass = StringArrayType.class),
+        @TypeDef(name = "int-array", typeClass = IntArrayType.class),
+        @TypeDef(name = "json", typeClass = JsonStringType.class),
+        @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class),
+        @TypeDef(name = "jsonb-node", typeClass = JsonNodeBinaryType.class),
+        @TypeDef(name = "json-node", typeClass = JsonNodeStringType.class),
+})
+public class HtsClient extends Audit implements Serializable {
     @Id
     @Column(name = "id", updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -152,7 +167,12 @@ public class HtsClient extends JsonBEntity implements Serializable {
     @Column(name = "sti_screening", columnDefinition = "jsonb")
     private  Object stiScreening;
 
-    //HIV TEST RESULT
+    @Type(type = "jsonb")
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "sex_partner_risk_assessment", columnDefinition = "jsonb")
+    private  Object sexPartnerRiskAssessment;
+
+    //HIV Test Result
     @Type(type = "jsonb")
     @Basic(fetch = FetchType.LAZY)
     @Column(name = "test1", columnDefinition = "jsonb")
@@ -172,6 +192,45 @@ public class HtsClient extends JsonBEntity implements Serializable {
     @Column(name = "hiv_test_result")
     private String hivTestResult;
 
-    //Recency Testing
+    @Type(type = "jsonb")
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "syphilis_testing", columnDefinition = "jsonb")
+    private Object syphilisTesting;
 
+    @Type(type = "jsonb")
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "hepatitis_testing", columnDefinition = "jsonb")
+    private Object hepatitisTesting;
+
+    @Type(type = "jsonb")
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "others", columnDefinition = "jsonb")
+    private Object others;
+
+    @Type(type = "jsonb")
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "cd4", columnDefinition = "jsonb")
+    private Object cd4;
+
+    //Recency Testing
+    @Type(type = "jsonb")
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "recency", columnDefinition = "jsonb")
+    private Object recency;
+    //Post test counseling
+    @Type(type = "jsonb")
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "post_test_counseling", columnDefinition = "jsonb")
+    private Object postTestCounselingKnowledgeAssessment;
+    //Index Notification Services - Elicitation
+    @Type(type = "jsonb")
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "index_notification_services_elicitation", columnDefinition = "jsonb")
+    private Object indexNotificationServicesElicitation;
+    @PrePersist
+    public void setFields(){
+        if(StringUtils.isEmpty(uuid)){
+            uuid = UUID.randomUUID().toString();
+        }
+    }
 }

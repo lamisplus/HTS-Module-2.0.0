@@ -5,21 +5,25 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.lamisplus.modules.base.controller.apierror.EntityNotFoundException;
 import org.lamisplus.modules.base.controller.apierror.IllegalTypeException;
-import org.lamisplus.modules.hts.domain.dto.HtsClientDto;
-import org.lamisplus.modules.hts.domain.dto.HtsClientRequestDto;
-import org.lamisplus.modules.hts.domain.dto.HtsHivTestResultDto;
-import org.lamisplus.modules.hts.domain.dto.HtsPreTestCounselingDto;
+import org.lamisplus.modules.hts.domain.dto.*;
 import org.lamisplus.modules.hts.domain.entity.HtsClient;
 import org.lamisplus.modules.hts.repository.HtsClientRepository;
+import org.lamisplus.modules.hts.util.RandomCodeGenerator;
 import org.lamisplus.modules.patient.domain.dto.PersonDto;
 import org.lamisplus.modules.patient.domain.dto.PersonResponseDto;
 import org.lamisplus.modules.patient.domain.entity.Person;
 import org.lamisplus.modules.patient.repository.PersonRepository;
 import org.lamisplus.modules.patient.service.PersonService;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -34,42 +38,54 @@ public class HtsClientService {
     public HtsClientDto save(HtsClientRequestDto htsClientRequestDto){
         HtsClient htsClient;
         PersonResponseDto personResponseDto;
+        Person person;
         //when it is a new person
         if(htsClientRequestDto.getPersonId() == null){
             if(htsClientRequestDto.getPersonDto() == null) throw new EntityNotFoundException(PersonDto.class, "PersonDTO is ", " empty");
             personResponseDto = personService.createPerson(htsClientRequestDto.getPersonDto());
-            String personUuid = personRepository.findById(personResponseDto.getId()).get().getUuid();
+            person = personRepository.findById(personResponseDto.getId()).get();
+            String personUuid = person.getUuid();
             htsClient = this.htsClientRequestDtoToHtsClient(htsClientRequestDto, personUuid);
         } else {
             //already existing person
-            Person person = this.getPerson(htsClientRequestDto.getPersonId());
+            person = this.getPerson(htsClientRequestDto.getPersonId());
             htsClient = this.htsClientRequestDtoToHtsClient(htsClientRequestDto, person.getUuid());
         }
         htsClient.setFacilityId(currentUserOrganizationService.getCurrentUserOrganization());
         htsClient = htsClientRepository.save(htsClient);
-        htsClient.getPerson();
+        htsClient.setPerson(person);
+        LOG.info("Person is - {}", htsClient.getPerson());
         return this.htsClientToHtsClientDto(htsClient);
     }
 
-    public HtsClientDto getHtsClientById(Long id){
-        HtsClient htsClient = this.getById(id);
-        HtsClientDto htsClientDto = new HtsClientDto();
-        BeanUtils.copyProperties(htsClient, htsClientDto);
-        return htsClientDto;
+    public HtsClientDtos getHtsClientById(Long id){
+        List<HtsClient> htsClients = new ArrayList<>();
+        htsClients.add(this.getById(id));
+        return this.htsClientToHtsClientDtos(htsClients);
     }
+
+    public HtsClientDtos getHtsClientByPersonId(Long personId){
+        Person person = personRepository.findById(personId).orElse(new Person());
+        if(person.getId() == null){
+            return new HtsClientDtos();
+        }
+        return this.htsClientToHtsClientDtos(htsClientRepository.findAllByPerson(person));
+    }
+
     private HtsClient getById(Long id){
         return htsClientRepository
                 .findById(id)
                 .orElseThrow(()-> new EntityNotFoundException(HtsClient.class, "id", ""+id));
     }
 
-        public HtsClientDto updatePreTestCounseling(Long id, HtsPreTestCounselingDto htsPreTestCounselingDto){
+    public HtsClientDto updatePreTestCounseling(Long id, HtsPreTestCounselingDto htsPreTestCounselingDto){
         HtsClient htsClient = this.getById(id);
         if(htsClient.getPerson().getId() != htsPreTestCounselingDto.getPersonId()) throw new IllegalTypeException(Person.class, "Person", "id not match");
         htsClient.setKnowledgeAssessment(htsPreTestCounselingDto.getKnowledgeAssessment());
         htsClient.setRiskAssessment(htsPreTestCounselingDto.getRiskAssessment());
         htsClient.setTbScreening(htsPreTestCounselingDto.getTbScreening());
         htsClient.setStiScreening(htsPreTestCounselingDto.getStiScreening());
+        htsClient.setSexPartnerRiskAssessment(htsPreTestCounselingDto.getSexPartnerRiskAssessment());
 
         HtsClientDto htsClientDto = new HtsClientDto();
         BeanUtils.copyProperties(htsClientRepository.save(htsClient), htsClientDto);
@@ -77,17 +93,50 @@ public class HtsClientService {
 
     }
 
-    public HtsClientDto updateHivTestResult(Long id, HtsHivTestResultDto htsHivTestResultDto){
+    public HtsClientDto updateRequestResult(Long id, HtsRequestResultDto htsRequestResultDto){
         HtsClient htsClient = this.getById(id);
-        if(htsClient.getPerson().getId() != htsHivTestResultDto.getPersonId()) throw new IllegalTypeException(Person.class, "Person", "id not match");
-        htsClient.setTest1(htsHivTestResultDto.getTest1());
-        htsClient.setConfirmatoryTest(htsHivTestResultDto.getConfirmatoryTest());
-        htsClient.setTieBreakerTest(htsHivTestResultDto.getTieBreakerTest());
-        htsClient.setHivTestResult(htsHivTestResultDto.getHivTestResult());
+        if(htsClient.getPerson().getId() != htsRequestResultDto.getPersonId()) throw new IllegalTypeException(Person.class, "Person", "id not match");
+
+        /* htsClient.setTest1(htsRequestResultDto.getTest1());
+        htsClient.setConfirmatoryTest(htsRequestResultDto.getConfirmatoryTest());
+        htsClient.setTieBreakerTest(htsRequestResultDto.getTieBreakerTest());
+        htsClient.setHivTestResult(htsRequestResultDto.getHivTestResult());
+        htsClient.setSyphilisTesting(htsRequestResultDto.getSyphilisTesting());
+        htsClient.setHepatitisTesting(htsRequestResultDto.getHepatitisTesting());*/
+
+        htsClient = this.htsRequestResultDtoToHtsClient(htsClient, htsRequestResultDto);
+        HtsClientDto htsClientDto = new HtsClientDto();
+        BeanUtils.copyProperties(htsClientRepository.save(htsClient), htsClientDto);
+        return htsClientDto;
+    }
+
+    public HtsClientDto updateRecency(Long id, HtsRecencyDto htsRecencyDto){
+        HtsClient htsClient = this.getById(id);
+        if(!this.getPersonId(htsClient).equals(htsRecencyDto.getPersonId())) {
+            throw new IllegalTypeException(Person.class, "Person", "id not match with supplied personId");
+        }
+        htsClient.setRecency(htsRecencyDto.getRecency());
 
         HtsClientDto htsClientDto = new HtsClientDto();
         BeanUtils.copyProperties(htsClientRepository.save(htsClient), htsClientDto);
         return htsClientDto;
+    }
+
+    private Long getPersonId(HtsClient htsClient){
+        return htsClient.getPerson().getId();
+    }
+
+    public HtsClient htsRequestResultDtoToHtsClient(HtsClient updatableHtsClient, HtsRequestResultDto htsRequestResultDto){
+        updatableHtsClient.setTest1(htsRequestResultDto.getTest1());
+        updatableHtsClient.setConfirmatoryTest(htsRequestResultDto.getConfirmatoryTest());
+        updatableHtsClient.setTieBreakerTest(htsRequestResultDto.getTieBreakerTest());
+        updatableHtsClient.setHivTestResult(htsRequestResultDto.getHivTestResult());
+        updatableHtsClient.setSyphilisTesting(htsRequestResultDto.getSyphilisTesting());
+        updatableHtsClient.setHepatitisTesting(htsRequestResultDto.getHepatitisTesting());
+        updatableHtsClient.setOthers(htsRequestResultDto.getOthers());
+        updatableHtsClient.setCd4(htsRequestResultDto.getCd4());
+
+        return updatableHtsClient;
     }
 
     public HtsClient htsClientRequestDtoToHtsClient(HtsClientRequestDto htsClientRequestDto, @NotNull String personUuid) {
@@ -121,7 +170,7 @@ public class HtsClientService {
                 .orElseThrow (() -> new EntityNotFoundException (Person.class, "id", String.valueOf (personId)));
     }
 
-    public HtsClient htsClientRequestDtoToHtsClient(HtsClientRequestDto htsClientRequestDto) {
+    private HtsClient htsClientRequestDtoToHtsClient(HtsClientRequestDto htsClientRequestDto) {
         if ( htsClientRequestDto == null ) {
             return null;
         }
@@ -147,7 +196,37 @@ public class HtsClientService {
         return htsClient;
     }
 
-    public HtsClientDto htsClientToHtsClientDto(HtsClient htsClient) {
+    public HtsClientDtos getAllHtsClientDtos(Page<HtsClient> page, List<HtsClient> clients){
+        if(page != null && !page.isEmpty()){
+            return htsClientToHtsClientDtos(page.stream().collect(Collectors.toList()));
+        } else if(clients != null && !clients.isEmpty()){
+            return htsClientToHtsClientDtos(clients);
+        }
+        return null;
+    }
+
+    private HtsClientDtos htsClientToHtsClientDtos(List<HtsClient> clients){
+        final Long[] pId = {null};
+        final PersonResponseDto[] personResponseDto = {new PersonResponseDto()};
+        HtsClientDtos htsClientDtos = new HtsClientDtos();
+        List<HtsClientDto> htsClientDtoList =  clients
+                .stream()
+                .map(htsClient1 -> {
+                    if(pId[0] == null) {
+                        Person person = htsClient1.getPerson();
+                        pId[0] = person.getId();
+                        personResponseDto[0] = personService.getDtoFromPerson(person);
+                    }
+                    return this.htsClientToHtsClientDto(htsClient1);})
+                .collect(Collectors.toList());
+        htsClientDtos.setHtsCount(htsClientDtoList.size());
+        htsClientDtos.setHtsClientDtoList(htsClientDtoList);
+        htsClientDtos.setPersonId(pId[0]);
+        htsClientDtos.setPersonResponseDto(personResponseDto[0]);
+        return htsClientDtos;
+    }
+
+    private HtsClientDto htsClientToHtsClientDto(HtsClient htsClient) {
         if ( htsClient == null ) {
             return null;
         }
@@ -166,12 +245,15 @@ public class HtsClientService {
         htsClientDto.setTypeCounseling( htsClient.getTypeCounseling() );
         htsClientDto.setIndexClient( htsClient.getIndexClient() );
         htsClientDto.setPreviouslyTested( htsClient.getPreviouslyTested() );
-        htsClientDto.setPerson( htsClient.getPerson() );
+        //LOG.info("Person in transform {}", htsClient.getPerson());
+        PersonResponseDto personResponseDto = personService.getDtoFromPerson(htsClient.getPerson());
+        htsClientDto.setPersonResponseDto(personResponseDto);
         htsClientDto.setExtra( htsClient.getExtra() );
         htsClientDto.setPregnant( htsClient.getPregnant() );
         htsClientDto.setBreastFeeding( htsClient.getBreastFeeding() );
         htsClientDto.setRelationWithIndexClient( htsClient.getRelationWithIndexClient() );
         htsClientDto.setCapturedBy( htsClient.getCapturedBy() );
+        htsClientDto.setRecency( htsClient.getRecency());
         htsClientDto.setKnowledgeAssessment( htsClient.getKnowledgeAssessment() );
         htsClientDto.setRiskAssessment( htsClient.getRiskAssessment() );
         htsClientDto.setTbScreening( htsClient.getTbScreening() );
@@ -180,9 +262,89 @@ public class HtsClientService {
         htsClientDto.setConfirmatoryTest( htsClient.getConfirmatoryTest() );
         htsClientDto.setTieBreakerTest( htsClient.getTieBreakerTest() );
         htsClientDto.setHivTestResult( htsClient.getHivTestResult() );
+        htsClientDto.setPersonId(personResponseDto.getId());
+        htsClientDto.setPostTestCounselingKnowledgeAssessment(htsClient.getPostTestCounselingKnowledgeAssessment());
+        htsClientDto.setRecency(htsClient.getRecency());
+        htsClientDto.setSyphilisTesting(htsClient.getSyphilisTesting());
+        htsClientDto.setCd4(htsClient.getCd4());
+        htsClientDto.setSexPartnerRiskAssessment(htsClient.getSexPartnerRiskAssessment());
+        htsClientDto.setOthers(htsClient.getOthers());
 
         return htsClientDto;
     }
 
+    public Page<HtsClient> findHtsClientPage(Pageable pageable) {
+        return htsClientRepository.findAll(pageable);
+    }
 
+    public HtsClientDtos getAllHtsClientDtos(Page<HtsClient> page) {
+        return getAllHtsClientDtos(page, null);
+    }
+
+    public List<HtsClientDtos> getAllPatients(){
+        List<HtsClientDtos> htsClientDtosList = new ArrayList<>();
+        for(PersonResponseDto personResponseDto :personService.getAllPerson()){
+            Person person = this.getPerson(personResponseDto.getId());
+            List<HtsClient> clients = htsClientRepository.findAllByPersonOrderByIdDesc(person);
+            HtsClientDtos htsClientDtos = new HtsClientDtos();
+            if(clients.isEmpty()){
+                htsClientDtos.setHtsClientDtoList(new ArrayList<>());
+                htsClientDtos.setHtsCount(0);
+                htsClientDtos.setPersonResponseDto(personResponseDto);
+                htsClientDtos.setPersonId(personResponseDto.getId());
+                htsClientDtosList.add(htsClientDtos);
+                //LOG.info("hts client is {}", htsClientDtos.getHtsCount());
+            } else {
+                htsClientDtosList.add(htsClientToHtsClientDtos(clients));
+                //LOG.info("hts client is {}", clients.size());
+            }
+
+        }
+
+        /*personService.getAllPerson().stream().map(personResponseDto -> {
+            Person person = this.getPerson(personResponseDto.getId());
+            List<HtsClient> clients = htsClientRepository.findAllByPerson(person);
+            HtsClientDtos htsClientDtos = new HtsClientDtos();
+            if(clients.isEmpty()){
+                htsClientDtos.setHtsClientDtoList(new ArrayList<>());
+                htsClientDtos.setHtsCount(0);
+                htsClientDtos.setPersonResponseDto(personResponseDto);
+                htsClientDtosList.add(htsClientDtos);
+            } else {
+                htsClientDtosList.add(htsClientToHtsClientDtos(clients));
+            }
+            return htsClientDtosList;
+            });*/
+
+        return htsClientDtosList;
+    }
+
+    public HtsClientDto updatePostTestCounselingKnowledgeAssessment(Long id, PostTestCounselingDto postTestCounselingDto){
+        HtsClient htsClient = this.getById(id);
+        if(htsClient.getPerson().getId() != postTestCounselingDto.getPersonId()) throw new IllegalTypeException(Person.class, "Person", "id not match");
+        htsClient.setPostTestCounselingKnowledgeAssessment(postTestCounselingDto.getPostTestCounselingKnowledgeAssessment());
+
+        HtsClientDto htsClientDto = new HtsClientDto();
+        BeanUtils.copyProperties(htsClientRepository.save(htsClient), htsClientDto);
+        return htsClientDto;
+    }
+
+    public HtsClientDto updateIndexNotificationServicesElicitation(Long id, IndexNotificationServicesElicitationDto indexNotificationServicesElicitationDto){
+        HtsClient htsClient = this.getById(id);
+        if(htsClient.getPerson().getId() != indexNotificationServicesElicitationDto.getPersonId()) throw new IllegalTypeException(Person.class, "Person", "id not match");
+        htsClient.setIndexNotificationServicesElicitation(indexNotificationServicesElicitationDto
+                        .getIndexNotificationServicesElicitation());
+
+        HtsClientDto htsClientDto = new HtsClientDto();
+        BeanUtils.copyProperties(htsClientRepository.save(htsClient), htsClientDto);
+        return htsClientDto;
+    }
+
+    public String getHtsClientCode(){
+        Optional<Long> number = htsClientRepository.maxId();
+        if(number.isPresent()){
+            return number.get() + RandomCodeGenerator.randomString(10, true, true);
+        }
+        return 1 + RandomCodeGenerator.randomString(10, true, true);
+    }
 }

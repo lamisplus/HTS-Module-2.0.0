@@ -1,0 +1,14 @@
+package org.lamisplus.modules.hts.domain.dto;
+
+import lombok.Data;
+import org.lamisplus.modules.patient.domain.dto.PersonResponseDto;
+
+import java.util.List;
+
+@Data
+public class HtsClientDtos {
+    private Long personId;
+    private Integer htsCount;
+    private PersonResponseDto personResponseDto;
+    private List<HtsClientDto> htsClientDtoList;
+}

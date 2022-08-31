@@ -1,11 +1,8 @@
 package org.lamisplus.modules.hts.domain.dto;
 
 import lombok.*;
-import org.lamisplus.modules.base.domain.entities.ApplicationCodeSet;
-import org.lamisplus.modules.base.domain.entities.User;
-import org.lamisplus.modules.patient.domain.entity.Person;
+import org.lamisplus.modules.patient.domain.dto.PersonResponseDto;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 
 @Builder(toBuilder = true)
@@ -16,41 +13,55 @@ import java.time.LocalDate;
 public class HtsClientDto {
     private  Long id;
     private  Long targetGroup;
-    private  ApplicationCodeSet targetGroupCodeSet;
+    //private  ApplicationCodeSet targetGroupCodeSet;
     private  String clientCode;
     private  LocalDate dateVisit;
     private  Long referredFrom;
-    private  ApplicationCodeSet referredFromCodeSet;
+    //private  ApplicationCodeSet referredFromCodeSet;
     private  Long testingSetting;
-    private  ApplicationCodeSet testingSettingCodeSet;
+    //private  ApplicationCodeSet testingSettingCodeSet;
     private  Boolean firstTimeVisit;
     private  Integer numChildren;
     private  Integer numWives;
     private  Long typeCounseling;
-    private  ApplicationCodeSet typeCounselingCodeSet;
+    //private  ApplicationCodeSet typeCounselingCodeSet;
     private  Boolean indexClient;
     private  Boolean previouslyTested;
     private  Long personId;
-    private Person person;
+    private PersonResponseDto personResponseDto;
     private  Object extra;
     private Long pregnant;
     private Long breastFeeding;
     private Long relationWithIndexClient;
     private String capturedBy;
 
-    private ApplicationCodeSet pregnantCodeSet;
+    private Object recency;
+
+    /*private ApplicationCodeSet pregnantCodeSet;
     private ApplicationCodeSet breastFeedingCodeSet;
-    private ApplicationCodeSet relationWithIndexClientCodeSet;
+    private ApplicationCodeSet relationWithIndexClientCodeSet;*/
 
     //PRE TEST COUNSELING
     private  Object knowledgeAssessment;
     private  Object riskAssessment;
     private  Object tbScreening;
     private  Object stiScreening;
+    private Object sexPartnerRiskAssessment;
 
-    //HIV TEST RESULT
+    //Request & Result Form
     private  Object test1;
     private  Object confirmatoryTest;
     private  Object tieBreakerTest;
     private String  hivTestResult;
+    private Object syphilisTesting;
+    private Object hepatitisTesting;
+    private Object others;
+    private Object cd4;
+
+
+    //Post Test Counseling
+    private Object postTestCounselingKnowledgeAssessment;
+
+    //index notification services - Elicitation
+    private Object indexNotificationServicesElicitation;
 }

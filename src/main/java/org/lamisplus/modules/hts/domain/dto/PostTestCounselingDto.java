@@ -9,8 +9,8 @@ public class PostTestCounselingDto {
     @NotNull(message = "htsClientId is mandatory")
     private final Long htsClientId;
     @NotNull(message = "personId is mandatory")
-    private  final Long personId;
+    private final Long personId;
     //Request & Result
     @NotNull(message = "post test counseling knowledge assessment test is mandatory")
-    private  final Object postTestCounselingKnowledgeAssessment;
+    private final Object postTestCounselingKnowledgeAssessment;
 }

@@ -20,10 +20,8 @@ public class HtsModule extends AcrossModule {
                 getClass ().getPackage ().getName () + ".controller"
         ));
     }
-
     @Override
     public String getName() {
         return NAME;
     }
-
 }

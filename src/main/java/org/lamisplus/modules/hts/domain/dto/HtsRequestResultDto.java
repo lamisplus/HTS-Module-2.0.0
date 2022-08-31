@@ -8,7 +8,7 @@ public class HtsRequestResultDto {
     @NotNull(message = "htsClientId is mandatory")
     private final Long htsClientId;
     @NotNull(message = "personId is mandatory")
-    private  final Long personId;
+    private final Long personId;
     //Request & Result
     @NotNull(message = "first test is mandatory")
     private  final Object test1;
@@ -18,4 +18,6 @@ public class HtsRequestResultDto {
     private final Object syphilisTesting;
     private final Object hepatitisTesting;
     private Object others;
+
+    private Object cd4;
 }

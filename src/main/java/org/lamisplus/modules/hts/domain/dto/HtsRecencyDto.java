@@ -9,7 +9,7 @@ public class HtsRecencyDto {
     @NotNull(message = "htsClientId is mandatory")
     private final Long htsClientId;
     @NotNull(message = "personId is mandatory")
-    private  final Long personId;
+    private final Long personId;
     //Request & Result
     @NotNull(message = "recency is mandatory")
     private final Object recency;

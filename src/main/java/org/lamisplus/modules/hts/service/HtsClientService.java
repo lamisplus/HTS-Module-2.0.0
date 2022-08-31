@@ -263,6 +263,11 @@ public class HtsClientService {
         htsClientDto.setTieBreakerTest( htsClient.getTieBreakerTest() );
         htsClientDto.setHivTestResult( htsClient.getHivTestResult() );
         htsClientDto.setPersonId(personResponseDto.getId());
+        htsClientDto.setPostTestCounselingKnowledgeAssessment(htsClient.getPostTestCounselingKnowledgeAssessment());
+        htsClientDto.setRecency(htsClient.getRecency());
+        htsClientDto.setSyphilisTesting(htsClient.getSyphilisTesting());
+        htsClientDto.setCd4(htsClient.getCd4());
+        htsClientDto.setSexPartnerRiskAssessment(htsClient.getSexPartnerRiskAssessment());
 
         return htsClientDto;
     }

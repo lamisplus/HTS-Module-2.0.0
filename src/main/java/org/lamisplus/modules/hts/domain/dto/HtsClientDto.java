@@ -61,4 +61,7 @@ public class HtsClientDto {
 
     //index notification services - Elicitation
     private Object indexNotificationServicesElicitation;
+
+    private Object cd4;
+    private  Object sexPartnerRiskAssessment;
 }

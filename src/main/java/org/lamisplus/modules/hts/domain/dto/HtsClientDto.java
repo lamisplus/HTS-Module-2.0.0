@@ -46,6 +46,7 @@ public class HtsClientDto {
     private  Object riskAssessment;
     private  Object tbScreening;
     private  Object stiScreening;
+    private Object sexPartnerRiskAssessment;
 
     //Request & Result Form
     private  Object test1;
@@ -55,13 +56,12 @@ public class HtsClientDto {
     private Object syphilisTesting;
     private Object hepatitisTesting;
     private Object others;
+    private Object cd4;
+
 
     //Post Test Counseling
     private Object postTestCounselingKnowledgeAssessment;
 
     //index notification services - Elicitation
     private Object indexNotificationServicesElicitation;
-
-    private Object cd4;
-    private  Object sexPartnerRiskAssessment;
 }

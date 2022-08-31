@@ -8,6 +8,7 @@ import org.lamisplus.modules.base.controller.apierror.IllegalTypeException;
 import org.lamisplus.modules.hts.domain.dto.*;
 import org.lamisplus.modules.hts.domain.entity.HtsClient;
 import org.lamisplus.modules.hts.repository.HtsClientRepository;
+import org.lamisplus.modules.hts.util.RandomCodeGenerator;
 import org.lamisplus.modules.patient.domain.dto.PersonDto;
 import org.lamisplus.modules.patient.domain.dto.PersonResponseDto;
 import org.lamisplus.modules.patient.domain.entity.Person;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -83,6 +85,7 @@ public class HtsClientService {
         htsClient.setRiskAssessment(htsPreTestCounselingDto.getRiskAssessment());
         htsClient.setTbScreening(htsPreTestCounselingDto.getTbScreening());
         htsClient.setStiScreening(htsPreTestCounselingDto.getStiScreening());
+        htsClient.setSexPartnerRiskAssessment(htsPreTestCounselingDto.getSexPartnerRiskAssessment());
 
         HtsClientDto htsClientDto = new HtsClientDto();
         BeanUtils.copyProperties(htsClientRepository.save(htsClient), htsClientDto);
@@ -109,12 +112,18 @@ public class HtsClientService {
 
     public HtsClientDto updateRecency(Long id, HtsRecencyDto htsRecencyDto){
         HtsClient htsClient = this.getById(id);
-        if(htsClient.getPerson().getId() != htsRecencyDto.getPersonId()) throw new IllegalTypeException(Person.class, "Person", "id not match");
+        if(!this.getPersonId(htsClient).equals(htsRecencyDto.getPersonId())) {
+            throw new IllegalTypeException(Person.class, "Person", "id not match with supplied personId");
+        }
         htsClient.setRecency(htsRecencyDto.getRecency());
 
         HtsClientDto htsClientDto = new HtsClientDto();
         BeanUtils.copyProperties(htsClientRepository.save(htsClient), htsClientDto);
         return htsClientDto;
+    }
+
+    private Long getPersonId(HtsClient htsClient){
+        return htsClient.getPerson().getId();
     }
 
     public HtsClient htsRequestResultDtoToHtsClient(HtsClient updatableHtsClient, HtsRequestResultDto htsRequestResultDto){
@@ -125,6 +134,7 @@ public class HtsClientService {
         updatableHtsClient.setSyphilisTesting(htsRequestResultDto.getSyphilisTesting());
         updatableHtsClient.setHepatitisTesting(htsRequestResultDto.getHepatitisTesting());
         updatableHtsClient.setOthers(htsRequestResultDto.getOthers());
+        updatableHtsClient.setCd4(htsRequestResultDto.getCd4());
 
         return updatableHtsClient;
     }
@@ -243,6 +253,7 @@ public class HtsClientService {
         htsClientDto.setBreastFeeding( htsClient.getBreastFeeding() );
         htsClientDto.setRelationWithIndexClient( htsClient.getRelationWithIndexClient() );
         htsClientDto.setCapturedBy( htsClient.getCapturedBy() );
+        htsClientDto.setRecency( htsClient.getRecency());
         htsClientDto.setKnowledgeAssessment( htsClient.getKnowledgeAssessment() );
         htsClientDto.setRiskAssessment( htsClient.getRiskAssessment() );
         htsClientDto.setTbScreening( htsClient.getTbScreening() );
@@ -321,5 +332,13 @@ public class HtsClientService {
         HtsClientDto htsClientDto = new HtsClientDto();
         BeanUtils.copyProperties(htsClientRepository.save(htsClient), htsClientDto);
         return htsClientDto;
+    }
+
+    public String getHtsClientCode(){
+        Optional<Long> number = htsClientRepository.maxId();
+        if(number.isPresent()){
+            return number.get() + RandomCodeGenerator.randomString(10, true, true);
+        }
+        return 1 + RandomCodeGenerator.randomString(10, true, true);
     }
 }

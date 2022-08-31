@@ -35,6 +35,8 @@ public class HtsClientDto {
     private Long relationWithIndexClient;
     private String capturedBy;
 
+    private Object recency;
+
     /*private ApplicationCodeSet pregnantCodeSet;
     private ApplicationCodeSet breastFeedingCodeSet;
     private ApplicationCodeSet relationWithIndexClientCodeSet;*/

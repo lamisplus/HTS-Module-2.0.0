@@ -96,7 +96,7 @@ public class HtsClientService {
     public HtsClientDto updateRequestResult(Long id, HtsRequestResultDto htsRequestResultDto){
         HtsClient htsClient = this.getById(id);
         if(!this.getPersonId(htsClient).equals( htsRequestResultDto.getPersonId())) {
-            throw new IllegalTypeException(Person.class, "Person", "id not match with supplied personId");
+            throw new IllegalTypeException(Person.class, "Person", "id does not match with supplied personId");
         }
 
         htsClient = this.htsRequestResultDtoToHtsClient(htsClient, htsRequestResultDto);
@@ -108,7 +108,7 @@ public class HtsClientService {
     public HtsClientDto updateRecency(Long id, HtsRecencyDto htsRecencyDto){
         HtsClient htsClient = this.getById(id);
         if(!this.getPersonId(htsClient).equals(htsRecencyDto.getPersonId())) {
-            throw new IllegalTypeException(Person.class, "Person", "id not match with supplied personId");
+            throw new IllegalTypeException(Person.class, "Person", "id does not match with supplied personId");
         }
         htsClient.setRecency(htsRecencyDto.getRecency());
 
@@ -327,7 +327,9 @@ public class HtsClientService {
 
     public HtsClientDto updateIndexNotificationServicesElicitation(Long id, IndexNotificationServicesElicitationDto indexNotificationServicesElicitationDto){
         HtsClient htsClient = this.getById(id);
-        if(htsClient.getPerson().getId() != indexNotificationServicesElicitationDto.getPersonId()) throw new IllegalTypeException(Person.class, "Person", "id not match");
+        if(!this.getPersonId(htsClient).equals(indexNotificationServicesElicitationDto.getPersonId())) {
+            throw new IllegalTypeException(Person.class, "Person", "id does not match with supplied personId");
+        }
         htsClient.setIndexNotificationServicesElicitation(indexNotificationServicesElicitationDto
                         .getIndexNotificationServicesElicitation());
 

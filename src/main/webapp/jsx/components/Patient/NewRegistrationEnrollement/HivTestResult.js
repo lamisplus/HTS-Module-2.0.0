@@ -18,7 +18,6 @@ import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
 
 
-
 const useStyles = makeStyles((theme) => ({
     card: {
         margin: theme.spacing(20),
@@ -65,7 +64,7 @@ const HivTestResult = (props) => {
     const [saving, setSaving] = useState(false);
     const [errors, setErrors] = useState({});
     let temp = { ...errors }
-
+    console.log(props.patientObj)
     const patientID= props.patientObj && props.patientObj.personResponseDto ? props.patientObj.personResponseDto.id : "";
     const clientId = props.patientObj && props.patientObj ? props.patientObj.id : "";
     const [objValues, setObjValues]= useState(
@@ -78,7 +77,8 @@ const HivTestResult = (props) => {
             tieBreakerTest: {},
             syphilisTesting:{},
             hepatitisTesting:{},
-            others:{}
+            others:{},
+            cd4:{},
         }
     )
 
@@ -96,6 +96,17 @@ const HivTestResult = (props) => {
         {
             date :"",
             result  :"",            
+        }
+    )
+    const handleInputChangeCd4Count = e => { 
+        //setErrors({...temp, [e.target.name]:""}) 
+        setCd4Count ({...cd4Count,  [e.target.name]: e.target.value});            
+    }
+    const [cd4Count, setCd4Count]= useState(
+        {
+            cd4Count:"",
+            cd4SemiQuantitative:"",
+            cd4FlowCyteometry:""            
         }
     )
     const handleInputChangeConfirmatory = e => { 
@@ -169,6 +180,8 @@ const HivTestResult = (props) => {
         setTieBreakerTest ({...tieBreakerTest, ...props.patientObj.tieBreakerTest}) 
         setSyphills ({...syphills, ...props.patientObj.syphilisTesting}) 
         setHepatitis({...hepatitis, ...props.patientObj.hepatitisTesting}) 
+        setOthers({...others, ...props.patientObj.others}) 
+        setCd4Count({...cd4Count, ...props.patientObj.cd4}) 
 
     }, [ props.patientObj]);
     const handleSubmit =(e)=>{
@@ -181,6 +194,8 @@ const HivTestResult = (props) => {
             objValues.tieBreakerTest=tieBreakerTest
             objValues.syphilisTesting=syphills
             objValues.hepatitisTesting=hepatitis
+            objValues.cd4=cd4Count
+            objValues.others=others
             axios.put(`${baseUrl}hts/${clientId}/request-result`,objValues,
             { headers: {"Authorization" : `Bearer ${token}`}}, )
             .then(response => {
@@ -343,20 +358,58 @@ const HivTestResult = (props) => {
                                     <Label>CD4 Count </Label>
                                     <select
                                         className="form-control"
-                                        name="result"
-                                        id="result"
-                                        value={initialTest.result}
-                                        onChange={handleInputChangeInitial}
+                                        name="cd4Count"
+                                        id="cd4Count"
+                                        value={cd4Count.cd4Count}
+                                        onChange={handleInputChangeCd4Count}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>
-                                        <option value="Yes">Reactive</option>
-                                        <option value="No">Non Reactive</option>
+                                        <option value="Semi-Quantitative">Semi-Quantitative</option>
+                                        <option value="Flow Cyteometry">Flow Cyteometry</option>
                                         
                                     </select>
                                     
                                 </FormGroup>
                             </div>
+                            {cd4Count.cd4Count ==='Semi-Quantitative' && (
+                            <div className="form-group  col-md-5">
+                                <FormGroup>
+                                    <Label>CD4 Count Value</Label>
+                                    <select
+                                        className="form-control"
+                                        name="cd4SemiQuantitative"
+                                        id="cd4SemiQuantitative"
+                                        value={cd4Count.cd4SemiQuantitative}
+                                        onChange={handleInputChangeCd4Count}
+                                        style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                    >
+                                        <option value={""}></option>
+                                        <option value="Semi-Quantitative">{"<= 200"}</option>
+                                        <option value="Flow Cyteometry">{">=200"}</option>
+                                        
+                                    </select>
+                                    
+                                </FormGroup>
+                            </div>
+                            )}
+                            {cd4Count.cd4Count ==='Flow Cyteometry' && (
+                            <div className="form-group mb-3 col-md-4">
+                                <FormGroup>
+                                <Label for="">CD4 Count Value</Label>
+                                <Input
+                                    type="text"
+                                    name="cd4FlowCyteometry"
+                                    id="cd4FlowCyteometry"
+                                    value={cd4Count.cd4FlowCyteometry}
+                                    onChange={handleInputChangeCd4Count}
+                                    style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
+                                    
+                                />
+                                 
+                                </FormGroup>
+                            </div>
+                            )}
                             <div className="form-group  col-md-7"></div>
                             <div className="form-group  col-md-6">
                                 {initialTest.result==='No'  && (

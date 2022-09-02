@@ -79,6 +79,7 @@ const BasicInfo = (props) => {
     const [gender, setGender] = useState([])
     const [counselingType, setCounselingType] = useState([]);
     const [pregnancyStatus, setPregnancyStatus] = useState([]);
+    const [indexTesting, setIndexTesting]= useState([]);
     let temp = { ...errors }
     console.log(props.patientObj)
 
@@ -131,7 +132,7 @@ const BasicInfo = (props) => {
         Genders();
         CounselingType();
         PregnancyStatus()
-
+        IndexTesting();
     }, [ props.patientObj]);
 
     //Get list of KP
@@ -142,6 +143,19 @@ const BasicInfo = (props) => {
         )
         .then((response) => {
             setKP(response.data);
+        })
+        .catch((error) => {
+        //console.log(error);
+        });    
+    }
+    //Get list of IndexTesting
+    const IndexTesting =()=>{
+        axios
+        .get(`${baseUrl}application-codesets/v2/INDEX_TESTING`,
+            { headers: {"Authorization" : `Bearer ${token}`} }
+        )
+        .then((response) => {
+            setIndexTesting(response.data);
         })
         .catch((error) => {
         //console.log(error);
@@ -501,9 +515,11 @@ const BasicInfo = (props) => {
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>
-                                        <option value="34">Biological</option>
-                                        <option value="32">Sexual</option>
-                                        <option value="34">Social</option>
+                                        {indexTesting.map((value) => (
+                                            <option key={value.id} value={value.id}>
+                                                {value.display}
+                                            </option>
+                                        ))}
                                         
                                     </select>
                                     

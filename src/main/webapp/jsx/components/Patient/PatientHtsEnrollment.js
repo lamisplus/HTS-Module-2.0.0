@@ -49,7 +49,9 @@ const UserRegistration = (props) => {
             setPatientObj(patientNewObj)           
         }
     }, [props.activePage]);
-
+    const LoadViewPage =(row, actionType)=>{
+        props.setActivePage({...props.activePage, activePage:"home", activeObject:row, actionType:actionType})
+    }
 
     return (
         <>
@@ -60,17 +62,18 @@ const UserRegistration = (props) => {
                 <form >
                     <div className="row">
                     <h3>HIV COUNSELLING AND TESTING   -  {patientObj && patientObj.dateVisit ? patientObj.dateVisit :""}
-                    <Link to={"/"} >
+
                             <Button
                                 variant="contained"
                                 color="primary"
                                 className=" float-end"
                                 //startIcon={<FaUserPlus size="10"/>}
                                 style={{backgroundColor:'#014d88', }}
+                                onClick={LoadViewPage}
                             >
                                 <span style={{ textTransform: "capitalize" }}>Back</span>
                             </Button>
-                    </Link>
+
                     </h3>
                         <br/>
                         <br/>

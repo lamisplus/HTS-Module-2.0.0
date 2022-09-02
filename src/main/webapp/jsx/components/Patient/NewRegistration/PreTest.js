@@ -82,7 +82,8 @@ const BasicInfo = (props) => {
                 personId: patientID,
                 riskAssessment: {},
                 stiScreening: {},
-                tbScreening: {}
+                tbScreening: {},
+                sexPartnerRiskAssessment:{}
             }
     )
     const [knowledgeAssessment, setKnowledgeAssessment]= useState(
@@ -191,6 +192,7 @@ const BasicInfo = (props) => {
             objValues.riskAssessment= riskAssessment
             objValues.stiScreening=stiScreening
             objValues.tbScreening=tbScreening
+            objValues.sexPartnerRiskAssessment=riskAssessmentPartner
             axios.put(`${baseUrl}hts/${clientId}/pre-test-counseling`,objValues,
             { headers: {"Authorization" : `Bearer ${token}`}},
             

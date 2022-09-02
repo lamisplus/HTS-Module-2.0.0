@@ -1,7 +1,6 @@
 
 import React, { useEffect, useState} from "react";
 import axios from "axios";
-import MatButton from "@material-ui/core/Button";
 import {FormGroup, Label , CardBody, Spinner,Input,Form} from "reactstrap";
 import * as moment from 'moment';
 import {makeStyles} from "@material-ui/core/styles";
@@ -12,7 +11,7 @@ import SaveIcon from "@material-ui/icons/Save";
 import {ToastContainer, toast} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
-import {Link, useHistory, useLocation} from "react-router-dom";
+import { useHistory, } from "react-router-dom";
 // import {TiArrowBack} from 'react-icons/ti'
 import {token, url as baseUrl } from "../../../../api";
 import 'react-phone-input-2/lib/style.css'
@@ -86,6 +85,7 @@ const BasicInfo = (props) => {
     let temp = { ...errors }
     const [open, setOpen] = React.useState(false)
     const toggle = () => setOpen(!open);
+    const [indexTesting, setIndexTesting]= useState([]);
     const [objValues, setObjValues]= useState(
         {
             active: true,
@@ -137,9 +137,8 @@ const BasicInfo = (props) => {
         MaterialStatus();
         Sex();
         CounselingType();
-        PregnancyStatus()
-        
-
+        PregnancyStatus();
+        IndexTesting();
     }, []);
 
     //Get list of KP
@@ -150,6 +149,19 @@ const BasicInfo = (props) => {
         )
         .then((response) => {
             setKP(response.data);
+        })
+        .catch((error) => {
+        //console.log(error);
+        });    
+    }
+    //Get list of IndexTesting
+    const IndexTesting =()=>{
+        axios
+        .get(`${baseUrl}application-codesets/v2/INDEX_TESTING`,
+            { headers: {"Authorization" : `Bearer ${token}`} }
+        )
+        .then((response) => {
+            setIndexTesting(response.data);
         })
         .catch((error) => {
         //console.log(error);
@@ -427,30 +439,7 @@ const BasicInfo = (props) => {
                     stateId: objValues.state
                 }
                 ],
-                contact: [
-                {
-                    address: {
-                    city: "",
-                    countryId: "",
-                    district: "",
-                    line: [
-                        ""
-                    ],
-                    organisationUnitId: "",
-                    postalCode: "",
-                    stateId: ""
-                    },
-                    contactPoint: {
-                    type: "",
-                    value: ""
-                    },
-                    firstName: "",
-                    genderId:"",
-                    otherName: "",
-                    relationshipId: "",
-                    surname: ""
-                }
-                ],
+                contact: [],
                 contactPoint: [
                 {
                     type: "",
@@ -559,6 +548,7 @@ const BasicInfo = (props) => {
                                     name="clientCode"
                                     id="clientCode"
                                     min={0}
+                                    //value={Math.floor(Math.random() * 1093328)}
                                     value={objValues.clientCode}
                                     onChange={handleInputChange}
                                     style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
@@ -795,7 +785,6 @@ const BasicInfo = (props) => {
                                         id="state"
                                         onChange={getProvinces}
                                         value={objValues.state}
-                                    
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>
@@ -913,13 +902,14 @@ const BasicInfo = (props) => {
                                             <option key={value.id} value={value.id}>
                                                 {value.display}
                                             </option>
-                                        ))}
+                                            ))}
                                     </select>
                                        
                                 </FormGroup>
                             </div>
                             )}
-                            {(objValues.age>9 && objValues.maritalStatusId==='6') && (
+                             {/* && objValues.maritalStatusId==='6' */}
+                            {(objValues.age>9) && (
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Number of Children {'<5'} years</Label>
@@ -937,7 +927,8 @@ const BasicInfo = (props) => {
                                 </FormGroup>
                             </div>
                             )}
-                            {(objValues.maritalStatusId==='6' && objValues.age > 9 && objValues.sexId=='376') && (
+                            {/* objValues.maritalStatusId==='6' && */}
+                            {( objValues.age > 9 && objValues.sexId=='376') && (
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Number of wives/co-wives</Label>
@@ -989,9 +980,11 @@ const BasicInfo = (props) => {
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>
-                                        <option value="34">Biological</option>
-                                        <option value="32">Sexual</option>
-                                        <option value="34">Social</option>
+                                        {indexTesting.map((value) => (
+                                            <option key={value.id} value={value.id}>
+                                                {value.display}
+                                            </option>
+                                            ))}
                                         
                                     </select>
                                     
@@ -1006,8 +999,7 @@ const BasicInfo = (props) => {
                                     id="indexClientCode"
                                     value={objValues.indexClientCode}
                                     onChange={handleInputChange}
-                                    style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
-                               
+                                    style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}                               
                                 />
                                   
                             </FormGroup>

@@ -79,9 +79,8 @@ const HivTestResult = (props) => {
             syphilisTesting:{},
             hepatitisTesting:{},
             others:{},
-            cd4Count:"",
-            cd4SemiQuantitative:"",
-            cd4FlowCyteometry:""
+            cd4:{},
+            
 
         }
     )
@@ -93,6 +92,17 @@ const HivTestResult = (props) => {
         {
             date :"",
             result  :"",            
+        }
+    )
+    const handleInputChangeCd4Count = e => { 
+        //setErrors({...temp, [e.target.name]:""}) 
+        setCd4Count ({...cd4Count,  [e.target.name]: e.target.value});            
+    }
+    const [cd4Count, setCd4Count]= useState(
+        {
+            cd4Count:"",
+            cd4SemiQuantitative:"",
+            cd4FlowCyteometry:""            
         }
     )
     const handleInputChangeInitial = e => { 
@@ -180,6 +190,7 @@ const HivTestResult = (props) => {
             objValues.tieBreakerTest=tieBreakerTest
             objValues.syphilisTesting=syphills
             objValues.hepatitisTesting=hepatitis
+            objValues.cd4=cd4Count
             axios.put(`${baseUrl}hts/${clientId}/request-result`,objValues,
             { headers: {"Authorization" : `Bearer ${token}`}}, )
             .then(response => {
@@ -344,8 +355,8 @@ const HivTestResult = (props) => {
                                         className="form-control"
                                         name="cd4Count"
                                         id="cd4Count"
-                                        value={objValues.cd4Count}
-                                        onChange={handleInputChange}
+                                        value={cd4Count.cd4Count}
+                                        onChange={handleInputChangeCd4Count}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>
@@ -356,7 +367,7 @@ const HivTestResult = (props) => {
                                     
                                 </FormGroup>
                             </div>
-                            {objValues.cd4Count ==='Semi-Quantitative' && (
+                            {cd4Count.cd4Count ==='Semi-Quantitative' && (
                             <div className="form-group  col-md-5">
                                 <FormGroup>
                                     <Label>CD4 Count Value</Label>
@@ -364,8 +375,8 @@ const HivTestResult = (props) => {
                                         className="form-control"
                                         name="cd4SemiQuantitative"
                                         id="cd4SemiQuantitative"
-                                        value={objValues.cd4SemiQuantitative}
-                                        onChange={handleInputChange}
+                                        value={cd4Count.cd4SemiQuantitative}
+                                        onChange={handleInputChangeCd4Count}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>
@@ -377,7 +388,7 @@ const HivTestResult = (props) => {
                                 </FormGroup>
                             </div>
                             )}
-                            {objValues.cd4Count ==='Flow Cyteometry' && (
+                            {cd4Count.cd4Count ==='Flow Cyteometry' && (
                             <div className="form-group mb-3 col-md-4">
                                 <FormGroup>
                                 <Label for="">CD4 Count Value</Label>
@@ -385,8 +396,8 @@ const HivTestResult = (props) => {
                                     type="text"
                                     name="cd4FlowCyteometry"
                                     id="cd4FlowCyteometry"
-                                    value={objValues.cd4FlowCyteometry}
-                                    onChange={handleInputChange}
+                                    value={cd4Count.cd4FlowCyteometry}
+                                    onChange={handleInputChangeCd4Count}
                                     style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
                                     
                                 />

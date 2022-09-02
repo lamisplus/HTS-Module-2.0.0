@@ -96,6 +96,15 @@ const BasicInfo = (props) => {
         setRecency ({...recency,  [e.target.name]: e.target.value}); 
           
     }
+    useEffect(() => { 
+        setRecency ({...recency, ...props.patientObj.recency}) 
+
+        if(props.patientObj.recency.optOutRTRI==='false'){
+            
+        }
+
+
+    }, [ props.patientObj]);
     const handleSubmit =(e)=>{
         e.preventDefault();
             objValues.htsClientId= clientId

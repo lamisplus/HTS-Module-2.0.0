@@ -11,6 +11,7 @@ import 'semantic-ui-css/semantic.min.css';
 
 
 const Elicitation = (props) => {
+    //console.log(props.patientObj)
     const [activePage, setActivePage]= useState('list')
     const handleIClickPage =(activeItem)=>{
         setActivePage(activeItem)
@@ -31,11 +32,11 @@ const Elicitation = (props) => {
         <Col md={12}>
             {activePage==='list' &&
                 (
-                    <IndexContactList activePage={activePage} setActivePage={setActivePage} handleIClickPage={handleIClickPage}/>
+                    <IndexContactList activePage={activePage} setActivePage={setActivePage} handleIClickPage={handleIClickPage} patientObj={props.patientObj}/>
                 )
             }
             {activePage==='add' && (
-                <AddIndexContact activePage={activePage} setActivePage={setActivePage} handleIClickPage={handleIClickPage}/>        
+                  <AddIndexContact activePage={activePage} setActivePage={setActivePage} handleIClickPage={handleIClickPage} patientObj={props.patientObj}/>        
             )}
             <br />
                 <div className="row">

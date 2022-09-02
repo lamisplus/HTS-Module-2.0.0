@@ -3,8 +3,9 @@ import {FormGroup, Label , CardBody, Spinner,Input,Form} from "reactstrap";
 import * as moment from 'moment';
 import {makeStyles} from "@material-ui/core/styles";
 import {Card, CardContent} from "@material-ui/core";
-
-// import {ToastContainer, toast} from "react-toastify";
+import axios from "axios";
+import {token, url as baseUrl } from "../../../../../api";
+import { toast} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
 // import {Link, useHistory, useLocation} from "react-router-dom";
@@ -15,6 +16,8 @@ import {Button} from 'semantic-ui-react'
 // import 'semantic-ui-css/semantic.min.css';
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
+import PhoneInput from 'react-phone-input-2'
+import 'react-phone-input-2/lib/style.css'
 
 
 
@@ -59,10 +62,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const BasicInfo = (props) => {
+const AddIndexContact = (props) => {
     const classes = useStyles();
     const [saving, setSaving] = useState(false);
     const [errors, setErrors] = useState({});
+    const [sexs, setSexs] = useState([])
+    const [notificationContact, setNotificationContact] = useState([])
+    const [ageDisabled, setAgeDisabled] = useState(true);
+    const [indexTesting, setIndexTesting]= useState([]);
     const handleItemClick =(page, completedMenu)=>{
         props.handleItemClick(page)
         if(props.completed.includes(completedMenu)) {
@@ -72,11 +79,185 @@ const BasicInfo = (props) => {
         }
         
     }
-
+    const [objValuesIndex, setObjValuesIndex]= useState( {
+        htsClientId: null,
+        indexNotificationServicesElicitation: {},
+        personId: null
+      })
     const handleItemClickPage =(page)=>{
         props.handleIClickPage(page)
     }
+    const [objValues, setObjValues]= useState(
+        {
+            firstName: "",
+            middleName: "",
+            lastName:"",
+            dob:"",
+            phoneNumber:"",
+            altPhoneNumber: "",
+            sex: "",
+            physicalHurt: "",
+            threatenToHurt: "",
+            address: "", 
+            hangOutSpots: "",
+            relativeToIndexClient: "",
+            currentlyLiveWithPartner: "", 
+            partnerTestedPositive: "",
+            sexuallyUncomfortable: "", 
+            notificationMethod : "",
+            datePartnerComeForTesting: "",
+        }
+    )
+           
+    useEffect(() => { 
+        Sex();
+        NotificationContact();
+        IndexTesting();
+    }, []);
+    //Get list of Genders from 
+    const Sex =()=>{
+        axios
+        .get(`${baseUrl}application-codesets/v2/SEX`,
+            { headers: {"Authorization" : `Bearer ${token}`} }
+        )
+        .then((response) => {
+            //console.log(response.data);
+            setSexs(response.data);
+           
 
+        })
+        .catch((error) => {
+        //console.log(error);
+        });        
+    }
+    //Get list of IndexTesting
+    const IndexTesting =()=>{
+        axios
+        .get(`${baseUrl}application-codesets/v2/INDEX_TESTING`,
+            { headers: {"Authorization" : `Bearer ${token}`} }
+        )
+        .then((response) => {
+            setIndexTesting(response.data);
+        })
+        .catch((error) => {
+        //console.log(error);
+        });    
+    }
+    const NotificationContact =()=>{
+        axios
+        .get(`${baseUrl}application-codesets/v2/NOTIFICATION_CONTACT`,
+            { headers: {"Authorization" : `Bearer ${token}`} }
+        )
+        .then((response) => {
+            //console.log(response.data);
+            setNotificationContact(response.data);
+        })
+        .catch((error) => {
+        //console.log(error);
+        });        
+    }
+    const handleInputChange = e => { 
+        //setErrors({...temp, [e.target.name]:""})
+        if(e.target.name==='firstName' && e.target.value!==''){
+            const name = alphabetOnly(e.target.value)
+            setObjValues ({...objValues,  [e.target.name]: name});
+        }
+        if(e.target.name==='lastName' && e.target.value!==''){
+            const name = alphabetOnly(e.target.value)
+            setObjValues ({...objValues,  [e.target.name]: name});
+        }
+        if(e.target.name==='middleName' && e.target.value!==''){
+            const name = alphabetOnly(e.target.value)
+            setObjValues ({...objValues,  [e.target.name]: name});
+        } 
+        // if((e.target.name !=='maritalStatusId' && e.target.value!=='5' )){//logic for marital status
+        //     setHideNumChild(true)
+        // }else{
+        //     setHideNumChild(false)
+        // }         
+        setObjValues ({...objValues,  [e.target.name]: e.target.value});            
+    }
+    //Date of Birth and Age handle 
+    const handleDobChange = (e) => {
+        if (e.target.value) {
+            const today = new Date();
+            const birthDate = new Date(e.target.value);
+            let age_now = today.getFullYear() - birthDate.getFullYear();
+            const m = today.getMonth() - birthDate.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                age_now--;
+            }
+            objValues.age=age_now
+            
+            //setBasicInfo({...basicInfo, age: age_now});        
+        } else {
+            setObjValues({...objValues, age:  ""});
+        }
+        setObjValues ({...objValues,  [e.target.name]: e.target.value});
+   
+        setObjValues({...objValues, dob: e.target.value});
+        
+    }
+    const handleDateOfBirthChange = (e) => {
+        if (e.target.value == "Actual") {
+            objValues.isDateOfBirthEstimated=false
+            setAgeDisabled(true);
+        } else if (e.target.value == "Estimated") {
+            objValues.isDateOfBirthEstimated=true
+            setAgeDisabled(false);
+        }
+    }
+    const handleAgeChange = (e) => {
+        if (!ageDisabled && e.target.value) {
+            const currentDate = new Date();
+            currentDate.setDate(15);
+            currentDate.setMonth(5);
+            const estDob = moment(currentDate.toISOString());
+            const dobNew = estDob.add((e.target.value * -1), 'years');
+            setObjValues({...objValues, dob: moment(dobNew).format("YYYY-MM-DD")});
+            objValues.dob =moment(dobNew).format("YYYY-MM-DD")
+
+        }
+        setObjValues({...objValues, age: e.target.value});
+    }
+    //End of Date of Birth and Age handling 
+    const checkPhoneNumberBasic=(e, inputName)=>{
+        const limit = 10;
+        setObjValues({...objValues,  [inputName]: e.slice(0, limit)});     
+    }
+    const alphabetOnly=(value)=>{
+        const result = value.replace(/[^a-z]/gi, '');
+        return result
+    }
+    const handleSubmit =(e)=>{
+        e.preventDefault();       
+            objValuesIndex.htsClientId=props.patientObj.clientCode
+            objValuesIndex.indexNotificationServicesElicitation.contacts=objValues
+            objValuesIndex.personId=props.patientObj.id
+            axios.put(`${baseUrl}hts/${props.patientObj.clientCode}/index-notification-services-elicitation`,objValuesIndex,
+            { headers: {"Authorization" : `Bearer ${token}`}},
+            
+            )
+            .then(response => {
+                setSaving(false);
+                props.setPatientObj(response.data)
+                toast.success("HTS Test successful");
+                //handleItemClick('pre-test-counsel', 'basic' )
+                handleItemClickPage('list')
+
+            })
+            .catch(error => {
+                setSaving(false);
+                if(error.response && error.response.data){
+                    let errorMessage = error.response.data.apierror && error.response.data.apierror.message!=="" ? error.response.data.apierror.message :  "Something went wrong, please try again";
+                    toast.error(errorMessage);
+                }
+                else{
+                    toast.error("Something went wrong. Please try again...");
+                }
+            });
+            
+    }
 
     return (
         <>
@@ -101,11 +282,11 @@ const BasicInfo = (props) => {
                                 <FormGroup>
                                 <Label for="">First Name</Label>
                                 <Input
-                                    type="number"
-                                    name="lastViralLoad"
-                                    id="lastViralLoad"
-                                    // value={objValues.lastViralLoad}
-                                    // onChange={handleInputChange}
+                                    type="text"
+                                    name="firstName"
+                                    id="firstName"
+                                    value={objValues.firstName}
+                                    onChange={handleInputChange}
                                     style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
                                    
                                 />
@@ -116,11 +297,11 @@ const BasicInfo = (props) => {
                                 <FormGroup>
                                 <Label for="">Middle Name</Label>
                                 <Input
-                                    type="number"
-                                    name="lastViralLoad"
-                                    id="lastViralLoad"
-                                    // value={objValues.lastViralLoad}
-                                    // onChange={handleInputChange}
+                                    type="text"
+                                    name="middleName"
+                                    id="middleName"
+                                    value={objValues.middleName}
+                                    onChange={handleInputChange}
                                     style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
                                     
                                 />
@@ -131,49 +312,120 @@ const BasicInfo = (props) => {
                                 <FormGroup>
                                 <Label for="">Last Name</Label>
                                 <Input
-                                    type="number"
-                                    name="lastViralLoad"
-                                    id="lastViralLoad"
-                                    // value={objValues.lastViralLoad}
-                                    // onChange={handleInputChange}
+                                    type="text"
+                                    name="lastName"
+                                    id="lastName"
+                                    value={objValues.lastName}
+                                    onChange={handleInputChange}
                                     style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
                                    
                                 />
                                 
                                 </FormGroup>
                             </div>
-                            <div className="form-group mb-3 col-md-4">
+                            <div className="form-group mb-2 col-md-2">
                                 <FormGroup>
-                                <Label for="">Date Of Birth </Label>
-                                <Input
-                                    type="date"
-                                    name="dateOfLastViralLoad"
-                                    id="dateOfLastViralLoad"
-                                    // value={objValues.dateOfLastViralLoad}
-                                    // onChange={handleInputChange}
-                                    max= {moment(new Date()).format("YYYY-MM-DD") }
-                                    style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
+                                    <Label>Date Of Birth</Label>
+                                    <div className="radio">
+                                        <label>
+                                            <input
+                                                type="radio"
+                                                value="Actual"
+                                                name="dateOfBirth"
+                                                defaultChecked
+                                                
+                                                onChange={(e) => handleDateOfBirthChange(e)}
+                                                style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                            /> Actual
+                                        </label>
+                                    </div>
+                                    <div className="radio">
+                                        <label>
+                                            <input
+                                                type="radio"
+                                                value="Estimated"
+                                                name="dateOfBirth"
+                                                
+                                                onChange={(e) => handleDateOfBirthChange(e)}
+                                                style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                            /> Estimated
+                                        </label>
+                                    </div>
+                                </FormGroup>
+                            </div>
+                            <div className="form-group mb-3 col-md-3">
+                                <FormGroup>
+                                    <Label>Date</Label>
+                                    <input
+                                        className="form-control"
+                                        type="date"
+                                        name="dob"
+                                        id="dob"
+                                        max= {moment(new Date()).format("YYYY-MM-DD") }
+                                        value={objValues.dob}
+                                        onChange={handleDobChange}
+                                        style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                    />
                                     
-                                />
-                                
+                                </FormGroup>
+                            </div>
+                            <div className="form-group mb-3 col-md-3">
+                                <FormGroup>
+                                    <Label>Age</Label>
+                                    <input
+                                        className="form-control"
+                                        type="number"
+                                        name="age"
+                                        id="age"
+                                        value={objValues.age}
+                                        disabled={ageDisabled}
+                                        onChange={handleAgeChange}
+                                        style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                    />
                                 </FormGroup>
                             </div>
                             <div className="form-group mb-3 col-md-4">
                                 <FormGroup>
-                                <Label for="">Age</Label>
-                                <Input
-                                    type="number"
-                                    name="lastViralLoad"
-                                    id="lastViralLoad"
-                                    // value={objValues.lastViralLoad}
-                                    // onChange={handleInputChange}
-                                    style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
-                                   
-                                />
+                                <Label for="">Phone Number</Label>
                                 
+                                    <PhoneInput
+                                        containerStyle={{width:'100%',border: "1px solid #014D88"}}
+                                        inputStyle={{width:'100%',borderRadius:'0px'}}
+                                        country={'ng'}
+                                        placeholder="(234)7099999999"
+                                        minLength={10}
+                                        name="phoneNumber"
+                                        id="phoneNumber"
+                                        masks={{ng: '...-...-....', at: '(....) ...-....'}}
+                                        value={objValues.phoneNumber}
+                                        onChange={(e)=>{checkPhoneNumberBasic(e,'phoneNumber')}}
+                                        //onChange={(e)=>{handleInputChangeBasic(e,'phoneNumber')}}
+                                    />
+                                    {errors.phoneNumber !=="" ? (
+                                        <span className={classes.error}>{errors.phoneNumber}</span>
+                                        ) : "" }
                                 </FormGroup>
                             </div>
                             
+                            <div className="form-group mb-3 col-md-4">
+                                <FormGroup>
+                                <Label for="">Alternative Phone Number</Label>
+                                <PhoneInput
+                                        containerStyle={{width:'100%',border: "1px solid #014D88"}}
+                                        inputStyle={{width:'100%',borderRadius:'0px'}}
+                                        country={'ng'}
+                                        placeholder="(234)7099999999"
+                                        minLength={10}
+                                        name="altPhoneNumber"
+                                        id="altPhoneNumber"
+                                        masks={{ng: '...-...-....', at: '(....) ...-....'}}
+                                        value={objValues.altPhoneNumber}
+                                        onChange={(e)=>{checkPhoneNumberBasic(e,'altPhoneNumber')}}
+                                        //onChange={(e)=>{handleInputChangeBasic(e,'phoneNumber')}}
+                                    />
+                                
+                                </FormGroup>
+                            </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Sex *</Label>
@@ -181,30 +433,33 @@ const BasicInfo = (props) => {
                                         className="form-control"
                                         name="sex"
                                         id="sex"
-                                        
+                                        value={objValues.sex}
+                                        onChange={handleInputChange}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>
-                                        
+                                        {sexs.map((value) => (
+                                            <option key={value.id} value={value.id}>
+                                                {value.display}
+                                            </option>
+                                        ))}
                                     </select>
                                     
                                 </FormGroup>
-                            </div>
+                            </div>                           
                             <div className="form-group mb-3 col-md-4">
                                 <FormGroup>
                                 <Label for="">Address</Label>
                                 <Input
-                                    type="number"
-                                    name="lastViralLoad"
-                                    id="lastViralLoad"
-                                    // value={objValues.lastViralLoad}
-                                    // onChange={handleInputChange}
-                                    style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
-                                   
-                                />
-                                
+                                    type="text"
+                                    name="address"
+                                    id="address"
+                                    value={objValues.address}
+                                    onChange={handleInputChange}
+                                    style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}                                   
+                                />                                
                                 </FormGroup>
-                            </div>
+                            </div> 
                             <div className="form-group mb-3 col-md-4">
                                 <FormGroup>
                                 <Label for="">Hang-out spots</Label>
@@ -212,44 +467,13 @@ const BasicInfo = (props) => {
                                     type="number"
                                     name="hangOutSpots"
                                     id="hangOutSpots"
-                                    // value={objValues.hangOutSpots}
-                                    // onChange={handleInputChange}
-                                    style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
-                                   
-                                />
-                                
+                                    value={objValues.hangOutSpots}
+                                    onChange={handleInputChange}
+                                    style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}                                   
+                                />                                
                                 </FormGroup>
                             </div>
-                            <div className="form-group mb-3 col-md-4">
-                                <FormGroup>
-                                <Label for="">Phone Number</Label>
-                                <Input
-                                    type="number"
-                                    name="phoneNumber"
-                                    id="phoneNumber"
-                                    // value={objValues.phoneNumber}
-                                    // onChange={handleInputChange}
-                                    style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
-                                   
-                                />
-                                
-                                </FormGroup>
-                            </div>
-                            <div className="form-group mb-3 col-md-4">
-                                <FormGroup>
-                                <Label for="">Alternative Phone Number</Label>
-                                <Input
-                                    type="number"
-                                    name="altPhoneNumber"
-                                    id="altPhoneNumber"
-                                    // value={objValues.altPhoneNumber}
-                                    // onChange={handleInputChange}
-                                    style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
-                                   
-                                />
-                                
-                                </FormGroup>
-                            </div>
+
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Relationship to Index Client *</Label>
@@ -257,11 +481,16 @@ const BasicInfo = (props) => {
                                         className="form-control"
                                         name="relativeToIndexClient"
                                         id="relativeToIndexClient"
-                                        
+                                        value={objValues.relativeToIndexClient}
+                                        onChange={handleInputChange}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>
-                                        
+                                        {indexTesting.map((value) => (
+                                            <option key={value.id} value={value.id}>
+                                                {value.display}
+                                            </option>
+                                            ))}
                                     </select>
                                     
                                 </FormGroup>
@@ -273,11 +502,13 @@ const BasicInfo = (props) => {
                                         className="form-control"
                                         name="currentlyLiveWithPartner"
                                         id="currentlyLiveWithPartner"
-                                        
+                                        value={objValues.currentlyLiveWithPartner}
+                                        onChange={handleInputChange}        
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>
-                                        
+                                        <option value={"Yes"}>Yes</option>
+                                        <option value={"No"}>No</option>
                                     </select>
                                     
                                 </FormGroup>
@@ -289,13 +520,14 @@ const BasicInfo = (props) => {
                                         className="form-control"
                                         name="partnerTestedPositive"
                                         id="partnerTestedPositive"
-                                        
+                                        value={objValues.partnerTestedPositive}
+                                        onChange={handleInputChange} 
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>
-                                        <option value={""}>Yes</option>
-                                        <option value={""}>No</option>
-                                        <option value={""}>Don't know/Decline to answer</option>
+                                        <option value={"Yes"}>Yes</option>
+                                        <option value={"No"}>No</option>
+                                        <option value={"Don't know/Decline to answer"}>Don't know/Decline to answer</option>
                                         
                                     </select>
                                     
@@ -308,13 +540,14 @@ const BasicInfo = (props) => {
                                         className="form-control"
                                         name="physicalHurt"
                                         id="physicalHurt"
-                                        
+                                        value={objValues.physicalHurt}
+                                        onChange={handleInputChange} 
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>
-                                        <option value={""}>Yes</option>
-                                        <option value={""}>No</option>
-                                        <option value={""}>Decline to answer</option>
+                                        <option value={"Yes"}>Yes</option>
+                                        <option value={"No"}>No</option>
+                                        <option value={"Decline to answer"}>Decline to answer</option>
                                         
                                     </select>
                                     
@@ -327,18 +560,20 @@ const BasicInfo = (props) => {
                                         className="form-control"
                                         name="threatenToHurt"
                                         id="threatenToHurt"
-                                        
+                                        value={objValues.threatenToHurt}
+                                        onChange={handleInputChange}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>
-                                        <option value={""}>Yes</option>
-                                        <option value={""}>No</option>
-                                        <option value={""}>Decline to answer</option>
+                                        <option value={"Yes"}>Yes</option>
+                                        <option value={"No"}>No</option>
+                                        <option value={"Decline to answer"}>Decline to answer</option>
                                         
                                     </select>
                                     
                                 </FormGroup>
                             </div>
+                           
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Has this partner ever threaten force you to do something sexually that made you uncomfortable ?  *</Label>
@@ -346,18 +581,19 @@ const BasicInfo = (props) => {
                                         className="form-control"
                                         name="sexuallyUncomfortable"
                                         id="sexuallyUncomfortable"
-                                        
+                                        value={objValues.sexuallyUncomfortable}
+                                        onChange={handleInputChange}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>
-                                        <option value={""}>Yes</option>
-                                        <option value={""}>No</option>
-                                        <option value={""}>Decline to answer</option>
+                                        <option value={"Yes"}>Yes</option>
+                                        <option value={"No"}>No</option>
+                                        <option value={"Decline to answer"}>Decline to answer</option>
                                         
                                     </select>
                                     
                                 </FormGroup>
-                            </div>
+                            </div> 
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Notification Method selected*</Label>
@@ -365,16 +601,22 @@ const BasicInfo = (props) => {
                                         className="form-control"
                                         name="notificationMethod"
                                         id="notificationMethod"
-                                        
+                                        value={objValues.notificationMethod}
+                                        onChange={handleInputChange}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>
-                                       
+                                        {notificationContact.map((value) => (
+                                            <option key={value.id} value={value.id}>
+                                                {value.display}
+                                            </option>
+                                        ))}
                                         
                                     </select>
                                     
                                 </FormGroup>
                             </div>
+
                             <div className="form-group mb-3 col-md-4">
                                 <FormGroup>
                                 <Label for="">If contract by which date will partner come for testing?</Label>
@@ -382,8 +624,8 @@ const BasicInfo = (props) => {
                                     type="date"
                                     name="datePartnerComeForTesting"
                                     id="datePartnerComeForTesting"
-                                    // value={objValues.dateOfEac1}
-                                    // onChange={handleInputChange}
+                                    value={objValues.datePartnerComeForTesting}
+                                    onChange={handleInputChange}
                                     max= {moment(new Date()).format("YYYY-MM-DD") }
                                     style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
                                     
@@ -399,7 +641,7 @@ const BasicInfo = (props) => {
                             <div className="row">
                             <div className="form-group mb-3 col-md-6">
                            
-                            <Button content='Next' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={()=>handleItemClick('others', 'indexing')}/>
+                            <Button content='Save' icon='save' labelPosition='left' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
                             </div>
                             </div>
                         </div>
@@ -410,4 +652,4 @@ const BasicInfo = (props) => {
     );
 };
 
-export default BasicInfo
+export default AddIndexContact

@@ -35,11 +35,10 @@ const useStyles = makeStyles((theme) => ({
 
 
 const UserRegistration = (props) => {
-    console.log(props)
-    const classes = useStyles();
+    //console.log(props)
+    //const classes = useStyles();
     const location = useLocation();
     const locationState = location.state;
-
     const [saving, setSaving] = useState(false);
     const [activeItem, setactiveItem] = useState('basic');
     const [completed, setCompleted] = useState([]);
@@ -101,7 +100,7 @@ const UserRegistration = (props) => {
                                 active={activeItem === 'pre-test-counsel'}
                                 onClick={()=>handleItemClick('pre-test-counsel')}
                                 style={{backgroundColor:activeItem === 'pre-test-counsel' ? '#000': ""}}
-                                disabled={activeItem !== 'pre-test-counsel' ? true : false}
+                                //disabled={activeItem !== 'pre-test-counsel' ? true : false}
                             >
                             {/* <Label>2</Label> */}
                             <span style={{color:'#fff'}}>Pre Test Counseling</span>
@@ -114,7 +113,7 @@ const UserRegistration = (props) => {
                                 active={activeItem === 'post-test'}
                                 onClick={()=>handleItemClick('post-test')}
                                 style={{backgroundColor:activeItem === 'post-test' ? '#000': ""}}
-                                disabled={activeItem !== 'post-test' ? true : false}
+                                //disabled={activeItem !== 'post-test' ? true : false}
                             >
                             {/* <Label>4</Label> */}
                             <span style={{color:'#fff'}}>Post Test Counseling</span>
@@ -128,7 +127,7 @@ const UserRegistration = (props) => {
                                 active={activeItem === 'recency-testing'}
                                 onClick={()=>handleItemClick('recency-testing')}
                                 style={{backgroundColor:activeItem === 'recency-testing' ? '#000': ""}}
-                                disabled={activeItem !== 'recency-testing' ? true : false}
+                                //disabled={activeItem !== 'recency-testing' ? true : false}
                             >
                             {/* <Label>4</Label> */}
                             <span style={{color:'#fff'}}>HIV Recency Testing</span>
@@ -141,7 +140,7 @@ const UserRegistration = (props) => {
                                 active={activeItem === 'hiv-test'}
                                 onClick={()=>handleItemClick('hiv-test')}
                                 style={{backgroundColor:activeItem === 'hiv-test' ? '#000': ""}}
-                                disabled={activeItem !== 'hiv-test' ? true : false}
+                                //disabled={activeItem !== 'hiv-test' ? true : false}
                             >               
                                 <span style={{color:'#fff'}}>Request {"&"} Result Form</span>
                                 {completed.includes('hiv-test') && (

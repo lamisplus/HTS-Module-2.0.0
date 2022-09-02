@@ -82,7 +82,8 @@ const BasicInfo = (props) => {
                 personId: patientID,
                 riskAssessment: {},
                 stiScreening: {},
-                tbScreening: {}
+                tbScreening: {},
+                sexPartnerRiskAssessment:{}
             }
     )
     const [knowledgeAssessment, setKnowledgeAssessment]= useState(
@@ -184,6 +185,8 @@ const BasicInfo = (props) => {
             setRiskAssessment({...riskAssessment, ...props.patientObj.riskAssessment})      
             setStiScreening({...stiScreening, ...props.patientObj.stiScreening})
             setTbScreening({...tbScreening, ...props.patientObj.tbScreening})
+            setRiskAssessmentPartner({...riskAssessmentPartner, ...props.patientObj.sexPartnerRiskAssessment})
+             
     }, [ props.patientObj]);
 
     const handleSubmit =(e)=>{
@@ -194,6 +197,7 @@ const BasicInfo = (props) => {
             objValues.riskAssessment= riskAssessment
             objValues.stiScreening=stiScreening
             objValues.tbScreening=tbScreening
+            objValues.sexPartnerRiskAssessment=riskAssessmentPartner
             axios.put(`${baseUrl}hts/${clientId}/pre-test-counseling`,objValues,
             { headers: {"Authorization" : `Bearer ${token}`}},
             

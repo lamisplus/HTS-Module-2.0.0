@@ -338,9 +338,10 @@ public class HtsClientService {
 
     public String getHtsClientCode(){
         Optional<Long> number = htsClientRepository.maxId();
+        String random = RandomCodeGenerator.randomString(10, true, true);
         if(number.isPresent()){
-            return number.get() + RandomCodeGenerator.randomString(10, true, true);
+            return number.get() + random;
         }
-        return 1 + RandomCodeGenerator.randomString(10, true, true);
+        return 1 + random;
     }
 }

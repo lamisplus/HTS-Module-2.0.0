@@ -64,4 +64,6 @@ public class HtsClientDto {
 
     //index notification services - Elicitation
     private Object indexNotificationServicesElicitation;
+
+    private String indexClientCode;
 }

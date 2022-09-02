@@ -51,6 +51,8 @@
                 date_modified timestamp without time zone,
                 modified_by character varying,
                 archived integer,
+                index_client_code character varying;
+                CONSTRAINT unique_client_code UNIQUE (client_code),
                 CONSTRAINT breast_feeding_fk FOREIGN KEY (breast_feeding)
                     REFERENCES base_application_codeset (id) MATCH SIMPLE
                     ON UPDATE NO ACTION

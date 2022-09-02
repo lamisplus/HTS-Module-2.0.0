@@ -47,8 +47,13 @@ public class HtsClient extends Audit implements Serializable {
     private ApplicationCodeSet targetGroupCodeSet;*/
 
     @Basic
-    @Column(name = "client_code")
+    @Column(name = "client_code", unique = true)
     private String clientCode;
+
+    @Basic
+    @Column(name = "index_client_code")
+    private String indexClientCode;
+
     @Basic
     @Column(name = "date_visit")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
@@ -227,6 +232,7 @@ public class HtsClient extends Audit implements Serializable {
     @Basic(fetch = FetchType.LAZY)
     @Column(name = "index_notification_services_elicitation", columnDefinition = "jsonb")
     private Object indexNotificationServicesElicitation;
+
     @PrePersist
     public void setFields(){
         if(StringUtils.isEmpty(uuid)){

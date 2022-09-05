@@ -60,6 +60,10 @@ public class HtsClientController {
     public ResponseEntity<String> getHtsClientCode() {
         return ResponseEntity.ok(this.htsClientService.getHtsClientCode());
     }
+    @GetMapping(HTS_URL_VERSION_ONE + "/code/{indexCode}")
+    public ResponseEntity<String> getIndexCodeHtsClientCode(@PathVariable Long personId) {
+        return ResponseEntity.ok(this.htsClientService.getHtsClientCode());
+    }
 
     @GetMapping(HTS_URL_VERSION_ONE)
     public ResponseEntity<HtsClientDtos> getHtsClients(@PageableDefault(value = 50) Pageable pageable) {

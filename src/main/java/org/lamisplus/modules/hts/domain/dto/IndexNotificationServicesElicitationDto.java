@@ -10,7 +10,6 @@ public class IndexNotificationServicesElicitationDto {
     private final Long htsClientId;
     @NotNull(message = "personId is mandatory")
     private  final Long personId;
-    //Request & Result
     @NotNull(message = "Index Notification Services - Elicitation is mandatory")
     private  final Object indexNotificationServicesElicitation;
 }

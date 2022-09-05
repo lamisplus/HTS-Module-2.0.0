@@ -265,6 +265,7 @@ public class HtsClientService {
         htsClientDto.setSexPartnerRiskAssessment(htsClient.getSexPartnerRiskAssessment());
         htsClientDto.setOthers(htsClient.getOthers());
         htsClientDto.setHepatitisTesting(htsClient.getHepatitisTesting());
+        htsClientDto.setIndexNotificationServicesElicitation(htsClient.getIndexNotificationServicesElicitation());
 
         return htsClientDto;
     }

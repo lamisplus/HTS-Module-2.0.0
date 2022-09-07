@@ -99,20 +99,19 @@ const PatientnHistory = (props) => {
     const [patientList, setPatientList] = useState([])
     //const [patientObj, setpatientObj] = useState([])
     const patientId = props.patientObj && props.patientObj.id ? props.patientObj.id: null
-    const [hideNewHTSTest, setHideNewHTSTest] = useState(false)
-    const [key, setKey] = useState('home');
-
+    //const [key, setKey] = useState('home');
+    //console.log(props)
     useEffect(() => {
         patients()
-      }, [props.patientObj]);
+      }, []);
     ///GET LIST OF Patients
     async function patients() {
         axios
-            .get(`${baseUrl}hts/persons/${patientId}`,
+            .get(`${baseUrl}hts/${patientId}`,
             { headers: {"Authorization" : `Bearer ${token}`} }
             )
             .then((response) => {
-                console.log(response.data)
+                console.log(response.data.htsClientDtoList)
                 setPatientList(response.data.htsClientDtoList);
             })
             .catch((error) => {    
@@ -121,6 +120,7 @@ const PatientnHistory = (props) => {
     const handleItemClickPage =(page)=>{
         props.handleIClickPage(page)
     }
+
 
   return (
     <div>     
@@ -139,20 +139,20 @@ const PatientnHistory = (props) => {
               title="List of index client "
               columns={[
               { title: "Name", field: "name" },
-              {title: "DOB",field: "dob",},
               { title: "Age", field: "age" },
-              { title: "Phone Number", field: "phone" },     
+              { title: "Phone Number", field: "phone" },  
+              {title: "Adress",field: "address",},   
               { title: "Actions", field: "actions", filtering: false }, 
               ]}
-              data={ [].map((row) => ({
-                name: row.dateVisit,
-                dob:"",
-                age:"",
-                phone: "",   
+              data={ patientList.map((row) => ({
+                name: row.indexNotificationServicesElicitation.contacts.firstName + " " + row.indexNotificationServicesElicitation.contacts.lastName,
+                age:row.indexNotificationServicesElicitation.contacts.age,
+                phone: row.indexNotificationServicesElicitation.contacts.phoneNumber, 
+                address:row.indexNotificationServicesElicitation.contacts.address,  
                 actions:
             
                     <div>
-                    <Menu.Menu position='right'  >
+                    {/* <Menu.Menu position='right'  >
                         <Menu.Item >
                             <Button style={{backgroundColor:'rgb(153,46,98)'}} primary>
                             <Dropdown item text='Action'>
@@ -173,7 +173,7 @@ const PatientnHistory = (props) => {
                         </Dropdown>
                             </Button>
                         </Menu.Item>
-                        </Menu.Menu>
+                    </Menu.Menu> */}
                   </div>
                   
                   }))}

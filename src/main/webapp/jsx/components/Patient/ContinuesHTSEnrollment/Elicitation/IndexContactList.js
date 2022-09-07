@@ -101,6 +101,7 @@ const PatientnHistory = (props) => {
     const patientId = props.patientObj && props.patientObj.id ? props.patientObj.id: null
     const [hideNewHTSTest, setHideNewHTSTest] = useState(false)
     const [key, setKey] = useState('home');
+    console.log(props.patientObj)
 
     useEffect(() => {
         patients()

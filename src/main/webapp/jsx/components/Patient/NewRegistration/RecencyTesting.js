@@ -89,6 +89,14 @@ const BasicInfo = (props) => {
             longTermLine:"",  
             rencencyInterpretation:"", 
             hasViralLoad:"", 
+            sampleCollectedDate:"",
+            sampleReferanceNumber:"",
+            dateSampleSentToPCRLab:"",
+            sampleTestDate:"", 
+            receivingPcrLab:"", 
+            viralLoadResultClassification:"",
+            recencyResult:"", 
+            finalRecencyResult:"",
         }
     )
     const handleInputChangeRecency = e => { 
@@ -335,153 +343,157 @@ const BasicInfo = (props) => {
                                     
                                 </FormGroup>
                             </div>
-                            <div className="row">
-                                <h4>Viral Load Classification :</h4>
-                                <br/>
-                            <div className="form-group  col-md-4">
-                                <FormGroup>
-                                    <Label>Sample Collected Date</Label>
-                                    <Input
-                                        className="form-control"
-                                        name="sampleCollectedDate"
-                                        id="sampleCollectedDate"
-                                        type="date"
-                                        value={recency.sampleCollectedDate}
-                                        onChange={handleInputChangeRecency}
-                                        style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
-                                    />
-                                   
-                                </FormGroup>
-                            </div>
-                            <div className="form-group  col-md-4">
-                                <FormGroup>
-                                    <Label>Sample Refernce Number</Label>
-                                    <Input
-                                        className="form-control"
-                                        name="sampleReferanceNumber"
-                                        id="sampleReferanceNumber"
-                                        type="text"
-                                        value={recency.sampleReferanceNumber}
-                                        onChange={handleInputChangeRecency}
-                                        style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
-                                    />
+                            {recency.hasViralLoad==='true' && (
+                            <>
+                                <div className="row">
+                                    <h4>Viral Load Classification :</h4>
+                                    <br/>
+                                <div className="form-group  col-md-4">
+                                    <FormGroup>
+                                        <Label>Sample Collected Date</Label>
+                                        <Input
+                                            className="form-control"
+                                            name="sampleCollectedDate"
+                                            id="sampleCollectedDate"
+                                            type="date"
+                                            value={recency.sampleCollectedDate}
+                                            onChange={handleInputChangeRecency}
+                                            style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        />
                                     
-                                </FormGroup>
-                            </div>
-                            <div className="form-group  col-md-4">
-                                <FormGroup>
-                                    <Label>Sample Type</Label>
-                                    <select
-                                        className="form-control"
-                                        name="sampleType"
-                                        id="sampleType"
-                                        value={recency.sampleType}
-                                        onChange={handleInputChangeRecency}
-                                        style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
-                                    >
-                                        <option value={""}></option>
-                                        <option value="true">Yes</option>
-                                        <option value="false">No</option>
+                                    </FormGroup>
+                                </div>
+                                <div className="form-group  col-md-4">
+                                    <FormGroup>
+                                        <Label>Sample Refernce Number</Label>
+                                        <Input
+                                            className="form-control"
+                                            name="sampleReferanceNumber"
+                                            id="sampleReferanceNumber"
+                                            type="text"
+                                            value={recency.sampleReferanceNumber}
+                                            onChange={handleInputChangeRecency}
+                                            style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        />
                                         
-                                    </select>
-                                    
-                                </FormGroup>
-                            </div>
-                            <div className="form-group  col-md-4">
-                                <FormGroup>
-                                    <Label>Date Sample Sent to PCR Lab</Label>
-                                    <Input
-                                        className="form-control"
-                                        name="dateSampleSentToPCRLab"
-                                        id="dateSampleSentToPCRLab"
-                                        type="date"
-                                        value={recency.dateSampleSentToPCRLab}
-                                        onChange={handleInputChangeRecency}
-                                        style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
-                                    />
-                                    
-                                </FormGroup>
-                            </div>
-                            <div className="form-group  col-md-4">
-                                <FormGroup>
-                                    <Label>Sample Test Date</Label>
-                                    <Input
-                                        className="form-control"
-                                        name="sampleTestDate"
-                                        id="sampleTestDate"
-                                        type="date"
-                                        value={recency.hasViralLoad}
-                                        onChange={handleInputChangeRecency}
-                                        style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
-                                    />
-                                    
-                                </FormGroup>
-                            </div>
-                            <div className="form-group  col-md-4">
-                                <FormGroup>
-                                    <Label>Receiving PCR Lab</Label>
-                                    <Input
-                                        className="form-control"
-                                        name="receivingPcrLab"
-                                        id="receivingPcrLab"
-                                        type="text"
-                                        value={recency.receivingPcrLab}
-                                        onChange={handleInputChangeRecency}
-                                        style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
-                                    />
-                                    
-                                </FormGroup>
-                            </div>
-                            <div className="form-group  col-md-4">
-                                <FormGroup>
-                                    <Label>Viral Load Result Classification</Label>
-                                    <select
-                                        className="form-control"
-                                        name="viralLoadResultClassification"
-                                        id="viralLoadResultClassification"
-                                        value={recency.viralLoadResultClassification}
-                                        onChange={handleInputChangeRecency}
-                                        style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
-                                    >
-                                        <option value={""}></option>
-                                        <option value="true">Yes</option>
-                                        <option value="false">No</option>
+                                    </FormGroup>
+                                </div>
+                                <div className="form-group  col-md-4">
+                                    <FormGroup>
+                                        <Label>Sample Type</Label>
+                                        <select
+                                            className="form-control"
+                                            name="sampleType"
+                                            id="sampleType"
+                                            value={recency.sampleType}
+                                            onChange={handleInputChangeRecency}
+                                            style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        >
+                                            <option value={""}></option>
+                                            <option value="true">Yes</option>
+                                            <option value="false">No</option>
+                                            
+                                        </select>
                                         
-                                    </select>
-                                    
-                                </FormGroup>
-                            </div>
-                            <div className="form-group  col-md-4">
-                                <FormGroup>
-                                    <Label>Result (copies/ml)</Label>
-                                    <Input
-                                        className="form-control"
-                                        name="recencyResult"
-                                        id="recencyResult"
-                                        type="text"
-                                        value={recency.recencyResult}
-                                        onChange={handleInputChangeRecency}
-                                        style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
-                                    />
-                                    
-                                </FormGroup>
-                            </div>
-                            <div className="form-group  col-md-4">
-                                <FormGroup>
-                                    <Label>Final Recency Result</Label>
-                                    <Input
-                                        className="form-control"
-                                        name="finalRecencyResult"
-                                        id="finalRecencyResult"
-                                        type="text"
-                                        value={recency.finalRecencyResult}
-                                        onChange={handleInputChangeRecency}
-                                        style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
-                                    />
-                                    
-                                </FormGroup>
-                            </div>
-                            </div>
+                                    </FormGroup>
+                                </div>
+                                <div className="form-group  col-md-4">
+                                    <FormGroup>
+                                        <Label>Date Sample Sent to PCR Lab</Label>
+                                        <Input
+                                            className="form-control"
+                                            name="dateSampleSentToPCRLab"
+                                            id="dateSampleSentToPCRLab"
+                                            type="date"
+                                            value={recency.dateSampleSentToPCRLab}
+                                            onChange={handleInputChangeRecency}
+                                            style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        />
+                                        
+                                    </FormGroup>
+                                </div>
+                                <div className="form-group  col-md-4">
+                                    <FormGroup>
+                                        <Label>Sample Test Date</Label>
+                                        <Input
+                                            className="form-control"
+                                            name="sampleTestDate"
+                                            id="sampleTestDate"
+                                            type="date"
+                                            value={recency.hasViralLoad}
+                                            onChange={handleInputChangeRecency}
+                                            style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        />
+                                        
+                                    </FormGroup>
+                                </div>
+                                <div className="form-group  col-md-4">
+                                    <FormGroup>
+                                        <Label>Receiving PCR Lab</Label>
+                                        <Input
+                                            className="form-control"
+                                            name="receivingPcrLab"
+                                            id="receivingPcrLab"
+                                            type="text"
+                                            value={recency.receivingPcrLab}
+                                            onChange={handleInputChangeRecency}
+                                            style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        />
+                                        
+                                    </FormGroup>
+                                </div>
+                                <div className="form-group  col-md-4">
+                                    <FormGroup>
+                                        <Label>Viral Load Result Classification</Label>
+                                        <select
+                                            className="form-control"
+                                            name="viralLoadResultClassification"
+                                            id="viralLoadResultClassification"
+                                            value={recency.viralLoadResultClassification}
+                                            onChange={handleInputChangeRecency}
+                                            style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        >
+                                            <option value={""}></option>
+                                            <option value="true">Yes</option>
+                                            <option value="false">No</option>
+                                            
+                                        </select>
+                                        
+                                    </FormGroup>
+                                </div>
+                                <div className="form-group  col-md-4">
+                                    <FormGroup>
+                                        <Label>Result (copies/ml)</Label>
+                                        <Input
+                                            className="form-control"
+                                            name="recencyResult"
+                                            id="recencyResult"
+                                            type="text"
+                                            value={recency.recencyResult}
+                                            onChange={handleInputChangeRecency}
+                                            style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        />
+                                        
+                                    </FormGroup>
+                                </div>
+                                <div className="form-group  col-md-4">
+                                    <FormGroup>
+                                        <Label>Final Recency Result</Label>
+                                        <Input
+                                            className="form-control"
+                                            name="finalRecencyResult"
+                                            id="finalRecencyResult"
+                                            type="text"
+                                            value={recency.finalRecencyResult}
+                                            onChange={handleInputChangeRecency}
+                                            style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        />
+                                        
+                                    </FormGroup>
+                                </div>
+                                </div>
+                            </>
+                            )}
                             </>)}
                                                       
                             {saving ? <Spinner /> : ""}

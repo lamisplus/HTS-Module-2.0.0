@@ -234,7 +234,7 @@ const AddIndexContact = (props) => {
             objValuesIndex.htsClientId=props.patientObj.clientCode
             objValuesIndex.indexNotificationServicesElicitation.contacts=objValues
             objValuesIndex.personId=props.patientObj.id
-            axios.put(`${baseUrl}hts/${props.patientObj.clientCode}/index-notification-services-elicitation`,objValuesIndex,
+            axios.put(`${baseUrl}hts/${props.patientObj.id}/index-notification-services-elicitation`,objValuesIndex,
             { headers: {"Authorization" : `Bearer ${token}`}},
             
             )

@@ -385,7 +385,7 @@ const HivTestResult = (props) => {
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>
-                                        <option value="Semi-Quantitative">{"<= 200"}</option>
+                                        <option value="Semi-Quantitative">{"<200"}</option>
                                         <option value="Flow Cyteometry">{">=200"}</option>
                                         
                                     </select>

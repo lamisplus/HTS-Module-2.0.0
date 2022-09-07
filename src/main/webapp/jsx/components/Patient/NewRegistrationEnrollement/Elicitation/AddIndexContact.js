@@ -63,6 +63,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 const AddIndexContact = (props) => {
+   
     const classes = useStyles();
     const [saving, setSaving] = useState(false);
     const [errors, setErrors] = useState({});
@@ -233,8 +234,8 @@ const AddIndexContact = (props) => {
         e.preventDefault();       
             objValuesIndex.htsClientId=props.patientObj.clientCode
             objValuesIndex.indexNotificationServicesElicitation.contacts=objValues
-            objValuesIndex.personId=props.patientObj.id
-            axios.put(`${baseUrl}hts/${props.patientObj.clientCode}/index-notification-services-elicitation`,objValuesIndex,
+            objValuesIndex.personId=props.patientObj.personId
+            axios.put(`${baseUrl}hts/${props.patientObj.id}/index-notification-services-elicitation`,objValuesIndex,
             { headers: {"Authorization" : `Bearer ${token}`}},
             
             )

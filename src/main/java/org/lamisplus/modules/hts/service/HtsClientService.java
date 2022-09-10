@@ -7,7 +7,9 @@ import org.lamisplus.modules.base.controller.apierror.EntityNotFoundException;
 import org.lamisplus.modules.base.controller.apierror.IllegalTypeException;
 import org.lamisplus.modules.hts.domain.dto.*;
 import org.lamisplus.modules.hts.domain.entity.HtsClient;
+import org.lamisplus.modules.hts.domain.entity.IndexElicitation;
 import org.lamisplus.modules.hts.repository.HtsClientRepository;
+import org.lamisplus.modules.hts.repository.IndexElicitationRepository;
 import org.lamisplus.modules.hts.util.RandomCodeGenerator;
 import org.lamisplus.modules.patient.domain.dto.PersonDto;
 import org.lamisplus.modules.patient.domain.dto.PersonResponseDto;
@@ -25,6 +27,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static org.lamisplus.modules.base.util.Constants.ArchiveStatus.ARCHIVED;
+import static org.lamisplus.modules.base.util.Constants.ArchiveStatus.UN_ARCHIVED;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -34,7 +39,7 @@ public class HtsClientService {
     private final PersonRepository personRepository;
     private final PersonService personService;
     private final CurrentUserOrganizationService currentUserOrganizationService;
-
+    private final IndexElicitationRepository indexElicitationRepository;
     public HtsClientDto save(HtsClientRequestDto htsClientRequestDto){
         HtsClient htsClient;
         PersonResponseDto personResponseDto;
@@ -74,7 +79,7 @@ public class HtsClientService {
 
     private HtsClient getById(Long id){
         return htsClientRepository
-                .findById(id)
+                .findByIdAndArchivedAndFacilityId(id, UN_ARCHIVED, currentUserOrganizationService.getCurrentUserOrganization())
                 .orElseThrow(()-> new EntityNotFoundException(HtsClient.class, "id", ""+id));
     }
 
@@ -326,17 +331,17 @@ public class HtsClientService {
         return htsClientDto;
     }
 
-    public HtsClientDto updateIndexNotificationServicesElicitation(Long id, IndexNotificationServicesElicitationDto indexNotificationServicesElicitationDto){
-        HtsClient htsClient = this.getById(id);
-        if(!this.getPersonId(htsClient).equals(indexNotificationServicesElicitationDto.getPersonId())) {
+    public HtsClientDto updateIndexNotificationServicesElicitation(Long id, IndexElicitationDto indexElicitationDto){
+        /*HtsClient htsClient = this.getById(id);
+        if(!this.getPersonId(htsClient).equals(indexElicitationDto.getPersonId())) {
             throw new IllegalTypeException(Person.class, "Person", "id does not match with supplied personId");
         }
-        htsClient.setIndexNotificationServicesElicitation(indexNotificationServicesElicitationDto
+        htsClient.setIndexNotificationServicesElicitation(indexElicitationDto
                         .getIndexNotificationServicesElicitation());
 
         HtsClientDto htsClientDto = new HtsClientDto();
-        BeanUtils.copyProperties(htsClientRepository.save(htsClient), htsClientDto);
-        return htsClientDto;
+        BeanUtils.copyProperties(htsClientRepository.save(htsClient), htsClientDto);*/
+        return null;
     }
 
     public String getHtsClientCode(){
@@ -346,5 +351,20 @@ public class HtsClientService {
             return number.get() + random;
         }
         return 1 + random;
+    }
+
+    public void delete(Long id) {
+        HtsClient htsClient = this.getById(id);
+
+        List<IndexElicitation> elicitation = htsClient.getIndexElicitation()
+                .stream()
+                .map(indexElicitation -> {
+                    indexElicitation.setArchived(ARCHIVED);
+                    return indexElicitation;})
+                .collect(Collectors.toList());
+
+        if(elicitation != null && !elicitation.isEmpty()) indexElicitationRepository.saveAll(elicitation);
+        htsClient.setArchived(ARCHIVED);
+        htsClientRepository.save(htsClient);
     }
 }

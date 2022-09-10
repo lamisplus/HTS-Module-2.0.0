@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.lamisplus.modules.hts.domain.dto.*;
 import org.lamisplus.modules.hts.domain.entity.HtsClient;
 import org.lamisplus.modules.hts.service.HtsClientService;
+import org.lamisplus.modules.hts.service.IndexElicitationService;
 import org.lamisplus.modules.hts.util.PaginationUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,6 +23,8 @@ import java.util.List;
 public class HtsClientController {
     private final HtsClientService htsClientService;
     private final String HTS_URL_VERSION_ONE = "/api/v1/hts";
+
+    private final IndexElicitationService indexElicitationService;
 
     @PostMapping(HTS_URL_VERSION_ONE)
     public ResponseEntity<HtsClientDto> save(@Valid @RequestBody HtsClientRequestDto htsClientRequestDto) {
@@ -45,12 +48,16 @@ public class HtsClientController {
         return ResponseEntity.ok(this.htsClientService.updatePostTestCounselingKnowledgeAssessment(id, postTestCounselingDto));
     }
     @PutMapping(HTS_URL_VERSION_ONE +"/{id}/index-notification-services-elicitation")
-    public ResponseEntity<HtsClientDto> updateIndexNotificationServicesElicitation(@PathVariable Long id, @Valid @RequestBody IndexNotificationServicesElicitationDto indexNotificationServicesElicitationDto) {
-        return ResponseEntity.ok(this.htsClientService.updateIndexNotificationServicesElicitation(id, indexNotificationServicesElicitationDto));
+    public ResponseEntity<HtsClientDto> updateIndexNotificationServicesElicitation(@PathVariable Long id, @Valid @RequestBody IndexElicitationDto indexElicitationDto) {
+        return ResponseEntity.ok(this.htsClientService.updateIndexNotificationServicesElicitation(id, indexElicitationDto));
     }
     @GetMapping(HTS_URL_VERSION_ONE + "/{id}")
     public ResponseEntity<HtsClientDtos> getHtsClientById(@PathVariable Long id) {
         return ResponseEntity.ok(this.htsClientService.getHtsClientById(id));
+    }
+    @GetMapping(HTS_URL_VERSION_ONE + "/{id}/index-elicitation")
+    public ResponseEntity<List<IndexElicitationResponseDto>> getAllByHtsClientId(@PathVariable Long id) {
+        return ResponseEntity.ok(this.indexElicitationService.getAllByHtsClientId(id));
     }
     @GetMapping(HTS_URL_VERSION_ONE + "/persons/{personId}")
     public ResponseEntity<HtsClientDtos> getHtsClientByPersonId(@PathVariable Long personId) {
@@ -75,5 +82,10 @@ public class HtsClientController {
     @GetMapping(HTS_URL_VERSION_ONE + "/persons")
     public ResponseEntity<List<HtsClientDtos>> getAllPerson() {
         return ResponseEntity.ok(this.htsClientService.getAllPatients());
+    }
+
+    @DeleteMapping(HTS_URL_VERSION_ONE + "/{id}")
+    public void delete(@PathVariable Long id) {
+        this.htsClientService.delete(id);
     }
 }

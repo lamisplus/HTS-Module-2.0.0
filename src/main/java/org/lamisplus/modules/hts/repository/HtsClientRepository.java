@@ -15,7 +15,12 @@ public interface HtsClientRepository extends JpaRepository<HtsClient, Long> {
     List<HtsClient> findAllByPersonOrderByIdDesc(Person person);
     Page<HtsClient> findAll(Pageable pageable);
 
+    Optional<HtsClient> findByUuid(String uuid);
+
     @Query(value = "SELECT max(id) FROM hts_client", nativeQuery = true)
     Optional<Long> maxId();
 
+    Optional<HtsClient> findByIdAndArchived(Long id, int archived);
+
+    Optional<HtsClient> findByIdAndArchivedAndFacilityId(Long htsClientId, int archived, Long facilityId);
 }

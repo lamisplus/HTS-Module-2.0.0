@@ -1,6 +1,7 @@
 package org.lamisplus.modules.hts.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.vladmihalcea.hibernate.type.array.IntArrayType;
 import com.vladmihalcea.hibernate.type.array.StringArrayType;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
@@ -9,6 +10,7 @@ import com.vladmihalcea.hibernate.type.json.JsonNodeStringType;
 import com.vladmihalcea.hibernate.type.json.JsonStringType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
@@ -18,6 +20,7 @@ import org.lamisplus.modules.patient.domain.entity.Person;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -197,6 +200,10 @@ public class HtsClient extends Audit implements Serializable {
     @Column(name = "hiv_test_result")
     private String hivTestResult;
 
+    @Basic
+    @Column(name = "archived")
+    private int archived=0;
+
     @Type(type = "jsonb")
     @Basic(fetch = FetchType.LAZY)
     @Column(name = "syphilis_testing", columnDefinition = "jsonb")
@@ -222,16 +229,23 @@ public class HtsClient extends Audit implements Serializable {
     @Basic(fetch = FetchType.LAZY)
     @Column(name = "recency", columnDefinition = "jsonb")
     private Object recency;
+
     //Post test counseling
     @Type(type = "jsonb")
     @Basic(fetch = FetchType.LAZY)
     @Column(name = "post_test_counseling", columnDefinition = "jsonb")
     private Object postTestCounselingKnowledgeAssessment;
+
     //Index Notification Services - Elicitation
     @Type(type = "jsonb")
     @Basic(fetch = FetchType.LAZY)
     @Column(name = "index_notification_services_elicitation", columnDefinition = "jsonb")
     private Object indexNotificationServicesElicitation;
+
+    @OneToMany(mappedBy = "htsClient")
+    @ToString.Exclude
+    @JsonIgnore
+    public List<IndexElicitation> indexElicitation;
 
     @PrePersist
     public void setFields(){

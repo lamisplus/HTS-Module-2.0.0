@@ -43,7 +43,7 @@ public class IndexElicitation extends Audit implements Serializable {
 
     @Basic
     @Column(name = "is_date_of_birth_estimated")
-    private Long isDateOfBirthEstimated;
+    private Boolean isDateOfBirthEstimated;
 
     @Basic
     @Column(name = "sex")

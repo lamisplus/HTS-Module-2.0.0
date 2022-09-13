@@ -15,7 +15,7 @@ public class IndexElicitationResponseDto {
     private Long htsClientId;
     private Long id;
     private LocalDate dob;
-    private Long isDateOfBirthEstimated;
+    private Boolean isDateOfBirthEstimated;
     private Long sex;
     private String address;
     private String lastName;

@@ -107,6 +107,7 @@ const PostTest = (props) => {
     }
     const handleSubmit =(e)=>{
         e.preventDefault();
+            console.log(patientID)
             objValues.htsClientId= clientId
             objValues.postTestCounselingKnowledgeAssessment= postTest
             objValues.personId= patientID
@@ -143,7 +144,7 @@ const PostTest = (props) => {
                     <form >
                         <div className="row">
                         <LabelRibbon as='a' color='blue' style={{width:'106%', height:'35px'}} ribbon>
-                            <h5 style={{color:'#fff'}}>Knowledge Assessment</h5>
+                            {/* <h5 style={{color:'#fff'}}>Knowledge Assessment</h5> */}
                         </LabelRibbon>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
@@ -434,7 +435,7 @@ const PostTest = (props) => {
                                     
                                 </FormGroup>
                             </div>
-                            <div className="form-group  col-md-4">
+                            {/* <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Unprotected sex with regular partner in the last 3months</Label>
                                     <select
@@ -452,7 +453,7 @@ const PostTest = (props) => {
                                     </select>
                                     
                                 </FormGroup>
-                            </div>
+                            </div> */}
                             {/* <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Unprotected sex with regular particular in the last 3 months</Label>

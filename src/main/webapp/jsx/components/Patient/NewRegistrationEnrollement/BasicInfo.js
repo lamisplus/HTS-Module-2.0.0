@@ -248,11 +248,11 @@ const BasicInfo = (props) => {
         //HTS FORM VALIDATION
             temp.typeCounseling = objValues.typeCounseling ? "" : "This field is required."
             temp.testingSetting = objValues.testingSetting ? "" : "This field is required."
-            temp.targetGroup = objValues.targetGroup ? "" : "This field is required."
-            temp.referredFrom = objValues.referredFrom ? "" : "This field is required."
-            temp.previouslyTested = objValues.previouslyTested ? "" : "This field is required." 
-            temp.indexClient = objValues.indexClient ? "" : "This field is required."  
-            temp.firstTimeVisit = objValues.firstTimeVisit ? "" : "This field is required." 
+            temp.targetGroup = objValues.targetGroup!==""  ? "" : "This field is required."
+            temp.referredFrom = objValues.referredFrom!==""  ? "" : "This field is required."
+            temp.previouslyTested = objValues.previouslyTested!==""  ? "" : "This field is required." 
+            temp.indexClient = objValues.indexClient!==""  ? "" : "This field is required."  
+            temp.firstTimeVisit = objValues.firstTimeVisit!=="" ? "" : "This field is required." 
             temp.dateVisit = objValues.dateVisit ? "" : "This field is required."               
                 setErrors({ ...temp })
         return Object.values(temp).every(x => x == "")
@@ -313,6 +313,7 @@ const BasicInfo = (props) => {
             }
     }
 
+    console.log(objValues.firstTimeVisit)
 
     return (
         <>  
@@ -415,10 +416,10 @@ const BasicInfo = (props) => {
                                     type="date"
                                     name="dateVisit"
                                     id="dateVisit"
-                                    value={objValues.dateVisit}
+                                    value={moment(new Date()).format("YYYY-MM-DD")}
                                     onChange={handleInputChange}
                                     min={objValues.dateOfRegistration}
-                                    max= {moment(new Date()).format("YYYY-MM-DD") }
+                                    max= {moment(new Date()).format("YYYY-MM-DD")}
                                     style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
                                     
                                 />
@@ -428,7 +429,7 @@ const BasicInfo = (props) => {
                                 </FormGroup>
                             </div>
 
-                            {(objValues.targetGroup!=='457' && objValues.targetGroup!=="") && (
+                            {/* {(objValues.targetGroup!=='457' && objValues.targetGroup!=="") && (
                             <div className="form-group  col-md-4">
                             <FormGroup>
                                 <Label>Gender</Label>
@@ -450,8 +451,25 @@ const BasicInfo = (props) => {
                                
                             </FormGroup>
                             </div>
+                            )} */}
+                             {(objValues.age > 9 && objValues.sexId=='376') && (
+                            <div className="form-group  col-md-4">
+                                <FormGroup>
+                                    <Label>Number of wives/co-wives</Label>
+                                    <Input
+                                        type="number"
+                                        name="numWives"
+                                        id="numWives"
+                                        min={0}
+                                        value={objValues.numWives}
+                                        onChange={handleInputChange}
+                                        style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
+                                   
+                                    />
+                                    
+                                </FormGroup>
+                            </div>
                             )}
-
                             {(objValues.age>9 ) && (
                             <div className="form-group  col-md-4">
                                 <FormGroup>
@@ -470,24 +488,7 @@ const BasicInfo = (props) => {
                                 </FormGroup>
                             </div>
                             )}
-                            {(objValues.age > 9 && objValues.sexId=='376') && (
-                            <div className="form-group  col-md-4">
-                                <FormGroup>
-                                    <Label>Number of wives/co-wives</Label>
-                                    <Input
-                                        type="number"
-                                        name="numWives"
-                                        id="numWives"
-                                        min={0}
-                                        value={objValues.numWives}
-                                        onChange={handleInputChange}
-                                        style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
-                                   
-                                    />
-                                    
-                                </FormGroup>
-                            </div>
-                            )}
+                           
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Index Testing</Label>

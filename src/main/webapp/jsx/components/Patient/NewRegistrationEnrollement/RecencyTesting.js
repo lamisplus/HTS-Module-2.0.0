@@ -62,7 +62,7 @@ const BasicInfo = (props) => {
     const clientId = props.patientObj && props.patientObj ? props.patientObj.id : "";
     const [saving, setSaving] = useState(false);
     const [errors, setErrors] = useState({});
-    
+    let temp = { ...errors }
     const handleItemClick =(page, completedMenu)=>{
         props.handleItemClick(page)
         if(props.completed.includes(completedMenu)) {
@@ -93,7 +93,8 @@ const BasicInfo = (props) => {
             sampleReferanceNumber:"",
             dateSampleSentToPCRLab:"",
             sampleTestDate:"", 
-            receivingPcrLab:"", 
+            receivingPcrLab:"",
+            sampleType:"", 
             viralLoadResultClassification:"",
             recencyResult:"", 
             finalRecencyResult:"", 
@@ -138,8 +139,19 @@ const BasicInfo = (props) => {
 
 
     }, [ props.patientObj,recency.longTermLine,recency.verififcationLine, recency.controlLine]);
+
+     /*****  Validation  */
+     const validate = () => {
+        //HTS FORM VALIDATION
+            {objValues.sampleCollectedDate!=='' && (temp.sampleReferanceNumber = objValues.sampleReferanceNumber ? "" : "This field is required.")}
+            {objValues.sampleCollectedDate!=='' && (temp.dateSampleSentToPCRLab = objValues.dateSampleSentToPCRLab ? "" : "This field is required.")}
+            {objValues.sampleCollectedDate!=='' && (temp.sampleType = objValues.sampleType ? "" : "This field is required.")}
+            setErrors({ ...temp })
+        return Object.values(temp).every(x => x == "")
+    }
     const handleSubmit =(e)=>{
         e.preventDefault();
+        if(validate()){
             objValues.htsClientId= clientId
             objValues.recency= recency
             objValues.personId= patientID
@@ -151,7 +163,7 @@ const BasicInfo = (props) => {
                 setSaving(false);
                 props.setPatientObj(props && props.patientObj ? props.patientObj : "")
                 toast.success("Risk Assesment successful");
-                handleItemClick('hiv-test', 'recency-testing' )
+                handleItemClick('indexing', 'recency-testing' )
 
             })
             .catch(error => {
@@ -164,7 +176,7 @@ const BasicInfo = (props) => {
                     toast.error("Something went wrong. Please try again...");
                 }
             });
-            
+        }   
     }
 
     return (
@@ -327,7 +339,7 @@ const BasicInfo = (props) => {
                                     
                                 </FormGroup>
                             </div>
-
+                            {recency.rencencyInterpretation==='Recent' && (
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Has viral load request been made? *</Label>
@@ -347,6 +359,7 @@ const BasicInfo = (props) => {
                                     
                                 </FormGroup>
                             </div>
+                            )}
                             {recency.hasViralLoad==='true' && (
                             <>
                                 <div className="row">
@@ -379,7 +392,9 @@ const BasicInfo = (props) => {
                                             onChange={handleInputChangeRecency}
                                             style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                         />
-                                        
+                                         {errors.sampleReferanceNumber !=="" ? (
+                                        <span className={classes.error}>{errors.sampleReferanceNumber}</span>
+                                        ) : "" }
                                     </FormGroup>
                                 </div>
                                 <div className="form-group  col-md-4">
@@ -398,7 +413,9 @@ const BasicInfo = (props) => {
                                             <option value="false">No</option>
                                             
                                         </select>
-                                        
+                                        {errors.sampleType !=="" ? (
+                                        <span className={classes.error}>{errors.sampleType}</span>
+                                        ) : "" }   
                                     </FormGroup>
                                 </div>
                                 <div className="form-group  col-md-4">
@@ -413,7 +430,9 @@ const BasicInfo = (props) => {
                                             onChange={handleInputChangeRecency}
                                             style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                         />
-                                        
+                                        {errors.dateSampleSentToPCRLab !=="" ? (
+                                        <span className={classes.error}>{errors.dateSampleSentToPCRLab}</span>
+                                        ) : "" }
                                     </FormGroup>
                                 </div>
                                 <div className="form-group  col-md-4">
@@ -448,7 +467,7 @@ const BasicInfo = (props) => {
                                 </div>
                                 <div className="form-group  col-md-4">
                                     <FormGroup>
-                                        <Label>Viral Load Result Classification</Label>
+                                        <Label>Viral Load Result Classification and Result (copies/ml)</Label>
                                         <select
                                             className="form-control"
                                             name="viralLoadResultClassification"
@@ -458,14 +477,15 @@ const BasicInfo = (props) => {
                                             style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                         >
                                             <option value={""}></option>
-                                            <option value="true">Yes</option>
-                                            <option value="false">No</option>
-                                            
+                                            <option value=">=1000">{">= "} 1000</option>
+                                            <option value="<=1000">{"<= "} 1000</option>
+                                            <option value="Failed run">Failed run</option>
+                                            <option value="Invalid viral load result">Invalid viral load result</option>
                                         </select>
                                         
                                     </FormGroup>
                                 </div>
-                                <div className="form-group  col-md-4">
+                                {/* <div className="form-group  col-md-4">
                                     <FormGroup>
                                         <Label>Result (copies/ml)</Label>
                                         <Input
@@ -479,20 +499,25 @@ const BasicInfo = (props) => {
                                         />
                                         
                                     </FormGroup>
-                                </div>
+                                </div> */}
                                 <div className="form-group  col-md-4">
                                     <FormGroup>
                                         <Label>Final Recency Result</Label>
-                                        <Input
+                                        <select
                                             className="form-control"
                                             name="finalRecencyResult"
                                             id="finalRecencyResult"
-                                            type="text"
+                                            type="select"
                                             value={recency.finalRecencyResult}
                                             onChange={handleInputChangeRecency}
                                             style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
-                                        />
-                                        
+                                        >
+                                        <option value={""}></option>
+                                            <option value="if < 1000 = RITA Long term">if {"<"} 1000 = RITA Long term</option>
+                                            <option value="if >= 1000 = RITA Recent">if {">="} 1000 = RITA Recent</option>
+                                            <option value="if Failed run = RITA Inconclusive">if Failed run = RITA Inconclusive</option>
+                                            <option value="If Invalid VL result = RITA Inconclusive">If Invalid VL result = RITA Inconclusive</option>
+                                        </select>
                                     </FormGroup>
                                 </div>
                                 </div>

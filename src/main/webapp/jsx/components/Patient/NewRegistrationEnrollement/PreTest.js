@@ -124,12 +124,25 @@ const BasicInfo = (props) => {
     const [riskCount, setRiskCount] = useState(0);
     const handleInputChangeRiskAssessment = e => { 
         //setErrors({...temp, [e.target.name]:""}) 
-        setRiskAssessment ({...riskAssessment,  [e.target.name]: e.target.value}); 
+        setRiskAssessment ({...riskAssessment,  [e.target.name]: e.target.value});  
         if(e.target.value==='true') {
             const newcount = riskCount +1
-            setRiskCount(newcount)
-        }             
+            if(newcount>=0 && newcount <=7){
+                setRiskCount(newcount)
+            }
+        }else{
+            const newcount = riskCount -1
+            //settbCount(newcount)
+            //console.log(newcount)
+            if(newcount <=0 ){
+                
+                setRiskCount(0)
+            }else{
+                setRiskCount(newcount)
+            }
+        }                   
     }
+    const [riskPartnerCount, setRiskPartnerCount] = useState(0);
     const [riskAssessmentPartner, setRiskAssessmentPartner]= useState(
         {
             sexPartnerHivPositive:"",
@@ -142,7 +155,21 @@ const BasicInfo = (props) => {
     )
     const handleInputChangeRiskAssessmentPartner = e => { 
         //setErrors({...temp, [e.target.name]:""}) 
-        setRiskAssessmentPartner ({...riskAssessmentPartner,  [e.target.name]: e.target.value});            
+        setRiskAssessmentPartner ({...riskAssessmentPartner,  [e.target.name]: e.target.value}); 
+        if(e.target.value==='true') {
+            const newcount = riskPartnerCount +1
+            if(newcount>=0 && newcount <=6){
+                setRiskPartnerCount(newcount)
+            }
+        }else{
+            const newcount = riskPartnerCount -1
+            if(newcount <=0 ){
+                
+                setRiskPartnerCount(0)
+            }else{
+                setRiskPartnerCount(newcount)
+            }
+        }                   
     }
     const [stiCount, setStiCount] = useState(0);
     const [stiScreening, setStiScreening]= useState(
@@ -159,7 +186,17 @@ const BasicInfo = (props) => {
         setStiScreening ({...stiScreening,  [e.target.name]: e.target.value});  
         if(e.target.value==='true') {
             const newcount = stiCount +1
-            setStiCount(newcount)
+            if(newcount>=0 && newcount <=7){
+                setStiCount(newcount)
+            }
+        }else{
+            const newcount = stiCount -1
+            if(newcount <=0 ){
+                
+                setStiCount(0)
+            }else{
+                setStiCount(newcount)
+            }
         }             
     }
     const [tbScreening, setTbScreening]= useState(
@@ -177,8 +214,18 @@ const BasicInfo = (props) => {
         setTbScreening ({...tbScreening,  [e.target.name]: e.target.value}); 
         if(e.target.value==='true') {
             const newcount = tbCount +1
-            settbCount(newcount)
-        }          
+            if(newcount>=0 && newcount <=7){
+                settbCount(newcount)
+            }
+        }else{
+            const newcount = tbCount -1
+            if(newcount <=0 ){
+                
+                settbCount(0)
+            }else{
+                settbCount(newcount)
+            }
+        }                 
     }
     useEffect(() => { 
             setKnowledgeAssessment({...knowledgeAssessment, ...props.patientObj.knowledgeAssessment}) 
@@ -253,6 +300,7 @@ const BasicInfo = (props) => {
                                     
                                 </FormGroup>
                             </div>
+                            {knowledgeAssessment.previousTestedHIVNegative==='false' && (
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Time of last HIV Negative test Result*</Label>
@@ -274,6 +322,7 @@ const BasicInfo = (props) => {
                                     
                                 </FormGroup>
                             </div>
+                            )}
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Client pregnant *</Label>
@@ -493,7 +542,7 @@ const BasicInfo = (props) => {
                             </Message>
                             <hr/>
                             <br/>
-                           {props.patientObj.targetGroup==="457" && ( <>
+                           {props.patientObj.targetGroup==="473" && ( <>
                             <div className="form-group  col-md-12 text-center pt-2 mb-4" style={{backgroundColor:'#992E62', width:'125%', height:'35px', color:'#fff', fontWeight:'bold'}} >HIV Risk Assessment  (Last 3 months)</div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
@@ -673,7 +722,7 @@ const BasicInfo = (props) => {
                             <hr/>
                             <br/>
                             </>)}
-                            {props.patientObj.targetGroup!=="457" && ( <>
+                            {props.patientObj.targetGroup!=="473" && ( <>
                             <div className="form-group  col-md-12 text-center pt-2 mb-4" style={{backgroundColor:'#992E62', width:'125%', height:'35px', color:'#fff', fontWeight:'bold'}} >HIV Risk Assessment  (Last 3 months)</div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
@@ -835,6 +884,7 @@ const BasicInfo = (props) => {
                                     
                                 </FormGroup>
                             </div>
+                            {riskAssessmentPartner.sexPartnerHivPositive==='true' && (<>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Is sex partner newly diagnosed with HIV and started treatment less than 3-6 months ago?*</Label>
@@ -929,11 +979,16 @@ const BasicInfo = (props) => {
                                     </select>
                                     
                                 </FormGroup>
-                            </div>        
-
+                            </div>
+                            </>)}       
+                            <Message warning>
+                                <h4>Personal HIV Risk assessment score (sum of all 6 answers)</h4>
+                                <b>Score :{riskPartnerCount}</b>
+                            </Message> 
                             <hr/>
                             <br/>
                             <div className="form-group  col-md-12 text-center pt-2 mb-4" style={{backgroundColor:'#014D88', width:'125%', height:'35px', color:'#fff', fontWeight:'bold'}} >Syndromic STI Screening</div>
+                            {props.patientObj.personResponseDto && props.patientObj.personResponseDto.sex==='Female' && (<>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Complaints of vaginal discharge or burning when urinating?</Label>
@@ -972,6 +1027,9 @@ const BasicInfo = (props) => {
                                     
                                 </FormGroup>
                             </div>
+                            </>
+                            )}
+                            {props.patientObj.personResponseDto && props.patientObj.personResponseDto.sex==='Male' && (<>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Complaints of urethral discharge or burning when urinating?</Label>
@@ -1029,6 +1087,7 @@ const BasicInfo = (props) => {
                                     
                                 </FormGroup>
                             </div> 
+                            </>)}
                             <Message warning>
                                 <h4>Calculate the sum of the STI screening. If {">= "}1, should be referred for STI test </h4>
                                 <b>Score :{stiCount}</b>

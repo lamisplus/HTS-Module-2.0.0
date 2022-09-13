@@ -343,7 +343,7 @@ const BasicInfo = (props) => {
                                 <FormGroup>
                                 <Label for="">Client Code</Label>
                                 <Input
-                                    type="number"
+                                    type="text"
                                     name="clientCode"
                                     id="clientCode"
                                     value={objValues.clientCode}

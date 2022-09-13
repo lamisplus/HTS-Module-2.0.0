@@ -139,6 +139,7 @@ const BasicInfo = (props) => {
         CounselingType();
         PregnancyStatus();
         IndexTesting();
+        objValues.dateVisit=moment(new Date()).format("YYYY-MM-DD")
     }, []);
 
     //Get list of KP
@@ -394,7 +395,7 @@ const BasicInfo = (props) => {
             temp.phoneNumber = objValues.phoneNumber ? "" : "This field is required."
            // temp.isDateOfBirthEstimated = objValues.isDateOfBirthEstimated ? "" : "This field is required."    
             temp.firstName = objValues.firstName ? "" : "This field is required."  
-            temp.dateOfRegistration = objValues.dateOfRegistration ? "" : "This field is required."   
+            //temp.dateOfRegistration = objValues.dateOfRegistration ? "" : "This field is required."   
             //temp.numChildren = objValues.numChildren ? "" : "This field is required."
             temp.address = objValues.address ? "" : "This field is required."
             temp.indexClient = objValues.indexClient ? "" : "This field is required."  
@@ -447,21 +448,21 @@ const BasicInfo = (props) => {
                 }
                 ],
                 dateOfBirth: objValues.dob,
-                dateOfRegistration:objValues.dateOfRegistration,
+                dateOfRegistration:objValues.dateVisit,
                 deceased: true,
                 deceasedDateTime: null,
                 educationId: "",
                 employmentStatusId: "",
                 facilityId: "",
                 firstName:objValues.firstName,
-                genderId: objValues.genderId,
+                genderId:'', //objValues.genderId,
                 id: "",
                 identifier: [
-                {
-                    assignerId:"",
-                    type: "",
-                    value: ""
-                }
+                    {
+                        "assignerId": 1,
+                        "type": "HospitalNumber",
+                        "value": objValues.clientCode
+                    }
                 ],
                 isDateOfBirthEstimated: objValues.isDateOfBirthEstimated,
                 maritalStatusId: objValues.maritalStatusId,
@@ -517,6 +518,7 @@ const BasicInfo = (props) => {
                 <br/>
                     <form >
                         <div className="row">
+                             <div className="row">
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Target Group *</Label>
@@ -544,10 +546,9 @@ const BasicInfo = (props) => {
                                 <FormGroup>
                                 <Label for="">Client Code</Label>
                                 <Input
-                                    type="number"
+                                    type="text"
                                     name="clientCode"
                                     id="clientCode"
-                                    min={0}
                                     //value={Math.floor(Math.random() * 1093328)}
                                     value={objValues.clientCode}
                                     onChange={handleInputChange}
@@ -559,7 +560,7 @@ const BasicInfo = (props) => {
                                 ) : "" }                                
                                 </FormGroup>
                             </div>
-                            <div className="form-group mb-3 col-md-4">
+                            {/* <div className="form-group mb-3 col-md-4">
                                 <FormGroup>
                                 <Label for=""> Date Of Registration </Label>
                                 <Input
@@ -576,8 +577,8 @@ const BasicInfo = (props) => {
                                     <span className={classes.error}>{errors.dateOfRegistration}</span>
                                 ) : "" }
                                 </FormGroup>
-                            </div>
-                           
+                            </div> */}
+                           </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Referred From *</Label>
@@ -632,7 +633,7 @@ const BasicInfo = (props) => {
                                     id="dateVisit"
                                     value={objValues.dateVisit}
                                     onChange={handleInputChange}
-                                    min={objValues.dateOfRegistration}
+                                    min="1983-12-31"
                                     max= {moment(new Date()).format("YYYY-MM-DD") }
                                     style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
                                     
@@ -644,7 +645,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group mb-3 col-md-4">
                                 <FormGroup>
-                                <Label for="">First Name</Label>
+                                <Label for="">First Name *</Label>
                                 <Input
                                     type="text"
                                     name="firstName"
@@ -678,7 +679,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group mb-3 col-md-4">
                                 <FormGroup>
-                                <Label for="">Last Name</Label>
+                                <Label for="">Last Name *</Label>
                                 <Input
                                     type="text"
                                     name="surname"
@@ -731,6 +732,7 @@ const BasicInfo = (props) => {
                                         type="date"
                                         name="dob"
                                         id="dob"
+                                        min={objValues.dateVisit}
                                         max= {moment(new Date()).format("YYYY-MM-DD") }
                                         value={objValues.dob}
                                         onChange={handleDobChange}
@@ -756,7 +758,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group mb-3 col-md-4">
                                 <FormGroup>
-                                <Label for="">Phone Number</Label>
+                                <Label for="">Phone Number *</Label>
                                 
                                     <PhoneInput
                                         containerStyle={{width:'100%',border: "1px solid #014D88"}}
@@ -862,7 +864,7 @@ const BasicInfo = (props) => {
                                     ) : "" }  
                                 </FormGroup>
                             </div>
-                            {(objValues.targetGroup!=='457' && objValues.targetGroup!=="") && (
+                            {/* {(objValues.targetGroup!=='457' && objValues.targetGroup!=="") && (
                             <div className="form-group  col-md-4">
                             <FormGroup>
                                 <Label>Gender</Label>
@@ -884,7 +886,7 @@ const BasicInfo = (props) => {
                                
                             </FormGroup>
                         </div>
-                        )}
+                             )} */}
                          {objValues.age>9 && (
                             <div className="form-group  col-md-4">
                                 <FormGroup>
@@ -908,6 +910,24 @@ const BasicInfo = (props) => {
                                 </FormGroup>
                             </div>
                             )}
+                             {( objValues.age > 9 && objValues.sexId=='376') && (
+                            <div className="form-group  col-md-4">
+                                <FormGroup>
+                                    <Label>Number of wives/co-wives</Label>
+                                    <Input
+                                        type="number"
+                                        name="numWives"
+                                        min={0}
+                                        id="numWives"
+                                        value={objValues.numWives}
+                                        onChange={handleInputChange}
+                                        style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
+                                   
+                                    />
+                                    
+                                </FormGroup>
+                            </div>
+                            )}
                              {/* && objValues.maritalStatusId==='6' */}
                             {(objValues.age>9) && (
                             <div className="form-group  col-md-4">
@@ -928,24 +948,7 @@ const BasicInfo = (props) => {
                             </div>
                             )}
                             {/* objValues.maritalStatusId==='6' && */}
-                            {( objValues.age > 9 && objValues.sexId=='376') && (
-                            <div className="form-group  col-md-4">
-                                <FormGroup>
-                                    <Label>Number of wives/co-wives</Label>
-                                    <Input
-                                        type="number"
-                                        name="numWives"
-                                        min={0}
-                                        id="numWives"
-                                        value={objValues.numWives}
-                                        onChange={handleInputChange}
-                                        style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
-                                   
-                                    />
-                                    
-                                </FormGroup>
-                            </div>
-                            )}
+                           
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Index Testing</Label>

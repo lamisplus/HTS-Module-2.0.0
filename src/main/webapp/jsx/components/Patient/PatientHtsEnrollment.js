@@ -104,6 +104,19 @@ const UserRegistration = (props) => {
                             )}
                             </Menu.Item>
                             <Menu.Item
+                                name='inbox'
+                                active={activeItem === 'hiv-test'}
+                                onClick={()=>handleItemClick('hiv-test')}
+                                style={{backgroundColor:activeItem === 'hiv-test' ? '#000': ""}}
+                                //disabled={activeItem !== 'hiv-test' ? true : false}
+                            >               
+                                <span style={{color:'#fff'}}>Request {"&"} Result Form</span>
+                                {completed.includes('hiv-test') && (
+                                    <Icon name='check' color='green' />
+                                )}
+                                {/* <Label color='teal'>3</Label> */}
+                            </Menu.Item>
+                            <Menu.Item
                                 name='spam'
                                 active={activeItem === 'post-test'}
                                 onClick={()=>handleItemClick('post-test')}
@@ -130,19 +143,7 @@ const UserRegistration = (props) => {
                                 <Icon name='check' color='green' />
                             )}
                             </Menu.Item>
-                            <Menu.Item
-                                name='inbox'
-                                active={activeItem === 'hiv-test'}
-                                onClick={()=>handleItemClick('hiv-test')}
-                                style={{backgroundColor:activeItem === 'hiv-test' ? '#000': ""}}
-                                //disabled={activeItem !== 'hiv-test' ? true : false}
-                            >               
-                                <span style={{color:'#fff'}}>Request {"&"} Result Form</span>
-                                {completed.includes('hiv-test') && (
-                                    <Icon name='check' color='green' />
-                                )}
-                                {/* <Label color='teal'>3</Label> */}
-                            </Menu.Item>
+                            
                             <Menu.Item
                                 name='spam'
                                 active={activeItem === 'indexing'}

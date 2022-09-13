@@ -1,5 +1,6 @@
 package org.lamisplus.modules.hts.domain.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.lamisplus.modules.patient.domain.dto.PersonDto;
 
@@ -15,6 +16,7 @@ public class HtsClientRequestDto {
     @NotBlank(message = "clientCode is mandatory")
     private final String clientCode;
     @NotNull(message = "dateVisit is mandatory")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private final LocalDate dateVisit;
     private final Long referredFrom;
     @NotNull(message = "testingSetting is mandatory")

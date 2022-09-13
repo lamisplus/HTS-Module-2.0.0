@@ -21,7 +21,7 @@ public class IndexElicitationDto {
     @NotNull(message = "htsClientId is mandatory")
     private Long htsClientId;
     private LocalDate dob;
-    private Long isDateOfBirthEstimated;
+    private Boolean isDateOfBirthEstimated;
     private Long sex;
     private String address;
     private String lastName;

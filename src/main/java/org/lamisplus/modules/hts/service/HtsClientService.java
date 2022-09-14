@@ -119,6 +119,7 @@ public class HtsClientService {
 
         HtsClientDto htsClientDto = new HtsClientDto();
         BeanUtils.copyProperties(htsClientRepository.save(htsClient), htsClientDto);
+        htsClientDto.setPersonResponseDto(personService.getDtoFromPerson(htsClient.getPerson()));
         return htsClientDto;
     }
 
@@ -328,6 +329,7 @@ public class HtsClientService {
 
         HtsClientDto htsClientDto = new HtsClientDto();
         BeanUtils.copyProperties(htsClientRepository.save(htsClient), htsClientDto);
+        htsClientDto.setPersonResponseDto(personService.getDtoFromPerson(htsClient.getPerson()));
         return htsClientDto;
     }
 

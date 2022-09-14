@@ -38,16 +38,23 @@ public class IndexElicitationService {
                 .findAllByHtsClient(htsClient));
     }
 
-    public IndexElicitationResponseDto save(IndexElicitationDto indexElicitationDto){
+    public IndexElicitation save(IndexElicitationDto indexElicitationDto){
         Long facilityId = currentUserOrganizationService.getCurrentUserOrganization();
-        htsClientRepository.findByIdAndArchivedAndFacilityId(indexElicitationDto.getHtsClientId(), UN_ARCHIVED, facilityId)
+        HtsClient htsClient = htsClientRepository.findByIdAndArchivedAndFacilityId(indexElicitationDto.getHtsClientId(), UN_ARCHIVED, facilityId)
                 .orElseThrow(()-> new EntityNotFoundException(HtsClient.class, "htsClientId", "" + indexElicitationDto.getHtsClientId()));
 
-        IndexElicitation indexElicitation = indexElicitationRepository
-                .save(this.convertToIndexElicitation(indexElicitationDto));
-        indexElicitation.setFacilityId(facilityId);
+        LOG.info("facilityId is {}", facilityId);
+        LOG.info("indexElicitationDto is {}", indexElicitationDto);
 
-        return this.convertToIndexElicitationResponseDto(indexElicitation);
+        IndexElicitation indexElicitation = this.convertToIndexElicitation(indexElicitationDto);
+        indexElicitation.setFacilityId(facilityId);
+        indexElicitation.setHtsClientUuid(htsClient.getUuid());
+        indexElicitation = indexElicitationRepository.save(indexElicitation);
+        LOG.info("indexElicitation is {}", indexElicitation);
+
+
+        //return this.convertToIndexElicitationResponseDto(indexElicitation);
+        return indexElicitation;
     }
 
     public IndexElicitationResponseDto getIndexElicitationById(Long id) {
@@ -89,25 +96,29 @@ public class IndexElicitationService {
 
         IndexElicitation indexElicitation = new IndexElicitation();
 
-        indexElicitation.setFacilityId(currentUserOrganizationService.getCurrentUserOrganization());
-        indexElicitation.setDob( indexElicitationDto.getDob() );
-        indexElicitation.setIsDateOfBirthEstimated( indexElicitationDto.getIsDateOfBirthEstimated() );
-        indexElicitation.setSex( indexElicitationDto.getSex() );
-        indexElicitation.setAddress( indexElicitationDto.getAddress() );
-        indexElicitation.setLastName( indexElicitationDto.getLastName() );
-        indexElicitation.setFirstName( indexElicitationDto.getFirstName() );
-        indexElicitation.setMiddleName( indexElicitationDto.getMiddleName() );
-        indexElicitation.setPhoneNumber( indexElicitationDto.getPhoneNumber() );
-        indexElicitation.setAltPhoneNumber( indexElicitationDto.getAltPhoneNumber() );
-        indexElicitation.setHangOutSpots( indexElicitationDto.getHangOutSpots() );
-        indexElicitation.setPhysicalHurt( indexElicitationDto.getPhysicalHurt() );
-        indexElicitation.setThreatenToHurt( indexElicitationDto.getThreatenToHurt() );
-        indexElicitation.setNotificationMethod( indexElicitationDto.getNotificationMethod() );
-        indexElicitation.setPartnerTestedPositive( indexElicitationDto.getPartnerTestedPositive() );
-        indexElicitation.setRelativeToIndexClient( indexElicitationDto.getRelativeToIndexClient() );
-        indexElicitation.setSexuallyUncomfortable( indexElicitationDto.getSexuallyUncomfortable() );
-        indexElicitation.setCurrentlyLiveWithPartner( indexElicitationDto.getCurrentlyLiveWithPartner() );
-        indexElicitation.setDatePartnerCameForTesting( indexElicitationDto.getDatePartnerCameForTesting() );
+        try {
+            indexElicitation.setFacilityId(currentUserOrganizationService.getCurrentUserOrganization());
+            indexElicitation.setDob(indexElicitationDto.getDob());
+            indexElicitation.setIsDateOfBirthEstimated(indexElicitationDto.getIsDateOfBirthEstimated());
+            indexElicitation.setSex(indexElicitationDto.getSex());
+            indexElicitation.setAddress(indexElicitationDto.getAddress());
+            indexElicitation.setLastName(indexElicitationDto.getLastName());
+            indexElicitation.setFirstName(indexElicitationDto.getFirstName());
+            indexElicitation.setMiddleName(indexElicitationDto.getMiddleName());
+            indexElicitation.setPhoneNumber(indexElicitationDto.getPhoneNumber());
+            indexElicitation.setAltPhoneNumber(indexElicitationDto.getAltPhoneNumber());
+            indexElicitation.setHangOutSpots(indexElicitationDto.getHangOutSpots());
+            indexElicitation.setPhysicalHurt(indexElicitationDto.getPhysicalHurt());
+            indexElicitation.setThreatenToHurt(indexElicitationDto.getThreatenToHurt());
+            indexElicitation.setNotificationMethod(indexElicitationDto.getNotificationMethod());
+            indexElicitation.setPartnerTestedPositive(indexElicitationDto.getPartnerTestedPositive());
+            indexElicitation.setRelativeToIndexClient(indexElicitationDto.getRelativeToIndexClient());
+            indexElicitation.setSexuallyUncomfortable(indexElicitationDto.getSexuallyUncomfortable());
+            indexElicitation.setCurrentlyLiveWithPartner(indexElicitationDto.getCurrentlyLiveWithPartner());
+            indexElicitation.setDatePartnerCameForTesting(indexElicitationDto.getDatePartnerCameForTesting());
+        }catch(Exception e){
+            e.printStackTrace();
+        }
 
         return indexElicitation;
     }

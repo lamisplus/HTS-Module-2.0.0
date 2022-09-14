@@ -60,6 +60,7 @@ const styles = theme => ({
 
 function PatientCard(props) {
   const { classes } = props;
+
   const patientCurrentStatus=props.patientObj && props.patientObj.currentStatus==="Died (Confirmed)" ? true : false ;
   const patientObjs = props.patientObj ? props.patientObj : {}
   const permissions= props.permissions ? props.permissions : [];
@@ -179,12 +180,12 @@ function PatientCard(props) {
                         Address : <b>{getAddress(patientObj.address)} </b>
                     </span>
                     </Col>
-                    <Col md={4} className={classes.root2}>
+                    {/* <Col md={4} className={classes.root2}>
                     <span>
                         {" "}
-                        Client Code : <b>{""} </b>
+                        Client Code : <b>{props && props.clientCode ? props.clientCode.clientCode : ""} </b>
                     </span>
-                    </Col>
+                    </Col> */}
                     <Col md={12}>
                      
                     </Col>

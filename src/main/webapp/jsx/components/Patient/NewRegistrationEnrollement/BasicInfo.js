@@ -313,7 +313,6 @@ const BasicInfo = (props) => {
             }
     }
 
-    console.log(objValues.firstTimeVisit)
 
     return (
         <>  

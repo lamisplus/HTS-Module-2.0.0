@@ -109,7 +109,7 @@ const PatientnHistory = (props) => {
     ///GET LIST OF Patients
     async function patients() {
         axios
-            .get(`${baseUrl}hts/persons/${patientId}`,
+            .get(`${baseUrl}hts/${props.patientObj.id}/index-elicitation`,
             { headers: {"Authorization" : `Bearer ${token}`} }
             )
             .then((response) => {
@@ -145,11 +145,11 @@ const PatientnHistory = (props) => {
               { title: "Phone Number", field: "phone" },     
               { title: "Actions", field: "actions", filtering: false }, 
               ]}
-              data={ [].map((row) => ({
-                name: row.dateVisit,
-                dob:"",
-                age:"",
-                phone: "",   
+              data={ patientList.map((row) => ({
+                name: row.firstName + " " + row.lastName,
+                dob:row.dob,
+                age:row.age,
+                phone: row.phoneNumber,   
                 actions:
             
                     <div>

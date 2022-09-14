@@ -145,7 +145,7 @@ const PatientnHistory = (props) => {
               { title: "Actions", field: "actions", filtering: false }, 
               ]}
               data={ [].map((row) => ({
-                name: row.dateVisit,
+                name: "",
                 dob:"",
                 age:"",
                 phone: "",   

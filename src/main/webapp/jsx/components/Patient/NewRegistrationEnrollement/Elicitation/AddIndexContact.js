@@ -63,8 +63,8 @@ const useStyles = makeStyles((theme) => ({
 
 
 const AddIndexContact = (props) => {
-   
     const classes = useStyles();
+    console.log(props.patientObj)
     const [saving, setSaving] = useState(false);
     const [errors, setErrors] = useState({});
     const [sexs, setSexs] = useState([])
@@ -97,6 +97,7 @@ const AddIndexContact = (props) => {
             phoneNumber:"",
             altPhoneNumber: "",
             sex: "",
+            htsClientId:props  && props.patientObj ? props.patientObj.id : "",
             physicalHurt: "",
             threatenToHurt: "",
             address: "", 
@@ -106,7 +107,7 @@ const AddIndexContact = (props) => {
             partnerTestedPositive: "",
             sexuallyUncomfortable: "", 
             notificationMethod : "",
-            datePartnerComeForTesting: "",
+            datePartnerCameForTesting: "",
         }
     )
            
@@ -124,7 +125,6 @@ const AddIndexContact = (props) => {
         .then((response) => {
             //console.log(response.data);
             setSexs(response.data);
-           
 
         })
         .catch((error) => {
@@ -231,18 +231,17 @@ const AddIndexContact = (props) => {
         return result
     }
     const handleSubmit =(e)=>{
-        e.preventDefault();       
-            objValuesIndex.htsClientId=props.patientObj.clientCode
-            objValuesIndex.indexNotificationServicesElicitation.contacts=objValues
-            objValuesIndex.personId=props.patientObj.personId
-            axios.put(`${baseUrl}hts/${props.patientObj.id}/index-notification-services-elicitation`,objValuesIndex,
+        e.preventDefault();     
+        objValues.isDateOfBirthEstimated=objValues.isDateOfBirthEstimated==true ? 1 : 0
+            axios.post(`${baseUrl}index-elicitation`,objValues,
             { headers: {"Authorization" : `Bearer ${token}`}},
             
             )
             .then(response => {
                 setSaving(false);
-                props.setPatientObj(response.data)
-                toast.success("HTS Test successful");
+                
+                //props.setPatientObj(response.data)
+                toast.success("Record save successful");
                 //handleItemClick('pre-test-counsel', 'basic' )
                 handleItemClickPage('list')
 
@@ -265,7 +264,7 @@ const AddIndexContact = (props) => {
             <Card >
                 <CardBody>
                 
-                <h2 style={{color:'#000'}}>Index Notification Services - Elicitation
+                <h2 style={{color:'#000'}}>Index Notification Services - Elicitation 
                 <Button
                     variant="contained"
                     color="primary"
@@ -508,8 +507,8 @@ const AddIndexContact = (props) => {
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>
-                                        <option value={"Yes"}>Yes</option>
-                                        <option value={"No"}>No</option>
+                                        <option value={"true"}>Yes</option>
+                                        <option value={"false"}>No</option>
                                     </select>
                                     
                                 </FormGroup>
@@ -526,9 +525,9 @@ const AddIndexContact = (props) => {
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>
-                                        <option value={"Yes"}>Yes</option>
-                                        <option value={"No"}>No</option>
-                                        <option value={"Don't know/Decline to answer"}>Don't know/Decline to answer</option>
+                                        <option value={"true"}>Yes</option>
+                                        <option value={"false"}>No</option>
+                                        <option value={"false"}>Don't know/Decline to answer</option>
                                         
                                     </select>
                                     
@@ -546,9 +545,9 @@ const AddIndexContact = (props) => {
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>
-                                        <option value={"Yes"}>Yes</option>
-                                        <option value={"No"}>No</option>
-                                        <option value={"Decline to answer"}>Decline to answer</option>
+                                        <option value={"true"}>Yes</option>
+                                        <option value={"false"}>No</option>
+                                        <option value={"false"}>Decline to answer</option>
                                         
                                     </select>
                                     
@@ -566,9 +565,9 @@ const AddIndexContact = (props) => {
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>
-                                        <option value={"Yes"}>Yes</option>
-                                        <option value={"No"}>No</option>
-                                        <option value={"Decline to answer"}>Decline to answer</option>
+                                        <option value={"true"}>Yes</option>
+                                        <option value={"false"}>No</option>
+                                        <option value={"false"}>Decline to answer</option>
                                         
                                     </select>
                                     
@@ -587,9 +586,9 @@ const AddIndexContact = (props) => {
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>
-                                        <option value={"Yes"}>Yes</option>
-                                        <option value={"No"}>No</option>
-                                        <option value={"Decline to answer"}>Decline to answer</option>
+                                        <option value={"true"}>Yes</option>
+                                        <option value={"false"}>No</option>
+                                        <option value={"false"}>Decline to answer</option>
                                         
                                     </select>
                                     
@@ -623,16 +622,16 @@ const AddIndexContact = (props) => {
                                 <Label for="">If contract by which date will partner come for testing?</Label>
                                 <Input
                                     type="date"
-                                    name="datePartnerComeForTesting"
-                                    id="datePartnerComeForTesting"
-                                    value={objValues.datePartnerComeForTesting}
+                                    name="datePartnerCameForTesting"
+                                    id="datePartnerCameForTesting"
+                                    value={objValues.datePartnerCameForTesting}
                                     onChange={handleInputChange}
                                     max= {moment(new Date()).format("YYYY-MM-DD") }
                                     style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
                                     
                                 />
-                                {errors.dateOfEac1 !=="" ? (
-                                    <span className={classes.error}>{errors.dateOfEac1}</span>
+                                {errors.datePartnerComeForTesting !=="" ? (
+                                    <span className={classes.error}>{errors.datePartnerComeForTesting}</span>
                                 ) : "" }
                                 </FormGroup>
                             </div>

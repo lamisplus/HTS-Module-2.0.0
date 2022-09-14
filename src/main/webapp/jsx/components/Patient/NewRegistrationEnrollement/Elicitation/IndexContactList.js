@@ -144,11 +144,11 @@ const PatientnHistory = (props) => {
               {title: "Adress",field: "address",},   
               { title: "Actions", field: "actions", filtering: false }, 
               ]}
-              data={ patientList.map((row) => ({
-                name: row.indexNotificationServicesElicitation.contacts.firstName + " " + row.indexNotificationServicesElicitation.contacts.lastName,
-                age:row.indexNotificationServicesElicitation.contacts.age,
-                phone: row.indexNotificationServicesElicitation.contacts.phoneNumber, 
-                address:row.indexNotificationServicesElicitation.contacts.address,  
+              data={ [].map((row) => ({
+                name: "",
+                age:"",
+                phone:"", 
+                address:"",  
                 actions:
             
                     <div>

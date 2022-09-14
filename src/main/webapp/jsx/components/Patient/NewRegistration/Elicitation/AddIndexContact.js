@@ -231,6 +231,7 @@ const AddIndexContact = (props) => {
         return result
     }
     const handleSubmit =(e)=>{
+        alert("code is here 2")
         e.preventDefault();       
         objValues.isDateOfBirthEstimated=objValues.isDateOfBirthEstimated==true ? 1 : 0
             axios.post(`${baseUrl}index-elicitation`,objValues,
@@ -239,10 +240,10 @@ const AddIndexContact = (props) => {
             )
             .then(response => {
                 setSaving(false);
-                props.setPatientObj(response.data)
-                toast.success("HTS Test successful");
+                ///props.setPatientObj(response.data)
+                toast.success("Record save successful");
                 //handleItemClick('pre-test-counsel', 'basic' )
-                handleItemClickPage('list')
+                //handleItemClickPage('list')
 
             })
             .catch(error => {
@@ -526,7 +527,7 @@ const AddIndexContact = (props) => {
                                         <option value={""}></option>
                                         <option value={"true"}>Yes</option>
                                         <option value={"false"}>No</option>
-                                        <option value={"Don't know/Decline to answer"}>Don't know/Decline to answer</option>
+                                        <option value={"false"}>Don't know/Decline to answer</option>
                                         
                                     </select>
                                     
@@ -585,9 +586,9 @@ const AddIndexContact = (props) => {
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>
-                                        <option value={"Yes"}>Yes</option>
-                                        <option value={"No"}>No</option>
-                                        <option value={"Decline to answer"}>Decline to answer</option>
+                                        <option value={"true"}>Yes</option>
+                                        <option value={"false"}>No</option>
+                                        <option value={"false"}>Decline to answer</option>
                                         
                                     </select>
                                     

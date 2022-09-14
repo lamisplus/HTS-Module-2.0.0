@@ -209,6 +209,7 @@ public class HtsClientService {
 
     private HtsClientDtos htsClientToHtsClientDtos(List<HtsClient> clients){
         final Long[] pId = {null};
+        final String[] clientCode = {null};
         final PersonResponseDto[] personResponseDto = {new PersonResponseDto()};
         HtsClientDtos htsClientDtos = new HtsClientDtos();
         List<HtsClientDto> htsClientDtoList =  clients
@@ -216,6 +217,7 @@ public class HtsClientService {
                 .map(htsClient1 -> {
                     if(pId[0] == null) {
                         Person person = htsClient1.getPerson();
+                        clientCode[0] = htsClient1.getClientCode();
                         pId[0] = person.getId();
                         personResponseDto[0] = personService.getDtoFromPerson(person);
                     }
@@ -224,6 +226,7 @@ public class HtsClientService {
         htsClientDtos.setHtsCount(htsClientDtoList.size());
         htsClientDtos.setHtsClientDtoList(htsClientDtoList);
         htsClientDtos.setPersonId(pId[0]);
+        htsClientDtos.setClientCode(clientCode[0]);
         htsClientDtos.setPersonResponseDto(personResponseDto[0]);
         return htsClientDtos;
     }

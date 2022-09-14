@@ -106,8 +106,8 @@ const PostTest = (props) => {
         }
     }
     const handleSubmit =(e)=>{
+        handleItemClick('recency-testing', 'post-test')
         e.preventDefault();
-            console.log(patientID)
             objValues.htsClientId= clientId
             objValues.postTestCounselingKnowledgeAssessment= postTest
             objValues.personId= patientID
@@ -119,7 +119,7 @@ const PostTest = (props) => {
                 setSaving(false);
                 props.setPatientObj(props && props.patientObj ? props.patientObj : "")
                 toast.success("Risk Assesment successful");
-                handleItemClick('recency-testing', 'post-test' )
+                handleItemClick('recency-testing', 'post-test')
 
             })
             .catch(error => {
@@ -501,7 +501,7 @@ const PostTest = (props) => {
                             <br />
                             <div className="row">
                             <div className="form-group mb-3 col-md-6">
-                                <Button content='Back' icon='left arrow' labelPosition='left' style={{backgroundColor:"#992E62", color:'#fff'}} onClick={()=>handleItemClick('pre-test-counsel', 'pre-test-counsel')}/>
+                                <Button content='Back' icon='left arrow' labelPosition='left' style={{backgroundColor:"#992E62", color:'#fff'}} onClick={()=>handleItemClick('hiv-test', 'hiv-test')}/>
                                 <Button content='Next' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
                             </div>
                             </div>

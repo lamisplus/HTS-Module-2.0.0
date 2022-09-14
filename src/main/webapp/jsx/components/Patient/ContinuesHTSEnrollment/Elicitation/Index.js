@@ -40,7 +40,7 @@ const Elicitation = (props) => {
             <br />
                 <div className="row">
                 <div className="form-group mb-3 col-md-6">
-                <Button content='Back' icon='left arrow' labelPosition='left' style={{backgroundColor:"#992E62", color:'#fff'}} onClick={()=>handleItemClick('hiv-test', 'hiv-test')}/>
+                <Button content='Back' icon='left arrow' labelPosition='left' style={{backgroundColor:"#992E62", color:'#fff'}} onClick={()=>handleItemClick('post-test', 'post-test')}/>
                 
                 </div>
                 </div>

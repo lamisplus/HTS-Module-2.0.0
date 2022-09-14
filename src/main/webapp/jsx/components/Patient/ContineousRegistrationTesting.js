@@ -75,10 +75,12 @@ const UserRegistration = (props) => {
                                 onClick={()=>handleItemClick('basic')}
                                 style={{backgroundColor:activeItem === 'basic' ? '#000': ""}}
                             >               
-                                <span style={{color:'#fff'}}> Basic Information</span>
+                                <span style={{color:'#fff'}}> Basic Information
                                 {completed.includes('basic') && (
                                     <Icon name='check' color='green' />
                                 )}
+                                </span>
+                               
                             </Menu.Item>
                             <Menu.Item
                                 name='spam'
@@ -88,10 +90,27 @@ const UserRegistration = (props) => {
                                 disabled={activeItem !== 'pre-test-counsel' ? true : false}
                             >
                             {/* <Label>2</Label> */}
-                            <span style={{color:'#fff'}}>Pre Test Counseling</span>
+                            <span style={{color:'#fff'}}>Pre Test Counseling
                             {completed.includes('pre-test-counsel') && (
                                 <Icon name='check' color='green' />
                             )}
+                            </span>
+                            
+                            </Menu.Item>
+                            <Menu.Item
+                                name='inbox'
+                                active={activeItem === 'hiv-test'}
+                                onClick={()=>handleItemClick('hiv-test')}
+                                style={{backgroundColor:activeItem === 'hiv-test' ? '#000': ""}}
+                                disabled={activeItem !== 'hiv-test' ? true : false}
+                            >               
+                                <span style={{color:'#fff'}}>Request {"&"} Result Form
+                                {completed.includes('hiv-test') && (
+                                    <Icon name='check' color='green' />
+                                )}
+                                </span>
+                                
+                                {/* <Label color='teal'>3</Label> */}
                             </Menu.Item>
                             <Menu.Item
                                 name='spam'
@@ -101,10 +120,12 @@ const UserRegistration = (props) => {
                                 disabled={activeItem !== 'post-test' ? true : false}
                             >
                             {/* <Label>4</Label> */}
-                            <span style={{color:'#fff'}}>Post Test Counseling</span>
+                            <span style={{color:'#fff'}}>Post Test Counseling
                             {completed.includes('post-test') && (
                                 <Icon name='check' color='green' />
                             )}
+                            </span>
+                            
                             </Menu.Item>
                             
                             <Menu.Item
@@ -115,24 +136,14 @@ const UserRegistration = (props) => {
                                 disabled={activeItem !== 'recency-testing' ? true : false}
                             >
                             {/* <Label>4</Label> */}
-                            <span style={{color:'#fff'}}>HIV Recency Testing</span>
-                            {completed.includes('recency-testing') && (
-                                <Icon name='check' color='green' />
-                            )}
-                            </Menu.Item>
-                            <Menu.Item
-                                name='inbox'
-                                active={activeItem === 'hiv-test'}
-                                onClick={()=>handleItemClick('hiv-test')}
-                                style={{backgroundColor:activeItem === 'hiv-test' ? '#000': ""}}
-                                disabled={activeItem !== 'hiv-test' ? true : false}
-                            >               
-                                <span style={{color:'#fff'}}>Request {"&"} Result Form</span>
-                                {completed.includes('hiv-test') && (
+                            <span style={{color:'#fff'}}>HIV Recency Testing
+                                {completed.includes('recency-testing') && (
                                     <Icon name='check' color='green' />
                                 )}
-                                {/* <Label color='teal'>3</Label> */}
+                            </span>
+                           
                             </Menu.Item>
+                           
                             <Menu.Item
                                 name='spam'
                                 active={activeItem === 'indexing'}
@@ -141,10 +152,12 @@ const UserRegistration = (props) => {
                                 disabled={activeItem !== 'indexing' ? true : false}
                             >
                             {/* <Label>4</Label> */}
-                            <span style={{color:'#fff'}}>Index Notification Services - Elicitation</span>
+                            <span style={{color:'#fff'}}>Index Notification Services - Elicitation
                             {completed.includes('indexing') && (
                                 <Icon name='check' color='green' />
                             )}
+                            </span>
+                            
                             </Menu.Item>
                            
                         </Menu>

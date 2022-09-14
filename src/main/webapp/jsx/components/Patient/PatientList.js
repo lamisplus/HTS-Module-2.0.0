@@ -161,9 +161,10 @@ const Patients = (props) => {
                 field: "name",
             },
             { title: "Hospital Number", field: "hospital_number", filtering: false },
+            { title: "Client Code", field: "clientCode", filtering: false },
             { title: "Sex", field: "gender", filtering: false },
             { title: "Age", field: "age", filtering: false },
-            //{ title: "Enrollment Status", field: "v_status", filtering: false },
+            
             //{ title: "ART Number", field: "v_status", filtering: false },
             { title: "HTS Count", field: "count", filtering: false },
             { title: "Actions", field: "actions", filtering: false }, 
@@ -173,7 +174,7 @@ const Patients = (props) => {
                 //Id: manager.id,
                 name:row.personResponseDto.firstName + " " + row.personResponseDto.surname,
                 hospital_number: getHospitalNumber(row.personResponseDto.identifier),
-                //address: row.address,
+                clientCode: row.clientCode,
                 //phone_number:  row.phone,
                 gender:row && row.personResponseDto.sex ? row.personResponseDto.sex : "",
                 age: (row.personResponseDto.dateOfBirth === 0 ||

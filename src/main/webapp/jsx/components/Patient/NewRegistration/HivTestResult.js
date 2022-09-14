@@ -171,15 +171,15 @@ const HivTestResult = (props) => {
     }
     const validate = () => {
         //HTS FORM VALIDATION
-        initialTest.result &&  (temp.date = initialTest.date ? "" : "This field is required.")
-        initialTest.result && (temp.date = confirmatoryTest.date ? "" : "This field is required.")
-        initialTest.result && (temp.date = tieBreakerTest.date ? "" : "This field is required.")
+        initialTest.date!=="" &&  (temp.date = initialTest.result ? "" : "This field is required.")
+        // initialTest.result!==""  && (temp.date = confirmatoryTest.date ? "" : "This field is required.")
+        // initialTest.result!==""  && (temp.date = tieBreakerTest.date ? "" : "This field is required.")
               
                 setErrors({ ...temp })
         return Object.values(temp).every(x => x == "")
     }
     const handleSubmit =(e)=>{
-        handleItemClick('recency-testing', 'hiv-test')
+      
         e.preventDefault();
         if(validate()){
             objValues.htsClientId= clientId
@@ -211,6 +211,7 @@ const HivTestResult = (props) => {
             });
         }   
     }
+    console.log(errors)
 
     return (
         <>
@@ -240,8 +241,8 @@ const HivTestResult = (props) => {
                                     style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
                                     required
                                 />
-                                {errors.dateOfEac1 !=="" ? (
-                                    <span className={classes.error}>{errors.dateOfEac1}</span>
+                                {errors.date !=="" ? (
+                                    <span className={classes.error}>{errors.date}</span>
                                 ) : "" }
                                 </FormGroup>
                             </div>
@@ -261,7 +262,9 @@ const HivTestResult = (props) => {
                                         <option value="No">Non Reactive</option>
                                         
                                     </select>
-                                    
+                                    {errors.result !=="" ? (
+                                    <span className={classes.error}>{errors.result}</span>
+                                ) : "" }
                                 </FormGroup>
                             </div>
                             <div className="form-group  col-md-2"></div>

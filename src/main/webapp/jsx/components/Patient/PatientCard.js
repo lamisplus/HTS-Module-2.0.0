@@ -179,7 +179,12 @@ function PatientCard(props) {
                         Address : <b>{getAddress(patientObj.address)} </b>
                     </span>
                     </Col>
-
+                    <Col md={4} className={classes.root2}>
+                    <span>
+                        {" "}
+                        Client Code : <b>{""} </b>
+                    </span>
+                    </Col>
                     <Col md={12}>
                      
                     </Col>

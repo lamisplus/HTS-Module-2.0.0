@@ -121,28 +121,13 @@ const BasicInfo = (props) => {
             soldPaidVaginalSex:"",
         }
     )
-    const [riskCount, setRiskCount] = useState(0);
     const handleInputChangeRiskAssessment = e => { 
         //setErrors({...temp, [e.target.name]:""}) 
-        setRiskAssessment ({...riskAssessment,  [e.target.name]: e.target.value});  
-        if(e.target.value==='true') {
-            const newcount = riskCount +1
-            if(newcount>=0 && newcount <=7){
-                setRiskCount(newcount)
-            }
-        }else{
-            const newcount = riskCount -1
-            //settbCount(newcount)
-            //console.log(newcount)
-            if(newcount <=0 ){
-                
-                setRiskCount(0)
-            }else{
-                setRiskCount(newcount)
-            }
-        }                   
+        setRiskAssessment ({...riskAssessment,  [e.target.name]: e.target.value});                    
     }
-    const [riskPartnerCount, setRiskPartnerCount] = useState(0);
+    // Getting the number count of riskAssessment True
+    const actualRiskCountTrue=Object.values(riskAssessment)
+    const riskCount=actualRiskCountTrue.filter((x)=> x==='true')
     const [riskAssessmentPartner, setRiskAssessmentPartner]= useState(
         {
             sexPartnerHivPositive:"",
@@ -156,22 +141,20 @@ const BasicInfo = (props) => {
     const handleInputChangeRiskAssessmentPartner = e => { 
         //setErrors({...temp, [e.target.name]:""}) 
         setRiskAssessmentPartner ({...riskAssessmentPartner,  [e.target.name]: e.target.value}); 
-        if(e.target.value==='true') {
-            const newcount = riskPartnerCount +1
-            if(newcount>=0 && newcount <=6){
-                setRiskPartnerCount(newcount)
-            }
-        }else{
-            const newcount = riskPartnerCount -1
-            if(newcount <=0 ){
-                
-                setRiskPartnerCount(0)
-            }else{
-                setRiskPartnerCount(newcount)
-            }
-        }                   
+        if(riskAssessmentPartner.sexPartnerHivPositive==='false' || (e.target.name==='sexPartnerHivPositive' &&  e.target.value==='false')){
+            setRiskAssessmentPartner ({
+                sexPartnerHivPositive:e.target.value,
+                newDiagnosedHivlastThreeMonths:"",
+                currentlyArvForPmtct :"",
+                knowHivPositiveOnArv :"",
+                knowHivPositiveAfterLostToFollowUp:"", 
+                uprotectedAnalSex  :"",
+            })
+        }                       
     }
-    const [stiCount, setStiCount] = useState(0);
+    // Getting the number count of sexPartRiskCount True
+    const actualSexPartRiskCountTrue=Object.values(riskAssessmentPartner)
+    const riskPartnerCount=actualSexPartRiskCountTrue.filter((x)=> x==='true')
     const [stiScreening, setStiScreening]= useState(
         {
             vaginalDischarge:"",
@@ -183,22 +166,11 @@ const BasicInfo = (props) => {
     )
     const handleInputChangeStiScreening = e => { 
         //setErrors({...temp, [e.target.name]:""}) 
-        setStiScreening ({...stiScreening,  [e.target.name]: e.target.value});  
-        if(e.target.value==='true') {
-            const newcount = stiCount +1
-            if(newcount>=0 && newcount <=7){
-                setStiCount(newcount)
-            }
-        }else{
-            const newcount = stiCount -1
-            if(newcount <=0 ){
-                
-                setStiCount(0)
-            }else{
-                setStiCount(newcount)
-            }
-        }             
+        setStiScreening ({...stiScreening,  [e.target.name]: e.target.value});          
     }
+    // Getting the number count of STI True
+    const actualStiTrue=Object.values(stiScreening)
+    const stiCount=actualStiTrue.filter((x)=> x==='true')
     const [tbScreening, setTbScreening]= useState(
         {
             currentCough :"",
@@ -208,25 +180,13 @@ const BasicInfo = (props) => {
             nightSweats :"",
         }
     )
-    const [tbCount, settbCount] = useState(0);
     const handleInputChangeTbScreening = e => { 
         //setErrors({...temp, [e.target.name]:""}) 
-        setTbScreening ({...tbScreening,  [e.target.name]: e.target.value}); 
-        if(e.target.value==='true') {
-            const newcount = tbCount +1
-            if(newcount>=0 && newcount <=7){
-                settbCount(newcount)
-            }
-        }else{
-            const newcount = tbCount -1
-            if(newcount <=0 ){
-                
-                settbCount(0)
-            }else{
-                settbCount(newcount)
-            }
-        }                 
+        setTbScreening ({...tbScreening,  [e.target.name]: e.target.value});               
     }
+    // Getting the number count of TB True
+    const actualTrue=Object.values(tbScreening)
+    const tbCount=actualTrue.filter((x)=> x==='true')
     useEffect(() => { 
             setKnowledgeAssessment({...knowledgeAssessment, ...props.patientObj.knowledgeAssessment}) 
             setRiskAssessment({...riskAssessment, ...props.patientObj.riskAssessment})      
@@ -538,7 +498,7 @@ const BasicInfo = (props) => {
                             </div> 
                             <Message warning>
                                 <h4>TB Screening score (calculate the sum of the TB assessment) If score {">= 1"}, test for Xper MTB RIF or refer to TB service </h4>
-                                <b>Score : {tbCount}</b>
+                                <b>Score : {tbCount.length}</b>
                             </Message>
                             <hr/>
                             <br/>
@@ -717,7 +677,7 @@ const BasicInfo = (props) => {
                             </div>
                             <Message warning>
                                 <h4>Personal HIV Risk assessment score (sum of all 7 answers)</h4>
-                                <b>Score : {riskCount}</b>
+                                <b>Score : {riskCount.legth}</b>
                             </Message>
                             <hr/>
                             <br/>
@@ -859,7 +819,7 @@ const BasicInfo = (props) => {
                             </div>
                             <Message warning>
                                 <h4>Personal HIV Risk assessment score (sum of all 7 answers)</h4>
-                                <b>Score :{riskCount}</b>
+                                <b>Score :{riskCount.length}</b>
                             </Message>
                             <hr/>
                             <br/>
@@ -983,7 +943,7 @@ const BasicInfo = (props) => {
                             </>)}       
                             <Message warning>
                                 <h4>Personal HIV Risk assessment score (sum of all 6 answers)</h4>
-                                <b>Score :{riskPartnerCount}</b>
+                                <b>Score :{riskPartnerCount.length}</b>
                             </Message> 
                             <hr/>
                             <br/>
@@ -1090,7 +1050,7 @@ const BasicInfo = (props) => {
                             </>)}
                             <Message warning>
                                 <h4>Calculate the sum of the STI screening. If {">= "}1, should be referred for STI test </h4>
-                                <b>Score :{stiCount}</b>
+                                <b>Score :{stiCount.length}</b>
                             </Message>
                            
                             {saving ? <Spinner /> : ""}

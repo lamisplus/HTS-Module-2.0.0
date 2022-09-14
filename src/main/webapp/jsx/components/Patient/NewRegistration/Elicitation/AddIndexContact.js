@@ -125,7 +125,6 @@ const AddIndexContact = (props) => {
         .then((response) => {
             //console.log(response.data);
             setSexs(response.data);
-           
 
         })
         .catch((error) => {

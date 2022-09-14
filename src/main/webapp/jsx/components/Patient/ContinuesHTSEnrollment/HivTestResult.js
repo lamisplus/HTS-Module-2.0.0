@@ -80,8 +80,6 @@ const HivTestResult = (props) => {
             hepatitisTesting:{},
             others:{},
             cd4:{},
-            
-
         }
     )
     const handleInputChange = e => { 
@@ -173,16 +171,17 @@ const HivTestResult = (props) => {
     }
     const validate = () => {
         //HTS FORM VALIDATION
-        initialTest.result &&  (temp.date = initialTest.date ? "" : "This field is required.")
-        initialTest.result && (temp.date = confirmatoryTest.date ? "" : "This field is required.")
-        initialTest.result && (temp.date = tieBreakerTest.date ? "" : "This field is required.")
+        initialTest.date!=="" &&  (temp.date = initialTest.result ? "" : "This field is required.")
+        // initialTest.result!==""  && (temp.date = confirmatoryTest.date ? "" : "This field is required.")
+        // initialTest.result!==""  && (temp.date = tieBreakerTest.date ? "" : "This field is required.")
               
                 setErrors({ ...temp })
         return Object.values(temp).every(x => x == "")
     }
     const handleSubmit =(e)=>{
-        handleItemClick('recency-testing', 'hiv-test')
+      
         e.preventDefault();
+        if(validate()){
             objValues.htsClientId= clientId
             objValues.confirmatoryTest= confirmatoryTest
             objValues.personId= patientID
@@ -191,13 +190,14 @@ const HivTestResult = (props) => {
             objValues.syphilisTesting=syphills
             objValues.hepatitisTesting=hepatitis
             objValues.cd4=cd4Count
+            objValues.others=others
             axios.put(`${baseUrl}hts/${clientId}/request-result`,objValues,
             { headers: {"Authorization" : `Bearer ${token}`}}, )
             .then(response => {
                 setSaving(false);
                 props.setPatientObj(response.data)
                 toast.success("HIV test successful");
-                handleItemClick('indexing', 'hiv-test')
+                handleItemClick('post-test', 'hiv-test')
             })
             .catch(error => {
                 setSaving(false);
@@ -209,8 +209,9 @@ const HivTestResult = (props) => {
                     toast.error("Something went wrong. Please try again...");
                 }
             });
-            
+        }   
     }
+    console.log(errors)
 
     return (
         <>
@@ -240,8 +241,8 @@ const HivTestResult = (props) => {
                                     style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
                                     required
                                 />
-                                {errors.dateOfEac1 !=="" ? (
-                                    <span className={classes.error}>{errors.dateOfEac1}</span>
+                                {errors.date !=="" ? (
+                                    <span className={classes.error}>{errors.date}</span>
                                 ) : "" }
                                 </FormGroup>
                             </div>
@@ -261,7 +262,9 @@ const HivTestResult = (props) => {
                                         <option value="No">Non Reactive</option>
                                         
                                     </select>
-                                    
+                                    {errors.result !=="" ? (
+                                    <span className={classes.error}>{errors.result}</span>
+                                ) : "" }
                                 </FormGroup>
                             </div>
                             <div className="form-group  col-md-2"></div>
@@ -277,6 +280,7 @@ const HivTestResult = (props) => {
                                     id="date"
                                     value={confirmatoryTest.date}
                                     onChange={handleInputChangeConfirmatory}
+                                    min={initialTest.date}
                                     max= {moment(new Date()).format("YYYY-MM-DD") }
                                     style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
                                     required
@@ -320,6 +324,7 @@ const HivTestResult = (props) => {
                                     id="date"
                                     value={tieBreakerTest.date}
                                     onChange={handleInputChangeTie}
+                                    min={confirmatoryTest.date}
                                     max= {moment(new Date()).format("YYYY-MM-DD") }
                                     style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
                                     required
@@ -347,7 +352,42 @@ const HivTestResult = (props) => {
                                 </FormGroup>
                             </div>
                             <div className="form-group  col-md-2"></div>
+
                             </>)}
+                            <div className="row">
+                            <div className="form-group  col-md-6">
+                                {initialTest.result==='No'  && (
+                                    <LabelRibbon color="green" >
+                                        Negative
+                                    </LabelRibbon>
+                                )}
+                                
+                                {(initialTest.result==='Yes' && confirmatoryTest.result==='Yes' ) && (
+                                    <LabelRibbon color="red" >
+                                        Positive
+                                    </LabelRibbon>
+                                )}
+                                {(initialTest.result==='Yes' && confirmatoryTest.result==='No' && tieBreakerTest.result==='' ) && (
+                                    <LabelRibbon color="green" >
+                                        Negative
+                                    </LabelRibbon>
+                                )}
+                                {(confirmatoryTest.result==='No' && tieBreakerTest.result==='Yes' ) && (
+                                    <LabelRibbon color="red" >
+                                        Positive
+                                    </LabelRibbon>
+                                )}
+                                {(confirmatoryTest.result==='No' && tieBreakerTest.result==='No' ) && (
+                                    <LabelRibbon color="green" >
+                                        Negative
+                                    </LabelRibbon>
+                                )}
+                            </div>
+                            </div>
+                            <LabelRibbon as='a' color='blue' style={{width:'106%', height:'35px'}} ribbon>
+                                <h5 style={{color:'#fff'}}>CD4 Count</h5>
+                            </LabelRibbon>
+                            <br/> <br/>
                             <div className="form-group  col-md-5">
                                 <FormGroup>
                                     <Label>CD4 Count </Label>
@@ -380,7 +420,7 @@ const HivTestResult = (props) => {
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>
-                                        <option value="Semi-Quantitative">{"<= 200"}</option>
+                                        <option value="Semi-Quantitative">{"<200"}</option>
                                         <option value="Flow Cyteometry">{">=200"}</option>
                                         
                                     </select>
@@ -405,35 +445,8 @@ const HivTestResult = (props) => {
                                 </FormGroup>
                             </div>
                             )}
-                            <div className="form-group  col-md-2"></div>
-                            <div className="form-group  col-md-6">
-                                {initialTest.result==='No'  && (
-                                    <LabelRibbon color="green" >
-                                        Negative
-                                    </LabelRibbon>
-                                )}
-                                
-                                {(initialTest.result==='Yes' && confirmatoryTest.result==='Yes' ) && (
-                                    <LabelRibbon color="red" >
-                                        Positive
-                                    </LabelRibbon>
-                                )}
-                                {(initialTest.result==='Yes' && confirmatoryTest.result==='No' && tieBreakerTest.result==='' ) && (
-                                    <LabelRibbon color="green" >
-                                        Negative
-                                    </LabelRibbon>
-                                )}
-                                {(confirmatoryTest.result==='No' && tieBreakerTest.result==='Yes' ) && (
-                                    <LabelRibbon color="red" >
-                                        Positive
-                                    </LabelRibbon>
-                                )}
-                                {(confirmatoryTest.result==='No' && tieBreakerTest.result==='No' ) && (
-                                    <LabelRibbon color="green" >
-                                        Negative
-                                    </LabelRibbon>
-                                )}
-                            </div>
+                            <div className="form-group  col-md-7"></div>
+                           
                             
                             <LabelRibbon as='a' color='blue' style={{width:'106%', height:'35px'}} ribbon>
                             <h5 style={{color:'#fff'}}>Syphilis Testing</h5>
@@ -555,7 +568,7 @@ const HivTestResult = (props) => {
                             <br />
                             <div className="row">
                             <div className="form-group mb-3 col-md-6">
-                            <Button content='Back' icon='left arrow' labelPosition='left' style={{backgroundColor:"#992E62", color:'#fff'}} onClick={()=>handleItemClick('recency-testing', 'recency-testing')}/>
+                            <Button content='Back' icon='left arrow' labelPosition='left' style={{backgroundColor:"#992E62", color:'#fff'}} onClick={()=>handleItemClick('pre-test-counsel', 'pre-test-counsel')}/>
                             <Button content='Next' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
                             </div>
                             </div>

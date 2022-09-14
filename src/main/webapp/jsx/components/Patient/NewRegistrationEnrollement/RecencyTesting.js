@@ -107,9 +107,9 @@ const BasicInfo = (props) => {
     }
     useEffect(() => { 
         setRecency ({...recency, ...props.patientObj.recency}) 
-
-        if(props.patientObj.recency.optOutRTRI==='false'){
-            
+        //console.log(props.patientObj)
+        if(props.patientObj.recency && props.patientObj.recency.optOutRTRI==='false'){
+            recency.optOutRTRI="false"
         }
         if(recency.longTermLine==='true' && recency.verififcationLine==='true' && recency.controlLine==='true'){
             recency.rencencyInterpretation="Long Term"

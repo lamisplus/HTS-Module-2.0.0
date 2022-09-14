@@ -421,7 +421,7 @@ const BasicInfo = (props) => {
                                 </FormGroup>
                             </div>
 
-                            {(objValues.targetGroup!=='457' && objValues.targetGroup!=="") && (
+                            {/* {(objValues.targetGroup!=='457' && objValues.targetGroup!=="") && (
                             <div className="form-group  col-md-4">
                             <FormGroup>
                                 <Label>Gender</Label>
@@ -443,7 +443,7 @@ const BasicInfo = (props) => {
                                
                             </FormGroup>
                             </div>
-                            )}
+                            )} */}
 
                             {(objValues.age>9 ) && (
                             <div className="form-group  col-md-4">

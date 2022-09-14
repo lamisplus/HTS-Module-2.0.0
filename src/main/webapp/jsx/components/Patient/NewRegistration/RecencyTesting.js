@@ -144,11 +144,12 @@ const BasicInfo = (props) => {
     }
     const handleSubmit =(e)=>{
         e.preventDefault();
-        console.log(recency)
+       
 
             objValues.htsClientId= clientId
             objValues.recency= recency
             objValues.personId= patientID
+            console.log(recency)
             axios.put(`${baseUrl}hts/${clientId}/recency`,objValues,
             { headers: {"Authorization" : `Bearer ${token}`}},
             
@@ -174,7 +175,7 @@ const BasicInfo = (props) => {
             
     }
 
-console.log(errors)
+
 
     return (
         <>

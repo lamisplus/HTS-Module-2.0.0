@@ -107,6 +107,7 @@ public class HtsClientService {
         htsClient = this.htsRequestResultDtoToHtsClient(htsClient, htsRequestResultDto);
         HtsClientDto htsClientDto = new HtsClientDto();
         BeanUtils.copyProperties(htsClientRepository.save(htsClient), htsClientDto);
+        htsClientDto.setPersonResponseDto(personService.getDtoFromPerson(htsClient.getPerson()));
         return htsClientDto;
     }
 

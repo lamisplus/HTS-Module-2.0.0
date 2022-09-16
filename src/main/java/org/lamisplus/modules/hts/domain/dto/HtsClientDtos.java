@@ -9,6 +9,7 @@ import java.util.List;
 public class HtsClientDtos {
     private Long personId;
     private Integer htsCount;
+    private String clientCode;
     private PersonResponseDto personResponseDto;
     private List<HtsClientDto> htsClientDtoList;
 }

@@ -31,4 +31,4 @@ local-data
 .log
 .mvn
 mvnw.cmd
-mapper
+/node_modules

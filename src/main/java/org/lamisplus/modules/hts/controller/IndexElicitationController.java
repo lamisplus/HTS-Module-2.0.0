@@ -3,6 +3,7 @@ package org.lamisplus.modules.hts.controller;
 import lombok.RequiredArgsConstructor;
 import org.lamisplus.modules.hts.domain.dto.*;
 import org.lamisplus.modules.hts.domain.entity.HtsClient;
+import org.lamisplus.modules.hts.domain.entity.IndexElicitation;
 import org.lamisplus.modules.hts.service.HtsClientService;
 import org.lamisplus.modules.hts.service.IndexElicitationService;
 import org.lamisplus.modules.hts.util.PaginationUtil;
@@ -25,7 +26,7 @@ public class IndexElicitationController {
     private final String INDEX_ELICITATION_URL_VERSION_ONE = "/api/v1/index-elicitation";
 
     @PostMapping(INDEX_ELICITATION_URL_VERSION_ONE)
-    public ResponseEntity<IndexElicitationResponseDto> save(@Valid @RequestBody IndexElicitationDto indexElicitationDto) {
+    public ResponseEntity<IndexElicitation> save(@Valid @RequestBody IndexElicitationDto indexElicitationDto) {
         return ResponseEntity.ok(this.indexElicitationService.save(indexElicitationDto));
     }
 

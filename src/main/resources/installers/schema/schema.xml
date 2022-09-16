@@ -145,7 +145,7 @@
                     ON DELETE NO ACTION
                     NOT VALID,
                 CONSTRAINT sex_fk FOREIGN KEY (sex)
-                    REFERENCES base_application_codeset_standard_codeset (id) MATCH SIMPLE
+                    REFERENCES base_application_codeset (id) MATCH SIMPLE
                     ON UPDATE NO ACTION
                     ON DELETE NO ACTION
                     NOT VALID

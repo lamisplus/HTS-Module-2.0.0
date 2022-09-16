@@ -110,8 +110,8 @@ public class IndexElicitation extends Audit implements Serializable {
     private LocalDate datePartnerCameForTesting;
 
     @Basic
-    @Column(name = "hts_client_uuid", updatable = false)
-    private LocalDate htsClientUuid;
+    @Column(name = "hts_client_uuid")
+    private String htsClientUuid;
 
     @Basic
     @Column(name = "archived")

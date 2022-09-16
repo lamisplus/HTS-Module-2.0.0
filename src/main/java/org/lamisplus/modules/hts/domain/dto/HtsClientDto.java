@@ -1,9 +1,11 @@
 package org.lamisplus.modules.hts.domain.dto;
 
 import lombok.*;
+import org.lamisplus.modules.hts.domain.entity.IndexElicitation;
 import org.lamisplus.modules.patient.domain.dto.PersonResponseDto;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Builder(toBuilder = true)
 @Getter
@@ -64,4 +66,8 @@ public class HtsClientDto {
 
     //index notification services - Elicitation
     private Object indexNotificationServicesElicitation;
+
+    private String indexClientCode;
+
+    public List<IndexElicitation> indexElicitation;
 }

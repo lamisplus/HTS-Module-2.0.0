@@ -18,6 +18,5 @@ public class HtsRequestResultDto {
     private final Object syphilisTesting;
     private final Object hepatitisTesting;
     private Object others;
-
     private Object cd4;
 }

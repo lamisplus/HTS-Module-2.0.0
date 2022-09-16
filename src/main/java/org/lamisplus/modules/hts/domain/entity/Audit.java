@@ -1,4 +1,4 @@
-package org.lamisplus.modules.base.domain.entities;
+package org.lamisplus.modules.hts.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;

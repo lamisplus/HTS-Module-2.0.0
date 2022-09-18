@@ -151,6 +151,12 @@ const BasicInfo = (props) => {
     }
     const handleSubmit =(e)=>{
         e.preventDefault();
+        if(props.activePage.actionType==='view'){
+            //e.preventDefault();
+            handleItemClick('indexing', 'recency-testing' )
+        }
+        if(props.activePage.actionType==='update'){
+        
         if(validate()){
             objValues.htsClientId= clientId
             objValues.recency= recency
@@ -176,7 +182,8 @@ const BasicInfo = (props) => {
                     toast.error("Something went wrong. Please try again...");
                 }
             });
-        }   
+        } 
+        }  
     }
 
     return (

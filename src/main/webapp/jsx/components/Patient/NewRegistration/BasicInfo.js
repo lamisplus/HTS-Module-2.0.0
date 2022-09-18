@@ -140,6 +140,8 @@ const BasicInfo = (props) => {
         PregnancyStatus();
         IndexTesting();
         objValues.dateVisit=moment(new Date()).format("YYYY-MM-DD")
+        //setObjValues(props.patientObj)
+        console.log(props.patientObj)
     }, []);
 
     //Get list of KP

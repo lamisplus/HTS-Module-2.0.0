@@ -98,7 +98,7 @@ const PatientnHistory = (props) => {
     const [patientList, setPatientList] = useState([])
     //const [patientObj, setpatientObj] = useState([])
     const patientId = props.patientObj && props.patientObj.id ? props.patientObj.id: null
-
+    
     useEffect(() => {
         patients()
       }, [props.patientObj]);
@@ -109,15 +109,16 @@ const PatientnHistory = (props) => {
             { headers: {"Authorization" : `Bearer ${token}`} }
             )
             .then((response) => {
-                console.log(response.data)
+                //console.log(response.data)
                 setPatientList(response.data.htsClientDtoList);
             })
             .catch((error) => {    
             });        
     }
-const LoadViewPage =(row, actionType)=>{
-    props.setActivePage({...props.activePage, activePage:"view", activeObject:row, actionType:actionType})
-}
+    const LoadViewPage =(row, actionType)=>{
+        props.setActivePage({...props.activePage, activePage:"view", activeObject:row, actionType:actionType})
+    }
+    
 
   return (
     <div> 

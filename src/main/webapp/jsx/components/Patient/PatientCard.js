@@ -65,7 +65,7 @@ function PatientCard(props) {
   const patientObjs = props.patientObj ? props.patientObj : {}
   const permissions= props.permissions ? props.permissions : [];
   const [patientObj, setpatientObj] = useState(patientObjs)
-
+console.log(props.clientCode)
   useEffect(() => {
     PatientCurrentStatus();
   }, [props.patientObj]);
@@ -180,12 +180,12 @@ function PatientCard(props) {
                         Address : <b>{getAddress(patientObj.address)} </b>
                     </span>
                     </Col>
-                    {/* <Col md={4} className={classes.root2}>
+                    <Col md={4} className={classes.root2}>
                     <span>
                         {" "}
-                        Client Code : <b>{props && props.clientCode ? props.clientCode.clientCode : ""} </b>
+                        Client Code : <b>{props && props.clientCode ? props.clientCode : ""} </b>
                     </span>
-                    </Col> */}
+                    </Col>
                     <Col md={12}>
                      
                     </Col>

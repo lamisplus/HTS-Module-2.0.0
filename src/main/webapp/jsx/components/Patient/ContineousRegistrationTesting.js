@@ -38,7 +38,7 @@ const UserRegistration = (props) => {
     const history = useHistory();
     const location = useLocation();
     const locationState = location.state;
-
+    console.log(props)
     const [saving, setSaving] = useState(false);
     const [activeItem, setactiveItem] = useState('basic');
     const [completed, setCompleted] = useState([]);

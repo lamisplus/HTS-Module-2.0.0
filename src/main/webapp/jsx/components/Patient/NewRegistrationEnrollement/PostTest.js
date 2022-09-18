@@ -111,6 +111,12 @@ const PostTest = (props) => {
     }, [ props.patientObj]);
     const handleSubmit =(e)=>{
         e.preventDefault();
+        if(props.activePage.actionType==='view'){
+            //e.preventDefault();
+            handleItemClick('recency-testing', 'post-test')
+        }
+        if(props.activePage.actionType==='update'){
+        //e.preventDefault();
             objValues.htsClientId= clientId
             objValues.postTestCounselingKnowledgeAssessment= postTest
             objValues.personId= patientID
@@ -122,7 +128,7 @@ const PostTest = (props) => {
                 setSaving(false);
                 props.setPatientObj(props && props.patientObj ? props.patientObj : "")
                 toast.success("Risk Assesment successful");
-                handleItemClick('recency-testing', 'post-test' )
+                handleItemClick('recency-testing', 'post-test')
 
             })
             .catch(error => {
@@ -135,7 +141,7 @@ const PostTest = (props) => {
                     toast.error("Something went wrong. Please try again...");
                 }
             });
-            
+        }   
     }
 
     return (

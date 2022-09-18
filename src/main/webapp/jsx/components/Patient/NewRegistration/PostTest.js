@@ -64,6 +64,16 @@ const PostTest = (props) => {
     const clientId = props.patientObj && props.patientObj ? props.patientObj.id : "";
     const [saving, setSaving] = useState(false);
     ///const [errors, setErrors] = useState({});
+    useEffect(() => { 
+        console.log(props.patientObj)
+        if(props.patientObj && props.clientCode){
+            setPostTest(
+                props.patientObj.postTestCounselingKnowledgeAssessment && props.patientObj.postTestCounselingKnowledgeAssessment!==null 
+                    ? props.patientObj.postTestCounselingKnowledgeAssessment : {},
+                
+            )
+        }
+    }, [props.patientObj]);
     const [objValues, setObjValues]= useState(
         {
             htsClientId: clientId,
@@ -106,7 +116,7 @@ const PostTest = (props) => {
         }
     }
     const handleSubmit =(e)=>{
-        handleItemClick('recency-testing', 'post-test')
+        //handleItemClick('recency-testing', 'post-test')
         e.preventDefault();
             objValues.htsClientId= clientId
             objValues.postTestCounselingKnowledgeAssessment= postTest

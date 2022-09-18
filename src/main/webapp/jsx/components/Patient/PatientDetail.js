@@ -51,17 +51,17 @@ function PatientCard(props) {
     const [activePage, setActivePage] = useState({activePage:"home", activeObject:{}, actionType:""});
     const { classes } = props;
     const patientObj = history.location && history.location.state ? history.location.state.patientObj : {}
-    //console.log(patientObj)
+    const clientCode =history.location && history.location.state ? history.location.state.clientCode : ""
   return (
     <div className={classes.root}>
       <Card >
         <CardContent>
-            <PatientCardDetail patientObj={patientObj}/>
+            <PatientCardDetail patientObj={patientObj} clientCode={clientCode}/>
             {activePage.activePage==="home" && (
-              <PatientHistory patientObj={patientObj} activePage={activePage} setActivePage={setActivePage}/>
+              <PatientHistory patientObj={patientObj} activePage={activePage} setActivePage={setActivePage} clientCode={clientCode}/>
             )}
             {activePage.activePage==="view" && (
-              <PatientHtsEnrollment patientObj={patientObj} activePage={activePage} setActivePage={setActivePage}/>
+              <PatientHtsEnrollment patientObj={patientObj} activePage={activePage} setActivePage={setActivePage} clientCode={clientCode}/>
             )}
          </CardContent>
       </Card>

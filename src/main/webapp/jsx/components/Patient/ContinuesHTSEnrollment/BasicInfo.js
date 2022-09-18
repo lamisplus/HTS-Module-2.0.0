@@ -69,7 +69,7 @@ const useStyles = makeStyles((theme) => ({
 const BasicInfo = (props) => {
     const classes = useStyles();
     const history = useHistory();
-    //console.log(props)
+    
     const [errors, setErrors] = useState({});
     const [saving, setSaving] = useState(false);
     const [hideNumChild, setHideNumChild] = useState(false);
@@ -81,7 +81,6 @@ const BasicInfo = (props) => {
     const [pregnancyStatus, setPregnancyStatus] = useState([]);
     const [indexTesting, setIndexTesting]= useState([]);
     let temp = { ...errors }
-    console.log(props.patientObj)
 
     const [objValues, setObjValues]= useState(
         {

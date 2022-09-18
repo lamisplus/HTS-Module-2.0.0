@@ -231,8 +231,7 @@ const AddIndexContact = (props) => {
         return result
     }
     const handleSubmit =(e)=>{
-        alert("code is here 2")
-        e.preventDefault();       
+        e.preventDefault();     
         objValues.isDateOfBirthEstimated=objValues.isDateOfBirthEstimated==true ? 1 : 0
             axios.post(`${baseUrl}index-elicitation`,objValues,
             { headers: {"Authorization" : `Bearer ${token}`}},
@@ -240,10 +239,8 @@ const AddIndexContact = (props) => {
             )
             .then(response => {
                 setSaving(false);
-                ///props.setPatientObj(response.data)
                 toast.success("Record save successful");
-                //handleItemClick('pre-test-counsel', 'basic' )
-                //handleItemClickPage('list')
+                handleItemClickPage('list')
 
             })
             .catch(error => {
@@ -264,7 +261,7 @@ const AddIndexContact = (props) => {
             <Card >
                 <CardBody>
                 
-                <h2 style={{color:'#000'}}>Index Notification Services - Elicitation
+                <h2 style={{color:'#000'}}>Index Notification Services - Elicitation 
                 <Button
                     variant="contained"
                     color="primary"

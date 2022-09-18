@@ -70,7 +70,7 @@ const useStyles = makeStyles((theme) => ({
 const BasicInfo = (props) => {
     const classes = useStyles();
     const history = useHistory();
-    //console.log(props)
+    //console.log(props.activePage)
     const [errors, setErrors] = useState({});
     const [saving, setSaving] = useState(false);
     const [hideNumChild, setHideNumChild] = useState(false);
@@ -265,10 +265,12 @@ const BasicInfo = (props) => {
             props.setCompleted([...props.completed, completedMenu])
         }
     }
-
     const handleSubmit =(e)=>{
         e.preventDefault();
-        const patientForm ={
+
+        if(props.activePage.actionType==='update'){
+        //e.preventDefault();
+            const patientForm ={
             clientCode: objValues.clientCode,
             dateVisit: objValues.dateVisit,
             extra: {},
@@ -311,6 +313,11 @@ const BasicInfo = (props) => {
                 }
             });
             }
+        }
+        if(props.activePage.actionType==='view'){
+            //e.preventDefault();
+            handleItemClick('pre-test-counsel', 'basic' )
+        }
     }
 
 

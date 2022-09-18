@@ -239,10 +239,7 @@ const AddIndexContact = (props) => {
             )
             .then(response => {
                 setSaving(false);
-                
-                //props.setPatientObj(response.data)
                 toast.success("Record save successful");
-                //handleItemClick('pre-test-counsel', 'basic' )
                 handleItemClickPage('list')
 
             })

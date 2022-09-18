@@ -198,6 +198,12 @@ const BasicInfo = (props) => {
 
     const handleSubmit =(e)=>{
         e.preventDefault();
+        if(props.activePage.actionType==='view'){
+           // e.preventDefault();
+            handleItemClick('hiv-test', 'pre-test-counsel' )
+        }
+        if(props.activePage.actionType==='update'){
+        //e.preventDefault();
             objValues.htsClientId= clientId
             objValues.knowledgeAssessment= knowledgeAssessment
             objValues.personId= patientID
@@ -213,7 +219,7 @@ const BasicInfo = (props) => {
                 setSaving(false);
                 props.setPatientObj(props && props.patientObj ? props.patientObj : "")
                 toast.success("Risk Assesment successful");
-                handleItemClick('post-test', 'pre-test-counsel' )
+                handleItemClick('hiv-test', 'pre-test-counsel' )
 
             })
             .catch(error => {
@@ -226,7 +232,7 @@ const BasicInfo = (props) => {
                     toast.error("Something went wrong. Please try again...");
                 }
             });
-            
+        }    
     }
 
 

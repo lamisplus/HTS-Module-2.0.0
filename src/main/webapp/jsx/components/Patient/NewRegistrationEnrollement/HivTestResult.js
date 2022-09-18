@@ -185,8 +185,13 @@ const HivTestResult = (props) => {
 
     }, [ props.patientObj]);
     const handleSubmit =(e)=>{
-        handleItemClick('recency-testing', 'hiv-test')
         e.preventDefault();
+        if(props.activePage.actionType==='view'){
+            //e.preventDefault();
+        handleItemClick('post-test', 'hiv-test')
+        }
+        if(props.activePage.actionType==='update'){
+        //e.preventDefault();
             objValues.htsClientId= clientId
             objValues.confirmatoryTest= confirmatoryTest
             objValues.personId= patientID
@@ -202,7 +207,7 @@ const HivTestResult = (props) => {
                 setSaving(false);
                 props.setPatientObj(response.data)
                 toast.success("HIV test successful");
-                handleItemClick('indexing', 'hiv-test')
+                handleItemClick('post-test', 'hiv-test')
             })
             .catch(error => {
                 setSaving(false);
@@ -214,7 +219,7 @@ const HivTestResult = (props) => {
                     toast.error("Something went wrong. Please try again...");
                 }
             });
-            
+        }    
     }
 
     return (

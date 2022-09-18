@@ -67,6 +67,16 @@ const BasicInfo = (props) => {
     const [saving, setSaving] = useState(false);
     const [errors, setErrors] = useState({});
     let temp = { ...errors }
+    useEffect(() => { 
+        console.log(props.patientObj)
+        if(props.patientObj && props.clientCode){
+            setKnowledgeAssessment(props.patientObj.knowledgeAssessment && props.patientObj.knowledgeAssessment!==null ? props.patientObj.knowledgeAssessment : {})
+            setRiskAssessment(props.patientObj.riskAssessment && props.patientObj.riskAssessment!==null ? props.patientObj.riskAssessment : {})
+            setRiskAssessmentPartner(props.patientObj.riskAssessmentPartner && props.patientObj.riskAssessmentPartner!==null ? props.patientObj.riskAssessmentPartner : {})
+            setStiScreening(props.patientObj.stiScreening && props.patientObj.stiScreening!==null ? props.patientObj.stiScreening : {})
+            setTbScreening(props.patientObj.tbScreening && props.patientObj.tbScreening!==null ? props.patientObj.tbScreening : {})
+        }
+    }, [props.patientObj]);
     const handleItemClick =(page, completedMenu)=>{        
         if(props.completed.includes(completedMenu)) {
         }else{
@@ -144,16 +154,16 @@ const BasicInfo = (props) => {
     const handleInputChangeRiskAssessmentPartner = e => { 
         //setErrors({...temp, [e.target.name]:""}) 
         setRiskAssessmentPartner ({...riskAssessmentPartner,  [e.target.name]: e.target.value});
-        if(riskAssessmentPartner.sexPartnerHivPositive==='false' || (e.target.name==='sexPartnerHivPositive' &&  e.target.value==='false')){
-            setRiskAssessmentPartner ({
-                sexPartnerHivPositive:'false',
-                newDiagnosedHivlastThreeMonths:"",
-                currentlyArvForPmtct :"",
-                knowHivPositiveOnArv :"",
-                knowHivPositiveAfterLostToFollowUp:"", 
-                uprotectedAnalSex  :"",
-            })
-        }                     
+        // if(riskAssessmentPartner.sexPartnerHivPositive==='false' || (e.target.name==='sexPartnerHivPositive' &&  e.target.value==='false')){
+        //     setRiskAssessmentPartner ({
+        //         sexPartnerHivPositive:'false',
+        //         newDiagnosedHivlastThreeMonths:"",
+        //         currentlyArvForPmtct :"",
+        //         knowHivPositiveOnArv :"",
+        //         knowHivPositiveAfterLostToFollowUp:"", 
+        //         uprotectedAnalSex  :"",
+        //     })
+        // }                     
     }
     // Getting the number count of sexPartRiskCount True
     const actualSexPartRiskCountTrue=Object.values(riskAssessmentPartner)

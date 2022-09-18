@@ -43,14 +43,14 @@ public class IndexElicitationService {
         HtsClient htsClient = htsClientRepository.findByIdAndArchivedAndFacilityId(indexElicitationDto.getHtsClientId(), UN_ARCHIVED, facilityId)
                 .orElseThrow(()-> new EntityNotFoundException(HtsClient.class, "htsClientId", "" + indexElicitationDto.getHtsClientId()));
 
-        LOG.info("facilityId is {}", facilityId);
-        LOG.info("indexElicitationDto is {}", indexElicitationDto);
+        //LOG.info("facilityId is {}", facilityId);
+        //LOG.info("indexElicitationDto is {}", indexElicitationDto);
 
         IndexElicitation indexElicitation = this.convertToIndexElicitation(indexElicitationDto);
         indexElicitation.setFacilityId(facilityId);
         indexElicitation.setHtsClientUuid(htsClient.getUuid());
         indexElicitation = indexElicitationRepository.save(indexElicitation);
-        LOG.info("indexElicitation is {}", indexElicitation);
+        //LOG.info("indexElicitation is {}", indexElicitation);
 
 
         //return this.convertToIndexElicitationResponseDto(indexElicitation);
@@ -112,7 +112,7 @@ public class IndexElicitationService {
             indexElicitation.setThreatenToHurt(indexElicitationDto.getThreatenToHurt());
             indexElicitation.setNotificationMethod(indexElicitationDto.getNotificationMethod());
             indexElicitation.setPartnerTestedPositive(indexElicitationDto.getPartnerTestedPositive());
-            indexElicitation.setRelativeToIndexClient(indexElicitationDto.getRelativeToIndexClient());
+            indexElicitation.setRelationshipToIndexClient(indexElicitationDto.getRelationshipToIndexClient());
             indexElicitation.setSexuallyUncomfortable(indexElicitationDto.getSexuallyUncomfortable());
             indexElicitation.setCurrentlyLiveWithPartner(indexElicitationDto.getCurrentlyLiveWithPartner());
             indexElicitation.setDatePartnerCameForTesting(indexElicitationDto.getDatePartnerCameForTesting());
@@ -147,7 +147,7 @@ public class IndexElicitationService {
         indexElicitation.setThreatenToHurt( indexElicitationResponseDto.getThreatenToHurt() );
         indexElicitation.setNotificationMethod( indexElicitationResponseDto.getNotificationMethod() );
         indexElicitation.setPartnerTestedPositive( indexElicitationResponseDto.getPartnerTestedPositive() );
-        indexElicitation.setRelativeToIndexClient( indexElicitationResponseDto.getRelativeToIndexClient() );
+        indexElicitation.setRelationshipToIndexClient( indexElicitationResponseDto.getRelationshipToIndexClient() );
         indexElicitation.setSexuallyUncomfortable( indexElicitationResponseDto.getSexuallyUncomfortable() );
         indexElicitation.setCurrentlyLiveWithPartner( indexElicitationResponseDto.getCurrentlyLiveWithPartner() );
         indexElicitation.setDatePartnerCameForTesting( indexElicitationResponseDto.getDatePartnerCameForTesting() );
@@ -178,7 +178,7 @@ public class IndexElicitationService {
         indexElicitationResponseDto.setThreatenToHurt( indexElicitation.getThreatenToHurt() );
         indexElicitationResponseDto.setNotificationMethod( indexElicitation.getNotificationMethod() );
         indexElicitationResponseDto.setPartnerTestedPositive( indexElicitation.getPartnerTestedPositive() );
-        indexElicitationResponseDto.setRelativeToIndexClient( indexElicitation.getRelativeToIndexClient() );
+        indexElicitationResponseDto.setRelationshipToIndexClient( indexElicitation.getRelationshipToIndexClient() );
         indexElicitationResponseDto.setSexuallyUncomfortable( indexElicitation.getSexuallyUncomfortable() );
         indexElicitationResponseDto.setCurrentlyLiveWithPartner( indexElicitation.getCurrentlyLiveWithPartner() );
         indexElicitationResponseDto.setDatePartnerCameForTesting( indexElicitation.getDatePartnerCameForTesting() );

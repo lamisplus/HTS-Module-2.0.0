@@ -106,15 +106,14 @@
                 middle_name character varying ,
                 phone_number character varying ,
                 alt_phone_number character varying ,
-                hang_out_spots bigint,
-                physical_hurt boolean,
-                threaten_to_hurt boolean,
+                hang_out_spots character varying,
+                physical_hurt bigint,
+                threaten_to_hurt bigint,
                 notification_method bigint,
-                partner_tested_positive boolean,
-                relative_to_index_client boolean,
-                sexually_uncomfortable boolean,
+                partner_tested_positive bigint,
+                sexually_uncomfortable bigint,
                 currently_live_with_partner boolean,
-                relation_with_index_client bigint,
+                relationship_with_index_client bigint,
                 date_partner_came_for_testing date,
                 facility_id bigint NOT NULL,
                 hts_client_uuid character varying,
@@ -124,6 +123,31 @@
                 modified_by character varying NOT NULL,
                 archived integer NOT NULL,
                 extra jsonb,
+                CONSTRAINT sexually_uncomfortable_fk FOREIGN KEY (sexually_uncomfortable)
+                    REFERENCES base_application_codeset (id) MATCH SIMPLE
+                    ON UPDATE NO ACTION
+                    ON DELETE NO ACTION
+                    NOT VALID,
+                CONSTRAINT threaten_to_hurt_fk FOREIGN KEY (threaten_to_hurt)
+                    REFERENCES base_application_codeset (id) MATCH SIMPLE
+                    ON UPDATE NO ACTION
+                    ON DELETE NO ACTION
+                    NOT VALID,
+                CONSTRAINT physical_hurt_fk FOREIGN KEY (physical_hurt)
+                    REFERENCES base_application_codeset (id) MATCH SIMPLE
+                    ON UPDATE NO ACTION
+                    ON DELETE NO ACTION
+                    NOT VALID,
+                CONSTRAINT partner_tested_positive_fk FOREIGN KEY (partner_tested_positive)
+                    REFERENCES base_application_codeset (id) MATCH SIMPLE
+                    ON UPDATE NO ACTION
+                    ON DELETE NO ACTION
+                    NOT VALID,
+                CONSTRAINT relationship_with_index_client_fk FOREIGN KEY (relationship_with_index_client)
+                    REFERENCES base_application_codeset (id) MATCH SIMPLE
+                    ON UPDATE NO ACTION
+                    ON DELETE NO ACTION
+                    NOT VALID,
                 CONSTRAINT hang_out_spots_fk FOREIGN KEY (hang_out_spots)
                     REFERENCES base_application_codeset (id) MATCH SIMPLE
                     ON UPDATE NO ACTION
@@ -135,11 +159,6 @@
                     ON DELETE NO ACTION
                     NOT VALID,
                 CONSTRAINT notification_method_fk FOREIGN KEY (notification_method)
-                    REFERENCES base_application_codeset (id) MATCH SIMPLE
-                    ON UPDATE NO ACTION
-                    ON DELETE NO ACTION
-                    NOT VALID,
-                CONSTRAINT relation_with_index_client_fk FOREIGN KEY (relation_with_index_client)
                     REFERENCES base_application_codeset (id) MATCH SIMPLE
                     ON UPDATE NO ACTION
                     ON DELETE NO ACTION

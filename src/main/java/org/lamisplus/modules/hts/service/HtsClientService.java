@@ -59,7 +59,7 @@ public class HtsClientService {
         htsClient.setFacilityId(currentUserOrganizationService.getCurrentUserOrganization());
         htsClient = htsClientRepository.save(htsClient);
         htsClient.setPerson(person);
-        LOG.info("Person is - {}", htsClient.getPerson());
+        //LOG.info("Person is - {}", htsClient.getPerson());
         return this.htsClientToHtsClientDto(htsClient);
     }
 

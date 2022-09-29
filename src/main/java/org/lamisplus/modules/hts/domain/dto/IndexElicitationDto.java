@@ -29,13 +29,13 @@ public class IndexElicitationDto {
     private String middleName;
     private String phoneNumber;
     private String altPhoneNumber;
-    private Long hangOutSpots;
-    private Boolean physicalHurt;
-    private Boolean threatenToHurt;
+    private String hangOutSpots;
+    private Long physicalHurt;
+    private Long threatenToHurt;
     private Long notificationMethod;
-    private Boolean partnerTestedPositive;
-    private Long relativeToIndexClient;
-    private Boolean sexuallyUncomfortable;
+    private Long partnerTestedPositive;
+    private Long relationshipToIndexClient;
+    private Long sexuallyUncomfortable;
     private Boolean currentlyLiveWithPartner;
     private LocalDate datePartnerCameForTesting;
 }

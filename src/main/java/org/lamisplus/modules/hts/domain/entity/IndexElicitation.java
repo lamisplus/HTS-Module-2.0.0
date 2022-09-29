@@ -75,15 +75,15 @@ public class IndexElicitation extends Audit implements Serializable {
 
     @Basic
     @Column(name = "hang_out_spots")
-    private Long hangOutSpots;
+    private String hangOutSpots;
 
     @Basic
     @Column(name = "physical_hurt")
-    private Boolean physicalHurt;
+    private Long physicalHurt;
 
     @Basic
     @Column(name = "threaten_to_hurt")
-    private Boolean threatenToHurt;
+    private Long threatenToHurt;
 
     @Basic
     @Column(name = "notification_method")
@@ -91,15 +91,15 @@ public class IndexElicitation extends Audit implements Serializable {
 
     @Basic
     @Column(name = "partner_tested_positive")
-    private Boolean partnerTestedPositive;
+    private Long partnerTestedPositive;
 
     @Basic
-    @Column(name = "relative_to_index_client")
-    private Long relativeToIndexClient;
+    @Column(name = "relationship_with_index_client")
+    private Long relationshipToIndexClient;
 
     @Basic
     @Column(name = "sexually_uncomfortable")
-    private Boolean sexuallyUncomfortable;
+    private Long sexuallyUncomfortable;
 
     @Basic
     @Column(name = "currently_live_with_partner")

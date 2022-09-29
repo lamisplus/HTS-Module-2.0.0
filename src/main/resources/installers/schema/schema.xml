@@ -106,7 +106,7 @@
                 middle_name character varying ,
                 phone_number character varying ,
                 alt_phone_number character varying ,
-                hang_out_spots bigint,
+                hang_out_spots character varying,
                 physical_hurt bigint,
                 threaten_to_hurt bigint,
                 notification_method bigint,

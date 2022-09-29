@@ -417,7 +417,7 @@ public class HtsClientService {
     }
 
     public String getClientNameByCode(String code) {
-        List<HtsClient> htsClients = htsClientRepository.findByAllClientCode(code);
+        List<HtsClient> htsClients = htsClientRepository.findAllByClientCode(code);
         if(htsClients.isEmpty())return "Record Not Found";
 
         Person person = htsClients.stream().findFirst().get().getPerson();

@@ -69,12 +69,12 @@ public class HtsClientController {
         return ResponseEntity.ok(this.htsClientService.getHtsClientByPersonId(personId));
     }
     @GetMapping(HTS_URL_VERSION_ONE + "/code/client-code")
-    public ResponseEntity<String> getHtsClientCode() {
-        return ResponseEntity.ok(this.htsClientService.getHtsClientCode());
+    public ResponseEntity<String> getGenerateHtsClientCode() {
+        return ResponseEntity.ok(this.htsClientService.getGenerateHtsClientCode());
     }
-    @GetMapping(HTS_URL_VERSION_ONE + "/code/{indexCode}")
-    public ResponseEntity<String> getIndexCodeHtsClientCode(@PathVariable Long personId) {
-        return ResponseEntity.ok(this.htsClientService.getHtsClientCode());
+    @GetMapping(HTS_URL_VERSION_ONE + "/client/{code}")
+    public ResponseEntity<String> getClientNameByCode(@PathVariable String code) {
+        return ResponseEntity.ok(this.htsClientService.getClientNameByCode(code));
     }
 
     @GetMapping(HTS_URL_VERSION_ONE)

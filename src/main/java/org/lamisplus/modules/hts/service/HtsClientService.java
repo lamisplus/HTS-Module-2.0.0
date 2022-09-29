@@ -350,7 +350,7 @@ public class HtsClientService {
         return null;
     }
 
-    public String getHtsClientCode(){
+    public String getGenerateHtsClientCode(){
         Optional<Long> number = htsClientRepository.maxId();
         String random = RandomCodeGenerator.randomString(10, true, true);
         if(number.isPresent()){
@@ -414,5 +414,13 @@ public class HtsClientService {
         htsClient.setRelationWithIndexClient(htsClientUpdateRequestDto.getRelationWithIndexClient());
 
         return htsClient;
+    }
+
+    public String getClientNameByCode(String code) {
+        List<HtsClient> htsClients = htsClientRepository.findByAllClientCode(code);
+        if(htsClients.isEmpty())return "Record Not Found";
+
+        Person person = htsClients.stream().findFirst().get().getPerson();
+        return person.getFirstName() + " " + person.getSurname();
     }
 }

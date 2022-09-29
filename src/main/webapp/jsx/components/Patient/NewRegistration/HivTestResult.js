@@ -235,7 +235,6 @@ const HivTestResult = (props) => {
                         <div className="row">
                         <LabelRibbon as='a' color='blue' style={{width:'106%', height:'35px'}} ribbon>
                         <h4 style={{color:'#fff'}}>HIV TEST RESULT</h4>
-
                         </LabelRibbon>
                            <br/>
                            <div className="form-group  col-md-2"></div>

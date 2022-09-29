@@ -52,10 +52,10 @@ const Home = (props) => {
                     className="mb-3"
                 >
                 <Tab eventKey="home" title="HTS HISTORY">                   
-                    <History patientObj={props.patientObj} activePage={props.activePage} setActivePage={props.setActivePage}/>
+                    <History patientObj={props.patientObj} activePage={props.activePage} setActivePage={props.setActivePage} clientCode={props.clientCode} patientAge={props.patientAge}/>
                 </Tab> 
                 <Tab eventKey="new" title="NEW HTS">                   
-                    <ContineousRegistrationTesting patientObj={props.patientObj} activePage={props.activePage} setActivePage={props.setActivePage}/>
+                    <ContineousRegistrationTesting patientObj={props.patientObj} activePage={props.activePage} setActivePage={props.setActivePage} clientCode={props.clientCode} patientAge={props.patientAge}/>
                 </Tab>
                                      
                 </Tabs>

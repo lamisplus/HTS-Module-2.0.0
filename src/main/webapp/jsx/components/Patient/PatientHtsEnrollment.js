@@ -90,6 +90,7 @@ const UserRegistration = (props) => {
                                     <Icon name='check' color='green' />
                                 )}
                             </Menu.Item>
+                            {props.patientAge>14 && (
                             <Menu.Item
                                 name='spam'
                                 active={activeItem === 'pre-test-counsel'}
@@ -103,6 +104,7 @@ const UserRegistration = (props) => {
                                 <Icon name='check' color='green' />
                             )}
                             </Menu.Item>
+                            )}
                             <Menu.Item
                                 name='inbox'
                                 active={activeItem === 'hiv-test'}

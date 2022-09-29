@@ -35,7 +35,6 @@ const useStyles = makeStyles((theme) => ({
 
 
 const UserRegistration = (props) => {
-    //console.log(props)
     //const classes = useStyles();
     const location = useLocation();
     const locationState = location.state;
@@ -43,6 +42,7 @@ const UserRegistration = (props) => {
     const [activeItem, setactiveItem] = useState('basic');
     const [completed, setCompleted] = useState([]);
     const [patientObj, setPatientObj] = useState("");
+    const [patientObjAge, setPatientObjAge] = useState(0);
     const handleItemClick =(activeItem)=>{
         setactiveItem(activeItem)
         //setCompleted({...completed, ...completedMenu})
@@ -52,8 +52,7 @@ const UserRegistration = (props) => {
             setPatientObj(locationState.patientObj)           
         }
     }, []);
-
-
+    
     return (
         <>
             <ToastContainer autoClose={3000} hideProgressBar />
@@ -97,6 +96,7 @@ const UserRegistration = (props) => {
                                 </span>
                                 
                             </Menu.Item>
+                            {patientObjAge>14 && (
                             <Menu.Item
                                 name='spam'
                                 active={activeItem === 'pre-test-counsel'}
@@ -109,9 +109,9 @@ const UserRegistration = (props) => {
                             {completed.includes('pre-test-counsel') && (
                                 <Icon name='check' color='green' />
                             )}
-                            </span>
-                            
+                            </span> 
                             </Menu.Item>
+                            )}
                             <Menu.Item
                                 name='inbox'
                                 active={activeItem === 'hiv-test'}
@@ -177,7 +177,7 @@ const UserRegistration = (props) => {
                         </Menu>
                         </div>
                         <div className="col-md-9 col-sm-9 col-lg-9 " style={{ backgroundColor:"#fff", margingLeft:"-50px", paddingLeft:"-20px"}}>
-                            {activeItem==='basic' && (<BasicInfo handleItemClick={handleItemClick} setCompleted={setCompleted} completed={completed} setPatientObj={setPatientObj} patientObj={patientObj}/>)}
+                            {activeItem==='basic' && (<BasicInfo handleItemClick={handleItemClick} setCompleted={setCompleted} completed={completed} setPatientObj={setPatientObj} patientObj={patientObj} setPatientObjAge={setPatientObjAge}/>)}
                             {activeItem==='pre-test-counsel' && (<PreTest handleItemClick={handleItemClick} setCompleted={setCompleted} completed={completed} setPatientObj={setPatientObj} patientObj={patientObj}/>)}
                             {activeItem==='hiv-test' && (<HivTestResult handleItemClick={handleItemClick} setCompleted={setCompleted} completed={completed} setPatientObj={setPatientObj} patientObj={patientObj}/>)}
                             {activeItem==='post-test' && (<PostTest handleItemClick={handleItemClick} setCompleted={setCompleted} completed={completed} setPatientObj={setPatientObj} patientObj={patientObj}/>)}

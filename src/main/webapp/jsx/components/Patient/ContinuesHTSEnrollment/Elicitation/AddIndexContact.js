@@ -461,7 +461,7 @@ const AddIndexContact = (props) => {
                                 <FormGroup>
                                 <Label for="">Hang-out spots</Label>
                                 <Input
-                                    type="number"
+                                    type="text"
                                     name="hangOutSpots"
                                     id="hangOutSpots"
                                     value={objValues.hangOutSpots}

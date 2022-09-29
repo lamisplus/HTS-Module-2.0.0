@@ -141,8 +141,11 @@ const BasicInfo = (props) => {
         IndexTesting();
         objValues.dateVisit=moment(new Date()).format("YYYY-MM-DD")
         //setObjValues(props.patientObj)
-        console.log(props.patientObj)
-    }, []);
+        console.log(objValues.age)
+        if(objValues.age!==''){
+            props.setPatientObjAge(objValues.age)
+        }
+    }, [objValues.age]);
 
     //Get list of KP
     const KP =()=>{
@@ -494,7 +497,12 @@ const BasicInfo = (props) => {
                 setSaving(false);
                 props.setPatientObj(response.data)
                 toast.success("HTS Test successful");
-                handleItemClick('pre-test-counsel', 'basic' )
+                if(objValues.age>14){
+                    handleItemClick('pre-test-counsel', 'basic' )
+                }else{
+                    
+                }
+                
 
             })
             .catch(error => {

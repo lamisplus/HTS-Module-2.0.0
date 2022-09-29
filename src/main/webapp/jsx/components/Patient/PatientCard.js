@@ -120,28 +120,28 @@ console.log(props.clientCode)
   return (
     <div className={classes.root}>
        <ExpansionPanel defaultExpanded>
-          <Link to={"/"}  >
-            <ButtonMui
-              variant="contained"
-              color="primary"
-              className=" float-end  mr-2 mt-2"
-              //startIcon={<FaUserPlus size="10"/>}
-            >
-            <span style={{ textTransform: "capitalize" }}>Back</span>
-            </ButtonMui>
-          </Link>
                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
                 
                 <Row>
                   
-                    <Col md={11}>
+                    <Col md={12}>
                       
                     <Row className={"mt-1"}>
                     <Col md={12} className={classes.root2}>
                         <b style={{fontSize: "25px"}}>
                         {patientObj.firstName + " " + patientObj.surname }
                         </b>
-                        
+                        <Link to={"/"}  >
+                        <ButtonMui
+                          variant="contained"
+                          color="primary"
+                          className="float-end ms-2 mr-2 mt-2"
+                          //startIcon={<FaUserPlus size="10"/>}
+                          style={{backgroundColor:"rgb(153, 46, 98)", color:'#fff', height:'35px'}}
+                        >
+                          <span style={{ textTransform: "capitalize" }}>Back</span>
+                        </ButtonMui>
+                    </Link>
                     </Col>
                     <Col md={4} className={classes.root2}>
                     <span>

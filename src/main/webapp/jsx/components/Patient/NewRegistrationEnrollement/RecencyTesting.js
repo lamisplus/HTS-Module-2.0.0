@@ -101,20 +101,30 @@ const BasicInfo = (props) => {
         }
     )
     const handleInputChangeRecency = e => { 
-        //setErrors({...temp, [e.target.name]:""})        
-        setRecency ({...recency,  [e.target.name]: e.target.value}); 
+        setErrors({...temp, [e.target.name]:""})         
+        if(e.target.name ==='viralLoadResultClassification'){
+            if(e.target.value ==='>=1000'){
+                recency.finalRecencyResult='RITA Long term'
+            
+            }else if(e.target.value ==='<=1000') {
+                recency.finalRecencyResult='RITA Recent'
+            }else if(e.target.value ==='Failed run') {
+                recency.finalRecencyResult='RITA Inconclusive'
+            }else if(e.target.value ==='Invalid viral load result') {
+                recency.finalRecencyResult='RITA Inconclusive'
+            }else{
+
+            }
+        } 
+        setRecency ({...recency,  [e.target.name]: e.target.value});
           
     }
+
     useEffect(() => { 
-        setRecency ({...recency, ...props.patientObj.recency}) 
-        //console.log(props.patientObj)
-        if(props.patientObj.recency && props.patientObj.recency.optOutRTRI==='false'){
-            recency.optOutRTRI="false"
-        }
         if(recency.longTermLine==='true' && recency.verififcationLine==='true' && recency.controlLine==='true'){
             recency.rencencyInterpretation="Long Term"
             setRecency ({...recency,  ['rencencyInterpretation']: 'Long Term'}); 
-            console.log("Long Term")
+            //console.log("Long Term")
         }else if(recency.longTermLine==='false' && recency.verififcationLine==='true' && recency.controlLine==='true'){
             recency.rencencyInterpretation="Recent"
             setRecency ({...recency,  ['rencencyInterpretation']: 'Recent'});
@@ -123,23 +133,28 @@ const BasicInfo = (props) => {
         }else if(recency.longTermLine==='false' && recency.verififcationLine==='false' && recency.controlLine==='true'){
             recency.rencencyInterpretation="Negative"
             setRecency ({...recency,  ['rencencyInterpretation']: 'Negative'});
-            console.log("Negative")
+            //console.log("Negative")
         }else if(recency.longTermLine==='true' && recency.verififcationLine==='true' && recency.controlLine==='false'){
             recency.rencencyInterpretation="Invalid"
             setRecency ({...recency,  ['rencencyInterpretation']: 'Invalid'});
-            console.log("Invalid")
+            //console.log("Invalid")
         }else if(recency.longTermLine==='true' && recency.verififcationLine==='false' && recency.controlLine==='true'){
             recency.rencencyInterpretation="Invalid"
             setRecency ({...recency,  ['rencencyInterpretation']: 'Invalid'});
-            console.log("Invalid")
+            //console.log("Invalid")
         }else{
-            console.log("empty")
+            //console.log("empty")
             setRecency ({...recency,  ['rencencyInterpretation']: ''});
         }
 
 
-    }, [ props.patientObj,recency.longTermLine,recency.verififcationLine, recency.controlLine]);
+    }, [recency.longTermLine,recency.verififcationLine, recency.controlLine]);
+    useEffect(() => { 
+        setRecency ({recency, ...props.patientObj.recency}) 
+        
 
+    }, [ props.patientObj]);
+   
      /*****  Validation  */
      const validate = () => {
         //HTS FORM VALIDATION
@@ -257,19 +272,16 @@ const BasicInfo = (props) => {
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Recency ID *</Label>
-                                    <select
+                                    <Input
                                         className="form-control"
                                         name="rencencyId"
                                         id="rencencyId"
+                                        type="text"
                                         value={recency.rencencyId}
                                         onChange={handleInputChangeRecency}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
-                                    >
-                                        <option value={""}></option>
-                                        <option value="true">Yes</option>
-                                        <option value="false">No</option>
+                                    />
                                         
-                                    </select>
                                     
                                 </FormGroup>
                             </div>
@@ -510,21 +522,16 @@ const BasicInfo = (props) => {
                                 <div className="form-group  col-md-4">
                                     <FormGroup>
                                         <Label>Final Recency Result</Label>
-                                        <select
+                                        <Input
                                             className="form-control"
                                             name="finalRecencyResult"
                                             id="finalRecencyResult"
-                                            type="select"
+                                            type="text"
                                             value={recency.finalRecencyResult}
                                             onChange={handleInputChangeRecency}
                                             style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
-                                        >
-                                        <option value={""}></option>
-                                            <option value="if < 1000 = RITA Long term">if {"<"} 1000 = RITA Long term</option>
-                                            <option value="if >= 1000 = RITA Recent">if {">="} 1000 = RITA Recent</option>
-                                            <option value="if Failed run = RITA Inconclusive">if Failed run = RITA Inconclusive</option>
-                                            <option value="If Invalid VL result = RITA Inconclusive">If Invalid VL result = RITA Inconclusive</option>
-                                        </select>
+                                        />
+                                        
                                     </FormGroup>
                                 </div>
                                 </div>

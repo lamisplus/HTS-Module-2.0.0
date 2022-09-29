@@ -131,7 +131,21 @@ const BasicInfo = (props) => {
     },[recency.longTermLine,recency.verififcationLine, recency.controlLine]);
     const handleInputChangeRecency = e => { 
         setErrors({...temp, [e.target.name]:""})        
-        setRecency ({...recency,  [e.target.name]: e.target.value});   
+        if(e.target.name ==='viralLoadResultClassification'){
+            if(e.target.value ==='>=1000'){
+                recency.finalRecencyResult='RITA Long term'
+            
+            }else if(e.target.value ==='<=1000') {
+                recency.finalRecencyResult='RITA Recent'
+            }else if(e.target.value ==='Failed run') {
+                recency.finalRecencyResult='RITA Inconclusive'
+            }else if(e.target.value ==='Invalid viral load result') {
+                recency.finalRecencyResult='RITA Inconclusive'
+            }else{
+
+            }
+        } 
+        setRecency ({...recency,  [e.target.name]: e.target.value});  
     }
     /*****  Validation  */
     const validate = () => {
@@ -256,9 +270,8 @@ const BasicInfo = (props) => {
                                         value={recency.rencencyId}
                                         onChange={handleInputChangeRecency}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
-                                    >
-                                       
-                                    </Input>
+                                    />
+                                 
                                     
                                 </FormGroup>
                             </div>
@@ -499,22 +512,17 @@ const BasicInfo = (props) => {
                                 <div className="form-group  col-md-4">
                                     <FormGroup>
                                         <Label>Final Recency Result</Label>
-                                        <select
+                                        <Input
                                             className="form-control"
                                             name="finalRecencyResult"
                                             id="finalRecencyResult"
-                                            type="select"
+                                            type="text"
+                                            disabled
                                             value={recency.finalRecencyResult}
                                             onChange={handleInputChangeRecency}
                                             style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
-                                        >
-                                        <option value={""}></option>
-                                            <option value="if < 1000 = RITA Long term">if {"<"} 1000 = RITA Long term</option>
-                                            <option value="if >= 1000 = RITA Recent">if {">="} 1000 = RITA Recent</option>
-                                            <option value="if Failed run = RITA Inconclusive">if Failed run = RITA Inconclusive</option>
-                                            <option value="If Invalid VL result = RITA Inconclusive">If Invalid VL result = RITA Inconclusive</option>
-                                        </select>
-                                        
+                                        />
+
                                     </FormGroup>
                                 </div>
                                 </div>

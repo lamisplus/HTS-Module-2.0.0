@@ -34,11 +34,11 @@ const useStyles = makeStyles((theme) => ({
 
 
 const UserRegistration = (props) => {
+    //console.log(props.patientAge)
     const classes = useStyles();
     const history = useHistory();
     const location = useLocation();
     const locationState = location.state;
-    console.log(props)
     const [saving, setSaving] = useState(false);
     const [activeItem, setactiveItem] = useState('basic');
     const [completed, setCompleted] = useState([]);
@@ -82,6 +82,7 @@ const UserRegistration = (props) => {
                                 </span>
                                
                             </Menu.Item>
+                            {props.patientAge>14 && (
                             <Menu.Item
                                 name='spam'
                                 active={activeItem === 'pre-test-counsel'}
@@ -95,8 +96,8 @@ const UserRegistration = (props) => {
                                 <Icon name='check' color='green' />
                             )}
                             </span>
-                            
                             </Menu.Item>
+                            )}
                             <Menu.Item
                                 name='inbox'
                                 active={activeItem === 'hiv-test'}
@@ -163,13 +164,13 @@ const UserRegistration = (props) => {
                         </Menu>
                         </div>
                         <div className="col-md-9 col-sm-9 col-lg-9 " style={{ backgroundColor:"#fff", margingLeft:"-50px", paddingLeft:"-20px"}}>
-                            {activeItem==='basic' && (<BasicInfo handleItemClick={handleItemClick} setCompleted={setCompleted} completed={completed} setPatientObj={setPatientObj} patientObj={patientObj}/>)}
-                            {activeItem==='pre-test-counsel' && (<PreTest handleItemClick={handleItemClick} setCompleted={setCompleted} completed={completed} setPatientObj={setPatientObj} patientObj={patientObj}/>)}
-                            {activeItem==='hiv-test' && (<HivTestResult handleItemClick={handleItemClick} setCompleted={setCompleted} completed={completed} setPatientObj={setPatientObj} patientObj={patientObj}/>)}
-                            {activeItem==='post-test' && (<PostTest handleItemClick={handleItemClick} setCompleted={setCompleted} completed={completed} setPatientObj={setPatientObj} patientObj={patientObj}/>)}
-                            {activeItem==='indexing' && (<IndexingContactTracing handleItemClick={handleItemClick} setCompleted={setCompleted} completed={completed} setPatientObj={setPatientObj} patientObj={patientObj}/>)}
-                            {activeItem==='recency-testing' && (<RecencyTesting  handleItemClick={handleItemClick} setCompleted={setCompleted} completed={completed} setPatientObj={setPatientObj} patientObj={patientObj}/>)}
-                            {activeItem==='others' && (<Others handleItemClick={handleItemClick} setCompleted={setCompleted} completed={completed} setPatientObj={setPatientObj} patientObj={patientObj}/>)}
+                            {activeItem==='basic' && (<BasicInfo handleItemClick={handleItemClick} setCompleted={setCompleted} completed={completed} setPatientObj={setPatientObj} patientObj={patientObj} clientCode={props.clientCode} patientAge={props.patientAge}/>)}
+                            {activeItem==='pre-test-counsel' && (<PreTest handleItemClick={handleItemClick} setCompleted={setCompleted} completed={completed} setPatientObj={setPatientObj} patientObj={patientObj} clientCode={props.clientCode} patientAge={props.patientAge}/>)}
+                            {activeItem==='hiv-test' && (<HivTestResult handleItemClick={handleItemClick} setCompleted={setCompleted} completed={completed} setPatientObj={setPatientObj} patientObj={patientObj} clientCode={props.clientCode} patientAge={props.patientAge}/>)}
+                            {activeItem==='post-test' && (<PostTest handleItemClick={handleItemClick} setCompleted={setCompleted} completed={completed} setPatientObj={setPatientObj} patientObj={patientObj} clientCode={props.clientCode} patientAge={props.patientAge}/>)}
+                            {activeItem==='indexing' && (<IndexingContactTracing handleItemClick={handleItemClick} setCompleted={setCompleted} completed={completed} setPatientObj={setPatientObj} patientObj={patientObj} clientCode={props.clientCode} patientAge={props.patientAge}/>)}
+                            {activeItem==='recency-testing' && (<RecencyTesting  handleItemClick={handleItemClick} setCompleted={setCompleted} completed={completed} setPatientObj={setPatientObj} patientObj={patientObj} clientCode={props.clientCode} patientAge={props.patientAge}/>)}
+                            {activeItem==='others' && (<Others handleItemClick={handleItemClick} setCompleted={setCompleted} completed={completed} setPatientObj={setPatientObj} patientObj={patientObj} clientCode={props.clientCode} patientAge={props.patientAge}/>)}
                             
                         </div>                                   
                     </div>

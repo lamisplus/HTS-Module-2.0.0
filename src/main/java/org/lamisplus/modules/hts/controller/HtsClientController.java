@@ -31,6 +31,11 @@ public class HtsClientController {
         return ResponseEntity.ok(this.htsClientService.save(htsClientRequestDto));
     }
 
+    @PutMapping(HTS_URL_VERSION_ONE +"/{id}")
+    public ResponseEntity<HtsClientDto> update(@PathVariable Long id, @Valid @RequestBody HtsClientUpdateRequestDto htsClientUpdateRequestDto) {
+        return ResponseEntity.ok(this.htsClientService.update(id, htsClientUpdateRequestDto));
+    }
+
     @PutMapping(HTS_URL_VERSION_ONE +"/{id}/pre-test-counseling")
     public ResponseEntity<HtsClientDto> updatePreTestCounseling(@PathVariable Long id, @Valid @RequestBody HtsPreTestCounselingDto htsPreTestCounselingDto) {
         return ResponseEntity.ok(this.htsClientService.updatePreTestCounseling(id, htsPreTestCounselingDto));

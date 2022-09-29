@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
 
-    <changeSet failOnError="true" author="Emeka" id="20223008101310-hts">
+    <changeSet failOnError="false" author="Emeka" id="20223008101310-hts">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="hts_client"/>
             </not>
         </preConditions>
+
         <sql>
             CREATE TABLE hts_client
             (
@@ -53,7 +54,6 @@
                 archived integer,
                 index_client_code character varying,
                 CONSTRAINT unique_hts_uuid UNIQUE (uuid),
-                CONSTRAINT unique_client_code UNIQUE (client_code),
                 CONSTRAINT breast_feeding_fk FOREIGN KEY (breast_feeding)
                     REFERENCES base_application_codeset (id) MATCH SIMPLE
                     ON UPDATE NO ACTION
@@ -86,7 +86,7 @@
         </sql>
     </changeSet>
 
-    <changeSet failOnError="true" author="Emeka" id="20220907061710-hts">
+    <changeSet failOnError="false" author="Emeka" id="20220907061710-hts">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="hts_index_notification_services_elicitation"/>
@@ -106,7 +106,7 @@
                 middle_name character varying ,
                 phone_number character varying ,
                 alt_phone_number character varying ,
-                hang_out_spots character varying,
+                hang_out_spots bigint,
                 physical_hurt bigint,
                 threaten_to_hurt bigint,
                 notification_method bigint,

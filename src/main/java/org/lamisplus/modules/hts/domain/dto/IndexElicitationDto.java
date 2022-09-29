@@ -11,13 +11,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class IndexElicitationDto {
-    /*@NotNull(message = "htsClientId is mandatory")
-    private Long htsClientId;
-    @NotNull(message = "personId is mandatory")
-    private  final Long personId;
-    @NotNull(message = "Index Notification Services - Elicitation is mandatory")
-    private  final Object indexNotificationServicesElicitation;*/
-
     @NotNull(message = "htsClientId is mandatory")
     private Long htsClientId;
     private LocalDate dob;

@@ -4,6 +4,7 @@ import lombok.*;
 import org.lamisplus.modules.hts.domain.entity.IndexElicitation;
 import org.lamisplus.modules.patient.domain.dto.PersonResponseDto;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -13,10 +14,13 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class HtsClientDto {
+    @NotNull(message = "id is mandatory")
     private  Long id;
     private  Long targetGroup;
     //private  ApplicationCodeSet targetGroupCodeSet;
+    @NotNull(message = "clientCode is mandatory")
     private  String clientCode;
+    @NotNull(message = "dateVisit is mandatory")
     private  LocalDate dateVisit;
     private  Long referredFrom;
     //private  ApplicationCodeSet referredFromCodeSet;
@@ -29,6 +33,7 @@ public class HtsClientDto {
     //private  ApplicationCodeSet typeCounselingCodeSet;
     private  Boolean indexClient;
     private  Boolean previouslyTested;
+    @NotNull(message = "personId is mandatory")
     private  Long personId;
     private PersonResponseDto personResponseDto;
     private  Object extra;

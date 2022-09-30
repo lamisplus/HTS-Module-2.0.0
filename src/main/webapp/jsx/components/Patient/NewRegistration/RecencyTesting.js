@@ -170,7 +170,7 @@ const BasicInfo = (props) => {
             )
             .then(response => {
                 setSaving(false);
-                props.setPatientObj(props && props.patientObj ? props.patientObj : "")
+                //props.setPatientObj(props && props.patientObj ? props.patientObj : "")
                 toast.success("Risk Assesment successful");
                 handleItemClick('indexing', 'recency-testing' )
 

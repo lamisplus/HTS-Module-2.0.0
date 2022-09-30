@@ -22,5 +22,5 @@ public interface HtsClientRepository extends JpaRepository<HtsClient, Long> {
 
     Optional<HtsClient> findByIdAndArchivedAndFacilityId(Long htsClientId, int archived, Long facilityId);
 
-    List<HtsClient> findByAllClientCode(String code);
+    List<HtsClient> findAllByClientCode(String code);
 }

@@ -62,13 +62,14 @@ const useStyles = makeStyles((theme) => ({
 
 const BasicInfo = (props) => {
     const classes = useStyles();
+    console.log(props.patientObj)
     const patientID= props.patientObj && props.patientObj.personResponseDto ? props.patientObj.personResponseDto.id : "";
     const clientId = props.patientObj && props.patientObj ? props.patientObj.id : "";
     const [saving, setSaving] = useState(false);
     const [errors, setErrors] = useState({});
     let temp = { ...errors }
     useEffect(() => { 
-        console.log(props.patientObj)
+        //console.log(props.patientObj)
         if(props.patientObj && props.clientCode){
             setKnowledgeAssessment(props.patientObj.knowledgeAssessment && props.patientObj.knowledgeAssessment!==null ? props.patientObj.knowledgeAssessment : {})
             setRiskAssessment(props.patientObj.riskAssessment && props.patientObj.riskAssessment!==null ? props.patientObj.riskAssessment : {})
@@ -258,7 +259,7 @@ const BasicInfo = (props) => {
     }
     const handleSubmit =(e)=>{
         e.preventDefault();
-
+        console.log(props.patientObj)
             objValues.htsClientId= clientId
             objValues.knowledgeAssessment= knowledgeAssessment
             objValues.personId= patientID
@@ -267,12 +268,10 @@ const BasicInfo = (props) => {
             objValues.tbScreening=tbScreening
             objValues.sexPartnerRiskAssessment=riskAssessmentPartner
             axios.put(`${baseUrl}hts/${clientId}/pre-test-counseling`,objValues,
-            { headers: {"Authorization" : `Bearer ${token}`}},
-            
-            )
+            { headers: {"Authorization" : `Bearer ${token}`}},)
             .then(response => {
                 setSaving(false);
-                props.setPatientObj(props && props.patientObj ? props.patientObj : "")
+                //props.setPatientObj(props && props.patientObj ? props.patientObj : "")
                 toast.success("Risk Assesment successful");
                 handleItemClick('hiv-test', 'pre-test-counsel' )
 

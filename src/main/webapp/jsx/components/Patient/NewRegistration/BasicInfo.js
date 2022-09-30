@@ -22,6 +22,7 @@ import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
 import { Button} from 'semantic-ui-react'
 import {  Modal } from "react-bootstrap";
+import { fontWeight } from "@mui/system";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -61,6 +62,11 @@ const useStyles = makeStyles((theme) => ({
     error:{
         color: '#f85032',
         fontSize: '12.8px'
+    },
+    success:{
+        color: 'blue',
+        fontSize: '12.8px',
+        fontWeight:'bold'
     }
 }));
 
@@ -86,6 +92,9 @@ const BasicInfo = (props) => {
     const [open, setOpen] = React.useState(false)
     const toggle = () => setOpen(!open);
     const [indexTesting, setIndexTesting]= useState([]);
+    const [clientCodeetail, setclientCodeetail]= useState("");
+    const [clientCodeetail2, setclientCodeetail2]= useState("");
+    const [clientCodeCheck, setClientCodeCheck]= useState("");
     const [objValues, setObjValues]= useState(
         {
             active: true,
@@ -325,8 +334,42 @@ const BasicInfo = (props) => {
         //     setHideNumChild(true)
         // }else{
         //     setHideNumChild(false)
-        // }         
+        // } 
+        if(e.target.name==='indexClientCode' && e.target.value!==''){
+            async function getIndexClientCode() {
+                const indexClientCode=e.target.value
+                const response = await axios.get(`${baseUrl}hts/client/${indexClientCode}`,
+                        { headers: {"Authorization" : `Bearer ${token}`, 'Content-Type': 'text/plain'} }
+                    );
+                if(response.data!=='Record Not Found'){
+                    setclientCodeetail2("")
+                    setclientCodeetail(response.data)
+                    
+                }else{
+                    setclientCodeetail("")
+                    setclientCodeetail2(response.data)
+                }
+            }
+            getIndexClientCode();
+            }         
         setObjValues ({...objValues,  [e.target.name]: e.target.value});            
+    }
+    //checkClientCode
+    const checkClientCode = e => { 
+
+            async function getIndexClientCode() {
+                const indexClientCode=objValues.clientCode
+                const response = await axios.get(`${baseUrl}hts/client/${indexClientCode}`,
+                        { headers: {"Authorization" : `Bearer ${token}`, 'Content-Type': 'text/plain'} }
+                    );
+                if(response.data!=='Record Not Found'){
+                    setClientCodeCheck("Client code already exist")
+                }else{
+                    setClientCodeCheck("")
+                }
+            }
+            getIndexClientCode();
+                              
     }
     //Date of Birth and Age handle 
     const handleDobChange = (e) => {
@@ -500,7 +543,7 @@ const BasicInfo = (props) => {
                 if(objValues.age>14){
                     handleItemClick('pre-test-counsel', 'basic' )
                 }else{
-                    
+                    handleItemClick('hiv-test', 'basic' )
                 }
                 
 
@@ -561,14 +604,19 @@ const BasicInfo = (props) => {
                                     id="clientCode"
                                     //value={Math.floor(Math.random() * 1093328)}
                                     value={objValues.clientCode}
+                                    onBlur ={checkClientCode}
                                     onChange={handleInputChange}
                                     style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
                                    
                                 />
                                 {errors.clientCode !=="" ? (
                                     <span className={classes.error}>{errors.clientCode}</span>
-                                ) : "" }                                
+                                ) : "" }
+                                                                
                                 </FormGroup>
+                                {clientCodeCheck!=="" ? (
+                                <span className={classes.error}>{clientCodeCheck}</span>
+                            ) : "" }
                             </div>
                             {/* <div className="form-group mb-3 col-md-4">
                                 <FormGroup>
@@ -1016,6 +1064,12 @@ const BasicInfo = (props) => {
                                 />
                                   
                             </FormGroup>
+                            {clientCodeetail2!=="" ? (
+                                <span className={classes.error}>{clientCodeetail2}</span>
+                            ) : "" }
+                            {clientCodeetail!=="" ? (
+                                <span className={classes.success}>{clientCodeetail}</span>
+                            ) :""}
                             </div>
                             </>
                             )}

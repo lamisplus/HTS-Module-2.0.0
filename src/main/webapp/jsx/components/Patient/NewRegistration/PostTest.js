@@ -63,17 +63,8 @@ const PostTest = (props) => {
     const patientID= props.patientObj && props.patientObj.personResponseDto ? props.patientObj.personResponseDto.id : "";
     const clientId = props.patientObj && props.patientObj ? props.patientObj.id : "";
     const [saving, setSaving] = useState(false);
+    console.log(props.patientObj)
     ///const [errors, setErrors] = useState({});
-    useEffect(() => { 
-        console.log(props.patientObj)
-        if(props.patientObj && props.clientCode){
-            setPostTest(
-                props.patientObj.postTestCounselingKnowledgeAssessment && props.patientObj.postTestCounselingKnowledgeAssessment!==null 
-                    ? props.patientObj.postTestCounselingKnowledgeAssessment : {},
-                
-            )
-        }
-    }, [props.patientObj]);
     const [objValues, setObjValues]= useState(
         {
             htsClientId: clientId,
@@ -117,17 +108,20 @@ const PostTest = (props) => {
     }
     const handleSubmit =(e)=>{
         //handleItemClick('recency-testing', 'post-test')
+        console.log(props.patientObj)
+       
         e.preventDefault();
-            objValues.htsClientId= clientId
+            objValues.htsClientId=  props.patientObj.id
             objValues.postTestCounselingKnowledgeAssessment= postTest
-            objValues.personId= patientID
-            axios.put(`${baseUrl}hts/${clientId}/post-test-counseling`,objValues,
+            objValues.personId= props.patientObj.personResponseDto.id
+            console.log(objValues)
+            axios.put(`${baseUrl}hts/${ props.patientObj.id}/post-test-counseling`,objValues,
             { headers: {"Authorization" : `Bearer ${token}`}},
             
             )
             .then(response => {
                 setSaving(false);
-                props.setPatientObj(props && props.patientObj ? props.patientObj : "")
+                //props.setPatientObj(props && props.patientObj ? props.patientObj : "")
                 toast.success("Risk Assesment successful");
                 handleItemClick('recency-testing', 'post-test')
 

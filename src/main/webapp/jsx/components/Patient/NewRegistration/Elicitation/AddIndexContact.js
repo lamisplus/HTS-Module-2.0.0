@@ -64,13 +64,13 @@ const useStyles = makeStyles((theme) => ({
 
 const AddIndexContact = (props) => {
     const classes = useStyles();
-    console.log(props.patientObj)
     const [saving, setSaving] = useState(false);
     const [errors, setErrors] = useState({});
     const [sexs, setSexs] = useState([])
     const [notificationContact, setNotificationContact] = useState([])
     const [ageDisabled, setAgeDisabled] = useState(true);
     const [indexTesting, setIndexTesting]= useState([]);
+    const [consent, setConsent]= useState([]);
     const handleItemClick =(page, completedMenu)=>{
         props.handleItemClick(page)
         if(props.completed.includes(completedMenu)) {
@@ -115,6 +115,7 @@ const AddIndexContact = (props) => {
         Sex();
         NotificationContact();
         IndexTesting();
+        Consent();
     }, []);
     //Get list of Genders from 
     const Sex =()=>{
@@ -139,6 +140,19 @@ const AddIndexContact = (props) => {
         )
         .then((response) => {
             setIndexTesting(response.data);
+        })
+        .catch((error) => {
+        //console.log(error);
+        });    
+    }
+    ///CONSENT	Yes		en	CONSENT
+    const Consent =()=>{
+        axios
+        .get(`${baseUrl}application-codesets/v2/CONSENT`,
+            { headers: {"Authorization" : `Bearer ${token}`} }
+        )
+        .then((response) => {
+            setConsent(response.data);
         })
         .catch((error) => {
         //console.log(error);
@@ -522,9 +536,11 @@ const AddIndexContact = (props) => {
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>
-                                        <option value={"true"}>Yes</option>
-                                        <option value={"false"}>No</option>
-                                        <option value={"false"}>Don't know/Decline to answer</option>
+                                        {consent.map((value) => (
+                                            <option key={value.id} value={value.id}>
+                                                {value.display}
+                                            </option>
+                                        ))}
                                         
                                     </select>
                                     
@@ -541,10 +557,12 @@ const AddIndexContact = (props) => {
                                         onChange={handleInputChange} 
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
-                                        <option value={""}></option>
-                                        <option value={"true"}>Yes</option>
-                                        <option value={"false"}>No</option>
-                                        <option value={"false"}>Decline to answer</option>
+                                         <option value={""}></option>
+                                        {consent.map((value) => (
+                                            <option key={value.id} value={value.id}>
+                                                {value.display}
+                                            </option>
+                                        ))}
                                         
                                     </select>
                                     
@@ -562,10 +580,11 @@ const AddIndexContact = (props) => {
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>
-                                        <option value={"true"}>Yes</option>
-                                        <option value={"false"}>No</option>
-                                        <option value={"false"}>Decline to answer</option>
-                                        
+                                        {consent.map((value) => (
+                                            <option key={value.id} value={value.id}>
+                                                {value.display}
+                                            </option>
+                                        ))}
                                     </select>
                                     
                                 </FormGroup>
@@ -582,11 +601,12 @@ const AddIndexContact = (props) => {
                                         onChange={handleInputChange}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
-                                        <option value={""}></option>
-                                        <option value={"true"}>Yes</option>
-                                        <option value={"false"}>No</option>
-                                        <option value={"false"}>Decline to answer</option>
-                                        
+                                         <option value={""}></option>
+                                        {consent.map((value) => (
+                                            <option key={value.id} value={value.id}>
+                                                {value.display}
+                                            </option>
+                                        ))}
                                     </select>
                                     
                                 </FormGroup>

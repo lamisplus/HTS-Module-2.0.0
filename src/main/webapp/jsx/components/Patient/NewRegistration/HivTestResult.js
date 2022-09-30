@@ -65,21 +65,10 @@ const HivTestResult = (props) => {
     const [saving, setSaving] = useState(false);
     const [errors, setErrors] = useState({});
     let temp = { ...errors }
-
+    console.log(props.patientObj)
     const patientID= props.patientObj && props.patientObj.personResponseDto ? props.patientObj.personResponseDto.id : "";
     const clientId = props.patientObj && props.patientObj ? props.patientObj.id : "";
-    useEffect(() => { 
-        console.log(props.patientObj)
-        if(props.patientObj && props.clientCode){
-            setInitailTest(props.patientObj.test1 && props.patientObj.test1!==null ? props.patientObj.test1 : {})
-            setCd4Count(props.patientObj.cd4 && props.patientObj.cd4!==null ? props.patientObj.cd4 : {})
-            setConfirmatoryTest(props.patientObj.confirmatoryTest && props.patientObj.confirmatoryTest!==null ? props.patientObj.confirmatoryTest : {})
-            setTieBreakerTest(props.patientObj.tieBreakerTest && props.patientObj.tieBreakerTest!==null ? props.patientObj.tieBreakerTest : {})
-            setHepatitis(props.patientObj.hepatitisTesting && props.patientObj.hepatitisTesting!==null ? props.patientObj.hepatitisTesting : {})
-            setOthers(props.patientObj.others && props.patientObj.others!==null ? props.patientObj.others : {})
-            setSyphills(props.patientObj.syphilisTesting && props.patientObj.syphilisTesting!==null ? props.patientObj.syphilisTesting : {})
-        }
-    }, []);
+ 
     const [objValues, setObjValues]= useState(
         {
             confirmatoryTest: {},
@@ -191,7 +180,6 @@ const HivTestResult = (props) => {
         return Object.values(temp).every(x => x == "")
     }
     const handleSubmit =(e)=>{
-      
         e.preventDefault();
         if(validate()){
             objValues.htsClientId= clientId
@@ -207,7 +195,7 @@ const HivTestResult = (props) => {
             { headers: {"Authorization" : `Bearer ${token}`}}, )
             .then(response => {
                 setSaving(false);
-                props.setPatientObj(response.data)
+                //props.setPatientObj(props && props.patientObj ? props.patientObj : "")
                 toast.success("HIV test successful");
                 handleItemClick('post-test', 'hiv-test')
             })
@@ -223,7 +211,6 @@ const HivTestResult = (props) => {
             });
         }   
     }
-    console.log(errors)
 
     return (
         <>

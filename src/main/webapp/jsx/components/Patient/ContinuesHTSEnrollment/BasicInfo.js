@@ -50,8 +50,34 @@ const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(1),
     },
     root: {
-        flexGrow: 1,
-        maxWidth: 752,
+        '& > *': {
+            margin: theme.spacing(1)
+        },
+        "& .card-title":{
+            color:'#fff',
+            fontWeight:'bold'
+        },
+        "& .form-control":{
+            borderRadius:'0.25rem',
+            height:'41px'
+        },
+        "& .card-header:first-child": {
+            borderRadius: "calc(0.25rem - 1px) calc(0.25rem - 1px) 0 0"
+        },
+        "& .dropdown-toggle::after": {
+            display: " block !important"
+        },
+        "& select":{
+            "-webkit-appearance": "listbox !important"
+        },
+        "& p":{
+            color:'red'
+        },
+        "& label":{
+            fontSize:'14px',
+            color:'#014d88',
+            fontWeight:'bold'
+        }
     },
     demo: {
         backgroundColor: theme.palette.background.default,
@@ -62,6 +88,11 @@ const useStyles = makeStyles((theme) => ({
     error:{
         color: '#f85032',
         fontSize: '12.8px'
+    },
+    success:{
+        color: 'green',
+        fontSize: '12.8px',
+        fontWeight:'bold'
     }
 }));
 
@@ -81,6 +112,9 @@ const BasicInfo = (props) => {
     const [pregnancyStatus, setPregnancyStatus] = useState([]);
     const [indexTesting, setIndexTesting]= useState([]);
     let temp = { ...errors }
+    const [clientCodeetail, setclientCodeetail]= useState("");
+    const [clientCodeetail2, setclientCodeetail2]= useState("");
+    const [clientCodeCheck, setClientCodeCheck]= useState("");
 
     const [objValues, setObjValues]= useState(
         {
@@ -231,7 +265,24 @@ const BasicInfo = (props) => {
         });        
     }
     const handleInputChange = e => { 
-        setErrors({...temp, [e.target.name]:""})        
+        setErrors({...temp, [e.target.name]:""}) 
+        if(e.target.name==='indexClientCode' && e.target.value!==''){
+            async function getIndexClientCode() {
+                const indexClientCode=e.target.value
+                const response = await axios.get(`${baseUrl}hts/client/${indexClientCode}`,
+                        { headers: {"Authorization" : `Bearer ${token}`, 'Content-Type': 'text/plain'} }
+                    );
+                if(response.data!=='Record Not Found'){
+                    setclientCodeetail2("")
+                    setclientCodeetail(response.data)
+                    
+                }else{
+                    setclientCodeetail("")
+                    setclientCodeetail2(response.data)
+                }
+            }
+            getIndexClientCode();
+        }         
         setObjValues ({...objValues,  [e.target.name]: e.target.value});            
     }
 
@@ -257,7 +308,23 @@ const BasicInfo = (props) => {
             props.setCompleted([...props.completed, completedMenu])
         }
     }
+    //checkClientCode
+    const checkClientCode = e => { 
 
+        async function getIndexClientCode() {
+            const indexClientCode=objValues.clientCode
+            const response = await axios.get(`${baseUrl}hts/client/${indexClientCode}`,
+                    { headers: {"Authorization" : `Bearer ${token}`, 'Content-Type': 'text/plain'} }
+                );
+            if(response.data!=='Record Not Found'){
+                setClientCodeCheck("Client code already exist")
+            }else{
+                setClientCodeCheck("")
+            }
+        }
+        getIndexClientCode();
+                          
+}
     const handleSubmit =(e)=>{
         e.preventDefault();
         const patientForm ={
@@ -313,7 +380,7 @@ const BasicInfo = (props) => {
     return (
         <>  
         
-            <Card >
+            <Card className={classes.root}>
                 <CardBody>   
                 <h2 style={{color:'#000'}}>CLIENT INTAKE FORM</h2>
                 <br/>
@@ -537,11 +604,14 @@ const BasicInfo = (props) => {
                                      name="indexClientCode"
                                      id="indexClientCode"
                                      value={objValues.indexClientCode}
+                                     onBlur ={checkClientCode}
                                      onChange={handleInputChange}
                                      style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
                                 
                                  />
-                                   
+                                 {clientCodeCheck!=="" ? (
+                                <span className={classes.error}>{clientCodeCheck}</span>
+                            ) : "" }  
                              </FormGroup>
                             </div>
                             </>

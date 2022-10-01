@@ -107,7 +107,7 @@ const PatientnHistory = (props) => {
     ///GET LIST OF Patients
     async function patients() {
         axios
-            .get(`${baseUrl}index-elicitation/3`,
+            .get(`${baseUrl}hts/${props.patientObj.id}/index-elicitation`,
             { headers: {"Authorization" : `Bearer ${token}`} }
             )
             .then((response) => {
@@ -119,6 +119,12 @@ const PatientnHistory = (props) => {
     }
     const handleItemClickPage =(page)=>{
         props.handleIClickPage(page)
+    }
+    const handleIEditIndex =(page, activePage)=> {
+        console.log(page)
+        console.log(activePage)
+        //props.setActivePage({...props.activePage, activePage:"activePage", activeObject:row, actionType:actionType})
+        //props.handleIClickPage(page)
     }
 
     const calculate_age = dob => {
@@ -147,7 +153,7 @@ const PatientnHistory = (props) => {
             onClick={()=>handleItemClickPage('add')}
             //startIcon={<FaUserPlus size="10"/>}
         >
-            <span style={{ textTransform: "capitalize" }}>New Index Client </span>
+            <span style={{ textTransform: "capitalize" }}>New Index Client --test</span>
         </Button>
         <br/><br/><br/><br/>
             <MaterialTable
@@ -160,39 +166,35 @@ const PatientnHistory = (props) => {
               {title: "Adress",field: "address",},   
               { title: "Actions", field: "actions", filtering: false }, 
               ]}
-              data={ [indexClientList].map((row) => ({
+              data={ indexClientList.map((row) => ({
                 name: row.firstName + " " + row.lastName,
                 age:calculate_age(moment(row.dob).format("DD-MM-YYYY")),
                 phone:row.phoneNumber, 
                 address:row.address,  
-                actions:
-            
-                    <div>
-                    {/* <Menu.Menu position='right'  >
-                        <Menu.Item >
-                            <Button style={{backgroundColor:'rgb(153,46,98)'}} primary>
-                            <Dropdown item text='Action'>
+                actions:(
+                        <>
+                        {/* <Menu.Menu position='right'  >
+                            <Menu.Item >
+                                <Button style={{backgroundColor:'rgb(153,46,98)'}} primary>
+                                <Dropdown item text='Action'>
 
-                            <Dropdown.Menu style={{ marginTop:"10px", }}>
-                              <Dropdown.Item 
-                                //onClick={()=>LoadViewPage(row, 'view')}
-                                > <Icon name='eye' />
-                                View  
-                                </Dropdown.Item>
+                                <Dropdown.Menu style={{ marginTop:"10px", }}>
+                                
                                 <Dropdown.Item  
-                               // onClick={()=>LoadViewPage(row, 'update')}
-                                ><Icon name='edit' />Edit</Dropdown.Item>
-                             <Dropdown.Item  
-                             //onClick={()=>LoadDeletePage(row, 'delete')}
-                             > <Icon name='trash' /> Delete</Dropdown.Item>
-                            </Dropdown.Menu>
-                        </Dropdown>
-                            </Button>
-                        </Menu.Item>
-                    </Menu.Menu> */}
-                  </div>
-                  
-                  }))}
+                                //onClick={()=>handleIEditIndex(row, 'update')}
+                                >
+                                    <Icon name='edit' />Edit</Dropdown.Item>
+                                <Dropdown.Item  
+                                //onClick={()=>LoadDeletePage(row, 'delete')}
+                                > <Icon name='trash' /> Delete</Dropdown.Item>
+                                </Dropdown.Menu>
+                            </Dropdown>
+                                </Button>
+                            </Menu.Item>
+                        </Menu.Menu> */}
+                        </>
+                        )
+                    }))}
             
                         options={{
                           headerStyle: {

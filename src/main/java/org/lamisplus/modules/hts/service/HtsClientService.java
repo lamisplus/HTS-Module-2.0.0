@@ -308,21 +308,6 @@ public class HtsClientService {
 
         }
 
-        /*personService.getAllPerson().stream().map(personResponseDto -> {
-            Person person = this.getPerson(personResponseDto.getId());
-            List<HtsClient> clients = htsClientRepository.findAllByPerson(person);
-            HtsClientDtos htsClientDtos = new HtsClientDtos();
-            if(clients.isEmpty()){
-                htsClientDtos.setHtsClientDtoList(new ArrayList<>());
-                htsClientDtos.setHtsCount(0);
-                htsClientDtos.setPersonResponseDto(personResponseDto);
-                htsClientDtosList.add(htsClientDtos);
-            } else {
-                htsClientDtosList.add(htsClientToHtsClientDtos(clients));
-            }
-            return htsClientDtosList;
-            });*/
-
         return htsClientDtosList;
     }
 

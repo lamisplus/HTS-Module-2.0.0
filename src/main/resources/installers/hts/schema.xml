@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
 
-    <changeSet failOnError="false" author="Emeka" id="20223008101310-hts">
+    <changeSet failOnError="true" author="Emeka" id="20223008101310-hts">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="hts_client"/>
@@ -86,10 +86,10 @@
         </sql>
     </changeSet>
 
-    <changeSet failOnError="false" author="Emeka" id="20220907061710-hts">
+    <changeSet failOnError="true" author="Emeka" id="20220907061710-hts">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="hts_index_notification_services_elicitation"/>
+                <tableExists tableName="hts_index_elicitation"/>
             </not>
         </preConditions>
         <sql>
@@ -144,11 +144,6 @@
                     ON DELETE NO ACTION
                     NOT VALID,
                 CONSTRAINT relationship_with_index_client_fk FOREIGN KEY (relationship_with_index_client)
-                    REFERENCES base_application_codeset (id) MATCH SIMPLE
-                    ON UPDATE NO ACTION
-                    ON DELETE NO ACTION
-                    NOT VALID,
-                CONSTRAINT hang_out_spots_fk FOREIGN KEY (hang_out_spots)
                     REFERENCES base_application_codeset (id) MATCH SIMPLE
                     ON UPDATE NO ACTION
                     ON DELETE NO ACTION

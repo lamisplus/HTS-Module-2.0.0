@@ -148,11 +148,6 @@
                     ON UPDATE NO ACTION
                     ON DELETE NO ACTION
                     NOT VALID,
-                CONSTRAINT hang_out_spots_fk FOREIGN KEY (hang_out_spots)
-                    REFERENCES base_application_codeset (id) MATCH SIMPLE
-                    ON UPDATE NO ACTION
-                    ON DELETE NO ACTION
-                    NOT VALID,
                 CONSTRAINT hts_client_uuid_fk FOREIGN KEY (hts_client_uuid)
                     REFERENCES hts_client (uuid) MATCH SIMPLE
                     ON UPDATE NO ACTION

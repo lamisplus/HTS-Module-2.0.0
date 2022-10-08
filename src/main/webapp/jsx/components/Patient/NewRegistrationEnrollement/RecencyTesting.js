@@ -130,10 +130,10 @@ const BasicInfo = (props) => {
         setErrors({...temp, [e.target.name]:""})         
         if(e.target.name ==='viralLoadResultClassification'){
             if(e.target.value ==='>=1000'){
-                recency.finalRecencyResult='RITA Long term'
-            
-            }else if(e.target.value ==='<=1000') {
                 recency.finalRecencyResult='RITA Recent'
+            
+            }else if(e.target.value ==='<1000') {
+                recency.finalRecencyResult='RITA Long term'
             }else if(e.target.value ==='Failed run') {
                 recency.finalRecencyResult='RITA Inconclusive'
             }else if(e.target.value ==='Invalid viral load result') {
@@ -523,7 +523,7 @@ const BasicInfo = (props) => {
                                         >
                                             <option value={""}></option>
                                             <option value=">=1000">{">= "} 1000</option>
-                                            <option value="<=1000">{"<= "} 1000</option>
+                                            <option value="<1000">{"<="} 1000</option>
                                             <option value="Failed run">Failed run</option>
                                             <option value="Invalid viral load result">Invalid viral load result</option>
                                         </select>

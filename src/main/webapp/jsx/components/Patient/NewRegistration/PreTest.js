@@ -88,7 +88,7 @@ const useStyles = makeStyles((theme) => ({
 
 const BasicInfo = (props) => {
     const classes = useStyles();
-    console.log(props.patientObj)
+
     const patientID= props.patientObj && props.patientObj.personResponseDto ? props.patientObj.personResponseDto.id : "";
     const clientId = props.patientObj && props.patientObj ? props.patientObj.id : "";
     const [saving, setSaving] = useState(false);

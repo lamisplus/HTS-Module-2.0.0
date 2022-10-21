@@ -40,6 +40,7 @@ public class HtsClientService {
     private final PersonService personService;
     private final CurrentUserOrganizationService currentUserOrganizationService;
     private final IndexElicitationRepository indexElicitationRepository;
+    private final RiskStratificationService riskStratificationService;
     public HtsClientDto save(HtsClientRequestDto htsClientRequestDto){
         HtsClient htsClient;
         PersonResponseDto personResponseDto;
@@ -407,5 +408,11 @@ public class HtsClientService {
 
         Person person = htsClients.stream().findFirst().get().getPerson();
         return person.getFirstName() + " " + person.getSurname();
+    }
+
+    public HtsClientDtos getRiskStratificationHtsClients(Long personId) {
+        HtsClientDtos htsClientDtos = this.getHtsClientByPersonId(personId);
+        htsClientDtos.setRiskStratificationResponseDtos(riskStratificationService.getAllByPersonId(personId));
+        return htsClientDtos;
     }
 }

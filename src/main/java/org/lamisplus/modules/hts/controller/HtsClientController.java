@@ -84,6 +84,11 @@ public class HtsClientController {
         return new ResponseEntity<>(this.htsClientService.getAllHtsClientDtos(page, null), headers, HttpStatus.OK);
     }
 
+    @GetMapping(HTS_URL_VERSION_ONE+ "/risk-stratification/person/{personId}")
+    public ResponseEntity<HtsClientDtos> getRiskStratificationHtsClients(@PathVariable Long personId) {
+        return ResponseEntity.ok(htsClientService.getRiskStratificationHtsClients(personId));
+    }
+
     @GetMapping(HTS_URL_VERSION_ONE + "/persons")
     public ResponseEntity<List<HtsClientDtos>> getAllPerson() {
         return ResponseEntity.ok(this.htsClientService.getAllPatients());

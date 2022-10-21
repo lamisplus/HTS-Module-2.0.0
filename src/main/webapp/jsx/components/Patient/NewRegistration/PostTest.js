@@ -43,8 +43,34 @@ const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(1),
     },
     root: {
-        flexGrow: 1,
-        maxWidth: 752,
+        '& > *': {
+            margin: theme.spacing(1)
+        },
+        "& .card-title":{
+            color:'#fff',
+            fontWeight:'bold'
+        },
+        "& .form-control":{
+            borderRadius:'0.25rem',
+            height:'41px'
+        },
+        "& .card-header:first-child": {
+            borderRadius: "calc(0.25rem - 1px) calc(0.25rem - 1px) 0 0"
+        },
+        "& .dropdown-toggle::after": {
+            display: " block !important"
+        },
+        "& select":{
+            "-webkit-appearance": "listbox !important"
+        },
+        "& p":{
+            color:'red'
+        },
+        "& label":{
+            fontSize:'14px',
+            color:'#014d88',
+            fontWeight:'bold'
+        }
     },
     demo: {
         backgroundColor: theme.palette.background.default,
@@ -60,20 +86,12 @@ const useStyles = makeStyles((theme) => ({
 
 
 const PostTest = (props) => {
+    const classes = useStyles();
     const patientID= props.patientObj && props.patientObj.personResponseDto ? props.patientObj.personResponseDto.id : "";
     const clientId = props.patientObj && props.patientObj ? props.patientObj.id : "";
     const [saving, setSaving] = useState(false);
+    console.log(props.patientObj)
     ///const [errors, setErrors] = useState({});
-    useEffect(() => { 
-        console.log(props.patientObj)
-        if(props.patientObj && props.clientCode){
-            setPostTest(
-                props.patientObj.postTestCounselingKnowledgeAssessment && props.patientObj.postTestCounselingKnowledgeAssessment!==null 
-                    ? props.patientObj.postTestCounselingKnowledgeAssessment : {},
-                
-            )
-        }
-    }, [props.patientObj]);
     const [objValues, setObjValues]= useState(
         {
             htsClientId: clientId,
@@ -117,17 +135,20 @@ const PostTest = (props) => {
     }
     const handleSubmit =(e)=>{
         //handleItemClick('recency-testing', 'post-test')
+        console.log(props.patientObj)
+       
         e.preventDefault();
-            objValues.htsClientId= clientId
+            objValues.htsClientId=  props.patientObj.id
             objValues.postTestCounselingKnowledgeAssessment= postTest
-            objValues.personId= patientID
-            axios.put(`${baseUrl}hts/${clientId}/post-test-counseling`,objValues,
+            objValues.personId= props.patientObj.personResponseDto.id
+            console.log(objValues)
+            axios.put(`${baseUrl}hts/${ props.patientObj.id}/post-test-counseling`,objValues,
             { headers: {"Authorization" : `Bearer ${token}`}},
             
             )
             .then(response => {
                 setSaving(false);
-                props.setPatientObj(props && props.patientObj ? props.patientObj : "")
+                //props.setPatientObj(props && props.patientObj ? props.patientObj : "")
                 toast.success("Risk Assesment successful");
                 handleItemClick('recency-testing', 'post-test')
 
@@ -147,7 +168,7 @@ const PostTest = (props) => {
 
     return (
         <>
-            <Card >
+            <Card className={classes.root}>
                 <CardBody>
                
                 <h2 >POST TEST COUNSELING</h2>

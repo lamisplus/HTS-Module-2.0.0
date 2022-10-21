@@ -22,6 +22,7 @@ import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
 import { Button} from 'semantic-ui-react'
 import {  Modal } from "react-bootstrap";
+import { fontWeight } from "@mui/system";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -49,8 +50,34 @@ const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(1),
     },
     root: {
-        flexGrow: 1,
-        maxWidth: 752,
+        '& > *': {
+            margin: theme.spacing(1)
+        },
+        "& .card-title":{
+            color:'#fff',
+            fontWeight:'bold'
+        },
+        "& .form-control":{
+            borderRadius:'0.25rem',
+            height:'41px'
+        },
+        "& .card-header:first-child": {
+            borderRadius: "calc(0.25rem - 1px) calc(0.25rem - 1px) 0 0"
+        },
+        "& .dropdown-toggle::after": {
+            display: " block !important"
+        },
+        "& select":{
+            "-webkit-appearance": "listbox !important"
+        },
+        "& p":{
+            color:'red'
+        },
+        "& label":{
+            fontSize:'14px',
+            color:'#014d88',
+            fontWeight:'bold'
+        }
     },
     demo: {
         backgroundColor: theme.palette.background.default,
@@ -61,6 +88,11 @@ const useStyles = makeStyles((theme) => ({
     error:{
         color: '#f85032',
         fontSize: '12.8px'
+    },
+    success:{
+        color: 'green',
+        fontSize: '12.8px',
+        fontWeight:'bold'
     }
 }));
 
@@ -68,6 +100,7 @@ const useStyles = makeStyles((theme) => ({
 const BasicInfo = (props) => {
     const classes = useStyles();
     const history = useHistory();
+    console.log(props.extra)
     const [errors, setErrors] = useState({});
     const [saving, setSaving] = useState(false);
     const [hideNumChild, setHideNumChild] = useState(false);
@@ -86,12 +119,15 @@ const BasicInfo = (props) => {
     const [open, setOpen] = React.useState(false)
     const toggle = () => setOpen(!open);
     const [indexTesting, setIndexTesting]= useState([]);
+    const [clientCodeetail, setclientCodeetail]= useState("");
+    const [clientCodeetail2, setclientCodeetail2]= useState("");
+    const [clientCodeCheck, setClientCodeCheck]= useState("");
     const [objValues, setObjValues]= useState(
         {
             active: true,
             clientCode: "",
-            age:"",
-            dob:"",
+            age:props && props.extra ? props.extra.age :"",
+            dob:props && props.extra ? props.extra.dob :"",
             breastFeeding:"",
             dateVisit: "",
             firstTimeVisit: null,
@@ -120,7 +156,7 @@ const BasicInfo = (props) => {
             surname: "",
             previouslyTested: "",
             referredFrom: "",
-            targetGroup: "",
+            targetGroup: props && props.extra ? props.extra.targetGroup :"",
             testingSetting:"",
             typeCounseling: "",
             relationshipWithIndexClient:"",
@@ -141,11 +177,14 @@ const BasicInfo = (props) => {
         IndexTesting();
         objValues.dateVisit=moment(new Date()).format("YYYY-MM-DD")
         //setObjValues(props.patientObj)
-        console.log(objValues.age)
+
         if(objValues.age!==''){
             props.setPatientObjAge(objValues.age)
         }
-    }, [objValues.age]);
+        if(props.extra && props.extra.age!==''){
+            props.setPatientObjAge(props.extra.age)
+        }
+    }, [objValues.age, props.extra.age]);
 
     //Get list of KP
     const KP =()=>{
@@ -325,8 +364,42 @@ const BasicInfo = (props) => {
         //     setHideNumChild(true)
         // }else{
         //     setHideNumChild(false)
-        // }         
+        // } 
+        if(e.target.name==='indexClientCode' && e.target.value!==''){
+            async function getIndexClientCode() {
+                const indexClientCode=e.target.value
+                const response = await axios.get(`${baseUrl}hts/client/${indexClientCode}`,
+                        { headers: {"Authorization" : `Bearer ${token}`, 'Content-Type': 'text/plain'} }
+                    );
+                if(response.data!=='Record Not Found'){
+                    setclientCodeetail2("")
+                    setclientCodeetail(response.data)
+                    
+                }else{
+                    setclientCodeetail("")
+                    setclientCodeetail2(response.data)
+                }
+            }
+            getIndexClientCode();
+        }         
         setObjValues ({...objValues,  [e.target.name]: e.target.value});            
+    }
+    //checkClientCode
+    const checkClientCode = e => { 
+
+            async function getIndexClientCode() {
+                const indexClientCode=objValues.clientCode
+                const response = await axios.get(`${baseUrl}hts/client/${indexClientCode}`,
+                        { headers: {"Authorization" : `Bearer ${token}`, 'Content-Type': 'text/plain'} }
+                    );
+                if(response.data!=='Record Not Found'){
+                    setClientCodeCheck("Client code already exist")
+                }else{
+                    setClientCodeCheck("")
+                }
+            }
+            getIndexClientCode();
+                              
     }
     //Date of Birth and Age handle 
     const handleDobChange = (e) => {
@@ -500,7 +573,7 @@ const BasicInfo = (props) => {
                 if(objValues.age>14){
                     handleItemClick('pre-test-counsel', 'basic' )
                 }else{
-                    
+                    handleItemClick('hiv-test', 'basic' )
                 }
                 
 
@@ -522,14 +595,14 @@ const BasicInfo = (props) => {
     return (
         <>  
         
-            <Card >
+            <Card className={classes.root}>
                 <CardBody>   
                 <h2 style={{color:'#000'}}>BASIC INFORMATION - CLIENT INTAKE FORM</h2>
                 <br/>
                     <form >
                         <div className="row">
                              <div className="row">
-                            <div className="form-group  col-md-4">
+                            {/* <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Target Group *</Label>
                                     <select
@@ -551,7 +624,7 @@ const BasicInfo = (props) => {
                                         <span className={classes.error}>{errors.targetGroup}</span>
                                     ) : "" }
                                 </FormGroup>
-                            </div>
+                            </div> */}
                             <div className="form-group mb-3 col-md-4">
                                 <FormGroup>
                                 <Label for="">Client Code</Label>
@@ -561,14 +634,19 @@ const BasicInfo = (props) => {
                                     id="clientCode"
                                     //value={Math.floor(Math.random() * 1093328)}
                                     value={objValues.clientCode}
+                                    onBlur ={checkClientCode}
                                     onChange={handleInputChange}
                                     style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
                                    
                                 />
                                 {errors.clientCode !=="" ? (
                                     <span className={classes.error}>{errors.clientCode}</span>
-                                ) : "" }                                
+                                ) : "" }
+                                                                
                                 </FormGroup>
+                                {clientCodeCheck!=="" ? (
+                                <span className={classes.error}>{clientCodeCheck}</span>
+                            ) : "" }
                             </div>
                             {/* <div className="form-group mb-3 col-md-4">
                                 <FormGroup>
@@ -1016,6 +1094,12 @@ const BasicInfo = (props) => {
                                 />
                                   
                             </FormGroup>
+                            {clientCodeetail2!=="" ? (
+                                <span className={classes.error}>{clientCodeetail2}</span>
+                            ) : "" }
+                            {clientCodeetail!=="" ? (
+                                <span className={classes.success}>{clientCodeetail}</span>
+                            ) :""}
                             </div>
                             </>
                             )}

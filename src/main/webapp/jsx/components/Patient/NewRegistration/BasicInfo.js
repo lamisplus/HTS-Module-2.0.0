@@ -100,6 +100,7 @@ const useStyles = makeStyles((theme) => ({
 const BasicInfo = (props) => {
     const classes = useStyles();
     const history = useHistory();
+    console.log(props.extra)
     const [errors, setErrors] = useState({});
     const [saving, setSaving] = useState(false);
     const [hideNumChild, setHideNumChild] = useState(false);
@@ -125,8 +126,8 @@ const BasicInfo = (props) => {
         {
             active: true,
             clientCode: "",
-            age:"",
-            dob:"",
+            age:props && props.extra ? props.extra.age :"",
+            dob:props && props.extra ? props.extra.dob :"",
             breastFeeding:"",
             dateVisit: "",
             firstTimeVisit: null,
@@ -155,7 +156,7 @@ const BasicInfo = (props) => {
             surname: "",
             previouslyTested: "",
             referredFrom: "",
-            targetGroup: "",
+            targetGroup: props && props.extra ? props.extra.targetGroup :"",
             testingSetting:"",
             typeCounseling: "",
             relationshipWithIndexClient:"",
@@ -176,11 +177,14 @@ const BasicInfo = (props) => {
         IndexTesting();
         objValues.dateVisit=moment(new Date()).format("YYYY-MM-DD")
         //setObjValues(props.patientObj)
-        console.log(objValues.age)
+
         if(objValues.age!==''){
             props.setPatientObjAge(objValues.age)
         }
-    }, [objValues.age]);
+        if(props.extra && props.extra.age!==''){
+            props.setPatientObjAge(props.extra.age)
+        }
+    }, [objValues.age, props.extra.age]);
 
     //Get list of KP
     const KP =()=>{
@@ -598,7 +602,7 @@ const BasicInfo = (props) => {
                     <form >
                         <div className="row">
                              <div className="row">
-                            <div className="form-group  col-md-4">
+                            {/* <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Target Group *</Label>
                                     <select
@@ -620,7 +624,7 @@ const BasicInfo = (props) => {
                                         <span className={classes.error}>{errors.targetGroup}</span>
                                     ) : "" }
                                 </FormGroup>
-                            </div>
+                            </div> */}
                             <div className="form-group mb-3 col-md-4">
                                 <FormGroup>
                                 <Label for="">Client Code</Label>

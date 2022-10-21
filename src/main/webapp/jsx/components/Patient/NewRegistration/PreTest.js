@@ -614,7 +614,7 @@ const BasicInfo = (props) => {
                             </Message>
                             <hr/>
                             <br/>
-                           {props.patientObj.targetGroup==="473" && ( <>
+                           {/* {props.patientObj.targetGroup==="473" && ( <>
                             <div className="form-group  col-md-12 text-center pt-2 mb-4" style={{backgroundColor:'#992E62', width:'125%', height:'35px', color:'#fff', fontWeight:'bold'}} >HIV Risk Assessment  (Last 3 months)</div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
@@ -967,7 +967,7 @@ const BasicInfo = (props) => {
                             </Message>
                             <hr/>
                             <br/>
-                            </>)}
+                            </>)} */}
                             <div className="form-group  col-md-12 text-center pt-2 mb-4" style={{backgroundColor:'#992E62', width:'125%', height:'35px', color:'#fff', fontWeight:'bold'}} >Sex Partner Risk Assessment (Last 3 months)</div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>

@@ -50,6 +50,14 @@ const UserRegistration = (props) => {
         setactiveItem(activeItem)
         //setCompleted({...completed, ...completedMenu})
     }
+    const [extra, setExtra] = useState({
+        risk:"",
+        index:"",
+        pre:"",
+        post:"",
+        recency:"",
+        elicitation:""
+    });
     useEffect(() => { 
         if(locationState && locationState.patientObj){
             setPatientObj(locationState.patientObj)           
@@ -194,14 +202,14 @@ const UserRegistration = (props) => {
                         </Menu>
                         </div>
                         <div className="col-md-9 col-sm-9 col-lg-9 " style={{ backgroundColor:"#fff", margingLeft:"-50px", paddingLeft:"-20px"}}>
-                            {activeItem==='risk' && (<RiskStratification handleItemClick={handleItemClick} setCompleted={setCompleted} completed={completed} setPatientObj={setPatientObj} patientObj={patientObj} setPatientObjAge={setPatientObjAge} setHideOtherMenu={setHideOtherMenu}/>)}
-                            {activeItem==='basic' && (<BasicInfo handleItemClick={handleItemClick} setCompleted={setCompleted} completed={completed} setPatientObj={setPatientObj} patientObj={patientObj} setPatientObjAge={setPatientObjAge}/>)}
-                            {activeItem==='pre-test-counsel' && (<PreTest handleItemClick={handleItemClick} setCompleted={setCompleted} completed={completed} setPatientObj={setPatientObj} patientObj={patientObj} />)}
-                            {activeItem==='hiv-test' && (<HivTestResult handleItemClick={handleItemClick} setCompleted={setCompleted} completed={completed} setPatientObj={setPatientObj} patientObj={patientObj}/>)}
-                            {activeItem==='post-test' && (<PostTest handleItemClick={handleItemClick} setCompleted={setCompleted} completed={completed} setPatientObj={setPatientObj} patientObj={patientObj}/>)}
-                            {activeItem==='indexing' && (<IndexingContactTracing handleItemClick={handleItemClick} setCompleted={setCompleted} completed={completed} setPatientObj={setPatientObj} patientObj={patientObj}/>)}
-                            {activeItem==='recency-testing' && (<RecencyTesting  handleItemClick={handleItemClick} setCompleted={setCompleted} completed={completed} setPatientObj={setPatientObj} patientObj={patientObj}/>)}
-                            {activeItem==='others' && (<Others handleItemClick={handleItemClick} setCompleted={setCompleted} completed={completed} setPatientObj={setPatientObj} patientObj={patientObj}/>)}
+                            {activeItem==='risk' && (<RiskStratification handleItemClick={handleItemClick} setCompleted={setCompleted} completed={completed} setPatientObj={setPatientObj} patientObj={patientObj} setPatientObjAge={setPatientObjAge} setHideOtherMenu={setHideOtherMenu} setExtra={setExtra} extra={extra}/>)}
+                            {activeItem==='basic' && (<BasicInfo handleItemClick={handleItemClick} setCompleted={setCompleted} completed={completed} setPatientObj={setPatientObj} patientObj={patientObj} setPatientObjAge={setPatientObjAge} setExtra={setExtra} extra={extra}/>)}
+                            {activeItem==='pre-test-counsel' && (<PreTest handleItemClick={handleItemClick} setCompleted={setCompleted} completed={completed} setPatientObj={setPatientObj} patientObj={patientObj} setExtra={setExtra} extra={extra}/>)}
+                            {activeItem==='hiv-test' && (<HivTestResult handleItemClick={handleItemClick} setCompleted={setCompleted} completed={completed} setPatientObj={setPatientObj} patientObj={patientObj} setExtra={setExtra} extra={extra}/>)}
+                            {activeItem==='post-test' && (<PostTest handleItemClick={handleItemClick} setCompleted={setCompleted} completed={completed} setPatientObj={setPatientObj} patientObj={patientObj} setExtra={setExtra} extra={extra}/>)}
+                            {activeItem==='indexing' && (<IndexingContactTracing handleItemClick={handleItemClick} setCompleted={setCompleted} completed={completed} setPatientObj={setPatientObj} patientObj={patientObj} setExtra={setExtra} extra={extra}/>)}
+                            {activeItem==='recency-testing' && (<RecencyTesting  handleItemClick={handleItemClick} setCompleted={setCompleted} completed={completed} setPatientObj={setPatientObj} patientObj={patientObj} setExtra={setExtra} extra={extra}/>)}
+                            {activeItem==='others' && (<Others handleItemClick={handleItemClick} setCompleted={setCompleted} completed={completed} setPatientObj={setPatientObj} patientObj={patientObj} setExtra={setExtra} extra={extra}/>)}
                             
                         </div>                                   
                     </div>

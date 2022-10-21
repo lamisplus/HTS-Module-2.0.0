@@ -99,6 +99,7 @@ const useStyles = makeStyles((theme) => ({
 const BasicInfo = (props) => {
     const classes = useStyles();
     const history = useHistory();
+    let riskCountQuestion=[]
     const [kP, setKP] = useState([]);
     const [errors, setErrors] = useState({});
     const [ageDisabled, setAgeDisabled] = useState(true);
@@ -143,12 +144,11 @@ const BasicInfo = (props) => {
     )
     useEffect(() => { 
         KP();
-        objValues.dateVisit=moment(new Date()).format("YYYY-MM-DD")
-        const actualRiskCountTrue=Object.values(riskAssessment)
-        setRiskCount((actualRiskCountTrue.filter((x)=> x==='true')).length)
+        objValues.dateVisit=moment(new Date()).format("YYYY-MM-DD")        
         if(objValues.age!==''){
             props.setPatientObjAge(objValues.age)
         }
+        
     }, [objValues.age]);
 
     //Get list of KP
@@ -269,6 +269,7 @@ const BasicInfo = (props) => {
             }
             if(e.target.value!=='' && e.target.value<=15){
                 props.setHideOtherMenu(false)
+                
             }else if(e.target.value!=='' && e.target.value>15){
                 props.setHideOtherMenu(true)
             }else{
@@ -319,23 +320,24 @@ const BasicInfo = (props) => {
             props.setCompleted([...props.completed, completedMenu])
         }
     }
-        // Getting the number count of riskAssessment True
-        
-        const [riskAssessmentPartner, setRiskAssessmentPartner]= useState(
-            {
-                sexPartnerHivPositive:"",
-                newDiagnosedHivlastThreeMonths:"",
-                currentlyArvForPmtct :"",
-                knowHivPositiveOnArv :"",
-                knowHivPositiveAfterLostToFollowUp:"", 
-                uprotectedAnalSex  :"",
-            }
-        )
-        const handleInputChangeRiskAssessment = e => { 
-            //setErrors({...temp, [e.target.name]:""}) 
-            setRiskAssessment ({...riskAssessment,  [e.target.name]: e.target.value}); 
-                              
+         // Getting the number count of riskAssessment True
+    const actualRiskCountTrue=Object.values(riskAssessment)
+     riskCountQuestion=actualRiskCountTrue.filter((x)=> x==='true')
+    const [riskAssessmentPartner, setRiskAssessmentPartner]= useState(
+        {
+            sexPartnerHivPositive:"",
+            newDiagnosedHivlastThreeMonths:"",
+            currentlyArvForPmtct :"",
+            knowHivPositiveOnArv :"",
+            knowHivPositiveAfterLostToFollowUp:"", 
+            uprotectedAnalSex  :"",
         }
+    )
+    const handleInputChangeRiskAssessment = e => { 
+        //setErrors({...temp, [e.target.name]:""}) 
+        setRiskAssessment ({...riskAssessment,  [e.target.name]: e.target.value}); 
+                            
+    }
     const handleSubmit =(e)=>{
         e.preventDefault();
             if(riskCount>0 && objValues.age>15){
@@ -554,7 +556,7 @@ const BasicInfo = (props) => {
                             <br />
                              
                             {objValues.age>15 && ( <>
-                            {(objValues.targetGroup==="473" || riskCount>0 )&& ( <>
+                            {(objValues.targetGroup==="473" )&& ( <>
                             <div className="form-group  col-md-12 text-center pt-2 mb-4" style={{backgroundColor:'#992E62', width:'125%', height:'35px', color:'#fff', fontWeight:'bold'}} >HIV Risk Assessment  (Last 3 months)</div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
@@ -748,7 +750,7 @@ const BasicInfo = (props) => {
                           
                             <br/>
                             </>)}
-                            {(objValues.targetGroup!=="473"  || riskCount>0) && ( <>
+                            {(objValues.targetGroup!=="473" ) && ( <>
                             <div className="form-group  col-md-12 text-center pt-2 mb-4" style={{backgroundColor:'#992E62', width:'125%', height:'35px', color:'#fff', fontWeight:'bold'}} >HIV Risk Assessment  (Last 3 months)</div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
@@ -904,7 +906,7 @@ const BasicInfo = (props) => {
                             <br/>
                             <Message warning>
                                 <h4>Personal HIV Risk assessment score </h4>
-                                <b>Score :{riskCount}</b>
+                                <b>Score :{riskCount + (objValues.age>15 ?riskCountQuestion.length : 0)}</b>
                             </Message>
                             <hr/>
                             <br/>

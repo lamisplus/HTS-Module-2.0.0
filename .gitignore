@@ -32,3 +32,4 @@ local-data
 .mvn
 mvnw.cmd
 /node_modules
+/node

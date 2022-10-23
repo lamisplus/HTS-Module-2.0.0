@@ -121,7 +121,7 @@ const BasicInfo = (props) => {
             setTbScreening(props.patientObj.tbScreening  && props.patientObj.tbScreening!==null? props.patientObj.tbScreening : {})
             //patientAge=calculate_age(moment(props.patientObj.personResponseDto.dateOfBirth).format("DD-MM-YYYY"))
         }
-    }, []);
+    }, [props.patientObj]);
 
     const handleItemClick =(page, completedMenu)=>{        
         if(props.completed.includes(completedMenu)) {

@@ -119,45 +119,23 @@ const BasicInfo = (props) => {
     const [objValues, setObjValues]= useState(
         {
             active: true,
-            clientCode: "",
-            age:"",
-            dob:"",
-            breastFeeding:"",
-            dateVisit: "",
-            firstTimeVisit: null,
-            indexClient: null,
-            numChildren: "",
-            numWives: "",
-            pregnant:"",            
-            dateOfBirth: null,
-            dateOfRegistration:null,
-            deceased: true,
-            deceasedDateTime: null,
-            educationId: "",
-            employmentStatusId: "",
-            facilityId: "",
-            firstName: "",
-            genderId: "",
-            address: "",
-            phoneNumber:"",           
-            isDateOfBirthEstimated: "",
-            maritalStatusId: "",
-            organizationId:"",
-            otherName: "",
-            sexId: "",
-            state:null,
-            lga:"",
-            surname: "",
-            previouslyTested: "",
-            referredFrom: "",
-            targetGroup: "",
-            testingSetting:"",
-            typeCounseling: "",
-            relationshipWithIndexClient:"",
-            indexClientCode:""
+            clientCode: props.patientObj && props.patientObj.clientCode ? props.patientObj.clientCode :"",  
+            breastFeeding:props.patientObj && props.patientObj.breastFeeding ? props.patientObj.breastFeeding :"",
+            dateVisit: props.patientObj && props.patientObj.dateVisit ? props.patientObj.dateVisit :"",
+            firstTimeVisit: props.patientObj && props.patientObj.firstTimeVisit ? props.patientObj.firstTimeVisit :"",
+            indexClient: props.patientObj && props.patientObj.indexClient ? props.patientObj.indexClient :"",
+            numChildren: props.patientObj && props.patientObj.numChildren ? props.patientObj.numChildren :"",
+            numWives: props.patientObj && props.patientObj.numWives ? props.patientObj.numWives :"",
+            pregnant:props.patientObj && props.patientObj.pregnant ? props.patientObj.pregnant :"",           
+            previouslyTested: props.patientObj ? props.patientObj.previouslyTested :"",
+            referredFrom: props.patientObj ? props.patientObj.referredFrom :"",
+            targetGroup: props.patientObj && props.patientObj.targetGroup? props.patientObj.targetGroup :"",
+            testingSetting:props.patientObj ? props.patientObj.testingSetting :"",
+            typeCounseling: props.patientObj ? props.patientObj.typeCounseling :"",
+            relationshipWithIndexClient:props.patientObj ? props.patientObj.relationshipWithIndexClient :"",
+            indexClientCode:props.patientObj ? props.patientObj.indexClientCode :"",
         }
-    )
-
+    )    
     useEffect(() => { 
         KP(); 
         EnrollmentSetting(); 
@@ -355,11 +333,11 @@ const BasicInfo = (props) => {
             .then(response => {
                 setSaving(false);
                 props.setPatientObj(response.data)
-                toast.success("HTS Test successful");
-                if(props.patientAge>14){
+                //toast.success("HTS Test successful");
+                if(props.patientAge>15){
                     handleItemClick('pre-test-counsel', 'basic' )
                 }else{
-                    handleItemClick('hiv-test', 'pre-test-counsel')
+                    handleItemClick('hiv-test', 'baisc')
                 }
 
             })
@@ -382,7 +360,7 @@ const BasicInfo = (props) => {
         
             <Card className={classes.root}>
                 <CardBody>   
-                <h2 style={{color:'#000'}}>CLIENT INTAKE FORM</h2>
+                <h2 style={{color:'#000'}}>CLIENT INTAKE FORM </h2>
                 <br/>
                     <form >
                         <div className="row">
@@ -416,9 +394,9 @@ const BasicInfo = (props) => {
                                     type="text"
                                     name="clientCode"
                                     id="clientCode"
-                                    value={props.clientCode}
+                                    value={objValues.clientCode}
                                     onChange={handleInputChange}
-                                    disabled
+                                    disabled={props.clientCode!==null? true : false}
                                     style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
                                    
                                 />

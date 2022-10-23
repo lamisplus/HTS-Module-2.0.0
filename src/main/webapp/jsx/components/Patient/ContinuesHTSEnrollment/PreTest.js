@@ -93,6 +93,17 @@ const BasicInfo = (props) => {
     const [saving, setSaving] = useState(false);
     const [errors, setErrors] = useState({});
     let temp = { ...errors }
+    useEffect(() => { 
+        //console.log(props.patientObj)
+        if(props.patientObj){
+            setKnowledgeAssessment(props.patientObj.knowledgeAssessment  && props.patientObj.knowledgeAssessment!==null ? props.patientObj.knowledgeAssessment : {})
+            setRiskAssessment(props.patientObj.riskAssessment  && props.patientObj.riskAssessment!==null ? props.patientObj.riskAssessment : {})
+            setRiskAssessmentPartner(props.patientObj.riskAssessmentPartner && props.patientObj.riskAssessmentPartner!==null ? props.patientObj.riskAssessmentPartner : {})
+            setStiScreening(props.patientObj.stiScreening  && props.patientObj.stiScreening!==null? props.patientObj.stiScreening : {})
+            setTbScreening(props.patientObj.tbScreening  && props.patientObj.tbScreening!==null? props.patientObj.tbScreening : {})
+            //patientAge=calculate_age(moment(props.patientObj.personResponseDto.dateOfBirth).format("DD-MM-YYYY"))
+        }
+    }, [props.patientObj]);
     const handleItemClick =(page, completedMenu)=>{        
         if(props.completed.includes(completedMenu)) {
         }else{
@@ -291,8 +302,8 @@ const BasicInfo = (props) => {
             )
             .then(response => {
                 setSaving(false);
-                props.setPatientObj(props && props.patientObj ? props.patientObj : "")
-                toast.success("Risk Assesment successful");
+                props.setPatientObj(response.data)
+                //toast.success("Risk Assesment successful");
                 handleItemClick('hiv-test', 'pre-test-counsel' )
 
             })

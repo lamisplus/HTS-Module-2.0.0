@@ -129,7 +129,7 @@ const BasicInfo = (props) => {
     
     useEffect(() => { 
         if(props.patientObj){
-            setRecency(props.patientObj  ? props.patientObj.recency : {}) 
+            setRecency(props.patientObj && props.patientObj.recency!==null ? props.patientObj.recency : {}) 
         }
         if(recency.longTermLine==='true' && recency.verififcationLine==='true' && recency.controlLine==='true'){
             recency.rencencyInterpretation="Long Term"

@@ -98,6 +98,12 @@ const PostTest = (props) => {
             personId: patientID,
         }
     )
+    useEffect(() => { 
+        //console.log(props.patientObj)
+        if(props.patientObj){
+            setPostTest(props.patientObj && props.patientObj.postTestCounselingKnowledgeAssessment!==null ? props.patientObj.postTestCounselingKnowledgeAssessment : {}) 
+        }
+    }, [props.patientObj]);
     const [postTest, setPostTest]= useState(
         {
             hivTestResult:"", 
@@ -144,8 +150,8 @@ const PostTest = (props) => {
             )
             .then(response => {
                 setSaving(false);
-                props.setPatientObj(props && props.patientObj ? props.patientObj : "")
-                toast.success("Risk Assesment successful");
+                props.setPatientObj(response.data)
+                //toast.success("Risk Assesment successful");
                 handleItemClick('recency-testing', 'post-test')
 
             })

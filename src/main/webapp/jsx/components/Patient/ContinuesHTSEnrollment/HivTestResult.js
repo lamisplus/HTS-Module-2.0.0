@@ -108,6 +108,18 @@ const HivTestResult = (props) => {
             cd4:{},
         }
     )
+    useEffect(() => { 
+        //console.log(props.patientObj)
+        if(props.patientObj){
+            setCd4Count(props.patientObj  && props.patientObj.cd4!==null? props.patientObj.cd4 : {})
+            setInitailTest(props.patientObj  && props.patientObj.test1!==null? props.patientObj.test1 : {})
+            setConfirmatoryTest(props.patientObj  && props.patientObj.confirmatoryTest!==null? props.patientObj.confirmatoryTest : {})
+            setTieBreakerTest(props.patientObj && props.patientObj.tieBreakerTest!==null ? props.patientObj.tieBreakerTest : {})
+            setSyphills(props.patientObj  && props.patientObj.syphilisTesting!==null ? props.patientObj.syphilisTesting : {})
+            setHepatitis(props.patientObj  && props.patientObj.hepatitisTesting!==null ? props.patientObj.hepatitisTesting : {})
+            setOthers(props.patientObj  && props.patientObj.others!==null ? props.patientObj.others : {})
+        }
+    }, [props.patientObj]);
     const handleInputChange = e => { 
         //setErrors({...temp, [e.target.name]:""}) 
         setObjValues ({...objValues,  [e.target.name]: e.target.value});            
@@ -222,7 +234,7 @@ const HivTestResult = (props) => {
             .then(response => {
                 setSaving(false);
                 props.setPatientObj(response.data)
-                toast.success("HIV test successful");
+                //toast.success("HIV test successful");
                 handleItemClick('post-test', 'hiv-test')
             })
             .catch(error => {

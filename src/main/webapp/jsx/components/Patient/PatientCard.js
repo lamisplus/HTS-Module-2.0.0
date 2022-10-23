@@ -65,7 +65,6 @@ function PatientCard(props) {
   const patientObjs = props.patientObj ? props.patientObj : {}
   const permissions= props.permissions ? props.permissions : [];
   const [patientObj, setpatientObj] = useState(patientObjs)
-console.log(props.clientCode)
   useEffect(() => {
     PatientCurrentStatus();
   }, [props.patientObj]);

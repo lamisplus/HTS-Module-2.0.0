@@ -16,6 +16,7 @@ import {Label as LabelRibbon, Button, Message} from 'semantic-ui-react'
 // import 'semantic-ui-css/semantic.min.css';
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
+import * as moment from 'moment';
 
 
 
@@ -88,22 +89,40 @@ const useStyles = makeStyles((theme) => ({
 
 const BasicInfo = (props) => {
     const classes = useStyles();
-
+    //let patientAge=""
     const patientID= props.patientObj && props.patientObj.personResponseDto ? props.patientObj.personResponseDto.id : "";
     const clientId = props.patientObj && props.patientObj ? props.patientObj.id : "";
     const [saving, setSaving] = useState(false);
     const [errors, setErrors] = useState({});
     let temp = { ...errors }
+    const calculate_age = dob => {
+        var today = new Date();
+        var dateParts = dob.split("-");
+        var dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
+        var birthDate = new Date(dateObject); // create a date object directlyfrom`dob1`argument
+        var age_now = today.getFullYear() - birthDate.getFullYear();
+        var m = today.getMonth() - birthDate.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                    age_now--;
+                }
+            if (age_now === 0) {
+                    return m + " month(s)";
+                }
+                return age_now ;
+    };
+    
     useEffect(() => { 
         //console.log(props.patientObj)
-        if(props.patientObj && props.clientCode){
-            setKnowledgeAssessment(props.patientObj.knowledgeAssessment && props.patientObj.knowledgeAssessment!==null ? props.patientObj.knowledgeAssessment : {})
-            setRiskAssessment(props.patientObj.riskAssessment && props.patientObj.riskAssessment!==null ? props.patientObj.riskAssessment : {})
+        if(props.patientObj){
+            setKnowledgeAssessment(props.patientObj.knowledgeAssessment  && props.patientObj.knowledgeAssessment!==null ? props.patientObj.knowledgeAssessment : {})
+            setRiskAssessment(props.patientObj.riskAssessment  && props.patientObj.riskAssessment!==null ? props.patientObj.riskAssessment : {})
             setRiskAssessmentPartner(props.patientObj.riskAssessmentPartner && props.patientObj.riskAssessmentPartner!==null ? props.patientObj.riskAssessmentPartner : {})
-            setStiScreening(props.patientObj.stiScreening && props.patientObj.stiScreening!==null ? props.patientObj.stiScreening : {})
-            setTbScreening(props.patientObj.tbScreening && props.patientObj.tbScreening!==null ? props.patientObj.tbScreening : {})
+            setStiScreening(props.patientObj.stiScreening  && props.patientObj.stiScreening!==null? props.patientObj.stiScreening : {})
+            setTbScreening(props.patientObj.tbScreening  && props.patientObj.tbScreening!==null? props.patientObj.tbScreening : {})
+            //patientAge=calculate_age(moment(props.patientObj.personResponseDto.dateOfBirth).format("DD-MM-YYYY"))
         }
-    }, [props.patientObj]);
+    }, []);
+
     const handleItemClick =(page, completedMenu)=>{        
         if(props.completed.includes(completedMenu)) {
         }else{
@@ -227,8 +246,8 @@ const BasicInfo = (props) => {
         setTbScreening ({...tbScreening,  [e.target.name]: e.target.value});         
     }
     // Getting the number count of TB True
-    const actualTrue=Object.values(tbScreening)
-    const newTbTrue=actualTrue.filter((x)=> x==='true')
+    const actualTBTrue=Object.values(tbScreening)
+    const newTbTrue=actualTBTrue.filter((x)=> x==='true')
      /*****  Validation  */
      const validate = () => {
         //HTS FORM VALIDATION
@@ -285,7 +304,6 @@ const BasicInfo = (props) => {
     }
     const handleSubmit =(e)=>{
         e.preventDefault();
-        console.log(props.patientObj)
             objValues.htsClientId= clientId
             objValues.knowledgeAssessment= knowledgeAssessment
             objValues.personId= patientID
@@ -297,8 +315,9 @@ const BasicInfo = (props) => {
             { headers: {"Authorization" : `Bearer ${token}`}},)
             .then(response => {
                 setSaving(false);
-                //props.setPatientObj(props && props.patientObj ? props.patientObj : "")
-                toast.success("Risk Assesment successful");
+                console.log(response.data)
+                //props.setPatientObj(response.data)
+                //toast.success("Risk Assesment successful");
                 handleItemClick('hiv-test', 'pre-test-counsel' )
 
             })
@@ -1105,7 +1124,7 @@ const BasicInfo = (props) => {
                             <hr/>
                             <br/>
                             <div className="form-group  col-md-12 text-center pt-2 mb-4" style={{backgroundColor:'#014D88', width:'125%', height:'35px', color:'#fff', fontWeight:'bold'}} >Syndromic STI Screening</div>
-                            {props.patientObj && props.patientObj.personResponseDto.sex==='Female' && (
+                            {props.patientObj.personResponseDto && props.patientObj.personResponseDto.sex==='Female' && (
                             <>
                             <div className="form-group  col-md-4">
                                 <FormGroup>

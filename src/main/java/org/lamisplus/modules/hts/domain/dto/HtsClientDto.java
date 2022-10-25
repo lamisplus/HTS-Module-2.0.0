@@ -65,6 +65,12 @@ public class HtsClientDto {
     private Object others;
     private Object cd4;
 
+    //Second test if first test positive
+    private  Object test2;
+    private  Object confirmatoryTest2;
+    private  Object tieBreakerTest2;
+    private String  hivTestResult2;
+
 
     //Post Test Counseling
     private Object postTestCounselingKnowledgeAssessment;

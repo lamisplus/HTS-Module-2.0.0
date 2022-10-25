@@ -196,6 +196,10 @@ public class HtsClient extends Audit implements Serializable {
     @Column(name = "tie_breaker_test", columnDefinition = "jsonb")
     private  Object tieBreakerTest;
 
+    @Basic
+    @Column(name = "hiv_test_result")
+    private String hivTestResult;
+
     //HIV Test result 2
     @Type(type = "jsonb")
     @Basic(fetch = FetchType.LAZY)

@@ -128,7 +128,9 @@ const BasicInfo = (props) => {
     )
     
     useEffect(() => { 
-
+        if(props.patientObj){
+            setRecency(props.patientObj && props.patientObj.recency!==null ? props.patientObj.recency : {}) 
+        }
         if(recency.longTermLine==='true' && recency.verififcationLine==='true' && recency.controlLine==='true'){
             recency.rencencyInterpretation="Long Term"
             setRecency ({...recency,  ['rencencyInterpretation']: 'Long Term'}); 
@@ -154,7 +156,7 @@ const BasicInfo = (props) => {
             
             setRecency ({...recency,  ['rencencyInterpretation']: ''});
         }
-    },[recency.longTermLine,recency.verififcationLine, recency.controlLine]);
+    },[recency.longTermLine,recency.verififcationLine, recency.controlLine, props.patientObj]);
     const handleInputChangeRecency = e => { 
         setErrors({...temp, [e.target.name]:""})        
         if(e.target.name ==='viralLoadResultClassification'){
@@ -196,8 +198,8 @@ const BasicInfo = (props) => {
             )
             .then(response => {
                 setSaving(false);
-                //props.setPatientObj(props && props.patientObj ? props.patientObj : "")
-                toast.success("Risk Assesment successful");
+                props.setPatientObj(response.data)
+                //toast.success("Risk Assesment successful");
                 handleItemClick('indexing', 'recency-testing' )
 
             })

@@ -99,6 +99,7 @@ const useStyles = makeStyles((theme) => ({
 const BasicInfo = (props) => {
     const classes = useStyles();
     const history = useHistory();
+    const [enrollSetting, setEnrollSetting] = useState([]);
     let riskCountQuestion=[]
     const [kP, setKP] = useState([]);
     const [errors, setErrors] = useState({});
@@ -144,13 +145,27 @@ const BasicInfo = (props) => {
     )
     useEffect(() => { 
         KP();
-        objValues.dateVisit=moment(new Date()).format("YYYY-MM-DD")        
+        EnrollmentSetting();
+        //objValues.dateVisit=moment(new Date()).format("YYYY-MM-DD")        
         if(objValues.age!==''){
             props.setPatientObjAge(objValues.age)
         }
         
     }, [objValues.age]);
-
+    //Get list of HIV STATUS ENROLLMENT
+    const EnrollmentSetting =()=>{
+        axios
+        .get(`${baseUrl}application-codesets/v2/TEST_SETTING`,
+            { headers: {"Authorization" : `Bearer ${token}`} }
+        )
+        .then((response) => {
+            //console.log(response.data);
+            setEnrollSetting(response.data);
+        })
+        .catch((error) => {
+        //console.log(error);
+        });    
+    }
     //Get list of KP
     const KP =()=>{
         axios
@@ -340,7 +355,14 @@ const BasicInfo = (props) => {
     }
     const handleSubmit =(e)=>{
         e.preventDefault();
-            if(riskCount>0 && objValues.age>15){
+            //props.patientObj.personResponseDto.age = objValues.age
+            props.patientObj.personResponseDto.dob = objValues.dob
+            props.patientObj.personResponseDto.dateOfBirth = objValues.dob
+            props.patientObj.personResponseDto.isDateOfBirthEstimated = objValues.isDateOfBirthEstimated
+            props.patientObj.targetGroup = objValues.targetGroup
+            props.patientObj.testingSetting = objValues.setting
+            props.patientObj.dateVisit= objValues.dateVisit
+            if((riskCount>0 || riskCountQuestion.length>0) && objValues.age>15){
                 handleItemClick('basic', 'risk' )
                 props.setExtra(objValues)
                 props.setHideOtherMenu(false)
@@ -349,7 +371,7 @@ const BasicInfo = (props) => {
                 handleItemClick('basic', 'risk' )
             }else{
                 props.setHideOtherMenu(false)
-                toast.success("Risk stratification save succesfully!");
+                //toast.success("Risk stratification save succesfully!");
             }
             // if(validate()){
             // axios.post(`${baseUrl}hts`,objValues,
@@ -404,8 +426,12 @@ const BasicInfo = (props) => {
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}>Select</option>
-
-                                        <option value="TEST_SETTING_CT">CT</option>
+                                        {enrollSetting.map((value) => (
+                                            <option key={value.id} value={value.code}>
+                                                {value.display}
+                                            </option>
+                                        ))}
+                                        {/* <option value="TEST_SETTING_CT">CT</option>
                                         <option value="TEST_SETTING_TB">TB</option>
                                         <option value="TEST_SETTING_STI">STI</option>
                                         <option value="TEST_SETTING_OPD">OPD</option>
@@ -414,7 +440,8 @@ const BasicInfo = (props) => {
                                         
                                         <option value="TEST_SETTING_FP">FP</option>
                                         <option value="TEST_SETTING_OUTREACH">OUTREACH</option>
-                                        <option value="TEST_SETTING_OTHERS">OTHERS</option>
+                                        <option value="TEST_SETTING_OTHERS">OTHERS</option> */}
+
                                     </select>
                                     {errors.setting !=="" ? (
                                     <span className={classes.error}>{errors.setting}</span>

@@ -128,7 +128,9 @@ const BasicInfo = (props) => {
     )
     
     useEffect(() => { 
-
+        if(props.patientObj){
+            setRecency(props.patientObj && props.patientObj.recency!==null ? props.patientObj.recency : {}) 
+        }
         if(recency.longTermLine==='true' && recency.verififcationLine==='true' && recency.controlLine==='true'){
             recency.rencencyInterpretation="Long Term"
             setRecency ({...recency,  ['rencencyInterpretation']: 'Long Term'}); 
@@ -185,20 +187,17 @@ const BasicInfo = (props) => {
     }
     const handleSubmit =(e)=>{
         e.preventDefault();
-       
-
             objValues.htsClientId= clientId
             objValues.recency= recency
             objValues.personId= patientID
-            console.log(recency)
             axios.put(`${baseUrl}hts/${clientId}/recency`,objValues,
             { headers: {"Authorization" : `Bearer ${token}`}},
             
             )
             .then(response => {
                 setSaving(false);
-                props.setPatientObj(props && props.patientObj ? props.patientObj : "")
-                toast.success("Risk Assesment successful");
+                props.setPatientObj(response.data)
+                //toast.success("Risk Assesment successful");
                 handleItemClick('indexing', 'recency-testing' )
 
             })

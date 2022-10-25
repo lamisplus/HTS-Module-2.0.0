@@ -100,7 +100,6 @@ const useStyles = makeStyles((theme) => ({
 const BasicInfo = (props) => {
     const classes = useStyles();
     const history = useHistory();
-    console.log(props.extra)
     const [errors, setErrors] = useState({});
     const [saving, setSaving] = useState(false);
     const [hideNumChild, setHideNumChild] = useState(false);
@@ -122,45 +121,77 @@ const BasicInfo = (props) => {
     const [clientCodeetail, setclientCodeetail]= useState("");
     const [clientCodeetail2, setclientCodeetail2]= useState("");
     const [clientCodeCheck, setClientCodeCheck]= useState("");
+    const getPhoneNumber = (identifier) => {     
+        const identifiers = identifier;
+            const phoneNumber = identifiers.contactPoint.find(obj => obj.type == 'phone');       
+            return phoneNumber ? phoneNumber.value : '';
+       
+      };
+    const getAddress = (identifier) => {           
+        const identifiers = identifier;
+            const address = identifiers.address.find(obj => obj.city);      
+            return address ? address.city : '';
+    };
+    //Calculate Date of birth 
+    const calculate_age = dob => {
+        var today = new Date();
+        var dateParts = dob.split("-");
+        var dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
+        var birthDate = new Date(dateObject); // create a date object directlyfrom`dob1`argument
+        var age_now = today.getFullYear() - birthDate.getFullYear();
+        var m = today.getMonth() - birthDate.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                    age_now--;
+                }
+            if (age_now === 0) {
+                    return m + " month(s)";
+                }
+                return age_now ;
+    };
+    const address = props.patientObj.personResponseDto.address ;
+    const country = address && address.address && address.address.length > 0 ? address.address[0] : null;
+    const patientAge=calculate_age(moment(props.patientObj.personResponseDto.dateOfBirth).format("DD-MM-YYYY"))
+   
     const [objValues, setObjValues]= useState(
         {
             active: true,
-            clientCode: "",
-            age:props && props.extra ? props.extra.age :"",
-            dob:props && props.extra ? props.extra.dob :"",
-            breastFeeding:"",
-            dateVisit: "",
-            firstTimeVisit: null,
-            indexClient: null,
-            numChildren: "",
-            numWives: "",
-            pregnant:"",            
-            dateOfBirth: null,
-            dateOfRegistration:null,
-            deceased: true,
-            deceasedDateTime: null,
-            educationId: "",
-            employmentStatusId: "",
+            clientCode: props.patientObj && props.patientObj.clientCode ? props.patientObj.clientCode :"",
+            age: props.patientObj.personResponseDto && props.patientObj.personResponseDto.dateOfBirth ? patientAge :"",
+            dob:props.patientObj.personResponseDto && props.patientObj.personResponseDto.dateOfBirth ? props.patientObj.personResponseDto.dateOfBirth :"",
+            breastFeeding:props.patientObj && props.patientObj.breastFeeding ? props.patientObj.breastFeeding :"",
+            dateVisit: props.patientObj && props.patientObj.dateVisit ? props.patientObj.dateVisit :"",
+            firstTimeVisit: props.patientObj && props.patientObj.firstTimeVisit ? props.patientObj.firstTimeVisit :"",
+            indexClient: props.patientObj && props.patientObj.indexClient ? props.patientObj.indexClient :"",
+            numChildren: props.patientObj && props.patientObj.numChildren ? props.patientObj.numChildren :"",
+            numWives: props.patientObj && props.patientObj.numWives ? props.patientObj.numWives :"",
+            pregnant:props.patientObj && props.patientObj.pregnant ? props.patientObj.pregnant :"",           
+            dateOfBirth: props.patientObj.personResponseDto && props.patientObj.personResponseDto.dateOfBirth ? props.patientObj.personResponseDto.dateOfBirth :"",
+            dateOfRegistration: props.patientObj && props.patientObj.dateOfRegistration ? props.patientObj.dateOfRegistration :"",
+            deceased:"",
+            deceasedDateTime: "",
+            educationId: props.patientObj.personResponseDto && props.patientObj.personResponseDto.educationId ? props.patientObj.personResponseDto.educationId :"",
+            employmentStatusId: props.patientObj.personResponseDto && props.patientObj.personResponseDto.employmentStatusId ? props.patientObj.personResponseDto.employmentStatusId :"",
             facilityId: "",
-            firstName: "",
-            genderId: "",
-            address: "",
-            phoneNumber:"",           
-            isDateOfBirthEstimated: "",
-            maritalStatusId: "",
-            organizationId:"",
-            otherName: "",
-            sexId: "",
-            state:null,
-            lga:"",
-            surname: "",
-            previouslyTested: "",
-            referredFrom: "",
-            targetGroup: props && props.extra ? props.extra.targetGroup :"",
-            testingSetting:"",
-            typeCounseling: "",
-            relationshipWithIndexClient:"",
-            indexClientCode:""
+            firstName: props.patientObj && props.patientObj.personResponseDto ? props.patientObj.personResponseDto.firstName :"",
+            genderId: props.patientObj.personResponseDto && props.patientObj.personResponseDto.genderId ? props.patientObj.personResponseDto.genderId :"",
+            address: props.patientObj.personResponseDto && props.patientObj.personResponseDto.address ? getAddress(props.patientObj.personResponseDto.address):"",
+            phoneNumber:props.patientObj.personResponseDto && props.patientObj.personResponseDto.contactPoint ? getPhoneNumber(props.patientObj.personResponseDto.contactPoint):"",           
+            isDateOfBirthEstimated: props.patientObj.personResponseDto && props.patientObj.personResponseDto.isDateOfBirthEstimated ? props.patientObj.personResponseDto.isDateOfBirthEstimated :"",
+            maritalStatusId: props.patientObj.personResponseDto && props.patientObj.personResponseDto.maritalStatus ? props.patientObj.personResponseDto.maritalStatus.id :"",
+            organizationId:props.patientObj.personResponseDto && props.patientObj.personResponseDto.genderId ? props.patientObj.personResponseDto.genderId :"",
+            otherName: props.patientObj.personResponseDto && props.patientObj.personResponseDto.otherName ? props.patientObj.personResponseDto.otherName :"",
+            sex: props.patientObj.personResponseDto && props.patientObj.personResponseDto.sex ? props.patientObj.personResponseDto.sex :"",
+            stateId:country && country.stateId ? country.stateId :"",
+                                               
+            lga:country && country.district ? country.district :"",
+            surname: props.patientObj.personResponseDto && props.patientObj.personResponseDto.surname ? props.patientObj.personResponseDto.surname :"",
+            previouslyTested: props.patientObj ? props.patientObj.previouslyTested :"",
+            referredFrom: props.patientObj ? props.patientObj.referredFrom :"",
+            targetGroup: props.patientObj && props.patientObj.targetGroup? props.patientObj.targetGroup :"",
+            testingSetting:props.patientObj ? props.patientObj.testingSetting :"",
+            typeCounseling: props.patientObj ? props.patientObj.typeCounseling :"",
+            relationshipWithIndexClient:props.patientObj ? props.patientObj.relationshipWithIndexClient :"",
+            indexClientCode:props.patientObj ? props.patientObj.indexClientCode :"",
         }
     )
 
@@ -175,7 +206,7 @@ const BasicInfo = (props) => {
         CounselingType();
         PregnancyStatus();
         IndexTesting();
-        objValues.dateVisit=moment(new Date()).format("YYYY-MM-DD")
+        //objValues.dateVisit=moment(new Date()).format("YYYY-MM-DD")
         //setObjValues(props.patientObj)
 
         if(objValues.age!==''){
@@ -184,7 +215,10 @@ const BasicInfo = (props) => {
         if(props.extra && props.extra.age!==''){
             props.setPatientObjAge(props.extra.age)
         }
-    }, [objValues.age, props.extra.age]);
+        if(country && country.stateId!==""){
+            getProvincesId(country.stateId)
+        }
+    }, [objValues.age, props.patientObj, props.extra.age]);
 
     //Get list of KP
     const KP =()=>{
@@ -329,7 +363,19 @@ const BasicInfo = (props) => {
         .catch((error) => {
         //console.log(error);
         });  
-    }   
+    }  
+    function getProvincesId(getStateId) {
+        axios
+        .get(`${baseUrl}organisation-units/parent-organisation-units/${getStateId}`,
+            { headers: {"Authorization" : `Bearer ${token}`} }
+        )
+        .then((response) => {
+            setProvinces(response.data);
+        })
+        .catch((error) => {
+        //console.log(error);
+        });  
+    }
     //fetch province
     const getProvinces = e => {
             const stateId = e.target.value;
@@ -468,7 +514,7 @@ const BasicInfo = (props) => {
             temp.referredFrom = objValues.referredFrom ? "" : "This field is required."
             temp.previouslyTested = objValues.previouslyTested ? "" : "This field is required."
             temp.surname = objValues.surname ? "" : "This field is required."
-            temp.sexId = objValues.sexId ? "" : "This field is required."
+            temp.sex = objValues.sex ? "" : "This field is required."
             //temp.maritalStatusId = objValues.maritalStatusId ? "" : "This field is required."
             temp.phoneNumber = objValues.phoneNumber ? "" : "This field is required."
            // temp.isDateOfBirthEstimated = objValues.isDateOfBirthEstimated ? "" : "This field is required."    
@@ -495,6 +541,8 @@ const BasicInfo = (props) => {
 
     const handleSubmit =(e)=>{
         e.preventDefault();
+        const getSexId=  sexs.find((x)=> x.display===objValues.sex)//get patient sex ID by filtering the request
+        //basicInfo.sexId=getSexId.id
         const patientForm ={
             clientCode: objValues.clientCode,
             dateVisit: objValues.dateVisit,
@@ -507,22 +555,22 @@ const BasicInfo = (props) => {
                 active: true,
                 address: [
                 {
-                    city: "",
+                    city: objValues.address,
                     countryId: 1,
                     district: objValues.lga,
                     line: [
-                    objValues.address
+                    ""
                     ],
                     organisationUnitId: "",
                     postalCode: "",
-                    stateId: objValues.state
+                    stateId: objValues.stateId
                 }
                 ],
                 contact: [],
                 contactPoint: [
                 {
-                    type: "",
-                    value: ""
+                    type: "phone",
+                    value: objValues.phoneNumber
                 }
                 ],
                 dateOfBirth: objValues.dob,
@@ -546,7 +594,7 @@ const BasicInfo = (props) => {
                 maritalStatusId: objValues.maritalStatusId,
                 organizationId:"",
                 otherName: objValues.otherName,
-                sexId: objValues.sexId,
+                sexId: getSexId.id,
                 surname: objValues.surname
             },
             personId: "",
@@ -560,7 +608,7 @@ const BasicInfo = (props) => {
             pregnant:objValues.pregnant,
             relationshipWithIndexClient:objValues.relationshipWithIndexClient
             }
-
+            props.setPatientObj({...props.patientObj, ...objValues})
             if(validate()){
             axios.post(`${baseUrl}hts`,patientForm,
             { headers: {"Authorization" : `Bearer ${token}`}},
@@ -569,7 +617,9 @@ const BasicInfo = (props) => {
             .then(response => {
                 setSaving(false);
                 props.setPatientObj(response.data)
-                toast.success("HTS Test successful");
+                //props.patientObj.personResponseDto=patientForm.personDto
+                //props.setPatientObj({...patientObj, })
+                //toast.success("HTS Test successful");
                 if(objValues.age>14){
                     handleItemClick('pre-test-counsel', 'basic' )
                 }else{
@@ -602,7 +652,7 @@ const BasicInfo = (props) => {
                     <form >
                         <div className="row">
                              <div className="row">
-                            {/* <div className="form-group  col-md-4">
+                            <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Target Group *</Label>
                                     <select
@@ -612,6 +662,7 @@ const BasicInfo = (props) => {
                                         onChange={handleInputChange}
                                         value={objValues.targetGroup}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled
                                     >
                                         <option value={""}></option>
                                         {kP.map((value) => (
@@ -624,7 +675,7 @@ const BasicInfo = (props) => {
                                         <span className={classes.error}>{errors.targetGroup}</span>
                                     ) : "" }
                                 </FormGroup>
-                            </div> */}
+                            </div>
                             <div className="form-group mb-3 col-md-4">
                                 <FormGroup>
                                 <Label for="">Client Code</Label>
@@ -666,7 +717,7 @@ const BasicInfo = (props) => {
                                 ) : "" }
                                 </FormGroup>
                             </div> */}
-                           </div>
+                            </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Referred From *</Label>
@@ -674,6 +725,7 @@ const BasicInfo = (props) => {
                                         className="form-control"
                                         name="referredFrom"
                                         id="referredFrom"
+                                        value={objValues.referredFrom}
                                         onChange={handleInputChange}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
@@ -700,7 +752,7 @@ const BasicInfo = (props) => {
                                         onChange={handleInputChange}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
-                                        <option value={""}></option>
+                                        <option value={""}>Select</option>
                                         {enrollSetting.map((value) => (
                                             <option key={value.id} value={value.id}>
                                                 {value.display}
@@ -874,7 +926,7 @@ const BasicInfo = (props) => {
                                         name="state"
                                         id="state"
                                         onChange={getProvinces}
-                                        value={objValues.state}
+                                        value={objValues.stateId}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>
@@ -884,8 +936,8 @@ const BasicInfo = (props) => {
                                             </option>
                                         ))}
                                     </select>
-                                    {errors.state !=="" ? (
-                                        <span className={classes.error}>{errors.state}</span>
+                                    {errors.stateId !=="" ? (
+                                        <span className={classes.error}>{errors.stateId}</span>
                                     ) : "" }
                                 </FormGroup>
                             </div>
@@ -934,15 +986,15 @@ const BasicInfo = (props) => {
                                     <Label>Sex*</Label>
                                     <select
                                         className="form-control"
-                                        name="sexId"
-                                        id="sexId"
-                                        value={objValues.sexId}
+                                        name="sex"
+                                        id="sex"
+                                        value={objValues.sex}
                                         onChange={handleInputChange}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>
                                         {sexs.map((value) => (
-                                            <option key={value.id} value={value.id}>
+                                            <option key={value.id} value={value.display}>
                                                 {value.display}
                                             </option>
                                         ))}
@@ -998,7 +1050,7 @@ const BasicInfo = (props) => {
                                 </FormGroup>
                             </div>
                             )}
-                             {( objValues.age > 9 && objValues.sexId=='376') && (
+                             {( objValues.age > 9 && objValues.sex=='Male') && (
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Number of wives/co-wives</Label>
@@ -1048,7 +1100,7 @@ const BasicInfo = (props) => {
                                         onChange={handleInputChange}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
-                                        <option value={""}></option>
+                                        <option value={""}>Select</option>
                                         <option value="true">YES</option>
                                         <option value="false">NO</option>
                                     </select>
@@ -1103,7 +1155,7 @@ const BasicInfo = (props) => {
                             </div>
                             </>
                             )}
-                            {objValues.sex==='377' && (
+                            {objValues.sex==='Female' && (
                             <>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
@@ -1139,9 +1191,9 @@ const BasicInfo = (props) => {
                                         onChange={handleInputChange}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
-                                        <option value={""}></option>
-                                        <option value="true">YES</option>
-                                        <option value="false">NO</option>
+                                        <option value={""}>Select</option>
+                                        <option value="1">YES</option>
+                                        <option value="0">NO</option>
                                     </select>
                                     
                                 </FormGroup>
@@ -1160,7 +1212,7 @@ const BasicInfo = (props) => {
                                         onChange={handleInputChange}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
-                                        <option value={""}></option>
+                                        <option value={""}>Select</option>
                                         <option value="true">YES</option>
                                         <option value="false">NO</option>
                                         
@@ -1181,7 +1233,7 @@ const BasicInfo = (props) => {
                                         onChange={handleInputChange}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
-                                        <option value={""}></option>
+                                        <option value={""}>Select</option>
                                         <option value="true">YES</option>
                                         <option value="false">NO</option>
                                     </select>
@@ -1201,7 +1253,7 @@ const BasicInfo = (props) => {
                                         onChange={handleInputChange}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
-                                        <option value={""}></option>
+                                        <option value={""}>Select</option>
                                         {counselingType.map((value) => (
                                             <option key={value.id} value={value.id}>
                                                 {value.display}

@@ -11,13 +11,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class IndexElicitationDto {
-    /*@NotNull(message = "htsClientId is mandatory")
-    private Long htsClientId;
-    @NotNull(message = "personId is mandatory")
-    private  final Long personId;
-    @NotNull(message = "Index Notification Services - Elicitation is mandatory")
-    private  final Object indexNotificationServicesElicitation;*/
-
     @NotNull(message = "htsClientId is mandatory")
     private Long htsClientId;
     private LocalDate dob;
@@ -29,13 +22,13 @@ public class IndexElicitationDto {
     private String middleName;
     private String phoneNumber;
     private String altPhoneNumber;
-    private Long hangOutSpots;
-    private Boolean physicalHurt;
-    private Boolean threatenToHurt;
+    private String hangOutSpots;
+    private Long physicalHurt;
+    private Long threatenToHurt;
     private Long notificationMethod;
-    private Boolean partnerTestedPositive;
-    private Long relativeToIndexClient;
-    private Boolean sexuallyUncomfortable;
+    private Long partnerTestedPositive;
+    private Long relationshipToIndexClient;
+    private Long sexuallyUncomfortable;
     private Boolean currentlyLiveWithPartner;
     private LocalDate datePartnerCameForTesting;
 }

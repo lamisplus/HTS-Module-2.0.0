@@ -40,6 +40,7 @@ public class HtsClientService {
     private final PersonService personService;
     private final CurrentUserOrganizationService currentUserOrganizationService;
     private final IndexElicitationRepository indexElicitationRepository;
+    private final RiskStratificationService riskStratificationService;
     public HtsClientDto save(HtsClientRequestDto htsClientRequestDto){
         HtsClient htsClient;
         PersonResponseDto personResponseDto;
@@ -59,7 +60,7 @@ public class HtsClientService {
         htsClient.setFacilityId(currentUserOrganizationService.getCurrentUserOrganization());
         htsClient = htsClientRepository.save(htsClient);
         htsClient.setPerson(person);
-        LOG.info("Person is - {}", htsClient.getPerson());
+        //LOG.info("Person is - {}", htsClient.getPerson());
         return this.htsClientToHtsClientDto(htsClient);
     }
 
@@ -133,6 +134,12 @@ public class HtsClientService {
         updatableHtsClient.setConfirmatoryTest(htsRequestResultDto.getConfirmatoryTest());
         updatableHtsClient.setTieBreakerTest(htsRequestResultDto.getTieBreakerTest());
         updatableHtsClient.setHivTestResult(htsRequestResultDto.getHivTestResult());
+
+        updatableHtsClient.setTest2(htsRequestResultDto.getTest2());
+        updatableHtsClient.setConfirmatoryTest2(htsRequestResultDto.getConfirmatoryTest2());
+        updatableHtsClient.setTieBreakerTest2(htsRequestResultDto.getTieBreakerTest2());
+        updatableHtsClient.setHivTestResult2(htsRequestResultDto.getHivTestResult2());
+
         updatableHtsClient.setSyphilisTesting(htsRequestResultDto.getSyphilisTesting());
         updatableHtsClient.setHepatitisTesting(htsRequestResultDto.getHepatitisTesting());
         updatableHtsClient.setOthers(htsRequestResultDto.getOthers());
@@ -267,6 +274,12 @@ public class HtsClientService {
         htsClientDto.setConfirmatoryTest( htsClient.getConfirmatoryTest() );
         htsClientDto.setTieBreakerTest( htsClient.getTieBreakerTest() );
         htsClientDto.setHivTestResult( htsClient.getHivTestResult() );
+
+        htsClientDto.setTest2( htsClient.getTest2() );
+        htsClientDto.setConfirmatoryTest2( htsClient.getConfirmatoryTest2() );
+        htsClientDto.setTieBreakerTest2( htsClient.getTieBreakerTest2() );
+        htsClientDto.setHivTestResult2( htsClient.getHivTestResult2() );
+
         htsClientDto.setPersonId(personResponseDto.getId());
         htsClientDto.setPostTestCounselingKnowledgeAssessment(htsClient.getPostTestCounselingKnowledgeAssessment());
         htsClientDto.setRecency(htsClient.getRecency());
@@ -308,21 +321,6 @@ public class HtsClientService {
 
         }
 
-        /*personService.getAllPerson().stream().map(personResponseDto -> {
-            Person person = this.getPerson(personResponseDto.getId());
-            List<HtsClient> clients = htsClientRepository.findAllByPerson(person);
-            HtsClientDtos htsClientDtos = new HtsClientDtos();
-            if(clients.isEmpty()){
-                htsClientDtos.setHtsClientDtoList(new ArrayList<>());
-                htsClientDtos.setHtsCount(0);
-                htsClientDtos.setPersonResponseDto(personResponseDto);
-                htsClientDtosList.add(htsClientDtos);
-            } else {
-                htsClientDtosList.add(htsClientToHtsClientDtos(clients));
-            }
-            return htsClientDtosList;
-            });*/
-
         return htsClientDtosList;
     }
 
@@ -350,7 +348,7 @@ public class HtsClientService {
         return null;
     }
 
-    public String getHtsClientCode(){
+    public String getGenerateHtsClientCode(){
         Optional<Long> number = htsClientRepository.maxId();
         String random = RandomCodeGenerator.randomString(10, true, true);
         if(number.isPresent()){
@@ -372,5 +370,61 @@ public class HtsClientService {
         if(elicitation != null && !elicitation.isEmpty()) indexElicitationRepository.saveAll(elicitation);
         htsClient.setArchived(ARCHIVED);
         htsClientRepository.save(htsClient);
+    }
+
+    public HtsClientDto update(Long id, HtsClientUpdateRequestDto htsClientUpdateRequestDto) {
+        if(!id.equals(htsClientUpdateRequestDto.getId())){
+            throw new IllegalTypeException(Person.class, "Id", "id does not match");
+        }
+        if(!this.getById(htsClientUpdateRequestDto.getId()).getPerson().getId().equals(htsClientUpdateRequestDto.getPersonId())){
+            throw new IllegalTypeException(Person.class, "Person", "id does not match with supplied personId");
+        }
+        Person person = this.getPerson(htsClientUpdateRequestDto.getPersonId());
+        HtsClient htsClient = this.htsClientUpdateRequestDtoToHtsClient(htsClientUpdateRequestDto, person.getUuid());
+
+        htsClient.setFacilityId(currentUserOrganizationService.getCurrentUserOrganization());
+        htsClient = htsClientRepository.save(htsClient);
+        htsClient.setPerson(person);
+        return this.htsClientToHtsClientDto(htsClient);
+    }
+
+    public HtsClient htsClientUpdateRequestDtoToHtsClient(HtsClientUpdateRequestDto htsClientUpdateRequestDto, @NotNull String personUuid) {
+        if ( htsClientUpdateRequestDto == null ) {
+            return null;
+        }
+
+        HtsClient htsClient = new HtsClient();
+        htsClient.setTargetGroup( htsClientUpdateRequestDto.getTargetGroup() );
+        htsClient.setClientCode( htsClientUpdateRequestDto.getClientCode() );
+        htsClient.setDateVisit( htsClientUpdateRequestDto.getDateVisit() );
+        htsClient.setReferredFrom( htsClientUpdateRequestDto.getReferredFrom() );
+        htsClient.setTestingSetting( htsClientUpdateRequestDto.getTestingSetting() );
+        htsClient.setFirstTimeVisit( htsClientUpdateRequestDto.getFirstTimeVisit() );
+        htsClient.setNumChildren( htsClientUpdateRequestDto.getNumChildren() );
+        htsClient.setNumWives( htsClientUpdateRequestDto.getNumWives() );
+        htsClient.setTypeCounseling( htsClientUpdateRequestDto.getTypeCounseling() );
+        htsClient.setIndexClient( htsClientUpdateRequestDto.getIndexClient() );
+        htsClient.setPreviouslyTested( htsClientUpdateRequestDto.getPreviouslyTested() );
+        htsClient.setExtra( htsClientUpdateRequestDto.getExtra() );
+        htsClient.setPersonUuid( personUuid);
+        htsClient.setPregnant(htsClientUpdateRequestDto.getPregnant());
+        htsClient.setBreastFeeding(htsClientUpdateRequestDto.getBreastFeeding());
+        htsClient.setRelationWithIndexClient(htsClientUpdateRequestDto.getRelationWithIndexClient());
+
+        return htsClient;
+    }
+
+    public String getClientNameByCode(String code) {
+        List<HtsClient> htsClients = htsClientRepository.findAllByClientCode(code);
+        if(htsClients.isEmpty())return "Record Not Found";
+
+        Person person = htsClients.stream().findFirst().get().getPerson();
+        return person.getFirstName() + " " + person.getSurname();
+    }
+
+    public HtsClientDtos getRiskStratificationHtsClients(Long personId) {
+        HtsClientDtos htsClientDtos = this.getHtsClientByPersonId(personId);
+        htsClientDtos.setRiskStratificationResponseDtos(riskStratificationService.getAllByPersonId(personId));
+        return htsClientDtos;
     }
 }

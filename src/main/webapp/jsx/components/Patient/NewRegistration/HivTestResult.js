@@ -18,7 +18,6 @@ import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
 
 
-
 const useStyles = makeStyles((theme) => ({
     card: {
         margin: theme.spacing(20),
@@ -44,8 +43,34 @@ const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(1),
     },
     root: {
-        flexGrow: 1,
-        maxWidth: 752,
+        '& > *': {
+            margin: theme.spacing(1)
+        },
+        "& .card-title":{
+            color:'#fff',
+            fontWeight:'bold'
+        },
+        "& .form-control":{
+            borderRadius:'0.25rem',
+            height:'41px'
+        },
+        "& .card-header:first-child": {
+            borderRadius: "calc(0.25rem - 1px) calc(0.25rem - 1px) 0 0"
+        },
+        "& .dropdown-toggle::after": {
+            display: " block !important"
+        },
+        "& select":{
+            "-webkit-appearance": "listbox !important"
+        },
+        "& p":{
+            color:'red'
+        },
+        "& label":{
+            fontSize:'14px',
+            color:'#014d88',
+            fontWeight:'bold'
+        }
     },
     demo: {
         backgroundColor: theme.palette.background.default,
@@ -65,15 +90,33 @@ const HivTestResult = (props) => {
     const [saving, setSaving] = useState(false);
     const [errors, setErrors] = useState({});
     let temp = { ...errors }
-
+    console.log(props.patientObj)
     const patientID= props.patientObj && props.patientObj.personResponseDto ? props.patientObj.personResponseDto.id : "";
     const clientId = props.patientObj && props.patientObj ? props.patientObj.id : "";
+    
+    const calculate_age = dob => {
+        var today = new Date();
+        var dateParts = dob.split("-");
+        var dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
+        var birthDate = new Date(dateObject); // create a date object directlyfrom`dob1`argument
+        var age_now = today.getFullYear() - birthDate.getFullYear();
+        var m = today.getMonth() - birthDate.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                    age_now--;
+                }
+            if (age_now === 0) {
+                    return m + " month(s)";
+                }
+                return age_now ;
+    };
+    const patientAge=calculate_age(moment(props.patientObj.personResponseDto && props.patientObj.personResponseDto.dateOfBirth ? props.patientObj.personResponseDto.dateOfBirth : 0).format("DD-MM-YYYY"))
+   
     const [objValues, setObjValues]= useState(
         {
             confirmatoryTest: {},
             hivTestResult: "",
             htsClientId:"",
-            personId: "",
+            personId: props.patientObj  ? props.patientObj.id : "",
             test1: {},
             tieBreakerTest: {},
             syphilisTesting:{},
@@ -88,7 +131,7 @@ const HivTestResult = (props) => {
     }
     const [initialTest, setInitailTest]= useState(
         {
-            date :"",
+            dateInitialTest :"",
             result  :"",            
         }
     )
@@ -157,6 +200,18 @@ const HivTestResult = (props) => {
             adhocCode :""                       
         }
     )
+    useEffect(() => { 
+        //console.log(props.patientObj)
+        if(props.patientObj){
+            setCd4Count(props.patientObj  && props.patientObj.cd4!==null? props.patientObj.cd4 : {})
+            setInitailTest(props.patientObj  && props.patientObj.test1!==null? props.patientObj.test1 : {})
+            setConfirmatoryTest(props.patientObj  && props.patientObj.confirmatoryTest!==null? props.patientObj.confirmatoryTest : {})
+            setTieBreakerTest(props.patientObj && props.patientObj.tieBreakerTest!==null ? props.patientObj.tieBreakerTest : {})
+            setSyphills(props.patientObj  && props.patientObj.syphilisTesting!==null ? props.patientObj.syphilisTesting : {})
+            setHepatitis(props.patientObj  && props.patientObj.hepatitisTesting!==null ? props.patientObj.hepatitisTesting : {})
+            setOthers(props.patientObj  && props.patientObj.others!==null ? props.patientObj.others : {})
+        }
+    }, [props.patientObj]);
     const handleInputChangeOthers = e => { 
         //setErrors({...temp, [e.target.name]:""}) 
         setOthers ({...others,  [e.target.name]: e.target.value});            
@@ -179,7 +234,6 @@ const HivTestResult = (props) => {
         return Object.values(temp).every(x => x == "")
     }
     const handleSubmit =(e)=>{
-      
         e.preventDefault();
         if(validate()){
             objValues.htsClientId= clientId
@@ -196,7 +250,9 @@ const HivTestResult = (props) => {
             .then(response => {
                 setSaving(false);
                 props.setPatientObj(response.data)
-                toast.success("HIV test successful");
+                console.log(response.data)
+                //props.setPatientObj(props && props.patientObj ? props.patientObj : "")
+                //toast.success("HIV test successful");
                 handleItemClick('post-test', 'hiv-test')
             })
             .catch(error => {
@@ -211,11 +267,10 @@ const HivTestResult = (props) => {
             });
         }   
     }
-    console.log(errors)
 
     return (
         <>
-            <Card >
+            <Card className={classes.root}>
                 <CardBody>
                
                 <h2 style={{color:'#000'}}>REQUEST AND RESULT FORM</h2>
@@ -223,7 +278,6 @@ const HivTestResult = (props) => {
                         <div className="row">
                         <LabelRibbon as='a' color='blue' style={{width:'106%', height:'35px'}} ribbon>
                         <h4 style={{color:'#fff'}}>HIV TEST RESULT</h4>
-
                         </LabelRibbon>
                            <br/>
                            <div className="form-group  col-md-2"></div>
@@ -235,7 +289,7 @@ const HivTestResult = (props) => {
                                     type="date"
                                     name="date"
                                     id="date"
-                                    value={initialTest.date}
+                                    value={initialTest.dateInitialTest}
                                     onChange={handleInputChangeInitial}
                                     max= {moment(new Date()).format("YYYY-MM-DD") }
                                     style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
@@ -568,7 +622,16 @@ const HivTestResult = (props) => {
                             <br />
                             <div className="row">
                             <div className="form-group mb-3 col-md-6">
-                            <Button content='Back' icon='left arrow' labelPosition='left' style={{backgroundColor:"#992E62", color:'#fff'}} onClick={()=>handleItemClick('pre-test-counsel', 'pre-test-counsel')}/>
+                            {patientAge<=15 ? 
+                            (<>
+                                <Button content='Back' icon='left arrow' labelPosition='left' style={{backgroundColor:"#992E62", color:'#fff'}} onClick={()=>handleItemClick('basic', 'basic')}/>
+                            </>)
+                            :
+                            (<>
+                                <Button content='Back' icon='left arrow' labelPosition='left' style={{backgroundColor:"#992E62", color:'#fff'}} onClick={()=>handleItemClick('pre-test-counsel', 'pre-test-counsel')}/>
+                            </>)
+                            }
+                            
                             <Button content='Next' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
                             </div>
                             </div>

@@ -27,7 +27,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import { FaUserPlus } from "react-icons/fa";
 import "@reach/menu-button/styles.css";
 import { Dropdown,Button, Menu, Icon } from 'semantic-ui-react'
-
+import moment from "moment";
 
 const tableIcons = {
 Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -96,7 +96,7 @@ const useStyles = makeStyles(theme => ({
 
 const PatientnHistory = (props) => {
 
-    const [patientList, setPatientList] = useState([])
+    const [indexClientList, setIndexClientList] = useState([])
     //const [patientObj, setpatientObj] = useState([])
     const patientId = props.patientObj && props.patientObj.id ? props.patientObj.id: null
     //const [key, setKey] = useState('home');
@@ -107,12 +107,12 @@ const PatientnHistory = (props) => {
     ///GET LIST OF Patients
     async function patients() {
         axios
-            .get(`${baseUrl}hts/${patientId}`,
+            .get(`${baseUrl}hts/${props.patientObj.id}/index-elicitation`,
             { headers: {"Authorization" : `Bearer ${token}`} }
             )
             .then((response) => {
-                console.log(response.data.htsClientDtoList)
-                setPatientList(response.data.htsClientDtoList);
+                console.log(response.data)
+                setIndexClientList(response.data);
             })
             .catch((error) => {    
             });        
@@ -120,6 +120,28 @@ const PatientnHistory = (props) => {
     const handleItemClickPage =(page)=>{
         props.handleIClickPage(page)
     }
+    const handleIEditIndex =(page, activePage)=> {
+        console.log(page)
+        console.log(activePage)
+        //props.setActivePage({...props.activePage, activePage:"activePage", activeObject:row, actionType:actionType})
+        //props.handleIClickPage(page)
+    }
+
+    const calculate_age = dob => {
+        var today = new Date();
+        var dateParts = dob.split("-");
+        var dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
+        var birthDate = new Date(dateObject); // create a date object directlyfrom`dob1`argument
+        var age_now = today.getFullYear() - birthDate.getFullYear();
+        var m = today.getMonth() - birthDate.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                    age_now--;
+                }
+            if (age_now === 0) {
+                    return m + " month(s)";
+                }
+                return age_now + " year(s)";
+      };
 
 
   return (
@@ -131,7 +153,7 @@ const PatientnHistory = (props) => {
             onClick={()=>handleItemClickPage('add')}
             //startIcon={<FaUserPlus size="10"/>}
         >
-            <span style={{ textTransform: "capitalize" }}>New Index Client </span>
+            <span style={{ textTransform: "capitalize" }}>New Index Client --test</span>
         </Button>
         <br/><br/><br/><br/>
             <MaterialTable
@@ -144,39 +166,35 @@ const PatientnHistory = (props) => {
               {title: "Adress",field: "address",},   
               { title: "Actions", field: "actions", filtering: false }, 
               ]}
-              data={ [].map((row) => ({
-                name: "",
-                age:"",
-                phone:"", 
-                address:"",  
-                actions:
-            
-                    <div>
-                    {/* <Menu.Menu position='right'  >
-                        <Menu.Item >
-                            <Button style={{backgroundColor:'rgb(153,46,98)'}} primary>
-                            <Dropdown item text='Action'>
+              data={ indexClientList.map((row) => ({
+                name: row.firstName + " " + row.lastName,
+                age:calculate_age(moment(row.dob).format("DD-MM-YYYY")),
+                phone:row.phoneNumber, 
+                address:row.address,  
+                actions:(
+                        <>
+                        {/* <Menu.Menu position='right'  >
+                            <Menu.Item >
+                                <Button style={{backgroundColor:'rgb(153,46,98)'}} primary>
+                                <Dropdown item text='Action'>
 
-                            <Dropdown.Menu style={{ marginTop:"10px", }}>
-                              <Dropdown.Item 
-                                //onClick={()=>LoadViewPage(row, 'view')}
-                                > <Icon name='eye' />
-                                View  
-                                </Dropdown.Item>
+                                <Dropdown.Menu style={{ marginTop:"10px", }}>
+                                
                                 <Dropdown.Item  
-                               // onClick={()=>LoadViewPage(row, 'update')}
-                                ><Icon name='edit' />Edit</Dropdown.Item>
-                             <Dropdown.Item  
-                             //onClick={()=>LoadDeletePage(row, 'delete')}
-                             > <Icon name='trash' /> Delete</Dropdown.Item>
-                            </Dropdown.Menu>
-                        </Dropdown>
-                            </Button>
-                        </Menu.Item>
-                    </Menu.Menu> */}
-                  </div>
-                  
-                  }))}
+                                //onClick={()=>handleIEditIndex(row, 'update')}
+                                >
+                                    <Icon name='edit' />Edit</Dropdown.Item>
+                                <Dropdown.Item  
+                                //onClick={()=>LoadDeletePage(row, 'delete')}
+                                > <Icon name='trash' /> Delete</Dropdown.Item>
+                                </Dropdown.Menu>
+                            </Dropdown>
+                                </Button>
+                            </Menu.Item>
+                        </Menu.Menu> */}
+                        </>
+                        )
+                    }))}
             
                         options={{
                           headerStyle: {

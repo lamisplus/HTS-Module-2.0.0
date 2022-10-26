@@ -65,7 +65,6 @@ function PatientCard(props) {
   const patientObjs = props.patientObj ? props.patientObj : {}
   const permissions= props.permissions ? props.permissions : [];
   const [patientObj, setpatientObj] = useState(patientObjs)
-
   useEffect(() => {
     PatientCurrentStatus();
   }, [props.patientObj]);
@@ -120,72 +119,72 @@ function PatientCard(props) {
   return (
     <div className={classes.root}>
        <ExpansionPanel defaultExpanded>
-          <Link to={"/"}  >
-            <ButtonMui
-              variant="contained"
-              color="primary"
-              className=" float-end  mr-2 mt-2"
-              //startIcon={<FaUserPlus size="10"/>}
-            >
-            <span style={{ textTransform: "capitalize" }}>Back</span>
-            </ButtonMui>
-          </Link>
                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
                 
                 <Row>
                   
-                    <Col md={11}>
+                    <Col md={12}>
                       
                     <Row className={"mt-1"}>
                     <Col md={12} className={classes.root2}>
-                        <b style={{fontSize: "25px"}}>
+                    <b style={{fontSize: "25px", color:'rgb(153, 46, 98)'}}>
                         {patientObj.firstName + " " + patientObj.surname }
                         </b>
-                        
+                        <Link to={"/"}  >
+                        <ButtonMui
+                          variant="contained"
+                          color="primary"
+                          className="float-end ms-2 mr-2 mt-2"
+                          //startIcon={<FaUserPlus size="10"/>}
+                          style={{backgroundColor:"rgb(153, 46, 98)", color:'#fff', height:'35px'}}
+                        >
+                          <span style={{ textTransform: "capitalize" }}>Back</span>
+                        </ButtonMui>
+                    </Link>
                     </Col>
                     <Col md={4} className={classes.root2}>
                     <span>
                         {" "}
-                        Patient ID : <b>{getHospitalNumber(patientObj.identifier) }</b>
+                        Patient ID :<b style={{color:'#0B72AA'}}>{getHospitalNumber(patientObj.identifier) }</b>
                     </span>
                     </Col>
 
                     <Col md={4} className={classes.root2}>
                     <span>
-                        Date Of Birth : <b>{patientObj.dateOfBirth }</b>
+                        Date Of Birth : <b style={{color:'#0B72AA'}}>{patientObj.dateOfBirth }</b>
                     </span>
                     </Col>
                     <Col md={4} className={classes.root2}>
                     <span>
                         {" "}
-                        Age : <b>{calculate_age(moment(patientObj.dateOfBirth).format("DD-MM-YYYY"))}</b>
+                        Age : <b style={{color:'#0B72AA'}}>{calculate_age(moment(patientObj.dateOfBirth).format("DD-MM-YYYY"))}</b>
                     </span>
                     </Col>
                     <Col md={4}>
                     <span>
                         {" "}
                         Gender :{" "}
-                        <b>{patientObj.sex && patientObj.sex!==null ?  patientObj.sex : '' }</b>
+                        <b style={{color:'#0B72AA'}}>{patientObj.sex && patientObj.sex!==null ?  patientObj.sex : '' }</b>
                     </span>
                     </Col>
                     <Col md={4} className={classes.root2}>
                     <span>
                         {" "}
-                        Phone Number : <b>{getPhoneNumber(patientObj.contactPoint)}</b>
+                        Phone Number : <b style={{color:'#0B72AA'}}>{getPhoneNumber(patientObj.contactPoint)}</b>
                     </span>
                     </Col>
                     <Col md={4} className={classes.root2}>
                     <span>
                         {" "}
-                        Address : <b>{getAddress(patientObj.address)} </b>
+                        Address : <b style={{color:'#0B72AA'}}>{getAddress(patientObj.address)} </b>
                     </span>
                     </Col>
-                    {/* <Col md={4} className={classes.root2}>
+                    <Col md={4} className={classes.root2}>
                     <span>
                         {" "}
-                        Client Code : <b>{props && props.clientCode ? props.clientCode.clientCode : ""} </b>
+                        Client Code : <b style={{color:'#0B72AA'}}>{props && props.clientCode ? props.clientCode : ""} </b>
                     </span>
-                    </Col> */}
+                    </Col>
                     <Col md={12}>
                      
                     </Col>

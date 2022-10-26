@@ -194,7 +194,7 @@ const Patients = (props) => {
                         <Link
                             to={{
                                 pathname: "/patient-history",
-                                state: {patientObj: row.personResponseDto, clientCode:row.clientCode}
+                                state: {patientObject: row, patientObj: row.personResponseDto, clientCode:row.clientCode}
                             }}
                             
                         >

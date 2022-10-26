@@ -41,8 +41,34 @@ const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(1),
     },
     root: {
-        flexGrow: 1,
-        maxWidth: 752,
+        '& > *': {
+            margin: theme.spacing(1)
+        },
+        "& .card-title":{
+            color:'#fff',
+            fontWeight:'bold'
+        },
+        "& .form-control":{
+            borderRadius:'0.25rem',
+            height:'41px'
+        },
+        "& .card-header:first-child": {
+            borderRadius: "calc(0.25rem - 1px) calc(0.25rem - 1px) 0 0"
+        },
+        "& .dropdown-toggle::after": {
+            display: " block !important"
+        },
+        "& select":{
+            "-webkit-appearance": "listbox !important"
+        },
+        "& p":{
+            color:'red'
+        },
+        "& label":{
+            fontSize:'14px',
+            color:'#014d88',
+            fontWeight:'bold'
+        }
     },
     demo: {
         backgroundColor: theme.palette.background.default,
@@ -102,7 +128,9 @@ const BasicInfo = (props) => {
     )
     
     useEffect(() => { 
-
+        if(props.patientObj){
+            setRecency(props.patientObj && props.patientObj.recency!==null ? props.patientObj.recency : {}) 
+        }
         if(recency.longTermLine==='true' && recency.verififcationLine==='true' && recency.controlLine==='true'){
             recency.rencencyInterpretation="Long Term"
             setRecency ({...recency,  ['rencencyInterpretation']: 'Long Term'}); 
@@ -131,7 +159,22 @@ const BasicInfo = (props) => {
     },[recency.longTermLine,recency.verififcationLine, recency.controlLine]);
     const handleInputChangeRecency = e => { 
         setErrors({...temp, [e.target.name]:""})        
-        setRecency ({...recency,  [e.target.name]: e.target.value});   
+        setErrors({...temp, [e.target.name]:""})        
+        if(e.target.name ==='viralLoadResultClassification'){
+            if(e.target.value ==='>=1000'){
+                recency.finalRecencyResult='RITA Recent'
+            
+            }else if(e.target.value ==='<1000') {
+                recency.finalRecencyResult='RITA Long term'
+            }else if(e.target.value ==='Failed run') {
+                recency.finalRecencyResult='RITA Inconclusive'
+            }else if(e.target.value ==='Invalid viral load result') {
+                recency.finalRecencyResult='RITA Inconclusive'
+            }else{
+
+            }
+        } 
+        setRecency ({...recency,  [e.target.name]: e.target.value});    
     }
     /*****  Validation  */
     const validate = () => {
@@ -144,20 +187,17 @@ const BasicInfo = (props) => {
     }
     const handleSubmit =(e)=>{
         e.preventDefault();
-       
-
             objValues.htsClientId= clientId
             objValues.recency= recency
             objValues.personId= patientID
-            console.log(recency)
             axios.put(`${baseUrl}hts/${clientId}/recency`,objValues,
             { headers: {"Authorization" : `Bearer ${token}`}},
             
             )
             .then(response => {
                 setSaving(false);
-                props.setPatientObj(props && props.patientObj ? props.patientObj : "")
-                toast.success("Risk Assesment successful");
+                props.setPatientObj(response.data)
+                //toast.success("Risk Assesment successful");
                 handleItemClick('indexing', 'recency-testing' )
 
             })
@@ -179,7 +219,7 @@ const BasicInfo = (props) => {
 
     return (
         <>
-            <Card >
+            <Card className={classes.root}>
                 <CardBody>               
                 <h2>RECENCY FORM</h2>
                     <form >
@@ -256,9 +296,9 @@ const BasicInfo = (props) => {
                                         value={recency.rencencyId}
                                         onChange={handleInputChangeRecency}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
-                                    >
+                                    />
                                        
-                                    </Input>
+                                  
                                     
                                 </FormGroup>
                             </div>
@@ -473,7 +513,7 @@ const BasicInfo = (props) => {
                                             style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                         >
                                             <option value=">=1000">{">= "} 1000</option>
-                                            <option value="<=1000">{"<= "} 1000</option>
+                                            <option value="<1000">{"< "} 1000</option>
                                             <option value="Failed run">Failed run</option>
                                             <option value="Invalid viral load result">Invalid viral load result</option>
                                             
@@ -499,21 +539,16 @@ const BasicInfo = (props) => {
                                 <div className="form-group  col-md-4">
                                     <FormGroup>
                                         <Label>Final Recency Result</Label>
-                                        <select
+                                        <Input
                                             className="form-control"
                                             name="finalRecencyResult"
                                             id="finalRecencyResult"
-                                            type="select"
+                                            type="text"
+                                            disabled
                                             value={recency.finalRecencyResult}
                                             onChange={handleInputChangeRecency}
                                             style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
-                                        >
-                                        <option value={""}></option>
-                                            <option value="if < 1000 = RITA Long term">if {"<"} 1000 = RITA Long term</option>
-                                            <option value="if >= 1000 = RITA Recent">if {">="} 1000 = RITA Recent</option>
-                                            <option value="if Failed run = RITA Inconclusive">if Failed run = RITA Inconclusive</option>
-                                            <option value="If Invalid VL result = RITA Inconclusive">If Invalid VL result = RITA Inconclusive</option>
-                                        </select>
+                                        />
                                         
                                     </FormGroup>
                                 </div>

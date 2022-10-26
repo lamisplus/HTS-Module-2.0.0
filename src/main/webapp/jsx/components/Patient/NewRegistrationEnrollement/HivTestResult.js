@@ -43,8 +43,34 @@ const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(1),
     },
     root: {
-        flexGrow: 1,
-        maxWidth: 752,
+        '& > *': {
+            margin: theme.spacing(1)
+        },
+        "& .card-title":{
+            color:'#fff',
+            fontWeight:'bold'
+        },
+        "& .form-control":{
+            borderRadius:'0.25rem',
+            height:'41px'
+        },
+        "& .card-header:first-child": {
+            borderRadius: "calc(0.25rem - 1px) calc(0.25rem - 1px) 0 0"
+        },
+        "& .dropdown-toggle::after": {
+            display: " block !important"
+        },
+        "& select":{
+            "-webkit-appearance": "listbox !important"
+        },
+        "& p":{
+            color:'red'
+        },
+        "& label":{
+            fontSize:'14px',
+            color:'#014d88',
+            fontWeight:'bold'
+        }
     },
     demo: {
         backgroundColor: theme.palette.background.default,
@@ -64,7 +90,7 @@ const HivTestResult = (props) => {
     const [saving, setSaving] = useState(false);
     const [errors, setErrors] = useState({});
     let temp = { ...errors }
-    console.log(props.patientObj)
+    //console.log(props.patientObj)
     const patientID= props.patientObj && props.patientObj.personResponseDto ? props.patientObj.personResponseDto.id : "";
     const clientId = props.patientObj && props.patientObj ? props.patientObj.id : "";
     const [objValues, setObjValues]= useState(
@@ -185,8 +211,13 @@ const HivTestResult = (props) => {
 
     }, [ props.patientObj]);
     const handleSubmit =(e)=>{
-        handleItemClick('recency-testing', 'hiv-test')
         e.preventDefault();
+        if(props.activePage.actionType==='view'){
+            //e.preventDefault();
+        handleItemClick('post-test', 'hiv-test')
+        }
+        if(props.activePage.actionType==='update'){
+        //e.preventDefault();
             objValues.htsClientId= clientId
             objValues.confirmatoryTest= confirmatoryTest
             objValues.personId= patientID
@@ -202,7 +233,7 @@ const HivTestResult = (props) => {
                 setSaving(false);
                 props.setPatientObj(response.data)
                 toast.success("HIV test successful");
-                handleItemClick('indexing', 'hiv-test')
+                handleItemClick('post-test', 'hiv-test')
             })
             .catch(error => {
                 setSaving(false);
@@ -214,12 +245,12 @@ const HivTestResult = (props) => {
                     toast.error("Something went wrong. Please try again...");
                 }
             });
-            
+        }    
     }
 
     return (
         <>
-            <Card >
+            <Card className={classes.root}>
                 <CardBody>
                
                 <h2 style={{color:'#000'}}>REQUEST AND RESULT FORM</h2>
@@ -566,7 +597,19 @@ const HivTestResult = (props) => {
                             <br />
                             <div className="row">
                             <div className="form-group mb-3 col-md-6">
-                            <Button content='Back' icon='left arrow' labelPosition='left' style={{backgroundColor:"#992E62", color:'#fff'}} onClick={()=>handleItemClick('pre-test-counsel', 'pre-test-counsel')}/>
+                            {props.patientAge>14 ? 
+                                ( 
+                                    <>
+                                    <Button content='Back' icon='left arrow' labelPosition='left' style={{backgroundColor:"#992E62", color:'#fff'}} onClick={()=>handleItemClick('pre-test-counsel', 'pre-test-counsel')}/>
+                                    </>
+                                )
+                                :
+                                ( 
+                                    <>
+                                    <Button content='Back' icon='left arrow' labelPosition='left' style={{backgroundColor:"#992E62", color:'#fff'}} onClick={()=>handleItemClick('basic', 'basic')}/>
+                                    </>
+                                )
+                            }
                             <Button content='Next' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
                             </div>
                             </div>

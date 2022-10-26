@@ -1,5 +1,6 @@
 import React,{useState} from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom'
 import { withStyles } from '@material-ui/core/styles';
 import 'semantic-ui-css/semantic.min.css';
 import Card from '@mui/material/Card';
@@ -9,6 +10,7 @@ import { useHistory } from "react-router-dom";
 import {   Tab, Tabs, } from "react-bootstrap";
 import PatientHistory from './../History/PatientHistory';
 import PatientHtsEnrollment from './PatientHtsEnrollment'
+import moment from "moment";
 
 const styles = theme => ({
   root: {
@@ -51,17 +53,39 @@ function PatientCard(props) {
     const [activePage, setActivePage] = useState({activePage:"home", activeObject:{}, actionType:""});
     const { classes } = props;
     const patientObj = history.location && history.location.state ? history.location.state.patientObj : {}
-    //console.log(patientObj)
+    const clientCode =history.location && history.location.state ? history.location.state.clientCode : ""
+    const calculate_age = dob => {
+      var today = new Date();
+      var dateParts = dob.split("-");
+      var dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
+      var birthDate = new Date(dateObject); // create a date object directlyfrom`dob1`argument
+      var age_now = today.getFullYear() - birthDate.getFullYear();
+      var m = today.getMonth() - birthDate.getMonth();
+          if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                  age_now--;
+              }
+          if (age_now === 0) {
+                  return m;
+              }
+              return age_now;
+  };
+  const patientAge=calculate_age(moment(patientObj.dateOfBirth).format("DD-MM-YYYY"));
+
   return (
     <div className={classes.root}>
+      <div className="row page-titles mx-0" style={{marginTop:"0px", marginBottom:"-10px"}}>
+			<ol className="breadcrumb">
+				<li className="breadcrumb-item active"><h4> <Link to={"/"} >HTS /</Link> Patient Dashboard</h4></li>
+			</ol>
+		  </div>
       <Card >
         <CardContent>
-            <PatientCardDetail patientObj={patientObj}/>
+            <PatientCardDetail patientObj={patientObj} clientCode={clientCode}/>
             {activePage.activePage==="home" && (
-              <PatientHistory patientObj={patientObj} activePage={activePage} setActivePage={setActivePage}/>
+              <PatientHistory patientObj={patientObj} activePage={activePage} setActivePage={setActivePage} clientCode={clientCode} patientAge={patientAge}/>
             )}
             {activePage.activePage==="view" && (
-              <PatientHtsEnrollment patientObj={patientObj} activePage={activePage} setActivePage={setActivePage}/>
+              <PatientHtsEnrollment patientObj={patientObj} activePage={activePage} setActivePage={setActivePage} clientCode={clientCode} patientAge={patientAge}/>
             )}
          </CardContent>
       </Card>

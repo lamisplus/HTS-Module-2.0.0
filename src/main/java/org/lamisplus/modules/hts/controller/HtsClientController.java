@@ -31,6 +31,11 @@ public class HtsClientController {
         return ResponseEntity.ok(this.htsClientService.save(htsClientRequestDto));
     }
 
+    @PutMapping(HTS_URL_VERSION_ONE +"/{id}")
+    public ResponseEntity<HtsClientDto> update(@PathVariable Long id, @Valid @RequestBody HtsClientUpdateRequestDto htsClientUpdateRequestDto) {
+        return ResponseEntity.ok(this.htsClientService.update(id, htsClientUpdateRequestDto));
+    }
+
     @PutMapping(HTS_URL_VERSION_ONE +"/{id}/pre-test-counseling")
     public ResponseEntity<HtsClientDto> updatePreTestCounseling(@PathVariable Long id, @Valid @RequestBody HtsPreTestCounselingDto htsPreTestCounselingDto) {
         return ResponseEntity.ok(this.htsClientService.updatePreTestCounseling(id, htsPreTestCounselingDto));
@@ -64,12 +69,12 @@ public class HtsClientController {
         return ResponseEntity.ok(this.htsClientService.getHtsClientByPersonId(personId));
     }
     @GetMapping(HTS_URL_VERSION_ONE + "/code/client-code")
-    public ResponseEntity<String> getHtsClientCode() {
-        return ResponseEntity.ok(this.htsClientService.getHtsClientCode());
+    public ResponseEntity<String> getGenerateHtsClientCode() {
+        return ResponseEntity.ok(this.htsClientService.getGenerateHtsClientCode());
     }
-    @GetMapping(HTS_URL_VERSION_ONE + "/code/{indexCode}")
-    public ResponseEntity<String> getIndexCodeHtsClientCode(@PathVariable Long personId) {
-        return ResponseEntity.ok(this.htsClientService.getHtsClientCode());
+    @GetMapping(HTS_URL_VERSION_ONE + "/client/{code}")
+    public ResponseEntity<String> getClientNameByCode(@PathVariable String code) {
+        return ResponseEntity.ok(this.htsClientService.getClientNameByCode(code));
     }
 
     @GetMapping(HTS_URL_VERSION_ONE)
@@ -77,6 +82,11 @@ public class HtsClientController {
         Page<HtsClient> page = htsClientService.findHtsClientPage(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return new ResponseEntity<>(this.htsClientService.getAllHtsClientDtos(page, null), headers, HttpStatus.OK);
+    }
+
+    @GetMapping(HTS_URL_VERSION_ONE+ "/risk-stratification/person/{personId}")
+    public ResponseEntity<HtsClientDtos> getRiskStratificationHtsClients(@PathVariable Long personId) {
+        return ResponseEntity.ok(htsClientService.getRiskStratificationHtsClients(personId));
     }
 
     @GetMapping(HTS_URL_VERSION_ONE + "/persons")

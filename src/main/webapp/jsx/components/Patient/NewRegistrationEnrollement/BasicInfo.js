@@ -51,8 +51,34 @@ const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(1),
     },
     root: {
-        flexGrow: 1,
-        maxWidth: 752,
+        '& > *': {
+            margin: theme.spacing(1)
+        },
+        "& .card-title":{
+            color:'#fff',
+            fontWeight:'bold'
+        },
+        "& .form-control":{
+            borderRadius:'0.25rem',
+            height:'41px'
+        },
+        "& .card-header:first-child": {
+            borderRadius: "calc(0.25rem - 1px) calc(0.25rem - 1px) 0 0"
+        },
+        "& .dropdown-toggle::after": {
+            display: " block !important"
+        },
+        "& select":{
+            "-webkit-appearance": "listbox !important"
+        },
+        "& p":{
+            color:'red'
+        },
+        "& label":{
+            fontSize:'14px',
+            color:'#014d88',
+            fontWeight:'bold'
+        }
     },
     demo: {
         backgroundColor: theme.palette.background.default,
@@ -70,7 +96,7 @@ const useStyles = makeStyles((theme) => ({
 const BasicInfo = (props) => {
     const classes = useStyles();
     const history = useHistory();
-    //console.log(props)
+    //console.log(props.activePage)
     const [errors, setErrors] = useState({});
     const [saving, setSaving] = useState(false);
     const [hideNumChild, setHideNumChild] = useState(false);
@@ -265,10 +291,12 @@ const BasicInfo = (props) => {
             props.setCompleted([...props.completed, completedMenu])
         }
     }
-
     const handleSubmit =(e)=>{
         e.preventDefault();
-        const patientForm ={
+
+        if(props.activePage.actionType==='update'){
+        //e.preventDefault();
+            const patientForm ={
             clientCode: objValues.clientCode,
             dateVisit: objValues.dateVisit,
             extra: {},
@@ -297,7 +325,12 @@ const BasicInfo = (props) => {
                 setSaving(false);
                 props.setPatientObj(response.data)
                 toast.success("HTS Test successful");
-                handleItemClick('pre-test-counsel', 'basic' )
+                if(props.patientAge>14){
+                    handleItemClick('pre-test-counsel', 'basic' )
+                }else{
+                    handleItemClick('hiv-test', 'pre-test-counsel')
+                }
+               
 
             })
             .catch(error => {
@@ -311,15 +344,24 @@ const BasicInfo = (props) => {
                 }
             });
             }
+        }
+        if(props.activePage.actionType==='view'){
+            //e.preventDefault();
+            if(props.patientAge>14){
+                handleItemClick('pre-test-counsel', 'basic' )
+            }else{
+                handleItemClick('hiv-test', 'pre-test-counsel')
+            }
+        }
     }
 
 
     return (
         <>  
         
-            <Card >
+            <Card className={classes.root}>
                 <CardBody>   
-                <h2 style={{color:'#000'}}>CLIENT INTAKE FORM</h2>
+                <h2 style={{color:'#000'}}>CLIENT INTAKE FORM -- - for existing 5</h2>
                 <br/>
                     <form >
                         <div className="row">

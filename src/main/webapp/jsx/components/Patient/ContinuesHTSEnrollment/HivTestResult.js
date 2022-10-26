@@ -44,8 +44,34 @@ const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(1),
     },
     root: {
-        flexGrow: 1,
-        maxWidth: 752,
+        '& > *': {
+            margin: theme.spacing(1)
+        },
+        "& .card-title":{
+            color:'#fff',
+            fontWeight:'bold'
+        },
+        "& .form-control":{
+            borderRadius:'0.25rem',
+            height:'41px'
+        },
+        "& .card-header:first-child": {
+            borderRadius: "calc(0.25rem - 1px) calc(0.25rem - 1px) 0 0"
+        },
+        "& .dropdown-toggle::after": {
+            display: " block !important"
+        },
+        "& select":{
+            "-webkit-appearance": "listbox !important"
+        },
+        "& p":{
+            color:'red'
+        },
+        "& label":{
+            fontSize:'14px',
+            color:'#014d88',
+            fontWeight:'bold'
+        }
     },
     demo: {
         backgroundColor: theme.palette.background.default,
@@ -82,6 +108,18 @@ const HivTestResult = (props) => {
             cd4:{},
         }
     )
+    useEffect(() => { 
+        //console.log(props.patientObj)
+        if(props.patientObj){
+            setCd4Count(props.patientObj  && props.patientObj.cd4!==null? props.patientObj.cd4 : {})
+            setInitailTest(props.patientObj  && props.patientObj.test1!==null? props.patientObj.test1 : {})
+            setConfirmatoryTest(props.patientObj  && props.patientObj.confirmatoryTest!==null? props.patientObj.confirmatoryTest : {})
+            setTieBreakerTest(props.patientObj && props.patientObj.tieBreakerTest!==null ? props.patientObj.tieBreakerTest : {})
+            setSyphills(props.patientObj  && props.patientObj.syphilisTesting!==null ? props.patientObj.syphilisTesting : {})
+            setHepatitis(props.patientObj  && props.patientObj.hepatitisTesting!==null ? props.patientObj.hepatitisTesting : {})
+            setOthers(props.patientObj  && props.patientObj.others!==null ? props.patientObj.others : {})
+        }
+    }, [props.patientObj]);
     const handleInputChange = e => { 
         //setErrors({...temp, [e.target.name]:""}) 
         setObjValues ({...objValues,  [e.target.name]: e.target.value});            
@@ -196,7 +234,7 @@ const HivTestResult = (props) => {
             .then(response => {
                 setSaving(false);
                 props.setPatientObj(response.data)
-                toast.success("HIV test successful");
+                //toast.success("HIV test successful");
                 handleItemClick('post-test', 'hiv-test')
             })
             .catch(error => {
@@ -215,7 +253,7 @@ const HivTestResult = (props) => {
 
     return (
         <>
-            <Card >
+            <Card className={classes.root}>
                 <CardBody>
                
                 <h2 style={{color:'#000'}}>REQUEST AND RESULT FORM</h2>

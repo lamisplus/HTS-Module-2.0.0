@@ -5,7 +5,7 @@ import { token as token } from "./../../../api";
 import { makeStyles } from "@material-ui/core/styles";
 import { Row, Col, Card,  Tab, Tabs, } from "react-bootstrap";
 import History from './History';
-import Registration from './../Patient/ContineousRegistrationTesting'
+import ContineousRegistrationTesting from './../Patient/ContineousRegistrationTesting'
 //import CheckedInPatients from './Patient/CheckedInPatients'
 
 
@@ -29,7 +29,7 @@ const Home = (props) => {
             { headers: {"Authorization" : `Bearer ${token}`} }
             )
             .then((response) => {
-                console.log(response.data)
+                //console.log(response.data)
                 setPatientList(response.data.htsClientDtoList);
             })
             .catch((error) => {    
@@ -52,10 +52,10 @@ const Home = (props) => {
                     className="mb-3"
                 >
                 <Tab eventKey="home" title="HTS HISTORY">                   
-                    <History patientObj={props.patientObj} activePage={props.activePage} setActivePage={props.setActivePage}/>
+                    <History patientObj={props.patientObj} activePage={props.activePage} setActivePage={props.setActivePage} clientCode={props.clientCode} patientAge={props.patientAge}/>
                 </Tab> 
                 <Tab eventKey="new" title="NEW HTS">                   
-                    <Registration patientObj={props.patientObj}/>
+                    <ContineousRegistrationTesting patientObj={props.patientObj} activePage={props.activePage} setActivePage={props.setActivePage} clientCode={props.clientCode} patientAge={props.patientAge}/>
                 </Tab>
                                      
                 </Tabs>

@@ -43,7 +43,7 @@ public class HtsClient extends Audit implements Serializable {
 
     @Basic
     @Column(name = "target_group")
-    private Long targetGroup;
+    private String targetGroup;
 
     /*@ManyToOne
     @JoinColumn(name = "target_group", referencedColumnName = "id", insertable = false, updatable = false)
@@ -74,7 +74,7 @@ public class HtsClient extends Audit implements Serializable {
 
     @Basic
     @Column(name = "testing_setting")
-    private Long testingSetting;
+    private String testingSetting;
 
     /*@ManyToOne
     @JoinColumn(name = "testing_setting", referencedColumnName = "id", insertable = false, updatable = false)

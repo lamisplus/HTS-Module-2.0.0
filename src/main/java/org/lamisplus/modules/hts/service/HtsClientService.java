@@ -94,7 +94,9 @@ public class HtsClientService {
         htsClient.setSexPartnerRiskAssessment(htsPreTestCounselingDto.getSexPartnerRiskAssessment());
 
         HtsClientDto htsClientDto = new HtsClientDto();
-        BeanUtils.copyProperties(htsClientRepository.save(htsClient), htsClientDto);
+        htsClient = htsClientRepository.save(htsClient);
+        BeanUtils.copyProperties(htsClient, htsClientDto);
+        htsClientDto.setPersonResponseDto(personService.getDtoFromPerson(htsClient.getPerson()));
         return htsClientDto;
 
     }

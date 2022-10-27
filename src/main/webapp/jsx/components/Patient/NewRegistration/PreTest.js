@@ -316,7 +316,7 @@ const BasicInfo = (props) => {
             .then(response => {
                 setSaving(false);
                 console.log(response.data)
-                //props.setPatientObj(response.data)
+                props.setPatientObj(response.data)
                 //toast.success("Risk Assesment successful");
                 handleItemClick('hiv-test', 'pre-test-counsel' )
 

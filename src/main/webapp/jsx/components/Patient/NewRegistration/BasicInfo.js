@@ -99,6 +99,7 @@ const useStyles = makeStyles((theme) => ({
 
 const BasicInfo = (props) => {
     const classes = useStyles();
+    console.log(props)
     const history = useHistory();
     const [errors, setErrors] = useState({});
     const [saving, setSaving] = useState(false);
@@ -666,7 +667,7 @@ const BasicInfo = (props) => {
                                     >
                                         <option value={""}></option>
                                         {kP.map((value) => (
-                                            <option key={value.id} value={value.id}>
+                                            <option key={value.id} value={value.code}>
                                                 {value.display}
                                             </option>
                                         ))}
@@ -754,7 +755,7 @@ const BasicInfo = (props) => {
                                     >
                                         <option value={""}>Select</option>
                                         {enrollSetting.map((value) => (
-                                            <option key={value.id} value={value.id}>
+                                            <option key={value.id} value={value.code}>
                                                 {value.display}
                                             </option>
                                         ))}

@@ -94,7 +94,9 @@ public class HtsClientService {
         htsClient.setSexPartnerRiskAssessment(htsPreTestCounselingDto.getSexPartnerRiskAssessment());
 
         HtsClientDto htsClientDto = new HtsClientDto();
-        BeanUtils.copyProperties(htsClientRepository.save(htsClient), htsClientDto);
+        htsClient = htsClientRepository.save(htsClient);
+        BeanUtils.copyProperties(htsClient, htsClientDto);
+        htsClientDto.setPersonResponseDto(personService.getDtoFromPerson(htsClient.getPerson()));
         return htsClientDto;
 
     }
@@ -134,6 +136,12 @@ public class HtsClientService {
         updatableHtsClient.setConfirmatoryTest(htsRequestResultDto.getConfirmatoryTest());
         updatableHtsClient.setTieBreakerTest(htsRequestResultDto.getTieBreakerTest());
         updatableHtsClient.setHivTestResult(htsRequestResultDto.getHivTestResult());
+
+        updatableHtsClient.setTest2(htsRequestResultDto.getTest2());
+        updatableHtsClient.setConfirmatoryTest2(htsRequestResultDto.getConfirmatoryTest2());
+        updatableHtsClient.setTieBreakerTest2(htsRequestResultDto.getTieBreakerTest2());
+        updatableHtsClient.setHivTestResult2(htsRequestResultDto.getHivTestResult2());
+
         updatableHtsClient.setSyphilisTesting(htsRequestResultDto.getSyphilisTesting());
         updatableHtsClient.setHepatitisTesting(htsRequestResultDto.getHepatitisTesting());
         updatableHtsClient.setOthers(htsRequestResultDto.getOthers());
@@ -268,6 +276,12 @@ public class HtsClientService {
         htsClientDto.setConfirmatoryTest( htsClient.getConfirmatoryTest() );
         htsClientDto.setTieBreakerTest( htsClient.getTieBreakerTest() );
         htsClientDto.setHivTestResult( htsClient.getHivTestResult() );
+
+        htsClientDto.setTest2( htsClient.getTest2() );
+        htsClientDto.setConfirmatoryTest2( htsClient.getConfirmatoryTest2() );
+        htsClientDto.setTieBreakerTest2( htsClient.getTieBreakerTest2() );
+        htsClientDto.setHivTestResult2( htsClient.getHivTestResult2() );
+
         htsClientDto.setPersonId(personResponseDto.getId());
         htsClientDto.setPostTestCounselingKnowledgeAssessment(htsClient.getPostTestCounselingKnowledgeAssessment());
         htsClientDto.setRecency(htsClient.getRecency());

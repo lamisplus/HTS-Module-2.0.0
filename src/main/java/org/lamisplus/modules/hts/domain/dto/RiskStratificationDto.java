@@ -24,6 +24,6 @@ public class RiskStratificationDto {
     private LocalDate visitDate;
     private LocalDate dob;
     private String code;
-    private long personId;
+    private Long personId;
     private  Object riskAssessment;
 }

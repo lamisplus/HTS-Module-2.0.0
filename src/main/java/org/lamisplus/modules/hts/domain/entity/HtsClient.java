@@ -180,7 +180,7 @@ public class HtsClient extends Audit implements Serializable {
     @Column(name = "sex_partner_risk_assessment", columnDefinition = "jsonb")
     private  Object sexPartnerRiskAssessment;
 
-    //HIV Test Result
+    //HIV Test Result 1
     @Type(type = "jsonb")
     @Basic(fetch = FetchType.LAZY)
     @Column(name = "test1", columnDefinition = "jsonb")
@@ -199,6 +199,26 @@ public class HtsClient extends Audit implements Serializable {
     @Basic
     @Column(name = "hiv_test_result")
     private String hivTestResult;
+
+    //HIV Test result 2
+    @Type(type = "jsonb")
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "test2", columnDefinition = "jsonb")
+    private  Object test2;
+
+    @Type(type = "jsonb")
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "confirmatory_test2", columnDefinition = "jsonb")
+    private  Object confirmatoryTest2;
+
+    @Type(type = "jsonb")
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "tie_breaker_test2", columnDefinition = "jsonb")
+    private  Object tieBreakerTest2;
+
+    @Basic
+    @Column(name = "hiv_test_result2")
+    private String hivTestResult2;
 
     @Basic
     @Column(name = "archived")

@@ -8,10 +8,6 @@ import org.lamisplus.modules.hts.domain.dto.RiskStratificationResponseDto;
 import org.lamisplus.modules.hts.service.RiskStratificationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-//import org.testcontainers.shaded.okhttp3.RequestBody;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor

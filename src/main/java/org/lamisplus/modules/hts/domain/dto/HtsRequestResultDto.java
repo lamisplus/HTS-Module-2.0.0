@@ -15,6 +15,13 @@ public class HtsRequestResultDto {
     private  final Object confirmatoryTest;
     private  final Object tieBreakerTest;
     private final String  hivTestResult;
+
+    //Second test if first test positive
+    private  final Object test2;
+    private  final Object confirmatoryTest2;
+    private  final Object tieBreakerTest2;
+    private final String  hivTestResult2;
+
     private final Object syphilisTesting;
     private final Object hepatitisTesting;
     private Object others;

@@ -29,7 +29,7 @@ public class RiskStratificationService {
     
     public RiskStratificationResponseDto save(RiskStratificationDto riskStratificationDTO) {
         Person person = null;
-        if(riskStratificationDTO.getPersonId() != 0){
+        if(riskStratificationDTO.getPersonId() != null){
             person = this.getPerson(riskStratificationDTO.getPersonId());
         }
         RiskStratification riskStratification = this.toRiskStratification(riskStratificationDTO, person);

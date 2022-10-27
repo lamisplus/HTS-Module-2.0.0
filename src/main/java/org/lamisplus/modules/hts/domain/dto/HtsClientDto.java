@@ -16,7 +16,7 @@ import java.util.List;
 public class HtsClientDto {
     @NotNull(message = "id is mandatory")
     private  Long id;
-    private  Long targetGroup;
+    private  String targetGroup;
     //private  ApplicationCodeSet targetGroupCodeSet;
     @NotNull(message = "clientCode is mandatory")
     private  String clientCode;
@@ -24,7 +24,7 @@ public class HtsClientDto {
     private  LocalDate dateVisit;
     private  Long referredFrom;
     //private  ApplicationCodeSet referredFromCodeSet;
-    private  Long testingSetting;
+    private  String testingSetting;
     //private  ApplicationCodeSet testingSettingCodeSet;
     private  Boolean firstTimeVisit;
     private  Integer numChildren;

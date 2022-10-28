@@ -1286,7 +1286,7 @@ const BasicInfo = (props) => {
                             <span style={{ textTransform: "capitalize" }}>Saving...</span>
                             )}
                             </MatButton> */}
-                            <Button content='Next' type="submit" icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
+                            <Button content='Save & Continue' type="submit" icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
                             </div>
                             </div>
                         </div>

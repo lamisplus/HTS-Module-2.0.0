@@ -281,7 +281,7 @@ const HivTestResult = (props) => {
                         </LabelRibbon>
                            <br/>
                            <div className="form-group  col-md-2"></div>
-                            <h4>Initial HIV Test:</h4>
+                            <h4>Initial HIV Test 1:</h4>
                             <div className="form-group mb-3 col-md-5">
                                 <FormGroup>
                                 <Label for=""> Date  </Label>
@@ -417,9 +417,139 @@ const HivTestResult = (props) => {
                                 )}
                                 
                                 {(initialTest.result==='Yes' && confirmatoryTest.result==='Yes' ) && (
+                                    <>
                                     <LabelRibbon color="red" >
                                         Positive
                                     </LabelRibbon>
+                                    <br/>
+                                        <h4>Initial HIV Test 2:</h4>
+                                        <div className="form-group mb-3 col-md-5">
+                                            <FormGroup>
+                                            <Label for=""> Date  </Label>
+                                            <Input
+                                                type="date"
+                                                name="date"
+                                                id="date"
+                                                value={initialTest.dateInitialTest}
+                                                onChange={handleInputChangeInitial}
+                                                max= {moment(new Date()).format("YYYY-MM-DD") }
+                                                style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
+                                                required
+                                            />
+                                            {errors.date !=="" ? (
+                                                <span className={classes.error}>{errors.date}</span>
+                                            ) : "" }
+                                            </FormGroup>
+                                        </div>
+                                        <div className="form-group  col-md-5">
+                                            <FormGroup>
+                                                <Label>Result  </Label>
+                                                <select
+                                                    className="form-control"
+                                                    name="result"
+                                                    id="result"
+                                                    value={initialTest.result}
+                                                    onChange={handleInputChangeInitial}
+                                                    style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                                >
+                                                    <option value={""}></option>
+                                                    <option value="Yes">Reactive</option>
+                                                    <option value="No">Non Reactive</option>
+                                                    
+                                                </select>
+                                                {errors.result !=="" ? (
+                                                <span className={classes.error}>{errors.result}</span>
+                                            ) : "" }
+                                            </FormGroup>
+                                        </div>
+                                        <div className="form-group  col-md-2"></div>
+                                        {initialTest.result ==='Yes' && (
+                                        <>
+                                        <h4>Confirmatory Test 2:</h4>
+                                        <div className="form-group mb-3 col-md-5">
+                                            <FormGroup>
+                                            <Label for=""> Date  </Label>
+                                            <Input
+                                                type="date"
+                                                name="date"
+                                                id="date"
+                                                value={confirmatoryTest.date}
+                                                onChange={handleInputChangeConfirmatory}
+                                                min={initialTest.date}
+                                                max= {moment(new Date()).format("YYYY-MM-DD") }
+                                                style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
+                                                required
+                                            />
+                                            {errors.dateOfEac1 !=="" ? (
+                                                <span className={classes.error}>{errors.dateOfEac1}</span>
+                                            ) : "" }
+                                            </FormGroup>
+                                        </div>
+                                        <div className="form-group  col-md-5">
+                                            <FormGroup>
+                                                <Label>Result </Label>
+                                                <select
+                                                    className="form-control"
+                                                    name="result"
+                                                    id="result"
+                                                    value={confirmatoryTest.result}
+                                                    onChange={handleInputChangeConfirmatory}
+                                                    style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                                >
+                                                    <option value={""}></option>
+                                                    <option value="Yes">Reactive</option>
+                                                    <option value="No">Non Reactive</option>
+                                                    
+                                                </select>
+                                                
+                                            </FormGroup>
+                                        </div>
+                                        <div className="form-group  col-md-2"></div>
+                                        </>
+                                        )}
+                                        {confirmatoryTest.result ==='No' && (
+                                        <>
+                                        <h4>Tie Breaker Test 2:</h4>
+                                        <div className="form-group mb-3 col-md-5">
+                                            <FormGroup>
+                                            <Label for=""> Date  </Label>
+                                            <Input
+                                                type="date"
+                                                name="date"
+                                                id="date"
+                                                value={tieBreakerTest.date}
+                                                onChange={handleInputChangeTie}
+                                                min={confirmatoryTest.date}
+                                                max= {moment(new Date()).format("YYYY-MM-DD") }
+                                                style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
+                                                required
+                                            />
+                                        
+                                            </FormGroup>
+                                        </div>
+                                        <div className="form-group  col-md-5">
+                                            <FormGroup>
+                                                <Label>Result </Label>
+                                                <select
+                                                    className="form-control"
+                                                    name="result"
+                                                    id="result"
+                                                    value={tieBreakerTest.result}
+                                                    onChange={handleInputChangeTie}
+                                                    style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                                >
+                                                    <option value={""}></option>
+                                                    <option value="Yes">Reactive</option>
+                                                    <option value="No">Non Reactive</option>
+                                                    
+                                                </select>
+                                                
+                                            </FormGroup>
+                                        </div>
+                                        <div className="form-group  col-md-2"></div>
+            
+                                        </>)}
+                                    </>
                                 )}
                                 {(initialTest.result==='Yes' && confirmatoryTest.result==='No' && tieBreakerTest.result==='' ) && (
                                     <LabelRibbon color="green" >
@@ -632,7 +762,7 @@ const HivTestResult = (props) => {
                             </>)
                             }
                             
-                            <Button content='Next' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
+                            <Button content='Save & Continue' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
                             </div>
                             </div>
                         </div>

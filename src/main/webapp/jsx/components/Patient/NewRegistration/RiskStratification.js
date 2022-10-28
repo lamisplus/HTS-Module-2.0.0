@@ -366,7 +366,7 @@ const BasicInfo = (props) => {
             props.patientObj.targetGroup = objValues.targetGroup
             props.patientObj.testingSetting = objValues.testingSetting
             props.patientObj.modality = objValues.modality
-            props.patientObj.dateVisit= objValues.dateVisit
+            props.patientObj.dateVisit= objValues.visitDate
             objValues.riskAssessment=riskAssessment
             if((riskCount>0 || riskCountQuestion.length>0) && objValues.age>15){
                 handleItemClick('basic', 'risk' )
@@ -385,7 +385,7 @@ const BasicInfo = (props) => {
                     )
                     .then(response => {
                         setSaving(false);
-                        toast.success("Risk stratification save succesfully!");
+                        //toast.success("Risk stratification save succesfully!");
                     })
                     .catch(error => {
                         setSaving(false);
@@ -397,12 +397,13 @@ const BasicInfo = (props) => {
                             toast.error("Something went wrong. Please try again...");
                         }
                     });
-                    }
+                }
 
             }
             
     }
-    console.log(errors)
+
+    console.log(objValues.targetGroup)
 
     return (
         <>  
@@ -584,7 +585,7 @@ const BasicInfo = (props) => {
                             <br />
                              
                             {objValues.age>15 && ( <>
-                            {(objValues.targetGroup==="473" )&& ( <>
+                            {(objValues.targetGroup==="TARGET_GROUP_GEN_POP" )&& ( <>
                             <div className="form-group  col-md-12 text-center pt-2 mb-4" style={{backgroundColor:'#992E62', width:'125%', height:'35px', color:'#fff', fontWeight:'bold'}} >HIV Risk Assessment  (Last 3 months)</div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>

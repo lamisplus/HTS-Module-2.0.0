@@ -328,7 +328,7 @@ const UserRegistration = (props) => {
                                 active={activeItem === 'hiv-test'}
                                 onClick={()=>handleItemClick('hiv-test')}
                                 style={{backgroundColor:activeItem === 'hiv-test' ? '#000': ""}}
-                                disabled={activeItem !== 'hiv-test' ? true : false}
+                                ///disabled={activeItem !== 'hiv-test' ? true : false}
                             >               
                                 <span style={{color:'#fff'}}>Request {"&"} Result Form
                                 {completed.includes('hiv-test') && (

@@ -114,15 +114,19 @@ const BasicInfo = (props) => {
         {
             age:"",
             dob:"",
-            dateVisit: "",         
+            visitDate: "", //        
             dateOfBirth: null,
             dateOfRegistration:null,
             isDateOfBirthEstimated: "",
             targetGroup:"",
-            settingModality:"",
-            setting  :""
+            testingSetting:"",//
+            modality  :"", //
+            code:"",
+            personId:"",
+            riskAssessment: {},
 
         }
+
     )
     const [riskAssessment, setRiskAssessment]= useState(
         {
@@ -181,11 +185,11 @@ const BasicInfo = (props) => {
     }
     const handleInputChange = e => { 
         setErrors({...temp, [e.target.name]:""})
-        if(e.target.name==='setting' && e.target.value!==""){
+        if(e.target.name==='testingSetting' && e.target.value!==""){
             SettingModality(e.target.value)
             setObjValues ({...objValues,  [e.target.name]: e.target.value}); 
         }
-        if(e.target.name==='settingModality' && e.target.value!==""){
+        if(e.target.name==='modality' && e.target.value!==""){
             //SettingModality(e.target.value)
             if(e.target.value==="TEST_SETTING_STANDALONE_HTS_PMTCT_(ANC1_ONLY)"){
                 setRiskCount(1)
@@ -321,7 +325,7 @@ const BasicInfo = (props) => {
     const validate = () => {
         //HTS FORM VALIDATION
 
-            temp.dateVisit = objValues.dateVisit ? "" : "This field is required."  
+            temp.visitDate = objValues.visitDate ? "" : "This field is required."  
             temp.dob = objValues.dob ? "" : "This field is required."
             temp.age = objValues.age ? "" : "This field is required."              
                 setErrors({ ...temp })
@@ -360,8 +364,10 @@ const BasicInfo = (props) => {
             props.patientObj.personResponseDto.dateOfBirth = objValues.dob
             props.patientObj.personResponseDto.isDateOfBirthEstimated = objValues.isDateOfBirthEstimated
             props.patientObj.targetGroup = objValues.targetGroup
-            props.patientObj.testingSetting = objValues.setting
-            props.patientObj.dateVisit= objValues.dateVisit
+            props.patientObj.testingSetting = objValues.testingSetting
+            props.patientObj.modality = objValues.modality
+            props.patientObj.dateVisit= objValues.visitDate
+            objValues.riskAssessment=riskAssessment
             if((riskCount>0 || riskCountQuestion.length>0) && objValues.age>15){
                 handleItemClick('basic', 'risk' )
                 props.setExtra(objValues)
@@ -371,37 +377,33 @@ const BasicInfo = (props) => {
                 handleItemClick('basic', 'risk' )
             }else{
                 props.setHideOtherMenu(false)
-                //toast.success("Risk stratification save succesfully!");
-            }
-            // if(validate()){
-            // axios.post(`${baseUrl}hts`,objValues,
-            // { headers: {"Authorization" : `Bearer ${token}`}},
-            
-            // )
-            // .then(response => {
-            //     setSaving(false);
-            //     props.setPatientObj(response.data)
-            //     if(objValues.age>14){
-            //         handleItemClick('pre-test-counsel', 'basic' )
-            //     }else{
-            //         handleItemClick('hiv-test', 'basic' )
-            //     }
-                
+                props.setExtra(objValues)
+                if(validate()){
+                    axios.post(`${baseUrl}risk-stratification`,objValues,
+                    { headers: {"Authorization" : `Bearer ${token}`}},
+                    
+                    )
+                    .then(response => {
+                        setSaving(false);
+                        //toast.success("Risk stratification save succesfully!");
+                    })
+                    .catch(error => {
+                        setSaving(false);
+                        if(error.response && error.response.data){
+                            let errorMessage = error.response.data.apierror && error.response.data.apierror.message!=="" ? error.response.data.apierror.message :  "Something went wrong, please try again";
+                            toast.error(errorMessage);
+                        }
+                        else{
+                            toast.error("Something went wrong. Please try again...");
+                        }
+                    });
+                }
 
-            // })
-            // .catch(error => {
-            //     setSaving(false);
-            //     if(error.response && error.response.data){
-            //         let errorMessage = error.response.data.apierror && error.response.data.apierror.message!=="" ? error.response.data.apierror.message :  "Something went wrong, please try again";
-            //         toast.error(errorMessage);
-            //     }
-            //     else{
-            //         toast.error("Something went wrong. Please try again...");
-            //     }
-            // });
-            // }
+            }
+            
     }
 
+    console.log(objValues.targetGroup)
 
     return (
         <>  
@@ -419,9 +421,9 @@ const BasicInfo = (props) => {
                                     <Label>Setting</Label>
                                     <select
                                         className="form-control"
-                                        name="setting"
-                                        id="setting"
-                                        value={objValues.setting}
+                                        name="testingSetting"
+                                        id="testingSetting"
+                                        value={objValues.testingSetting}
                                         onChange={handleInputChange}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
@@ -443,8 +445,8 @@ const BasicInfo = (props) => {
                                         <option value="TEST_SETTING_OTHERS">OTHERS</option> */}
 
                                     </select>
-                                    {errors.setting !=="" ? (
-                                    <span className={classes.error}>{errors.setting}</span>
+                                    {errors.testingSetting !=="" ? (
+                                    <span className={classes.error}>{errors.testingSetting}</span>
                                     ) : "" }
                                 </FormGroup>
                             </div>
@@ -453,9 +455,9 @@ const BasicInfo = (props) => {
                                     <Label>Modality</Label>
                                     <select
                                         className="form-control"
-                                        name="settingModality"
-                                        id="settingModality"
-                                        value={objValues.settingModality}
+                                        name="modality"
+                                        id="modality"
+                                        value={objValues.modality}
                                         onChange={handleInputChange}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
@@ -467,8 +469,8 @@ const BasicInfo = (props) => {
                                         ))}
                                         
                                     </select>
-                                    {errors.settingModality !=="" ? (
-                                    <span className={classes.error}>{errors.settingModality}</span>
+                                    {errors.modality !=="" ? (
+                                    <span className={classes.error}>{errors.modality}</span>
                                     ) : "" }
                                 </FormGroup>
                             </div>
@@ -477,17 +479,17 @@ const BasicInfo = (props) => {
                                 <Label for="">Visit Date  </Label>
                                 <Input
                                     type="date"
-                                    name="dateVisit"
-                                    id="dateVisit"
-                                    value={objValues.dateVisit}
+                                    name="visitDate"
+                                    id="visitDate"
+                                    value={objValues.visitDate}
                                     onChange={handleInputChange}
                                     min="1983-12-31"
                                     max= {moment(new Date()).format("YYYY-MM-DD") }
                                     style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
                                     
                                 />
-                                {errors.dateVisit !=="" ? (
-                                    <span className={classes.error}>{errors.dateVisit}</span>
+                                {errors.visitDate !=="" ? (
+                                    <span className={classes.error}>{errors.visitDate}</span>
                                 ) : "" }
                                 </FormGroup>
                             </div>
@@ -507,7 +509,7 @@ const BasicInfo = (props) => {
                                     >
                                         <option value={""}></option>
                                         {kP.map((value) => (
-                                            <option key={value.id} value={value.id}>
+                                            <option key={value.id} value={value.code}>
                                                 {value.display}
                                             </option>
                                         ))}
@@ -583,7 +585,7 @@ const BasicInfo = (props) => {
                             <br />
                              
                             {objValues.age>15 && ( <>
-                            {(objValues.targetGroup==="473" )&& ( <>
+                            {(objValues.targetGroup==="TARGET_GROUP_GEN_POP" )&& ( <>
                             <div className="form-group  col-md-12 text-center pt-2 mb-4" style={{backgroundColor:'#992E62', width:'125%', height:'35px', color:'#fff', fontWeight:'bold'}} >HIV Risk Assessment  (Last 3 months)</div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>

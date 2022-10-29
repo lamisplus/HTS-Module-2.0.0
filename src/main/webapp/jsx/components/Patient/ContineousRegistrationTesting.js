@@ -281,6 +281,7 @@ const UserRegistration = (props) => {
                                     active={activeItem === 'basic'}
                                     onClick={()=>handleItemClick('basic')}
                                     style={{backgroundColor:activeItem === 'basic' ? '#000': ""}}
+                                    disabled={activeItem !== 'basic' ? true : false}
                                 >               
                                     <span style={{color:'#fff'}}> Basic Information
                                     {completed.includes('basic') && (

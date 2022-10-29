@@ -299,6 +299,7 @@ const UserRegistration = (props) => {
                                 active={activeItem === 'basic'}
                                 onClick={()=>handleItemClick('basic')}
                                 style={{backgroundColor:activeItem === 'basic' ? '#000': ""}}
+                                disabled={activeItem !== 'basic' ? true : false}
                             >               
                                 <span style={{color:'#fff'}}> Basic Information
                                 {completed.includes('basic') && (
@@ -313,7 +314,7 @@ const UserRegistration = (props) => {
                                 active={activeItem === 'pre-test-counsel'}
                                 onClick={()=>handleItemClick('pre-test-counsel')}
                                 style={{backgroundColor:activeItem === 'pre-test-counsel' ? '#000': ""}}
-                                //disabled={activeItem !== 'pre-test-counsel' ? true : false}
+                                disabled={activeItem !== 'pre-test-counsel' ? true : false}
                             >
                             {/* <Label>2</Label> */}
                             <span style={{color:'#fff'}}>Pre Test Counseling
@@ -328,7 +329,7 @@ const UserRegistration = (props) => {
                                 active={activeItem === 'hiv-test'}
                                 onClick={()=>handleItemClick('hiv-test')}
                                 style={{backgroundColor:activeItem === 'hiv-test' ? '#000': ""}}
-                                ///disabled={activeItem !== 'hiv-test' ? true : false}
+                                disabled={activeItem !== 'hiv-test' ? true : false}
                             >               
                                 <span style={{color:'#fff'}}>Request {"&"} Result Form
                                 {completed.includes('hiv-test') && (

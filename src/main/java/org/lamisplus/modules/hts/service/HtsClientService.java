@@ -216,6 +216,15 @@ public class HtsClientService {
         return null;
     }
 
+
+    public List<HtsClientDtos> getAllHtsClientDTOSByPerson(Page<Person> page){
+        return page.stream()
+                .map(person -> getHtsClientByPersonId(person.getId()))
+                //.filter(htsClientDtos ->htsClientDtos.getClientCode() != null)
+                .collect(Collectors.toList());
+    }
+
+
     private HtsClientDtos htsClientToHtsClientDtos(List<HtsClient> clients){
         final Long[] pId = {null};
         final String[] clientCode = {null};
@@ -296,7 +305,12 @@ public class HtsClientService {
     }
 
     public Page<HtsClient> findHtsClientPage(Pageable pageable) {
+        Page<Person> personPage = personRepository.findAll(pageable);
         return htsClientRepository.findAll(pageable);
+    }
+
+    public Page<Person> findHtsClientPersonPage(Pageable pageable) {
+        return personRepository.findAll(pageable);
     }
 
     public HtsClientDtos getAllHtsClientDtos(Page<HtsClient> page) {

@@ -26,7 +26,7 @@
                 previously_tested boolean,
                 extra jsonb,
                 pregnant bigint,
-                breast_feeding bigint,
+                breast_feeding boolean,
                 relation_with_index_client bigint,
                 test1 jsonb,
                 confirmatory_test jsonb,

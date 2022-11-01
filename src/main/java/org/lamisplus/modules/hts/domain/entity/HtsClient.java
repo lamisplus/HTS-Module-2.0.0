@@ -144,7 +144,7 @@ public class HtsClient extends Audit implements Serializable {
 
     @Basic
     @Column(name = "breast_feeding")
-    private Long breastFeeding;
+    private Boolean breastFeeding;
 
     /*@ManyToOne
     @JoinColumn(name = "relation_with_index_client", referencedColumnName = "id", insertable = false, updatable = false)

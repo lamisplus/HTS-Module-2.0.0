@@ -6,6 +6,7 @@ import org.lamisplus.modules.hts.domain.entity.HtsClient;
 import org.lamisplus.modules.hts.service.HtsClientService;
 import org.lamisplus.modules.hts.service.IndexElicitationService;
 import org.lamisplus.modules.hts.util.PaginationUtil;
+import org.lamisplus.modules.patient.domain.entity.Person;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -52,10 +53,10 @@ public class HtsClientController {
     public ResponseEntity<HtsClientDto> updatePostTestCounselingKnowledgeAssessment(@PathVariable Long id, @Valid @RequestBody PostTestCounselingDto postTestCounselingDto) {
         return ResponseEntity.ok(this.htsClientService.updatePostTestCounselingKnowledgeAssessment(id, postTestCounselingDto));
     }
-    @PutMapping(HTS_URL_VERSION_ONE +"/{id}/index-notification-services-elicitation")
+    /*@PutMapping(HTS_URL_VERSION_ONE +"/{id}/index-notification-services-elicitation")
     public ResponseEntity<HtsClientDto> updateIndexNotificationServicesElicitation(@PathVariable Long id, @Valid @RequestBody IndexElicitationDto indexElicitationDto) {
         return ResponseEntity.ok(this.htsClientService.updateIndexNotificationServicesElicitation(id, indexElicitationDto));
-    }
+    }*/
     @GetMapping(HTS_URL_VERSION_ONE + "/{id}")
     public ResponseEntity<HtsClientDtos> getHtsClientById(@PathVariable Long id) {
         return ResponseEntity.ok(this.htsClientService.getHtsClientById(id));
@@ -78,10 +79,10 @@ public class HtsClientController {
     }
 
     @GetMapping(HTS_URL_VERSION_ONE)
-    public ResponseEntity<HtsClientDtos> getHtsClients(@PageableDefault(value = 50) Pageable pageable) {
-        Page<HtsClient> page = htsClientService.findHtsClientPage(pageable);
+    public ResponseEntity<List<HtsClientDtos>> getHtsClients(@PageableDefault(value = 30) Pageable pageable) {
+        Page<Person> page = htsClientService.findHtsClientPersonPage(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
-        return new ResponseEntity<>(this.htsClientService.getAllHtsClientDtos(page, null), headers, HttpStatus.OK);
+        return new ResponseEntity<>(this.htsClientService.getAllHtsClientDTOSByPerson(page), headers, HttpStatus.OK);
     }
 
     @GetMapping(HTS_URL_VERSION_ONE+ "/risk-stratification/person/{personId}")
@@ -90,8 +91,10 @@ public class HtsClientController {
     }
 
     @GetMapping(HTS_URL_VERSION_ONE + "/persons")
-    public ResponseEntity<List<HtsClientDtos>> getAllPerson() {
-        return ResponseEntity.ok(this.htsClientService.getAllPatients());
+    public ResponseEntity<List<HtsClientDtos>> getAllPerson(@PageableDefault(value = 30) Pageable pageable) {
+        Page<Person> page = htsClientService.findHtsClientPersonPage(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return new ResponseEntity<>(this.htsClientService.getAllHtsClientDTOSByPerson(page), headers, HttpStatus.OK);
     }
 
     @DeleteMapping(HTS_URL_VERSION_ONE + "/{id}")

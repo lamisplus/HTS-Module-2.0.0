@@ -53,10 +53,10 @@ public class HtsClientController {
     public ResponseEntity<HtsClientDto> updatePostTestCounselingKnowledgeAssessment(@PathVariable Long id, @Valid @RequestBody PostTestCounselingDto postTestCounselingDto) {
         return ResponseEntity.ok(this.htsClientService.updatePostTestCounselingKnowledgeAssessment(id, postTestCounselingDto));
     }
-    @PutMapping(HTS_URL_VERSION_ONE +"/{id}/index-notification-services-elicitation")
+    /*@PutMapping(HTS_URL_VERSION_ONE +"/{id}/index-notification-services-elicitation")
     public ResponseEntity<HtsClientDto> updateIndexNotificationServicesElicitation(@PathVariable Long id, @Valid @RequestBody IndexElicitationDto indexElicitationDto) {
         return ResponseEntity.ok(this.htsClientService.updateIndexNotificationServicesElicitation(id, indexElicitationDto));
-    }
+    }*/
     @GetMapping(HTS_URL_VERSION_ONE + "/{id}")
     public ResponseEntity<HtsClientDtos> getHtsClientById(@PathVariable Long id) {
         return ResponseEntity.ok(this.htsClientService.getHtsClientById(id));
@@ -91,8 +91,10 @@ public class HtsClientController {
     }
 
     @GetMapping(HTS_URL_VERSION_ONE + "/persons")
-    public ResponseEntity<List<HtsClientDtos>> getAllPerson() {
-        return ResponseEntity.ok(this.htsClientService.getAllPatients());
+    public ResponseEntity<List<HtsClientDtos>> getAllPerson(@PageableDefault(value = 30) Pageable pageable) {
+        Page<Person> page = htsClientService.findHtsClientPersonPage(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return new ResponseEntity<>(this.htsClientService.getAllHtsClientDTOSByPerson(page), headers, HttpStatus.OK);
     }
 
     @DeleteMapping(HTS_URL_VERSION_ONE + "/{id}")

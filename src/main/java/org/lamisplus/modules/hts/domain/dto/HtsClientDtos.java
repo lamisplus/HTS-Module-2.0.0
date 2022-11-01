@@ -13,5 +13,6 @@ public class HtsClientDtos {
     private String clientCode;
     private PersonResponseDto personResponseDto;
     private List<HtsClientDto> htsClientDtoList;
+    private Boolean hivPositive;
     private List<RiskStratificationResponseDto> riskStratificationResponseDtos = new ArrayList<>();
 }

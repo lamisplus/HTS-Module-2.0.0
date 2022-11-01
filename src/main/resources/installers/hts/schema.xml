@@ -26,7 +26,7 @@
                 previously_tested boolean,
                 extra jsonb,
                 pregnant bigint,
-                breast_feeding bigint,
+                breast_feeding boolean,
                 relation_with_index_client bigint,
                 test1 jsonb,
                 confirmatory_test jsonb,
@@ -58,10 +58,6 @@
                 archived integer,
                 index_client_code character varying,
                 CONSTRAINT unique_hts_uuid UNIQUE (uuid),
-                CONSTRAINT breast_feeding_fk FOREIGN KEY (breast_feeding)
-                    REFERENCES base_application_codeset (id) MATCH SIMPLE
-                    ON UPDATE NO ACTION
-                    ON DELETE NO ACTION,
                 CONSTRAINT person_uuid_fk FOREIGN KEY (person_uuid)
                     REFERENCES patient_person (uuid) MATCH SIMPLE
                     ON UPDATE NO ACTION

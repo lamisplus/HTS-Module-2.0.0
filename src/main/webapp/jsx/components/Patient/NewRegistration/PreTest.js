@@ -112,7 +112,7 @@ const BasicInfo = (props) => {
     };
     
     useEffect(() => { 
-        //console.log(props.patientObj)
+        console.log(props.patientObj)
         if(props.patientObj){
             setKnowledgeAssessment(props.patientObj.knowledgeAssessment  && props.patientObj.knowledgeAssessment!==null ? props.patientObj.knowledgeAssessment : {})
             setRiskAssessment(props.patientObj.riskAssessment  && props.patientObj.riskAssessment!==null ? props.patientObj.riskAssessment : {})
@@ -391,6 +391,7 @@ const BasicInfo = (props) => {
                                 </FormGroup>
                             </div>
                             )}
+                            {props.patientObj && props.patientObj.personResponseDto.sex ==='Female' && (
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Client pregnant *</Label>
@@ -412,6 +413,7 @@ const BasicInfo = (props) => {
                                     ) : "" }
                                 </FormGroup>
                             </div>
+                            )}
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Client informed about HIV transmission routes *</Label>

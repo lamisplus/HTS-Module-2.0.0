@@ -102,8 +102,18 @@ const PostTest = (props) => {
         //console.log(props.patientObj)
         if(props.patientObj){
             setPostTest(props.patientObj && props.patientObj.postTestCounselingKnowledgeAssessment!==null ? props.patientObj.postTestCounselingKnowledgeAssessment : {}) 
+            if(props.patientObj.hivTestResult==='Positive' || props.patientObj.hivTestResult2==='Positive'){
+                postTest.hivTestResult='True'
+                setPostTest({...postTest, hivTestResult:'True' })
+            console.log(props.patientObj.hivTestResult2)
+            }else if(props.patientObj.hivTestResult==='Negative' || props.patientObj.hivTestResult2==='Negative'){
+                postTest.hivTestResult='False'
+                setPostTest({...postTest, hivTestResult:'False' })
+            }
+        
         }
-    }, [props.patientObj]);
+        
+    }, [props.patientObj, postTest.hivTestResult]);
     const [postTest, setPostTest]= useState(
         {
             hivTestResult:"", 
@@ -139,8 +149,9 @@ const PostTest = (props) => {
         }
     }
     const handleSubmit =(e)=>{
-        handleItemClick('recency-testing', 'post-test')
+        //handleItemClick('recency-testing', 'post-test')
         e.preventDefault();
+        if(!(Object.values(postTest).every(x => x === ""))){
             objValues.htsClientId= clientId
             objValues.postTestCounselingKnowledgeAssessment= postTest
             objValues.personId= patientID
@@ -152,7 +163,13 @@ const PostTest = (props) => {
                 setSaving(false);
                 props.setPatientObj(response.data)
                 //toast.success("Risk Assesment successful");
-                handleItemClick('recency-testing', 'post-test')
+                if(postTest.hivTestResult==='True'){
+                    handleItemClick('recency-testing', 'post-test')
+                }else{
+                    //history.push('/');
+                    props.setActivePage({...props.activePage,  activePage:"home", })
+                }
+                //handleItemClick('recency-testing', 'post-test')
 
             })
             .catch(error => {
@@ -165,7 +182,10 @@ const PostTest = (props) => {
                     toast.error("Something went wrong. Please try again...");
                 }
             });
-            
+        }else{
+            toast.error("All post test fields are required")  
+        
+        }    
     }
 
     return (
@@ -192,7 +212,7 @@ const PostTest = (props) => {
                                     >
                                         <option value={""}></option>
                                         <option value="True">Positive</option>
-                                        <option value="false">Negative</option>
+                                        <option value="False">Negative</option>
                                         
                                     </select>
                                     
@@ -535,7 +555,12 @@ const PostTest = (props) => {
                             <div className="row">
                             <div className="form-group mb-3 col-md-6">
                                 <Button content='Back' icon='left arrow' labelPosition='left' style={{backgroundColor:"#992E62", color:'#fff'}} onClick={()=>handleItemClick('hiv-test', 'hiv-test')}/>
-                                <Button content='Save & Continue' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
+                                {postTest.hivTestResult==='True' && (
+                                    <Button content='Save & Continue' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
+                                )}
+                                {postTest.hivTestResult==='False' && (
+                                    <Button content='Save & Finish' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
+                                )}
                             </div>
                             </div>
                         </div>

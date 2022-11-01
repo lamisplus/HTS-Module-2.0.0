@@ -88,6 +88,7 @@ const BasicInfo = (props) => {
     const clientId = props.patientObj && props.patientObj ? props.patientObj.id : "";
     const [saving, setSaving] = useState(false);
     const [errors, setErrors] = useState({});
+    const [hivTestDate, setHivTestDate] = useState("");
     let temp = { ...errors }
     const handleItemClick =(page, completedMenu)=>{
         props.handleItemClick(page)
@@ -129,7 +130,14 @@ const BasicInfo = (props) => {
     
     useEffect(() => { 
         if(props.patientObj){
-            setRecency(props.patientObj && props.patientObj.recency!==null ? props.patientObj.recency : {}) 
+            setRecency(props.patientObj && props.patientObj.recency!==null ? props.patientObj.recency : {})
+            if(props.patientObj.confirmatoryTest && props.patientObj.confirmatoryTest.date!=='' ){
+                setHivTestDate(props.patientObj.confirmatoryTest.date)
+            }else if(props.patientObj.confirmatoryTest2 && props.patientObj.confirmatoryTest2.date2!=='' ){
+                setHivTestDate(props.patientObj.confirmatoryTest2.date2)
+            }else{
+                setHivTestDate(props.patientObj.confirmatoryTest.date)
+            }
         }
         if(recency.longTermLine==='true' && recency.verififcationLine==='true' && recency.controlLine==='true'){
             recency.rencencyInterpretation="Long Term"
@@ -157,6 +165,7 @@ const BasicInfo = (props) => {
             setRecency ({...recency,  ['rencencyInterpretation']: ''});
         }
     },[recency.longTermLine,recency.verififcationLine, recency.controlLine, props.patientObj]);
+    console.log(props.patientObj)
     const handleInputChangeRecency = e => { 
         setErrors({...temp, [e.target.name]:""})        
         if(e.target.name ==='viralLoadResultClassification'){
@@ -172,8 +181,18 @@ const BasicInfo = (props) => {
             }else{
 
             }
-        } 
-        setRecency ({...recency,  [e.target.name]: e.target.value});  
+        }else if(e.target.name==='rencencyId' && e.target.value!==''){
+            const recencyIdNumberValue = checkRecencyLimit(e.target.value)
+            setRecency ({...recency,  [e.target.name]: recencyIdNumberValue});
+        }else {
+            setRecency ({...recency,  [e.target.name]: e.target.value}); 
+        }
+         
+    }
+    const checkRecencyLimit=(e)=>{
+        const limit = 10;        
+        const acceptedNumber= e.slice(0, limit)
+        return  acceptedNumber   
     }
     /*****  Validation  */
     const validate = () => {
@@ -280,6 +299,7 @@ const BasicInfo = (props) => {
                                         id="optOutRTRITestDate"
                                         value={recency.optOutRTRITestDate}
                                         onChange={handleInputChangeRecency}
+                                        min={hivTestDate}
                                         max= {moment(new Date()).format("YYYY-MM-DD") }
                                         style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
                                     
@@ -411,6 +431,8 @@ const BasicInfo = (props) => {
                                             id="sampleCollectedDate"
                                             type="date"
                                             value={recency.sampleCollectedDate}
+                                            min={recency.optOutRTRITestDate}
+                                            max= {moment(new Date()).format("YYYY-MM-DD") }
                                             onChange={handleInputChangeRecency}
                                             style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                         />
@@ -446,8 +468,8 @@ const BasicInfo = (props) => {
                                             style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                         >
                                             <option value={""}></option>
-                                            <option value="true">Yes</option>
-                                            <option value="false">No</option>
+                                            <option value="DBS">DBS</option>
+                                            <option value="Plasma">Plasma</option>
                                             
                                         </select>
                                         {errors.sampleType !=="" ? (
@@ -463,7 +485,9 @@ const BasicInfo = (props) => {
                                             name="dateSampleSentToPCRLab"
                                             id="dateSampleSentToPCRLab"
                                             type="date"
+                                            min={recency.optOutRTRITestDate}
                                             value={recency.dateSampleSentToPCRLab}
+                                            max= {moment(new Date()).format("YYYY-MM-DD") }
                                             onChange={handleInputChangeRecency}
                                             style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                         />
@@ -480,6 +504,8 @@ const BasicInfo = (props) => {
                                             name="sampleTestDate"
                                             id="sampleTestDate"
                                             type="date"
+                                            min={recency.optOutRTRITestDate}
+                                            max= {moment(new Date()).format("YYYY-MM-DD") }
                                             value={recency.sampleTestDate}
                                             onChange={handleInputChangeRecency}
                                             style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
@@ -513,6 +539,7 @@ const BasicInfo = (props) => {
                                             onChange={handleInputChangeRecency}
                                             style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                         >
+                                            <option value={""}>Select</option>
                                             <option value=">=1000">{">= "} 1000</option>
                                             <option value="<1000">{"< "} 1000</option>
                                             <option value="Failed run">Failed run</option>

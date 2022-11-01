@@ -412,6 +412,7 @@ const BasicInfo = (props) => {
         // }else{
         //     setHideNumChild(false)
         // } 
+        
         if(e.target.name==='indexClientCode' && e.target.value!==''){
             async function getIndexClientCode() {
                 const indexClientCode=e.target.value
@@ -506,6 +507,7 @@ const BasicInfo = (props) => {
         const result = value.replace(/[^a-z]/gi, '');
         return result
     }
+    
     /*****  Validation  */
     const validate = () => {
         //HTS FORM VALIDATION
@@ -1193,8 +1195,8 @@ const BasicInfo = (props) => {
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}>Select</option>
-                                        <option value="1">YES</option>
-                                        <option value="0">NO</option>
+                                        <option value="true">YES</option>
+                                        <option value="false">NO</option>
                                     </select>
                                     
                                 </FormGroup>

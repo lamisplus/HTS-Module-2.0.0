@@ -134,8 +134,11 @@ const PostTest = (props) => {
     }
     useEffect(() => { 
         setPostTest({...postTest, ...props.patientObj.postTestCounselingKnowledgeAssessment}) 
-
+        if(props.patientObj && (props.patientObj.hivTestResult==='Positive' || props.patientObj.hivTestResult2!=='Positive')){
+            postTest.hivTestResult='Positive'
+        }
     }, [ props.patientObj]);
+    
     const handleSubmit =(e)=>{
         e.preventDefault();
         if(props.activePage.actionType==='view'){
@@ -194,7 +197,7 @@ const PostTest = (props) => {
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>
-                                        <option value="True">Positive</option>
+                                        <option value="True" >Positive</option>
                                         <option value="false">Negative</option>
                                         
                                     </select>

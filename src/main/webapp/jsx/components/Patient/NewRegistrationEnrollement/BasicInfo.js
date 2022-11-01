@@ -167,7 +167,6 @@ const BasicInfo = (props) => {
         //setObjValues({...objectValues, genderId: props.patientObj.personResponseDto.gender.id})
         //objValues.genderId = props.patientObj && props.patientObj.personResponseDto ? props.patientObj.personResponseDto.gender.id : ""
     }, [props.patientObj]);
-
     //Get list of KP
     const KP =()=>{
         axios
@@ -361,7 +360,7 @@ const BasicInfo = (props) => {
         
             <Card className={classes.root}>
                 <CardBody>   
-                <h2 style={{color:'#000'}}>CLIENT INTAKE FORM -- - for existing 5</h2>
+                <h2 style={{color:'#000'}}>CLIENT INTAKE FORM </h2>
                 <br/>
                     <form >
                         <div className="row">
@@ -378,7 +377,7 @@ const BasicInfo = (props) => {
                                     >
                                         <option value={""}></option>
                                         {kP.map((value) => (
-                                            <option key={value.id} value={value.id}>
+                                            <option key={value.id} value={value.code}>
                                                 {value.display}
                                             </option>
                                         ))}
@@ -412,6 +411,7 @@ const BasicInfo = (props) => {
                                         className="form-control"
                                         name="referredFrom"
                                         id="referredFrom"
+                                        value={objValues.referredFrom}
                                         onChange={handleInputChange}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
@@ -440,7 +440,7 @@ const BasicInfo = (props) => {
                                     >
                                         <option value={""}></option>
                                         {enrollSetting.map((value) => (
-                                            <option key={value.id} value={value.id}>
+                                            <option key={value.id} value={value.code}>
                                                 {value.display}
                                             </option>
                                         ))}

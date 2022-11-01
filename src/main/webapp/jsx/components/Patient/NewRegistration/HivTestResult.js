@@ -270,6 +270,10 @@ const HivTestResult = (props) => {
             setSyphills(props.patientObj  && props.patientObj.syphilisTesting!==null ? props.patientObj.syphilisTesting : {})
             setHepatitis(props.patientObj  && props.patientObj.hepatitisTesting!==null ? props.patientObj.hepatitisTesting : {})
             setOthers(props.patientObj  && props.patientObj.others!==null ? props.patientObj.others : {})
+            
+            setInitailTest2(props.patientObj  && props.patientObj.test2!==null? props.patientObj.test2 : {})
+            setConfirmatoryTest2(props.patientObj  && props.patientObj.confirmatoryTest2!==null? props.patientObj.confirmatoryTest2 : {})
+            setTieBreakerTest2(props.patientObj && props.patientObj.tieBreakerTest2!==null ? props.patientObj.tieBreakerTest2 : {})
         }
     }, [props.patientObj]);//initialTest12, tieBreakerTest2, confirmatoryTest2, 
 

@@ -112,7 +112,6 @@ const BasicInfo = (props) => {
     };
     
     useEffect(() => { 
-        console.log(props.patientObj)
         if(props.patientObj){
             setKnowledgeAssessment(props.patientObj.knowledgeAssessment  && props.patientObj.knowledgeAssessment!==null ? props.patientObj.knowledgeAssessment : {})
             setRiskAssessment(props.patientObj.riskAssessment  && props.patientObj.riskAssessment!==null ? props.patientObj.riskAssessment : {})

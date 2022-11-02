@@ -89,6 +89,7 @@ const useStyles = makeStyles((theme) => ({
 const BasicInfo = (props) => {
     const classes = useStyles();
     const patientID= props.patientObj && props.patientObj.personResponseDto ? props.patientObj.personResponseDto.id : "";
+    const sex= props.patientObj && props.patientObj.personResponseDto ? props.patientObj.personResponseDto.sex : "";
     const clientId = props.patientObj && props.patientObj ? props.patientObj.id : "";
     const [saving, setSaving] = useState(false);
     const [errors, setErrors] = useState({});
@@ -319,7 +320,7 @@ const BasicInfo = (props) => {
             });
             
     }
-
+    console.log(sex)
 
     return (
         <>
@@ -378,6 +379,7 @@ const BasicInfo = (props) => {
                                 </FormGroup>
                             </div>
                             )}
+                            {sex ==='Female' && (
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Client pregnant *</Label>
@@ -399,6 +401,7 @@ const BasicInfo = (props) => {
                                     ) : "" }
                                 </FormGroup>
                             </div>
+                             )}
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Client informed about HIV transmission routes *</Label>

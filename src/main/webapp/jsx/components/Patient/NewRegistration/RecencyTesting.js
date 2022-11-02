@@ -82,7 +82,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const BasicInfo = (props) => {
+const Recency = (props) => {
     const classes = useStyles();
     const patientID= props.patientObj && props.patientObj.personResponseDto ? props.patientObj.personResponseDto.id : "";
     const clientId = props.patientObj && props.patientObj ? props.patientObj.id : "";
@@ -136,7 +136,7 @@ const BasicInfo = (props) => {
             }else if(props.patientObj.confirmatoryTest2 && props.patientObj.confirmatoryTest2.date2!=='' ){
                 setHivTestDate(props.patientObj.confirmatoryTest2.date2)
             }else{
-                setHivTestDate(props.patientObj.confirmatoryTest.date)
+                setHivTestDate("")
             }
         }
         if(recency.longTermLine==='true' && recency.verififcationLine==='true' && recency.controlLine==='true'){
@@ -169,6 +169,7 @@ const BasicInfo = (props) => {
     const handleInputChangeRecency = e => { 
         setErrors({...temp, [e.target.name]:""})        
         if(e.target.name ==='viralLoadResultClassification'){
+            setRecency ({...recency,  [e.target.name]: e.target.value}); 
             if(e.target.value ==='>=1000'){
                 recency.finalRecencyResult='RITA Recent'
             
@@ -299,7 +300,7 @@ const BasicInfo = (props) => {
                                         id="optOutRTRITestDate"
                                         value={recency.optOutRTRITestDate}
                                         onChange={handleInputChangeRecency}
-                                        min={hivTestDate}
+                                        min={hivTestDate!=="" && hivTestDate!==null ? hivTestDate :""}
                                         max= {moment(new Date()).format("YYYY-MM-DD") }
                                         style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
                                     
@@ -601,4 +602,4 @@ const BasicInfo = (props) => {
     );
 };
 
-export default BasicInfo
+export default Recency

@@ -24,6 +24,9 @@ const Elicitation = (props) => {
             props.setCompleted([...props.completed, completedMenu])
         }
     }
+    const handleDone=()=>{
+      props.setActivePage({...props.activePage, activePage:"home",})
+    }
 
   return (
     <Fragment>  
@@ -41,7 +44,7 @@ const Elicitation = (props) => {
             <br />
                 <div className="row">
                 <div className="form-group mb-3 col-md-6">
-                <Button content='Done' icon='left arrow' labelPosition='left' style={{backgroundColor:"#992E62", color:'#fff'}} onClick={()=>handleItemClick('hiv-test', 'hiv-test')}/>
+                <Button content='Done' icon='left arrow' labelPosition='left' style={{backgroundColor:"#992E62", color:'#fff'}} onClick={()=>handleDone()}/>
                 
                 </div>
                 </div>

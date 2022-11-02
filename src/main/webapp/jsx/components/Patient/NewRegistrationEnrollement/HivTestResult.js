@@ -300,6 +300,7 @@ const HivTestResult = (props) => {
     }
     const handleSubmit =(e)=>{
         e.preventDefault();
+        
         if(validate()){
                     //logic to get Hiv result test
         if(initialTest12.result2==='No' ){
@@ -1063,8 +1064,13 @@ const HivTestResult = (props) => {
                                 <Button content='Back' icon='left arrow' labelPosition='left' style={{backgroundColor:"#992E62", color:'#fff'}} onClick={()=>handleItemClick('pre-test-counsel', 'pre-test-counsel')}/>
                             </>)
                             }
-                            
-                            <Button content='Save & Continue' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
+                            {props.activePage.actionType==='update' && (
+                            <Button content='Update & Continue' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
+                            )}
+                            {props.activePage.actionType==='view' && (
+                                <Button content='Next' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
+                            )}
+                           
                             </div>
                             </div>
                         </div>

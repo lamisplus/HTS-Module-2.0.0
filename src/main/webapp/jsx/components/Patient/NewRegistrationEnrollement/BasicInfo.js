@@ -303,7 +303,7 @@ const BasicInfo = (props) => {
             indexClient: objValues.indexClient,
             numChildren: objValues.numChildren,
             numWives: objValues.numWives,
-            personId: props.patientObj.id,
+            personId: props.patientObj.personId,
             hospitalNumber:objValues.clientCode,
             previouslyTested: objValues.previouslyTested,
             referredFrom: objValues.referredFrom,
@@ -316,7 +316,7 @@ const BasicInfo = (props) => {
             }
 
             if(validate()){
-            axios.post(`${baseUrl}hts`,patientForm,
+            axios.put(`${baseUrl}hts/${props.patientObj.id}`,patientForm,
             { headers: {"Authorization" : `Bearer ${token}`}},
             
             )
@@ -346,7 +346,7 @@ const BasicInfo = (props) => {
         }
         if(props.activePage.actionType==='view'){
             //e.preventDefault();
-            if(props.patientAge>14){
+            if(props.patientAge >14){
                 handleItemClick('pre-test-counsel', 'basic' )
             }else{
                 handleItemClick('hiv-test', 'pre-test-counsel')
@@ -706,8 +706,13 @@ const BasicInfo = (props) => {
                             <br />
                             <div className="row">
                             <div className="form-group mb-3 col-md-6">
-
-                            <Button content='Next' type="submit" icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
+                            {props.activePage.actionType==='update' && (
+                                <Button content='Update & Continue' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
+                            )}
+                            {props.activePage.actionType==='view' && (
+                                <Button content='Next' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
+                            )}
+                            
                             </div>
                             </div>
                         </div>

@@ -96,7 +96,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const BasicInfo = (props) => {
+const RiskStratification = (props) => {
     const classes = useStyles();
     const history = useHistory();
     console.log(props)
@@ -236,7 +236,6 @@ const BasicInfo = (props) => {
     }
 
     //Date of Birth and Age handle 
-
     //Get list of DSD Model Type
     function SettingModality (settingId) {
         const setting = settingId
@@ -352,6 +351,7 @@ const BasicInfo = (props) => {
             // });
             // }
     }
+
 
     return (
         <>  
@@ -472,7 +472,7 @@ const BasicInfo = (props) => {
                             <br />
                              
                             {props.patientAge>15 && ( <>
-                            {(objValues.targetGroup==="TARGET_GROUP_GEN_POP" )&& ( <>
+                            {(objValues.targetGroup!=="" && objValues.targetGroup==="TARGET_GROUP_GEN_POP" )&& ( <>
                             <div className="form-group  col-md-12 text-center pt-2 mb-4" style={{backgroundColor:'#992E62', width:'125%', height:'35px', color:'#fff', fontWeight:'bold'}} >HIV Risk Assessment  (Last 3 months)</div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
@@ -666,7 +666,7 @@ const BasicInfo = (props) => {
                           
                             <br/>
                             </>)}
-                            {(objValues.targetGroup!=="TARGET_GROUP_GEN_POP" ) && ( <>
+                            {(objValues.targetGroup!=="" && objValues.targetGroup!=="TARGET_GROUP_GEN_POP" ) && ( <>
                             <div className="form-group  col-md-12 text-center pt-2 mb-4" style={{backgroundColor:'#992E62', width:'125%', height:'35px', color:'#fff', fontWeight:'bold'}} >HIV Risk Assessment  (Last 3 months)</div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
@@ -857,4 +857,4 @@ const BasicInfo = (props) => {
     );
 };
 
-export default BasicInfo
+export default RiskStratification

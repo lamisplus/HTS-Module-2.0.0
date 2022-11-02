@@ -93,7 +93,7 @@ const HivTestResult = (props) => {
     console.log(props.patientObj)
     const patientID= props.patientObj && props.patientObj.personResponseDto ? props.patientObj.personResponseDto.id : "";
     const clientId = props.patientObj && props.patientObj ? props.patientObj.id : "";
-    
+    const [hivTestDate, setHivTestDate] = useState("");
     const calculate_age = dob => {
         var today = new Date();
         var dateParts = dob.split("-");
@@ -263,6 +263,11 @@ const HivTestResult = (props) => {
     useEffect(() => { 
         //console.log(props.patientObj)
         if(props.patientObj){
+            if(props.patientObj.dateVisit && props.patientObj.dateVisit!=='' ){
+                setHivTestDate(props.patientObj.dateVisit)
+            }else{
+                setHivTestDate("")
+            }
             setCd4Count(props.patientObj  && props.patientObj.cd4!==null? props.patientObj.cd4 : {})
             setInitailTest(props.patientObj  && props.patientObj.test1!==null? props.patientObj.test1 : {})
             setConfirmatoryTest(props.patientObj  && props.patientObj.confirmatoryTest!==null? props.patientObj.confirmatoryTest : {})
@@ -392,6 +397,7 @@ const HivTestResult = (props) => {
                                     id="date"
                                     value={initialTest1.date}
                                     onChange={handleInputChangeInitial}
+                                    min={hivTestDate!=="" && hivTestDate!==null ? hivTestDate  :""}
                                     max= {moment(new Date()).format("YYYY-MM-DD") }
                                     style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
                                     required

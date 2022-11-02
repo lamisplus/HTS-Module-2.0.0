@@ -118,7 +118,7 @@ const PatientnHistory = (props) => {
               {title: "Pre Test Counseling",field: "pre",},
                 { title: "Recency Test", field: "rencency" },
                 { title: "Post Test", field: "post" },
-                { title: "Index Notification", field: "indexNotifiation", filtering: false },  
+                // { title: "Index Notification", field: "indexNotifiation", filtering: false },  
                 { title: "Request & Result", field: "requestResult", filtering: false },       
                 { title: "Actions", field: "actions", filtering: false }, 
               ]}
@@ -129,7 +129,7 @@ const PatientnHistory = (props) => {
                 requestResult:row.confirmatoryTest ? "Filled":"Not Filled ",
                 rencency: row.knowledgeAssessment ? "Filled":"Not Filled ",
                 post:row.postTestCounselingKnowledgeAssessment ? "Filled":"Not Filled ",
-                indexNotifiation:row.indexNotificationServicesElicitation ? "Filled":"Not Filled ",
+                //indexNotifiation:row.indexNotificationServicesElicitation ? "Filled":"Not Filled ",
 
                 actions:
             

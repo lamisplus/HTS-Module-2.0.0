@@ -164,7 +164,7 @@ const PostTest = (props) => {
                 setSaving(false);
                 props.setPatientObj(response.data)
                 //toast.success("Risk Assesment successful");
-                if(postTest.hivTestResult==='True'){
+                if(postTest.hivTestResult==='False'){
                     handleItemClick('recency-testing', 'post-test')
                 }else{
                     history.push('/');

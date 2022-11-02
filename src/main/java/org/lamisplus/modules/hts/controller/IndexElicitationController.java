@@ -26,7 +26,7 @@ public class IndexElicitationController {
     private final String INDEX_ELICITATION_URL_VERSION_ONE = "/api/v1/index-elicitation";
 
     @PostMapping(INDEX_ELICITATION_URL_VERSION_ONE)
-    public ResponseEntity<IndexElicitation> save(@Valid @RequestBody IndexElicitationDto indexElicitationDto) {
+    public ResponseEntity<IndexElicitationResponseDto> save(@Valid @RequestBody IndexElicitationDto indexElicitationDto) {
         return ResponseEntity.ok(this.indexElicitationService.save(indexElicitationDto));
     }
 

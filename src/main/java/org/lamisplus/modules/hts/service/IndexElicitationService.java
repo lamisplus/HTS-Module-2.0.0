@@ -11,6 +11,7 @@ import org.lamisplus.modules.hts.domain.entity.HtsClient;
 import org.lamisplus.modules.hts.domain.entity.IndexElicitation;
 import org.lamisplus.modules.hts.repository.HtsClientRepository;
 import org.lamisplus.modules.hts.repository.IndexElicitationRepository;
+import org.lamisplus.modules.patient.service.PersonService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ public class IndexElicitationService {
     private final CurrentUserOrganizationService currentUserOrganizationService;
     private final IndexElicitationRepository indexElicitationRepository;
     private final HtsClientRepository htsClientRepository;
+    private final PersonService personService;
 
 
 
@@ -38,7 +40,7 @@ public class IndexElicitationService {
                 .findAllByHtsClient(htsClient));
     }
 
-    public IndexElicitation save(IndexElicitationDto indexElicitationDto){
+    public IndexElicitationResponseDto save(IndexElicitationDto indexElicitationDto){
         Long facilityId = currentUserOrganizationService.getCurrentUserOrganization();
         HtsClient htsClient = htsClientRepository.findByIdAndArchivedAndFacilityId(indexElicitationDto.getHtsClientId(), UN_ARCHIVED, facilityId)
                 .orElseThrow(()-> new EntityNotFoundException(HtsClient.class, "htsClientId", "" + indexElicitationDto.getHtsClientId()));
@@ -54,7 +56,7 @@ public class IndexElicitationService {
 
 
         //return this.convertToIndexElicitationResponseDto(indexElicitation);
-        return indexElicitation;
+        return this.convertToIndexElicitationResponseDto(indexElicitation);
     }
 
     public IndexElicitationResponseDto getIndexElicitationById(Long id) {
@@ -182,6 +184,7 @@ public class IndexElicitationService {
         indexElicitationResponseDto.setSexuallyUncomfortable( indexElicitation.getSexuallyUncomfortable() );
         indexElicitationResponseDto.setCurrentlyLiveWithPartner( indexElicitation.getCurrentlyLiveWithPartner() );
         indexElicitationResponseDto.setDatePartnerCameForTesting( indexElicitation.getDatePartnerCameForTesting() );
+        indexElicitationResponseDto.setPersonResponseDto(personService.getDtoFromPerson(indexElicitation.getHtsClient().getPerson()));
 
         return indexElicitationResponseDto;
     }

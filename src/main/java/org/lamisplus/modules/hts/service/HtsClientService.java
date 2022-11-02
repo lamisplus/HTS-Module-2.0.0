@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.lamisplus.modules.base.controller.apierror.EntityNotFoundException;
 import org.lamisplus.modules.base.controller.apierror.IllegalTypeException;
+import org.lamisplus.modules.base.module.ModuleService;
 import org.lamisplus.modules.hts.domain.dto.*;
 import org.lamisplus.modules.hts.domain.entity.HtsClient;
 import org.lamisplus.modules.hts.domain.entity.IndexElicitation;
@@ -41,6 +42,9 @@ public class HtsClientService {
     private final CurrentUserOrganizationService currentUserOrganizationService;
     private final IndexElicitationRepository indexElicitationRepository;
     private final RiskStratificationService riskStratificationService;
+    private final ModuleService moduleService;
+    //private final HtsHivPatientRepository htsHivPatientRepository;
+
     public HtsClientDto save(HtsClientRequestDto htsClientRequestDto){
         HtsClient htsClient;
         PersonResponseDto personResponseDto;
@@ -56,6 +60,9 @@ public class HtsClientService {
             //already existing person
             person = this.getPerson(htsClientRequestDto.getPersonId());
             htsClient = this.htsClientRequestDtoToHtsClient(htsClientRequestDto, person.getUuid());
+        }
+        if(this.isHivPositive(person.getUuid())){
+            throw new IllegalTypeException(HtsClient.class, "Person", person.getId() + "already enrolled to HIV");
         }
         htsClient.setFacilityId(currentUserOrganizationService.getCurrentUserOrganization());
         htsClient = htsClientRepository.save(htsClient);
@@ -228,6 +235,7 @@ public class HtsClientService {
     private HtsClientDtos htsClientToHtsClientDtos(List<HtsClient> clients){
         final Long[] pId = {null};
         final String[] clientCode = {null};
+        final Boolean[] isPositive = {null};
         final PersonResponseDto[] personResponseDto = {new PersonResponseDto()};
         HtsClientDtos htsClientDtos = new HtsClientDtos();
         List<HtsClientDto> htsClientDtoList =  clients
@@ -236,6 +244,7 @@ public class HtsClientService {
                     if(pId[0] == null) {
                         Person person = htsClient1.getPerson();
                         clientCode[0] = htsClient1.getClientCode();
+                        isPositive[0] = this.isHivPositive(person.getUuid());
                         pId[0] = person.getId();
                         personResponseDto[0] = personService.getDtoFromPerson(person);
                     }
@@ -246,6 +255,7 @@ public class HtsClientService {
         htsClientDtos.setPersonId(pId[0]);
         htsClientDtos.setClientCode(clientCode[0]);
         htsClientDtos.setPersonResponseDto(personResponseDto[0]);
+        htsClientDtos.setHivPositive(isPositive[0]);
         return htsClientDtos;
     }
 
@@ -351,19 +361,6 @@ public class HtsClientService {
         return htsClientDto;
     }
 
-    public HtsClientDto updateIndexNotificationServicesElicitation(Long id, IndexElicitationDto indexElicitationDto){
-        /*HtsClient htsClient = this.getById(id);
-        if(!this.getPersonId(htsClient).equals(indexElicitationDto.getPersonId())) {
-            throw new IllegalTypeException(Person.class, "Person", "id does not match with supplied personId");
-        }
-        htsClient.setIndexNotificationServicesElicitation(indexElicitationDto
-                        .getIndexNotificationServicesElicitation());
-
-        HtsClientDto htsClientDto = new HtsClientDto();
-        BeanUtils.copyProperties(htsClientRepository.save(htsClient), htsClientDto);*/
-        return null;
-    }
-
     public String getGenerateHtsClientCode(){
         Optional<Long> number = htsClientRepository.maxId();
         String random = RandomCodeGenerator.randomString(10, true, true);
@@ -442,5 +439,13 @@ public class HtsClientService {
         HtsClientDtos htsClientDtos = this.getHtsClientByPersonId(personId);
         htsClientDtos.setRiskStratificationResponseDtos(riskStratificationService.getAllByPersonId(personId));
         return htsClientDtos;
+    }
+
+    public Boolean isHivPositive(String personUuid){
+        String hivEnrolledPerson = null;
+        if(moduleService.exist("HivModule")){
+            hivEnrolledPerson = htsClientRepository.findInHivEnrollmentByUuid(personUuid).orElse(null);
+        }
+        return (hivEnrolledPerson != null) ? true : false;
     }
 }

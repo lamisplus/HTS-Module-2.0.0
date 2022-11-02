@@ -100,21 +100,9 @@ const PatientnHistory = (props) => {
     const patientId = props.patientObj && props.patientObj.id ? props.patientObj.id: null
     
     useEffect(() => {
-        patients()
+        //patients()
       }, [props.patientObj]);
-    ///GET LIST OF Patients
-    async function patients() {
-        axios
-            .get(`${baseUrl}hts/persons/${patientId}`,
-            { headers: {"Authorization" : `Bearer ${token}`} }
-            )
-            .then((response) => {
-                //console.log(response.data)
-                setPatientList(response.data.htsClientDtoList);
-            })
-            .catch((error) => {    
-            });        
-    }
+
     const LoadViewPage =(row, actionType)=>{
         props.setActivePage({...props.activePage, activePage:"view", activeObject:row, actionType:actionType})
     }
@@ -130,17 +118,18 @@ const PatientnHistory = (props) => {
               {title: "Pre Test Counseling",field: "pre",},
                 { title: "Recency Test", field: "rencency" },
                 { title: "Post Test", field: "post" },
-                { title: "Index Notification", field: "indexNotifiation", filtering: false },  
+                // { title: "Index Notification", field: "indexNotifiation", filtering: false },  
                 { title: "Request & Result", field: "requestResult", filtering: false },       
                 { title: "Actions", field: "actions", filtering: false }, 
               ]}
-              data={ patientList.map((row) => ({
+              isLoading={props.loading}
+              data={ props.patientList.map((row) => ({
                 date: row.dateVisit,
                 pre: row.knowledgeAssessment? "Filled":"Not Filled ",
                 requestResult:row.confirmatoryTest ? "Filled":"Not Filled ",
                 rencency: row.knowledgeAssessment ? "Filled":"Not Filled ",
                 post:row.postTestCounselingKnowledgeAssessment ? "Filled":"Not Filled ",
-                indexNotifiation:row.indexNotificationServicesElicitation ? "Filled":"Not Filled ",
+                //indexNotifiation:row.indexNotificationServicesElicitation ? "Filled":"Not Filled ",
 
                 actions:
             

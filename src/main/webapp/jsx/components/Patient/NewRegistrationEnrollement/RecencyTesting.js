@@ -88,6 +88,7 @@ const BasicInfo = (props) => {
     const clientId = props.patientObj && props.patientObj ? props.patientObj.id : "";
     const [saving, setSaving] = useState(false);
     const [errors, setErrors] = useState({});
+    const [hivTestDate, setHivTestDate] = useState("");
     let temp = { ...errors }
     const handleItemClick =(page, completedMenu)=>{
         props.handleItemClick(page)
@@ -176,11 +177,21 @@ const BasicInfo = (props) => {
 
     }, [recency.longTermLine,recency.verififcationLine, recency.controlLine]);
     useEffect(() => { 
+        if(props.patientObj){
+            setRecency(props.patientObj && props.patientObj.recency!==null ? props.patientObj.recency : {})
+            if(props.patientObj.confirmatoryTest && props.patientObj.confirmatoryTest.date!=='' ){
+                setHivTestDate(props.patientObj.confirmatoryTest.date)
+            }else if(props.patientObj.confirmatoryTest2 && props.patientObj.confirmatoryTest2.date2!=='' ){
+                setHivTestDate(props.patientObj.confirmatoryTest2.date2)
+            }else{
+                setHivTestDate("")
+            }
+        }
         setRecency ({recency, ...props.patientObj.recency}) 
         
 
     }, [ props.patientObj]);
-   
+   //console.log(props.patientObj)
      /*****  Validation  */
      const validate = () => {
         //HTS FORM VALIDATION
@@ -288,6 +299,7 @@ const BasicInfo = (props) => {
                                         id="optOutRTRITestDate"
                                         value={recency.optOutRTRITestDate}
                                         onChange={handleInputChangeRecency}
+                                        min={hivTestDate!=="" && hivTestDate!==null ? hivTestDate :""}
                                         max= {moment(new Date()).format("YYYY-MM-DD") }
                                         style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
                                     
@@ -418,6 +430,8 @@ const BasicInfo = (props) => {
                                             name="sampleCollectedDate"
                                             id="sampleCollectedDate"
                                             type="date"
+                                            min={recency.optOutRTRITestDate}
+                                            max= {moment(new Date()).format("YYYY-MM-DD") }
                                             value={recency.sampleCollectedDate}
                                             onChange={handleInputChangeRecency}
                                             style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
@@ -454,8 +468,8 @@ const BasicInfo = (props) => {
                                             style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                         >
                                             <option value={""}></option>
-                                            <option value="true">Yes</option>
-                                            <option value="false">No</option>
+                                            <option value="DBS">DBS</option>
+                                            <option value="Plasma">Plasma</option>
                                             
                                         </select>
                                         {errors.sampleType !=="" ? (
@@ -471,6 +485,8 @@ const BasicInfo = (props) => {
                                             name="dateSampleSentToPCRLab"
                                             id="dateSampleSentToPCRLab"
                                             type="date"
+                                            min={recency.optOutRTRITestDate}
+                                            max= {moment(new Date()).format("YYYY-MM-DD") }
                                             value={recency.dateSampleSentToPCRLab}
                                             onChange={handleInputChangeRecency}
                                             style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
@@ -488,7 +504,9 @@ const BasicInfo = (props) => {
                                             name="sampleTestDate"
                                             id="sampleTestDate"
                                             type="date"
-                                            value={recency.hasViralLoad}
+                                            min={recency.optOutRTRITestDate}
+                                            max= {moment(new Date()).format("YYYY-MM-DD") }
+                                            value={recency.sampleTestDate}
                                             onChange={handleInputChangeRecency}
                                             style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                         />
@@ -523,7 +541,7 @@ const BasicInfo = (props) => {
                                         >
                                             <option value={""}></option>
                                             <option value=">=1000">{">= "} 1000</option>
-                                            <option value="<1000">{"<="} 1000</option>
+                                            <option value="<1000">{"< "} 1000</option>
                                             <option value="Failed run">Failed run</option>
                                             <option value="Invalid viral load result">Invalid viral load result</option>
                                         </select>
@@ -570,7 +588,13 @@ const BasicInfo = (props) => {
                             <div className="row">
                             <div className="form-group mb-3 col-md-6">
                             <Button content='Back' icon='left arrow' labelPosition='left' style={{backgroundColor:"#992E62", color:'#fff'}} onClick={()=>handleItemClick('post-test','post-test')}/>
-                            <Button content='Next' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
+                            {props.activePage.actionType==='update' && (
+                            <Button content='Update & Continue' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
+                            )}
+                            {props.activePage.actionType==='view' && (
+                                <Button content='Next' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
+                            )}
+                            
                             </div>
                             </div>
                         </div>

@@ -89,6 +89,7 @@ const useStyles = makeStyles((theme) => ({
 const BasicInfo = (props) => {
     const classes = useStyles();
     const patientID= props.patientObj && props.patientObj.personResponseDto ? props.patientObj.personResponseDto.id : "";
+    const sex= props.patientObj && props.patientObj.personResponseDto ? props.patientObj.personResponseDto.sex : "";
     const clientId = props.patientObj && props.patientObj ? props.patientObj.id : "";
     const [saving, setSaving] = useState(false);
     const [errors, setErrors] = useState({});
@@ -319,7 +320,7 @@ const BasicInfo = (props) => {
             });
             
     }
-
+    console.log(sex)
 
     return (
         <>
@@ -378,6 +379,7 @@ const BasicInfo = (props) => {
                                 </FormGroup>
                             </div>
                             )}
+                            {sex ==='Female' && (
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Client pregnant *</Label>
@@ -399,6 +401,7 @@ const BasicInfo = (props) => {
                                     ) : "" }
                                 </FormGroup>
                             </div>
+                             )}
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Client informed about HIV transmission routes *</Label>
@@ -619,7 +622,7 @@ const BasicInfo = (props) => {
                             </Message>
                             <hr/>
                             <br/>
-                           {props.patientObj.targetGroup==="473" && ( <>
+                           {props.patientObj.targetGroup==="TARGET_GROUP_GEN_POP" && ( <>
                             <div className="form-group  col-md-12 text-center pt-2 mb-4" style={{backgroundColor:'#992E62', width:'125%', height:'35px', color:'#fff', fontWeight:'bold'}} >HIV Risk Assessment  (Last 3 months)</div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
@@ -817,7 +820,7 @@ const BasicInfo = (props) => {
                             <hr/>
                             <br/>
                             </>)}
-                            {props.patientObj.targetGroup!=="473" && ( <>
+                            {props.patientObj.targetGroup!=="TARGET_GROUP_GEN_POP" && ( <>
                             <div className="form-group  col-md-12 text-center pt-2 mb-4" style={{backgroundColor:'#992E62', width:'125%', height:'35px', color:'#fff', fontWeight:'bold'}} >HIV Risk Assessment  (Last 3 months)</div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
@@ -1232,7 +1235,7 @@ const BasicInfo = (props) => {
                             <div className="row">
                             <div className="form-group mb-3 col-md-6">
                             <Button content='Back' icon='left arrow' labelPosition='left' style={{backgroundColor:"#992E62", color:'#fff'}} onClick={()=>handleItemClick('basic','basic')}/>
-                            <Button content='Next' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
+                            <Button content='Save & Continue' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
                             </div>
                             </div>
                         </div>

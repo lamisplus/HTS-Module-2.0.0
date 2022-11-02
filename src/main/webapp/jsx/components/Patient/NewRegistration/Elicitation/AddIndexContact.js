@@ -97,23 +97,14 @@ const AddIndexContact = (props) => {
     const [ageDisabled, setAgeDisabled] = useState(true);
     const [indexTesting, setIndexTesting]= useState([]);
     const [consent, setConsent]= useState([]);
-    const handleItemClick =(page, completedMenu)=>{
-        props.handleItemClick(page)
-        if(props.completed.includes(completedMenu)) {
-
-        }else{
-            props.setCompleted([...props.completed, completedMenu])
-        }
-        
-    }
+    const [hivTestDate, setHivTestDate] = useState("");
+   
     const [objValuesIndex, setObjValuesIndex]= useState( {
         htsClientId: null,
         indexNotificationServicesElicitation: {},
         personId: null
       })
-    const handleItemClickPage =(page)=>{
-        props.handleIClickPage(page)
-    }
+   
     const [objValues, setObjValues]= useState(
         {
             firstName: "",
@@ -142,7 +133,16 @@ const AddIndexContact = (props) => {
         NotificationContact();
         IndexTesting();
         Consent();
-    }, []);
+        if(props.patientObj){
+
+            if(props.patientObj.dateVisit && props.patientObj.dateVisit!=='' ){
+                setHivTestDate(props.patientObj.dateVisit)
+            }else{
+                setHivTestDate("")
+            }
+        }
+    }, [props.patientObj]);
+
     //Get list of Genders from 
     const Sex =()=>{
         axios
@@ -196,6 +196,18 @@ const AddIndexContact = (props) => {
         .catch((error) => {
         //console.log(error);
         });        
+    }
+    const handleItemClick =(page, completedMenu)=>{
+        props.handleItemClick(page)
+        if(props.completed.includes(completedMenu)) {
+
+        }else{
+            props.setCompleted([...props.completed, completedMenu])
+        }
+        
+    }
+    const handleItemClickPage =(page)=>{
+        props.handleIClickPage(page)
     }
     const handleInputChange = e => { 
         //setErrors({...temp, [e.target.name]:""})
@@ -669,7 +681,8 @@ const AddIndexContact = (props) => {
                                     id="datePartnerCameForTesting"
                                     value={objValues.datePartnerCameForTesting}
                                     onChange={handleInputChange}
-                                    max= {moment(new Date()).format("YYYY-MM-DD") }
+                                    min={hivTestDate}
+                                    //max= {moment(new Date()).format("YYYY-MM-DD") }
                                     style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
                                     
                                 />

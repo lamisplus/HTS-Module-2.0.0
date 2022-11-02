@@ -67,15 +67,13 @@ public class HtsClientService {
     public HtsClientDtos getHtsClientById(Long id){
         List<HtsClient> htsClients = new ArrayList<>();
         htsClients.add(this.getById(id));
-        return this.htsClientToHtsClientDtos(htsClients);
+        return this.htsClientToHtsClientDtos(null, htsClients);
     }
 
     public HtsClientDtos getHtsClientByPersonId(Long personId){
         Person person = personRepository.findById(personId).orElse(new Person());
-        if(person.getId() == null){
-            return new HtsClientDtos();
-        }
-        return this.htsClientToHtsClientDtos(htsClientRepository.findAllByPerson(person));
+
+        return this.htsClientToHtsClientDtos(person, htsClientRepository.findAllByPerson(person));
     }
 
     private HtsClient getById(Long id){
@@ -209,9 +207,9 @@ public class HtsClientService {
 
     public HtsClientDtos getAllHtsClientDtos(Page<HtsClient> page, List<HtsClient> clients){
         if(page != null && !page.isEmpty()){
-            return htsClientToHtsClientDtos(page.stream().collect(Collectors.toList()));
+            return htsClientToHtsClientDtos(null, page.stream().collect(Collectors.toList()));
         } else if(clients != null && !clients.isEmpty()){
-            return htsClientToHtsClientDtos(clients);
+            return htsClientToHtsClientDtos(null, clients);
         }
         return null;
     }
@@ -225,19 +223,24 @@ public class HtsClientService {
     }
 
 
-    private HtsClientDtos htsClientToHtsClientDtos(List<HtsClient> clients){
-        final Long[] pId = {null};
-        final String[] clientCode = {null};
+    private HtsClientDtos htsClientToHtsClientDtos(Person person, List<HtsClient> clients){
+        final Long[] pId = {0L};
+        final String[] clientCode = {""};
         final PersonResponseDto[] personResponseDto = {new PersonResponseDto()};
+        if(person != null){
+            pId[0] =person.getId();
+            personResponseDto[0] = personService.getDtoFromPerson(person);
+        }
         HtsClientDtos htsClientDtos = new HtsClientDtos();
-        List<HtsClientDto> htsClientDtoList =  clients
+        List<HtsClientDto> htsClientDtoList = new ArrayList<>();
+        htsClientDtoList =  clients
                 .stream()
                 .map(htsClient1 -> {
                     if(pId[0] == null) {
-                        Person person = htsClient1.getPerson();
+                        Person person1 = htsClient1.getPerson();
                         clientCode[0] = htsClient1.getClientCode();
                         pId[0] = person.getId();
-                        personResponseDto[0] = personService.getDtoFromPerson(person);
+                        personResponseDto[0] = personService.getDtoFromPerson(person1);
                     }
                     return this.htsClientToHtsClientDto(htsClient1);})
                 .collect(Collectors.toList());
@@ -331,7 +334,7 @@ public class HtsClientService {
                 htsClientDtosList.add(htsClientDtos);
                 //LOG.info("hts client is {}", htsClientDtos.getHtsCount());
             } else {
-                htsClientDtosList.add(htsClientToHtsClientDtos(clients));
+                htsClientDtosList.add(htsClientToHtsClientDtos(null, clients));
                 //LOG.info("hts client is {}", clients.size());
             }
 

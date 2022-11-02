@@ -91,8 +91,10 @@ public class HtsClientController {
     }
 
     @GetMapping(HTS_URL_VERSION_ONE + "/persons")
-    public ResponseEntity<List<HtsClientDtos>> getAllPerson() {
-        return ResponseEntity.ok(this.htsClientService.getAllPatients());
+    public ResponseEntity<List<HtsClientDtos>> getAllPerson(@PageableDefault(value = 30) Pageable pageable) {
+        Page<Person> page = htsClientService.findHtsClientPersonPage(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return new ResponseEntity<>(this.htsClientService.getAllHtsClientDTOSByPerson(page), headers, HttpStatus.OK);
     }
 
     @DeleteMapping(HTS_URL_VERSION_ONE + "/{id}")

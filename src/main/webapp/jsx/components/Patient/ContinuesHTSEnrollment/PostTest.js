@@ -167,6 +167,7 @@ const PostTest = (props) => {
                 if(postTest.hivTestResult==='True'){
                     handleItemClick('recency-testing', 'post-test')
                 }else{
+                    props.patientsHistory();
                     props.setActivePage({...props.activePage, activePage:"home",})
                 }
                 

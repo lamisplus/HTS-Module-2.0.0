@@ -100,21 +100,9 @@ const PatientnHistory = (props) => {
     const patientId = props.patientObj && props.patientObj.id ? props.patientObj.id: null
     
     useEffect(() => {
-        patients()
+        //patients()
       }, [props.patientObj]);
-    ///GET LIST OF Patients
-    async function patients() {
-        axios
-            .get(`${baseUrl}hts/persons/${patientId}`,
-            { headers: {"Authorization" : `Bearer ${token}`} }
-            )
-            .then((response) => {
-                //console.log(response.data)
-                setPatientList(response.data.htsClientDtoList);
-            })
-            .catch((error) => {    
-            });        
-    }
+
     const LoadViewPage =(row, actionType)=>{
         props.setActivePage({...props.activePage, activePage:"view", activeObject:row, actionType:actionType})
     }
@@ -134,7 +122,8 @@ const PatientnHistory = (props) => {
                 { title: "Request & Result", field: "requestResult", filtering: false },       
                 { title: "Actions", field: "actions", filtering: false }, 
               ]}
-              data={ patientList.map((row) => ({
+              isLoading={props.loading}
+              data={ props.patientList.map((row) => ({
                 date: row.dateVisit,
                 pre: row.knowledgeAssessment? "Filled":"Not Filled ",
                 requestResult:row.confirmatoryTest ? "Filled":"Not Filled ",

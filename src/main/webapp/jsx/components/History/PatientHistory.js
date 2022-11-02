@@ -16,7 +16,7 @@ const divStyle = {
 
 const Home = (props) => {
     const [patientList, setPatientList] = useState([])
-    //const [patientObj, setpatientObj] = useState([])
+    const [loading, setLoading] = useState(true)
     const patientId = props.patientObj && props.patientObj.id ? props.patientObj.id: null
     const [key, setKey] = useState('home');
     useEffect(() => {
@@ -24,15 +24,18 @@ const Home = (props) => {
       }, [props.patientObj]);
     ///GET LIST OF Patients
     async function patients() {
+      setLoading(true)
         axios
             .get(`${baseUrl}hts/persons/${patientId}`,
             { headers: {"Authorization" : `Bearer ${token}`} }
             )
             .then((response) => {
                 //console.log(response.data)
+                setLoading(false)
                 setPatientList(response.data.htsClientDtoList);
             })
-            .catch((error) => {    
+            .catch((error) => {  
+              setLoading(false)  
             });        
     }
 
@@ -52,10 +55,10 @@ const Home = (props) => {
                     className="mb-3"
                 >
                 <Tab eventKey="home" title="HTS HISTORY">                   
-                    <History patientObj={props.patientObj} activePage={props.activePage} setActivePage={props.setActivePage} clientCode={props.clientCode} patientAge={props.patientAge}/>
+                    <History patientObj={props.patientObj} activePage={props.activePage} setActivePage={props.setActivePage} clientCode={props.clientCode} patientAge={props.patientAge} patients={patients} patientList={patientList} loading={loading}/>
                 </Tab> 
                 <Tab eventKey="new" title="NEW HTS">                   
-                    <ContineousRegistrationTesting patientObj={props.patientObj} activePage={props.activePage} setActivePage={props.setActivePage} clientCode={props.clientCode} patientAge={props.patientAge}/>
+                    <ContineousRegistrationTesting patientObj={props.patientObj} activePage={props.activePage} setActivePage={props.setActivePage} clientCode={props.clientCode} patientAge={props.patientAge} patients={patients}/>
                 </Tab>
                                      
                 </Tabs>

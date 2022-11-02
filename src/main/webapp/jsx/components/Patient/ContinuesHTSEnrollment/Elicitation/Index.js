@@ -11,6 +11,7 @@ import 'semantic-ui-css/semantic.min.css';
 
 
 const Elicitation = (props) => {
+    //console.log(props.patientObj)
     const [activePage, setActivePage]= useState('list')
     const handleIClickPage =(activeItem)=>{
         setActivePage(activeItem)
@@ -23,6 +24,9 @@ const Elicitation = (props) => {
             props.setCompleted([...props.completed, completedMenu])
         }
     }
+    const handleDone=()=>{
+      props.setActivePage({...props.activePage, activePage:"home",})
+    }
 
   return (
     <Fragment>  
@@ -31,16 +35,16 @@ const Elicitation = (props) => {
         <Col md={12}>
             {activePage==='list' &&
                 (
-                    <IndexContactList activePage={activePage} setActivePage={setActivePage} handleIClickPage={handleIClickPage}/>
+                    <IndexContactList activePage={activePage} setActivePage={setActivePage} handleIClickPage={handleIClickPage} patientObj={props.patientObj}/>
                 )
             }
             {activePage==='add' && (
-                <AddIndexContact activePage={activePage} setActivePage={setActivePage} handleIClickPage={handleIClickPage}/>        
+                  <AddIndexContact activePage={activePage} setActivePage={setActivePage} handleIClickPage={handleIClickPage} patientObj={props.patientObj}/>        
             )}
             <br />
                 <div className="row">
                 <div className="form-group mb-3 col-md-6">
-                <Button content='Back' icon='left arrow' labelPosition='left' style={{backgroundColor:"#992E62", color:'#fff'}} onClick={()=>handleItemClick('post-test', 'post-test')}/>
+                <Button content='Done' icon='list' labelPosition='left' style={{backgroundColor:"#992E62", color:'#fff'}} onClick={()=>handleDone()}/>
                 
                 </div>
                 </div>

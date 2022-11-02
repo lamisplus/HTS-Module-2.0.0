@@ -8,8 +8,7 @@ import {Card} from "@material-ui/core";
 import { toast} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
-// import {Link, useHistory, useLocation} from "react-router-dom";
-// import {TiArrowBack} from 'react-icons/ti'
+import { useHistory, } from "react-router-dom";
 import {token, url as baseUrl } from "../../../../api";
 import 'react-phone-input-2/lib/style.css'
 import {Label as LabelRibbon, Button, Message} from 'semantic-ui-react'
@@ -87,6 +86,7 @@ const useStyles = makeStyles((theme) => ({
 
 const PostTest = (props) => {
     const classes = useStyles();
+    const history = useHistory();
     const patientID= props.patientObj && props.patientObj.personResponseDto ? props.patientObj.personResponseDto.id : "";
     const clientId = props.patientObj && props.patientObj ? props.patientObj.id : "";
     const [saving, setSaving] = useState(false);
@@ -99,12 +99,7 @@ const PostTest = (props) => {
             personId: patientID,
         }
     )
-    useEffect(() => { 
-        //console.log(props.patientObj)
-        if(props.patientObj){
-            setPostTest(props.patientObj && props.patientObj.postTestCounselingKnowledgeAssessment!==null ? props.patientObj.postTestCounselingKnowledgeAssessment : {}) 
-        }
-    }, [props.patientObj]);
+
     const [postTest, setPostTest]= useState(
         {
             hivTestResult:"", 
@@ -126,6 +121,21 @@ const PostTest = (props) => {
             referredToServices:"",
         }
     )
+    useEffect(() => { 
+        
+        if(props.patientObj){
+            setPostTest(props.patientObj && props.patientObj.postTestCounselingKnowledgeAssessment!==null ? props.patientObj.postTestCounselingKnowledgeAssessment : {}) 
+
+            if(props.patientObj.hivTestResult==='Positive' || props.patientObj.hivTestResult2==='Positive'){
+                postTest.hivTestResult='True'
+                setPostTest({...postTest, hivTestResult:'True' })
+            console.log(props.patientObj.hivTestResult2)
+            }else if(props.patientObj.hivTestResult==='Negative' || props.patientObj.hivTestResult2==='Negative'){
+                postTest.hivTestResult='False'
+                setPostTest({...postTest, hivTestResult:'False' })
+            }
+        }
+    }, [props.patientObj, postTest.hivTestResult]);
     const handleInputChangePostTest = e => { 
         //setErrors({...temp, [e.target.name]:""})        
         setPostTest ({...postTest,  [e.target.name]: e.target.value}); 
@@ -140,14 +150,12 @@ const PostTest = (props) => {
         }
     }
     const handleSubmit =(e)=>{
-        //handleItemClick('recency-testing', 'post-test')
-        console.log(props.patientObj)
-       
         e.preventDefault();
+        //handleItemClick('recency-testing', 'post-test')
+        if(!(Object.values(postTest).every(x => x === ""))){
             objValues.htsClientId=  props.patientObj.id
             objValues.postTestCounselingKnowledgeAssessment= postTest
             objValues.personId= props.patientObj.personResponseDto.id
-            console.log(objValues)
             axios.put(`${baseUrl}hts/${ props.patientObj.id}/post-test-counseling`,objValues,
             { headers: {"Authorization" : `Bearer ${token}`}},
             
@@ -156,7 +164,12 @@ const PostTest = (props) => {
                 setSaving(false);
                 props.setPatientObj(response.data)
                 //toast.success("Risk Assesment successful");
-                handleItemClick('recency-testing', 'post-test')
+                if(postTest.hivTestResult==='False'){
+                    handleItemClick('recency-testing', 'post-test')
+                }else{
+                    history.push('/');
+                }
+                
 
             })
             .catch(error => {
@@ -169,6 +182,10 @@ const PostTest = (props) => {
                     toast.error("Something went wrong. Please try again...");
                 }
             });
+        }else{
+            toast.error("All post test fields are required")  
+        
+        }
             
     }
 
@@ -196,7 +213,7 @@ const PostTest = (props) => {
                                     >
                                         <option value={""}></option>
                                         <option value="True">Positive</option>
-                                        <option value="false">Negative</option>
+                                        <option value="False">Negative</option>
                                         
                                     </select>
                                     
@@ -539,8 +556,13 @@ const PostTest = (props) => {
                             <div className="row">
                             <div className="form-group mb-3 col-md-6">
                                 <Button content='Back' icon='left arrow' labelPosition='left' style={{backgroundColor:"#992E62", color:'#fff'}} onClick={()=>handleItemClick('hiv-test', 'hiv-test')}/>
-                                <Button content='Next' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
-                            </div>
+                                {postTest.hivTestResult==='True' && (
+                                    <Button content='Save & Continue' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
+                                )}
+                                {postTest.hivTestResult==='False' && (
+                                    <Button content='Save & Finish' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
+                                )}
+                                </div>
                             </div>
                         </div>
                     </form>

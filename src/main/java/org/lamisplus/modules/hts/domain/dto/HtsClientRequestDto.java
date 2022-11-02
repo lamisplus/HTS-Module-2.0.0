@@ -11,16 +11,16 @@ import java.time.LocalDate;
 
 @Data
 public class HtsClientRequestDto {
-    @NotNull(message = "targetGroup is mandatory")
-    private final Long targetGroup;
+    @NotBlank(message = "targetGroup is mandatory")
+    private final String targetGroup;
     @NotBlank(message = "clientCode is mandatory")
     private final String clientCode;
     @NotNull(message = "dateVisit is mandatory")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private final LocalDate dateVisit;
     private final Long referredFrom;
-    @NotNull(message = "testingSetting is mandatory")
-    private final Long testingSetting;
+    @NotBlank(message = "testingSetting is mandatory")
+    private final String testingSetting;
     @NotNull(message = "firstTimeVisit is mandatory")
     private final Boolean firstTimeVisit;
     private final Integer numChildren;
@@ -36,6 +36,6 @@ public class HtsClientRequestDto {
     //private final String personUuid;
     private PersonDto personDto;
     private final Long pregnant;
-    private final Long breastFeeding;
+    private final Boolean breastFeeding;
     private final Long relationWithIndexClient;
 }

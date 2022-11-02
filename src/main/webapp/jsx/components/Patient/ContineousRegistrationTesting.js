@@ -227,7 +227,15 @@ const UserRegistration = (props) => {
         tieBreakerTest: {},
         typeCounseling: "",
         
-      });
+    });
+    const [extra, setExtra] = useState({
+    risk:"",
+    index:"",
+    pre:"",
+    post:"",
+    recency:"",
+    elicitation:""
+});
     const handleItemClick =(activeItem)=>{
         setactiveItem(activeItem)
         //setCompleted({...completed, ...completedMenu})
@@ -273,6 +281,7 @@ const UserRegistration = (props) => {
                                     active={activeItem === 'basic'}
                                     onClick={()=>handleItemClick('basic')}
                                     style={{backgroundColor:activeItem === 'basic' ? '#000': ""}}
+                                    disabled={activeItem !== 'basic' ? true : false}
                                 >               
                                     <span style={{color:'#fff'}}> Basic Information
                                     {completed.includes('basic') && (
@@ -364,11 +373,11 @@ const UserRegistration = (props) => {
                         </Menu>
                         </div>
                         <div className="col-md-9 col-sm-9 col-lg-9 " style={{ backgroundColor:"#fff", margingLeft:"-50px", paddingLeft:"-20px"}}>
-                        {activeItem==='risk' && (<RiskStratification handleItemClick={handleItemClick} setCompleted={setCompleted} completed={completed} setPatientObj={setPatientObj} patientObj={patientObj}  setHideOtherMenu={setHideOtherMenu} patientAge={props.patientAge}/>)}
-                            {activeItem==='basic' && (<BasicInfo handleItemClick={handleItemClick} setCompleted={setCompleted} completed={completed} setPatientObj={setPatientObj} patientObj={patientObj} clientCode={props.clientCode} patientAge={props.patientAge}/>)}
+                            {activeItem==='risk' && (<RiskStratification handleItemClick={handleItemClick} setCompleted={setCompleted} completed={completed} setPatientObj={setPatientObj} patientObj={patientObj}  setHideOtherMenu={setHideOtherMenu} patientAge={props.patientAge} setExtra={setExtra} extra={extra}/>)}
+                            {activeItem==='basic' && (<BasicInfo handleItemClick={handleItemClick} setCompleted={setCompleted} completed={completed} setPatientObj={setPatientObj} patientObj={patientObj} clientCode={props.clientCode} patientAge={props.patientAge} setExtra={setExtra} extra={extra}/>)}
                             {activeItem==='pre-test-counsel' && (<PreTest handleItemClick={handleItemClick} setCompleted={setCompleted} completed={completed} setPatientObj={setPatientObj} patientObj={patientObj} clientCode={props.clientCode} patientAge={props.patientAge}/>)}
                             {activeItem==='hiv-test' && (<HivTestResult handleItemClick={handleItemClick} setCompleted={setCompleted} completed={completed} setPatientObj={setPatientObj} patientObj={patientObj} clientCode={props.clientCode} patientAge={props.patientAge}/>)}
-                            {activeItem==='post-test' && (<PostTest handleItemClick={handleItemClick} setCompleted={setCompleted} completed={completed} setPatientObj={setPatientObj} patientObj={patientObj} clientCode={props.clientCode} patientAge={props.patientAge}/>)}
+                            {activeItem==='post-test' && (<PostTest handleItemClick={handleItemClick} setCompleted={setCompleted} completed={completed} setPatientObj={setPatientObj} patientObj={patientObj} clientCode={props.clientCode} patientAge={props.patientAge} patientsHistory={props.patients}/>)}
                             {activeItem==='indexing' && (<IndexingContactTracing handleItemClick={handleItemClick} setCompleted={setCompleted} completed={completed} setPatientObj={setPatientObj} patientObj={patientObj} clientCode={props.clientCode} patientAge={props.patientAge}/>)}
                             {activeItem==='recency-testing' && (<RecencyTesting  handleItemClick={handleItemClick} setCompleted={setCompleted} completed={completed} setPatientObj={setPatientObj} patientObj={patientObj} clientCode={props.clientCode} patientAge={props.patientAge}/>)}
                             {activeItem==='others' && (<Others handleItemClick={handleItemClick} setCompleted={setCompleted} completed={completed} setPatientObj={setPatientObj} patientObj={patientObj} clientCode={props.clientCode} patientAge={props.patientAge}/>)}

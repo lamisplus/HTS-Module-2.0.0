@@ -94,7 +94,7 @@ const HivTestResult = (props) => {
     const patientID= props.patientObj && props.patientObj.personResponseDto ? props.patientObj.personResponseDto.id : "";
     const clientId = props.patientObj && props.patientObj ? props.patientObj.id : "";
     const [hivTestDate, setHivTestDate] = useState("");
-    const [showCD4Count, setShowCD4Count] = useState(false);
+    const [showCD4Count, setShowCD4Count] = useState(true);
     const calculate_age = dob => {
         var today = new Date();
         var dateParts = dob.split("-");
@@ -169,47 +169,16 @@ const HivTestResult = (props) => {
                 date :"",
                 result  :"",            
             })
+            if(initialTest1.result==='No' ){
+                setShowCD4Count(false)
+            }
         }else{
             setInitailTest ({...initialTest1,  [e.target.name]: e.target.value}); 
-        }
-
-        //Logic to show CD4 Count 
-        if(initialTest12.result2==='No' ){
-            setShowCD4Count(false)
-        }else if(initialTest12.result2==='Yes' && confirmatoryTest2.result2==='Yes'){
-            setShowCD4Count(true) 
-        }
-        // else if(initialTest12.result2==='Yes' && confirmatoryTest2.result2==='No' && tieBreakerTest2.result2===''){
-        //     objValues.hivTestResult2="Negative" 
-        // }
-        else if(confirmatoryTest2.result2==='No' && tieBreakerTest2.result2==='Yes'){
             setShowCD4Count(true)
-        }else if(confirmatoryTest2.result2==='No' && tieBreakerTest2.result2==='No'){
-            setShowCD4Count(false)
-        }else{
-            setShowCD4Count(true)
-        }
-      
-        if(initialTest1.result==='No' ){
-            setShowCD4Count(false)
-        }else if(initialTest1.result==='Yes' && confirmatoryTest.result==='Yes'){
-            setShowCD4Count(true)
-        }
-        // else if(initialTest1.result==='Yes' && confirmatoryTest.result==='No' && tieBreakerTest.result===''){
-        //     objValues.hivTestResult="Negative"
-        // }
-        else if(confirmatoryTest.result==='No' && tieBreakerTest.result==='Yes'){
-            setShowCD4Count(true)
-        }else if(confirmatoryTest.result==='No' && tieBreakerTest.result==='No'){
-            setShowCD4Count(false)
-        }else{
-            setShowCD4Count(true)
-        }
-                   
+        }            
     }
     const handleInputChangeInitial2 = e => { 
         //setErrors({...temp, [e.target.name]:""}) 
-        
         if(e.target.value==='No'){
             setInitailTest2 ({...initialTest12,  [e.target.name]: e.target.value});  
             setConfirmatoryTest2({
@@ -222,40 +191,7 @@ const HivTestResult = (props) => {
             })
         }else{
             setInitailTest2 ({...initialTest12,  [e.target.name]: e.target.value}); 
-        } 
-        
-        //Logic to show CD4 Count 
-        if(initialTest12.result2==='No' ){
-            setShowCD4Count(false)
-        }else if(initialTest12.result2==='Yes' && confirmatoryTest2.result2==='Yes'){
-            setShowCD4Count(true) 
-        }
-        // else if(initialTest12.result2==='Yes' && confirmatoryTest2.result2==='No' && tieBreakerTest2.result2===''){
-        //     objValues.hivTestResult2="Negative" 
-        // }
-        else if(confirmatoryTest2.result2==='No' && tieBreakerTest2.result2==='Yes'){
-            setShowCD4Count(true)
-        }else if(confirmatoryTest2.result2==='No' && tieBreakerTest2.result2==='No'){
-            setShowCD4Count(false)
-        }else{
-            setShowCD4Count(true)
-        }
-      
-        if(initialTest1.result==='No' ){
-            setShowCD4Count(false)
-        }else if(initialTest1.result==='Yes' && confirmatoryTest.result==='Yes'){
-            setShowCD4Count(true)
-        }
-        // else if(initialTest1.result==='Yes' && confirmatoryTest.result==='No' && tieBreakerTest.result===''){
-        //     objValues.hivTestResult="Negative"
-        // }
-        else if(confirmatoryTest.result==='No' && tieBreakerTest.result==='Yes'){
-            setShowCD4Count(true)
-        }else if(confirmatoryTest.result==='No' && tieBreakerTest.result==='No'){
-            setShowCD4Count(false)
-        }else{
-            setShowCD4Count(true)
-        }
+        }           
     }
     const [confirmatoryTest, setConfirmatoryTest]= useState(
         {
@@ -271,75 +207,11 @@ const HivTestResult = (props) => {
     )
     const handleInputChangeConfirmatory = e => { 
         //setErrors({...temp, [e.target.name]:""}) 
-        setConfirmatoryTest ({...confirmatoryTest,  [e.target.name]: e.target.value}); 
-        //Logic to show CD4 Count 
-        if(initialTest12.result2==='No' ){
-            setShowCD4Count(false)
-        }else if(initialTest12.result2==='Yes' && confirmatoryTest2.result2==='Yes'){
-            setShowCD4Count(true) 
-        }
-        // else if(initialTest12.result2==='Yes' && confirmatoryTest2.result2==='No' && tieBreakerTest2.result2===''){
-        //     objValues.hivTestResult2="Negative" 
-        // }
-        else if(confirmatoryTest2.result2==='No' && tieBreakerTest2.result2==='Yes'){
-            setShowCD4Count(true)
-        }else if(confirmatoryTest2.result2==='No' && tieBreakerTest2.result2==='No'){
-            setShowCD4Count(false)
-        }else{
-            setShowCD4Count(true)
-        }
-      
-        if(initialTest1.result==='No' ){
-            setShowCD4Count(false)
-        }else if(initialTest1.result==='Yes' && confirmatoryTest.result==='Yes'){
-            setShowCD4Count(true)
-        }
-        // else if(initialTest1.result==='Yes' && confirmatoryTest.result==='No' && tieBreakerTest.result===''){
-        //     objValues.hivTestResult="Negative"
-        // }
-        else if(confirmatoryTest.result==='No' && tieBreakerTest.result==='Yes'){
-            setShowCD4Count(true)
-        }else if(confirmatoryTest.result==='No' && tieBreakerTest.result==='No'){
-            setShowCD4Count(false)
-        }else{
-            setShowCD4Count(true)
-        }           
+        setConfirmatoryTest ({...confirmatoryTest,  [e.target.name]: e.target.value});             
     }
     const handleInputChangeConfirmatory2 = e => { 
         //setErrors({...temp, [e.target.name]:""}) 
-        setConfirmatoryTest2 ({...confirmatoryTest2,  [e.target.name]: e.target.value});  
-        //Logic to show CD4 Count 
-        if(initialTest12.result2==='No' ){
-            setShowCD4Count(false)
-        }else if(initialTest12.result2==='Yes' && confirmatoryTest2.result2==='Yes'){
-            setShowCD4Count(true) 
-        }
-        // else if(initialTest12.result2==='Yes' && confirmatoryTest2.result2==='No' && tieBreakerTest2.result2===''){
-        //     objValues.hivTestResult2="Negative" 
-        // }
-        else if(confirmatoryTest2.result2==='No' && tieBreakerTest2.result2==='Yes'){
-            setShowCD4Count(true)
-        }else if(confirmatoryTest2.result2==='No' && tieBreakerTest2.result2==='No'){
-            setShowCD4Count(false)
-        }else{
-            setShowCD4Count(true)
-        }
-      
-        if(initialTest1.result==='No' ){
-            setShowCD4Count(false)
-        }else if(initialTest1.result==='Yes' && confirmatoryTest.result==='Yes'){
-            setShowCD4Count(true)
-        }
-        // else if(initialTest1.result==='Yes' && confirmatoryTest.result==='No' && tieBreakerTest.result===''){
-        //     objValues.hivTestResult="Negative"
-        // }
-        else if(confirmatoryTest.result==='No' && tieBreakerTest.result==='Yes'){
-            setShowCD4Count(true)
-        }else if(confirmatoryTest.result==='No' && tieBreakerTest.result==='No'){
-            setShowCD4Count(false)
-        }else{
-            setShowCD4Count(true)
-        }          
+        setConfirmatoryTest2 ({...confirmatoryTest2,  [e.target.name]: e.target.value});            
     }
     const [tieBreakerTest, setTieBreakerTest]= useState(
         {
@@ -355,75 +227,11 @@ const HivTestResult = (props) => {
     )
     const handleInputChangeTie = e => { 
         //setErrors({...temp, [e.target.name]:""}) 
-        setTieBreakerTest ({...tieBreakerTest,  [e.target.name]: e.target.value}); 
-        //Logic to show CD4 Count 
-        if(initialTest12.result2==='No' ){
-            setShowCD4Count(false)
-        }else if(initialTest12.result2==='Yes' && confirmatoryTest2.result2==='Yes'){
-            setShowCD4Count(true) 
-        }
-        // else if(initialTest12.result2==='Yes' && confirmatoryTest2.result2==='No' && tieBreakerTest2.result2===''){
-        //     objValues.hivTestResult2="Negative" 
-        // }
-        else if(confirmatoryTest2.result2==='No' && tieBreakerTest2.result2==='Yes'){
-            setShowCD4Count(true)
-        }else if(confirmatoryTest2.result2==='No' && tieBreakerTest2.result2==='No'){
-            setShowCD4Count(false)
-        }else{
-            setShowCD4Count(true)
-        }
-      
-        if(initialTest1.result==='No' ){
-            setShowCD4Count(false)
-        }else if(initialTest1.result==='Yes' && confirmatoryTest.result==='Yes'){
-            setShowCD4Count(true)
-        }
-        // else if(initialTest1.result==='Yes' && confirmatoryTest.result==='No' && tieBreakerTest.result===''){
-        //     objValues.hivTestResult="Negative"
-        // }
-        else if(confirmatoryTest.result==='No' && tieBreakerTest.result==='Yes'){
-            setShowCD4Count(true)
-        }else if(confirmatoryTest.result==='No' && tieBreakerTest.result==='No'){
-            setShowCD4Count(false)
-        }else{
-            setShowCD4Count(true)
-        }           
+        setTieBreakerTest ({...tieBreakerTest,  [e.target.name]: e.target.value});           
     }
     const handleInputChangeTie2 = e => { 
         //setErrors({...temp, [e.target.name]:""}) 
-        setTieBreakerTest2 ({...tieBreakerTest2,  [e.target.name]: e.target.value}); 
-        //Logic to show CD4 Count 
-        if(initialTest12.result2==='No' ){
-            setShowCD4Count(false)
-        }else if(initialTest12.result2==='Yes' && confirmatoryTest2.result2==='Yes'){
-            setShowCD4Count(true) 
-        }
-        // else if(initialTest12.result2==='Yes' && confirmatoryTest2.result2==='No' && tieBreakerTest2.result2===''){
-        //     objValues.hivTestResult2="Negative" 
-        // }
-        else if(confirmatoryTest2.result2==='No' && tieBreakerTest2.result2==='Yes'){
-            setShowCD4Count(true)
-        }else if(confirmatoryTest2.result2==='No' && tieBreakerTest2.result2==='No'){
-            setShowCD4Count(false)
-        }else{
-            setShowCD4Count(true)
-        }
-      
-        if(initialTest1.result==='No' ){
-            setShowCD4Count(false)
-        }else if(initialTest1.result==='Yes' && confirmatoryTest.result==='Yes'){
-            setShowCD4Count(true)
-        }
-        // else if(initialTest1.result==='Yes' && confirmatoryTest.result==='No' && tieBreakerTest.result===''){
-        //     objValues.hivTestResult="Negative"
-        // }
-        else if(confirmatoryTest.result==='No' && tieBreakerTest.result==='Yes'){
-            setShowCD4Count(true)
-        }else if(confirmatoryTest.result==='No' && tieBreakerTest.result==='No'){
-            setShowCD4Count(false)
-        }else{
-            setShowCD4Count(true)
-        }           
+        setTieBreakerTest2 ({...tieBreakerTest2,  [e.target.name]: e.target.value});            
     }
     const [syphills, setSyphills]= useState(
         {
@@ -477,7 +285,7 @@ const HivTestResult = (props) => {
             setTieBreakerTest2(props.patientObj && props.patientObj.tieBreakerTest2!==null ? props.patientObj.tieBreakerTest2 : {})
         }
 
-        
+       
     }, [props.patientObj]);//initialTest12, tieBreakerTest2, confirmatoryTest2, 
 
     const handleInputChangeOthers = e => { 
@@ -492,6 +300,43 @@ const HivTestResult = (props) => {
             props.setCompleted([...props.completed, completedMenu])
         }
     }
+    function CheckTestResult(){
+         //Logic to show CD4 Count       
+        if(initialTest1.result==='Yes' && confirmatoryTest.result==='Yes'){
+            setShowCD4Count(true)
+
+        }
+        // else if(initialTest1.result==='Yes' && confirmatoryTest.result==='No' && tieBreakerTest.result===''){
+        //     objValues.hivTestResult="Negative"
+        // }
+        else if(confirmatoryTest.result==='No' && tieBreakerTest.result==='Yes'){
+            setShowCD4Count(true)
+        }else if(confirmatoryTest.result==='No' && tieBreakerTest.result==='No'){
+            setShowCD4Count(false)
+        }else{
+            setShowCD4Count(true)
+        }
+    }
+    function CheckTestResult2(){
+        //Logic to show CD4 Count 
+        if(initialTest12.result2==='No' ){
+           setShowCD4Count(false)
+       }else if(initialTest12.result2==='Yes' && confirmatoryTest2.result2==='Yes'){
+           setShowCD4Count(true) 
+       }
+       // else if(initialTest12.result2==='Yes' && confirmatoryTest2.result2==='No' && tieBreakerTest2.result2===''){
+       //     objValues.hivTestResult2="Negative" 
+       // }
+       else if(confirmatoryTest2.result2==='No' && tieBreakerTest2.result2==='Yes'){
+           setShowCD4Count(true)
+       }else if(confirmatoryTest2.result2==='No' && tieBreakerTest2.result2==='No'){
+           setShowCD4Count(false)
+       }else{
+           setShowCD4Count(true)
+       }
+     
+      
+   }
     const validate = () => {
         //HTS FORM VALIDATION
         initialTest1.date!=="" &&  (temp.date = initialTest1.result ? "" : "This field is required.")
@@ -571,7 +416,7 @@ const HivTestResult = (props) => {
             });
         }   
     }
-
+console.log(showCD4Count)
     return (
         <>
             <Card className={classes.root}>
@@ -1068,7 +913,7 @@ const HivTestResult = (props) => {
                                  {/* END of  result for Test 2*/}
                             </div>
                             </div>
-                            {showCD4Count===true && (<>
+                            {showCD4Count && (<>
                             <LabelRibbon as='a' color='blue' style={{width:'106%', height:'35px'}} ribbon>
                                 <h5 style={{color:'#fff'}}>CD4 Count</h5>
                             </LabelRibbon>

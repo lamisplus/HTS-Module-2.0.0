@@ -359,7 +359,7 @@ const UserRegistration = (props) => {
                                 active={activeItem === 'recency-testing'}
                                 onClick={()=>handleItemClick('recency-testing')}
                                 style={{backgroundColor:activeItem === 'recency-testing' ? '#000': ""}}
-                                //disabled={activeItem !== 'recency-testing' ? true : false}
+                                disabled={activeItem !== 'recency-testing' ? true : false}
                             >
                             {/* <Label>4</Label> */}
                             <span style={{color:'#fff'}}>HIV Recency Testing

@@ -397,7 +397,7 @@ const BasicInfo = (props) => {
                                     id="clientCode"
                                     value={objValues.clientCode}
                                     onChange={handleInputChange}
-                                    disabled={props.clientCode!==null? true : false}
+                                    disabled={props.clientCode!=="" && props.clientCode!==null? true : false}
                                     style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
                                    
                                 />

@@ -299,6 +299,7 @@ const UserRegistration = (props) => {
                                 active={activeItem === 'basic'}
                                 onClick={()=>handleItemClick('basic')}
                                 style={{backgroundColor:activeItem === 'basic' ? '#000': ""}}
+                                disabled={activeItem !== 'basic' ? true : false}
                             >               
                                 <span style={{color:'#fff'}}> Basic Information
                                 {completed.includes('basic') && (
@@ -313,7 +314,7 @@ const UserRegistration = (props) => {
                                 active={activeItem === 'pre-test-counsel'}
                                 onClick={()=>handleItemClick('pre-test-counsel')}
                                 style={{backgroundColor:activeItem === 'pre-test-counsel' ? '#000': ""}}
-                                //disabled={activeItem !== 'pre-test-counsel' ? true : false}
+                                disabled={activeItem !== 'pre-test-counsel' ? true : false}
                             >
                             {/* <Label>2</Label> */}
                             <span style={{color:'#fff'}}>Pre Test Counseling
@@ -358,7 +359,7 @@ const UserRegistration = (props) => {
                                 active={activeItem === 'recency-testing'}
                                 onClick={()=>handleItemClick('recency-testing')}
                                 style={{backgroundColor:activeItem === 'recency-testing' ? '#000': ""}}
-                                disabled={activeItem !== 'recency-testing' ? true : false}
+                                //disabled={activeItem !== 'recency-testing' ? true : false}
                             >
                             {/* <Label>4</Label> */}
                             <span style={{color:'#fff'}}>HIV Recency Testing

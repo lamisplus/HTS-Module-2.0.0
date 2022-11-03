@@ -153,7 +153,7 @@ const PatientnHistory = (props) => {
             onClick={()=>handleItemClickPage('add')}
             //startIcon={<FaUserPlus size="10"/>}
         >
-            <span style={{ textTransform: "capitalize" }}>New Index Client --test</span>
+            <span style={{ textTransform: "capitalize" }}>New Index Client </span>
         </Button>
         <br/><br/><br/><br/>
             <MaterialTable

@@ -119,6 +119,7 @@ const BasicInfo = (props) => {
     const [objValues, setObjValues]= useState(
         {
             active: true,
+            personId: props.patientObj.personId,
             clientCode: props.patientObj && props.patientObj.clientCode ? props.patientObj.clientCode :"",  
             breastFeeding:props.patientObj && props.patientObj.breastFeeding ? props.patientObj.breastFeeding :"",
             dateVisit: props.patientObj && props.patientObj.dateVisit ? props.patientObj.dateVisit :"",
@@ -313,7 +314,7 @@ const BasicInfo = (props) => {
             indexClient: objValues.indexClient,
             numChildren: objValues.numChildren,
             numWives: objValues.numWives,
-            personId: props.patientObj.id,
+            personId: props.patientObj.personId,
             hospitalNumber:objValues.clientCode,
             previouslyTested: objValues.previouslyTested,
             referredFrom: objValues.referredFrom,
@@ -377,7 +378,7 @@ const BasicInfo = (props) => {
                                     >
                                         <option value={""}></option>
                                         {kP.map((value) => (
-                                            <option key={value.id} value={value.id}>
+                                            <option key={value.id} value={value.code}>
                                                 {value.display}
                                             </option>
                                         ))}
@@ -440,7 +441,7 @@ const BasicInfo = (props) => {
                                     >
                                         <option value={""}></option>
                                         {enrollSetting.map((value) => (
-                                            <option key={value.id} value={value.id}>
+                                            <option key={value.id} value={value.code}>
                                                 {value.display}
                                             </option>
                                         ))}
@@ -710,7 +711,7 @@ const BasicInfo = (props) => {
                             <div className="row">
                             <div className="form-group mb-3 col-md-6">
 
-                            <Button content='Next' type="submit" icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
+                            <Button content='Save & Continue' type="submit" icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
                             </div>
                             </div>
                         </div>

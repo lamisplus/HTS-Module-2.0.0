@@ -90,7 +90,6 @@ const useStyles = makeStyles((theme) => ({
 
 const AddIndexContact = (props) => {
     const classes = useStyles();
-    console.log(props.patientObj)
     const [saving, setSaving] = useState(false);
     const [errors, setErrors] = useState({});
     const [sexs, setSexs] = useState([])
@@ -98,23 +97,14 @@ const AddIndexContact = (props) => {
     const [ageDisabled, setAgeDisabled] = useState(true);
     const [indexTesting, setIndexTesting]= useState([]);
     const [consent, setConsent]= useState([]);
-    const handleItemClick =(page, completedMenu)=>{
-        props.handleItemClick(page)
-        if(props.completed.includes(completedMenu)) {
-
-        }else{
-            props.setCompleted([...props.completed, completedMenu])
-        }
-        
-    }
+    const [hivTestDate, setHivTestDate] = useState("");
+   
     const [objValuesIndex, setObjValuesIndex]= useState( {
         htsClientId: null,
         indexNotificationServicesElicitation: {},
         personId: null
       })
-    const handleItemClickPage =(page)=>{
-        props.handleIClickPage(page)
-    }
+   
     const [objValues, setObjValues]= useState(
         {
             firstName: "",
@@ -143,7 +133,16 @@ const AddIndexContact = (props) => {
         NotificationContact();
         IndexTesting();
         Consent();
-    }, []);
+        if(props.patientObj){
+
+            if(props.patientObj.dateVisit && props.patientObj.dateVisit!=='' ){
+                setHivTestDate(props.patientObj.dateVisit)
+            }else{
+                setHivTestDate("")
+            }
+        }
+    }, [props.patientObj]);
+
     //Get list of Genders from 
     const Sex =()=>{
         axios
@@ -159,19 +158,6 @@ const AddIndexContact = (props) => {
         //console.log(error);
         });        
     }
-    ///CONSENT	Yes		en	CONSENT
-    const Consent =()=>{
-        axios
-        .get(`${baseUrl}application-codesets/v2/CONSENT`,
-            { headers: {"Authorization" : `Bearer ${token}`} }
-        )
-        .then((response) => {
-            setConsent(response.data);
-        })
-        .catch((error) => {
-        //console.log(error);
-        });    
-    }
     //Get list of IndexTesting
     const IndexTesting =()=>{
         axios
@@ -180,6 +166,19 @@ const AddIndexContact = (props) => {
         )
         .then((response) => {
             setIndexTesting(response.data);
+        })
+        .catch((error) => {
+        //console.log(error);
+        });    
+    }
+    ///CONSENT	Yes		en	CONSENT
+    const Consent =()=>{
+        axios
+        .get(`${baseUrl}application-codesets/v2/CONSENT`,
+            { headers: {"Authorization" : `Bearer ${token}`} }
+        )
+        .then((response) => {
+            setConsent(response.data);
         })
         .catch((error) => {
         //console.log(error);
@@ -197,6 +196,18 @@ const AddIndexContact = (props) => {
         .catch((error) => {
         //console.log(error);
         });        
+    }
+    const handleItemClick =(page, completedMenu)=>{
+        props.handleItemClick(page)
+        if(props.completed.includes(completedMenu)) {
+
+        }else{
+            props.setCompleted([...props.completed, completedMenu])
+        }
+        
+    }
+    const handleItemClickPage =(page)=>{
+        props.handleIClickPage(page)
     }
     const handleInputChange = e => { 
         //setErrors({...temp, [e.target.name]:""})
@@ -562,12 +573,13 @@ const AddIndexContact = (props) => {
                                         onChange={handleInputChange} 
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
-                                         <option value={""}></option>
+                                        <option value={""}></option>
                                         {consent.map((value) => (
                                             <option key={value.id} value={value.id}>
                                                 {value.display}
                                             </option>
                                         ))}
+                                        
                                     </select>
                                     
                                 </FormGroup>
@@ -583,12 +595,13 @@ const AddIndexContact = (props) => {
                                         onChange={handleInputChange} 
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
-                                        <option value={""}></option>
+                                         <option value={""}></option>
                                         {consent.map((value) => (
                                             <option key={value.id} value={value.id}>
                                                 {value.display}
                                             </option>
                                         ))}
+                                        
                                     </select>
                                     
                                 </FormGroup>
@@ -604,7 +617,7 @@ const AddIndexContact = (props) => {
                                         onChange={handleInputChange}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
-                                         <option value={""}></option>
+                                        <option value={""}></option>
                                         {consent.map((value) => (
                                             <option key={value.id} value={value.id}>
                                                 {value.display}
@@ -626,7 +639,7 @@ const AddIndexContact = (props) => {
                                         onChange={handleInputChange}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
-                                        <option value={""}></option>
+                                         <option value={""}></option>
                                         {consent.map((value) => (
                                             <option key={value.id} value={value.id}>
                                                 {value.display}
@@ -668,7 +681,8 @@ const AddIndexContact = (props) => {
                                     id="datePartnerCameForTesting"
                                     value={objValues.datePartnerCameForTesting}
                                     onChange={handleInputChange}
-                                    max= {moment(new Date()).format("YYYY-MM-DD") }
+                                    min={hivTestDate}
+                                    //max= {moment(new Date()).format("YYYY-MM-DD") }
                                     style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
                                     
                                 />

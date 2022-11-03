@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.lamisplus.modules.base.controller.apierror.EntityNotFoundException;
 import org.lamisplus.modules.base.controller.apierror.IllegalTypeException;
-import org.lamisplus.modules.base.module.ModuleService;
 import org.lamisplus.modules.hts.domain.dto.*;
 import org.lamisplus.modules.hts.domain.entity.HtsClient;
 import org.lamisplus.modules.hts.domain.entity.IndexElicitation;
@@ -42,9 +41,6 @@ public class HtsClientService {
     private final CurrentUserOrganizationService currentUserOrganizationService;
     private final IndexElicitationRepository indexElicitationRepository;
     private final RiskStratificationService riskStratificationService;
-    private final ModuleService moduleService;
-    //private final HtsHivPatientRepository htsHivPatientRepository;
-
     public HtsClientDto save(HtsClientRequestDto htsClientRequestDto){
         HtsClient htsClient;
         PersonResponseDto personResponseDto;
@@ -61,9 +57,6 @@ public class HtsClientService {
             person = this.getPerson(htsClientRequestDto.getPersonId());
             htsClient = this.htsClientRequestDtoToHtsClient(htsClientRequestDto, person.getUuid());
         }
-        if(this.isHivPositive(person.getUuid())){
-            throw new IllegalTypeException(HtsClient.class, "Person", person.getId() + "already enrolled to HIV");
-        }
         htsClient.setFacilityId(currentUserOrganizationService.getCurrentUserOrganization());
         htsClient = htsClientRepository.save(htsClient);
         htsClient.setPerson(person);
@@ -74,15 +67,13 @@ public class HtsClientService {
     public HtsClientDtos getHtsClientById(Long id){
         List<HtsClient> htsClients = new ArrayList<>();
         htsClients.add(this.getById(id));
-        return this.htsClientToHtsClientDtos(htsClients);
+        return this.htsClientToHtsClientDtos(null, htsClients);
     }
 
     public HtsClientDtos getHtsClientByPersonId(Long personId){
         Person person = personRepository.findById(personId).orElse(new Person());
-        if(person.getId() == null){
-            return new HtsClientDtos();
-        }
-        return this.htsClientToHtsClientDtos(htsClientRepository.findAllByPerson(person));
+
+        return this.htsClientToHtsClientDtos(person, htsClientRepository.findAllByPerson(person));
     }
 
     private HtsClient getById(Long id){
@@ -216,9 +207,9 @@ public class HtsClientService {
 
     public HtsClientDtos getAllHtsClientDtos(Page<HtsClient> page, List<HtsClient> clients){
         if(page != null && !page.isEmpty()){
-            return htsClientToHtsClientDtos(page.stream().collect(Collectors.toList()));
+            return htsClientToHtsClientDtos(null, page.stream().collect(Collectors.toList()));
         } else if(clients != null && !clients.isEmpty()){
-            return htsClientToHtsClientDtos(clients);
+            return htsClientToHtsClientDtos(null, clients);
         }
         return null;
     }
@@ -232,21 +223,24 @@ public class HtsClientService {
     }
 
 
-    private HtsClientDtos htsClientToHtsClientDtos(List<HtsClient> clients){
-        final Long[] pId = {null};
-        final String[] clientCode = {null};
-        final Boolean[] isPositive = {null};
+    private HtsClientDtos htsClientToHtsClientDtos(Person person, List<HtsClient> clients){
+        final Long[] pId = {0L};
+        final String[] clientCode = {""};
         final PersonResponseDto[] personResponseDto = {new PersonResponseDto()};
+        if(person != null){
+            pId[0] =person.getId();
+            personResponseDto[0] = personService.getDtoFromPerson(person);
+        }
         HtsClientDtos htsClientDtos = new HtsClientDtos();
-        List<HtsClientDto> htsClientDtoList =  clients
+        List<HtsClientDto> htsClientDtoList = new ArrayList<>();
+        htsClientDtoList =  clients
                 .stream()
                 .map(htsClient1 -> {
                     if(pId[0] == null) {
-                        Person person = htsClient1.getPerson();
+                        Person person1 = htsClient1.getPerson();
                         clientCode[0] = htsClient1.getClientCode();
-                        isPositive[0] = this.isHivPositive(person.getUuid());
                         pId[0] = person.getId();
-                        personResponseDto[0] = personService.getDtoFromPerson(person);
+                        personResponseDto[0] = personService.getDtoFromPerson(person1);
                     }
                     return this.htsClientToHtsClientDto(htsClient1);})
                 .collect(Collectors.toList());
@@ -255,7 +249,6 @@ public class HtsClientService {
         htsClientDtos.setPersonId(pId[0]);
         htsClientDtos.setClientCode(clientCode[0]);
         htsClientDtos.setPersonResponseDto(personResponseDto[0]);
-        htsClientDtos.setHivPositive(isPositive[0]);
         return htsClientDtos;
     }
 
@@ -341,7 +334,7 @@ public class HtsClientService {
                 htsClientDtosList.add(htsClientDtos);
                 //LOG.info("hts client is {}", htsClientDtos.getHtsCount());
             } else {
-                htsClientDtosList.add(htsClientToHtsClientDtos(clients));
+                htsClientDtosList.add(htsClientToHtsClientDtos(null, clients));
                 //LOG.info("hts client is {}", clients.size());
             }
 
@@ -359,6 +352,19 @@ public class HtsClientService {
         BeanUtils.copyProperties(htsClientRepository.save(htsClient), htsClientDto);
         htsClientDto.setPersonResponseDto(personService.getDtoFromPerson(htsClient.getPerson()));
         return htsClientDto;
+    }
+
+    public HtsClientDto updateIndexNotificationServicesElicitation(Long id, IndexElicitationDto indexElicitationDto){
+        /*HtsClient htsClient = this.getById(id);
+        if(!this.getPersonId(htsClient).equals(indexElicitationDto.getPersonId())) {
+            throw new IllegalTypeException(Person.class, "Person", "id does not match with supplied personId");
+        }
+        htsClient.setIndexNotificationServicesElicitation(indexElicitationDto
+                        .getIndexNotificationServicesElicitation());
+
+        HtsClientDto htsClientDto = new HtsClientDto();
+        BeanUtils.copyProperties(htsClientRepository.save(htsClient), htsClientDto);*/
+        return null;
     }
 
     public String getGenerateHtsClientCode(){
@@ -439,13 +445,5 @@ public class HtsClientService {
         HtsClientDtos htsClientDtos = this.getHtsClientByPersonId(personId);
         htsClientDtos.setRiskStratificationResponseDtos(riskStratificationService.getAllByPersonId(personId));
         return htsClientDtos;
-    }
-
-    public Boolean isHivPositive(String personUuid){
-        String hivEnrolledPerson = null;
-        if(moduleService.exist("HivModule")){
-            hivEnrolledPerson = htsClientRepository.findInHivEnrollmentByUuid(personUuid).orElse(null);
-        }
-        return (hivEnrolledPerson != null) ? true : false;
     }
 }

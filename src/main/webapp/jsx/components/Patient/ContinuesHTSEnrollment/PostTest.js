@@ -164,11 +164,10 @@ const PostTest = (props) => {
                 setSaving(false);
                 props.setPatientObj(response.data)
                 //toast.success("Risk Assesment successful");
-                if(postTest.hivTestResult==='False'){
+                if(postTest.hivTestResult==='True'){
                     handleItemClick('recency-testing', 'post-test')
-                }else{
-                    props.patientsHistory();
-                    props.setActivePage({...props.activePage, activePage:"home",})
+                }else if(postTest.hivTestResult==='False'){
+                    history.push('/');
                 }
                 
 

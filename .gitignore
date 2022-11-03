@@ -33,4 +33,3 @@ local-data
 mvnw.cmd
 /node_modules
 /node
-/src/main/resources/views/static/hts

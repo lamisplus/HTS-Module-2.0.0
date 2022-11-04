@@ -327,7 +327,7 @@ const BasicInfo = (props) => {
                 if(props.patientAge>14){
                     handleItemClick('pre-test-counsel', 'basic' )
                 }else{
-                    handleItemClick('hiv-test', 'pre-test-counsel')
+                    handleItemClick('hiv-test', 'basic')
                 }
                
 

@@ -169,18 +169,22 @@ const Recency = (props) => {
     const handleInputChangeRecency = e => { 
         setErrors({...temp, [e.target.name]:""})        
         if(e.target.name ==='viralLoadResultClassification'){
-            setRecency ({...recency,  [e.target.name]: e.target.value}); 
+            
             if(e.target.value ==='>=1000'){
                 recency.finalRecencyResult='RITA Recent'
+                setRecency ({...recency,  [e.target.name]: e.target.value}); 
             
             }else if(e.target.value ==='<1000') {
                 recency.finalRecencyResult='RITA Long term'
+                setRecency ({...recency,  [e.target.name]: e.target.value}); 
             }else if(e.target.value ==='Failed run') {
                 recency.finalRecencyResult='RITA Inconclusive'
+                setRecency ({...recency,  [e.target.name]: e.target.value}); 
             }else if(e.target.value ==='Invalid viral load result') {
                 recency.finalRecencyResult='RITA Inconclusive'
+                setRecency ({...recency,  [e.target.name]: e.target.value}); 
             }else{
-
+                setRecency ({...recency,  [e.target.name]: e.target.value}); 
             }
         }else if(e.target.name==='rencencyId' && e.target.value!==''){
             const recencyIdNumberValue = checkRecencyLimit(e.target.value)

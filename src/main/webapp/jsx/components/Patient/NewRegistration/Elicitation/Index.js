@@ -16,7 +16,7 @@ const Elicitation = (props) => {
     const handleIClickPage =(activeItem)=>{
         setActivePage(activeItem)
     }
-    const handleDone =(page, completedMenu)=>{
+    const handleDone =()=>{
       history.push('/');
     }
 

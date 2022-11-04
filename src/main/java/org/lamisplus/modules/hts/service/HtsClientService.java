@@ -34,7 +34,6 @@ import static org.lamisplus.modules.base.util.Constants.ArchiveStatus.UN_ARCHIVE
 @Slf4j
 @RequiredArgsConstructor
 public class HtsClientService {
-    //private final HtsClientMapper htsClientMapper;
     private final HtsClientRepository htsClientRepository;
     private final PersonRepository personRepository;
     private final PersonService personService;
@@ -152,7 +151,7 @@ public class HtsClientService {
         if ( htsClientRequestDto == null ) {
             return null;
         }
-
+        System.out.println("level 6");
         HtsClient htsClient = new HtsClient();
         htsClient.setTargetGroup( htsClientRequestDto.getTargetGroup() );
         htsClient.setClientCode( htsClientRequestDto.getClientCode() );
@@ -224,8 +223,8 @@ public class HtsClientService {
 
 
     private HtsClientDtos htsClientToHtsClientDtos(Person person, List<HtsClient> clients){
-        final Long[] pId = {0L};
-        final String[] clientCode = {""};
+        final Long[] pId = {null};
+        final String[] clientCode = {null};
         final PersonResponseDto[] personResponseDto = {new PersonResponseDto()};
         if(person != null){
             pId[0] =person.getId();
@@ -238,10 +237,10 @@ public class HtsClientService {
                 .map(htsClient1 -> {
                     if(pId[0] == null) {
                         Person person1 = htsClient1.getPerson();
-                        clientCode[0] = htsClient1.getClientCode();
                         pId[0] = person.getId();
                         personResponseDto[0] = personService.getDtoFromPerson(person1);
                     }
+                    if(clientCode[0] == null){clientCode[0] = htsClient1.getClientCode();}
                     return this.htsClientToHtsClientDto(htsClient1);})
                 .collect(Collectors.toList());
         htsClientDtos.setHtsCount(htsClientDtoList.size());
@@ -313,7 +312,8 @@ public class HtsClientService {
     }
 
     public Page<Person> findHtsClientPersonPage(Pageable pageable) {
-        return personRepository.findAll(pageable);
+        return personRepository
+                .getAllByArchivedAndFacilityIdOrderByIdDesc(UN_ARCHIVED, currentUserOrganizationService.getCurrentUserOrganization(),pageable);
     }
 
     public HtsClientDtos getAllHtsClientDtos(Page<HtsClient> page) {

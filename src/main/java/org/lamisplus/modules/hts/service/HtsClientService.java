@@ -311,7 +311,13 @@ public class HtsClientService {
         return htsClientRepository.findAll(pageable);
     }
 
-    public Page<Person> findHtsClientPersonPage(Pageable pageable) {
+    public Page<Person> findHtsClientPersonPage(String searchValue, Pageable pageable) {
+        Long facilityId = currentUserOrganizationService.getCurrentUserOrganization();
+        if(String.valueOf(searchValue).equals("null") && !searchValue.equals("*")){
+            String queryParam = "%"+searchValue+"%";
+            return personRepository
+                    .findAllPersonBySearchParameters(queryParam, UN_ARCHIVED, facilityId,  pageable);
+        }
         return personRepository
                 .getAllByArchivedAndFacilityIdOrderByIdDesc(UN_ARCHIVED, currentUserOrganizationService.getCurrentUserOrganization(),pageable);
     }

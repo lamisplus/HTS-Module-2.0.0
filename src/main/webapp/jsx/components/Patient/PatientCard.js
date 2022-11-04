@@ -60,8 +60,8 @@ const styles = theme => ({
 
 function PatientCard(props) {
   const { classes } = props;
-
-  const patientCurrentStatus=props.patientObj && props.patientObj.currentStatus==="Died (Confirmed)" ? true : false ;
+  console.log(props)
+  //const patientCurrentStatus=props.patientObj && props.patientObj.currentStatus==="Died (Confirmed)" ? true : false ;
   const patientObjs = props.patientObj ? props.patientObj : {}
   const permissions= props.permissions ? props.permissions : [];
   const [patientObj, setpatientObj] = useState(patientObjs)

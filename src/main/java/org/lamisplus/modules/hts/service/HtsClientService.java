@@ -151,7 +151,6 @@ public class HtsClientService {
         if ( htsClientRequestDto == null ) {
             return null;
         }
-        System.out.println("level 6");
         HtsClient htsClient = new HtsClient();
         htsClient.setTargetGroup( htsClientRequestDto.getTargetGroup() );
         htsClient.setClientCode( htsClientRequestDto.getClientCode() );
@@ -270,7 +269,6 @@ public class HtsClientService {
         htsClientDto.setTypeCounseling( htsClient.getTypeCounseling() );
         htsClientDto.setIndexClient( htsClient.getIndexClient() );
         htsClientDto.setPreviouslyTested( htsClient.getPreviouslyTested() );
-        //LOG.info("Person in transform {}", htsClient.getPerson());
         PersonResponseDto personResponseDto = personService.getDtoFromPerson(htsClient.getPerson());
         htsClientDto.setPersonResponseDto(personResponseDto);
         htsClientDto.setExtra( htsClient.getExtra() );
@@ -351,7 +349,7 @@ public class HtsClientService {
 
     public HtsClientDto updatePostTestCounselingKnowledgeAssessment(Long id, PostTestCounselingDto postTestCounselingDto){
         HtsClient htsClient = this.getById(id);
-        if(htsClient.getPerson().getId() != postTestCounselingDto.getPersonId()) throw new IllegalTypeException(Person.class, "Person", "id not match");
+        //if(htsClient.getPerson().getId().equals(postTestCounselingDto.getPersonId())) throw new IllegalTypeException(Person.class, "Person", "id not match");
         htsClient.setPostTestCounselingKnowledgeAssessment(postTestCounselingDto.getPostTestCounselingKnowledgeAssessment());
 
         HtsClientDto htsClientDto = new HtsClientDto();

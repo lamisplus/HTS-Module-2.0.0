@@ -584,7 +584,7 @@ const BasicInfo = (props) => {
                 employmentStatusId: "",
                 facilityId: "",
                 firstName:objValues.firstName,
-                genderId:'', //objValues.genderId,
+                genderId:getSexId.id, //objValues.genderId,
                 id: "",
                 identifier: [
                     {

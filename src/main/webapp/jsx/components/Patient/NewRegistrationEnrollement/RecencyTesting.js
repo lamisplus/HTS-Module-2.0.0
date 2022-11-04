@@ -128,25 +128,38 @@ const BasicInfo = (props) => {
         }
     )
     const handleInputChangeRecency = e => { 
-        setErrors({...temp, [e.target.name]:""})         
+        setErrors({...temp, [e.target.name]:""})        
         if(e.target.name ==='viralLoadResultClassification'){
+            
             if(e.target.value ==='>=1000'){
                 recency.finalRecencyResult='RITA Recent'
+                setRecency ({...recency,  [e.target.name]: e.target.value}); 
             
             }else if(e.target.value ==='<1000') {
                 recency.finalRecencyResult='RITA Long term'
+                setRecency ({...recency,  [e.target.name]: e.target.value}); 
             }else if(e.target.value ==='Failed run') {
                 recency.finalRecencyResult='RITA Inconclusive'
+                setRecency ({...recency,  [e.target.name]: e.target.value}); 
             }else if(e.target.value ==='Invalid viral load result') {
                 recency.finalRecencyResult='RITA Inconclusive'
+                setRecency ({...recency,  [e.target.name]: e.target.value}); 
             }else{
-
+                setRecency ({...recency,  [e.target.name]: e.target.value}); 
             }
-        } 
-        setRecency ({...recency,  [e.target.name]: e.target.value});
-          
+        }else if(e.target.name==='rencencyId' && e.target.value!==''){
+            const recencyIdNumberValue = checkRecencyLimit(e.target.value)
+            setRecency ({...recency,  [e.target.name]: recencyIdNumberValue});
+        }else {
+            setRecency ({...recency,  [e.target.name]: e.target.value}); 
+        }
+         
     }
-
+    const checkRecencyLimit=(e)=>{
+        const limit = 10;        
+        const acceptedNumber= e.slice(0, limit)
+        return  acceptedNumber   
+    }
     useEffect(() => { 
         if(recency.longTermLine==='true' && recency.verififcationLine==='true' && recency.controlLine==='true'){
             recency.rencencyInterpretation="Long Term"

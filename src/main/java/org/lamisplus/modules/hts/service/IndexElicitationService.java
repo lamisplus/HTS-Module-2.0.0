@@ -45,22 +45,17 @@ public class IndexElicitationService {
         HtsClient htsClient = htsClientRepository.findByIdAndArchivedAndFacilityId(indexElicitationDto.getHtsClientId(), UN_ARCHIVED, facilityId)
                 .orElseThrow(()-> new EntityNotFoundException(HtsClient.class, "htsClientId", "" + indexElicitationDto.getHtsClientId()));
 
-        //LOG.info("facilityId is {}", facilityId);
-        //LOG.info("indexElicitationDto is {}", indexElicitationDto);
-
         IndexElicitation indexElicitation = this.convertToIndexElicitation(indexElicitationDto);
         indexElicitation.setFacilityId(facilityId);
         indexElicitation.setHtsClientUuid(htsClient.getUuid());
         indexElicitation = indexElicitationRepository.save(indexElicitation);
-        //LOG.info("indexElicitation is {}", indexElicitation);
 
 
-        //return this.convertToIndexElicitationResponseDto(indexElicitation);
-        return this.convertToIndexElicitationResponseDto(indexElicitation);
+        return this.convertToIndexElicitationResponseDto(htsClient, indexElicitation);
     }
 
     public IndexElicitationResponseDto getIndexElicitationById(Long id) {
-        return this.convertToIndexElicitationResponseDto(this.getById(id));
+        return this.convertToIndexElicitationResponseDto(null, this.getById(id));
     }
 
     public IndexElicitationResponseDto update(Long id, IndexElicitationResponseDto indexElicitationResponseDto) {
@@ -69,7 +64,7 @@ public class IndexElicitationService {
             throw new IllegalTypeException(IndexElicitation.class, "id", "does not match");
         }
         indexElicitation = this.convertToIndexElicitation(indexElicitationResponseDto, indexElicitation.getHtsClient());
-        return this.convertToIndexElicitationResponseDto(indexElicitationRepository.save(indexElicitation));
+        return this.convertToIndexElicitationResponseDto(null, indexElicitationRepository.save(indexElicitation));
     }
 
     public void delete(Long id) {
@@ -86,7 +81,7 @@ public class IndexElicitationService {
         List<IndexElicitationResponseDto> list = new ArrayList<>(indexElicitation.size());
         for ( IndexElicitation indexElicitation1 : indexElicitation) {
             if(indexElicitation1.getHtsClient() == null) throw new EntityNotFoundException(HtsClient.class, "HtsClient", "cannot be null");
-            list.add( convertToIndexElicitationResponseDto(indexElicitation1) );
+            list.add( convertToIndexElicitationResponseDto(null, indexElicitation1) );
         }
         return list;
     }
@@ -157,14 +152,18 @@ public class IndexElicitationService {
         return indexElicitation;
     }
 
-    private IndexElicitationResponseDto convertToIndexElicitationResponseDto(IndexElicitation indexElicitation) {
+    private IndexElicitationResponseDto convertToIndexElicitationResponseDto(HtsClient client, IndexElicitation indexElicitation) {
         if ( indexElicitation == null ) {
             return null;
         }
 
         IndexElicitationResponseDto indexElicitationResponseDto = new IndexElicitationResponseDto();
+        HtsClient htsClient = indexElicitation.getHtsClient();
+        if(client != null){
+            indexElicitationResponseDto.setHtsClientId(client.getId());
+            indexElicitationResponseDto.setPersonResponseDto(personService.getDtoFromPerson(client.getPerson()));
 
-        indexElicitationResponseDto.setHtsClientId(indexElicitation.getHtsClient().getId());
+        }
         indexElicitationResponseDto.setId(indexElicitation.getId());
         indexElicitationResponseDto.setDob( indexElicitation.getDob() );
         indexElicitationResponseDto.setIsDateOfBirthEstimated( indexElicitation.getIsDateOfBirthEstimated() );
@@ -184,7 +183,6 @@ public class IndexElicitationService {
         indexElicitationResponseDto.setSexuallyUncomfortable( indexElicitation.getSexuallyUncomfortable() );
         indexElicitationResponseDto.setCurrentlyLiveWithPartner( indexElicitation.getCurrentlyLiveWithPartner() );
         indexElicitationResponseDto.setDatePartnerCameForTesting( indexElicitation.getDatePartnerCameForTesting() );
-        indexElicitationResponseDto.setPersonResponseDto(personService.getDtoFromPerson(indexElicitation.getHtsClient().getPerson()));
 
         return indexElicitationResponseDto;
     }

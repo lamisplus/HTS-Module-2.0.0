@@ -93,7 +93,7 @@ const HivTestResult = (props) => {
     console.log(props.patientObj)
     const patientID= props.patientObj && props.patientObj.personResponseDto ? props.patientObj.personResponseDto.id : "";
     const clientId = props.patientObj && props.patientObj ? props.patientObj.id : "";
-    
+    const [showCD4Count, setShowCD4Count] = useState(true);
     const calculate_age = dob => {
         var today = new Date();
         var dateParts = dob.split("-");
@@ -168,14 +168,17 @@ const HivTestResult = (props) => {
                 date :"",
                 result  :"",            
             })
+            //This is to show cd4 count section
+            setShowCD4Count(false)
+                
         }else{
-            setInitailTest ({...initialTest1,  [e.target.name]: e.target.value}); 
-        }
-                   
+            setInitailTest ({...initialTest1,  [e.target.name]: e.target.value});
+            //This is to show cd4 count section 
+            setShowCD4Count(true)
+        }            
     }
     const handleInputChangeInitial2 = e => { 
         //setErrors({...temp, [e.target.name]:""}) 
-        
         if(e.target.value==='No'){
             setInitailTest2 ({...initialTest12,  [e.target.name]: e.target.value});  
             setConfirmatoryTest2({
@@ -186,8 +189,12 @@ const HivTestResult = (props) => {
                 date :"",
                 result  :"",            
             })
+            //This is to show cd4 count section
+            setShowCD4Count(false)
         }else{
-            setInitailTest2 ({...initialTest12,  [e.target.name]: e.target.value}); 
+            setInitailTest2 ({...initialTest12,  [e.target.name]: e.target.value});
+            //This is to show cd4 count section 
+            setShowCD4Count(true) 
         }           
     }
     const [confirmatoryTest, setConfirmatoryTest]= useState(
@@ -204,11 +211,25 @@ const HivTestResult = (props) => {
     )
     const handleInputChangeConfirmatory = e => { 
         //setErrors({...temp, [e.target.name]:""}) 
-        setConfirmatoryTest ({...confirmatoryTest,  [e.target.name]: e.target.value});            
+        setConfirmatoryTest ({...confirmatoryTest,  [e.target.name]: e.target.value});
+        //This is to show cd4 count section 
+        if(initialTest1.result==='Yes' && e.target.value==='Yes'){
+            setShowCD4Count(true)
+
+        }else{
+            setShowCD4Count(true)
+        }              
     }
     const handleInputChangeConfirmatory2 = e => { 
         //setErrors({...temp, [e.target.name]:""}) 
-        setConfirmatoryTest2 ({...confirmatoryTest2,  [e.target.name]: e.target.value});            
+        setConfirmatoryTest2 ({...confirmatoryTest2,  [e.target.name]: e.target.value}); 
+        //This is to show cd4 count section 
+        if(initialTest12.result2==='Yes' && e.target.value==='Yes'){
+            setShowCD4Count(true)
+
+        }else{
+            setShowCD4Count(true)
+        }                 
     }
     const [tieBreakerTest, setTieBreakerTest]= useState(
         {
@@ -224,11 +245,27 @@ const HivTestResult = (props) => {
     )
     const handleInputChangeTie = e => { 
         //setErrors({...temp, [e.target.name]:""}) 
-        setTieBreakerTest ({...tieBreakerTest,  [e.target.name]: e.target.value});            
+        setTieBreakerTest ({...tieBreakerTest,  [e.target.name]: e.target.value});  
+        //This is to show cd4 count section
+        if(confirmatoryTest.result==='No' && e.target.value==='Yes'){
+            setShowCD4Count(true)
+        }else if(confirmatoryTest.result==='No' && e.target.value==='No'){
+            setShowCD4Count(false)
+        }else{
+            setShowCD4Count(true)
+        }         
     }
     const handleInputChangeTie2 = e => { 
         //setErrors({...temp, [e.target.name]:""}) 
-        setTieBreakerTest2 ({...tieBreakerTest2,  [e.target.name]: e.target.value});            
+        setTieBreakerTest2 ({...tieBreakerTest2,  [e.target.name]: e.target.value});
+        //This is to show cd4 count section
+        if(confirmatoryTest2.result2==='No' && e.target.value==='Yes'){
+            setShowCD4Count(true)
+        }else if(confirmatoryTest2.result2==='No' && e.target.value==='No'){
+            setShowCD4Count(false)
+        }else{
+            setShowCD4Count(true)
+        }                     
     }
     const [syphills, setSyphills]= useState(
         {
@@ -274,6 +311,17 @@ const HivTestResult = (props) => {
             setInitailTest2(props.patientObj  && props.patientObj.test2!==null? props.patientObj.test2 : {})
             setConfirmatoryTest2(props.patientObj  && props.patientObj.confirmatoryTest2!==null? props.patientObj.confirmatoryTest2 : {})
             setTieBreakerTest2(props.patientObj && props.patientObj.tieBreakerTest2!==null ? props.patientObj.tieBreakerTest2 : {})
+            //Logic for cd4 count section to show
+            if(props.patientObj.hivTestResult!==null && props.patientObj.hivTestResult!=="" && props.patientObj.hivTestResult==='Positive'){
+                setShowCD4Count(true)
+            }else{
+                setShowCD4Count(false)
+            }
+            if(props.patientObj.hivTestResult2!==null && props.patientObj.hivTestResult2!=="" && props.patientObj.hivTestResult2==='Positive'){
+                setShowCD4Count(true)
+            }else{
+                setShowCD4Count(false)
+            }
         }
     }, [props.patientObj]);//initialTest12, tieBreakerTest2, confirmatoryTest2, 
 
@@ -871,6 +919,7 @@ const HivTestResult = (props) => {
                                  {/* END of  result for Test 2*/}
                             </div>
                             </div>
+                            {cd4Count.cd4Count ==='Semi-Quantitative' && (<>
                             <LabelRibbon as='a' color='blue' style={{width:'106%', height:'35px'}} ribbon>
                                 <h5 style={{color:'#fff'}}>CD4 Count</h5>
                             </LabelRibbon>
@@ -934,7 +983,7 @@ const HivTestResult = (props) => {
                             )}
                             <div className="form-group  col-md-7"></div>
                            
-                            
+                            </>)}
                             <LabelRibbon as='a' color='blue' style={{width:'106%', height:'35px'}} ribbon>
                             <h5 style={{color:'#fff'}}>Syphilis Testing</h5>
                         </LabelRibbon>

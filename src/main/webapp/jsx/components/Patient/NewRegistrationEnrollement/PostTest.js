@@ -8,6 +8,7 @@ import {Card} from "@material-ui/core";
 import { toast} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
+import { useHistory, } from "react-router-dom";
 // import {Link, useHistory, useLocation} from "react-router-dom";
 // import {TiArrowBack} from 'react-icons/ti'
 import {token, url as baseUrl } from "../../../../api";
@@ -88,6 +89,7 @@ const useStyles = makeStyles((theme) => ({
 
 const PostTest = (props) => {
     const classes = useStyles();
+    const history = useHistory();
     const patientID= props.patientObj && props.patientObj.personResponseDto ? props.patientObj.personResponseDto.id : "";
     const clientId = props.patientObj && props.patientObj ? props.patientObj.id : "";
     const [saving, setSaving] = useState(false);
@@ -157,9 +159,13 @@ const PostTest = (props) => {
             )
             .then(response => {
                 setSaving(false);
-                props.setPatientObj(props && props.patientObj ? props.patientObj : "")
-                toast.success("Risk Assesment successful");
-                handleItemClick('recency-testing', 'post-test')
+                props.setPatientObj(response.data)
+                //toast.success("Risk Assesment successful");
+                if(postTest.hivTestResult==='True'){
+                    handleItemClick('recency-testing', 'post-test')
+                }else if(postTest.hivTestResult==='False'){
+                    history.push('/');
+                }
 
             })
             .catch(error => {

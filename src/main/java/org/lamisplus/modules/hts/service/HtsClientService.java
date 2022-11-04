@@ -34,7 +34,6 @@ import static org.lamisplus.modules.base.util.Constants.ArchiveStatus.UN_ARCHIVE
 @Slf4j
 @RequiredArgsConstructor
 public class HtsClientService {
-    //private final HtsClientMapper htsClientMapper;
     private final HtsClientRepository htsClientRepository;
     private final PersonRepository personRepository;
     private final PersonService personService;
@@ -152,7 +151,6 @@ public class HtsClientService {
         if ( htsClientRequestDto == null ) {
             return null;
         }
-
         HtsClient htsClient = new HtsClient();
         htsClient.setTargetGroup( htsClientRequestDto.getTargetGroup() );
         htsClient.setClientCode( htsClientRequestDto.getClientCode() );
@@ -224,8 +222,8 @@ public class HtsClientService {
 
 
     private HtsClientDtos htsClientToHtsClientDtos(Person person, List<HtsClient> clients){
-        final Long[] pId = {0L};
-        final String[] clientCode = {""};
+        final Long[] pId = {null};
+        final String[] clientCode = {null};
         final PersonResponseDto[] personResponseDto = {new PersonResponseDto()};
         if(person != null){
             pId[0] =person.getId();
@@ -238,10 +236,10 @@ public class HtsClientService {
                 .map(htsClient1 -> {
                     if(pId[0] == null) {
                         Person person1 = htsClient1.getPerson();
-                        clientCode[0] = htsClient1.getClientCode();
                         pId[0] = person.getId();
                         personResponseDto[0] = personService.getDtoFromPerson(person1);
                     }
+                    if(clientCode[0] == null){clientCode[0] = htsClient1.getClientCode();}
                     return this.htsClientToHtsClientDto(htsClient1);})
                 .collect(Collectors.toList());
         htsClientDtos.setHtsCount(htsClientDtoList.size());
@@ -271,7 +269,6 @@ public class HtsClientService {
         htsClientDto.setTypeCounseling( htsClient.getTypeCounseling() );
         htsClientDto.setIndexClient( htsClient.getIndexClient() );
         htsClientDto.setPreviouslyTested( htsClient.getPreviouslyTested() );
-        //LOG.info("Person in transform {}", htsClient.getPerson());
         PersonResponseDto personResponseDto = personService.getDtoFromPerson(htsClient.getPerson());
         htsClientDto.setPersonResponseDto(personResponseDto);
         htsClientDto.setExtra( htsClient.getExtra() );
@@ -312,8 +309,15 @@ public class HtsClientService {
         return htsClientRepository.findAll(pageable);
     }
 
-    public Page<Person> findHtsClientPersonPage(Pageable pageable) {
-        return personRepository.findAll(pageable);
+    public Page<Person> findHtsClientPersonPage(String searchValue, Pageable pageable) {
+        Long facilityId = currentUserOrganizationService.getCurrentUserOrganization();
+        if(String.valueOf(searchValue).equals("null") && !searchValue.equals("*")){
+            String queryParam = "%"+searchValue+"%";
+            return personRepository
+                    .findAllPersonBySearchParameters(queryParam, UN_ARCHIVED, facilityId,  pageable);
+        }
+        return personRepository
+                .getAllByArchivedAndFacilityIdOrderByIdDesc(UN_ARCHIVED, currentUserOrganizationService.getCurrentUserOrganization(),pageable);
     }
 
     public HtsClientDtos getAllHtsClientDtos(Page<HtsClient> page) {
@@ -345,7 +349,7 @@ public class HtsClientService {
 
     public HtsClientDto updatePostTestCounselingKnowledgeAssessment(Long id, PostTestCounselingDto postTestCounselingDto){
         HtsClient htsClient = this.getById(id);
-        if(htsClient.getPerson().getId() != postTestCounselingDto.getPersonId()) throw new IllegalTypeException(Person.class, "Person", "id not match");
+        //if(htsClient.getPerson().getId().equals(postTestCounselingDto.getPersonId())) throw new IllegalTypeException(Person.class, "Person", "id not match");
         htsClient.setPostTestCounselingKnowledgeAssessment(postTestCounselingDto.getPostTestCounselingKnowledgeAssessment());
 
         HtsClientDto htsClientDto = new HtsClientDto();

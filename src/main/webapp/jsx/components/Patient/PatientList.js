@@ -170,63 +170,123 @@ const Patients = (props) => {
             { title: "Actions", field: "actions", filtering: false }, 
             ]}
             isLoading={loading}
-            data={ patientList.map((row) => ({
-                //Id: manager.id,
-                name:row.personResponseDto.firstName + " " + row.personResponseDto.surname,
-                hospital_number: getHospitalNumber(row.personResponseDto.identifier),
-                clientCode: row.clientCode,
-                //phone_number:  row.phone,
-                gender:row && row.personResponseDto.sex ? row.personResponseDto.sex : "",
-                age: (row.personResponseDto.dateOfBirth === 0 ||
-                    row.personResponseDto.dateOfBirth === undefined ||
-                    row.personResponseDto.dateOfBirth === null ||
-                    row.personResponseDto.dateOfBirth === "" )
-                        ? 0
-                        : calculate_age(moment(row.personResponseDto.dateOfBirth).format("DD-MM-YYYY")),
+            // data={ patientList.map((row) => ({
+            //     //Id: manager.id,
+            //     name:row.personResponseDto.firstName + " " + row.personResponseDto.surname,
+            //     hospital_number: getHospitalNumber(row.personResponseDto.identifier),
+            //     clientCode: row.clientCode,
+            //     //phone_number:  row.phone,
+            //     gender:row && row.personResponseDto.sex ? row.personResponseDto.sex : "",
+            //     age: (row.personResponseDto.dateOfBirth === 0 ||
+            //         row.personResponseDto.dateOfBirth === undefined ||
+            //         row.personResponseDto.dateOfBirth === null ||
+            //         row.personResponseDto.dateOfBirth === "" )
+            //             ? 0
+            //             : calculate_age(moment(row.personResponseDto.dateOfBirth).format("DD-MM-YYYY")),
                 
-                count: (<Label color="blue" size="mini">{row.htsCount}</Label>),
+            //     count: (<Label color="blue" size="mini">{row.htsCount}</Label>),
                 
-                actions:
+            //     actions:
         
-                <div>
-                    {row.htsCount >=0 && (
-                    <>
-                        <Link
-                            to={{
-                                pathname: "/patient-history",
-                                state: {patientObject: row, patientObj: row.personResponseDto, clientCode:row.clientCode}
-                            }}
+            //     <div>
+            //         {row.htsCount >=0 && (
+            //         <>
+            //             <Link
+            //                 to={{
+            //                     pathname: "/patient-history",
+            //                     state: {patientObject: row, patientObj: row.personResponseDto, clientCode:row.clientCode}
+            //                 }}
                             
-                        >
-                            <ButtonGroup variant="contained" 
-                                aria-label="split button"
-                                style={{backgroundColor:'rgb(153, 46, 98)', height:'30px',width:'215px'}}
-                                size="large"
-                            >
-                            <Button
-                            color="primary"
-                            size="small"
-                            aria-label="select merge strategy"
-                            aria-haspopup="menu"
-                            style={{backgroundColor:'rgb(153, 46, 98)'}}
-                            >
-                                <MdDashboard />
-                            </Button>
-                            <Button 
-                            style={{backgroundColor:'rgb(153, 46, 98)'}}
-                            >
-                                <span style={{fontSize:'12px', color:'#fff', fontWeight:'bolder'}}>Patient Dashboard</span>
-                            </Button>
+            //             >
+            //                 <ButtonGroup variant="contained" 
+            //                     aria-label="split button"
+            //                     style={{backgroundColor:'rgb(153, 46, 98)', height:'30px',width:'215px'}}
+            //                     size="large"
+            //                 >
+            //                 <Button
+            //                 color="primary"
+            //                 size="small"
+            //                 aria-label="select merge strategy"
+            //                 aria-haspopup="menu"
+            //                 style={{backgroundColor:'rgb(153, 46, 98)'}}
+            //                 >
+            //                     <MdDashboard />
+            //                 </Button>
+            //                 <Button 
+            //                 style={{backgroundColor:'rgb(153, 46, 98)'}}
+            //                 >
+            //                     <span style={{fontSize:'12px', color:'#fff', fontWeight:'bolder'}}>Patient Dashboard</span>
+            //                 </Button>
                             
-                            </ButtonGroup>
-                        </Link> 
-                    </>
-                    )} 
+            //                 </ButtonGroup>
+            //             </Link> 
+            //         </>
+            //         )} 
                                     
-                </div>
+            //     </div>
                 
-                }))}
-        
+            //     }))}
+            data={query =>
+                new Promise((resolve, reject) =>
+                    axios.get(`${baseUrl}hts/persons?size=${query.pageSize}&page=${query.page}&searchValue=${query.search}`, { headers: {"Authorization" : `Bearer ${token}`} })
+                        .then(response => response)
+                        .then(result => {
+                            console.log(result.headers)
+                            resolve({
+                                data: result.data.map((row) => ({
+                                    name: row.personResponseDto.firstName + " " + row.personResponseDto.surname,
+                                    hospital_number: getHospitalNumber(row.personResponseDto.identifier),
+                                    clientCode: row.clientCode,
+                                    gender: row && row.personResponseDto.sex ? row.personResponseDto.sex : "",
+                                    age: (row.personResponseDto.dateOfBirth === 0 ||
+                                            row.personResponseDto.dateOfBirth === undefined ||
+                                            row.personResponseDto.dateOfBirth === null ||
+                                            row.personResponseDto.dateOfBirth === "" )
+                                                ? 0
+                                                : calculate_age(moment(row.personResponseDto.dateOfBirth).format("DD-MM-YYYY")),
+                                    count: (<Label color="blue" size="mini">{row.htsCount}</Label>),
+                                    actions:
+                                            <div>
+                                                {row.htsCount >=0 && (
+                                                <>
+                                                    <Link
+                                                        to={{
+                                                            pathname: "/patient-history",
+                                                            state: {patientObject: row, patientObj: row.personResponseDto, clientCode:row.clientCode}
+                                                        }}
+                                                        
+                                                    >
+                                                        <ButtonGroup variant="contained" 
+                                                            aria-label="split button"
+                                                            style={{backgroundColor:'rgb(153, 46, 98)', height:'30px',width:'215px'}}
+                                                            size="large"
+                                                        >
+                                                        <Button
+                                                        color="primary"
+                                                        size="small"
+                                                        aria-label="select merge strategy"
+                                                        aria-haspopup="menu"
+                                                        style={{backgroundColor:'rgb(153, 46, 98)'}}
+                                                        >
+                                                            <MdDashboard />
+                                                        </Button>
+                                                        <Button 
+                                                        style={{backgroundColor:'rgb(153, 46, 98)'}}
+                                                        >
+                                                            <span style={{fontSize:'12px', color:'#fff', fontWeight:'bolder'}}>Patient Dashboard</span>
+                                                        </Button>
+                                                        
+                                                        </ButtonGroup>
+                                                    </Link> 
+                                                </>
+                                                )}           
+                                            </div>
+                                    })),
+                                page: query.page,
+                                totalCount: result.headers['x-total-count'],
+                            })
+                        })
+                )}
                 options={{
                     headerStyle: {
                         backgroundColor: "#014d88",
@@ -240,7 +300,7 @@ const Patients = (props) => {
                     exportButton: false,
                     searchFieldAlignment: 'left',
                     pageSizeOptions:[10,20,100],
-                    pageSize:10,
+                    pageSize:20,
                     debounceInterval: 400
                 }}
         />

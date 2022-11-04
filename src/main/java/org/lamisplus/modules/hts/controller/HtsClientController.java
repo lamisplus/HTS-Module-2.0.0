@@ -81,8 +81,6 @@ public class HtsClientController {
     public ResponseEntity<List<HtsClientDtos>> getHtsClients(@RequestParam (required = false, defaultValue = "*")  String searchValue,
                                                              @PageableDefault(value = 30) Pageable pageable) {
         Page<Person> page = htsClientService.findHtsClientPersonPage(searchValue, pageable);
-        System.out.println("Total is - " + page.getTotalElements());
-        System.out.println("Total pages is - " + page.getTotalPages());
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return new ResponseEntity<>(this.htsClientService.getAllHtsClientDTOSByPerson(page), headers, HttpStatus.OK);
     }

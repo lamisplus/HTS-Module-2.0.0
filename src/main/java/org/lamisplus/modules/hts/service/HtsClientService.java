@@ -316,7 +316,7 @@ public class HtsClientService {
         if(String.valueOf(searchValue).equals("null") && !searchValue.equals("*")){
             String queryParam = "%"+searchValue+"%";
             return personRepository
-                    .findAllPersonBySearchParameters(queryParam, queryParam, queryParam, queryParam, UN_ARCHIVED, facilityId,  pageable);
+                    .findAllPersonBySearchParameters(queryParam, UN_ARCHIVED, facilityId,  pageable);
         }
         return personRepository
                 .getAllByArchivedAndFacilityIdOrderByIdDesc(UN_ARCHIVED, currentUserOrganizationService.getCurrentUserOrganization(),pageable);

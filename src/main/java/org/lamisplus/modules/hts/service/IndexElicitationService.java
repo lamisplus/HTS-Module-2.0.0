@@ -45,10 +45,9 @@ public class IndexElicitationService {
         HtsClient htsClient = htsClientRepository.findByIdAndArchivedAndFacilityId(indexElicitationDto.getHtsClientId(), UN_ARCHIVED, facilityId)
                 .orElseThrow(()-> new EntityNotFoundException(HtsClient.class, "htsClientId", "" + indexElicitationDto.getHtsClientId()));
 
-        //LOG.info("facilityId is {}", facilityId);
-        //LOG.info("indexElicitationDto is {}", indexElicitationDto);
-
+        System.out.println("Level 1");
         IndexElicitation indexElicitation = this.convertToIndexElicitation(indexElicitationDto);
+        System.out.println("Level 10");
         indexElicitation.setFacilityId(facilityId);
         indexElicitation.setHtsClientUuid(htsClient.getUuid());
         indexElicitation = indexElicitationRepository.save(indexElicitation);
@@ -97,6 +96,7 @@ public class IndexElicitationService {
         }
 
         IndexElicitation indexElicitation = new IndexElicitation();
+        System.out.println("Level 3");
 
         try {
             indexElicitation.setFacilityId(currentUserOrganizationService.getCurrentUserOrganization());
@@ -118,6 +118,7 @@ public class IndexElicitationService {
             indexElicitation.setSexuallyUncomfortable(indexElicitationDto.getSexuallyUncomfortable());
             indexElicitation.setCurrentlyLiveWithPartner(indexElicitationDto.getCurrentlyLiveWithPartner());
             indexElicitation.setDatePartnerCameForTesting(indexElicitationDto.getDatePartnerCameForTesting());
+            System.out.println("Level 4");
         }catch(Exception e){
             e.printStackTrace();
         }

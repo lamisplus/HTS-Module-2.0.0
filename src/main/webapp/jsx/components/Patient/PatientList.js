@@ -231,7 +231,7 @@ const Patients = (props) => {
                     axios.get(`${baseUrl}hts/persons?size=${query.pageSize}&page=${query.page}&searchValue=${query.search}`, { headers: {"Authorization" : `Bearer ${token}`} })
                         .then(response => response)
                         .then(result => {
-
+                            console.log(result.headers)
                             resolve({
                                 data: result.data.map((row) => ({
                                     name: row.personResponseDto.firstName + " " + row.personResponseDto.surname,
@@ -300,7 +300,7 @@ const Patients = (props) => {
                     exportButton: false,
                     searchFieldAlignment: 'left',
                     pageSizeOptions:[10,20,100],
-                    pageSize:50,
+                    pageSize:20,
                     debounceInterval: 400
                 }}
         />

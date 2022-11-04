@@ -50,7 +50,7 @@ public class HtsClient extends Audit implements Serializable {
     private ApplicationCodeSet targetGroupCodeSet;*/
 
     @Basic
-    @Column(name = "client_code", unique = true)
+    @Column(name = "client_code")
     private String clientCode;
 
     @Basic

@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.lamisplus.modules.base.controller.apierror.EntityNotFoundException;
 import org.lamisplus.modules.base.controller.apierror.IllegalTypeException;
 import org.lamisplus.modules.base.domain.dto.PageDTO;
+import org.lamisplus.modules.base.module.ModuleService;
 import org.lamisplus.modules.base.util.PaginationUtil;
 import org.lamisplus.modules.hts.domain.dto.*;
 import org.lamisplus.modules.hts.domain.entity.HtsClient;
@@ -43,6 +44,7 @@ public class HtsClientService {
     private final CurrentUserOrganizationService currentUserOrganizationService;
     private final IndexElicitationRepository indexElicitationRepository;
     private final RiskStratificationService riskStratificationService;
+    private final ModuleService moduleService;
     public HtsClientDto save(HtsClientRequestDto htsClientRequestDto){
         HtsClient htsClient;
         PersonResponseDto personResponseDto;
@@ -229,11 +231,16 @@ public class HtsClientService {
     private HtsClientDtos htsClientToHtsClientDtos(Person person, List<HtsClient> clients){
         final Long[] pId = {null};
         final String[] clientCode = {null};
+        final String[] personUuid = {null};
         final PersonResponseDto[] personResponseDto = {new PersonResponseDto()};
+        boolean isPositive = false;
+
         if(person != null){
             pId[0] =person.getId();
             personResponseDto[0] = personService.getDtoFromPerson(person);
+            personUuid[0]  = person.getUuid();
         }
+
         HtsClientDtos htsClientDtos = new HtsClientDtos();
         List<HtsClientDto> htsClientDtoList = new ArrayList<>();
         htsClientDtoList =  clients
@@ -243,15 +250,20 @@ public class HtsClientService {
                         Person person1 = htsClient1.getPerson();
                         pId[0] = person.getId();
                         personResponseDto[0] = personService.getDtoFromPerson(person1);
+                        personUuid[0]  = person.getUuid();
                     }
                     if(clientCode[0] == null){clientCode[0] = htsClient1.getClientCode();}
                     return this.htsClientToHtsClientDto(htsClient1);})
                 .collect(Collectors.toList());
+        if(moduleService.exist("HIVModule")){
+            if(htsClientRepository.findInHivEnrollmentByUuid(personUuid[0]).isPresent())isPositive=true;
+        }
         htsClientDtos.setHtsCount(htsClientDtoList.size());
         htsClientDtos.setHtsClientDtoList(htsClientDtoList);
         htsClientDtos.setPersonId(pId[0]);
         htsClientDtos.setClientCode(clientCode[0]);
         htsClientDtos.setPersonResponseDto(personResponseDto[0]);
+        htsClientDtos.setHivPositive(isPositive);
         return htsClientDtos;
     }
 

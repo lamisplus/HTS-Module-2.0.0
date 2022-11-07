@@ -58,6 +58,7 @@
                 archived integer,
                 index_client_code character varying,
                 CONSTRAINT unique_hts_uuid UNIQUE (uuid),
+                CONSTRAINT hts_client_pkey PRIMARY KEY (id),
                 CONSTRAINT person_uuid_fk FOREIGN KEY (person_uuid)
                     REFERENCES patient_person (uuid) MATCH SIMPLE
                     ON UPDATE NO ACTION
@@ -123,6 +124,7 @@
                 modified_by character varying NOT NULL,
                 archived integer NOT NULL,
                 extra jsonb,
+                CONSTRAINT hts_index_elicitation_pkey PRIMARY KEY (id),
                 CONSTRAINT sexually_uncomfortable_fk FOREIGN KEY (sexually_uncomfortable)
                     REFERENCES base_application_codeset (id) MATCH SIMPLE
                     ON UPDATE NO ACTION

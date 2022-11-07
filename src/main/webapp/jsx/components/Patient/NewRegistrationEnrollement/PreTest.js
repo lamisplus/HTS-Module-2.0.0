@@ -122,7 +122,7 @@ const BasicInfo = (props) => {
             clientInformRiskkHivTrans:"",
             clientInformPreventingsHivTrans:"", 
             clientInformPossibleTestResult:"",
-            informCosentHivTest:"",
+            informConsentHivTest:"",
         }
     )
     const handleInputChangeKnowledgeAssessment = e => { 
@@ -419,9 +419,9 @@ const BasicInfo = (props) => {
                                     <Label>Informed consent for HIV testing given *</Label>
                                     <select
                                         className="form-control"
-                                        name="informCosentHivTest"
-                                        id="informCosentHivTest"
-                                        value={knowledgeAssessment.informCosentHivTest}
+                                        name="informConsentHivTest"
+                                        id="informConsentHivTest"
+                                        value={knowledgeAssessment.informConsentHivTest}
                                         onChange={handleInputChangeKnowledgeAssessment}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >

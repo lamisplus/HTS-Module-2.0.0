@@ -132,7 +132,7 @@ const BasicInfo = (props) => {
             clientInformRiskkHivTrans:"",
             clientInformPreventingsHivTrans:"", 
             clientInformPossibleTestResult:"",
-            informCosentHivTest:"",
+            informConsentHivTest:"",
         }
     )
     const handleInputChangeKnowledgeAssessment = e => { 
@@ -243,7 +243,7 @@ const BasicInfo = (props) => {
            temp.clientInformRiskkHivTrans = knowledgeAssessment.clientInformRiskkHivTrans ? "" : "This field is required."
            temp.clientInformPreventingsHivTrans = knowledgeAssessment.clientInformPreventingsHivTrans ? "" : "This field is required."
            temp.clientInformPossibleTestResult = knowledgeAssessment.clientInformPossibleTestResult ? "" : "This field is required."
-           temp.informCosentHivTest = knowledgeAssessment.informCosentHivTest ? "" : "This field is required."  
+           temp.informConsentHivTest = knowledgeAssessment.informConsentHivTest ? "" : "This field is required."  
 
             temp.currentCough = tbScreening.currentCough ? "" : "This field is required."
             temp.weightLoss = tbScreening.weightLoss ? "" : "This field is required."
@@ -492,9 +492,9 @@ const BasicInfo = (props) => {
                                     <Label>Informed consent for HIV testing given *</Label>
                                     <select
                                         className="form-control"
-                                        name="informCosentHivTest"
-                                        id="informCosentHivTest"
-                                        value={knowledgeAssessment.informCosentHivTest}
+                                        name="informConsentHivTest"
+                                        id="informConsentHivTest"
+                                        value={knowledgeAssessment.informConsentHivTest}
                                         onChange={handleInputChangeKnowledgeAssessment}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
@@ -503,8 +503,8 @@ const BasicInfo = (props) => {
                                         <option value="false">No</option>
                                         
                                     </select>
-                                    {errors.informCosentHivTest !=="" ? (
-                                    <span className={classes.error}>{errors.informCosentHivTest}</span>
+                                    {errors.informConsentHivTest !=="" ? (
+                                    <span className={classes.error}>{errors.informConsentHivTest}</span>
                                     ) : "" }
                                 </FormGroup>
                             </div>

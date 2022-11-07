@@ -228,12 +228,12 @@ const Patients = (props) => {
             //     }))}
             data={query =>
                 new Promise((resolve, reject) =>
-                    axios.get(`${baseUrl}hts/persons?size=${query.pageSize}&page=${query.page}&searchValue=${query.search}`, { headers: {"Authorization" : `Bearer ${token}`} })
+                    axios.get(`${baseUrl}hts/persons?pageSize=${query.pageSize}&pageNo=${query.page}&searchValue=${query.search}`, { headers: {"Authorization" : `Bearer ${token}`} })
                         .then(response => response)
                         .then(result => {
-                            console.log(result.headers)
+                            console.log(query)
                             resolve({
-                                data: result.data.map((row) => ({
+                                data: result.data.records.map((row) => ({
                                     name: row.personResponseDto.firstName + " " + row.personResponseDto.surname,
                                     hospital_number: getHospitalNumber(row.personResponseDto.identifier),
                                     clientCode: row.clientCode,
@@ -283,7 +283,7 @@ const Patients = (props) => {
                                             </div>
                                     })),
                                 page: query.page,
-                                totalCount: result.headers['x-total-count'],
+                                totalCount: result.data.totalRecords,
                             })
                         })
                 )}

@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.lamisplus.modules.base.controller.apierror.EntityNotFoundException;
 import org.lamisplus.modules.base.controller.apierror.IllegalTypeException;
+import org.lamisplus.modules.base.domain.dto.PageDTO;
+import org.lamisplus.modules.base.util.PaginationUtil;
 import org.lamisplus.modules.hts.domain.dto.*;
 import org.lamisplus.modules.hts.domain.entity.HtsClient;
 import org.lamisplus.modules.hts.domain.entity.IndexElicitation;
@@ -18,6 +20,7 @@ import org.lamisplus.modules.patient.repository.PersonRepository;
 import org.lamisplus.modules.patient.service.PersonService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -213,11 +216,13 @@ public class HtsClientService {
     }
 
 
-    public List<HtsClientDtos> getAllHtsClientDTOSByPerson(Page<Person> page){
-        return page.stream()
+    public PageDTO getAllHtsClientDTOSByPerson(Page<Person> page){
+
+        List<HtsClientDtos> htsClientDtosList =  page.stream()
                 .map(person -> getHtsClientByPersonId(person.getId()))
                 //.filter(htsClientDtos ->htsClientDtos.getClientCode() != null)
                 .collect(Collectors.toList());
+        return PaginationUtil.generatePagination(page, htsClientDtosList);
     }
 
 
@@ -309,9 +314,10 @@ public class HtsClientService {
         return htsClientRepository.findAll(pageable);
     }
 
-    public Page<Person> findHtsClientPersonPage(String searchValue, Pageable pageable) {
+    public Page<Person> findHtsClientPersonPage(String searchValue, int pageNo, int pageSize) {
         Long facilityId = currentUserOrganizationService.getCurrentUserOrganization();
-        if(String.valueOf(searchValue).equals("null") && !searchValue.equals("*")){
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        if(!String.valueOf(searchValue).equals("null") && !searchValue.equals("*")){
             String queryParam = "%"+searchValue+"%";
             return personRepository
                     .findAllPersonBySearchParameters(queryParam, UN_ARCHIVED, facilityId,  pageable);

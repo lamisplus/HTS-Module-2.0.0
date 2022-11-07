@@ -1,6 +1,7 @@
 package org.lamisplus.modules.hts.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.lamisplus.modules.base.domain.dto.PageDTO;
 import org.lamisplus.modules.hts.domain.dto.*;
 import org.lamisplus.modules.hts.service.HtsClientService;
 import org.lamisplus.modules.hts.service.IndexElicitationService;
@@ -78,9 +79,10 @@ public class HtsClientController {
     }
 
     @GetMapping(HTS_URL_VERSION_ONE)
-    public ResponseEntity<List<HtsClientDtos>> getHtsClients(@RequestParam (required = false, defaultValue = "*")  String searchValue,
-                                                             @PageableDefault(value = 30) Pageable pageable) {
-        Page<Person> page = htsClientService.findHtsClientPersonPage(searchValue, pageable);
+    public ResponseEntity<PageDTO> getHtsClients(@RequestParam (required = false, defaultValue = "*")  String searchValue,
+                                                 @RequestParam (required = false, defaultValue = "20")int pageSize,
+                                                 @RequestParam (required = false, defaultValue = "0") int pageNo) {
+        Page<Person> page = htsClientService.findHtsClientPersonPage(searchValue, pageNo, pageSize);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return new ResponseEntity<>(this.htsClientService.getAllHtsClientDTOSByPerson(page), headers, HttpStatus.OK);
     }
@@ -91,9 +93,10 @@ public class HtsClientController {
     }
 
     @GetMapping(HTS_URL_VERSION_ONE + "/persons")
-    public ResponseEntity<List<HtsClientDtos>> getAllPerson(@RequestParam (required = false, defaultValue = "*")  String searchValue,
-                                                            @PageableDefault(value = 30) Pageable pageable) {
-        Page<Person> page = htsClientService.findHtsClientPersonPage(searchValue, pageable);
+    public ResponseEntity<PageDTO> getAllPerson(@RequestParam (required = false, defaultValue = "*")  String searchValue,
+                                                @RequestParam (required = false, defaultValue = "20")int pageSize,
+                                                @RequestParam (required = false, defaultValue = "0") int pageNo) {
+        Page<Person> page = htsClientService.findHtsClientPersonPage(searchValue, pageNo, pageSize);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return new ResponseEntity<>(this.htsClientService.getAllHtsClientDTOSByPerson(page), headers, HttpStatus.OK);
     }

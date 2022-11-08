@@ -9,7 +9,7 @@ import {Link} from "react-router-dom";
 //import {TiArrowBack} from 'react-icons/ti'
 //import {token, url as baseUrl } from "../../../api";
 import 'react-phone-input-2/lib/style.css'
-import { Icon, Menu } from 'semantic-ui-react'
+import { Icon, Menu, Sticky } from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css';
 import BasicInfo from './NewRegistrationEnrollement/BasicInfo'
 import PreTest from './NewRegistrationEnrollement/PreTest'
@@ -77,7 +77,9 @@ const UserRegistration = (props) => {
                     </h3>
                         <br/>
                         <br/>
+                       
                         <div className="col-md-3 col-sm-3 col-lg-3">
+                        <Sticky>
                         <Menu  size='large'  vertical  style={{backgroundColor:"#014D88"}}>
                             <Menu.Item
                                 name='inbox'
@@ -161,7 +163,9 @@ const UserRegistration = (props) => {
                             </Menu.Item>
                            
                         </Menu>
+                        </Sticky>
                         </div>
+                       
                         <div className="col-md-9 col-sm-9 col-lg-9 " style={{ backgroundColor:"#fff", margingLeft:"-50px", paddingLeft:"-20px"}}>
                             {activeItem==='basic' && (<BasicInfo handleItemClick={handleItemClick} setCompleted={setCompleted} completed={completed} setPatientObj={setPatientObj} patientObj={patientObj} activePage={props.activePage} setActivePage={props.setActivePage} patientAge={props.patientAge}/>)}
                             {activeItem==='pre-test-counsel' && (<PreTest handleItemClick={handleItemClick} setCompleted={setCompleted} completed={completed} setPatientObj={setPatientObj} patientObj={patientObj} activePage={props.activePage} setActivePage={props.setActivePage} patientAge={props.patientAge}/>)}

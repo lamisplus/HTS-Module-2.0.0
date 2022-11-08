@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import classNames from 'classnames';
+//import classNames from 'classnames';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
@@ -18,6 +18,8 @@ import momentLocalizer from "react-widgets-moment";
 import moment from "moment";
 import axios from "axios";
 import { url as baseUrl, token } from "./../../../api";
+import Typography from '@material-ui/core/Typography';
+import {Label, Sticky} from "semantic-ui-react";
 
 //Dtate Picker package
 Moment.locale("en");
@@ -117,7 +119,9 @@ function PatientCard(props) {
     
   
   return (
+    <Sticky >
     <div className={classes.root}>
+       
        <ExpansionPanel >
                 <ExpansionPanelSummary >
                 
@@ -186,24 +190,25 @@ function PatientCard(props) {
                     </span>
                     </Col>
                     <Col md={12}>
-                     
-                    </Col>
+
+                        <div >
+                            <Typography variant="caption">
+                                <Label color={props.patientObj.hivPositive==true ? "red" : "teal"} size={"mini"}>
+                                  HIV STATUS : {props.patientObj.hivPositive==true ? "Positive" : "Negative"}    
+                                </Label>
+                              
+                            </Typography>
+                        </div>
+                  
+                    </Col>     
                     </Row>
                     </Col>
                 </Row>
             
                 </ExpansionPanelSummary>
-                <ExpansionPanelDetails className={classes.details}>
-               
-                </ExpansionPanelDetails>
-                <Divider />
-                <ExpansionPanelActions expandIcon={<ExpandMoreIcon />}>
-                
-                </ExpansionPanelActions>
             </ExpansionPanel>
-     
-      
     </div>
+    </Sticky>
   );
 }
 

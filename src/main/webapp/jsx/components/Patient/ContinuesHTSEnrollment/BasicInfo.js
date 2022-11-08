@@ -268,6 +268,8 @@ const BasicInfo = (props) => {
     /*****  Validation  */
     const validate = () => {
         //HTS FORM VALIDATION
+        
+           temp.clientCode = objValues.clientCode ? "" : "This field is required."
             temp.typeCounseling = objValues.typeCounseling ? "" : "This field is required."
             temp.testingSetting = objValues.testingSetting ? "" : "This field is required."
             temp.targetGroup = objValues.targetGroup ? "" : "This field is required."
@@ -390,7 +392,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group mb-3 col-md-4">
                                 <FormGroup>
-                                <Label for="">Client Code</Label>
+                                <Label for="">Client Code *</Label>
                                 <Input
                                     type="text"
                                     name="clientCode"

@@ -52,8 +52,11 @@ function PatientCard(props) {
     let history = useHistory();
     const [activePage, setActivePage] = useState({activePage:"home", activeObject:{}, actionType:""});
     const { classes } = props;
+   
+    const patientObject= history.location && history.location.state ? history.location.state.patientObject : {}
     const patientObj = history.location && history.location.state ? history.location.state.patientObj : {}
     const clientCode =history.location && history.location.state ? history.location.state.clientCode : ""
+    console.log(patientObject.hivPositive)
     const calculate_age = dob => {
       var today = new Date();
       var dateParts = dob.split("-");
@@ -80,12 +83,12 @@ function PatientCard(props) {
 		  </div>
       <Card >
         <CardContent>
-            <PatientCardDetail patientObj={patientObj} clientCode={clientCode}/>
+            <PatientCardDetail patientObj={patientObj} clientCode={clientCode} patientObject={patientObject}/>
             {activePage.activePage==="home" && (
-              <PatientHistory patientObj={patientObj} activePage={activePage} setActivePage={setActivePage} clientCode={clientCode} patientAge={patientAge}/>
+              <PatientHistory patientObj={patientObj} activePage={activePage} setActivePage={setActivePage} clientCode={clientCode} patientAge={patientAge} patientObject={patientObject}/>
             )}
             {activePage.activePage==="view" && (
-              <PatientHtsEnrollment patientObj={patientObj} activePage={activePage} setActivePage={setActivePage} clientCode={clientCode} patientAge={patientAge}/>
+              <PatientHtsEnrollment patientObj={patientObj} activePage={activePage} setActivePage={setActivePage} clientCode={clientCode} patientAge={patientAge} patientObject={patientObject}/>
             )}
          </CardContent>
       </Card>

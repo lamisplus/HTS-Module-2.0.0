@@ -518,7 +518,7 @@ const BasicInfo = (props) => {
             temp.previouslyTested = objValues.previouslyTested ? "" : "This field is required."
             temp.surname = objValues.surname ? "" : "This field is required."
             temp.sex = objValues.sex ? "" : "This field is required."
-            //temp.maritalStatusId = objValues.maritalStatusId ? "" : "This field is required."
+            temp.clientCode = objValues.clientCode ? "" : "This field is required."
             temp.phoneNumber = objValues.phoneNumber ? "" : "This field is required."
            // temp.isDateOfBirthEstimated = objValues.isDateOfBirthEstimated ? "" : "This field is required."    
             temp.firstName = objValues.firstName ? "" : "This field is required."  
@@ -681,7 +681,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group mb-3 col-md-4">
                                 <FormGroup>
-                                <Label for="">Client Code</Label>
+                                <Label for="">Client Code *</Label>
                                 <Input
                                     type="text"
                                     name="clientCode"

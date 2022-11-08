@@ -62,7 +62,6 @@ const styles = theme => ({
 
 function PatientCard(props) {
   const { classes } = props;
-  console.log(props)
   //const patientCurrentStatus=props.patientObj && props.patientObj.currentStatus==="Died (Confirmed)" ? true : false ;
   const patientObjs = props.patientObj ? props.patientObj : {}
   const permissions= props.permissions ? props.permissions : [];
@@ -193,8 +192,8 @@ function PatientCard(props) {
 
                         <div >
                             <Typography variant="caption">
-                                <Label color={props.patientObj.hivPositive==true ? "red" : "teal"} size={"mini"}>
-                                  HIV STATUS : {props.patientObj.hivPositive==true ? "Positive" : "Negative"}    
+                                <Label color={props.patientObject.hivPositive && props.patientObject.hivPositive===true ? "red" : "teal"} size={"mini"}>
+                                  HIV STATUS : {props.patientObject.hivPositive && props.patientObject.hivPositive===true ? "Positive" : "Negative"}    
                                 </Label>
                               
                             </Typography>

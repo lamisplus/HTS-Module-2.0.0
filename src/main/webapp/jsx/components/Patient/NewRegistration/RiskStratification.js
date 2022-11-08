@@ -369,12 +369,54 @@ const BasicInfo = (props) => {
             props.patientObj.dateVisit= objValues.visitDate
             objValues.riskAssessment=riskAssessment
             if((riskCount>0 || riskCountQuestion.length>0) && objValues.age>15){
-                handleItemClick('basic', 'risk' )
-                props.setExtra(objValues)
-                props.setHideOtherMenu(false)
+                if(validate()){
+                    handleItemClick('basic', 'risk' )
+                    props.setExtra(objValues)
+                    props.setHideOtherMenu(false)
+                    axios.post(`${baseUrl}risk-stratification`,objValues,
+                    { headers: {"Authorization" : `Bearer ${token}`}},
+                    
+                    )
+                    .then(response => {
+                        setSaving(false);
+                        //toast.success("Risk stratification save succesfully!");
+                    })
+                    .catch(error => {
+                        setSaving(false);
+                        if(error.response && error.response.data){
+                            let errorMessage = error.response.data.apierror && error.response.data.apierror.message!=="" ? error.response.data.apierror.message :  "Something went wrong, please try again";
+                            toast.error(errorMessage);
+                        }
+                        else{
+                            toast.error("Something went wrong. Please try again...");
+                        }
+                    });
+                }
+                
             }if(objValues.age<15){
-                props.setExtra(objValues)
-                handleItemClick('basic', 'risk' )
+                if(validate()){
+                    axios.post(`${baseUrl}risk-stratification`,objValues,
+                    { headers: {"Authorization" : `Bearer ${token}`}},
+                    
+                    )
+                    .then(response => {
+                        setSaving(false);
+                        props.setExtra(objValues)
+                        handleItemClick('basic', 'risk' )
+                        //toast.success("Risk stratification save succesfully!");
+                    })
+                    .catch(error => {
+                        setSaving(false);
+                        if(error.response && error.response.data){
+                            let errorMessage = error.response.data.apierror && error.response.data.apierror.message!=="" ? error.response.data.apierror.message :  "Something went wrong, please try again";
+                            toast.error(errorMessage);
+                        }
+                        else{
+                            toast.error("Something went wrong. Please try again...");
+                        }
+                    });
+                }
+                
             }else{
                 props.setHideOtherMenu(false)
                 props.setExtra(objValues)

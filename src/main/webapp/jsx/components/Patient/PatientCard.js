@@ -118,8 +118,8 @@ function PatientCard(props) {
   
   return (
     <div className={classes.root}>
-       <ExpansionPanel defaultExpanded>
-                <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+       <ExpansionPanel >
+                <ExpansionPanelSummary >
                 
                 <Row>
                   

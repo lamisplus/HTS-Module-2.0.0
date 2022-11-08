@@ -28,7 +28,7 @@ import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import { MdDashboard } from "react-icons/md";
 import "@reach/menu-button/styles.css";
-import { Label } from 'semantic-ui-react'
+import { Label, Icon } from 'semantic-ui-react'
 import Moment from "moment";
 import momentLocalizer from "react-widgets-moment";
 import moment from "moment";
@@ -231,10 +231,10 @@ const Patients = (props) => {
                     axios.get(`${baseUrl}hts/persons?pageSize=${query.pageSize}&pageNo=${query.page}&searchValue=${query.search}`, { headers: {"Authorization" : `Bearer ${token}`} })
                         .then(response => response)
                         .then(result => {
-                            
+                            setLoading(false)
                             resolve({
                                 data: result.data.records.map((row) => ({
-                                    name:  row.hivPositive!==null  ? ( <><Label circular color="red" /> { " " + row.personResponseDto.firstName + " " + row.personResponseDto.surname} </>) :row.personResponseDto.firstName + " " + row.personResponseDto.surname,
+                                    name:   row.hivPositive===true ? ( <> { " " + row.personResponseDto.firstName + " " + row.personResponseDto.surname} <sup><b style={{color:"red"}}><Icon name='circle' size="small"/></b></sup></>) :row.personResponseDto.firstName + " " + row.personResponseDto.surname,
                                     hospital_number: getHospitalNumber(row.personResponseDto.identifier),
                                     clientCode: row.clientCode,
                                     gender: row && row.personResponseDto.sex ? row.personResponseDto.sex : "",
@@ -285,8 +285,10 @@ const Patients = (props) => {
                                 page: query.page,
                                 totalCount: result.data.totalRecords,
                             })
+                            setLoading(false)
                         })
                 )}
+                
                 options={{
                     headerStyle: {
                         backgroundColor: "#014d88",
@@ -300,7 +302,7 @@ const Patients = (props) => {
                     exportButton: false,
                     searchFieldAlignment: 'left',
                     pageSizeOptions:[10,20,100],
-                    pageSize:20,
+                    pageSize:10,
                     debounceInterval: 400
                 }}
         />

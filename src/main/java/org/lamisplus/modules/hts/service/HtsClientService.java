@@ -255,9 +255,9 @@ public class HtsClientService {
                     if(clientCode[0] == null){clientCode[0] = htsClient1.getClientCode();}
                     return this.htsClientToHtsClientDto(htsClient1);})
                 .collect(Collectors.toList());
-        if(moduleService.exist("HIVModule")){
-            if(htsClientRepository.findInHivEnrollmentByUuid(personUuid[0]).isPresent())isPositive=true;
-        }
+            if(moduleService.exist("HIVModule")){
+                if(htsClientRepository.findInHivEnrollmentByUuid(personUuid[0]).isPresent())isPositive=true;
+            }
         htsClientDtos.setHtsCount(htsClientDtoList.size());
         htsClientDtos.setHtsClientDtoList(htsClientDtoList);
         htsClientDtos.setPersonId(pId[0]);
@@ -457,10 +457,19 @@ public class HtsClientService {
 
     public String getClientNameByCode(String code) {
         List<HtsClient> htsClients = htsClientRepository.findAllByClientCode(code);
-        if(htsClients.isEmpty())return "Record Not Found";
+        String name = "Record Not Found";
 
-        Person person = htsClients.stream().findFirst().get().getPerson();
-        return person.getFirstName() + " " + person.getSurname();
+        if(moduleService.exist("PatientModule")){
+            Optional<String> firstName = htsClientRepository.findInPatientByHospitalNumber(code);
+            if(firstName.isPresent()){
+                return firstName.get();
+            }
+        }
+        if(!htsClients.isEmpty() && name.equals("Record Not Found")){
+            Person person = htsClients.stream().findFirst().get().getPerson();
+            return person.getFirstName() + " " + person.getSurname();
+        }
+        return name;
     }
 
     public HtsClientDtos getRiskStratificationHtsClients(Long personId) {

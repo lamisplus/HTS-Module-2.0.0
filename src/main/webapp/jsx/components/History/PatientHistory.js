@@ -56,11 +56,12 @@ const Home = (props) => {
                 >
                 <Tab eventKey="home" title="HTS HISTORY">                   
                     <History patientObj={props.patientObj} activePage={props.activePage} setActivePage={props.setActivePage} clientCode={props.clientCode} patientAge={props.patientAge} patients={patients} patientList={patientList} loading={loading}/>
-                </Tab> 
-                <Tab eventKey="new" title="NEW HTS">                   
-                    <ContineousRegistrationTesting patientObj={props.patientObj} activePage={props.activePage} setActivePage={props.setActivePage} clientCode={props.clientCode} patientAge={props.patientAge} patients={patients}/>
                 </Tab>
-                                     
+                {patientObj && patientObj.hivPositive !==null && (
+                  <Tab eventKey="new" title="NEW HTS">                   
+                      <ContineousRegistrationTesting patientObj={props.patientObj} activePage={props.activePage} setActivePage={props.setActivePage} clientCode={props.clientCode} patientAge={props.patientAge} patients={patients}/>
+                  </Tab>
+                 )}                     
                 </Tabs>
                 
               </div>

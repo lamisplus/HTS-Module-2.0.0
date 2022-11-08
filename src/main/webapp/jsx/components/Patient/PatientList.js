@@ -231,10 +231,10 @@ const Patients = (props) => {
                     axios.get(`${baseUrl}hts/persons?pageSize=${query.pageSize}&pageNo=${query.page}&searchValue=${query.search}`, { headers: {"Authorization" : `Bearer ${token}`} })
                         .then(response => response)
                         .then(result => {
-                            console.log(query)
+                            
                             resolve({
                                 data: result.data.records.map((row) => ({
-                                    name: row.personResponseDto.firstName + " " + row.personResponseDto.surname,
+                                    name:  row.hivPositive!==null  ? ( <><Label circular color="red" /> { " " + row.personResponseDto.firstName + " " + row.personResponseDto.surname} </>) :row.personResponseDto.firstName + " " + row.personResponseDto.surname,
                                     hospital_number: getHospitalNumber(row.personResponseDto.identifier),
                                     clientCode: row.clientCode,
                                     gender: row && row.personResponseDto.sex ? row.personResponseDto.sex : "",

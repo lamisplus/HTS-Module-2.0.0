@@ -25,8 +25,7 @@ import java.util.stream.Collectors;
 public class RiskStratificationService {
     private final RiskStratificationRepository stratificationRepository;
     private final PersonRepository personRepository;
-    private final PersonService personService;
-    
+
     public RiskStratificationResponseDto save(RiskStratificationDto riskStratificationDTO) {
         Person person = null;
         if(riskStratificationDTO.getPersonId() != null){
@@ -34,6 +33,14 @@ public class RiskStratificationService {
         }
         RiskStratification riskStratification = this.toRiskStratification(riskStratificationDTO, person);
         return this.toRiskStratificationResponseDTO(stratificationRepository.save(riskStratification));
+    }
+
+    public RiskStratificationResponseDto getByCode(String code){
+        RiskStratification riskStratification = stratificationRepository.findByCode(code).orElse(null);
+        if(riskStratification != null){
+            return this.toRiskStratificationResponseDTO(riskStratification);
+        }
+        return null;
     }
 
     public Person getPerson(Long personId) {

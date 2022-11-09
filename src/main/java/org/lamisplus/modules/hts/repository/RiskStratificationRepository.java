@@ -6,8 +6,11 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface RiskStratificationRepository extends PagingAndSortingRepository<RiskStratification, Long> {
     List<RiskStratification> findAllByPersonUuid(String uuid);
+
+    Optional<RiskStratification> findByCode(String code);
 }

@@ -81,4 +81,7 @@ public class HtsClientDto {
     private String indexClientCode;
 
     public List<IndexElicitation> indexElicitation;
+
+    private RiskStratificationResponseDto riskStratificationResponseDto;
+    private String riskStratificationCode;
 }

@@ -11,6 +11,7 @@ import org.lamisplus.modules.base.util.PaginationUtil;
 import org.lamisplus.modules.hts.domain.dto.*;
 import org.lamisplus.modules.hts.domain.entity.HtsClient;
 import org.lamisplus.modules.hts.domain.entity.IndexElicitation;
+import org.lamisplus.modules.hts.domain.entity.RiskStratification;
 import org.lamisplus.modules.hts.repository.HtsClientRepository;
 import org.lamisplus.modules.hts.repository.IndexElicitationRepository;
 import org.lamisplus.modules.hts.util.RandomCodeGenerator;
@@ -71,7 +72,11 @@ public class HtsClientService {
     public HtsClientDtos getHtsClientById(Long id){
         List<HtsClient> htsClients = new ArrayList<>();
         htsClients.add(this.getById(id));
-        return this.htsClientToHtsClientDtos(null, htsClients);
+        HtsClientDtos htsClientDtos = htsClientToHtsClientDtos(null, htsClients);
+        return htsClientDtos;
+        /*if(moduleService.exist("HIVModule")){
+            if(htsClientRepository.findInHivEnrollmentByUuid(htsClientDtos.per)isPositive=true;
+        }*/
     }
 
     public HtsClientDtos getHtsClientByPersonId(Long personId){
@@ -149,6 +154,7 @@ public class HtsClientService {
         updatableHtsClient.setOthers(htsRequestResultDto.getOthers());
         updatableHtsClient.setCd4(htsRequestResultDto.getCd4());
 
+
         return updatableHtsClient;
     }
 
@@ -172,6 +178,7 @@ public class HtsClientService {
         htsClient.setPersonUuid( personUuid);
         htsClient.setPregnant(htsClientRequestDto.getPregnant());
         htsClient.setBreastFeeding(htsClientRequestDto.getBreastFeeding());
+        htsClient.setRiskStratificationCode(htsClientRequestDto.getRiskStratificationCode());
         htsClient.setRelationWithIndexClient(htsClientRequestDto.getRelationWithIndexClient());
 
         return htsClient;
@@ -199,6 +206,7 @@ public class HtsClientService {
         htsClient.setNumWives( htsClientRequestDto.getNumWives() );
         htsClient.setTypeCounseling( htsClientRequestDto.getTypeCounseling() );
         htsClient.setIndexClient( htsClientRequestDto.getIndexClient() );
+        htsClient.setRiskStratificationCode( htsClientRequestDto.getRiskStratificationCode() );
         htsClient.setPreviouslyTested( htsClientRequestDto.getPreviouslyTested() );
         htsClient.setExtra( htsClientRequestDto.getExtra() );
         htsClient.setPregnant( htsClientRequestDto.getPregnant() );
@@ -255,9 +263,6 @@ public class HtsClientService {
                     if(clientCode[0] == null){clientCode[0] = htsClient1.getClientCode();}
                     return this.htsClientToHtsClientDto(htsClient1);})
                 .collect(Collectors.toList());
-        if(moduleService.exist("HIVModule")){
-            if(htsClientRepository.findInHivEnrollmentByUuid(personUuid[0]).isPresent())isPositive=true;
-        }
         htsClientDtos.setHtsCount(htsClientDtoList.size());
         htsClientDtos.setHtsClientDtoList(htsClientDtoList);
         htsClientDtos.setPersonId(pId[0]);
@@ -316,7 +321,14 @@ public class HtsClientService {
         htsClientDto.setSexPartnerRiskAssessment(htsClient.getSexPartnerRiskAssessment());
         htsClientDto.setOthers(htsClient.getOthers());
         htsClientDto.setHepatitisTesting(htsClient.getHepatitisTesting());
+        htsClientDto.setRiskStratificationCode(htsClient.getRiskStratificationCode());
         htsClientDto.setIndexNotificationServicesElicitation(htsClient.getIndexNotificationServicesElicitation());
+
+        if(htsClient.getRiskStratificationCode() != null) {
+            RiskStratificationResponseDto riskStratificationResponseDto
+                    = riskStratificationService.getByCode(htsClient.getRiskStratificationCode());
+            htsClientDto.setRiskStratificationResponseDto(riskStratificationResponseDto);
+        }
 
         return htsClientDto;
     }
@@ -448,6 +460,7 @@ public class HtsClientService {
         htsClient.setPreviouslyTested( htsClientUpdateRequestDto.getPreviouslyTested() );
         htsClient.setExtra( htsClientUpdateRequestDto.getExtra() );
         htsClient.setPersonUuid( personUuid);
+        htsClient.setRiskStratificationCode( htsClientUpdateRequestDto.getRiskStratificationCode());
         htsClient.setPregnant(htsClientUpdateRequestDto.getPregnant());
         htsClient.setBreastFeeding(htsClientUpdateRequestDto.getBreastFeeding());
         htsClient.setRelationWithIndexClient(htsClientUpdateRequestDto.getRelationWithIndexClient());
@@ -457,10 +470,19 @@ public class HtsClientService {
 
     public String getClientNameByCode(String code) {
         List<HtsClient> htsClients = htsClientRepository.findAllByClientCode(code);
-        if(htsClients.isEmpty())return "Record Not Found";
+        String name = "Record Not Found";
 
-        Person person = htsClients.stream().findFirst().get().getPerson();
-        return person.getFirstName() + " " + person.getSurname();
+        if(moduleService.exist("PatientModule")){
+            Optional<String> firstName = htsClientRepository.findInPatientByHospitalNumber(code);
+            if(firstName.isPresent()){
+                return firstName.get();
+            }
+        }
+        if(!htsClients.isEmpty() && name.equals("Record Not Found")){
+            Person person = htsClients.stream().findFirst().get().getPerson();
+            return person.getFirstName() + " " + person.getSurname();
+        }
+        return name;
     }
 
     public HtsClientDtos getRiskStratificationHtsClients(Long personId) {

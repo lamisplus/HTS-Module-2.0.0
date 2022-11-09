@@ -41,4 +41,6 @@ public class HtsClientUpdateRequestDto {
     private final Long pregnant;
     private final Boolean breastFeeding;
     private final Long relationWithIndexClient;
+
+    private String riskStratificationCode;
 }

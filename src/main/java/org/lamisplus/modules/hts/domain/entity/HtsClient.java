@@ -267,6 +267,14 @@ public class HtsClient extends Audit implements Serializable {
     @JsonIgnore
     public List<IndexElicitation> indexElicitation;
 
+    @OneToOne
+    @JoinColumn(name = "risk_stratification_code", referencedColumnName = "code", insertable = false, updatable = false)
+    private RiskStratification riskStratification;
+
+    @Basic
+    @Column(name = "risk_stratification_code")
+    private String riskStratificationCode;
+
     @PrePersist
     public void setFields(){
         if(StringUtils.isEmpty(uuid)){

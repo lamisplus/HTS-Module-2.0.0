@@ -26,4 +26,7 @@ public interface HtsClientRepository extends JpaRepository<HtsClient, Long> {
 
     @Query(value = "SELECT uuid FROM hiv_enrollment where person_uuid=?1", nativeQuery = true)
     Optional<String> findInHivEnrollmentByUuid(String uuid);
+
+    @Query(value = "SELECT first_name FROM patient_person where hospital_number=?1", nativeQuery = true)
+    Optional<String> findInPatientByHospitalNumber(String hospitalNumber);
 }

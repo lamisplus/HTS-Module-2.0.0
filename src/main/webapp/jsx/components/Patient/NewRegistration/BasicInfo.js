@@ -184,7 +184,7 @@ const BasicInfo = (props) => {
             sex: props.patientObj.personResponseDto && props.patientObj.personResponseDto.sex ? props.patientObj.personResponseDto.sex :"",
             stateId:country && country.stateId ? country.stateId :"",
             riskAssessment:  props.patientObj && props.patientObj.riskAssessment? props.patientObj.riskAssessment : {},                                 
-            riskStratificationCode:props.extra && props.extra.code!=='' ? props.extra.cod : "",
+            riskStratificationCode:props.extra && props.extra.code!=='' ? props.extra.code : "",
             lga:country && country.district ? country.district :"",
             surname: props.patientObj.personResponseDto && props.patientObj.personResponseDto.surname ? props.patientObj.personResponseDto.surname :"",
             previouslyTested: props.patientObj ? props.patientObj.previouslyTested :"",
@@ -610,10 +610,12 @@ const BasicInfo = (props) => {
             typeCounseling:objValues.typeCounseling,
             breastFeeding:objValues.breastFeeding,
             pregnant:objValues.pregnant,
-            relationshipWithIndexClient:objValues.relationshipWithIndexClient
+            relationshipWithIndexClient:objValues.relationshipWithIndexClient,
+            riskStratificationCode:props.extra && props.extra.code!=='' ? props.extra.code : "",
             }
             props.setPatientObj({...props.patientObj, ...objValues})
             if(validate()){
+            console.log(patientForm)
             axios.post(`${baseUrl}hts`,patientForm,
             { headers: {"Authorization" : `Bearer ${token}`}},
             

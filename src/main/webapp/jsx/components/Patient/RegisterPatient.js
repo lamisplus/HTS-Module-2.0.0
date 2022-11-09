@@ -61,6 +61,7 @@ const UserRegistration = (props) => {
     const [patientObj, setPatientObj] = useState({
         breastFeeding: "",
         capturedBy: "",
+        riskStratificationCode:"",
         cd4: {},
         clientCode: "",
         confirmatoryTest: {},
@@ -280,7 +281,7 @@ const UserRegistration = (props) => {
                         <br/>
                         
                         <div className="col-md-3 col-sm-3 col-lg-3">
-                        <Sticky>
+                       
                         <Menu  size='large'  vertical  style={{backgroundColor:"#014D88"}}>
                             <Menu.Item
                                 name='inbox'
@@ -389,7 +390,7 @@ const UserRegistration = (props) => {
                             </Menu.Item>
                         </>)}   
                         </Menu>
-                        </Sticky>
+                     
                         </div>
                        
                         <div className="col-md-9 col-sm-9 col-lg-9 " style={{ backgroundColor:"#fff", margingLeft:"-50px", paddingLeft:"-20px"}}>

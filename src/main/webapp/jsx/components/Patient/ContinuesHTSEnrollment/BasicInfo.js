@@ -130,6 +130,8 @@ const BasicInfo = (props) => {
             pregnant:props.patientObj && props.patientObj.pregnant ? props.patientObj.pregnant :"",           
             previouslyTested: props.patientObj ? props.patientObj.previouslyTested :"",
             referredFrom: props.patientObj ? props.patientObj.referredFrom :"",
+            riskAssessment:  props.patientObj && props.patientObj.riskAssessment? props.patientObj.riskAssessment : {},
+            riskStratificationCode:props.extra && props.extra.code!=='' ? props.extra.cod : "",
             targetGroup: props.patientObj && props.patientObj.targetGroup? props.patientObj.targetGroup :"",
             testingSetting:props.patientObj ? props.patientObj.testingSetting :"",
             typeCounseling: props.patientObj ? props.patientObj.typeCounseling :"",

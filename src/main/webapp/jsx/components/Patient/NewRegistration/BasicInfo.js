@@ -183,7 +183,8 @@ const BasicInfo = (props) => {
             otherName: props.patientObj.personResponseDto && props.patientObj.personResponseDto.otherName ? props.patientObj.personResponseDto.otherName :"",
             sex: props.patientObj.personResponseDto && props.patientObj.personResponseDto.sex ? props.patientObj.personResponseDto.sex :"",
             stateId:country && country.stateId ? country.stateId :"",
-                                               
+            riskAssessment:  props.patientObj && props.patientObj.riskAssessment? props.patientObj.riskAssessment : {},                                 
+            riskStratificationCode:props.extra && props.extra.code!=='' ? props.extra.cod : "",
             lga:country && country.district ? country.district :"",
             surname: props.patientObj.personResponseDto && props.patientObj.personResponseDto.surname ? props.patientObj.personResponseDto.surname :"",
             previouslyTested: props.patientObj ? props.patientObj.previouslyTested :"",

@@ -303,6 +303,8 @@ const RiskStratification = (props) => {
                     )
                     .then(response => {
                         setSaving(false);
+                        objValues.code=response.data.code
+                        props.setExtra(objValues)
                         handleItemClick('basic', 'risk' )
                         props.setHideOtherMenu(false)
                         //toast.success("Risk stratification save succesfully!");
@@ -327,6 +329,8 @@ const RiskStratification = (props) => {
                     )
                     .then(response => {
                         setSaving(false);
+                        objValues.code=response.data.code
+                        props.setExtra(objValues)
                         props.setHideOtherMenu(false)
                         handleItemClick('basic', 'risk' )
                         //toast.success("Risk stratification save succesfully!");
@@ -352,6 +356,8 @@ const RiskStratification = (props) => {
                     )
                     .then(response => {
                         setSaving(false);
+                        objValues.code=response.data.code
+                        props.setExtra(objValues)
                         //toast.success("Risk stratification save succesfully!");
                     })
                     .catch(error => {

@@ -121,10 +121,9 @@ const PostTest = (props) => {
         }
     )
     useEffect(() => { 
-        
-        if(props.patientObj){
-            setPostTest(props.patientObj && props.patientObj.postTestCounselingKnowledgeAssessment!==null ? props.patientObj.postTestCounselingKnowledgeAssessment : {}) 
 
+        if(props.patientObj){
+            
             if(props.patientObj.hivTestResult==='Positive' || props.patientObj.hivTestResult2==='Positive'){
                 postTest.hivTestResult='True'
                 setPostTest({...postTest, hivTestResult:'True' })
@@ -133,6 +132,8 @@ const PostTest = (props) => {
                 postTest.hivTestResult='False'
                 setPostTest({...postTest, hivTestResult:'False' })
             }
+
+            setPostTest(props.patientObj.postTestCounselingKnowledgeAssessment) 
         }
     }, [props.patientObj, postTest.hivTestResult]);
     const handleInputChangePostTest = e => { 

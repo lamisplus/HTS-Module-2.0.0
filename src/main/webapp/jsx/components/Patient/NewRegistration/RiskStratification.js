@@ -114,6 +114,7 @@ const BasicInfo = (props) => {
         {
             age:"",
             dob:"",
+            code:"",
             visitDate: "", //        
             dateOfBirth: null,
             dateOfRegistration:null,
@@ -372,7 +373,7 @@ const BasicInfo = (props) => {
             if((riskCount>0 || riskCountQuestion.length>0) && objValues.age>15){
                 if(validate()){
                     handleItemClick('basic', 'risk' )
-                    props.setExtra(objValues)
+                    
                     props.setHideOtherMenu(false)
                     axios.post(`${baseUrl}risk-stratification`,objValues,
                     { headers: {"Authorization" : `Bearer ${token}`}},
@@ -380,6 +381,8 @@ const BasicInfo = (props) => {
                     )
                     .then(response => {
                         setSaving(false);
+                        objValues.code=response.data.code
+                        props.setExtra(objValues)
                         //toast.success("Risk stratification save succesfully!");
                     })
                     .catch(error => {
@@ -402,6 +405,7 @@ const BasicInfo = (props) => {
                     )
                     .then(response => {
                         setSaving(false);
+                        objValues.code=response.data.code
                         props.setExtra(objValues)
                         handleItemClick('basic', 'risk' )
                         //toast.success("Risk stratification save succesfully!");
@@ -428,6 +432,8 @@ const BasicInfo = (props) => {
                     )
                     .then(response => {
                         setSaving(false);
+                        objValues.code=response.data.code
+                        props.setExtra(objValues)
                         //toast.success("Risk stratification save succesfully!");
                     })
                     .catch(error => {

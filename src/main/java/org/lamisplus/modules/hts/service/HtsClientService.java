@@ -321,6 +321,7 @@ public class HtsClientService {
         htsClientDto.setSexPartnerRiskAssessment(htsClient.getSexPartnerRiskAssessment());
         htsClientDto.setOthers(htsClient.getOthers());
         htsClientDto.setHepatitisTesting(htsClient.getHepatitisTesting());
+        htsClientDto.setRiskStratificationCode(htsClient.getRiskStratificationCode());
         htsClientDto.setIndexNotificationServicesElicitation(htsClient.getIndexNotificationServicesElicitation());
 
         if(htsClient.getRiskStratificationCode() != null) {

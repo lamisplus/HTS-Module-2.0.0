@@ -367,6 +367,7 @@ const BasicInfo = (props) => {
             props.patientObj.testingSetting = objValues.testingSetting
             props.patientObj.modality = objValues.modality
             props.patientObj.dateVisit= objValues.visitDate
+            props.patientObj.riskAssessment =riskAssessment 
             objValues.riskAssessment=riskAssessment
             if((riskCount>0 || riskCountQuestion.length>0) && objValues.age>15){
                 if(validate()){

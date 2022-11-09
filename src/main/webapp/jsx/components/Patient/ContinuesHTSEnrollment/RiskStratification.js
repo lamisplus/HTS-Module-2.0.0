@@ -294,6 +294,7 @@ const RiskStratification = (props) => {
             props.patientObj.targetGroup = objValues.targetGroup
             props.patientObj.testingSetting = objValues.testingSetting
             props.patientObj.dateVisit= objValues.visitDate
+            props.patientObj.riskAssessment =riskAssessment 
             if((riskCount>0 || riskCountQuestion.length>0) && props.patientAge>15){
                 if(validate()){
                     axios.post(`${baseUrl}risk-stratification`,objValues,

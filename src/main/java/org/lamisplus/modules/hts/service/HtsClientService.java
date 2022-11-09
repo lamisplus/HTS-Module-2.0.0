@@ -72,8 +72,7 @@ public class HtsClientService {
     public HtsClientDtos getHtsClientById(Long id){
         List<HtsClient> htsClients = new ArrayList<>();
         htsClients.add(this.getById(id));
-        HtsClientDtos htsClientDtos = htsClientToHtsClientDtos(null, htsClients);
-        return htsClientDtos;
+        return htsClientToHtsClientDtos(null, htsClients);
         /*if(moduleService.exist("HIVModule")){
             if(htsClientRepository.findInHivEnrollmentByUuid(htsClientDtos.per)isPositive=true;
         }*/
@@ -82,6 +81,10 @@ public class HtsClientService {
     public HtsClientDtos getHtsClientByPersonId(Long personId){
         Person person = personRepository.findById(personId).orElse(new Person());
 
+        return this.htsClientToHtsClientDtos(person, htsClientRepository.findAllByPerson(person));
+    }
+
+    public HtsClientDtos getHtsClientByPersonId(Person person){
         return this.htsClientToHtsClientDtos(person, htsClientRepository.findAllByPerson(person));
     }
 
@@ -229,7 +232,7 @@ public class HtsClientService {
     public PageDTO getAllHtsClientDTOSByPerson(Page<Person> page){
 
         List<HtsClientDtos> htsClientDtosList =  page.stream()
-                .map(person -> getHtsClientByPersonId(person.getId()))
+                .map(person -> getHtsClientByPersonId(person))
                 //.filter(htsClientDtos ->htsClientDtos.getClientCode() != null)
                 .collect(Collectors.toList());
         return PaginationUtil.generatePagination(page, htsClientDtosList);
@@ -243,7 +246,7 @@ public class HtsClientService {
         final PersonResponseDto[] personResponseDto = {new PersonResponseDto()};
         boolean isPositive = false;
 
-        if(person != null){
+        if(person!= null && person.getUuid() != null){
             pId[0] =person.getId();
             personResponseDto[0] = personService.getDtoFromPerson(person);
             personUuid[0]  = person.getUuid();

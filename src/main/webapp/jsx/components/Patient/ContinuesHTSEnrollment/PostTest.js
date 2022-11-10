@@ -122,25 +122,23 @@ const PostTest = (props) => {
         }
     )
     useEffect(() => { 
-        
-        if(props.patientObj){
-            //setPostTest(props.patientObj && props.patientObj.postTestCounselingKnowledgeAssessment!==null ? props.patientObj.postTestCounselingKnowledgeAssessment : {}) 
-
-            if(props.patientObj.hivTestResult==='Positive' || props.patientObj.hivTestResult2==='Positive'){
+        //console.log(props.patientObj)
+        if(props.patientObj && props.patientObj.postTestCounselingKnowledgeAssessment){
+            setPostTest(props.patientObj.postTestCounselingKnowledgeAssessment) 
+        }else{
+            ///setPostTest(props.patientObj && props.patientObj.postTestCounselingKnowledgeAssessment!==null ? props.patientObj.postTestCounselingKnowledgeAssessment : {}) 
+            if(postTest.hivTestResult==="" && props.patientObj.hivTestResult!=="" && props.patientObj.hivTestResult!==null && (props.patientObj.hivTestResult==='Positive' || props.patientObj.hivTestResult2==='Positive')){
                 postTest.hivTestResult='True'
                 setPostTest({...postTest, hivTestResult:'True' })
-            console.log(props.patientObj.hivTestResult2)
-            }else if(props.patientObj.hivTestResult==='Negative' || props.patientObj.hivTestResult2==='Negative'){
+            }else if(postTest.hivTestResult===""  && props.patientObj.hivTestResult!=="" && props.patientObj.hivTestResult!==null && (props.patientObj.hivTestResult==='Negative' || props.patientObj.hivTestResult2==='Negative')){
                 postTest.hivTestResult='False'
                 setPostTest({...postTest, hivTestResult:'False' })
             }
-            setPostTest(props.patientObj.postTestCounselingKnowledgeAssessment) 
         }
-    }, [props.patientObj, postTest.hivTestResult]);
+    }, [props.patientObj,postTest.hivTestResult]);
     const handleInputChangePostTest = e => { 
         //setErrors({...temp, [e.target.name]:""})        
-        setPostTest ({...postTest,  [e.target.name]: e.target.value}); 
-          
+        setPostTest ({...postTest,  [e.target.name]: e.target.value});           
     }
     const handleItemClick =(page, completedMenu)=>{
         props.handleItemClick(page)
@@ -190,6 +188,7 @@ const PostTest = (props) => {
             
     }
 
+    console.log(postTest.hivTestResult)
     return (
         <>
             <Card className={classes.root}>

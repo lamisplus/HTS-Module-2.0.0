@@ -98,7 +98,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 const BasicInfo = (props) => {
-    //console.log(props.patientAge)
+    //console.log(props)
     const classes = useStyles();
     const history = useHistory();
     const [errors, setErrors] = useState({});
@@ -148,7 +148,6 @@ const BasicInfo = (props) => {
         PregnancyStatus()
         IndexTesting();
     }, [ props.patientObj]);
-
     //Get list of KP
     const KP =()=>{
         axios
@@ -379,6 +378,7 @@ const BasicInfo = (props) => {
                                         id="targetGroup"
                                         onChange={handleInputChange}
                                         value={objValues.targetGroup}
+                                        disabled
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>

@@ -112,17 +112,17 @@ const RiskStratification = (props) => {
     const [riskCount, setRiskCount] = useState(0);
     const [objValues, setObjValues]= useState(
         {
-            age:"",
-            dob:"",
+            age:props.patientAge,
+            dob:props.patientObj.personResponseDto.dateOfBirth,
             visitDate: "",         
-            dateOfBirth: null,
-            dateOfRegistration:null,
-            isDateOfBirthEstimated: "",
+            dateOfBirth: props.patientObj.personResponseDto.dateOfBirth,
+            dateOfRegistration:props.patientObj.personResponseDto.dateOfRegistration,//
+            isDateOfBirthEstimated: props.patientObj.personResponseDto.isDateOfBirthEstimated,//
             targetGroup:"",
             testingSetting:"",//
             modality  :"", //
             code:"",
-            personId:"",
+            personId:props.patientObj.personId,
             riskAssessment: {},
 
         }
@@ -149,8 +149,7 @@ const RiskStratification = (props) => {
     useEffect(() => { 
         KP();
         EnrollmentSetting();
-    }, []);
-    
+    }, [props.patientObj]);
     //Get list of HIV STATUS ENROLLMENT
     const EnrollmentSetting =()=>{
         axios
@@ -234,7 +233,6 @@ const RiskStratification = (props) => {
         
         setObjValues ({...objValues,  [e.target.name]: e.target.value});            
     }
-
     //Date of Birth and Age handle 
     //Get list of DSD Model Type
     function SettingModality (settingId) {
@@ -255,10 +253,11 @@ const RiskStratification = (props) => {
     /*****  Validation  */
     const validate = () => {
         //HTS FORM VALIDATION
-
-            temp.dateVisit = objValues.dateVisit ? "" : "This field is required."  
-            temp.dob = objValues.dob ? "" : "This field is required."
-            temp.age = objValues.age ? "" : "This field is required."              
+            temp.dateVisit = objValues.visitDate ? "" : "This field is required."  
+            temp.testingSetting = objValues.testingSetting ? "" : "This field is required."
+            temp.modality = objValues.modality ? "" : "This field is required."  
+            temp.targetGroup = objValues.targetGroup ? "" : "This field is required." 
+            //targetGroup            
                 setErrors({ ...temp })
         return Object.values(temp).every(x => x == "")
     }
@@ -272,17 +271,7 @@ const RiskStratification = (props) => {
     }
          // Getting the number count of riskAssessment True
     const actualRiskCountTrue=Object.values(riskAssessment)
-     riskCountQuestion=actualRiskCountTrue.filter((x)=> x==='true')
-    const [riskAssessmentPartner, setRiskAssessmentPartner]= useState(
-        {
-            sexPartnerHivPositive:"",
-            newDiagnosedHivlastThreeMonths:"",
-            currentlyArvForPmtct :"",
-            knowHivPositiveOnArv :"",
-            knowHivPositiveAfterLostToFollowUp:"", 
-            uprotectedAnalSex  :"",
-        }
-    )
+    riskCountQuestion=actualRiskCountTrue.filter((x)=> x==='true')
     const handleInputChangeRiskAssessment = e => { 
         //setErrors({...temp, [e.target.name]:""}) 
         setRiskAssessment ({...riskAssessment,  [e.target.name]: e.target.value}); 
@@ -290,11 +279,13 @@ const RiskStratification = (props) => {
     }
     const handleSubmit =(e)=>{
         e.preventDefault();
-            
+            //console.log(riskAssessment)
             props.patientObj.targetGroup = objValues.targetGroup
             props.patientObj.testingSetting = objValues.testingSetting
             props.patientObj.dateVisit= objValues.visitDate
             props.patientObj.riskAssessment =riskAssessment 
+            
+            objValues.riskAssessment=riskAssessment
             if((riskCount>0 || riskCountQuestion.length>0) && props.patientAge>15){
                 if(validate()){
                     axios.post(`${baseUrl}risk-stratification`,objValues,
@@ -319,9 +310,41 @@ const RiskStratification = (props) => {
                             toast.error("Something went wrong. Please try again...");
                         }
                     });
-                }
-                
-            }if(props.patientAge<15){
+                }   
+            }else{
+                if(validate()){
+                    axios.post(`${baseUrl}risk-stratification`,objValues,
+                    { headers: {"Authorization" : `Bearer ${token}`}},
+                    
+                    )
+                    .then(response => {
+                        setSaving(false);
+                        objValues.code=response.data.code
+                        props.patientObj.riskStratificationResponseDto = response.data
+                        props.setActivePage({...props.activePage, activePage:"home"})
+                        //props.setExtra(objValues)
+                        //handleItemClick('basic', 'risk' )
+                        //props.setHideOtherMenu(false)
+                        // history.push({
+                        //     pathname: '/patient-history',
+                        //     state: {patientObject: props.patientObj, patientObj: props.patientObj.personResponseDto, clientCode:props.patientObj.clientCode}
+                        // });
+                        toast.success("Risk stratification save succesfully!");
+                    })
+                    .catch(error => {
+                        console.log(error)
+                        setSaving(false);
+                        if(error.response && error.response.data){
+                            let errorMessage = error.response.data.apierror && error.response.data.apierror.message!=="" ? error.response.data.apierror.message :  "Something went wrong, please try again";
+                            toast.error(errorMessage);
+                        }
+                        else{
+                            toast.error("Something went wrong. Please try again...");
+                        }
+                    });
+                } 
+            }
+            if(props.patientAge<15){
                 if(validate()){
                     axios.post(`${baseUrl}risk-stratification`,objValues,
                     { headers: {"Authorization" : `Bearer ${token}`}},
@@ -372,35 +395,8 @@ const RiskStratification = (props) => {
                     });
                 }
             }
-            // if(validate()){
-            // axios.post(`${baseUrl}hts`,objValues,
-            // { headers: {"Authorization" : `Bearer ${token}`}},
             
-            // )
-            // .then(response => {
-            //     setSaving(false);
-            //     props.setPatientObj(response.data)
-            //     if(objValues.age>14){
-            //         handleItemClick('pre-test-counsel', 'basic' )
-            //     }else{
-            //         handleItemClick('hiv-test', 'basic' )
-            //     }
-                
-
-            // })
-            // .catch(error => {
-            //     setSaving(false);
-            //     if(error.response && error.response.data){
-            //         let errorMessage = error.response.data.apierror && error.response.data.apierror.message!=="" ? error.response.data.apierror.message :  "Something went wrong, please try again";
-            //         toast.error(errorMessage);
-            //     }
-            //     else{
-            //         toast.error("Something went wrong. Please try again...");
-            //     }
-            // });
-            // }
     }
-
 
     return (
         <>  
@@ -485,8 +481,8 @@ const RiskStratification = (props) => {
                                     style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
                                     
                                 />
-                                {errors.visitDate !=="" ? (
-                                    <span className={classes.error}>{errors.visitDate}</span>
+                                {errors.dateVisit !=="" ? (
+                                    <span className={classes.error}>{errors.dateVisit}</span>
                                 ) : "" }
                                 </FormGroup>
                             </div>

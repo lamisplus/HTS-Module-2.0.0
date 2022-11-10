@@ -113,13 +113,19 @@ const BasicInfo = (props) => {
     
     useEffect(() => { 
         //console.log(props.patientObj)
+        //console.log(props.extra.riskAssessment)
         if(props.patientObj){
             setKnowledgeAssessment(props.patientObj.knowledgeAssessment  && props.patientObj.knowledgeAssessment!==null ? props.patientObj.knowledgeAssessment : {})
-            setRiskAssessment(props.patientObj.riskAssessment  && props.patientObj.riskAssessment!==null ? props.patientObj.riskAssessment : {})
+            
             setRiskAssessmentPartner(props.patientObj.riskAssessmentPartner && props.patientObj.riskAssessmentPartner!==null ? props.patientObj.riskAssessmentPartner : {})
             setStiScreening(props.patientObj.stiScreening  && props.patientObj.stiScreening!==null? props.patientObj.stiScreening : {})
             setTbScreening(props.patientObj.tbScreening  && props.patientObj.tbScreening!==null? props.patientObj.tbScreening : {})
             //patientAge=calculate_age(moment(props.patientObj.personResponseDto.dateOfBirth).format("DD-MM-YYYY"))
+            if(props.extra.riskAssessment){
+                setRiskAssessment(props.extra.riskAssessment  && props.extra.riskAssessment!==null ? props.extra.riskAssessment : {})
+            }else{
+                setRiskAssessment(props.patientObj.riskAssessment  && props.patientObj.riskAssessment!==null ? props.patientObj.riskAssessment : {})
+            }
         }
     }, [props.patientObj]);
 

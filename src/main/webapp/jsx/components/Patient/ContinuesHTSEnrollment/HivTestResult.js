@@ -394,7 +394,7 @@ const HivTestResult = (props) => {
             .then(response => {
                 setSaving(false);
                 props.setPatientObj(response.data)
-                console.log(response.data)
+                //console.log(response.data)
                 //props.setPatientObj(props && props.patientObj ? props.patientObj : "")
                 //toast.success("HIV test successful");
                 handleItemClick('post-test', 'hiv-test')

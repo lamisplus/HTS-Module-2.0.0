@@ -121,14 +121,14 @@ const PostTest = (props) => {
         }
     )
     useEffect(() => { 
-
+        //console.log(props.patientObj)
         if(props.patientObj){
             
-            if(props.patientObj.hivTestResult==='Positive' || props.patientObj.hivTestResult2==='Positive'){
+            if(props.patientObj.hivTestResult!=="" && props.patientObj.hivTestResult!==null && props.patientObj.hivTestResult==='Positive' || props.patientObj.hivTestResult2==='Positive'){
                 postTest.hivTestResult='True'
                 setPostTest({...postTest, hivTestResult:'True' })
-            console.log(props.patientObj.hivTestResult2)
-            }else if(props.patientObj.hivTestResult==='Negative' || props.patientObj.hivTestResult2==='Negative'){
+            //console.log(props.patientObj.hivTestResult2)
+            }else if(props.patientObj.hivTestResult!=="" && props.patientObj.hivTestResult!==null &&  props.patientObj.hivTestResult==='Negative' || props.patientObj.hivTestResult2==='Negative'){
                 postTest.hivTestResult='False'
                 setPostTest({...postTest, hivTestResult:'False' })
             }

@@ -19,9 +19,13 @@ const Home = (props) => {
     const [loading, setLoading] = useState(true)
     const patientId = props.patientObj && props.patientObj.id ? props.patientObj.id: null
     const [key, setKey] = useState('home');
+ 
     useEffect(() => {
         patients()
-      }, [props.patientObj]);
+        if(props.activePage.activePage==='home'){
+          setKey('home')
+        }
+      }, [props.patientObj, props.activePage]);
     ///GET LIST OF Patients
     async function patients() {
       setLoading(true)

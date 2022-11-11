@@ -122,18 +122,17 @@ const PostTest = (props) => {
     )
     useEffect(() => { 
         //console.log(props.patientObj)
-        if(props.patientObj){
-            
-            if(props.patientObj.hivTestResult!=="" && props.patientObj.hivTestResult!==null && props.patientObj.hivTestResult==='Positive' || props.patientObj.hivTestResult2==='Positive'){
+        if(props.patientObj && props.patientObj.postTestCounselingKnowledgeAssessment){
+            setPostTest(props.patientObj.postTestCounselingKnowledgeAssessment) 
+        }else{
+            ///setPostTest(props.patientObj && props.patientObj.postTestCounselingKnowledgeAssessment!==null ? props.patientObj.postTestCounselingKnowledgeAssessment : {}) 
+            if(postTest.hivTestResult==="" && props.patientObj.hivTestResult!=="" && props.patientObj.hivTestResult!==null && (props.patientObj.hivTestResult==='Positive' || props.patientObj.hivTestResult2==='Positive')){
                 postTest.hivTestResult='True'
                 setPostTest({...postTest, hivTestResult:'True' })
-            //console.log(props.patientObj.hivTestResult2)
-            }else if(props.patientObj.hivTestResult!=="" && props.patientObj.hivTestResult!==null &&  props.patientObj.hivTestResult==='Negative' || props.patientObj.hivTestResult2==='Negative'){
+            }else if(postTest.hivTestResult===""  && props.patientObj.hivTestResult!=="" && props.patientObj.hivTestResult!==null && (props.patientObj.hivTestResult==='Negative' || props.patientObj.hivTestResult2==='Negative')){
                 postTest.hivTestResult='False'
                 setPostTest({...postTest, hivTestResult:'False' })
             }
-
-            setPostTest(props.patientObj.postTestCounselingKnowledgeAssessment) 
         }
     }, [props.patientObj, postTest.hivTestResult]);
     const handleInputChangePostTest = e => { 

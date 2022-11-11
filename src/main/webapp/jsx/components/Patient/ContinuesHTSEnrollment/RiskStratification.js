@@ -304,13 +304,15 @@ const RiskStratification = (props) => {
                         setSaving(false);
                         if(error.response && error.response.data){
                             let errorMessage = error.response.data.apierror && error.response.data.apierror.message!=="" ? error.response.data.apierror.message :  "Something went wrong, please try again";
-                            toast.error(errorMessage);
+                            toast.error(errorMessage,  {position: toast.POSITION.BOTTOM_CENTER});
                         }
                         else{
-                            toast.error("Something went wrong. Please try again...");
+                            toast.error("Something went wrong. Please try again...",  {position: toast.POSITION.BOTTOM_CENTER});
                         }
                     });
-                }   
+                }else{
+                    toast.error("All fields are required",  {position: toast.POSITION.BOTTOM_CENTER});
+                }  
             }else{
                 if(validate()){
                     axios.post(`${baseUrl}risk-stratification`,objValues,
@@ -329,19 +331,21 @@ const RiskStratification = (props) => {
                         //     pathname: '/patient-history',
                         //     state: {patientObject: props.patientObj, patientObj: props.patientObj.personResponseDto, clientCode:props.patientObj.clientCode}
                         // });
-                        toast.success("Risk stratification save succesfully!");
+                        toast.success("Risk stratification save succesfully!",  {position: toast.POSITION.BOTTOM_CENTER});
                     })
                     .catch(error => {
                         console.log(error)
                         setSaving(false);
                         if(error.response && error.response.data){
                             let errorMessage = error.response.data.apierror && error.response.data.apierror.message!=="" ? error.response.data.apierror.message :  "Something went wrong, please try again";
-                            toast.error(errorMessage);
+                            toast.error(errorMessage,  {position: toast.POSITION.BOTTOM_CENTER});
                         }
                         else{
-                            toast.error("Something went wrong. Please try again...");
+                            toast.error("Something went wrong. Please try again...",  {position: toast.POSITION.BOTTOM_CENTER});
                         }
                     });
+                }else{
+                    toast.error("All fields are required",  {position: toast.POSITION.BOTTOM_CENTER});
                 } 
             }
             if(props.patientAge<15){
@@ -352,6 +356,7 @@ const RiskStratification = (props) => {
                     )
                     .then(response => {
                         setSaving(false);
+                        props.patientObj.riskStratificationResponseDto=response.data
                         objValues.code=response.data.code
                         props.setExtra(objValues)
                         props.setHideOtherMenu(false)
@@ -362,12 +367,14 @@ const RiskStratification = (props) => {
                         setSaving(false);
                         if(error.response && error.response.data){
                             let errorMessage = error.response.data.apierror && error.response.data.apierror.message!=="" ? error.response.data.apierror.message :  "Something went wrong, please try again";
-                            toast.error(errorMessage);
+                            toast.error(errorMessage,  {position: toast.POSITION.BOTTOM_CENTER});
                         }
                         else{
                             toast.error("Something went wrong. Please try again...");
                         }
                     });
+                }else{
+                    toast.error("All fields are required",  {position: toast.POSITION.BOTTOM_CENTER});
                 }
                 
             }else{
@@ -379,6 +386,7 @@ const RiskStratification = (props) => {
                     )
                     .then(response => {
                         setSaving(false);
+                        props.patientObj.riskStratificationResponseDto=response.data
                         objValues.code=response.data.code
                         props.setExtra(objValues)
                         //toast.success("Risk stratification save succesfully!");
@@ -387,12 +395,14 @@ const RiskStratification = (props) => {
                         setSaving(false);
                         if(error.response && error.response.data){
                             let errorMessage = error.response.data.apierror && error.response.data.apierror.message!=="" ? error.response.data.apierror.message :  "Something went wrong, please try again";
-                            toast.error(errorMessage);
+                            toast.error(errorMessage,  {position: toast.POSITION.BOTTOM_CENTER});
                         }
                         else{
-                            toast.error("Something went wrong. Please try again...");
+                            toast.error("Something went wrong. Please try again...",  {position: toast.POSITION.BOTTOM_CENTER});
                         }
                     });
+                }else{
+                    toast.error("All fields are required",  {position: toast.POSITION.BOTTOM_CENTER});
                 }
             }
             

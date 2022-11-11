@@ -1244,7 +1244,7 @@ const BasicInfo = (props) => {
                             {saving ? <Spinner /> : ""}
                             <br />
                             <div className="row">
-                            <div className="form-group mb-3 col-md-6">
+                            <div className="form-group mb-3 col-md-12">
                             <Button content='Back' icon='left arrow' labelPosition='left' style={{backgroundColor:"#992E62", color:'#fff'}} onClick={()=>handleItemClick('basic','basic')}/>
                             <Button content='Save & Continue' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
                             </div>

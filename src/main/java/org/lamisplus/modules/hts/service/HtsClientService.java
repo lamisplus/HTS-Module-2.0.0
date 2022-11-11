@@ -47,6 +47,11 @@ public class HtsClientService {
     private final RiskStratificationService riskStratificationService;
     private final ModuleService moduleService;
     public HtsClientDto save(HtsClientRequestDto htsClientRequestDto){
+        if(htsClientRequestDto.getRiskStratificationCode() != null){
+            if(!htsClientRepository.existsByRiskStratificationCode(htsClientRequestDto.getRiskStratificationCode())){
+                throw new IllegalTypeException(HtsClientRequestDto.class, "RiskStratificationCode is ", "already exist for an hts client");
+            }
+        }
         HtsClient htsClient;
         PersonResponseDto personResponseDto;
         Person person;
@@ -102,11 +107,15 @@ public class HtsClientService {
         htsClient.setTbScreening(htsPreTestCounselingDto.getTbScreening());
         htsClient.setStiScreening(htsPreTestCounselingDto.getStiScreening());
         htsClient.setSexPartnerRiskAssessment(htsPreTestCounselingDto.getSexPartnerRiskAssessment());
-
         HtsClientDto htsClientDto = new HtsClientDto();
         htsClient = htsClientRepository.save(htsClient);
         BeanUtils.copyProperties(htsClient, htsClientDto);
         htsClientDto.setPersonResponseDto(personService.getDtoFromPerson(htsClient.getPerson()));
+        if(htsClient.getRiskStratificationCode() != null) {
+            RiskStratificationResponseDto riskStratificationResponseDto
+                    = riskStratificationService.getByCode(htsClient.getRiskStratificationCode());
+            htsClientDto.setRiskStratificationResponseDto(riskStratificationResponseDto);
+        }
         return htsClientDto;
 
     }
@@ -121,6 +130,20 @@ public class HtsClientService {
         HtsClientDto htsClientDto = new HtsClientDto();
         BeanUtils.copyProperties(htsClientRepository.save(htsClient), htsClientDto);
         htsClientDto.setPersonResponseDto(personService.getDtoFromPerson(htsClient.getPerson()));
+        if(htsClient.getRiskStratificationCode() != null) {
+            RiskStratificationResponseDto riskStratificationResponseDto
+                    = riskStratificationService.getByCode(htsClient.getRiskStratificationCode());
+            htsClientDto.setRiskStratificationResponseDto(riskStratificationResponseDto);
+        }
+        return htsClientDto;
+    }
+
+    private HtsClientDto setRiskStratificationCode(HtsClient htsClient, HtsClientDto htsClientDto){
+        if(htsClient.getRiskStratificationCode() != null) {
+            RiskStratificationResponseDto riskStratificationResponseDto
+                    = riskStratificationService.getByCode(htsClient.getRiskStratificationCode());
+            htsClientDto.setRiskStratificationResponseDto(riskStratificationResponseDto);
+        }
         return htsClientDto;
     }
 
@@ -134,6 +157,11 @@ public class HtsClientService {
         HtsClientDto htsClientDto = new HtsClientDto();
         BeanUtils.copyProperties(htsClientRepository.save(htsClient), htsClientDto);
         htsClientDto.setPersonResponseDto(personService.getDtoFromPerson(htsClient.getPerson()));
+        if(htsClient.getRiskStratificationCode() != null) {
+            RiskStratificationResponseDto riskStratificationResponseDto
+                    = riskStratificationService.getByCode(htsClient.getRiskStratificationCode());
+            htsClientDto.setRiskStratificationResponseDto(riskStratificationResponseDto);
+        }
         return htsClientDto;
     }
 
@@ -388,6 +416,11 @@ public class HtsClientService {
         HtsClientDto htsClientDto = new HtsClientDto();
         BeanUtils.copyProperties(htsClientRepository.save(htsClient), htsClientDto);
         htsClientDto.setPersonResponseDto(personService.getDtoFromPerson(htsClient.getPerson()));
+        if(htsClient.getRiskStratificationCode() != null) {
+            RiskStratificationResponseDto riskStratificationResponseDto
+                    = riskStratificationService.getByCode(htsClient.getRiskStratificationCode());
+            htsClientDto.setRiskStratificationResponseDto(riskStratificationResponseDto);
+        }
         return htsClientDto;
     }
 

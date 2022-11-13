@@ -394,7 +394,7 @@ const HivTestResult = (props) => {
             .then(response => {
                 setSaving(false);
                 props.setPatientObj(response.data)
-                console.log(response.data)
+                //console.log(response.data)
                 //props.setPatientObj(props && props.patientObj ? props.patientObj : "")
                 //toast.success("HIV test successful");
                 handleItemClick('post-test', 'hiv-test')
@@ -1092,7 +1092,7 @@ const HivTestResult = (props) => {
                             {saving ? <Spinner /> : ""}
                             <br />
                             <div className="row">
-                            <div className="form-group mb-3 col-md-6">
+                            <div className="form-group mb-3 col-md-12">
                             {patientAge<=15 ? 
                             (<>
                                 <Button content='Back' icon='left arrow' labelPosition='left' style={{backgroundColor:"#992E62", color:'#fff'}} onClick={()=>handleItemClick('basic', 'basic')}/>

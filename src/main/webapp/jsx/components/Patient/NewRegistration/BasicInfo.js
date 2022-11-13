@@ -183,7 +183,7 @@ const BasicInfo = (props) => {
             otherName: props.patientObj.personResponseDto && props.patientObj.personResponseDto.otherName ? props.patientObj.personResponseDto.otherName :"",
             sex: props.patientObj.personResponseDto && props.patientObj.personResponseDto.sex ? props.patientObj.personResponseDto.sex :"",
             stateId:country && country.stateId ? country.stateId :"",
-            riskAssessment:  props.patientObj && props.patientObj.riskAssessment? props.patientObj.riskAssessment : {},                                 
+            riskAssessment:  props.extra && props.extra.riskAssessment ? props.extra.riskAssessment : {},                                 
             riskStratificationCode:props.extra && props.extra.code!=='' ? props.extra.code : "",
             lga:country && country.district ? country.district :"",
             surname: props.patientObj.personResponseDto && props.patientObj.personResponseDto.surname ? props.patientObj.personResponseDto.surname :"",
@@ -615,7 +615,7 @@ const BasicInfo = (props) => {
             }
             props.setPatientObj({...props.patientObj, ...objValues})
             if(validate()){
-            console.log(patientForm)
+            //console.log(patientForm)
             axios.post(`${baseUrl}hts`,patientForm,
             { headers: {"Authorization" : `Bearer ${token}`}},
             
@@ -638,12 +638,14 @@ const BasicInfo = (props) => {
                 setSaving(false);
                 if(error.response && error.response.data){
                     let errorMessage = error.response.data.apierror && error.response.data.apierror.message!=="" ? error.response.data.apierror.message :  "Something went wrong, please try again";
-                    toast.error(errorMessage);
+                    toast.error(errorMessage,  {position: toast.POSITION.BOTTOM_CENTER});
                 }
                 else{
-                    toast.error("Something went wrong. Please try again...");
+                    toast.error("Something went wrong. Please try again...",  {position: toast.POSITION.BOTTOM_CENTER});
                 }
             });
+            }else{
+                toast.error("All fields are required",  {position: toast.POSITION.BOTTOM_CENTER});
             }
     }
 

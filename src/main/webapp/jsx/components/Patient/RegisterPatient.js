@@ -243,6 +243,7 @@ const UserRegistration = (props) => {
         testingSetting: "",
         tieBreakerTest: {},
         typeCounseling: "",
+        riskStratificationResponseDto:null
         
       });
     useEffect(() => { 

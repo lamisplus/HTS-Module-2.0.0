@@ -98,7 +98,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 const BasicInfo = (props) => {
-    //console.log(props.patientAge)
+    //console.log(props)
     const classes = useStyles();
     const history = useHistory();
     const [errors, setErrors] = useState({});
@@ -148,7 +148,6 @@ const BasicInfo = (props) => {
         PregnancyStatus()
         IndexTesting();
     }, [ props.patientObj]);
-
     //Get list of KP
     const KP =()=>{
         axios
@@ -351,12 +350,14 @@ const BasicInfo = (props) => {
                 setSaving(false);
                 if(error.response && error.response.data){
                     let errorMessage = error.response.data.apierror && error.response.data.apierror.message!=="" ? error.response.data.apierror.message :  "Something went wrong, please try again";
-                    toast.error(errorMessage);
+                    toast.error(errorMessage, {position: toast.POSITION.BOTTOM_CENTER});
                 }
                 else{
-                    toast.error("Something went wrong. Please try again...");
+                    toast.error("Something went wrong. Please try again...", {position: toast.POSITION.BOTTOM_CENTER});
                 }
             });
+            }else{
+                toast.error("All fields are required",  {position: toast.POSITION.BOTTOM_CENTER});
             }
     }
 
@@ -379,6 +380,7 @@ const BasicInfo = (props) => {
                                         id="targetGroup"
                                         onChange={handleInputChange}
                                         value={objValues.targetGroup}
+                                        disabled
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>

@@ -94,34 +94,26 @@ const BasicInfo = (props) => {
     const [saving, setSaving] = useState(false);
     const [errors, setErrors] = useState({});
     let temp = { ...errors }
-    useEffect(() => { 
-        //console.log(props.patientObj)
-        if(props.patientObj){
-            setKnowledgeAssessment(props.patientObj.knowledgeAssessment  && props.patientObj.knowledgeAssessment!==null ? props.patientObj.knowledgeAssessment : {})
-            setRiskAssessment(props.patientObj.riskAssessment  && props.patientObj.riskAssessment!==null ? props.patientObj.riskAssessment : {})
-            setRiskAssessmentPartner(props.patientObj.riskAssessmentPartner && props.patientObj.riskAssessmentPartner!==null ? props.patientObj.riskAssessmentPartner : {})
-            setStiScreening(props.patientObj.stiScreening  && props.patientObj.stiScreening!==null? props.patientObj.stiScreening : {})
-            setTbScreening(props.patientObj.tbScreening  && props.patientObj.tbScreening!==null? props.patientObj.tbScreening : {})
-            //patientAge=calculate_age(moment(props.patientObj.personResponseDto.dateOfBirth).format("DD-MM-YYYY"))
+    const [riskAssessmentPartner, setRiskAssessmentPartner]= useState(
+        {
+            sexPartnerHivPositive:"",
+            newDiagnosedHivlastThreeMonths:"",
+            currentlyArvForPmtct :"",
+            knowHivPositiveOnArv :"",
+            knowHivPositiveAfterLostToFollowUp:"", 
+            uprotectedAnalSex  :"",
         }
-    }, [props.patientObj]);
-    const handleItemClick =(page, completedMenu)=>{        
-        if(props.completed.includes(completedMenu)) {
-        }else{
-            props.setCompleted([...props.completed, completedMenu])
-        }
-        props.handleItemClick(page)
-    }
+    )
     const [objValues, setObjValues]= useState(
-            {
-                htsClientId: clientId,
-                knowledgeAssessment: {},
-                personId: patientID,
-                riskAssessment: {},
-                stiScreening: {},
-                tbScreening: {},
-                sexPartnerRiskAssessment:{}
-            }
+        {
+            htsClientId: clientId,
+            knowledgeAssessment: {},
+            personId: patientID,
+            riskAssessment: {},
+            stiScreening: {},
+            tbScreening: {},
+            sexPartnerRiskAssessment:{}
+        }
     )
     const [knowledgeAssessment, setKnowledgeAssessment]= useState(
         {
@@ -135,12 +127,6 @@ const BasicInfo = (props) => {
             informConsentHivTest:"",
         }
     )
-    const handleInputChangeKnowledgeAssessment = e => { 
-        //setErrors({...temp, [e.target.name]:""})
-        
-        setKnowledgeAssessment ({...knowledgeAssessment,  [e.target.name]: e.target.value}); 
-          
-    }
     const [riskAssessment, setRiskAssessment]= useState(
         {
             everHadSexualIntercourse:"",
@@ -160,30 +146,6 @@ const BasicInfo = (props) => {
             soldPaidVaginalSex:"",
         }
     )
-    const handleInputChangeRiskAssessment = e => { 
-        //setErrors({...temp, [e.target.name]:""}) 
-        setRiskAssessment ({...riskAssessment,  [e.target.name]: e.target.value});                  
-    }
-    // Getting the number count of riskAssessment True
-    const actualRiskCountTrue=Object.values(riskAssessment)
-    const riskCount=actualRiskCountTrue.filter((x)=> x==='true')
-    const [riskAssessmentPartner, setRiskAssessmentPartner]= useState(
-        {
-            sexPartnerHivPositive:"",
-            newDiagnosedHivlastThreeMonths:"",
-            currentlyArvForPmtct :"",
-            knowHivPositiveOnArv :"",
-            knowHivPositiveAfterLostToFollowUp:"", 
-            uprotectedAnalSex  :"",
-        }
-    )
-    const handleInputChangeRiskAssessmentPartner = e => { 
-        //setErrors({...temp, [e.target.name]:""}) 
-        setRiskAssessmentPartner ({...riskAssessmentPartner,  [e.target.name]: e.target.value});                       
-    }
-    // Getting the number count of sexPartRiskCount True
-    const actualSexPartRiskCountTrue=Object.values(riskAssessmentPartner)
-    const sexPartRiskCount=actualSexPartRiskCountTrue.filter((x)=> x==='true')
     const [stiScreening, setStiScreening]= useState(
         {
             vaginalDischarge:"",
@@ -194,13 +156,6 @@ const BasicInfo = (props) => {
                 
         }
     )
-    const handleInputChangeStiScreening = e => { 
-        //setErrors({...temp, [e.target.name]:""}) 
-        setStiScreening ({...stiScreening,  [e.target.name]: e.target.value});            
-    }
-    // Getting the number count of STI True
-    const actualStiTrue=Object.values(stiScreening)
-    const stiCount=actualStiTrue.filter((x)=> x==='true')
     const [tbScreening, setTbScreening]= useState(
         {
             currentCough :"",
@@ -210,6 +165,62 @@ const BasicInfo = (props) => {
             nightSweats :"",
         }
     )
+    useEffect(() => { 
+        //console.log(props.patientObj)
+        if(props.patientObj){
+            setKnowledgeAssessment(props.patientObj.knowledgeAssessment  && props.patientObj.knowledgeAssessment!==null ? props.patientObj.knowledgeAssessment : {})
+            setRiskAssessment(props.patientObj.riskAssessment  && props.patientObj.riskAssessment!==null ? props.patientObj.riskAssessment : {})
+            setRiskAssessmentPartner(props.patientObj.sexPartnerRiskAssessment && props.patientObj.sexPartnerRiskAssessment!==null ? props.patientObj.sexPartnerRiskAssessment : {})
+            setStiScreening(props.patientObj.stiScreening  && props.patientObj.stiScreening!==null? props.patientObj.stiScreening : {})
+            setTbScreening(props.patientObj.tbScreening  && props.patientObj.tbScreening!==null? props.patientObj.tbScreening : {})
+            //patientAge=calculate_age(moment(props.patientObj.personResponseDto.dateOfBirth).format("DD-MM-YYYY"))
+            //console.log(props.patientObj.riskStratificationResponseDto.riskAssessment)
+            if(props.patientObj.riskStratificationResponseDto && Object.keys(props.patientObj.riskStratificationResponseDto.riskAssessment).length !== 0 && props.patientObj.riskAssessment===null){
+                setRiskAssessment({...riskAssessment, ...props.patientObj.riskStratificationResponseDto.riskAssessment})
+            }else{
+                setRiskAssessment({...riskAssessment, ...props.patientObj.riskAssessment})   
+            } 
+        }
+    }, [props.patientObj]);
+    const handleItemClick =(page, completedMenu)=>{        
+        if(props.completed.includes(completedMenu)) {
+        }else{
+            props.setCompleted([...props.completed, completedMenu])
+        }
+        props.handleItemClick(page)
+    }
+
+    const handleInputChangeKnowledgeAssessment = e => { 
+        //setErrors({...temp, [e.target.name]:""})
+        
+        setKnowledgeAssessment ({...knowledgeAssessment,  [e.target.name]: e.target.value}); 
+          
+    }
+    
+    const handleInputChangeRiskAssessment = e => { 
+        //setErrors({...temp, [e.target.name]:""}) 
+        setRiskAssessment ({...riskAssessment,  [e.target.name]: e.target.value});                  
+    }
+    // Getting the number count of riskAssessment True
+    const actualRiskCountTrue=Object.values(riskAssessment)
+    const riskCount=actualRiskCountTrue.filter((x)=> x==='true')
+   
+    const handleInputChangeRiskAssessmentPartner = e => { 
+        //setErrors({...temp, [e.target.name]:""}) 
+        setRiskAssessmentPartner ({...riskAssessmentPartner,  [e.target.name]: e.target.value});                       
+    }
+    // Getting the number count of sexPartRiskCount True
+    const actualSexPartRiskCountTrue=Object.values(riskAssessmentPartner)
+    const sexPartRiskCount=actualSexPartRiskCountTrue.filter((x)=> x==='true')
+
+    const handleInputChangeStiScreening = e => { 
+        //setErrors({...temp, [e.target.name]:""}) 
+        setStiScreening ({...stiScreening,  [e.target.name]: e.target.value});            
+    }
+    // Getting the number count of STI True
+    const actualStiTrue=Object.values(stiScreening)
+    const stiCount=actualStiTrue.filter((x)=> x==='true')
+    
     const [tbCount, settbCount] = useState(0);
     const handleInputChangeTbScreening = e => { 
         //setErrors({...temp, [e.target.name]:""}) 
@@ -320,7 +331,7 @@ const BasicInfo = (props) => {
             });
             
     }
-    console.log(sex)
+    console.log(riskAssessmentPartner)
 
     return (
         <>
@@ -1233,7 +1244,7 @@ const BasicInfo = (props) => {
                             {saving ? <Spinner /> : ""}
                             <br />
                             <div className="row">
-                            <div className="form-group mb-3 col-md-6">
+                            <div className="form-group mb-3 col-md-12">
                             <Button content='Back' icon='left arrow' labelPosition='left' style={{backgroundColor:"#992E62", color:'#fff'}} onClick={()=>handleItemClick('basic','basic')}/>
                             <Button content='Save & Continue' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
                             </div>

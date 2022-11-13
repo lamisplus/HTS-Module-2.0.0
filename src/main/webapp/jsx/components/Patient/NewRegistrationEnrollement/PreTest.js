@@ -216,11 +216,11 @@ const BasicInfo = (props) => {
     const tbCount=actualTrue.filter((x)=> x==='true')
     useEffect(() => { 
             setKnowledgeAssessment({...knowledgeAssessment, ...props.patientObj.knowledgeAssessment}) 
-            setRiskAssessment({...riskAssessment, ...props.patientObj.riskAssessment})      
+               
             setStiScreening({...stiScreening, ...props.patientObj.stiScreening})
             setTbScreening({...tbScreening, ...props.patientObj.tbScreening})
             setRiskAssessmentPartner({...riskAssessmentPartner, ...props.patientObj.sexPartnerRiskAssessment})
-             
+            
     }, [ props.patientObj]);
 
     const handleSubmit =(e)=>{

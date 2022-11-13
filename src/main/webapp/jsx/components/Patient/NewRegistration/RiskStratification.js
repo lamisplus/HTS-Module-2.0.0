@@ -381,6 +381,7 @@ const BasicInfo = (props) => {
                     )
                     .then(response => {
                         setSaving(false);
+                        props.patientObj.riskStratificationResponseDto=response.data
                         objValues.code=response.data.code
                         props.setExtra(objValues)
                         //toast.success("Risk stratification save succesfully!");
@@ -389,15 +390,48 @@ const BasicInfo = (props) => {
                         setSaving(false);
                         if(error.response && error.response.data){
                             let errorMessage = error.response.data.apierror && error.response.data.apierror.message!=="" ? error.response.data.apierror.message :  "Something went wrong, please try again";
-                            toast.error(errorMessage);
+                            toast.error(errorMessage,  {position: toast.POSITION.BOTTOM_CENTER});
                         }
                         else{
-                            toast.error("Something went wrong. Please try again...");
+                            toast.error("Something went wrong. Please try again...",  {position: toast.POSITION.BOTTOM_CENTER});
                         }
                     });
+                }else{
+                    toast.error("All fields are required",  {position: toast.POSITION.BOTTOM_CENTER});
                 }
                 
-            }if(objValues.age<15){
+            }else{
+                if(validate()){
+                    
+                    axios.post(`${baseUrl}risk-stratification`,objValues,
+                    { headers: {"Authorization" : `Bearer ${token}`}},
+                    
+                    )
+                    .then(response => {
+                        setSaving(false);
+                        props.patientObj.riskStratificationResponseDto=response.data
+                        toast.success("Risk stratification save succesfully!",  {position: toast.POSITION.BOTTOM_CENTER});
+                        history.push({
+                            pathname: '/',
+                            
+                        });
+                        //
+                    })
+                    .catch(error => {
+                        setSaving(false);
+                        if(error.response && error.response.data){
+                            let errorMessage = error.response.data.apierror && error.response.data.apierror.message!=="" ? error.response.data.apierror.message :  "Something went wrong, please try again";
+                            toast.error(errorMessage,  {position: toast.POSITION.BOTTOM_CENTER});
+                        }
+                        else{
+                            toast.error("Something went wrong. Please try again...",  {position: toast.POSITION.BOTTOM_CENTER});
+                        }
+                    });
+                }else{
+                    toast.error("All fields are required",  {position: toast.POSITION.BOTTOM_CENTER});
+                }
+            }
+            if(objValues.age<15){
                 if(validate()){
                     axios.post(`${baseUrl}risk-stratification`,objValues,
                     { headers: {"Authorization" : `Bearer ${token}`}},
@@ -405,6 +439,7 @@ const BasicInfo = (props) => {
                     )
                     .then(response => {
                         setSaving(false);
+                        props.patientObj.riskStratificationResponseDto=response.data
                         objValues.code=response.data.code
                         props.setExtra(objValues)
                         handleItemClick('basic', 'risk' )
@@ -414,12 +449,14 @@ const BasicInfo = (props) => {
                         setSaving(false);
                         if(error.response && error.response.data){
                             let errorMessage = error.response.data.apierror && error.response.data.apierror.message!=="" ? error.response.data.apierror.message :  "Something went wrong, please try again";
-                            toast.error(errorMessage);
+                            toast.error(errorMessage,  {position: toast.POSITION.BOTTOM_CENTER});
                         }
                         else{
-                            toast.error("Something went wrong. Please try again...");
+                            toast.error("Something went wrong. Please try again...",  {position: toast.POSITION.BOTTOM_CENTER});
                         }
                     });
+                }else{
+                    toast.error("All fields are required",  {position: toast.POSITION.BOTTOM_CENTER});
                 }
                 
             }else{
@@ -432,6 +469,7 @@ const BasicInfo = (props) => {
                     )
                     .then(response => {
                         setSaving(false);
+                        props.patientObj.riskStratificationResponseDto=response.data
                         objValues.code=response.data.code
                         props.setExtra(objValues)
                         //toast.success("Risk stratification save succesfully!");
@@ -440,19 +478,20 @@ const BasicInfo = (props) => {
                         setSaving(false);
                         if(error.response && error.response.data){
                             let errorMessage = error.response.data.apierror && error.response.data.apierror.message!=="" ? error.response.data.apierror.message :  "Something went wrong, please try again";
-                            toast.error(errorMessage);
+                            toast.error(errorMessage,  {position: toast.POSITION.BOTTOM_CENTER});
                         }
                         else{
-                            toast.error("Something went wrong. Please try again...");
+                            toast.error("Something went wrong. Please try again...",  {position: toast.POSITION.BOTTOM_CENTER});
                         }
                     });
+                }else{
+                    toast.error("All fields are required",  {position: toast.POSITION.BOTTOM_CENTER});
                 }
 
             }
             
     }
 
-    console.log(objValues.targetGroup)
 
     return (
         <>  

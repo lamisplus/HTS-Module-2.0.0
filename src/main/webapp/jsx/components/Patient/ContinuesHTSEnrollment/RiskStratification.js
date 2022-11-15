@@ -313,41 +313,42 @@ const RiskStratification = (props) => {
                 }else{
                     toast.error("All fields are required",  {position: toast.POSITION.BOTTOM_CENTER});
                 }  
-            }else{
-                if(validate()){
-                    axios.post(`${baseUrl}risk-stratification`,objValues,
-                    { headers: {"Authorization" : `Bearer ${token}`}},
-                    
-                    )
-                    .then(response => {
-                        setSaving(false);
-                        objValues.code=response.data.code
-                        props.patientObj.riskStratificationResponseDto = response.data
-                        props.setActivePage({...props.activePage, activePage:"home"})
-                        //props.setExtra(objValues)
-                        //handleItemClick('basic', 'risk' )
-                        //props.setHideOtherMenu(false)
-                        // history.push({
-                        //     pathname: '/patient-history',
-                        //     state: {patientObject: props.patientObj, patientObj: props.patientObj.personResponseDto, clientCode:props.patientObj.clientCode}
-                        // });
-                        toast.success("Risk stratification save succesfully!",  {position: toast.POSITION.BOTTOM_CENTER});
-                    })
-                    .catch(error => {
-                        console.log(error)
-                        setSaving(false);
-                        if(error.response && error.response.data){
-                            let errorMessage = error.response.data.apierror && error.response.data.apierror.message!=="" ? error.response.data.apierror.message :  "Something went wrong, please try again";
-                            toast.error(errorMessage,  {position: toast.POSITION.BOTTOM_CENTER});
-                        }
-                        else{
-                            toast.error("Something went wrong. Please try again...",  {position: toast.POSITION.BOTTOM_CENTER});
-                        }
-                    });
-                }else{
-                    toast.error("All fields are required",  {position: toast.POSITION.BOTTOM_CENTER});
-                } 
             }
+            // else{
+            //     if(validate()){
+            //         axios.post(`${baseUrl}risk-stratification`,objValues,
+            //         { headers: {"Authorization" : `Bearer ${token}`}},
+                    
+            //         )
+            //         .then(response => {
+            //             setSaving(false);
+            //             objValues.code=response.data.code
+            //             props.patientObj.riskStratificationResponseDto = response.data
+            //             props.setActivePage({...props.activePage, activePage:"home"})
+            //             //props.setExtra(objValues)
+            //             //handleItemClick('basic', 'risk' )
+            //             //props.setHideOtherMenu(false)
+            //             // history.push({
+            //             //     pathname: '/patient-history',
+            //             //     state: {patientObject: props.patientObj, patientObj: props.patientObj.personResponseDto, clientCode:props.patientObj.clientCode}
+            //             // });
+            //             toast.success("Risk stratification save succesfully!",  {position: toast.POSITION.BOTTOM_CENTER});
+            //         })
+            //         .catch(error => {
+            //             console.log(error)
+            //             setSaving(false);
+            //             if(error.response && error.response.data){
+            //                 let errorMessage = error.response.data.apierror && error.response.data.apierror.message!=="" ? error.response.data.apierror.message :  "Something went wrong, please try again";
+            //                 toast.error(errorMessage,  {position: toast.POSITION.BOTTOM_CENTER});
+            //             }
+            //             else{
+            //                 toast.error("Something went wrong. Please try again...",  {position: toast.POSITION.BOTTOM_CENTER});
+            //             }
+            //         });
+            //     }else{
+            //         toast.error("All fields are required",  {position: toast.POSITION.BOTTOM_CENTER});
+            //     } 
+            // }
             if(props.patientAge<15){
                 if(validate()){
                     axios.post(`${baseUrl}risk-stratification`,objValues,

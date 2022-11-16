@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import MaterialTable from 'material-table';
+import MaterialTable, { MTableToolbar }  from 'material-table';
 import axios from "axios";
 
 import { token as token, url as baseUrl } from "./../../../api";
@@ -108,6 +108,7 @@ const useStyles = makeStyles(theme => ({
 const Patients = (props) => {    
     const [patientList, setPatientList] = useState([])
     const [loading, setLoading] = useState(true)
+    const [showPPI, setShowPPI] = useState(false)
     useEffect(() => {
         patients()
       }, []);
@@ -149,6 +150,14 @@ const Patients = (props) => {
         return hospitalNumber ? hospitalNumber.value : '';
     };
 
+    const handleCheckBox =e =>{
+        if(e.target.checked){
+            setShowPPI(true)
+        }else{
+            setShowPPI(false)
+        }
+    }
+
   return (
     <div>
         <MaterialTable
@@ -159,6 +168,7 @@ const Patients = (props) => {
             {
                 title: "Patient Name",
                 field: "name",
+                hidden:showPPI
             },
             { title: "Hospital Number", field: "hospital_number", filtering: false },
             { title: "Client Code", field: "clientCode", filtering: false },
@@ -170,62 +180,7 @@ const Patients = (props) => {
             { title: "Actions", field: "actions", filtering: false }, 
             ]}
             isLoading={loading}
-            // data={ patientList.map((row) => ({
-            //     //Id: manager.id,
-            //     name:row.personResponseDto.firstName + " " + row.personResponseDto.surname,
-            //     hospital_number: getHospitalNumber(row.personResponseDto.identifier),
-            //     clientCode: row.clientCode,
-            //     //phone_number:  row.phone,
-            //     gender:row && row.personResponseDto.sex ? row.personResponseDto.sex : "",
-            //     age: (row.personResponseDto.dateOfBirth === 0 ||
-            //         row.personResponseDto.dateOfBirth === undefined ||
-            //         row.personResponseDto.dateOfBirth === null ||
-            //         row.personResponseDto.dateOfBirth === "" )
-            //             ? 0
-            //             : calculate_age(moment(row.personResponseDto.dateOfBirth).format("DD-MM-YYYY")),
-                
-            //     count: (<Label color="blue" size="mini">{row.htsCount}</Label>),
-                
-            //     actions:
-        
-            //     <div>
-            //         {row.htsCount >=0 && (
-            //         <>
-            //             <Link
-            //                 to={{
-            //                     pathname: "/patient-history",
-            //                     state: {patientObject: row, patientObj: row.personResponseDto, clientCode:row.clientCode}
-            //                 }}
-                            
-            //             >
-            //                 <ButtonGroup variant="contained" 
-            //                     aria-label="split button"
-            //                     style={{backgroundColor:'rgb(153, 46, 98)', height:'30px',width:'215px'}}
-            //                     size="large"
-            //                 >
-            //                 <Button
-            //                 color="primary"
-            //                 size="small"
-            //                 aria-label="select merge strategy"
-            //                 aria-haspopup="menu"
-            //                 style={{backgroundColor:'rgb(153, 46, 98)'}}
-            //                 >
-            //                     <MdDashboard />
-            //                 </Button>
-            //                 <Button 
-            //                 style={{backgroundColor:'rgb(153, 46, 98)'}}
-            //                 >
-            //                     <span style={{fontSize:'12px', color:'#fff', fontWeight:'bolder'}}>Patient Dashboard</span>
-            //                 </Button>
-                            
-            //                 </ButtonGroup>
-            //             </Link> 
-            //         </>
-            //         )} 
-                                    
-            //     </div>
-                
-            //     }))}
+
             data={query =>
                 new Promise((resolve, reject) =>
                     axios.get(`${baseUrl}hts/persons?pageSize=${query.pageSize}&pageNo=${query.page}&searchValue=${query.search}`, { headers: {"Authorization" : `Bearer ${token}`} })
@@ -304,6 +259,30 @@ const Patients = (props) => {
                     pageSizeOptions:[10,20,100],
                     pageSize:10,
                     debounceInterval: 400
+                }}
+                components={{
+                    Toolbar: props => (
+                      <div >
+                        <div className="form-check custom-checkbox  float-left mt-4 ml-3 ">
+                            <input
+                            type="checkbox"
+                            className="form-check-input"                       
+                            name="showPP!"
+                            id="showPP"
+                            value="showPP"
+                            onChange={handleCheckBox}
+                            style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
+                            />
+                            <label
+                            className="form-check-label"
+                            htmlFor="basic_checkbox_1"
+                            >
+                            <b style={{color:'#014d88',fontWeight:'bold'}}>SHOW PPI</b>
+                            </label>
+                        </div>
+                        <MTableToolbar {...props} />
+                      </div>
+                    ),
                 }}
         />
        

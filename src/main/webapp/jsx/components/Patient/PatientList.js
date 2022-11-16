@@ -234,7 +234,7 @@ const Patients = (props) => {
                             setLoading(false)
                             resolve({
                                 data: result.data.records.map((row) => ({
-                                    name:   row.hivPositive===true ? ( <><sup><b style={{color:"red"}}><Icon name='circle' size="small"/></b></sup> { " " + row.personResponseDto.firstName + " " + row.personResponseDto.surname} </>) :row.personResponseDto.firstName + " " + row.personResponseDto.surname,
+                                    name:   row.hivPositive && row.hivPositive===true ? ( <><sup><b style={{color:"red"}}><Icon name='circle' size="small"/></b></sup> { " " + row.personResponseDto.firstName + " " + row.personResponseDto.surname} </>) :row.personResponseDto.firstName + " " + row.personResponseDto.surname,
                                     hospital_number: getHospitalNumber(row.personResponseDto.identifier),
                                     clientCode: row.clientCode,
                                     gender: row && row.personResponseDto.sex ? row.personResponseDto.sex : "",

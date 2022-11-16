@@ -586,7 +586,7 @@ const AddIndexContact = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>As this partner ever hit, kick, slapped or otherwise physical hurt you? *</Label>
+                                    <Label>Has this partner ever hit, kick, slapped or otherwise physical hurt you? *</Label>
                                     <select
                                         className="form-control"
                                         name="physicalHurt"

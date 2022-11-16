@@ -277,7 +277,7 @@ const Patients = (props) => {
                             className="form-check-label"
                             htmlFor="basic_checkbox_1"
                             >
-                            <b style={{color:'#014d88',fontWeight:'bold'}}>SHOW PPI</b>
+                            <b style={{color:'#014d88',fontWeight:'bold'}}>SHOW PII</b>
                             </label>
                         </div>
                         <MTableToolbar {...props} />

@@ -170,7 +170,7 @@ const Widget = () => {
   return (
     <Fragment>     
       <div className="row">
-       <div className="col-xl-3 col-xxl-4 col-lg-6 col-sm-6">
+       <div className="col-xl-3 col-md-3 col-lg-3 col-sm-3 col-xs-3">
           <div className="widget-stat card">
             <div className="card-body p-4">
               <div className="media ai-icon">
@@ -185,7 +185,7 @@ const Widget = () => {
             </div>
           </div>
         </div>
-        <div className="col-xl-3 col-xxl-4 col-lg-6 col-sm-6">
+        <div className="col-xl-3 col-md-3 col-lg-3 col-sm-3 col-xs-3">
           <div className="widget-stat card">
             <div className="card-body p-4">
               <div className="media ai-icon">
@@ -201,7 +201,7 @@ const Widget = () => {
             </div>
           </div>
         </div>
-        <div className="col-xl-3 col-xxl-4 col-lg-6 col-sm-6">
+        <div className="col-xl-3 col-md-3 col-lg-3 col-sm-3 col-xs-3">
           <div className="widget-stat card">
             <div className="card-body  p-4">
               <div className="media ai-icon">
@@ -217,7 +217,7 @@ const Widget = () => {
             </div>
           </div>
         </div>
-        <div className="col-xl-3 col-xxl-4 col-lg-6 col-sm-6">
+        <div className="col-xl-3 col-md-3 col-lg-3 col-sm-3 col-xs-3">
           <div className="widget-stat card">
             <div className="card-body p-4">
               <div className="media ai-icon">

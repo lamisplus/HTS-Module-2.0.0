@@ -179,8 +179,7 @@ const Patients = (props) => {
             { title: "HTS Count", field: "count", filtering: false },
             { title: "Actions", field: "actions", filtering: false }, 
             ]}
-            isLoading={loading}
-
+            
             data={query =>
                 new Promise((resolve, reject) =>
                     axios.get(`${baseUrl}hts/persons?pageSize=${query.pageSize}&pageNo=${query.page}&searchValue=${query.search}`, { headers: {"Authorization" : `Bearer ${token}`} })

@@ -125,6 +125,7 @@ const BasicInfo = (props) => {
             code:"",
             personId:"",
             riskAssessment: {},
+            entryPoint:""
 
         }
 
@@ -505,6 +506,26 @@ const BasicInfo = (props) => {
                         <div className="row">
                         <div className="form-group  col-md-12 text-center pt-2 mb-4" style={{backgroundColor:'#992E62', width:'125%', height:'35px', color:'#fff', fontWeight:'bold'}} >Modality</div>
                             <div className="row">
+                            <div className="form-group  col-md-4">
+                                <FormGroup>
+                                    <Label>Entry Point</Label>
+                                    <select
+                                        className="form-control"
+                                        name="entryPoint"
+                                        id="entryPoint"
+                                        value={objValues.entryPoint}
+                                        onChange={handleInputChange}
+                                        style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                    >
+                                        <option value={""}>Select</option>                                      
+                                        <option value="Facility">Facility</option>
+                                        <option value="Community">Community</option>
+                                    </select>
+                                    {errors.entryPoint !=="" ? (
+                                    <span className={classes.error}>{errors.entryPoint}</span>
+                                    ) : "" }
+                                </FormGroup>
+                            </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Setting</Label>

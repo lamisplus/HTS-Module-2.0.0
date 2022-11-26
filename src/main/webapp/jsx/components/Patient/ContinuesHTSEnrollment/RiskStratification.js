@@ -124,6 +124,7 @@ const RiskStratification = (props) => {
             code:"",
             personId:props.patientObj.personId,
             riskAssessment: {},
+            entryPoint:""
 
         }
     )
@@ -422,6 +423,26 @@ const RiskStratification = (props) => {
                             <div className="row">
                             <div className="form-group  col-md-4">
                                 <FormGroup>
+                                    <Label>Entry Point </Label>
+                                    <select
+                                        className="form-control"
+                                        name="entryPoint"
+                                        id="entryPoint"
+                                        value={objValues.entryPoint}
+                                        onChange={handleInputChange}
+                                        style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                    >
+                                        <option value={""}>Select</option>                                      
+                                        <option value="Facility">Facility</option>
+                                        <option value="Community">Community</option>
+                                    </select>
+                                    {errors.entryPoint !=="" ? (
+                                    <span className={classes.error}>{errors.entryPoint}</span>
+                                    ) : "" }
+                                </FormGroup>
+                            </div>
+                            <div className="form-group  col-md-4">
+                                <FormGroup>
                                     <Label>Setting</Label>
                                     <select
                                         className="form-control"
@@ -480,7 +501,7 @@ const RiskStratification = (props) => {
                             </div>
                             <div className="form-group mb-3 col-md-4">
                                 <FormGroup>
-                                <Label for="">Visit Date  </Label>
+                                <Label for="">Visit Date * </Label>
                                 <Input
                                     type="date"
                                     name="visitDate"

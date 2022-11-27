@@ -135,7 +135,8 @@ const PostTest = (props) => {
             props.setCompleted([...props.completed, completedMenu])
         }
     }
-    useEffect(() => { 
+    useEffect(() => {
+        console.log(props.patientObj.postTestCounselingKnowledgeAssessment) 
         setPostTest({...postTest, ...props.patientObj.postTestCounselingKnowledgeAssessment}) 
         if(props.patientObj && (props.patientObj.hivTestResult==='Positive' || props.patientObj.hivTestResult2!=='Positive')){
             postTest.hivTestResult='Positive'
@@ -481,7 +482,7 @@ const PostTest = (props) => {
                                     
                                 </FormGroup>
                             </div>
-                            <div className="form-group  col-md-4">
+                            {/* <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Unprotected sex with regular partner in the last 3months</Label>
                                     <select
@@ -499,7 +500,7 @@ const PostTest = (props) => {
                                     </select>
                                     
                                 </FormGroup>
-                            </div>
+                            </div> */}
                             {/* <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Unprotected sex with regular particular in the last 3 months</Label>

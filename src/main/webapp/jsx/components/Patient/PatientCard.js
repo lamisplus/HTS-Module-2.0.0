@@ -188,7 +188,7 @@ function PatientCard(props) {
                         Client Code : <b style={{color:'#0B72AA'}}>{props && props.clientCode ? props.clientCode : ""} </b>
                     </span>
                     </Col>
-                    <Col md={12}>
+                    {/* <Col md={12}>
 
                         <div >
                             <Typography variant="caption">
@@ -199,7 +199,7 @@ function PatientCard(props) {
                             </Typography>
                         </div>
                   
-                    </Col>     
+                    </Col>      */}
                     </Row>
                     </Col>
                 </Row>

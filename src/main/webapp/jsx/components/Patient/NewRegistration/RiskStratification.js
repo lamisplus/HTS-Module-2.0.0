@@ -125,6 +125,7 @@ const BasicInfo = (props) => {
             code:"",
             personId:"",
             riskAssessment: {},
+            entryPoint:""
 
         }
 
@@ -400,37 +401,38 @@ const BasicInfo = (props) => {
                     toast.error("All fields are required",  {position: toast.POSITION.BOTTOM_CENTER});
                 }
                 
-            }else{
-                if(validate()){
-                    
-                    axios.post(`${baseUrl}risk-stratification`,objValues,
-                    { headers: {"Authorization" : `Bearer ${token}`}},
-                    
-                    )
-                    .then(response => {
-                        setSaving(false);
-                        props.patientObj.riskStratificationResponseDto=response.data
-                        toast.success("Risk stratification save succesfully!",  {position: toast.POSITION.BOTTOM_CENTER});
-                        history.push({
-                            pathname: '/',
-                            
-                        });
-                        //
-                    })
-                    .catch(error => {
-                        setSaving(false);
-                        if(error.response && error.response.data){
-                            let errorMessage = error.response.data.apierror && error.response.data.apierror.message!=="" ? error.response.data.apierror.message :  "Something went wrong, please try again";
-                            toast.error(errorMessage,  {position: toast.POSITION.BOTTOM_CENTER});
-                        }
-                        else{
-                            toast.error("Something went wrong. Please try again...",  {position: toast.POSITION.BOTTOM_CENTER});
-                        }
-                    });
-                }else{
-                    toast.error("All fields are required",  {position: toast.POSITION.BOTTOM_CENTER});
-                }
             }
+            // else {
+            //     if(validate()){
+                    
+            //         axios.post(`${baseUrl}risk-stratification`,objValues,
+            //         { headers: {"Authorization" : `Bearer ${token}`}},
+                    
+            //         )
+            //         .then(response => {
+            //             setSaving(false);
+            //             props.patientObj.riskStratificationResponseDto=response.data
+            //             toast.success("Risk stratification save succesfully!",  {position: toast.POSITION.BOTTOM_CENTER});
+            //             history.push({
+            //                 pathname: '/',
+                            
+            //             });
+            //             //
+            //         })
+            //         .catch(error => {
+            //             setSaving(false);
+            //             if(error.response && error.response.data){
+            //                 let errorMessage = error.response.data.apierror && error.response.data.apierror.message!=="" ? error.response.data.apierror.message :  "Something went wrong, please try again";
+            //                 toast.error(errorMessage,  {position: toast.POSITION.BOTTOM_CENTER});
+            //             }
+            //             else{
+            //                 toast.error("Something went wrong. Please try again...",  {position: toast.POSITION.BOTTOM_CENTER});
+            //             }
+            //         });
+            //     }else{
+            //         toast.error("All fields are required",  {position: toast.POSITION.BOTTOM_CENTER});
+            //     }
+            // }
             if(objValues.age<15){
                 if(validate()){
                     axios.post(`${baseUrl}risk-stratification`,objValues,
@@ -504,6 +506,26 @@ const BasicInfo = (props) => {
                         <div className="row">
                         <div className="form-group  col-md-12 text-center pt-2 mb-4" style={{backgroundColor:'#992E62', width:'125%', height:'35px', color:'#fff', fontWeight:'bold'}} >Modality</div>
                             <div className="row">
+                            <div className="form-group  col-md-4">
+                                <FormGroup>
+                                    <Label>Entry Point</Label>
+                                    <select
+                                        className="form-control"
+                                        name="entryPoint"
+                                        id="entryPoint"
+                                        value={objValues.entryPoint}
+                                        onChange={handleInputChange}
+                                        style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                    >
+                                        <option value={""}>Select</option>                                      
+                                        <option value="Facility">Facility</option>
+                                        <option value="Community">Community</option>
+                                    </select>
+                                    {errors.entryPoint !=="" ? (
+                                    <span className={classes.error}>{errors.entryPoint}</span>
+                                    ) : "" }
+                                </FormGroup>
+                            </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Setting</Label>

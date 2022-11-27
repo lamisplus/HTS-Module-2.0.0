@@ -48,7 +48,7 @@ public class HtsClientService {
     private final ModuleService moduleService;
     public HtsClientDto save(HtsClientRequestDto htsClientRequestDto){
         if(htsClientRequestDto.getRiskStratificationCode() != null){
-            if(!htsClientRepository.existsByRiskStratificationCode(htsClientRequestDto.getRiskStratificationCode())){
+            if(htsClientRepository.existsByRiskStratificationCode(htsClientRequestDto.getRiskStratificationCode())){
                 throw new IllegalTypeException(HtsClientRequestDto.class, "RiskStratificationCode is ", "already exist for an hts client");
             }
         }
@@ -76,11 +76,9 @@ public class HtsClientService {
 
     public HtsClientDtos getHtsClientById(Long id){
         List<HtsClient> htsClients = new ArrayList<>();
-        htsClients.add(this.getById(id));
+        HtsClient htsClient = this.getById(id);
+        htsClients.add(htsClient);
         return htsClientToHtsClientDtos(null, htsClients);
-        /*if(moduleService.exist("HIVModule")){
-            if(htsClientRepository.findInHivEnrollmentByUuid(htsClientDtos.per)isPositive=true;
-        }*/
     }
 
     public HtsClientDtos getHtsClientByPersonId(Long personId){
@@ -297,6 +295,11 @@ public class HtsClientService {
         htsClientDtos.setHtsCount(htsClientDtoList.size());
         htsClientDtos.setHtsClientDtoList(htsClientDtoList);
         htsClientDtos.setPersonId(pId[0]);
+        if(moduleService.exist("HIVModule") && personUuid[0] != null){
+            if(htsClientRepository.findInHivEnrollmentByUuid(personUuid[0]).isPresent()){
+                isPositive = true;
+            }
+        }
         htsClientDtos.setClientCode(clientCode[0]);
         htsClientDtos.setPersonResponseDto(personResponseDto[0]);
         htsClientDtos.setHivPositive(isPositive);
@@ -373,6 +376,7 @@ public class HtsClientService {
         Long facilityId = currentUserOrganizationService.getCurrentUserOrganization();
         Pageable pageable = PageRequest.of(pageNo, pageSize);
         if(!String.valueOf(searchValue).equals("null") && !searchValue.equals("*")){
+            searchValue = searchValue.replaceAll("\\s", "");
             String queryParam = "%"+searchValue+"%";
             return personRepository
                     .findAllPersonBySearchParameters(queryParam, UN_ARCHIVED, facilityId,  pageable);
@@ -443,6 +447,9 @@ public class HtsClientService {
         if(number.isPresent()){
             return number.get() + random;
         }
+        String s = "";
+        Integer a = s.matches("[0-9.]+")? Integer.valueOf(s):null;
+        Integer.valueOf(s);
         return 1 + random;
     }
 

@@ -421,7 +421,7 @@ const RiskStratification = (props) => {
                         <div className="row">
                         <div className="form-group  col-md-12 text-center pt-2 mb-4" style={{backgroundColor:'#992E62', width:'125%', height:'35px', color:'#fff', fontWeight:'bold'}} >Modality</div>
                             <div className="row">
-                            <div className="form-group  col-md-4">
+                            <div className="form-group  col-md-6">
                                 <FormGroup>
                                     <Label>Entry Point </Label>
                                     <select
@@ -441,7 +441,26 @@ const RiskStratification = (props) => {
                                     ) : "" }
                                 </FormGroup>
                             </div>
-                            <div className="form-group  col-md-4">
+                            <div className="form-group mb-3 col-md-6">
+                                <FormGroup>
+                                <Label for="">Visit Date * </Label>
+                                <Input
+                                    type="date"
+                                    name="visitDate"
+                                    id="visitDate"
+                                    value={objValues.visitDate}
+                                    onChange={handleInputChange}
+                                    min="1983-12-31"
+                                    max= {moment(new Date()).format("YYYY-MM-DD") }
+                                    style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
+                                    
+                                />
+                                {errors.dateVisit !=="" ? (
+                                    <span className={classes.error}>{errors.dateVisit}</span>
+                                ) : "" }
+                                </FormGroup>
+                            </div>
+                            <div className="form-group  col-md-6">
                                 <FormGroup>
                                     <Label>Setting</Label>
                                     <select
@@ -475,7 +494,7 @@ const RiskStratification = (props) => {
                                     ) : "" }
                                 </FormGroup>
                             </div>
-                            <div className="form-group  col-md-4">
+                            <div className="form-group  col-md-6">
                                 <FormGroup>
                                     <Label>Modality</Label>
                                     <select
@@ -499,25 +518,7 @@ const RiskStratification = (props) => {
                                     ) : "" }
                                 </FormGroup>
                             </div>
-                            <div className="form-group mb-3 col-md-4">
-                                <FormGroup>
-                                <Label for="">Visit Date * </Label>
-                                <Input
-                                    type="date"
-                                    name="visitDate"
-                                    id="visitDate"
-                                    value={objValues.visitDate}
-                                    onChange={handleInputChange}
-                                    min="1983-12-31"
-                                    max= {moment(new Date()).format("YYYY-MM-DD") }
-                                    style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
-                                    
-                                />
-                                {errors.dateVisit !=="" ? (
-                                    <span className={classes.error}>{errors.dateVisit}</span>
-                                ) : "" }
-                                </FormGroup>
-                            </div>
+                            
                             </div>
                             <br/>
                            

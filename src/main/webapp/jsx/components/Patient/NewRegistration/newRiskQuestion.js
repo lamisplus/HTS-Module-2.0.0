@@ -132,21 +132,16 @@ const BasicInfo = (props) => {
     )
     const [riskAssessment, setRiskAssessment]= useState(
         {
-            everHadSexualIntercourse:"",
-            bloodtransInlastThreeMonths:"",
-            uprotectedSexWithCasualLastThreeMonths:"",
-            uprotectedSexWithRegularPartnerLastThreeMonths:"", 
-            unprotectedVaginalSex:"",  
-            uprotectedAnalSex:"",   
-            stiLastThreeMonths:"",
-            sexUnderInfluence :"",
-            moreThanOneSexPartnerLastThreeMonths:"",
-            experiencePain:"",
-            haveSexWithoutCondom:"",
-            abuseDrug:"",
-            bloodTransfusion:"",
-            consistentWeightFeverNightCough:"",
-            soldPaidVaginalSex:"",
+            lastHivTestForceToHaveSex:"", 
+            lastHivTestHadAnal:"",
+            lastHivTestInjectedDrugs:"",
+            whatWasTheResult:"",
+            lastHivTestDone:"",
+            diagnosedWithTb:"",
+            lastHivTestPainfulUrination:"",
+            lastHivTestBloodTransfusion:"",
+            lastHivTestVaginalOral:"",
+            lastHivTestBasedOnRequest:""
         }
     )
     useEffect(() => { 
@@ -344,16 +339,6 @@ const BasicInfo = (props) => {
          // Getting the number count of riskAssessment True
     const actualRiskCountTrue=Object.values(riskAssessment)
      riskCountQuestion=actualRiskCountTrue.filter((x)=> x==='true')
-    const [riskAssessmentPartner, setRiskAssessmentPartner]= useState(
-        {
-            sexPartnerHivPositive:"",
-            newDiagnosedHivlastThreeMonths:"",
-            currentlyArvForPmtct :"",
-            knowHivPositiveOnArv :"",
-            knowHivPositiveAfterLostToFollowUp:"", 
-            uprotectedAnalSex  :"",
-        }
-    )
     const handleInputChangeRiskAssessment = e => { 
         //setErrors({...temp, [e.target.name]:""}) 
         setRiskAssessment ({...riskAssessment,  [e.target.name]: e.target.value}); 
@@ -506,7 +491,7 @@ const BasicInfo = (props) => {
                         <div className="row">
                         <div className="form-group  col-md-12 text-center pt-2 mb-4" style={{backgroundColor:'#992E62', width:'125%', height:'35px', color:'#fff', fontWeight:'bold'}} >Modality</div>
                             <div className="row">
-                            <div className="form-group  col-md-6">
+                            <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Entry Point</Label>
                                     <select
@@ -526,26 +511,7 @@ const BasicInfo = (props) => {
                                     ) : "" }
                                 </FormGroup>
                             </div>
-                            <div className="form-group mb-3 col-md-6">
-                                <FormGroup>
-                                <Label for="">Visit Date  </Label>
-                                <Input
-                                    type="date"
-                                    name="visitDate"
-                                    id="visitDate"
-                                    value={objValues.visitDate}
-                                    onChange={handleInputChange}
-                                    min="1983-12-31"
-                                    max= {moment(new Date()).format("YYYY-MM-DD") }
-                                    style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
-                                    
-                                />
-                                {errors.visitDate !=="" ? (
-                                    <span className={classes.error}>{errors.visitDate}</span>
-                                ) : "" }
-                                </FormGroup>
-                            </div>
-                            <div className="form-group  col-md-6">
+                            <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Setting</Label>
                                     <select
@@ -579,7 +545,7 @@ const BasicInfo = (props) => {
                                     ) : "" }
                                 </FormGroup>
                             </div>
-                            <div className="form-group  col-md-6">
+                            <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Modality</Label>
                                     <select
@@ -603,7 +569,25 @@ const BasicInfo = (props) => {
                                     ) : "" }
                                 </FormGroup>
                             </div>
-                            
+                            <div className="form-group mb-3 col-md-4">
+                                <FormGroup>
+                                <Label for="">Visit Date  </Label>
+                                <Input
+                                    type="date"
+                                    name="visitDate"
+                                    id="visitDate"
+                                    value={objValues.visitDate}
+                                    onChange={handleInputChange}
+                                    min="1983-12-31"
+                                    max= {moment(new Date()).format("YYYY-MM-DD") }
+                                    style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
+                                    
+                                />
+                                {errors.visitDate !=="" ? (
+                                    <span className={classes.error}>{errors.visitDate}</span>
+                                ) : "" }
+                                </FormGroup>
+                            </div>
                             </div>
                             <br/>
                            
@@ -700,12 +684,12 @@ const BasicInfo = (props) => {
                             <div className="form-group  col-md-12 text-center pt-2 mb-4" style={{backgroundColor:'#992E62', width:'125%', height:'35px', color:'#fff', fontWeight:'bold'}} >HIV Risk Assessment  (Last 3 months)</div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Ever had sexual intercourse </Label>
+                                    <Label>Is this HIV test based on a Clinician/Doctor/Health Care Provider’s  request? *</Label>
                                     <select
                                         className="form-control"
-                                        name="everHadSexualIntercourse"
-                                        id="everHadSexualIntercourse"
-                                        value={riskAssessment.everHadSexualIntercourse}
+                                        name="lastHivTestBasedOnRequest"
+                                        id="lastHivTestBasedOnRequest"
+                                        value={riskAssessment.lastHivTestBasedOnRequest}
                                         onChange={handleInputChangeRiskAssessment}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
@@ -714,19 +698,19 @@ const BasicInfo = (props) => {
                                         <option value="false">No</option>
                                         
                                     </select>
-                                    {errors.everHadSexualIntercourse !=="" ? (
-                                    <span className={classes.error}>{errors.everHadSexualIntercourse}</span>
+                                    {errors.lastHivTestBasedOnRequest !=="" ? (
+                                    <span className={classes.error}>{errors.lastHivTestBasedOnRequest}</span>
                                     ) : "" }
                                 </FormGroup>
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Blood transfusion in last 3 months *</Label>
+                                    <Label>When was your last HIV test done?  *</Label>
                                     <select
                                         className="form-control"
-                                        name="bloodtransInlastThreeMonths"
-                                        id="bloodtransInlastThreeMonths"
-                                        value={riskAssessment.bloodtransInlastThreeMonths}
+                                        name="lastHivTestDone"
+                                        id="lastHivTestDone"
+                                        value={riskAssessment.lastHivTestDone}
                                         onChange={handleInputChangeRiskAssessment}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
@@ -735,19 +719,19 @@ const BasicInfo = (props) => {
                                         <option value="false">No</option>
                                         
                                     </select>
-                                    {errors.bloodtransInlastThreeMonths !=="" ? (
-                                    <span className={classes.error}>{errors.bloodtransInlastThreeMonths}</span>
+                                    {errors.lastHivTestDone !=="" ? (
+                                    <span className={classes.error}>{errors.lastHivTestDone}</span>
                                     ) : "" }
                                 </FormGroup>
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Unprotected sex with casual partner in last 3 months *</Label>
+                                    <Label>What was the result? *</Label>
                                     <select
                                         className="form-control"
-                                        name="uprotectedSexWithCasualLastThreeMonths"
-                                        id="uprotectedSexWithCasualLastThreeMonths"
-                                        value={riskAssessment.uprotectedSexWithCasualLastThreeMonths}
+                                        name="whatWasTheResult"
+                                        id="whatWasTheResult"
+                                        value={riskAssessment.whatWasTheResult}
                                         onChange={handleInputChangeRiskAssessment}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
@@ -756,19 +740,19 @@ const BasicInfo = (props) => {
                                         <option value="false">No</option>
                                         
                                     </select>
-                                    {errors.uprotectedSexWithCasualLastThreeMonths !=="" ? (
-                                    <span className={classes.error}>{errors.uprotectedSexWithCasualLastThreeMonths}</span>
+                                    {errors.whatWasTheResult !=="" ? (
+                                    <span className={classes.error}>{errors.whatWasTheResult}</span>
                                     ) : "" }
                                 </FormGroup>
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Unprotected sex with regular partner in the last 3months</Label>
+                                    <Label>Since your last HIV test, have you had anal or vaginal or oral sex without a condom with someone who was HIV positive or unaware of their HIV status? *</Label>
                                     <select
                                         className="form-control"
-                                        name="uprotectedSexWithRegularPartnerLastThreeMonths"
-                                        id="uprotectedSexWithRegularPartnerLastThreeMonths"
-                                        value={riskAssessment.uprotectedSexWithRegularPartnerLastThreeMonths}
+                                        name="lastHivTestVaginalOral"
+                                        id="lastHivTestVaginalOral"
+                                        value={riskAssessment.lastHivTestVaginalOral}
                                         onChange={handleInputChangeRiskAssessment}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
@@ -777,19 +761,19 @@ const BasicInfo = (props) => {
                                         <option value="false">No</option>
                                         
                                     </select>
-                                    {errors.uprotectedSexWithRegularPartnerLastThreeMonths !=="" ? (
-                                    <span className={classes.error}>{errors.uprotectedSexWithRegularPartnerLastThreeMonths}</span>
+                                    {errors.lastHivTestVaginalOral !=="" ? (
+                                    <span className={classes.error}>{errors.lastHivTestVaginalOral}</span>
                                     ) : "" }
                                 </FormGroup>
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Unprotected vaginal sex</Label>
+                                    <Label>Since your last HIV test, have you had a blood or blood product transfusion? *</Label>
                                     <select
                                         className="form-control"
-                                        name="unprotectedVaginalSex"
-                                        id="unprotectedVaginalSex"
-                                        value={riskAssessment.unprotectedVaginalSex}
+                                        name="lastHivTestBloodTransfusion"
+                                        id="lastHivTestBloodTransfusion"
+                                        value={riskAssessment.lastHivTestBloodTransfusion}
                                         onChange={handleInputChangeRiskAssessment}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
@@ -798,61 +782,61 @@ const BasicInfo = (props) => {
                                         <option value="false">No</option>
                                         
                                     </select>
-                                    {errors.unprotectedVaginalSex !=="" ? (
-                                    <span className={classes.error}>{errors.unprotectedVaginalSex}</span>
+                                    {errors.lastHivTestBloodTransfusion !=="" ? (
+                                    <span className={classes.error}>{errors.lastHivTestBloodTransfusion}</span>
+                                    ) : "" }
+                                </FormGroup>
+                            </div>    
+                            <div className="form-group  col-md-4">
+                                <FormGroup>
+                                    <Label>Since your last HIV test, have you experienced painful urination, lower abdominal pain, vaginal or penile discharge, pain during sexual intercourse, thick, cloudy, or foul smelling discharge and/or small bumps or blisters near the mouth, penis, vagina, or anal areas? *</Label>
+                                    <select
+                                        className="form-control"
+                                        name="lastHivTestPainfulUrination"
+                                        id="lastHivTestPainfulUrination"
+                                        value={riskAssessment.lastHivTestPainfulUrination}
+                                        onChange={handleInputChangeRiskAssessment}
+                                        style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                    >
+                                        <option value={""}></option>
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
+                                        
+                                    </select>
+                                    {errors.lastHivTestPainfulUrination !=="" ? (
+                                    <span className={classes.error}>{errors.lastHivTestPainfulUrination}</span>
+                                    ) : "" }
+                                </FormGroup>
+                            </div>   
+                            <div className="form-group  col-md-4">
+                                <FormGroup>
+                                    <Label>Have you been diagnosed with TB or currently have any of the following symptoms : cough, fever, weight loss, night sweats? *</Label>
+                                    <select
+                                        className="form-control"
+                                        name="diagnosedWithTb"
+                                        id="diagnosedWithTb"
+                                        value={riskAssessment.diagnosedWithTb}
+                                        onChange={handleInputChangeRiskAssessment}
+                                        style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                    >
+                                        <option value={""}></option>
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
+                                        
+                                    </select>
+                                    {errors.diagnosedWithTb !=="" ? (
+                                    <span className={classes.error}>{errors.diagnosedWithTb}</span>
                                     ) : "" }
                                 </FormGroup>
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Unprotected Anal sex</Label>
+                                    <Label>Since your last HIV test, have you ever injected drugs, shared needles or other sharp objects with someone known to be HIV positive or who you didn’t know their HIV status? *</Label>
                                     <select
                                         className="form-control"
-                                        name="uprotectedAnalSex"
-                                        id="uprotectedAnalSex"
-                                        value={riskAssessment.uprotectedAnalSex}
-                                        onChange={handleInputChangeRiskAssessment}
-                                        style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
-                                    >
-                                        <option value={""}></option>
-                                        <option value="true">Yes</option>
-                                        <option value="false">No</option>
-                                        
-                                    </select>
-                                    {errors.uprotectedAnalSex !=="" ? (
-                                    <span className={classes.error}>{errors.uprotectedAnalSex}</span>
-                                    ) : "" }
-                                </FormGroup>
-                            </div>         
-                            <div className="form-group  col-md-4">
-                                <FormGroup>
-                                    <Label>STI in last 3 months *</Label>
-                                    <select
-                                        className="form-control"
-                                        name="stiLastThreeMonths"
-                                        id="stiLastThreeMonths"
-                                        value={riskAssessment.stiLastThreeMonths}
-                                        onChange={handleInputChangeRiskAssessment}
-                                        style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
-                                    >
-                                        <option value={""}></option>
-                                        <option value="true">Yes</option>
-                                        <option value="false">No</option>
-                                        
-                                    </select>
-                                    {errors.stiLastThreeMonths !=="" ? (
-                                    <span className={classes.error}>{errors.stiLastThreeMonths}</span>
-                                    ) : "" }
-                                </FormGroup>
-                            </div>
-                            <div className="form-group  col-md-4">
-                                <FormGroup>
-                                    <Label>Sex under the influence of drugs or alcohol*</Label>
-                                    <select
-                                        className="form-control"
-                                        name="sexUnderInfluence"
+                                        name="lastHivTestInjectedDrugs"
                                         id="sexUnderInfluence"
-                                        value={riskAssessment.sexUnderInfluence}
+                                        value={riskAssessment.lastHivTestInjectedDrugs}
                                         onChange={handleInputChangeRiskAssessment}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
@@ -861,19 +845,19 @@ const BasicInfo = (props) => {
                                         <option value="false">No</option>
                                         
                                     </select>
-                                    {errors.sexUnderInfluence !=="" ? (
-                                    <span className={classes.error}>{errors.sexUnderInfluence}</span>
+                                    {errors.lastHivTestInjectedDrugs !=="" ? (
+                                    <span className={classes.error}>{errors.lastHivTestInjectedDrugs}</span>
                                     ) : "" }
                                 </FormGroup>
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>More than 1 sex partner during last 3 months*</Label>
+                                    <Label>Since your last HIV test, have you had anal, oral or vaginal sex in exchange for money or other benefits? *</Label>
                                     <select
                                         className="form-control"
-                                        name="moreThanOneSexPartnerLastThreeMonths"
-                                        id="moreThanOneSexPartnerLastThreeMonths"
-                                        value={riskAssessment.moreThanOneSexPartnerLastThreeMonths}
+                                        name="lastHivTestHadAnal"
+                                        id="lastHivTestHadAnal"
+                                        value={riskAssessment.lastHivTestHadAnal}
                                         onChange={handleInputChangeRiskAssessment}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
@@ -882,12 +866,32 @@ const BasicInfo = (props) => {
                                         <option value="false">No</option>
                                         
                                     </select>
-                                    {errors.moreThanOneSexPartnerLastThreeMonths !=="" ? (
-                                    <span className={classes.error}>{errors.moreThanOneSexPartnerLastThreeMonths}</span>
+                                    {errors.lastHivTestHadAnal !=="" ? (
+                                    <span className={classes.error}>{errors.lastHivTestHadAnal}</span>
+                                    ) : "" }
+                                </FormGroup>
+                            </div> 
+                            <div className="form-group  col-md-4">
+                                <FormGroup>
+                                    <Label>Since your last HIV test, have you been forced to have sex? *</Label>
+                                    <select
+                                        className="form-control"
+                                        name="lastHivTestForceToHaveSex"
+                                        id="moreThanOneSexPartnerLastThreeMonths"
+                                        value={riskAssessment.lastHivTestForceToHaveSex}
+                                        onChange={handleInputChangeRiskAssessment}
+                                        style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                    >
+                                        <option value={""}></option>
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
+                                        
+                                    </select>
+                                    {errors.lastHivTestForceToHaveSex !=="" ? (
+                                    <span className={classes.error}>{errors.lastHivTestForceToHaveSex}</span>
                                     ) : "" }
                                 </FormGroup>
                             </div>
-                          
                             <br/>
                             </>)}
                             {(objValues.targetGroup!=="TARGET_GROUP_GEN_POP" ) && ( <>

@@ -902,7 +902,7 @@ const BasicInfo = (props) => {
                           
                             <br/>
                             </>)} */}
-                            {(objValues.targetGroup==="TARGET_GROUP_GEN_POP" )&& ( <>
+                            {(objValues.targetGroup!=="" && objValues.targetGroup!==null)&& ( <>
                             <div className="form-group  col-md-12 text-center pt-2 mb-4" style={{backgroundColor:'#992E62', width:'125%', height:'35px', color:'#fff', fontWeight:'bold'}} >HIV Risk Assessment  (Last 3 months)</div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
@@ -1116,7 +1116,7 @@ const BasicInfo = (props) => {
                             </div>
                             <br/>
                             </>)}
-                            {(objValues.targetGroup!=="TARGET_GROUP_GEN_POP" ) && ( <>
+                            {/* {(objValues.targetGroup!=="TARGET_GROUP_GEN_POP" ) && ( <>
                             <div className="form-group  col-md-12 text-center pt-2 mb-4" style={{backgroundColor:'#992E62', width:'125%', height:'35px', color:'#fff', fontWeight:'bold'}} >HIV Risk Assessment  (Last 3 months)</div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
@@ -1267,7 +1267,7 @@ const BasicInfo = (props) => {
                             </div>
                            
                             <br/>
-                            </>)}
+                            </>)} */}
                             </>)}
                             <br/>
                             <Message warning>

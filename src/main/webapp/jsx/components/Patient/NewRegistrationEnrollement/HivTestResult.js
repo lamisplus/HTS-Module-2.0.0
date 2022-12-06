@@ -919,7 +919,7 @@ const HivTestResult = (props) => {
                                  {/* END of  result for Test 2*/}
                             </div>
                             </div>
-                            {cd4Count.cd4Count ==='Semi-Quantitative' && (<>
+                            {showCD4Count && (<>
                             <LabelRibbon as='a' color='blue' style={{width:'106%', height:'35px'}} ribbon>
                                 <h5 style={{color:'#fff'}}>CD4 Count</h5>
                             </LabelRibbon>
@@ -956,8 +956,8 @@ const HivTestResult = (props) => {
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>
-                                        <option value="Semi-Quantitative">{"<200"}</option>
-                                        <option value="Flow Cyteometry">{">=200"}</option>
+                                        <option value="<200">{"<200"}</option>
+                                        <option value=">=200">{">=200"}</option>
                                         
                                     </select>
                                     

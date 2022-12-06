@@ -336,9 +336,8 @@ const HivTestResult = (props) => {
         //HTS FORM VALIDATION
         initialTest1.date!=="" &&  (temp.date = initialTest1.result ? "" : "This field is required.")
         // initialTest1.result!==""  && (temp.date = confirmatoryTest.date ? "" : "This field is required.")
-        // initialTest1.result!==""  && (temp.date = tieBreakerTest.date ? "" : "This field is required.")
-              
-                setErrors({ ...temp })
+        // initialTest1.result!==""  && (temp.date = tieBreakerTest.date ? "" : "This field is required.")    
+        setErrors({ ...temp })
         return Object.values(temp).every(x => x == "")
     }
     const handleSubmit =(e)=>{
@@ -945,8 +944,8 @@ const HivTestResult = (props) => {
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>
-                                        <option value="Semi-Quantitative">{"<200"}</option>
-                                        <option value="Flow Cyteometry">{">=200"}</option>
+                                        <option value="<200">{"<200"}</option>
+                                        <option value=">=200">{">=200"}</option>
                                         
                                     </select>
                                     
@@ -977,7 +976,7 @@ const HivTestResult = (props) => {
                             <h5 style={{color:'#fff'}}>Syphilis Testing</h5>
                         </LabelRibbon>
                         <br/> <br/>
-                            <div className="form-group  col-md-4">
+                            <div className="form-group  col-md-6">
                                 <FormGroup>
                                     <Label>Syphilis test result *</Label>
                                     <select

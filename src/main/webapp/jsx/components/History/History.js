@@ -127,7 +127,7 @@ const PatientnHistory = (props) => {
                 date: row.dateVisit,
                 pre: row.knowledgeAssessment? "Filled":"Not Filled ",
                 requestResult:row.confirmatoryTest ? "Filled":"Not Filled ",
-                rencency: row.knowledgeAssessment ? "Filled":"Not Filled ",
+                rencency: row.recency ? "Filled":"Not Filled ",
                 post:row.postTestCounselingKnowledgeAssessment ? "Filled":"Not Filled ",
                 //indexNotifiation:row.indexNotificationServicesElicitation ? "Filled":"Not Filled ",
 

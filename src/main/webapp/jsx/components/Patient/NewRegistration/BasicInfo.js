@@ -545,6 +545,7 @@ const BasicInfo = (props) => {
 
     const handleSubmit =(e)=>{
         e.preventDefault();
+        if(validate()){
         const getSexId=  sexs.find((x)=> x.display===objValues.sex)//get patient sex ID by filtering the request
         //basicInfo.sexId=getSexId.id
         const patientForm ={
@@ -614,7 +615,7 @@ const BasicInfo = (props) => {
             riskStratificationCode:props.extra && props.extra.code!=='' ? props.extra.code : "",
             }
             props.setPatientObj({...props.patientObj, ...objValues})
-            if(validate()){
+            
             //console.log(patientForm)
             axios.post(`${baseUrl}hts`,patientForm,
             { headers: {"Authorization" : `Bearer ${token}`}},

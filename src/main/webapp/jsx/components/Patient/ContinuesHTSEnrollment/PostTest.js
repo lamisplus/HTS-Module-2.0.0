@@ -221,7 +221,7 @@ const PostTest = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Have you been tested for HIV before within this year? *</Label>
+                                    <Label>Have you been tested for HIV before within this year? </Label>
                                     <select
                                         className="form-control"
                                         name="hivTestBefore"
@@ -242,7 +242,7 @@ const PostTest = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>HIV Request and Result form signed by tester *</Label>
+                                    <Label>HIV Request and Result form signed by tester </Label>
                                     <select
                                         className="form-control"
                                         name="hivRequestResult"
@@ -261,7 +261,7 @@ const PostTest = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>HIV Request and Result form filled with CT Intake Form *</Label>
+                                    <Label>HIV Request and Result form filled with CT Intake Form </Label>
                                     <select
                                         className="form-control"
                                         name="hivRequestResultCt"
@@ -280,7 +280,7 @@ const PostTest = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Client received HIV test result *</Label>
+                                    <Label>Client received HIV test result </Label>
                                     <select
                                         className="form-control"
                                         name="clientReceivedHivTestResult"
@@ -299,7 +299,7 @@ const PostTest = (props) => {
                             </div> 
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Post test counseling done *</Label>
+                                    <Label>Post test counseling done </Label>
                                     <select
                                         className="form-control"
                                         name="postTestCounseling"
@@ -318,7 +318,7 @@ const PostTest = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Risk reduction plan developed *</Label>
+                                    <Label>Risk reduction plan developed </Label>
                                     <select
                                         className="form-control"
                                         name="riskReduction"
@@ -338,7 +338,7 @@ const PostTest = (props) => {
 
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Post test disclosure plan developed *</Label>
+                                    <Label>Post test disclosure plan developed </Label>
                                     <select
                                         className="form-control"
                                         name="postTestDisclosure"
@@ -357,7 +357,7 @@ const PostTest = (props) => {
                             </div>                            
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Will bring partner(s) for HIV testing *</Label>
+                                    <Label>Will bring partner(s) for HIV testing </Label>
                                     <select
                                         className="form-control"
                                         name="bringPartnerHivtesting"
@@ -376,7 +376,7 @@ const PostTest = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Will bring own children {'<5'} years for HIV testing *</Label>
+                                    <Label>Will bring own children {'<5'} years for HIV testing </Label>
                                     <select
                                         className="form-control"
                                         name="childrenHivtesting"
@@ -395,7 +395,7 @@ const PostTest = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Provided with information on FP and dual contraception *</Label>
+                                    <Label>Provided with information on FP and dual contraception </Label>
                                     <select
                                         className="form-control"
                                         name="informationFp"
@@ -414,7 +414,7 @@ const PostTest = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Client/Partner use FP methods (other than condom)*</Label>
+                                    <Label>Client/Partner use FP methods (other than condom)</Label>
                                     <select
                                         className="form-control"
                                         name="partnerFpThanCondom"
@@ -453,7 +453,7 @@ const PostTest = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Correct condom use demonstrated *</Label>
+                                    <Label>Correct condom use demonstrated </Label>
                                     <select
                                         className="form-control"
                                         name="correctCondomUse"
@@ -472,7 +472,7 @@ const PostTest = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Condoms provided to client *</Label>
+                                    <Label>Condoms provided to client </Label>
                                     <select
                                         className="form-control"
                                         name="condomProvidedToClient"
@@ -528,7 +528,7 @@ const PostTest = (props) => {
                             </div> */}
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Client referred to other services *</Label>
+                                    <Label>Client referred to other services </Label>
                                     <select
                                         className="form-control"
                                         name="referredToServices"

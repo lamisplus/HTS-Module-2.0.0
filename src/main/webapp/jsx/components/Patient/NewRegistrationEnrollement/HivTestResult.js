@@ -990,7 +990,7 @@ const HivTestResult = (props) => {
                         <br/> <br/>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Syphilis test result *</Label>
+                                    <Label>Syphilis test result </Label>
                                     <select
                                         className="form-control"
                                         name="syphilisTestResult"
@@ -1014,7 +1014,7 @@ const HivTestResult = (props) => {
                             <br/> <br/>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Hepatitis B virus test result *</Label>
+                                    <Label>Hepatitis B virus test result </Label>
                                     <select
                                         className="form-control"
                                         name="hepatitisBTestResult"
@@ -1033,7 +1033,7 @@ const HivTestResult = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Hepatitis C virus test result *</Label>
+                                    <Label>Hepatitis C virus test result </Label>
                                     <select
                                         className="form-control"
                                         name="hepatitisCTestResult"

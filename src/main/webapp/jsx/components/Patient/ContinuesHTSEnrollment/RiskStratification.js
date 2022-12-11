@@ -759,7 +759,7 @@ const RiskStratification = (props) => {
                             <div className="form-group  col-md-12 text-center pt-2 mb-4" style={{backgroundColor:'#992E62', width:'125%', height:'35px', color:'#fff', fontWeight:'bold'}} >HIV Risk Assessment  (Last 3 months)</div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Is this HIV test based on a Clinician/Doctor/Health Care Provider’s  request? *</Label>
+                                    <Label>Is this HIV test based on a Clinician/Doctor/Health Care Provider’s  request? </Label>
                                     <select
                                         className="form-control"
                                         name="lastHivTestBasedOnRequest"
@@ -780,7 +780,7 @@ const RiskStratification = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>When was your last HIV test done?  *</Label>
+                                    <Label>When was your last HIV test done?  </Label>
                                     <select
                                         className="form-control"
                                         name="lastHivTestDone"
@@ -822,7 +822,7 @@ const RiskStratification = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Since your last HIV test, have you had anal or vaginal or oral sex without a condom with someone who was HIV positive or unaware of their HIV status? *</Label>
+                                    <Label>Since your last HIV test, have you had anal or vaginal or oral sex without a condom with someone who was HIV positive or unaware of their HIV status? </Label>
                                     <select
                                         className="form-control"
                                         name="lastHivTestVaginalOral"
@@ -864,7 +864,7 @@ const RiskStratification = (props) => {
                             </div>    
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Since your last HIV test, have you experienced painful urination, lower abdominal pain, vaginal or penile discharge, pain during sexual intercourse, thick, cloudy, or foul smelling discharge and/or small bumps or blisters near the mouth, penis, vagina, or anal areas? *</Label>
+                                    <Label>Since your last HIV test, have you experienced painful urination, lower abdominal pain, vaginal or penile discharge, pain during sexual intercourse, thick, cloudy, or foul smelling discharge and/or small bumps or blisters near the mouth, penis, vagina, or anal areas? </Label>
                                     <select
                                         className="form-control"
                                         name="lastHivTestPainfulUrination"
@@ -885,7 +885,7 @@ const RiskStratification = (props) => {
                             </div>   
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Have you been diagnosed with TB or currently have any of the following symptoms : cough, fever, weight loss, night sweats? *</Label>
+                                    <Label>Have you been diagnosed with TB or currently have any of the following symptoms : cough, fever, weight loss, night sweats? </Label>
                                     <select
                                         className="form-control"
                                         name="diagnosedWithTb"
@@ -906,7 +906,7 @@ const RiskStratification = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Since your last HIV test, have you ever injected drugs, shared needles or other sharp objects with someone known to be HIV positive or who you didn’t know their HIV status? *</Label>
+                                    <Label>Since your last HIV test, have you ever injected drugs, shared needles or other sharp objects with someone known to be HIV positive or who you didn’t know their HIV status? </Label>
                                     <select
                                         className="form-control"
                                         name="lastHivTestInjectedDrugs"
@@ -927,7 +927,7 @@ const RiskStratification = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Since your last HIV test, have you had anal, oral or vaginal sex in exchange for money or other benefits? *</Label>
+                                    <Label>Since your last HIV test, have you had anal, oral or vaginal sex in exchange for money or other benefits? </Label>
                                     <select
                                         className="form-control"
                                         name="lastHivTestHadAnal"
@@ -948,7 +948,7 @@ const RiskStratification = (props) => {
                             </div> 
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Since your last HIV test, have you been forced to have sex? *</Label>
+                                    <Label>Since your last HIV test, have you been forced to have sex? </Label>
                                     <select
                                         className="form-control"
                                         name="lastHivTestForceToHaveSex"

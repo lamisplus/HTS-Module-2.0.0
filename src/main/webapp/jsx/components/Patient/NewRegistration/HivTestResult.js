@@ -1010,7 +1010,7 @@ console.log(showCD4Count)
                         <br/> <br/>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Syphilis test result *</Label>
+                                    <Label>Syphilis test result </Label>
                                     <select
                                         className="form-control"
                                         name="syphilisTestResult"
@@ -1034,7 +1034,7 @@ console.log(showCD4Count)
                             <br/> <br/>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Hepatitis B virus test result *</Label>
+                                    <Label>Hepatitis B virus test result </Label>
                                     <select
                                         className="form-control"
                                         name="hepatitisBTestResult"
@@ -1053,7 +1053,7 @@ console.log(showCD4Count)
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Hepatitis C virus test result *</Label>
+                                    <Label>Hepatitis C virus test result </Label>
                                     <select
                                         className="form-control"
                                         name="hepatitisCTestResult"

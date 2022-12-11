@@ -368,7 +368,7 @@ const BasicInfo = (props) => {
                             {knowledgeAssessment.previousTestedHIVNegative==='true' && (
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Time of last HIV Negative test Result*</Label>
+                                    <Label>Time of last HIV Negative test Result</Label>
                                     <select
                                         className="form-control"
                                         name="timeLastHIVNegativeTestResult"
@@ -393,7 +393,7 @@ const BasicInfo = (props) => {
                             {sex ==='Female' && (
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Client pregnant *</Label>
+                                    <Label>Client pregnant </Label>
                                     <select
                                         className="form-control"
                                         name="clientPregnant"
@@ -415,7 +415,7 @@ const BasicInfo = (props) => {
                              )}
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Client informed about HIV transmission routes *</Label>
+                                    <Label>Client informed about HIV transmission routes </Label>
                                     <select
                                         className="form-control"
                                         name="clientInformHivTransRoutes"
@@ -436,7 +436,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Client informed about risk factors for HIV transmission *</Label>
+                                    <Label>Client informed about risk factors for HIV transmission </Label>
                                     <select
                                         className="form-control"
                                         name="clientInformRiskkHivTrans"
@@ -457,7 +457,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Client informed on preventing HIV transmission methods *</Label>
+                                    <Label>Client informed on preventing HIV transmission methods </Label>
                                     <select
                                         className="form-control"
                                         name="clientInformPreventingsHivTrans"
@@ -478,7 +478,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Client informed about possible test results *</Label>
+                                    <Label>Client informed about possible test results </Label>
                                     <select
                                         className="form-control"
                                         name="clientInformPossibleTestResult"
@@ -500,7 +500,7 @@ const BasicInfo = (props) => {
                             
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Informed consent for HIV testing given *</Label>
+                                    <Label>Informed consent for HIV testing given </Label>
                                     <select
                                         className="form-control"
                                         name="informConsentHivTest"
@@ -524,7 +524,7 @@ const BasicInfo = (props) => {
                             <div className="form-group  col-md-12 text-center pt-2 mb-4" style={{backgroundColor:'#000', width:'125%', height:'35px', color:'#fff', fontWeight:'bold'}} >Clinical TB screening</div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Current cough *</Label>
+                                    <Label>Current cough </Label>
                                     <select
                                         className="form-control"
                                         name="currentCough"
@@ -545,7 +545,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Weight loss *</Label>
+                                    <Label>Weight loss </Label>
                                     <select
                                         className="form-control"
                                         name="weightLoss"
@@ -566,7 +566,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Lymphadenopathy (swelling of the lymph nodes) *</Label>
+                                    <Label>Lymphadenopathy (swelling of the lymph nodes) </Label>
                                     <select
                                         className="form-control"
                                         name="lymphadenopathy"
@@ -608,7 +608,7 @@ const BasicInfo = (props) => {
                             </div> 
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Night sweats*</Label>
+                                    <Label>Night sweats</Label>
                                     <select
                                         className="form-control"
                                         name="nightSweats"
@@ -658,7 +658,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Blood transfusion in last 3 months *</Label>
+                                    <Label>Blood transfusion in last 3 months </Label>
                                     <select
                                         className="form-control"
                                         name="bloodtransInlastThreeMonths"
@@ -679,7 +679,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Unprotected sex with casual partner in last 3 months *</Label>
+                                    <Label>Unprotected sex with casual partner in last 3 months </Label>
                                     <select
                                         className="form-control"
                                         name="uprotectedSexWithCasualLastThreeMonths"
@@ -763,7 +763,7 @@ const BasicInfo = (props) => {
                             </div>         
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>STI in last 3 months *</Label>
+                                    <Label>STI in last 3 months </Label>
                                     <select
                                         className="form-control"
                                         name="stiLastThreeMonths"
@@ -784,7 +784,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Sex under the influence of drugs or alcohol*</Label>
+                                    <Label>Sex under the influence of drugs or alcohol</Label>
                                     <select
                                         className="form-control"
                                         name="sexUnderInfluence"
@@ -805,7 +805,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>More than 1 sex partner during last 3 months*</Label>
+                                    <Label>More than 1 sex partner during last 3 months</Label>
                                     <select
                                         className="form-control"
                                         name="moreThanOneSexPartnerLastThreeMonths"
@@ -856,7 +856,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Have you/partner had sex without a condom with someone of unknown HIV status, or you/partner raped by person with unknown HIV status? *</Label>
+                                    <Label>Have you/partner had sex without a condom with someone of unknown HIV status, or you/partner raped by person with unknown HIV status? </Label>
                                     <select
                                         className="form-control"
                                         name="haveSexWithoutCondom"
@@ -877,7 +877,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Have you had a condom burst with your partner during sexual intercourse?  *</Label>
+                                    <Label>Have you had a condom burst with your partner during sexual intercourse?  </Label>
                                     <select
                                         className="form-control"
                                         name="haveCondomBurst"
@@ -961,7 +961,7 @@ const BasicInfo = (props) => {
                             </div>            
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Have you/partner paid or sold vaginal, anal or oral sex? *</Label>
+                                    <Label>Have you/partner paid or sold vaginal, anal or oral sex? </Label>
                                     <select
                                         className="form-control"
                                         name="soldPaidVaginalSex"
@@ -1012,7 +1012,7 @@ const BasicInfo = (props) => {
                             {riskAssessmentPartner.sexPartnerHivPositive==='true' && (<>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Is sex partner newly diagnosed with HIV and started treatment less than 3-6 months ago?*</Label>
+                                    <Label>Is sex partner newly diagnosed with HIV and started treatment less than 3-6 months ago?</Label>
                                     <select
                                         className="form-control"
                                         name="newDiagnosedHivlastThreeMonths"
@@ -1033,7 +1033,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Is sex partner pregnant and currently receiving ARV for PMTCT?*</Label>
+                                    <Label>Is sex partner pregnant and currently receiving ARV for PMTCT?</Label>
                                     <select
                                         className="form-control"
                                         name="currentlyArvForPmtct"

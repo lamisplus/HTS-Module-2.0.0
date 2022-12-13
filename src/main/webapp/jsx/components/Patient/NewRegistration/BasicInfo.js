@@ -193,7 +193,7 @@ const BasicInfo = (props) => {
             testingSetting:props.patientObj ? props.patientObj.testingSetting :"",
             typeCounseling: props.patientObj ? props.patientObj.typeCounseling :"",
             relationshipWithIndexClient:props.patientObj ? props.patientObj.relationshipWithIndexClient :"",
-            indexClientCode:props.patientObj ? props.patientObj.indexClientCode :"",
+            indexClientCode:"",
         }
     )
 
@@ -421,6 +421,7 @@ const BasicInfo = (props) => {
                 if(response.data!=='Record Not Found'){
                     setclientCodeetail2("")
                     setclientCodeetail(response.data)
+                    //setObjValues ({...objValues,  [e.target.name]: e.target.value});
                     
                 }else{
                     setclientCodeetail("")
@@ -608,6 +609,7 @@ const BasicInfo = (props) => {
             testingSetting: objValues.testingSetting,
             typeCounseling:objValues.typeCounseling,
             breastFeeding:objValues.breastFeeding,
+            indexClientCode:objValues.indexClientCode,
             pregnant:objValues.pregnant,
             relationshipWithIndexClient:objValues.relationshipWithIndexClient,
             riskStratificationCode:props.extra && props.extra.code!=='' ? props.extra.code : "",

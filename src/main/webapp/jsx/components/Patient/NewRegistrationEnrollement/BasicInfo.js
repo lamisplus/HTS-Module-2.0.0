@@ -313,6 +313,7 @@ const BasicInfo = (props) => {
             testingSetting: objValues.testingSetting,
             typeCounseling:objValues.typeCounseling,
             breastFeeding:objValues.breastFeeding,
+            indexClientCode:objValues.indexClientCode,
             pregnant:objValues.pregnant,
             relationshipWithIndexClient:objValues.relationshipWithIndexClient
             }

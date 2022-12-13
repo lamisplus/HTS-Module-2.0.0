@@ -136,7 +136,7 @@ const BasicInfo = (props) => {
             testingSetting:props.patientObj ? props.patientObj.testingSetting :"",
             typeCounseling: props.patientObj ? props.patientObj.typeCounseling :"",
             relationshipWithIndexClient:props.patientObj ? props.patientObj.relationshipWithIndexClient :"",
-            indexClientCode:props.patientObj ? props.patientObj.indexClientCode :"",
+            indexClientCode:"",
         }
     )    
     useEffect(() => { 
@@ -326,6 +326,7 @@ const BasicInfo = (props) => {
             typeCounseling:objValues.typeCounseling,
             breastFeeding:objValues.breastFeeding,
             pregnant:objValues.pregnant,
+            indexClientCode:objValues.indexClientCode,
             relationshipWithIndexClient:objValues.relationshipWithIndexClient,
             riskStratificationCode:props.extra && props.extra.code!=='' ? props.extra.code : "",
             }

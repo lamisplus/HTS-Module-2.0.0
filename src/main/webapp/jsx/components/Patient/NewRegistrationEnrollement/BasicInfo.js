@@ -495,7 +495,7 @@ const BasicInfo = (props) => {
                             </FormGroup>
                             </div>
                             )} */}
-                             {(objValues.age > 9 && objValues.sexId=='376') && (
+                             {(objValues.age > 9 && objValues.sex=='Male' && objValues.maritalStatusId!==5) && (
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Number of wives/co-wives</Label>

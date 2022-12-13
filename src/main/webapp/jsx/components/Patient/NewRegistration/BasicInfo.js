@@ -221,7 +221,6 @@ const BasicInfo = (props) => {
             getProvincesId(country.stateId)
         }
     }, [objValues.age, props.patientObj, props.extra.age]);
-
     //Get list of KP
     const KP =()=>{
         axios
@@ -261,7 +260,6 @@ const BasicInfo = (props) => {
         //console.log(error);
         });    
     }
-    
     //Get list of KP
     const CounselingType =()=>{
         axios
@@ -1059,7 +1057,7 @@ const BasicInfo = (props) => {
                                 </FormGroup>
                             </div>
                             )}
-                             {( objValues.age > 9 && objValues.sex=='Male') && (
+                             {( objValues.age > 9 && objValues.sex=='Male' && objValues.maritalStatusId!==5) && (
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Number of wives/co-wives</Label>

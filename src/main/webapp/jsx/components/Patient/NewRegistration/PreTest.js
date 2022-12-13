@@ -110,7 +110,18 @@ const BasicInfo = (props) => {
                 }
                 return age_now ;
     };
-    
+    const [knowledgeAssessment, setKnowledgeAssessment]= useState(
+        {
+            previousTestedHIVNegative:"",
+            timeLastHIVNegativeTestResult:"",
+            clientPregnant:"",
+            clientInformHivTransRoutes:"",
+            clientInformRiskkHivTrans:"",
+            clientInformPreventingsHivTrans:"", 
+            clientInformPossibleTestResult:"",
+            informConsentHivTest:"",
+        }
+    )
     useEffect(() => { 
         //console.log(props.patientObj)
         //console.log(props.extra.riskAssessment)
@@ -126,6 +137,7 @@ const BasicInfo = (props) => {
             }else{
                 setRiskAssessment(props.patientObj.riskAssessment  && props.patientObj.riskAssessment!==null ? props.patientObj.riskAssessment : {})
             }
+            knowledgeAssessment.clientPregnant=props.patientObj.pregnant===73 ? "true" :"" ;
         }
     }, [props.patientObj]);
 
@@ -147,18 +159,7 @@ const BasicInfo = (props) => {
                 sexPartnerRiskAssessment:{}
             }
     )
-    const [knowledgeAssessment, setKnowledgeAssessment]= useState(
-        {
-            previousTestedHIVNegative:"",
-            timeLastHIVNegativeTestResult:"",
-            clientPregnant:"",
-            clientInformHivTransRoutes:"",
-            clientInformRiskkHivTrans:"",
-            clientInformPreventingsHivTrans:"", 
-            clientInformPossibleTestResult:"",
-            informConsentHivTest:"",
-        }
-    )
+
     const handleInputChangeKnowledgeAssessment = e => { 
         //setErrors({...temp, [e.target.name]:""})
         

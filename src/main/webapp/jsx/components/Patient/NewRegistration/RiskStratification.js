@@ -339,6 +339,10 @@ const BasicInfo = (props) => {
         //HTS FORM VALIDATION
 
             temp.visitDate = objValues.visitDate ? "" : "This field is required."  
+            temp.entryPoint = objValues.entryPoint ? "" : "This field is required." 
+            temp.testingSetting = objValues.testingSetting ? "" : "This field is required."
+            temp.entryPoint = objValues.entryPoint ? "" : "This field is required." 
+            temp.modality = objValues.modality ? "" : "This field is required." 
             temp.dob = objValues.dob ? "" : "This field is required."
             temp.age = objValues.age ? "" : "This field is required." 
             objValues.age>15 && (temp.targetGroup = objValues.targetGroup ? "" : "This field is required." )             
@@ -680,13 +684,15 @@ const BasicInfo = (props) => {
                                         type="date"
                                         name="dob"
                                         id="dob"
-                                        min={objValues.dateVisit}
+                                        min="1983-12-31"
                                         max= {moment(new Date()).format("YYYY-MM-DD") }
                                         value={objValues.dob}
                                         onChange={handleDobChange}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     />
-                                    
+                                    {errors.dob !=="" ? (
+                                        <span className={classes.error}>{errors.dob}</span>
+                                    ) : "" }
                                 </FormGroup>
                             </div>
                             <div className="form-group mb-3 col-md-3">
@@ -702,6 +708,9 @@ const BasicInfo = (props) => {
                                         onChange={handleAgeChange}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     />
+                                    {errors.age !=="" ? (
+                                        <span className={classes.error}>{errors.age}</span>
+                                    ) : "" }
                                 </FormGroup>
                             </div>
 
@@ -902,7 +911,7 @@ const BasicInfo = (props) => {
                           
                             <br/>
                             </>)} */}
-                            {(objValues.targetGroup!=="" && objValues.targetGroup!==null)&& ( <>
+                            {/* {(objValues.targetGroup!=="" && objValues.targetGroup!==null)&& ( <> */}
                             <div className="form-group  col-md-12 text-center pt-2 mb-4" style={{backgroundColor:'#992E62', width:'125%', height:'35px', color:'#fff', fontWeight:'bold'}} >HIV Risk Assessment  (Last 3 months)</div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
@@ -1115,7 +1124,7 @@ const BasicInfo = (props) => {
                                 </FormGroup>
                             </div>
                             <br/>
-                            </>)}
+                            {/* </>)} */}
                             {/* {(objValues.targetGroup!=="TARGET_GROUP_GEN_POP" ) && ( <>
                             <div className="form-group  col-md-12 text-center pt-2 mb-4" style={{backgroundColor:'#992E62', width:'125%', height:'35px', color:'#fff', fontWeight:'bold'}} >HIV Risk Assessment  (Last 3 months)</div>
                             <div className="form-group  col-md-4">

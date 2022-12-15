@@ -603,7 +603,7 @@ const BasicInfo = (props) => {
                             </div>
                             </>
                             )}
-                            {objValues.sex==='377' && (
+                            {objValues.sex==='Female' && (
                             <>
                             <div className="form-group  col-md-4">
                                 <FormGroup>

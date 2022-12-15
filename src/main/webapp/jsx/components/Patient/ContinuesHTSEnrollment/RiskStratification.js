@@ -267,6 +267,7 @@ const RiskStratification = (props) => {
         //HTS FORM VALIDATION
             temp.dateVisit = objValues.visitDate ? "" : "This field is required."  
             temp.testingSetting = objValues.testingSetting ? "" : "This field is required."
+            temp.entryPoint = objValues.entryPoint ? "" : "This field is required." 
             temp.modality = objValues.modality ? "" : "This field is required."  
             props.patientAge>15 && (temp.targetGroup = objValues.targetGroup ? "" : "This field is required." )             
             //targetGroup            
@@ -755,7 +756,7 @@ const RiskStratification = (props) => {
                           
                             <br/>
                             </>)} */}
-                            {(objValues.targetGroup!=="" && objValues.targetGroup!==null ) && ( <>
+                            {/* {(objValues.targetGroup!=="" && objValues.targetGroup!==null ) && ( <> */}
                             <div className="form-group  col-md-12 text-center pt-2 mb-4" style={{backgroundColor:'#992E62', width:'125%', height:'35px', color:'#fff', fontWeight:'bold'}} >HIV Risk Assessment  (Last 3 months)</div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
@@ -1121,7 +1122,7 @@ const RiskStratification = (props) => {
                            
                             <br/>
                             </>)} */}
-                            </>)}
+                            {/* </>)} */}
                             <br/>
                             <Message warning>
                                 <h4>Personal HIV Risk assessment score </h4>

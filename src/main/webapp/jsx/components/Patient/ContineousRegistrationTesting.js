@@ -261,8 +261,7 @@ const UserRegistration = (props) => {
                     <h3>HIV COUNSELLING AND TESTING 
                     </h3>
                         <br/>
-                        <br/>
-                        
+                        <br/>                       
                         <div className="col-md-3 col-sm-3 col-lg-3">                       
                         <Menu  size='large'  vertical  style={{backgroundColor:"#014D88"}}>
                         <Menu.Item
@@ -375,7 +374,6 @@ const UserRegistration = (props) => {
                             )}
                         </Menu>
                         </div>
-                        
                         <div className="col-md-9 col-sm-9 col-lg-9 " style={{ backgroundColor:"#fff", margingLeft:"-50px", paddingLeft:"-20px"}}>
                             {activeItem==='risk' && (<RiskStratification handleItemClick={handleItemClick} setCompleted={setCompleted} completed={completed} setPatientObj={setPatientObj} patientObj={patientObj}  setHideOtherMenu={setHideOtherMenu} patientAge={props.patientAge} setExtra={setExtra} extra={extra} activePage={props.activePage} setActivePage={props.setActivePage}/>)}
                             {activeItem==='basic' && (<BasicInfo handleItemClick={handleItemClick} setCompleted={setCompleted} completed={completed} setPatientObj={setPatientObj} patientObj={patientObj} clientCode={props.clientCode} patientAge={props.patientAge} setExtra={setExtra} extra={extra}/>)}

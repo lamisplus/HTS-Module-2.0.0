@@ -95,10 +95,6 @@ const useStyles = makeStyles(theme => ({
 
 
 const PatientnHistory = (props) => {
-    const [patientList, setPatientList] = useState([])
-    //const [patientObj, setpatientObj] = useState([])
-    const patientId = props.patientObj && props.patientObj.id ? props.patientObj.id: null
-    
     useEffect(() => {
         //patients()
       }, [props.patientObj]);
@@ -112,7 +108,7 @@ const PatientnHistory = (props) => {
     <div> 
             <MaterialTable
             icons={tableIcons}
-              title="HTS History "
+              title="HTS HISTORY "
               columns={[
               { title: "Date", field: "date" },
               {title: "Pre Test Counseling",field: "pre",},

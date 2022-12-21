@@ -23,10 +23,10 @@ const Elicitation = (props) => {
             props.setCompleted([...props.completed, completedMenu])
         }
     }
-    const handleDone=()=>{
-      props.setActivePage({...props.activePage, activePage:"home",})
+    const handleDone=(row, actionType)=>{
+      props.setActivePage({...props.activePage, activePage:"home", activeObject:row, actionType:actionType})
     }
-
+    
 
   return (
     <Fragment>  

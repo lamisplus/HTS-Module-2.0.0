@@ -1103,7 +1103,7 @@ const HivTestResult = (props) => {
                             {saving ? <Spinner /> : ""}
                             <br />
                             <div className="row">
-                            <div className="form-group mb-3 col-md-6">
+                            <div className="form-group mb-3 col-md-12">
                             {patientAge<=15 ? 
                             (<>
                                 <Button content='Back' icon='left arrow' labelPosition='left' style={{backgroundColor:"#992E62", color:'#fff'}} onClick={()=>handleItemClick('basic', 'basic')}/>

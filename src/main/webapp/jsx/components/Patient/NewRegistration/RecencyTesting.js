@@ -202,20 +202,19 @@ const Recency = (props) => {
     /*****  Validation  */
     const validate = () => {
         //HTS FORM VALIDATION
-            {recency.sampleCollectedDate!=='' && (temp.sampleReferanceNumber = recency.sampleReferanceNumber ? "" : "This field is required.")}
-            {  recency.sampleCollectedDate!=='' && (temp.dateSampleSentToPCRLab = recency.dateSampleSentToPCRLab ? "" : "This field is required.")}
-            { recency.sampleCollectedDate!=='' && (temp.sampleType = recency.sampleType ? "" : "This field is required.")}
+            {recency.hasViralLoad=='true' && (temp.sampleReferanceNumber = recency.sampleReferanceNumber ? "" : "This field is required.")}
+            //{  recency.sampleCollectedDate!=='' && (temp.dateSampleSentToPCRLab = recency.dateSampleSentToPCRLab ? "" : "This field is required.")}
+            {recency.hasViralLoad=='true' && (temp.sampleType = recency.sampleType ? "" : "This field is required.")}
             setErrors({ ...temp })
         return Object.values(temp).every(x => x == "")
     }
     const handleSubmit =(e)=>{
         e.preventDefault();
-       
-
             objValues.htsClientId= clientId
             objValues.recency= recency
             objValues.personId= patientID
-            console.log(recency)
+            //console.log(recency)
+            if(validate()){
             axios.put(`${baseUrl}hts/${clientId}/recency`,objValues,
             { headers: {"Authorization" : `Bearer ${token}`}},
             
@@ -237,7 +236,7 @@ const Recency = (props) => {
                     toast.error("Something went wrong. Please try again...");
                 }
             });
-        
+            }
             
     }
 

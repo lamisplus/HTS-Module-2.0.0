@@ -708,7 +708,7 @@ const BasicInfo = (props) => {
                             
                             <br />
                             <div className="row">
-                            <div className="form-group mb-3 col-md-6">
+                            <div className="form-group mb-3 col-md-12">
                             {props.activePage.actionType==='update' && (
                                 <Button content='Update & Continue' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
                             )}

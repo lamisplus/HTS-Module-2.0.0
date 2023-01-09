@@ -78,7 +78,7 @@ public class HtsClientService {
         List<HtsClient> htsClients = new ArrayList<>();
         HtsClient htsClient = this.getById(id);
         htsClients.add(htsClient);
-        return htsClientToHtsClientDtos(null, htsClients);
+        return htsClientToHtsClientDtos(htsClient.getPerson(), htsClients);
     }
 
     public HtsClientDtos getHtsClientByPersonId(Long personId){
@@ -295,11 +295,11 @@ public class HtsClientService {
         htsClientDtos.setHtsCount(htsClientDtoList.size());
         htsClientDtos.setHtsClientDtoList(htsClientDtoList);
         htsClientDtos.setPersonId(pId[0]);
-        if(moduleService.exist("HIVModule") && personUuid[0] != null){
+        /*if(moduleService.exist("HIVModule") && personUuid[0] != null){
             if(htsClientRepository.findInHivEnrollmentByUuid(personUuid[0]).isPresent()){
                 isPositive = true;
             }
-        }
+        }*/
         htsClientDtos.setClientCode(clientCode[0]);
         htsClientDtos.setPersonResponseDto(personResponseDto[0]);
         htsClientDtos.setHivPositive(isPositive);

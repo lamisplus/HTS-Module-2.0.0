@@ -4,11 +4,11 @@ import axios from "axios";
 import {FormGroup, Label , CardBody, Spinner,Input,Form} from "reactstrap";
 import * as moment from 'moment';
 import {makeStyles} from "@material-ui/core/styles";
-import {Card, CardContent} from "@material-ui/core";
+import {Card,} from "@material-ui/core";
 import SaveIcon from "@material-ui/icons/Save";
 // import AddIcon from "@material-ui/icons/Add";
 // import CancelIcon from "@material-ui/icons/Cancel";
-import {ToastContainer, toast} from "react-toastify";
+import {toast} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
 import { useHistory, } from "react-router-dom";
@@ -18,7 +18,7 @@ import 'react-phone-input-2/lib/style.css'
 import 'semantic-ui-css/semantic.min.css';
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
-import PhoneInput from 'react-phone-input-2'
+//import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
 import { Button} from 'semantic-ui-react'
 import {  Modal } from "react-bootstrap";
@@ -122,7 +122,7 @@ const BasicInfo = (props) => {
             targetGroup:"",
             testingSetting:"",//
             modality  :"", //
-            code:"",
+            careProvider:"",
             personId:"",
             riskAssessment: {},
             entryPoint:""
@@ -524,7 +524,7 @@ const BasicInfo = (props) => {
                             <div className="row">
                             <div className="form-group  col-md-6">
                                 <FormGroup>
-                                    <Label>Entry Point</Label>
+                                    <Label>Entry Point *</Label>
                                     <select
                                         className="form-control"
                                         name="entryPoint"
@@ -544,7 +544,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group mb-3 col-md-6">
                                 <FormGroup>
-                                <Label for="">Visit Date  </Label>
+                                <Label for="">Visit Date * </Label>
                                 <Input
                                     type="date"
                                     name="visitDate"
@@ -563,7 +563,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-6">
                                 <FormGroup>
-                                    <Label>Setting</Label>
+                                    <Label>Setting *</Label>
                                     <select
                                         className="form-control"
                                         name="testingSetting"
@@ -597,7 +597,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-6">
                                 <FormGroup>
-                                    <Label>Modality</Label>
+                                    <Label>Modality *</Label>
                                     <select
                                         className="form-control"
                                         name="modality"
@@ -648,7 +648,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group mb-2 col-md-2">
                                 <FormGroup>
-                                    <Label>Date Of Birth</Label>
+                                    <Label>Date Of Birth *</Label>
                                     <div className="radio">
                                         <label>
                                             <input
@@ -678,7 +678,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group mb-3 col-md-3">
                                 <FormGroup>
-                                    <Label>Date</Label>
+                                    <Label>Date *</Label>
                                     <input
                                         className="form-control"
                                         type="date"
@@ -697,7 +697,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group mb-3 col-md-3">
                                 <FormGroup>
-                                    <Label>Age</Label>
+                                    <Label>Age *</Label>
                                     <input
                                         className="form-control"
                                         type="number"
@@ -713,10 +713,29 @@ const BasicInfo = (props) => {
                                     ) : "" }
                                 </FormGroup>
                             </div>
-
+                            <div className="form-group  col-md-6">
+                                <FormGroup>
+                                    <Label>Is this HIV test based on a Clinician/Doctor/Health Care Provider's  request ? *</Label>
+                                    <select
+                                        className="form-control"
+                                        name="careProvider"
+                                        id="careProvider"
+                                        value={objValues.careProvider}
+                                        onChange={handleInputChange}
+                                        style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                    >
+                                        <option value={""}>Select</option>                                      
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
+                                    </select>
+                                    {errors.careProvider !=="" ? (
+                                    <span className={classes.error}>{errors.careProvider}</span>
+                                    ) : "" }
+                                </FormGroup>
+                            </div>
                             <br />
                              
-                            {objValues.age>15 && ( <>
+                            {objValues.age>15 && objValues.careProvider==='false' && ( <>
                             {/* {(objValues.targetGroup==="TARGET_GROUP_GEN_POP" )&& ( <>
                             <div className="form-group  col-md-12 text-center pt-2 mb-4" style={{backgroundColor:'#992E62', width:'125%', height:'35px', color:'#fff', fontWeight:'bold'}} >HIV Risk Assessment  (Last 3 months)</div>
                             <div className="form-group  col-md-4">
@@ -937,19 +956,18 @@ const BasicInfo = (props) => {
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>When was your last HIV test done?  </Label>
-                                    <select
+                                    <input
                                         className="form-control"
                                         name="lastHivTestDone"
+                                        type="date"
                                         id="lastHivTestDone"
                                         value={riskAssessment.lastHivTestDone}
                                         onChange={handleInputChangeRiskAssessment}
+                                        max= {moment(new Date()).format("YYYY-MM-DD") }
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
-                                        <option value={""}></option>
-                                        <option value="true">Yes</option>
-                                        <option value="false">No</option>
-                                        
-                                    </select>
+                                       
+                                    </input>
                                     {errors.lastHivTestDone !=="" ? (
                                     <span className={classes.error}>{errors.lastHivTestDone}</span>
                                     ) : "" }
@@ -967,8 +985,8 @@ const BasicInfo = (props) => {
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>
-                                        <option value="true">Yes</option>
-                                        <option value="false">No</option>
+                                        <option value="Positive">Positive</option>
+                                        <option value="Negative">Negative</option>
                                         
                                     </select>
                                     {errors.whatWasTheResult !=="" ? (

@@ -1,9 +1,9 @@
-import React, {useCallback, useEffect, useState} from "react";
+import React, { useEffect, useState} from "react";
 import axios from "axios";
 import {FormGroup, Label , CardBody, Spinner,Input,Form} from "reactstrap";
 import * as moment from 'moment';
 import {makeStyles} from "@material-ui/core/styles";
-import {Card, CardContent} from "@material-ui/core";
+import {Card,} from "@material-ui/core";
 import { toast} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
@@ -165,7 +165,7 @@ const Recency = (props) => {
             setRecency ({...recency,  ['rencencyInterpretation']: ''});
         }
     },[recency.longTermLine,recency.verififcationLine, recency.controlLine, props.patientObj]);
-    console.log(props.patientObj)
+    //console.log(props.patientObj)
     const handleInputChangeRecency = e => { 
         setErrors({...temp, [e.target.name]:""})        
         if(e.target.name ==='viralLoadResultClassification'){
@@ -199,8 +199,10 @@ const Recency = (props) => {
         const acceptedNumber= e.slice(0, limit)
         return  acceptedNumber   
     }
+    
     /*****  Validation  */
     const validate = () => {
+        
         //HTS FORM VALIDATION
             {recency.hasViralLoad=='true' && (temp.sampleReferanceNumber = recency.sampleReferanceNumber ? "" : "This field is required.")}
            // {  recency.sampleCollectedDate!=='' && (temp.dateSampleSentToPCRLab = recency.dateSampleSentToPCRLab ? "" : "This field is required.")}
@@ -446,7 +448,7 @@ const Recency = (props) => {
                                 </div>
                                 <div className="form-group  col-md-4">
                                     <FormGroup>
-                                        <Label>Sample Refernce Number</Label>
+                                        <Label>Sample Refernce Number *</Label>
                                         <Input
                                             className="form-control"
                                             name="sampleReferanceNumber"
@@ -463,7 +465,7 @@ const Recency = (props) => {
                                 </div>
                                 <div className="form-group  col-md-4">
                                     <FormGroup>
-                                        <Label>Sample Type</Label>
+                                        <Label>Sample Type *</Label>
                                         <select
                                             className="form-control"
                                             name="sampleType"

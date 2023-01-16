@@ -204,13 +204,13 @@ const BasicInfo = (props) => {
         
 
     }, [ props.patientObj]);
-   //console.log(props.patientObj)
+     //console.log(recency.hasViralLoad)
      /*****  Validation  */
      const validate = () => {
         //HTS FORM VALIDATION
-            {recency.hasViralLoad=='true' && (temp.sampleReferanceNumber = objValues.sampleReferanceNumber ? "" : "This field is required.")}
+            {recency.hasViralLoad=='true' && (temp.sampleReferanceNumber = recency.sampleReferanceNumber ? "" : "This field is required.")}
             //{objValues.sampleCollectedDate!=='' && (temp.dateSampleSentToPCRLab = objValues.dateSampleSentToPCRLab ? "" : "This field is required.")}
-            {recency.hasViralLoad=='true' && (temp.sampleType = objValues.sampleType ? "" : "This field is required.")}
+            {recency.hasViralLoad=='true' && (temp.sampleType = recency.sampleType ? "" : "This field is required.")}
             setErrors({ ...temp })
         return Object.values(temp).every(x => x == "")
     }
@@ -454,7 +454,7 @@ const BasicInfo = (props) => {
                                 </div>
                                 <div className="form-group  col-md-4">
                                     <FormGroup>
-                                        <Label>Sample Refernce Number</Label>
+                                        <Label>Sample Refernce Number *</Label>
                                         <Input
                                             className="form-control"
                                             name="sampleReferanceNumber"
@@ -471,7 +471,7 @@ const BasicInfo = (props) => {
                                 </div>
                                 <div className="form-group  col-md-4">
                                     <FormGroup>
-                                        <Label>Sample Type</Label>
+                                        <Label>Sample Type *</Label>
                                         <select
                                             className="form-control"
                                             name="sampleType"

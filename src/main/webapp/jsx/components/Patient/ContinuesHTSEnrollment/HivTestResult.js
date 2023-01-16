@@ -424,7 +424,7 @@ const HivTestResult = (props) => {
                         </LabelRibbon>
                            <br/>
                            <div className="form-group  col-md-2"></div>
-                            <h4>Initial HIV Test 1:</h4>
+                            <h4>Initial Test:</h4>
                             <div className="form-group mb-3 col-md-5">
                                 <FormGroup>
                                 <Label for=""> Date  </Label>
@@ -582,7 +582,7 @@ const HivTestResult = (props) => {
                                     <br/>
                                     <hr/>
                                     <div className="row">
-                                        <h4>Initial HIV Test 2:</h4>
+                                        <h4>Retesting:</h4>
                                         <div className="form-group mb-3 col-md-5">
                                             <FormGroup>
                                             <Label for=""> Date </Label>
@@ -730,7 +730,7 @@ const HivTestResult = (props) => {
                                     <hr/>
                                    
                                     <div className="row">
-                                        <h4>Initial HIV Test 2:</h4>
+                                        <h4>Retesting:</h4>
                                         <div className="form-group mb-3 col-md-5">
                                             <FormGroup>
                                             <Label for=""> Date  </Label>

@@ -456,7 +456,7 @@ console.log(showCD4Count)
                         </LabelRibbon>
                            <br/>
                            <div className="form-group  col-md-2"></div>
-                            <h4>Initial HIV Test 1:</h4>
+                            <h4>Initial Test :</h4>
                             <div className="form-group mb-3 col-md-5">
                                 <FormGroup>
                                 <Label for=""> Date  </Label>
@@ -614,7 +614,7 @@ console.log(showCD4Count)
                                     <br/>
                                     <hr/>
                                     <div className="row">
-                                        <h4>Initial HIV Test 2:</h4>
+                                        <h4>Retesting :</h4>
                                         <div className="form-group mb-3 col-md-5">
                                             <FormGroup>
                                             <Label for=""> Date </Label>
@@ -762,7 +762,7 @@ console.log(showCD4Count)
                                     <hr/>
                                    
                                     <div className="row">
-                                        <h4>Initial HIV Test 2:</h4>
+                                        <h4>Retesting:</h4>
                                         <div className="form-group mb-3 col-md-5">
                                             <FormGroup>
                                             <Label for=""> Date  </Label>
@@ -976,8 +976,8 @@ console.log(showCD4Count)
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>
-                                        <option value="Semi-Quantitative">{"<200"}</option>
-                                        <option value="Flow Cyteometry">{">=200"}</option>
+                                        <option value="<200">{"<200"}</option>
+                                        <option value=">=200">{">=200"}</option>
                                         
                                     </select>
                                     
@@ -1010,7 +1010,7 @@ console.log(showCD4Count)
                         <br/> <br/>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Syphilis test result *</Label>
+                                    <Label>Syphilis test result </Label>
                                     <select
                                         className="form-control"
                                         name="syphilisTestResult"
@@ -1034,7 +1034,7 @@ console.log(showCD4Count)
                             <br/> <br/>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Hepatitis B virus test result *</Label>
+                                    <Label>Hepatitis B virus test result </Label>
                                     <select
                                         className="form-control"
                                         name="hepatitisBTestResult"
@@ -1053,7 +1053,7 @@ console.log(showCD4Count)
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Hepatitis C virus test result *</Label>
+                                    <Label>Hepatitis C virus test result </Label>
                                     <select
                                         className="form-control"
                                         name="hepatitisCTestResult"

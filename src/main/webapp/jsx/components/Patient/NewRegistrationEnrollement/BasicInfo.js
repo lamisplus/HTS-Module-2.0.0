@@ -313,6 +313,7 @@ const BasicInfo = (props) => {
             testingSetting: objValues.testingSetting,
             typeCounseling:objValues.typeCounseling,
             breastFeeding:objValues.breastFeeding,
+            indexClientCode:objValues.indexClientCode,
             pregnant:objValues.pregnant,
             relationshipWithIndexClient:objValues.relationshipWithIndexClient
             }
@@ -495,7 +496,7 @@ const BasicInfo = (props) => {
                             </FormGroup>
                             </div>
                             )} */}
-                             {(objValues.age > 9 && objValues.sexId=='376') && (
+                             {(objValues.age > 9 && objValues.sex==='Male' && objValues.maritalStatusId!==5) && (
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Number of wives/co-wives</Label>
@@ -593,7 +594,7 @@ const BasicInfo = (props) => {
                             </div>
                             </>
                             )}
-                            {objValues.sex==='377' && (
+                            {objValues.sex==='Female' && (
                             <>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
@@ -707,7 +708,7 @@ const BasicInfo = (props) => {
                             
                             <br />
                             <div className="row">
-                            <div className="form-group mb-3 col-md-6">
+                            <div className="form-group mb-3 col-md-12">
                             {props.activePage.actionType==='update' && (
                                 <Button content='Update & Continue' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
                             )}

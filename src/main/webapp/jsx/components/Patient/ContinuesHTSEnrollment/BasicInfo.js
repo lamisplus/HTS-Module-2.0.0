@@ -136,7 +136,7 @@ const BasicInfo = (props) => {
             testingSetting:props.patientObj ? props.patientObj.testingSetting :"",
             typeCounseling: props.patientObj ? props.patientObj.typeCounseling :"",
             relationshipWithIndexClient:props.patientObj ? props.patientObj.relationshipWithIndexClient :"",
-            indexClientCode:props.patientObj ? props.patientObj.indexClientCode :"",
+            indexClientCode:"",
         }
     )    
     useEffect(() => { 
@@ -306,7 +306,7 @@ const BasicInfo = (props) => {
         }
         getIndexClientCode();
                           
-}
+    }
     const handleSubmit =(e)=>{
         e.preventDefault();
         const patientForm ={
@@ -326,6 +326,7 @@ const BasicInfo = (props) => {
             typeCounseling:objValues.typeCounseling,
             breastFeeding:objValues.breastFeeding,
             pregnant:objValues.pregnant,
+            indexClientCode:objValues.indexClientCode,
             relationshipWithIndexClient:objValues.relationshipWithIndexClient,
             riskStratificationCode:props.extra && props.extra.code!=='' ? props.extra.code : "",
             }
@@ -342,7 +343,7 @@ const BasicInfo = (props) => {
                 if(props.patientAge>15){
                     handleItemClick('pre-test-counsel', 'basic' )
                 }else{
-                    handleItemClick('hiv-test', 'baisc')
+                    handleItemClick('hiv-test', 'basic')
                 }
 
             })
@@ -520,7 +521,7 @@ const BasicInfo = (props) => {
                                 </FormGroup>
                             </div>
                             )}
-                            {(objValues.age > 9 && objValues.sexId=='376') && (
+                            {(objValues.age > 9 && objValues.sex==='Male' && objValues.maritalStatusId!==5) && (
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Number of wives/co-wives</Label>
@@ -602,7 +603,7 @@ const BasicInfo = (props) => {
                             </div>
                             </>
                             )}
-                            {objValues.sex==='377' && (
+                            {objValues.sex==='Female' && (
                             <>
                             <div className="form-group  col-md-4">
                                 <FormGroup>

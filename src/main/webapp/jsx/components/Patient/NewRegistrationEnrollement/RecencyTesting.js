@@ -204,13 +204,13 @@ const BasicInfo = (props) => {
         
 
     }, [ props.patientObj]);
-   //console.log(props.patientObj)
+     //console.log(recency.hasViralLoad)
      /*****  Validation  */
      const validate = () => {
         //HTS FORM VALIDATION
-            {objValues.sampleCollectedDate!=='' && (temp.sampleReferanceNumber = objValues.sampleReferanceNumber ? "" : "This field is required.")}
-            {objValues.sampleCollectedDate!=='' && (temp.dateSampleSentToPCRLab = objValues.dateSampleSentToPCRLab ? "" : "This field is required.")}
-            {objValues.sampleCollectedDate!=='' && (temp.sampleType = objValues.sampleType ? "" : "This field is required.")}
+            {recency.hasViralLoad=='true' && (temp.sampleReferanceNumber = recency.sampleReferanceNumber ? "" : "This field is required.")}
+            //{objValues.sampleCollectedDate!=='' && (temp.dateSampleSentToPCRLab = objValues.dateSampleSentToPCRLab ? "" : "This field is required.")}
+            {recency.hasViralLoad=='true' && (temp.sampleType = recency.sampleType ? "" : "This field is required.")}
             setErrors({ ...temp })
         return Object.values(temp).every(x => x == "")
     }
@@ -233,7 +233,7 @@ const BasicInfo = (props) => {
             .then(response => {
                 setSaving(false);
                 props.setPatientObj(props && props.patientObj ? props.patientObj : "")
-                toast.success("Risk Assesment successful");
+                //toast.success("Risk Assesment successful");
                 handleItemClick('indexing', 'recency-testing' )
 
             })
@@ -454,7 +454,7 @@ const BasicInfo = (props) => {
                                 </div>
                                 <div className="form-group  col-md-4">
                                     <FormGroup>
-                                        <Label>Sample Refernce Number</Label>
+                                        <Label>Sample Refernce Number *</Label>
                                         <Input
                                             className="form-control"
                                             name="sampleReferanceNumber"
@@ -471,7 +471,7 @@ const BasicInfo = (props) => {
                                 </div>
                                 <div className="form-group  col-md-4">
                                     <FormGroup>
-                                        <Label>Sample Type</Label>
+                                        <Label>Sample Type *</Label>
                                         <select
                                             className="form-control"
                                             name="sampleType"
@@ -599,8 +599,9 @@ const BasicInfo = (props) => {
                             {saving ? <Spinner /> : ""}
                             <br />
                             <div className="row">
-                            <div className="form-group mb-3 col-md-6">
+                            <div className="form-group mb-3 col-md-12">
                             <Button content='Back' icon='left arrow' labelPosition='left' style={{backgroundColor:"#992E62", color:'#fff'}} onClick={()=>handleItemClick('post-test','post-test')}/>
+                            
                             {props.activePage.actionType==='update' && (
                             <Button content='Update & Continue' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
                             )}

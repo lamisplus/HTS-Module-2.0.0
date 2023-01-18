@@ -2,7 +2,7 @@ import React, {useState, Fragment, useEffect } from "react";
 import axios from "axios";
 import { url as baseUrl } from "./../../../api";
 import { token as token } from "./../../../api";
-import { makeStyles } from "@material-ui/core/styles";
+//import { makeStyles } from "@material-ui/core/styles";
 import { Row, Col, Card,  Tab, Tabs, } from "react-bootstrap";
 import History from './History';
 import ContineousRegistrationTesting from './../Patient/ContineousRegistrationTesting'
@@ -19,13 +19,13 @@ const Home = (props) => {
     const [loading, setLoading] = useState(true)
     const patientId = props.patientObj && props.patientObj.id ? props.patientObj.id: null
     const [key, setKey] = useState('home');
- 
+    console.log(props.patientObject)
     useEffect(() => {
         patients()
         if(props.activePage.activePage==='home'){
           setKey('home')
         }
-      }, [props.patientObj, props.activePage]);
+      }, [props.patientObj,props.activePage]);
     ///GET LIST OF Patients
     async function patients() {
       setLoading(true)

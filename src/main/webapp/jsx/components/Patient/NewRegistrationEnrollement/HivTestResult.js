@@ -437,7 +437,7 @@ const HivTestResult = (props) => {
                         </LabelRibbon>
                            <br/>
                            <div className="form-group  col-md-2"></div>
-                            <h4>Initial HIV Test 1:</h4>
+                            <h4>Initial Test :</h4>
                             <div className="form-group mb-3 col-md-5">
                                 <FormGroup>
                                 <Label for=""> Date  </Label>
@@ -594,7 +594,7 @@ const HivTestResult = (props) => {
                                     <br/>
                                     <hr/>
                                     <div className="row">
-                                        <h4>Initial HIV Test 2:</h4>
+                                        <h4>Retesting:</h4>
                                         <div className="form-group mb-3 col-md-5">
                                             <FormGroup>
                                             <Label for=""> Date </Label>
@@ -742,7 +742,7 @@ const HivTestResult = (props) => {
                                     <hr/>
                                    
                                     <div className="row">
-                                        <h4>Initial HIV Test 2:</h4>
+                                        <h4>Retesting:</h4>
                                         <div className="form-group mb-3 col-md-5">
                                             <FormGroup>
                                             <Label for=""> Date  </Label>
@@ -919,7 +919,7 @@ const HivTestResult = (props) => {
                                  {/* END of  result for Test 2*/}
                             </div>
                             </div>
-                            {cd4Count.cd4Count ==='Semi-Quantitative' && (<>
+                            {showCD4Count && (<>
                             <LabelRibbon as='a' color='blue' style={{width:'106%', height:'35px'}} ribbon>
                                 <h5 style={{color:'#fff'}}>CD4 Count</h5>
                             </LabelRibbon>
@@ -956,8 +956,8 @@ const HivTestResult = (props) => {
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>
-                                        <option value="Semi-Quantitative">{"<200"}</option>
-                                        <option value="Flow Cyteometry">{">=200"}</option>
+                                        <option value="<200">{"<200"}</option>
+                                        <option value=">=200">{">=200"}</option>
                                         
                                     </select>
                                     
@@ -990,7 +990,7 @@ const HivTestResult = (props) => {
                         <br/> <br/>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Syphilis test result *</Label>
+                                    <Label>Syphilis test result </Label>
                                     <select
                                         className="form-control"
                                         name="syphilisTestResult"
@@ -1014,7 +1014,7 @@ const HivTestResult = (props) => {
                             <br/> <br/>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Hepatitis B virus test result *</Label>
+                                    <Label>Hepatitis B virus test result </Label>
                                     <select
                                         className="form-control"
                                         name="hepatitisBTestResult"
@@ -1033,7 +1033,7 @@ const HivTestResult = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Hepatitis C virus test result *</Label>
+                                    <Label>Hepatitis C virus test result </Label>
                                     <select
                                         className="form-control"
                                         name="hepatitisCTestResult"
@@ -1103,7 +1103,7 @@ const HivTestResult = (props) => {
                             {saving ? <Spinner /> : ""}
                             <br />
                             <div className="row">
-                            <div className="form-group mb-3 col-md-6">
+                            <div className="form-group mb-3 col-md-12">
                             {patientAge<=15 ? 
                             (<>
                                 <Button content='Back' icon='left arrow' labelPosition='left' style={{backgroundColor:"#992E62", color:'#fff'}} onClick={()=>handleItemClick('basic', 'basic')}/>

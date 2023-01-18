@@ -193,7 +193,7 @@ const BasicInfo = (props) => {
             testingSetting:props.patientObj ? props.patientObj.testingSetting :"",
             typeCounseling: props.patientObj ? props.patientObj.typeCounseling :"",
             relationshipWithIndexClient:props.patientObj ? props.patientObj.relationshipWithIndexClient :"",
-            indexClientCode:props.patientObj ? props.patientObj.indexClientCode :"",
+            indexClientCode:"",
         }
     )
 
@@ -221,7 +221,6 @@ const BasicInfo = (props) => {
             getProvincesId(country.stateId)
         }
     }, [objValues.age, props.patientObj, props.extra.age]);
-
     //Get list of KP
     const KP =()=>{
         axios
@@ -261,7 +260,6 @@ const BasicInfo = (props) => {
         //console.log(error);
         });    
     }
-    
     //Get list of KP
     const CounselingType =()=>{
         axios
@@ -423,6 +421,7 @@ const BasicInfo = (props) => {
                 if(response.data!=='Record Not Found'){
                     setclientCodeetail2("")
                     setclientCodeetail(response.data)
+                    //setObjValues ({...objValues,  [e.target.name]: e.target.value});
                     
                 }else{
                     setclientCodeetail("")
@@ -545,6 +544,7 @@ const BasicInfo = (props) => {
 
     const handleSubmit =(e)=>{
         e.preventDefault();
+        if(validate()){
         const getSexId=  sexs.find((x)=> x.display===objValues.sex)//get patient sex ID by filtering the request
         //basicInfo.sexId=getSexId.id
         const patientForm ={
@@ -609,12 +609,13 @@ const BasicInfo = (props) => {
             testingSetting: objValues.testingSetting,
             typeCounseling:objValues.typeCounseling,
             breastFeeding:objValues.breastFeeding,
+            indexClientCode:objValues.indexClientCode,
             pregnant:objValues.pregnant,
             relationshipWithIndexClient:objValues.relationshipWithIndexClient,
             riskStratificationCode:props.extra && props.extra.code!=='' ? props.extra.code : "",
             }
             props.setPatientObj({...props.patientObj, ...objValues})
-            if(validate()){
+            
             //console.log(patientForm)
             axios.post(`${baseUrl}hts`,patientForm,
             { headers: {"Authorization" : `Bearer ${token}`}},
@@ -1058,7 +1059,7 @@ const BasicInfo = (props) => {
                                 </FormGroup>
                             </div>
                             )}
-                             {( objValues.age > 9 && objValues.sex=='Male') && (
+                             {( objValues.age > 9 && objValues.sex==='Male' && objValues.maritalStatusId!==5) && (
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Number of wives/co-wives</Label>

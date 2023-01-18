@@ -14,6 +14,8 @@ import java.time.LocalDate;
 public class RiskStratificationDto {
     @NotNull(message = "age is mandatory")
     private Integer age;
+    @NotBlank(message = "entryPoint is mandatory")
+    private String entryPoint;
     @NotBlank(message = "testingSetting is mandatory")
     private String testingSetting;
     @NotBlank(message = "modality is mandatory")

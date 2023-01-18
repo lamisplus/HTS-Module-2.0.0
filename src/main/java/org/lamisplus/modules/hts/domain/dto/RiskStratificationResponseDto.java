@@ -15,6 +15,7 @@ import java.time.LocalDate;
 public class RiskStratificationResponseDto {
     private long id;
     private int age;
+    private String entryPoint;
     private String testingSetting;
     private String modality;
     private String targetGroup;

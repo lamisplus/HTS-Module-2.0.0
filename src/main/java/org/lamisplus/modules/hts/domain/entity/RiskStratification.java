@@ -44,6 +44,11 @@ public class RiskStratification extends Audit implements Serializable {
     private int age;
 
     @Basic
+    @Column(name = "entry_point")
+    private String entryPoint;
+
+
+    @Basic
     @Column(name = "dob")
     private LocalDate dob;
 

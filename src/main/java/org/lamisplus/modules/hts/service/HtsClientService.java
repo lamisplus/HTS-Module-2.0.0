@@ -10,8 +10,8 @@ import org.lamisplus.modules.base.module.ModuleService;
 import org.lamisplus.modules.base.util.PaginationUtil;
 import org.lamisplus.modules.hts.domain.dto.*;
 import org.lamisplus.modules.hts.domain.entity.HtsClient;
+import org.lamisplus.modules.hts.domain.entity.HtsPerson;
 import org.lamisplus.modules.hts.domain.entity.IndexElicitation;
-import org.lamisplus.modules.hts.domain.entity.RiskStratification;
 import org.lamisplus.modules.hts.repository.HtsClientRepository;
 import org.lamisplus.modules.hts.repository.IndexElicitationRepository;
 import org.lamisplus.modules.hts.util.RandomCodeGenerator;
@@ -85,6 +85,16 @@ public class HtsClientService {
         Person person = personRepository.findById(personId).orElse(new Person());
 
         return this.htsClientToHtsClientDtos(person, htsClientRepository.findAllByPerson(person));
+    }
+
+    public HtsClientDto getLatestHtsByPersonId(Long personId){
+        Person person = getPerson(personId);
+        HtsClient htsClient = htsClientRepository
+                .findTopByPersonUuidAndArchivedAndFacilityId(person.getUuid(),
+                        UN_ARCHIVED, currentUserOrganizationService.getCurrentUserOrganization())
+                .orElse(new HtsClient());
+
+        return this.htsClientToHtsClientDto(htsClient);
     }
 
     public HtsClientDtos getHtsClientByPersonId(Person person){
@@ -310,6 +320,9 @@ public class HtsClientService {
         if ( htsClient == null ) {
             return null;
         }
+        if(htsClient.getId() == null){
+            return new HtsClientDto();
+        }
 
         HtsClientDto htsClientDto = new HtsClientDto();
 
@@ -372,17 +385,31 @@ public class HtsClientService {
         return htsClientRepository.findAll(pageable);
     }
 
-    public Page<Person> findHtsClientPersonPage(String searchValue, int pageNo, int pageSize) {
+    public Page<Person> findHtsClientPersonPage(String search, int pageNo, int pageSize) {
         Long facilityId = currentUserOrganizationService.getCurrentUserOrganization();
         Pageable pageable = PageRequest.of(pageNo, pageSize);
-        if(!String.valueOf(searchValue).equals("null") && !searchValue.equals("*")){
-            searchValue = searchValue.replaceAll("\\s", "");
-            String queryParam = "%"+searchValue+"%";
+        if(!String.valueOf(search).equals("null") && !search.equals("*")){
+            search = search.replaceAll("\\s", "");
+            String queryParam = "%"+search+"%";
             return personRepository
                     .findAllPersonBySearchParameters(queryParam, UN_ARCHIVED, facilityId,  pageable);
         }
         return personRepository
                 .getAllByArchivedAndFacilityIdOrderByIdDesc(UN_ARCHIVED, currentUserOrganizationService.getCurrentUserOrganization(),pageable);
+    }
+
+    public Page<HtsPerson> getAllPersonHts(String search, int pageNo, int pageSize) {
+        Long facilityId = currentUserOrganizationService.getCurrentUserOrganization();
+        //List<HtsPerson> htsPeople = new ArrayList<>();
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        if(!String.valueOf(search).equals("null") && !search.equals("*")){
+            search = search.replaceAll("\\s", "");
+            String queryParam = "%"+search+"%";
+            return htsClientRepository
+                    .findAllPersonHtsBySearchParam(UN_ARCHIVED, facilityId, queryParam, pageable);
+        }
+        return htsClientRepository
+                .findAllPersonHts(UN_ARCHIVED, facilityId, pageable);
     }
 
     public HtsClientDtos getAllHtsClientDtos(Page<HtsClient> page) {

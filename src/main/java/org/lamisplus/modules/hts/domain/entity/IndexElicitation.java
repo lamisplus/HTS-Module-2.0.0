@@ -125,6 +125,9 @@ public class IndexElicitation extends Audit implements Serializable {
     @Column(name = "facility_id", updatable = false)
     private Long facilityId;
 
+    /*Add offeredIns:"",
+    acceptedIns:"" to Index Elicitation DTO*/
+
     @Type(type = "jsonb")
     @Basic(fetch = FetchType.LAZY)
     @Column(name = "extra", columnDefinition = "jsonb")
@@ -140,4 +143,13 @@ public class IndexElicitation extends Audit implements Serializable {
             uuid = UUID.randomUUID().toString();
         }
     }
+
+    @Basic
+    @Column(name = "offered_ins")
+    private String offered_ins;
+
+    @Basic
+    @Column(name = "accepted_ins")
+    private String acceptedIns;
+
 }

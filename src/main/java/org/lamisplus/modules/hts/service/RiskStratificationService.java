@@ -56,6 +56,9 @@ public class RiskStratificationService {
         RiskStratificationDto riskStratificationDto = new RiskStratificationDto();
 
         riskStratificationDto.setAge( riskStratification.getAge() );
+
+        riskStratificationDto.setEntryPoint( riskStratification.getEntryPoint() );
+
         riskStratificationDto.setTestingSetting( riskStratification.getTestingSetting() );
         riskStratificationDto.setModality( riskStratification.getModality() );
         riskStratificationDto.setTargetGroup( riskStratification.getTargetGroup() );
@@ -73,6 +76,7 @@ public class RiskStratificationService {
 
         RiskStratificationResponseDto responseDto = new RiskStratificationResponseDto();
         responseDto.setId(riskStratification.getId());
+        responseDto.setEntryPoint( riskStratification.getEntryPoint());
         responseDto.setAge( riskStratification.getAge() );
         responseDto.setTestingSetting( riskStratification.getTestingSetting() );
         responseDto.setModality( riskStratification.getModality() );
@@ -101,6 +105,9 @@ public class RiskStratificationService {
         riskStratification.setVisitDate( riskStratificationDTO.getVisitDate() );
         riskStratification.setDob(riskStratificationDTO.getDob());
         riskStratification.setRiskAssessment( riskStratificationDTO.getRiskAssessment() );
+
+        riskStratification.setEntryPoint( riskStratificationDTO.getEntryPoint());
+
 
         return riskStratification;
     }

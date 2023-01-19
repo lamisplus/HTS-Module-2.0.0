@@ -1188,7 +1188,7 @@ const BasicInfo = (props) => {
                                     
                                 </FormGroup>
                             </div>
-
+                            {objValues.pregnant!== 73 && (
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Breast Feeding</Label>
@@ -1207,6 +1207,7 @@ const BasicInfo = (props) => {
                                     
                                 </FormGroup>
                             </div>
+                            )}
                             </>
                             )}
                             

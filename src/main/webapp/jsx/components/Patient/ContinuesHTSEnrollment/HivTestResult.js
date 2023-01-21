@@ -336,7 +336,10 @@ const HivTestResult = (props) => {
         //HTS FORM VALIDATION
         initialTest1.date!=="" &&  (temp.date = initialTest1.result ? "" : "This field is required.")
         // initialTest1.result!==""  && (temp.date = confirmatoryTest.date ? "" : "This field is required.")
-        // initialTest1.result!==""  && (temp.date = tieBreakerTest.date ? "" : "This field is required.")    
+        // initialTest1.result!==""  && (temp.date = tieBreakerTest.date ? "" : "This field is required.")  
+        temp.syphilisTestResult = syphills.syphilisTestResult ? "" : "This field is required."
+        temp.hepatitisBTestResult = hepatitis.hepatitisBTestResult ? "" : "This field is required."
+        temp.hepatitisCTestResult = hepatitis.hepatitisBTestResult ? "" : "This field is required."  
         setErrors({ ...temp })
         return Object.values(temp).every(x => x == "")
     }
@@ -992,7 +995,9 @@ const HivTestResult = (props) => {
                                         <option value="No">Non-Reactive</option>
                                         
                                     </select>
-                                    
+                                    {errors.syphilisTestResult !=="" ? (
+                                    <span className={classes.error}>{errors.syphilisTestResult}</span>
+                                    ) : "" }
                                 </FormGroup>
                             </div>
  
@@ -1016,7 +1021,9 @@ const HivTestResult = (props) => {
                                         <option value="No">Negative</option>
                                         
                                     </select>
-                                    
+                                    {errors.hepatitisBTestResult !=="" ? (
+                                    <span className={classes.error}>{errors.hepatitisBTestResult}</span>
+                                    ) : "" }
                                 </FormGroup>
                             </div>
                             <div className="form-group  col-md-4">
@@ -1035,7 +1042,9 @@ const HivTestResult = (props) => {
                                         <option value="No">Negative</option>
                                         
                                     </select>
-                                    
+                                    {errors.hepatitisCTestResult !=="" ? (
+                                    <span className={classes.error}>{errors.hepatitisCTestResult}</span>
+                                    ) : "" }
                                 </FormGroup>
                             </div>
                             <LabelRibbon as='a' color='blue' style={{width:'106%', height:'35px'}} ribbon>

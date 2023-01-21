@@ -16,7 +16,7 @@ import {Label as LabelRibbon, Button, Message} from 'semantic-ui-react'
 // import 'semantic-ui-css/semantic.min.css';
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
-import * as moment from 'moment';
+//import * as moment from 'moment';
 
 
 
@@ -124,7 +124,7 @@ const BasicInfo = (props) => {
     )
     useEffect(() => { 
         //console.log(props.patientObj)
-        //console.log(props.extra.riskAssessment)
+        console.log(props.extra.riskAssessment)
         if(props.patientObj){
             setKnowledgeAssessment(props.patientObj.knowledgeAssessment  && props.patientObj.knowledgeAssessment!==null ? props.patientObj.knowledgeAssessment : {})
             
@@ -134,10 +134,13 @@ const BasicInfo = (props) => {
             //patientAge=calculate_age(moment(props.patientObj.personResponseDto.dateOfBirth).format("DD-MM-YYYY"))
             if(props.extra.riskAssessment){
                 setRiskAssessment(props.extra.riskAssessment  && props.extra.riskAssessment!==null ? props.extra.riskAssessment : {})
+                props.extra.riskAssessment.whatWasTheResult!=="" && props.extra.riskAssessment.whatWasTheResult==='Positive' ? knowledgeAssessment.previousTestedHIVNegative='false' :
+                knowledgeAssessment.previousTestedHIVNegative='true'
             }else{
                 setRiskAssessment(props.patientObj.riskAssessment  && props.patientObj.riskAssessment!==null ? props.patientObj.riskAssessment : {})
             }
             knowledgeAssessment.clientPregnant=props.patientObj.pregnant===73 ? "true" :"" ;
+            
         }
     }, [props.patientObj]);
 
@@ -390,7 +393,7 @@ const BasicInfo = (props) => {
                                         <option value="1-3 Months">1-3 Months</option>
                                         <option value="4-6 Months">4-6 Months</option>
                                         <option value=">6 Months"> {">6"} Months</option>
-                                        
+                                        <option value="Never"> Never</option> 
                                     </select>
                                     {errors.timeLastHIVNegativeTestResult !=="" ? (
                                     <span className={classes.error}>{errors.timeLastHIVNegativeTestResult}</span>

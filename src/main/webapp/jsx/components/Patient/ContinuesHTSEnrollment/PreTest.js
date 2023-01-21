@@ -177,6 +177,8 @@ const BasicInfo = (props) => {
             //console.log(props.patientObj.riskStratificationResponseDto.riskAssessment)
             if(props.patientObj.riskStratificationResponseDto && Object.keys(props.patientObj.riskStratificationResponseDto.riskAssessment).length !== 0 && props.patientObj.riskAssessment===null){
                 setRiskAssessment({...riskAssessment, ...props.patientObj.riskStratificationResponseDto.riskAssessment})
+                props.extra.riskAssessment.whatWasTheResult!=="" && props.extra.riskAssessment.whatWasTheResult==='Positive' ? knowledgeAssessment.previousTestedHIVNegative='false' :
+                knowledgeAssessment.previousTestedHIVNegative='true'
             }else{
                 setRiskAssessment({...riskAssessment, ...props.patientObj.riskAssessment})   
             } 
@@ -383,6 +385,7 @@ const BasicInfo = (props) => {
                                         <option value="1-3 Months">1-3 Months</option>
                                         <option value="4-6 Months">4-6 Months</option>
                                         <option value=">6 Months"> {">6"} Months</option>
+                                        <option value="Never">Never</option> 
                                         
                                     </select>
                                     {errors.timeLastHIVNegativeTestResult !=="" ? (

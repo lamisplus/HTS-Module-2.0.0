@@ -345,6 +345,8 @@ const BasicInfo = (props) => {
             temp.modality = objValues.modality ? "" : "This field is required." 
             temp.dob = objValues.dob ? "" : "This field is required."
             temp.age = objValues.age ? "" : "This field is required." 
+            temp.lastHivTestBasedOnRequest = riskAssessment.lastHivTestBasedOnRequest ? "" : "This field is required." 
+                       
             objValues.age>15 && (temp.targetGroup = objValues.targetGroup ? "" : "This field is required." )             
                 setErrors({ ...temp })
         return Object.values(temp).every(x => x == "")
@@ -360,20 +362,19 @@ const BasicInfo = (props) => {
          // Getting the number count of riskAssessment True
     const actualRiskCountTrue=Object.values(riskAssessment)
      riskCountQuestion=actualRiskCountTrue.filter((x)=> x==='true')
-    const [riskAssessmentPartner, setRiskAssessmentPartner]= useState(
-        {
-            sexPartnerHivPositive:"",
-            newDiagnosedHivlastThreeMonths:"",
-            currentlyArvForPmtct :"",
-            knowHivPositiveOnArv :"",
-            knowHivPositiveAfterLostToFollowUp:"", 
-            uprotectedAnalSex  :"",
-        }
-    )
+    // const [riskAssessmentPartner, setRiskAssessmentPartner]= useState(
+    //     {
+    //         sexPartnerHivPositive:"",
+    //         newDiagnosedHivlastThreeMonths:"",
+    //         currentlyArvForPmtct :"",
+    //         knowHivPositiveOnArv :"",
+    //         knowHivPositiveAfterLostToFollowUp:"", 
+    //         uprotectedAnalSex  :"",
+    //     }
+    // )
     const handleInputChangeRiskAssessment = e => { 
         //setErrors({...temp, [e.target.name]:""}) 
-        setRiskAssessment ({...riskAssessment,  [e.target.name]: e.target.value}); 
-                            
+        setRiskAssessment ({...riskAssessment,  [e.target.name]: e.target.value});                         
     }
     const handleSubmit =(e)=>{
         e.preventDefault();
@@ -718,24 +719,24 @@ const BasicInfo = (props) => {
                                     <Label>Is this HIV test based on a Clinician/Doctor/Health Care Provider's  request ? *</Label>
                                     <select
                                         className="form-control"
-                                        name="careProvider"
-                                        id="careProvider"
-                                        value={objValues.careProvider}
-                                        onChange={handleInputChange}
+                                        name="lastHivTestBasedOnRequest"
+                                        id="lastHivTestBasedOnRequest"
+                                        value={riskAssessment.lastHivTestBasedOnRequest}
+                                        onChange={handleInputChangeRiskAssessment}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}>Select</option>                                      
                                         <option value="true">Yes</option>
                                         <option value="false">No</option>
                                     </select>
-                                    {errors.careProvider !=="" ? (
-                                    <span className={classes.error}>{errors.careProvider}</span>
+                                    {errors.lastHivTestBasedOnRequest !=="" ? (
+                                    <span className={classes.error}>{errors.lastHivTestBasedOnRequest}</span>
                                     ) : "" }
                                 </FormGroup>
                             </div>
                             <br />
                              
-                            {objValues.age>15 && objValues.careProvider==='false' && ( <>
+                            {objValues.age>15 && riskAssessment.lastHivTestBasedOnRequest==='false' && ( <>
                             {/* {(objValues.targetGroup==="TARGET_GROUP_GEN_POP" )&& ( <>
                             <div className="form-group  col-md-12 text-center pt-2 mb-4" style={{backgroundColor:'#992E62', width:'125%', height:'35px', color:'#fff', fontWeight:'bold'}} >HIV Risk Assessment  (Last 3 months)</div>
                             <div className="form-group  col-md-4">
@@ -932,47 +933,32 @@ const BasicInfo = (props) => {
                             </>)} */}
                             {/* {(objValues.targetGroup!=="" && objValues.targetGroup!==null)&& ( <> */}
                             <div className="form-group  col-md-12 text-center pt-2 mb-4" style={{backgroundColor:'#992E62', width:'125%', height:'35px', color:'#fff', fontWeight:'bold'}} >HIV Risk Assessment  (Last 3 months)</div>
-                            <div className="form-group  col-md-4">
-                                <FormGroup>
-                                    <Label>Is this HIV test based on a Clinician/Doctor/Health Care Provider’s  request? </Label>
-                                    <select
-                                        className="form-control"
-                                        name="lastHivTestBasedOnRequest"
-                                        id="lastHivTestBasedOnRequest"
-                                        value={riskAssessment.lastHivTestBasedOnRequest}
-                                        onChange={handleInputChangeRiskAssessment}
-                                        style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
-                                    >
-                                        <option value={""}></option>
-                                        <option value="true">Yes</option>
-                                        <option value="false">No</option>
-                                        
-                                    </select>
-                                    {errors.lastHivTestBasedOnRequest !=="" ? (
-                                    <span className={classes.error}>{errors.lastHivTestBasedOnRequest}</span>
-                                    ) : "" }
-                                </FormGroup>
-                            </div>
+                           
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>When was your last HIV test done?  </Label>
-                                    <input
+                                    <select
                                         className="form-control"
                                         name="lastHivTestDone"
-                                        type="date"
                                         id="lastHivTestDone"
                                         value={riskAssessment.lastHivTestDone}
                                         onChange={handleInputChangeRiskAssessment}
-                                        max= {moment(new Date()).format("YYYY-MM-DD") }
+                                        
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
-                                       
-                                    </input>
+                                       <option value={""}></option>
+                                        <option value="<1"> {"< 1"} month</option>
+                                        <option value="1-3 Months">1-3 Months</option>
+                                        <option value="4-6 Months">4-6 Months</option>
+                                        <option value=">6 Months"> {">6"} Months</option>  
+                                        <option value="Never">Never</option> 
+                                    </select>
                                     {errors.lastHivTestDone !=="" ? (
                                     <span className={classes.error}>{errors.lastHivTestDone}</span>
                                     ) : "" }
                                 </FormGroup>
                             </div>
+                            {riskAssessment.lastHivTestDone!=="" && riskAssessment.lastHivTestDone!=='Never' && (
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>What was the result? </Label>
@@ -994,6 +980,7 @@ const BasicInfo = (props) => {
                                     ) : "" }
                                 </FormGroup>
                             </div>
+                            )}
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Since your last HIV test, have you had anal or vaginal or oral sex without a condom with someone who was HIV positive or unaware of their HIV status? </Label>

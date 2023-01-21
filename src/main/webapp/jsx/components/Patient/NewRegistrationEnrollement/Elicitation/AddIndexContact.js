@@ -317,6 +317,50 @@ const AddIndexContact = (props) => {
                 </h2>
                 <br/><br/>    
                     <form >
+                    <div className="row">
+                    <div className="form-group  col-md-4">
+                        <FormGroup>
+                            <Label>Offered INS ? *</Label>
+                            <select
+                                className="form-control"
+                                name="offeredIns"
+                                id="offeredIns"
+                                value={objValues.offeredIns}
+                                onChange={handleInputChange}
+                                style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                            >
+                                <option value={""}></option>
+                                {consent.map((value) => (
+                                    <option key={value.id} value={value.id}>
+                                        {value.display}
+                                    </option>
+                                ))}
+                            </select>
+                            
+                        </FormGroup>
+                    </div>
+                    <div className="form-group  col-md-4">
+                        <FormGroup>
+                            <Label>Accepted INS ? *</Label>
+                            <select
+                                className="form-control"
+                                name="acceptedIns"
+                                id="acceptedIns"
+                                value={objValues.acceptedIns}
+                                onChange={handleInputChange}
+                                style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                            >
+                                <option value={""}></option>
+                                {consent.map((value) => (
+                                    <option key={value.id} value={value.id}>
+                                        {value.display}
+                                    </option>
+                                ))}
+                            </select>
+                            
+                        </FormGroup>
+                    </div>
+                    </div>
                         <div className="row">
                             <div className="form-group mb-3 col-md-4">
                                 <FormGroup>
@@ -679,48 +723,7 @@ const AddIndexContact = (props) => {
                                 ) : "" }
                                 </FormGroup>
                             </div>
-                            <div className="form-group  col-md-4">
-                                <FormGroup>
-                                    <Label>Offered INS ? *</Label>
-                                    <select
-                                        className="form-control"
-                                        name="offeredIns"
-                                        id="offeredIns"
-                                        value={objValues.offeredIns}
-                                        onChange={handleInputChange}
-                                        style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
-                                    >
-                                        <option value={""}></option>
-                                        {consent.map((value) => (
-                                            <option key={value.id} value={value.id}>
-                                                {value.display}
-                                            </option>
-                                        ))}
-                                    </select>
-                                    
-                                </FormGroup>
-                            </div>
-                            <div className="form-group  col-md-4">
-                                <FormGroup>
-                                    <Label>Accepted INS ? *</Label>
-                                    <select
-                                        className="form-control"
-                                        name="acceptedIns"
-                                        id="acceptedIns"
-                                        value={objValues.acceptedIns}
-                                        onChange={handleInputChange}
-                                        style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
-                                    >
-                                        <option value={""}></option>
-                                        {consent.map((value) => (
-                                            <option key={value.id} value={value.id}>
-                                                {value.display}
-                                            </option>
-                                        ))}
-                                    </select>
-                                    
-                                </FormGroup>
-                            </div>
+                           
                             {saving ? <Spinner /> : ""}
                             <br />
                             <div className="row">

@@ -146,7 +146,7 @@ public class IndexElicitation extends Audit implements Serializable {
 
     @Basic
     @Column(name = "offered_ins")
-    private String offered_ins;
+    private String offeredIns;
 
     @Basic
     @Column(name = "accepted_ins")

@@ -2,6 +2,8 @@ package org.lamisplus.modules.hts.domain.dto;
 
 import lombok.*;
 
+import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
@@ -31,4 +33,6 @@ public class IndexElicitationDto {
     private Long sexuallyUncomfortable;
     private Boolean currentlyLiveWithPartner;
     private LocalDate datePartnerCameForTesting;
+    private String offeredIns;
+    private String acceptedIns;
 }

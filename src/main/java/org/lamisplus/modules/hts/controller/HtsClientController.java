@@ -88,7 +88,7 @@ public class HtsClientController {
         //HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return new ResponseEntity<>(this.htsClientService.getAllHtsClientDTOSByPerson(page), HttpStatus.OK);
     }
-    @GetMapping(HTS_URL_VERSION_TWO + "/persons")
+    @GetMapping(HTS_URL_VERSION_ONE + "/persons")
     public ResponseEntity<PageDTO> getHtsPerson(@RequestParam (required = false, defaultValue = "*")  String searchValue,
                                                  @RequestParam (required = false, defaultValue = "20")int pageSize,
                                                  @RequestParam (required = false, defaultValue = "0") int pageNo) {
@@ -99,14 +99,14 @@ public class HtsClientController {
     public ResponseEntity<HtsClientDtos> getRiskStratificationHtsClients(@PathVariable Long personId) {
         return ResponseEntity.ok(htsClientService.getRiskStratificationHtsClients(personId));
     }
-    @GetMapping(HTS_URL_VERSION_ONE + "/persons")
+    /*@GetMapping(HTS_URL_VERSION_ONE + "/persons")
     public ResponseEntity<PageDTO> getAllPerson(@RequestParam (required = false, defaultValue = "*")  String searchValue,
                                                 @RequestParam (required = false, defaultValue = "20")int pageSize,
                                                 @RequestParam (required = false, defaultValue = "0") int pageNo) {
         return new ResponseEntity<>(this.htsClientService
                 .getAllHtsClientDTOSByPerson(htsClientService
                         .findHtsClientPersonPage(searchValue, pageNo, pageSize)), HttpStatus.OK);
-    }
+    }*/
     @DeleteMapping(HTS_URL_VERSION_ONE + "/{id}")
     public void delete(@PathVariable Long id) {
         this.htsClientService.delete(id);

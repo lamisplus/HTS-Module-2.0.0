@@ -29,7 +29,7 @@ public interface HtsClientRepository extends JpaRepository<HtsClient, Long> {
 
     Optional<HtsClient> findTopByPersonUuidAndArchivedAndFacilityId(String personUuid, Integer archived, Long facilityId);
 
-    @Query(value = "SELECT p.id, p.first_name as firstName, p.surname as surname, p.other_name as otherName, " +
+    @Query(value = "SELECT p.id as personId, p.first_name as firstName, p.surname as surname, p.other_name as otherName, " +
             "p.hospital_number as hospitalNumber, CAST (EXTRACT(YEAR from AGE(NOW(),  date_of_birth)) AS INTEGER) as age, " +
             "INITCAP(p.sex) as gender, p.date_of_birth as dateOfBirth, CAST (COUNT(hc.person_uuid) AS INTEGER) as htsCount " +
             "FROM patient_person p " +
@@ -41,7 +41,7 @@ public interface HtsClientRepository extends JpaRepository<HtsClient, Long> {
     Page<HtsPerson> findAllPersonHtsBySearchParam(Integer archived, Long facilityId, String search, Pageable pageable);
 
 
-    @Query(value = "SELECT p.id, p.first_name as firstName, p.surname as surname, p.other_name as otherName, " +
+    @Query(value = "SELECT p.id as personId, p.first_name as firstName, p.surname as surname, p.other_name as otherName, " +
             "p.hospital_number as hospitalNumber, CAST (EXTRACT(YEAR from AGE(NOW(),  date_of_birth)) AS INTEGER) as age, " +
             "INITCAP(p.sex) as gender, p.date_of_birth as dateOfBirth, CAST (COUNT(hc.person_uuid) AS INTEGER) as htsCount " +
             "FROM patient_person p " +
@@ -53,7 +53,7 @@ public interface HtsClientRepository extends JpaRepository<HtsClient, Long> {
     List<HtsPerson> findAllPersonHtsBySearchParam(Integer archived, Long facilityId, String search);
 
 
-    @Query(value = "SELECT p.id as id, p.first_name as firstName, p.surname as surname, p.other_name as otherName, " +
+    @Query(value = "SELECT p.id as personId, p.first_name as firstName, p.surname as surname, p.other_name as otherName, " +
             "p.hospital_number as hospitalNumber, CAST (EXTRACT(YEAR from AGE(NOW(),  date_of_birth)) AS INTEGER) as age, " +
             "INITCAP(p.sex) as gender, p.date_of_birth as dateOfBirth, CAST (COUNT(hc.person_uuid) AS INTEGER) as htsCount FROM patient_person p " +
             "LEFT JOIN hts_client hc ON hc.person_uuid = p.uuid AND hc.archived = ?1 " +
@@ -62,7 +62,7 @@ public interface HtsClientRepository extends JpaRepository<HtsClient, Long> {
     Page<HtsPerson> findAllPersonHts(Integer archived, Long facilityId, Pageable pageable);
 
 
-    @Query(value = "SELECT p.id as id, p.first_name as firstName, p.surname as surname, p.other_name as otherName, " +
+    @Query(value = "SELECT p.id as personId, p.first_name as firstName, p.surname as surname, p.other_name as otherName, " +
             "p.hospital_number as hospitalNumber, CAST (EXTRACT(YEAR from AGE(NOW(),  date_of_birth)) AS INTEGER) as age, " +
             "INITCAP(p.sex) as gender, p.date_of_birth as dateOfBirth, CAST (COUNT(hc.person_uuid) AS INTEGER) as htsCount FROM patient_person p " +
             "LEFT JOIN hts_client hc ON hc.person_uuid = p.uuid AND hc.archived = ?1 " +

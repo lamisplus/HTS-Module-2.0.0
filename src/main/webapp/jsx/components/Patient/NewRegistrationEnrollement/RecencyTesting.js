@@ -412,7 +412,7 @@ const BasicInfo = (props) => {
                             {recency.rencencyInterpretation==='Recent' && (
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Has viral load request been made? *</Label>
+                                    <Label>Has viral load request been made? </Label>
                                     <select
                                         className="form-control"
                                         name="hasViralLoad"

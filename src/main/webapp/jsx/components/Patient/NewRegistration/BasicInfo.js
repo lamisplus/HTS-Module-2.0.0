@@ -99,7 +99,7 @@ const useStyles = makeStyles((theme) => ({
 
 const BasicInfo = (props) => {
     const classes = useStyles();
-    console.log(props)
+    //console.log(props)
     const history = useHistory();
     const [errors, setErrors] = useState({});
     const [saving, setSaving] = useState(false);

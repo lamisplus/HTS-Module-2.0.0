@@ -7,7 +7,7 @@ import { Row, Col, Card,  Tab, Tabs, } from "react-bootstrap";
 import History from './History';
 import ContineousRegistrationTesting from './../Patient/ContineousRegistrationTesting'
 //import CheckedInPatients from './Patient/CheckedInPatients'
-
+import * as moment from 'moment';
 
 const divStyle = {
   borderRadius: "2px",
@@ -19,9 +19,16 @@ const Home = (props) => {
     const [loading, setLoading] = useState(true)
     const patientId = props.patientObj && props.patientObj.id ? props.patientObj.id: null
     const [key, setKey] = useState('home');
-    console.log(props.patientObject)
+    const [lastVisitCount, setLastVisitCount] = useState(null);
+    //Calculate last date of visit 
+    const calculateLastVisitDate = visitDate => {
+      const monthDifference =  moment(new Date(moment(new Date()).format("YYYY-MM-DD"))).diff(new Date(visitDate), 'months', true);
+      //console.log(monthDifference)
+      return  monthDifference
+    }
     useEffect(() => {
-        patients()
+        patients();
+        patientsCurrentHts();
         if(props.activePage.activePage==='home'){
           setKey('home')
         }
@@ -42,7 +49,21 @@ const Home = (props) => {
               setLoading(false)  
             });        
     }
-
+    async function patientsCurrentHts() {
+      setLoading(true)
+        axios
+            .get(`${baseUrl}hts/persons/${patientId}/current-hts`,
+            { headers: {"Authorization" : `Bearer ${token}`} }
+            )
+            .then((response) => {
+              //set the last date of visit after the response
+                setLastVisitCount(Math.round(calculateLastVisitDate(response.data.dateVisit)))
+            })
+            .catch((error) => {  
+              //setLoading(false)  
+            });        
+    }
+    
   return (
     <Fragment>  
     <br/>
@@ -61,7 +82,7 @@ const Home = (props) => {
                 <Tab eventKey="home" title="HTS HISTORY">                   
                     <History patientObj={props.patientObj} activePage={props.activePage} setActivePage={props.setActivePage} clientCode={props.clientCode} patientAge={props.patientAge} patients={patients} patientList={patientList} loading={loading}/>
                 </Tab>
-                {props.patientObject && props.patientObject.hivPositive!==true  && (
+                {lastVisitCount!==null && lastVisitCount >=3  && ( //check if the last test is more than 3months 
                   <Tab eventKey="new" title="NEW HTS">                   
                       <ContineousRegistrationTesting patientObj={props.patientObj} activePage={props.activePage} setActivePage={props.setActivePage} clientCode={props.clientCode} patientAge={props.patientAge} patients={patients}/>
                   </Tab>

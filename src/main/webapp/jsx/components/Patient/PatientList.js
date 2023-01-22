@@ -32,9 +32,6 @@ import { Label, Icon } from 'semantic-ui-react'
 import Moment from "moment";
 import momentLocalizer from "react-widgets-moment";
 import moment from "moment";
-import { FaUserPlus } from "react-icons/fa";
-import {TiArrowForward} from 'react-icons/ti'
-
 
 
 //Dtate Picker package
@@ -109,6 +106,7 @@ const Patients = (props) => {
     //const [patientList, setPatientList] = useState([])
     const [loading, setLoading] = useState(false)
     const [showPPI, setShowPPI] = useState(true)
+    const baseUrl2 = "http://localhost:8282/api/v2/"
     useEffect(() => {
         //patients()
       }, []);
@@ -167,22 +165,18 @@ const Patients = (props) => {
             
             data={query =>
                 new Promise((resolve, reject) =>
-                    axios.get(`${baseUrl}hts/persons?pageSize=${query.pageSize}&pageNo=${query.page}&searchValue=${query.search}`, { headers: {"Authorization" : `Bearer ${token}`} })
+                    axios.get(`${baseUrl2}hts/persons?pageSize=${query.pageSize}&pageNo=${query.page}&searchValue=${query.search}`, { headers: {"Authorization" : `Bearer ${token}`} })
                         .then(response => response)
                         .then(result => {
                             setLoading(false)
                             resolve({
                                 data: result.data.records.map((row) => ({
-                                    name:   row.hivPositive && row.hivPositive===true ? ( <><sup><b style={{color:"red"}}><Icon name='circle' size="small"/></b></sup> { " " + row.personResponseDto.firstName + " " + row.personResponseDto.surname} </>) :row.personResponseDto.firstName + " " + row.personResponseDto.surname,
-                                    hospital_number: getHospitalNumber(row.personResponseDto.identifier),
+                                    //name:   row.hivPositive && row.hivPositive===true ? ( <><sup><b style={{color:"red"}}><Icon name='circle' size="small"/></b></sup> { " " + row.personResponseDto.firstName + " " + row.personResponseDto.surname} </>) :row.personResponseDto.firstName + " " + row.personResponseDto.surname,
+                                    name: row.firstName + " " + row.surname,
+                                    hospital_number: row.hospitalNumber,
                                     clientCode: row.clientCode,
-                                    gender: row && row.personResponseDto.sex ? row.personResponseDto.sex : "",
-                                    age: (row.personResponseDto.dateOfBirth === 0 ||
-                                            row.personResponseDto.dateOfBirth === undefined ||
-                                            row.personResponseDto.dateOfBirth === null ||
-                                            row.personResponseDto.dateOfBirth === "" )
-                                                ? 0
-                                                : calculate_age(moment(row.personResponseDto.dateOfBirth).format("DD-MM-YYYY")),
+                                    gender: row.gender,
+                                    age: row.age,
                                     count: (<Label color="blue" size="mini">{row.htsCount}</Label>),
                                     actions:
                                             <div>
@@ -191,7 +185,7 @@ const Patients = (props) => {
                                                     <Link
                                                         to={{
                                                             pathname: "/patient-history",
-                                                            state: {patientObject: row, patientObj: row.personResponseDto, clientCode:row.clientCode}
+                                                            state: {patientObject: row, patientObj: row, clientCode:row.clientCode}
                                                         }}
                                                         
                                                     >

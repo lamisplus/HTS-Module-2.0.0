@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 //import classNames from 'classnames';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+//import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import ExpansionPanelActions from '@material-ui/core/ExpansionPanelActions';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+// import ExpansionPanelActions from '@material-ui/core/ExpansionPanelActions';
+// import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 //import Chip from '@material-ui/core/Chip';
-import Divider from '@material-ui/core/Divider';
+//import Divider from '@material-ui/core/Divider';
 import { Link } from 'react-router-dom'
 import ButtonMui from "@material-ui/core/Button";
 import 'semantic-ui-css/semantic.min.css';
@@ -65,21 +65,19 @@ function PatientCard(props) {
   //const patientCurrentStatus=props.patientObj && props.patientObj.currentStatus==="Died (Confirmed)" ? true : false ;
   const patientObjs = props.patientObj ? props.patientObj : {}
   const permissions= props.permissions ? props.permissions : [];
-  const [patientObj, setpatientObj] = useState(patientObjs)
+  const [patientObj, setPatientObj] = useState(null)
   useEffect(() => {
-    PatientCurrentStatus();
+    PatientCurrentObject();
   }, [props.patientObj]);
-
-
     ///GET LIST OF Patients
-    async function PatientCurrentStatus() {
+    async function PatientCurrentObject() {
         axios
-            .get(`${baseUrl}hiv/status/patient-current/${patientObj.id}`,
+            .get(`${baseUrl}hts/persons/${patientObjs.id}`,
             { headers: {"Authorization" : `Bearer ${token}`} }
             )
             .then((response) => {
 
-              //setHivStatus(response.data);
+              setPatientObj(response.data);
             })
             .catch((error) => {    
             });        
@@ -129,9 +127,11 @@ function PatientCard(props) {
                     <Col md={12}>
                       
                     <Row className={"mt-1"}>
+                    {patientObj && patientObj!==null ? (
+                    <>
                     <Col md={12} className={classes.root2}>
                     <b style={{fontSize: "25px", color:'rgb(153, 46, 98)'}}>
-                        {patientObj.firstName + " " + patientObj.surname }
+                        {patientObj.personResponseDto.firstName + " " + patientObj.personResponseDto.surname }
                         </b>
                         <Link to={"/"}  >
                         <ButtonMui
@@ -148,58 +148,65 @@ function PatientCard(props) {
                     <Col md={4} className={classes.root2}>
                     <span>
                         {" "}
-                        Patient ID :<b style={{color:'#0B72AA'}}>{getHospitalNumber(patientObj.identifier) }</b>
+                        Patient ID :<b style={{color:'#0B72AA'}}>{getHospitalNumber(patientObj.personResponseDto.identifier) }</b>
                     </span>
                     </Col>
 
                     <Col md={4} className={classes.root2}>
                     <span>
-                        Date Of Birth : <b style={{color:'#0B72AA'}}>{patientObj.dateOfBirth }</b>
+                        Date Of Birth : <b style={{color:'#0B72AA'}}>{patientObj.personResponseDto.dateOfBirth }</b>
                     </span>
                     </Col>
                     <Col md={4} className={classes.root2}>
                     <span>
                         {" "}
-                        Age : <b style={{color:'#0B72AA'}}>{calculate_age(moment(patientObj.dateOfBirth).format("DD-MM-YYYY"))}</b>
+                        Age : <b style={{color:'#0B72AA'}}>{calculate_age(moment(patientObj.personResponseDto.dateOfBirth).format("DD-MM-YYYY"))}</b>
                     </span>
                     </Col>
                     <Col md={4}>
                     <span>
                         {" "}
                         Gender :{" "}
-                        <b style={{color:'#0B72AA'}}>{patientObj.sex && patientObj.sex!==null ?  patientObj.sex : '' }</b>
+                        <b style={{color:'#0B72AA'}}>{patientObj.personResponseDto && patientObj.personResponseDto.sex!==null ?  patientObj.personResponseDto.sex : '' }</b>
                     </span>
                     </Col>
                     <Col md={4} className={classes.root2}>
                     <span>
                         {" "}
-                        Phone Number : <b style={{color:'#0B72AA'}}>{getPhoneNumber(patientObj.contactPoint)}</b>
+                        Phone Number : <b style={{color:'#0B72AA'}}>{getPhoneNumber(patientObj.personResponseDto.contactPoint)}</b>
                     </span>
                     </Col>
                     <Col md={4} className={classes.root2}>
                     <span>
                         {" "}
-                        Address : <b style={{color:'#0B72AA'}}>{getAddress(patientObj.address)} </b>
+                        Address : <b style={{color:'#0B72AA'}}>{getAddress(patientObj.personResponseDto.address)} </b>
                     </span>
                     </Col>
                     <Col md={4} className={classes.root2}>
                     <span>
                         {" "}
-                        Client Code : <b style={{color:'#0B72AA'}}>{props && props.clientCode ? props.clientCode : ""} </b>
+                        Client Code : <b style={{color:'#0B72AA'}}>{patientObj && patientObj.clientCode ? patientObj.clientCode : ""} </b>
                     </span>
                     </Col>
-                    {/* <Col md={12}>
+                    <Col md={12}>
 
                         <div >
                             <Typography variant="caption">
-                                <Label color={props.patientObject.hivPositive && props.patientObject.hivPositive===true ? "red" : "teal"} size={"mini"}>
-                                  HIV STATUS : {props.patientObject.hivPositive && props.patientObject.hivPositive===true ? "Positive" : "Negative"}    
+                                <Label color={patientObj && patientObj.hivPositive===true ? "red" : "teal"} size={"mini"}>
+                                   STATUS : {patientObj && patientObj.hivPositive===true ? "Positive" : "Negative"}    
                                 </Label>
                               
                             </Typography>
                         </div>
                   
-                    </Col>      */}
+                    </Col>     
+                     </>
+                    )
+                    :
+                    (
+                    <p>Loading Please wait...</p>
+                    )
+                    }
                     </Row>
                     </Col>
                 </Row>

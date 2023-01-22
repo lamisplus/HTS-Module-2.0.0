@@ -5,7 +5,7 @@ import lombok.*;
 import java.time.LocalDate;
 
 public interface HtsPerson {
-    Long getId();
+    Long getPersonId();
     String getFirstName();
     String getSurname();
     String getOtherName();

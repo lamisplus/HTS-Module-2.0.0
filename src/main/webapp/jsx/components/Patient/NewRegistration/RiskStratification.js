@@ -110,6 +110,7 @@ const BasicInfo = (props) => {
     const toggle = () => setOpen(!open);
     const [setting, setSetting] = useState([]);
     const [riskCount, setRiskCount] = useState(0);
+    const [targetGroupValue, setTargetGroupValue] = useState(null);
     const [objValues, setObjValues]= useState(
         {
             age:"",
@@ -162,6 +163,7 @@ const BasicInfo = (props) => {
     )
     useEffect(() => { 
         KP();
+        TargetGroupSetup();
         EnrollmentSetting();
         //objValues.dateVisit=moment(new Date()).format("YYYY-MM-DD")        
         if(objValues.age!==''){
@@ -178,6 +180,19 @@ const BasicInfo = (props) => {
         .then((response) => {
             //console.log(response.data);
             setEnrollSetting(response.data);
+        })
+        .catch((error) => {
+        //console.log(error);
+        });    
+    }
+    const TargetGroupSetup =()=>{
+        axios
+        .get(`${baseUrl}account`,
+            { headers: {"Authorization" : `Bearer ${token}`} }
+        )
+        .then((response) => {
+            console.log(response.data);
+            setTargetGroupValue(response.data);
         })
         .catch((error) => {
         //console.log(error);

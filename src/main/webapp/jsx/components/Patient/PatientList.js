@@ -28,10 +28,10 @@ import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import { MdDashboard } from "react-icons/md";
 import "@reach/menu-button/styles.css";
-import { Label, Icon } from 'semantic-ui-react'
+import { Label, } from 'semantic-ui-react'
 import Moment from "moment";
 import momentLocalizer from "react-widgets-moment";
-import moment from "moment";
+//import moment from "moment";
 
 
 //Dtate Picker package
@@ -58,80 +58,16 @@ ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
 ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
 
-const useStyles = makeStyles(theme => ({
-    card: {
-        margin: theme.spacing(20),
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center'
-    },
-    form: {
-        width: '100%', // Fix IE 11 issue.
-        marginTop: theme.spacing(3)
-    },
-    submit: {
-        margin: theme.spacing(3, 0, 2)
-    },
-    cardBottom: {
-        marginBottom: 20
-    },
-    Select: {
-        height: 45,
-        width: 350
-    },
-    button: {
-        margin: theme.spacing(1)
-    },
-
-    root: {
-        '& > *': {
-            margin: theme.spacing(1)
-        }
-    },
-    input: {
-        display: 'none'
-    },
-    error: {
-        color: "#f85032",
-        fontSize: "11px",
-    },
-    success: {
-        color: "#4BB543 ",
-        fontSize: "11px",
-    }, 
-}))
 
 
 const Patients = (props) => {    
     //const [patientList, setPatientList] = useState([])
-    const [loading, setLoading] = useState(false)
+    //const [loading, setLoading] = useState(false)
     const [showPPI, setShowPPI] = useState(true)
-    const baseUrl2 = "http://localhost:8282/api/v2/"
+    //const baseUrl2 = "http://localhost:8282/api/v2/"
     useEffect(() => {
         //patients()
       }, []);
-
-    const calculate_age = dob => {
-        var today = new Date();
-        var dateParts = dob.split("-");
-        var dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
-        var birthDate = new Date(dateObject); // create a date object directlyfrom`dob1`argument
-        var age_now = today.getFullYear() - birthDate.getFullYear();
-        var m = today.getMonth() - birthDate.getMonth();
-            if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-                    age_now--;
-                }
-            if (age_now === 0) {
-                    return m + " month(s)";
-                }
-                return age_now + " year(s)";
-        };
-    
-    const getHospitalNumber = (identifier) => {     
-        const identifiers = identifier;
-        const hospitalNumber = identifiers.identifier.find(obj => obj.type == 'HospitalNumber');       
-        return hospitalNumber ? hospitalNumber.value : '';
-    };
 
     const handleCheckBox =e =>{
         if(e.target.checked){
@@ -165,10 +101,10 @@ const Patients = (props) => {
             
             data={query =>
                 new Promise((resolve, reject) =>
-                    axios.get(`${baseUrl2}hts/persons?pageSize=${query.pageSize}&pageNo=${query.page}&searchValue=${query.search}`, { headers: {"Authorization" : `Bearer ${token}`} })
+                    axios.get(`${baseUrl}hts/persons?pageSize=${query.pageSize}&pageNo=${query.page}&searchValue=${query.search}`, { headers: {"Authorization" : `Bearer ${token}`} })
                         .then(response => response)
                         .then(result => {
-                            setLoading(false)
+                            //setLoading(false)
                             resolve({
                                 data: result.data.records.map((row) => ({
                                     //name:   row.hivPositive && row.hivPositive===true ? ( <><sup><b style={{color:"red"}}><Icon name='circle' size="small"/></b></sup> { " " + row.personResponseDto.firstName + " " + row.personResponseDto.surname} </>) :row.personResponseDto.firstName + " " + row.personResponseDto.surname,

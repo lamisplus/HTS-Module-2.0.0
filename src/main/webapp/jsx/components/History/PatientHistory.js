@@ -17,7 +17,7 @@ const divStyle = {
 const Home = (props) => {
     const [patientList, setPatientList] = useState([])
     const [loading, setLoading] = useState(true)
-    const patientId = props.patientObj && props.patientObj.id ? props.patientObj.id: null
+    const patientId = props.patientObj && props.patientObj.personId ? props.patientObj.personId: null
     const [key, setKey] = useState('home');
     const [lastVisitCount, setLastVisitCount] = useState(null);
     //Calculate last date of visit 

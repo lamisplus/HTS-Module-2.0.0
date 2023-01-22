@@ -248,62 +248,63 @@ const BasicInfo = (props) => {
         setTbScreening ({...tbScreening,  [e.target.name]: e.target.value});          
     }
      /*****  Validation  */
+     /*****  Validation  */
      const validate = () => {
         //HTS FORM VALIDATION
-           temp.previousTestedHIVNegative = knowledgeAssessment.previousTestedHIVNegative ? "" : "This field is required."
-           {knowledgeAssessment.previousTestedHIVNegative==='true' && ( temp.timeLastHIVNegativeTestResult = knowledgeAssessment.timeLastHIVNegativeTestResult ? "" : "This field is required.")}
-           temp.clientPregnant = knowledgeAssessment.clientPregnant ? "" : "This field is required."
-           temp.clientInformHivTransRoutes = knowledgeAssessment.clientInformHivTransRoutes ? "" : "This field is required."
-           temp.clientInformRiskkHivTrans = knowledgeAssessment.clientInformRiskkHivTrans ? "" : "This field is required."
-           temp.clientInformPreventingsHivTrans = knowledgeAssessment.clientInformPreventingsHivTrans ? "" : "This field is required."
-           temp.clientInformPossibleTestResult = knowledgeAssessment.clientInformPossibleTestResult ? "" : "This field is required."
-           temp.informConsentHivTest = knowledgeAssessment.informConsentHivTest ? "" : "This field is required."  
+           //temp.previousTestedHIVNegative = knowledgeAssessment.previousTestedHIVNegative ? "" : "This field is required."
+        //    {knowledgeAssessment.previousTestedHIVNegative==='true' && ( temp.timeLastHIVNegativeTestResult = knowledgeAssessment.timeLastHIVNegativeTestResult ? "" : "This field is required.")}
+        //    temp.clientPregnant = knowledgeAssessment.clientPregnant ? "" : "This field is required."
+        //    temp.clientInformHivTransRoutes = knowledgeAssessment.clientInformHivTransRoutes ? "" : "This field is required."
+        //    temp.clientInformRiskkHivTrans = knowledgeAssessment.clientInformRiskkHivTrans ? "" : "This field is required."
+        //    temp.clientInformPreventingsHivTrans = knowledgeAssessment.clientInformPreventingsHivTrans ? "" : "This field is required."
+        //    temp.clientInformPossibleTestResult = knowledgeAssessment.clientInformPossibleTestResult ? "" : "This field is required."
+        //    temp.informConsentHivTest = knowledgeAssessment.informConsentHivTest ? "" : "This field is required."  
 
-            temp.currentCough = tbScreening.currentCough ? "" : "This field is required."
-            temp.weightLoss = tbScreening.weightLoss ? "" : "This field is required."
-            temp.lymphadenopathy = tbScreening.lymphadenopathy ? "" : "This field is required."
-            temp.fever = tbScreening.fever ? "" : "This field is required."
-            temp.nightSweats = tbScreening.nightSweats ? "" : "This field is required."
+        //     temp.currentCough = tbScreening.currentCough ? "" : "This field is required."
+        //     temp.weightLoss = tbScreening.weightLoss ? "" : "This field is required."
+        //     temp.lymphadenopathy = tbScreening.lymphadenopathy ? "" : "This field is required."
+        //     temp.fever = tbScreening.fever ? "" : "This field is required."
+        //     temp.nightSweats = tbScreening.nightSweats ? "" : "This field is required."
 
-            {props.patientObj && props.patientObj.personResponseDto.sex==='Female' && (temp.vaginalDischarge = stiScreening.vaginalDischarge ? "" : "This field is required." )}
-            {props.patientObj && props.patientObj.personResponseDto.sex==='Female' && (temp.lowerAbdominalPains = stiScreening.lowerAbdominalPains ? "" : "This field is required.")}
-            {props.patientObj.personResponseDto && props.patientObj.personResponseDto.sex==='Male' && (temp.urethralDischarge = stiScreening.urethralDischarge ? "" : "This field is required.")}
-            {props.patientObj.personResponseDto && props.patientObj.personResponseDto.sex==='Male' && (temp.complaintsOfScrotal = stiScreening.complaintsOfScrotal ? "" : "This field is required.")}
-            {props.patientObj.personResponseDto && props.patientObj.personResponseDto.sex==='Male' && (temp.complaintsGenitalSore = stiScreening.complaintsGenitalSore ? "" : "This field is required.")}
+            // props.patientObj && props.patientObj.personResponseDto.sex==='Female' && (temp.vaginalDischarge = stiScreening.vaginalDischarge ? "" : "This field is required." )
+            // props.patientObj && props.patientObj.personResponseDto.sex==='Female' && (temp.lowerAbdominalPains = stiScreening.lowerAbdominalPains ? "" : "This field is required.")
+            // props.patientObj.personResponseDto && props.patientObj.personResponseDto.sex==='Male' && (temp.urethralDischarge = stiScreening.urethralDischarge ? "" : "This field is required.")
+            // props.patientObj.personResponseDto && props.patientObj.personResponseDto.sex==='Male' && (temp.complaintsOfScrotal = stiScreening.complaintsOfScrotal ? "" : "This field is required.")
+            // props.patientObj.personResponseDto && props.patientObj.personResponseDto.sex==='Male' && (temp.complaintsGenitalSore = stiScreening.complaintsGenitalSore ? "" : "This field is required.")
  
-            {props.patientObj.targetGroup==="473" && (temp.everHadSexualIntercourse = riskAssessment.everHadSexualIntercourse ? "" : "This field is required.")}
-            {props.patientObj.targetGroup==="473" && (temp.bloodtransInlastThreeMonths = riskAssessment.bloodtransInlastThreeMonths ? "" : "This field is required.")}
-            {props.patientObj.targetGroup==="473" && (temp.uprotectedSexWithCasualLastThreeMonths = riskAssessment.uprotectedSexWithCasualLastThreeMonths ? "" : "This field is required.")}
-            {props.patientObj.targetGroup==="473" && (temp.uprotectedSexWithRegularPartnerLastThreeMonths = riskAssessment.uprotectedSexWithRegularPartnerLastThreeMonths ? "" : "This field is required.")}
-            {props.patientObj.targetGroup==="473" && (temp.unprotectedVaginalSex = riskAssessment.unprotectedVaginalSex ? "" : "This field is required.")}
+            props.patientObj.targetGroup==="TARGET_GROUP_GEN_POP" && (temp.everHadSexualIntercourse = riskAssessment.everHadSexualIntercourse ? "" : "This field is required.")
+            props.patientObj.targetGroup==="TARGET_GROUP_GEN_POP" && (temp.bloodtransInlastThreeMonths = riskAssessment.bloodtransInlastThreeMonths ? "" : "This field is required.")
+            props.patientObj.targetGroup==="TARGET_GROUP_GEN_POP" && (temp.uprotectedSexWithCasualLastThreeMonths = riskAssessment.uprotectedSexWithCasualLastThreeMonths ? "" : "This field is required.")
+            props.patientObj.targetGroup==="TARGET_GROUP_GEN_POP" && (temp.uprotectedSexWithRegularPartnerLastThreeMonths = riskAssessment.uprotectedSexWithRegularPartnerLastThreeMonths ? "" : "This field is required.")
+            props.patientObj.targetGroup==="TARGET_GROUP_GEN_POP" && (temp.unprotectedVaginalSex = riskAssessment.unprotectedVaginalSex ? "" : "This field is required.")
 
-            {props.patientObj.targetGroup==="473" && (temp.uprotectedAnalSex = riskAssessment.uprotectedAnalSex ? "" : "This field is required.")}
-            {props.patientObj.targetGroup==="473" && (temp.sexUnderInfluence = riskAssessment.sexUnderInfluence ? "" : "This field is required.")}
-            {props.patientObj.targetGroup==="473" && (temp.uprotectedSexWithCasualLastThreeMonths = riskAssessment.uprotectedSexWithCasualLastThreeMonths ? "" : "This field is required.")}
-            {props.patientObj.targetGroup==="473" && (temp.moreThanOneSexPartnerLastThreeMonths = riskAssessment.moreThanOneSexPartnerLastThreeMonths ? "" : "This field is required.")}
+            props.patientObj.targetGroup==="TARGET_GROUP_GEN_POP" && (temp.uprotectedAnalSex = riskAssessment.uprotectedAnalSex ? "" : "This field is required.")
+            props.patientObj.targetGroup==="TARGET_GROUP_GEN_POP" && (temp.sexUnderInfluence = riskAssessment.sexUnderInfluence ? "" : "This field is required.")
+            props.patientObj.targetGroup==="TARGET_GROUP_GEN_POP" && (temp.uprotectedSexWithCasualLastThreeMonths = riskAssessment.uprotectedSexWithCasualLastThreeMonths ? "" : "This field is required.")
+            props.patientObj.targetGroup==="TARGET_GROUP_GEN_POP" && (temp.moreThanOneSexPartnerLastThreeMonths = riskAssessment.moreThanOneSexPartnerLastThreeMonths ? "" : "This field is required.")
             
             
-            {props.patientObj.targetGroup!=="473" && (temp.experiencePain = riskAssessment.experiencePain ? "" : "This field is required.")}
+            props.patientObj.targetGroup!=="TARGET_GROUP_GEN_POP" && (temp.experiencePain = riskAssessment.experiencePain ? "" : "This field is required.")
 
-            {props.patientObj.targetGroup!=="473" && (temp.haveSexWithoutCondom = riskAssessment.haveSexWithoutCondom ? "" : "This field is required.")}
-            {props.patientObj.targetGroup!=="473" && (temp.abuseDrug = riskAssessment.abuseDrug ? "" : "This field is required.")}
-            {props.patientObj.targetGroup!=="473" && (temp.bloodTransfusion = riskAssessment.bloodTransfusion ? "" : "This field is required.")}
-            {props.patientObj.targetGroup!=="473" && (temp.consistentWeightFeverNightCough = riskAssessment.consistentWeightFeverNightCough ? "" : "This field is required.")}
-            {props.patientObj.targetGroup!=="473" && (temp.soldPaidVaginalSex = riskAssessment.soldPaidVaginalSex ? "" : "This field is required.")}
+            props.patientObj.targetGroup!=="TARGET_GROUP_GEN_POP" && (temp.haveSexWithoutCondom = riskAssessment.haveSexWithoutCondom ? "" : "This field is required.")
+            props.patientObj.targetGroup!=="TARGET_GROUP_GEN_POP" && (temp.abuseDrug = riskAssessment.abuseDrug ? "" : "This field is required.")
+            props.patientObj.targetGroup!=="TARGET_GROUP_GEN_POP" && (temp.bloodTransfusion = riskAssessment.bloodTransfusion ? "" : "This field is required.")
+            props.patientObj.targetGroup!=="TARGET_GROUP_GEN_POP" && (temp.consistentWeightFeverNightCough = riskAssessment.consistentWeightFeverNightCough ? "" : "This field is required.")
+            props.patientObj.targetGroup!=="TARGET_GROUP_GEN_POP" && (temp.soldPaidVaginalSex = riskAssessment.soldPaidVaginalSex ? "" : "This field is required.")
 
-            temp.sexPartnerHivPositive = tbScreening.sexPartnerHivPositive ? "" : "This field is required."
-            {riskAssessmentPartner.sexPartnerHivPositive==='true' && (temp.newDiagnosedHivlastThreeMonths = tbScreening.newDiagnosedHivlastThreeMonths ? "" : "This field is required.")}
-            {riskAssessmentPartner.sexPartnerHivPositive==='true' && (temp.currentlyArvForPmtct = tbScreening.currentlyArvForPmtct ? "" : "This field is required.")}
-            {riskAssessmentPartner.sexPartnerHivPositive==='true' && ( temp.knowHivPositiveOnArv = tbScreening.knowHivPositiveOnArv ? "" : "This field is required.")}
-            {riskAssessmentPartner.sexPartnerHivPositive==='true' && (temp.knowHivPositiveAfterLostToFollowUp = tbScreening.knowHivPositiveAfterLostToFollowUp ? "" : "This field is required.")}
-            {riskAssessmentPartner.sexPartnerHivPositive==='true' && (temp.uprotectedAnalSex = tbScreening.uprotectedAnalSex ? "" : "This field is required.")}
+            // temp.sexPartnerHivPositive = tbScreening.sexPartnerHivPositive ? "" : "This field is required."
+            // {riskAssessmentPartner.sexPartnerHivPositive==='true' && (temp.newDiagnosedHivlastThreeMonths = tbScreening.newDiagnosedHivlastThreeMonths ? "" : "This field is required.")}
+            // {riskAssessmentPartner.sexPartnerHivPositive==='true' && (temp.currentlyArvForPmtct = tbScreening.currentlyArvForPmtct ? "" : "This field is required.")}
+            // {riskAssessmentPartner.sexPartnerHivPositive==='true' && ( temp.knowHivPositiveOnArv = tbScreening.knowHivPositiveOnArv ? "" : "This field is required.")}
+            // {riskAssessmentPartner.sexPartnerHivPositive==='true' && (temp.knowHivPositiveAfterLostToFollowUp = tbScreening.knowHivPositiveAfterLostToFollowUp ? "" : "This field is required.")}
+            // {riskAssessmentPartner.sexPartnerHivPositive==='true' && (temp.uprotectedAnalSex = tbScreening.uprotectedAnalSex ? "" : "This field is required.")}
             
             setErrors({ ...temp })
-        return Object.values(temp).every(x => x == "")
+        return Object.values(temp).every(x => x === "")
     }
     const handleSubmit =(e)=>{
         e.preventDefault();
-
+        if(validate()){
             objValues.htsClientId= clientId
             objValues.knowledgeAssessment= knowledgeAssessment
             objValues.personId= patientID
@@ -332,9 +333,12 @@ const BasicInfo = (props) => {
                     toast.error("Something went wrong. Please try again...");
                 }
             });
-            
+        }else{
+            toast.error("All fields are required",  {position: toast.POSITION.BOTTOM_CENTER});
+                
+        }
     }
-    console.log(riskAssessmentPartner)
+    //console.log(riskAssessmentPartner)
 
     return (
         <>

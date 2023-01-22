@@ -93,7 +93,8 @@ const BasicInfo = (props) => {
     const sex= props.patientObj && props.patientObj.personResponseDto ? props.patientObj.personResponseDto.sex : "";
     const [saving, setSaving] = useState(false);
     const [errors, setErrors] = useState({});
-    console.log(props.patientObj)
+    let temp = { ...errors }
+    //console.log(props.patientObj)
 
     const handleItemClick =(page, completedMenu)=>{       
         if(props.completed.includes(completedMenu)) {
@@ -222,7 +223,55 @@ const BasicInfo = (props) => {
             setRiskAssessmentPartner({...riskAssessmentPartner, ...props.patientObj.sexPartnerRiskAssessment})
             
     }, [ props.patientObj]);
+     /*****  Validation  */
+     const validate = () => {
+        //HTS FORM VALIDATION
+           //temp.previousTestedHIVNegative = knowledgeAssessment.previousTestedHIVNegative ? "" : "This field is required."
+        //    {knowledgeAssessment.previousTestedHIVNegative==='true' && ( temp.timeLastHIVNegativeTestResult = knowledgeAssessment.timeLastHIVNegativeTestResult ? "" : "This field is required.")}
+        //    temp.clientPregnant = knowledgeAssessment.clientPregnant ? "" : "This field is required."
+        //    temp.clientInformHivTransRoutes = knowledgeAssessment.clientInformHivTransRoutes ? "" : "This field is required."
+        //    temp.clientInformRiskkHivTrans = knowledgeAssessment.clientInformRiskkHivTrans ? "" : "This field is required."
+        //    temp.clientInformPreventingsHivTrans = knowledgeAssessment.clientInformPreventingsHivTrans ? "" : "This field is required."
+        //    temp.clientInformPossibleTestResult = knowledgeAssessment.clientInformPossibleTestResult ? "" : "This field is required."
+        //    temp.informConsentHivTest = knowledgeAssessment.informConsentHivTest ? "" : "This field is required."  
 
+        //     temp.currentCough = tbScreening.currentCough ? "" : "This field is required."
+        //     temp.weightLoss = tbScreening.weightLoss ? "" : "This field is required."
+        //     temp.lymphadenopathy = tbScreening.lymphadenopathy ? "" : "This field is required."
+        //     temp.fever = tbScreening.fever ? "" : "This field is required."
+        //     temp.nightSweats = tbScreening.nightSweats ? "" : "This field is required."
+
+           
+            props.patientObj.targetGroup==="TARGET_GROUP_GEN_POP" && (temp.everHadSexualIntercourse = riskAssessment.everHadSexualIntercourse ? "" : "This field is required.")
+            props.patientObj.targetGroup==="TARGET_GROUP_GEN_POP" && (temp.bloodtransInlastThreeMonths = riskAssessment.bloodtransInlastThreeMonths ? "" : "This field is required.")
+            props.patientObj.targetGroup==="TARGET_GROUP_GEN_POP" && (temp.uprotectedSexWithCasualLastThreeMonths = riskAssessment.uprotectedSexWithCasualLastThreeMonths ? "" : "This field is required.")
+            props.patientObj.targetGroup==="TARGET_GROUP_GEN_POP" && (temp.uprotectedSexWithRegularPartnerLastThreeMonths = riskAssessment.uprotectedSexWithRegularPartnerLastThreeMonths ? "" : "This field is required.")
+            props.patientObj.targetGroup==="TARGET_GROUP_GEN_POP" && (temp.unprotectedVaginalSex = riskAssessment.unprotectedVaginalSex ? "" : "This field is required.")
+
+            props.patientObj.targetGroup==="TARGET_GROUP_GEN_POP" && (temp.uprotectedAnalSex = riskAssessment.uprotectedAnalSex ? "" : "This field is required.")
+            props.patientObj.targetGroup==="TARGET_GROUP_GEN_POP" && (temp.sexUnderInfluence = riskAssessment.sexUnderInfluence ? "" : "This field is required.")
+            props.patientObj.targetGroup==="TARGET_GROUP_GEN_POP" && (temp.uprotectedSexWithCasualLastThreeMonths = riskAssessment.uprotectedSexWithCasualLastThreeMonths ? "" : "This field is required.")
+            props.patientObj.targetGroup==="TARGET_GROUP_GEN_POP" && (temp.moreThanOneSexPartnerLastThreeMonths = riskAssessment.moreThanOneSexPartnerLastThreeMonths ? "" : "This field is required.")
+            
+            
+            props.patientObj.targetGroup!=="TARGET_GROUP_GEN_POP" && (temp.experiencePain = riskAssessment.experiencePain ? "" : "This field is required.")
+
+            props.patientObj.targetGroup!=="TARGET_GROUP_GEN_POP" && (temp.haveSexWithoutCondom = riskAssessment.haveSexWithoutCondom ? "" : "This field is required.")
+            props.patientObj.targetGroup!=="TARGET_GROUP_GEN_POP" && (temp.abuseDrug = riskAssessment.abuseDrug ? "" : "This field is required.")
+            props.patientObj.targetGroup!=="TARGET_GROUP_GEN_POP" && (temp.bloodTransfusion = riskAssessment.bloodTransfusion ? "" : "This field is required.")
+            props.patientObj.targetGroup!=="TARGET_GROUP_GEN_POP" && (temp.consistentWeightFeverNightCough = riskAssessment.consistentWeightFeverNightCough ? "" : "This field is required.")
+            props.patientObj.targetGroup!=="TARGET_GROUP_GEN_POP" && (temp.soldPaidVaginalSex = riskAssessment.soldPaidVaginalSex ? "" : "This field is required.")
+
+            // temp.sexPartnerHivPositive = tbScreening.sexPartnerHivPositive ? "" : "This field is required."
+            // {riskAssessmentPartner.sexPartnerHivPositive==='true' && (temp.newDiagnosedHivlastThreeMonths = tbScreening.newDiagnosedHivlastThreeMonths ? "" : "This field is required.")}
+            // {riskAssessmentPartner.sexPartnerHivPositive==='true' && (temp.currentlyArvForPmtct = tbScreening.currentlyArvForPmtct ? "" : "This field is required.")}
+            // {riskAssessmentPartner.sexPartnerHivPositive==='true' && ( temp.knowHivPositiveOnArv = tbScreening.knowHivPositiveOnArv ? "" : "This field is required.")}
+            // {riskAssessmentPartner.sexPartnerHivPositive==='true' && (temp.knowHivPositiveAfterLostToFollowUp = tbScreening.knowHivPositiveAfterLostToFollowUp ? "" : "This field is required.")}
+            // {riskAssessmentPartner.sexPartnerHivPositive==='true' && (temp.uprotectedAnalSex = tbScreening.uprotectedAnalSex ? "" : "This field is required.")}
+            
+            setErrors({ ...temp })
+        return Object.values(temp).every(x => x === "")
+    }
     const handleSubmit =(e)=>{
         e.preventDefault();
         if(props.activePage.actionType==='view'){
@@ -231,6 +280,7 @@ const BasicInfo = (props) => {
         }
         if(props.activePage.actionType==='update'){
         //e.preventDefault();
+        if(validate()){
             objValues.htsClientId= clientId
             objValues.knowledgeAssessment= knowledgeAssessment
             objValues.personId= patientID
@@ -259,9 +309,13 @@ const BasicInfo = (props) => {
                     toast.error("Something went wrong. Please try again...");
                 }
             });
-        }    
+        }else{
+            toast.error("All fields are required",  {position: toast.POSITION.BOTTOM_CENTER});
+                
+        } 
+        }  
     }
-
+    //console.log(errors)
 
     return (
         <>
@@ -541,7 +595,7 @@ const BasicInfo = (props) => {
                             <div className="form-group  col-md-12 text-center pt-2 mb-4" style={{backgroundColor:'#992E62', width:'125%', height:'35px', color:'#fff', fontWeight:'bold'}} >HIV Risk Assessment  (Last 3 months)</div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Ever had sexual intercourse </Label>
+                                    <Label>Ever had sexual intercourse <sup style={{ color:"red"}}> *</sup></Label>
                                     <select
                                         className="form-control"
                                         name="everHadSexualIntercourse"
@@ -555,12 +609,14 @@ const BasicInfo = (props) => {
                                         <option value="false">No</option>
                                         
                                     </select>
-                                    
+                                    {errors.everHadSexualIntercourse !=="" ? (
+                                    <span className={classes.error}>{errors.everHadSexualIntercourse}</span>
+                                ) : "" }
                                 </FormGroup>
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Blood transfusion in last 3 months </Label>
+                                    <Label>Blood transfusion in last 3 months <sup style={{ color:"red"}}> *</sup></Label>
                                     <select
                                         className="form-control"
                                         name="bloodtransInlastThreeMonths"
@@ -574,12 +630,14 @@ const BasicInfo = (props) => {
                                         <option value="false">No</option>
                                         
                                     </select>
-                                    
+                                    {errors.bloodtransInlastThreeMonths !=="" ? (
+                                    <span className={classes.error}>{errors.bloodtransInlastThreeMonths}</span>
+                                ) : "" }
                                 </FormGroup>
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Unprotected sex with casual partner in last 3 months </Label>
+                                    <Label>Unprotected sex with casual partner in last 3 months <sup style={{ color:"red"}}> *</sup></Label>
                                     <select
                                         className="form-control"
                                         name="uprotectedSexWithCasualLastThreeMonths"
@@ -593,12 +651,14 @@ const BasicInfo = (props) => {
                                         <option value="false">No</option>
                                         
                                     </select>
-                                    
+                                    {errors.uprotectedSexWithCasualLastThreeMonths !=="" ? (
+                                    <span className={classes.error}>{errors.uprotectedSexWithCasualLastThreeMonths}</span>
+                                ) : "" }
                                 </FormGroup>
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Unprotected sex with regular partner in the last 3months</Label>
+                                    <Label>Unprotected sex with regular partner in the last 3months <sup style={{ color:"red"}}> *</sup></Label>
                                     <select
                                         className="form-control"
                                         name="uprotectedSexWithRegularPartnerLastThreeMonths"
@@ -612,12 +672,14 @@ const BasicInfo = (props) => {
                                         <option value="false">No</option>
                                         
                                     </select>
-                                    
+                                    {errors.uprotectedSexWithRegularPartnerLastThreeMonths !=="" ? (
+                                    <span className={classes.error}>{errors.uprotectedSexWithRegularPartnerLastThreeMonths}</span>
+                                ) : "" }
                                 </FormGroup>
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Unprotected vaginal sex</Label>
+                                    <Label>Unprotected vaginal sex <sup style={{ color:"red"}}> *</sup></Label>
                                     <select
                                         className="form-control"
                                         name="unprotectedVaginalSex"
@@ -631,12 +693,14 @@ const BasicInfo = (props) => {
                                         <option value="false">No</option>
                                         
                                     </select>
-                                    
+                                    {errors.unprotectedVaginalSex !=="" ? (
+                                    <span className={classes.error}>{errors.unprotectedVaginalSex}</span>
+                                ) : "" }
                                 </FormGroup>
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Unprotected Anal sex</Label>
+                                    <Label>Unprotected Anal sex <sup style={{ color:"red"}}> *</sup></Label>
                                     <select
                                         className="form-control"
                                         name="uprotectedAnalSex"
@@ -650,12 +714,14 @@ const BasicInfo = (props) => {
                                         <option value="false">No</option>
                                         
                                     </select>
-                                    
+                                    {errors.uprotectedAnalSex !=="" ? (
+                                    <span className={classes.error}>{errors.uprotectedAnalSex}</span>
+                                ) : "" }
                                 </FormGroup>
                             </div>         
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>STI in last 3 months </Label>
+                                    <Label>STI in last 3 months <sup style={{ color:"red"}}> *</sup></Label>
                                     <select
                                         className="form-control"
                                         name="stiLastThreeMonths"
@@ -669,12 +735,14 @@ const BasicInfo = (props) => {
                                         <option value="false">No</option>
                                         
                                     </select>
-                                    
+                                    {errors.stiLastThreeMonths !=="" ? (
+                                    <span className={classes.error}>{errors.stiLastThreeMonths}</span>
+                                ) : "" }
                                 </FormGroup>
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Sex under the influence of drugs or alcohol</Label>
+                                    <Label>Sex under the influence of drugs or alcohol <sup style={{ color:"red"}}> *</sup></Label>
                                     <select
                                         className="form-control"
                                         name="sexUnderInfluence"
@@ -688,12 +756,14 @@ const BasicInfo = (props) => {
                                         <option value="false">No</option>
                                         
                                     </select>
-                                    
+                                    {errors.sexUnderInfluence !=="" ? (
+                                    <span className={classes.error}>{errors.sexUnderInfluence}</span>
+                                ) : "" }
                                 </FormGroup>
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>More than 1 sex partner during last 3 months</Label>
+                                    <Label>More than 1 sex partner during last 3 months <sup style={{ color:"red"}}> *</sup></Label>
                                     <select
                                         className="form-control"
                                         name="moreThanOneSexPartnerLastThreeMonths"
@@ -707,7 +777,9 @@ const BasicInfo = (props) => {
                                         <option value="false">No</option>
                                         
                                     </select>
-                                    
+                                    {errors.moreThanOneSexPartnerLastThreeMonths !=="" ? (
+                                    <span className={classes.error}>{errors.moreThanOneSexPartnerLastThreeMonths}</span>
+                                ) : "" }
                                 </FormGroup>
                             </div>
                             <Message warning>
@@ -721,7 +793,7 @@ const BasicInfo = (props) => {
                             <div className="form-group  col-md-12 text-center pt-2 mb-4" style={{backgroundColor:'#992E62', width:'125%', height:'35px', color:'#fff', fontWeight:'bold'}} >HIV Risk Assessment  (Last 3 months)</div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Have you/your partner experienced lower abdominal pain, smelly discharge, blisters and wounds around you/partner vagina, penis anus or mouth?</Label>
+                                    <Label>Have you/your partner experienced lower abdominal pain, smelly discharge, blisters and wounds around you/partner vagina, penis anus or mouth? <sup style={{ color:"red"}}> *</sup></Label>
                                     <select
                                         className="form-control"
                                         name="experiencePain"
@@ -735,12 +807,14 @@ const BasicInfo = (props) => {
                                         <option value="false">No</option>
                                         
                                     </select>
-                                    
+                                    {errors.experiencePain !=="" ? (
+                                    <span className={classes.error}>{errors.experiencePain}</span>
+                                ) : "" }
                                 </FormGroup>
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Have you/partner had sex without a condom with someone of unknown HIV status, or you/partner raped by person with unknown HIV status? *</Label>
+                                    <Label>Have you/partner had sex without a condom with someone of unknown HIV status, or you/partner raped by person with unknown HIV status? <sup style={{ color:"red"}}> *</sup></Label>
                                     <select
                                         className="form-control"
                                         name="haveSexWithoutCondom"
@@ -754,12 +828,14 @@ const BasicInfo = (props) => {
                                         <option value="false">No</option>
                                         
                                     </select>
-                                    
+                                    {errors.haveSexWithoutCondom !=="" ? (
+                                    <span className={classes.error}>{errors.haveSexWithoutCondom}</span>
+                                ) : "" }
                                 </FormGroup>
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Have you had a condom burst with your partner during sexual intercourse?  *</Label>
+                                    <Label>Have you had a condom burst with your partner during sexual intercourse?  <sup style={{ color:"red"}}> *</sup></Label>
                                     <select
                                         className="form-control"
                                         name="haveCondomBurst"
@@ -773,12 +849,14 @@ const BasicInfo = (props) => {
                                         <option value="false">No</option>
                                         
                                     </select>
-                                    
+                                    {errors.haveCondomBurst !=="" ? (
+                                    <span className={classes.error}>{errors.haveCondomBurst}</span>
+                                ) : "" }
                                 </FormGroup>
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Do you/partner share needles/syringes, other sharp objects or used abuse drug substances of any kind?</Label>
+                                    <Label>Do you/partner share needles/syringes, other sharp objects or used abuse drug substances of any kind? <sup style={{ color:"red"}}> *</sup></Label>
                                     <select
                                         className="form-control"
                                         name="abuseDrug"
@@ -792,12 +870,14 @@ const BasicInfo = (props) => {
                                         <option value="false">No</option>
                                         
                                     </select>
-                                    
+                                    {errors.abuseDrug !=="" ? (
+                                    <span className={classes.error}>{errors.abuseDrug}</span>
+                                ) : "" }
                                 </FormGroup>
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Have you/partner had any blood or blood product transfusion?</Label>
+                                    <Label>Have you/partner had any blood or blood product transfusion? <sup style={{ color:"red"}}> *</sup></Label>
                                     <select
                                         className="form-control"
                                         name="bloodTransfusion"
@@ -811,12 +891,14 @@ const BasicInfo = (props) => {
                                         <option value="false">No</option>
                                         
                                     </select>
-                                    
+                                    {errors.bloodTransfusion !=="" ? (
+                                    <span className={classes.error}>{errors.bloodTransfusion}</span>
+                                ) : "" }
                                 </FormGroup>
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Have you/partner experienced coughing, weight loss, fever, night sweats consistently?</Label>
+                                    <Label>Have you/partner experienced coughing, weight loss, fever, night sweats consistently? <sup style={{ color:"red"}}> *</sup></Label>
                                     <select
                                         className="form-control"
                                         name="consistentWeightFeverNightCough"
@@ -830,12 +912,14 @@ const BasicInfo = (props) => {
                                         <option value="false">No</option>
                                         
                                     </select>
-                                    
+                                    {errors.consistentWeightFeverNightCough !=="" ? (
+                                    <span className={classes.error}>{errors.consistentWeightFeverNightCough}</span>
+                                ) : "" }
                                 </FormGroup>
                             </div>            
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Have you/partner paid or sold vaginal, anal or oral sex? *</Label>
+                                    <Label>Have you/partner paid or sold vaginal, anal or oral sex? <sup style={{ color:"red"}}> *</sup></Label>
                                     <select
                                         className="form-control"
                                         name="soldPaidVaginalSex"
@@ -849,7 +933,9 @@ const BasicInfo = (props) => {
                                         <option value="false">No</option>
                                         
                                     </select>
-                                    
+                                    {errors.soldPaidVaginalSex !=="" ? (
+                                    <span className={classes.error}>{errors.soldPaidVaginalSex}</span>
+                                ) : "" }
                                 </FormGroup>
                             </div>
                             <Message warning>

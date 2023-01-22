@@ -64,15 +64,16 @@ function PatientCard(props) {
   const { classes } = props;
   //const patientCurrentStatus=props.patientObj && props.patientObj.currentStatus==="Died (Confirmed)" ? true : false ;
   const patientObjs = props.patientObj ? props.patientObj : {}
-  const permissions= props.permissions ? props.permissions : [];
+  //const permissions= props.permissions ? props.permissions : [];
   const [patientObj, setPatientObj] = useState(null)
+
   useEffect(() => {
     PatientCurrentObject();
   }, [props.patientObj]);
     ///GET LIST OF Patients
     async function PatientCurrentObject() {
         axios
-            .get(`${baseUrl}hts/persons/${patientObjs.id}`,
+            .get(`${baseUrl}hts/persons/${patientObjs.personId}`,
             { headers: {"Authorization" : `Bearer ${token}`} }
             )
             .then((response) => {
@@ -189,16 +190,14 @@ function PatientCard(props) {
                     </span>
                     </Col>
                     <Col md={12}>
-
-                        <div >
+                       <div >
                             <Typography variant="caption">
                                 <Label color={patientObj && patientObj.hivPositive===true ? "red" : "teal"} size={"mini"}>
                                    STATUS : {patientObj && patientObj.hivPositive===true ? "Positive" : "Negative"}    
                                 </Label>
                               
                             </Typography>
-                        </div>
-                  
+                       </div>                 
                     </Col>     
                      </>
                     )

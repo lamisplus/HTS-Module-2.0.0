@@ -43,8 +43,9 @@ const Elicitation = (props) => {
             )}
             <br />
                 <div className="row">
-                <div className="form-group mb-3 col-md-6">
-                <Button content='Done' icon='list' labelPosition='left' style={{backgroundColor:"#992E62", color:'#fff'}} onClick={()=>handleDone()}/>
+                <div className="form-group mb-3 col-md-12">
+                <Button content='Back' icon='left arrow' labelPosition='left' style={{backgroundColor:"#992E62", color:'#fff'}} onClick={()=>handleItemClick('recency-testing','recency-testing')}/>
+                <Button content='Done' icon='list' labelPosition='left' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={()=>handleDone()}/>
                 
                 </div>
                 </div>

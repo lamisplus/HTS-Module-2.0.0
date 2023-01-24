@@ -898,25 +898,35 @@ console.log(showCD4Count)
                                     </>
                                 )}
                                 {(confirmatoryTest.result==='No' && tieBreakerTest.result==='No' && (initialTest1.result==='Yes' || initialTest1.result==='Yes' || initialTest1.result==='')) && (
+                                    <>
+                                    <b> Result : </b>
                                     <LabelRibbon color="green" >
-                                        Negative
+                                        None Reactive
                                     </LabelRibbon>
+                                    </>
                                 )}
                                  {/* END of  result for Test 1 */}
                                 {/* This is result for Test 2 */}
                                 {initialTest12.result2==='No' &&  (
+                                    <>
+                                    <b> Result : </b>
                                     <LabelRibbon color="green" >
-                                        Negative
+                                        None Reactive
                                     </LabelRibbon>
+                                    </>
                                 )} 
                                 {initialTest12.result2==='No' && confirmatoryTest2.result2==='No'  && (
+                                     <>
+                                     <b> Result : </b>
                                     <LabelRibbon color="green" >
-                                        Negative
+                                        None Reactive
                                     </LabelRibbon>
+                                    </>
                                 )}
                                 
                                 {(initialTest12.result2==='Yes' && confirmatoryTest2.result2==='Yes' ) && (
                                     <>
+                                     <b> Result : </b>
                                     <LabelRibbon color="red" >
                                         Positive
                                     </LabelRibbon>
@@ -929,14 +939,20 @@ console.log(showCD4Count)
                                     </LabelRibbon>
                                 )} */}
                                 {(confirmatoryTest2.result2==='No' && tieBreakerTest2.result2==='Yes' ) && (
+                                    <>
+                                    <b>Final Result : </b>
                                     <LabelRibbon color="red" >
                                         Positive
                                     </LabelRibbon>
+                                    </>
                                 )}
                                 {(confirmatoryTest2.result2==='No' && tieBreakerTest2.result2==='No' && (initialTest12.result2==='Yes' || initialTest12.result2==='Yes' || initialTest12.result2==='')) && (
+                                    <>
+                                    <b>Final Result : </b>
                                     <LabelRibbon color="green" >
                                         Negative
                                     </LabelRibbon>
+                                    </>
                                 )}
                                 
                                  {/* END of  result for Test 2*/}
@@ -1013,7 +1029,7 @@ console.log(showCD4Count)
                         <br/> <br/>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Syphilis test result </Label>
+                                    <Label>Syphilis test result *</Label>
                                     <select
                                         className="form-control"
                                         name="syphilisTestResult"
@@ -1039,7 +1055,7 @@ console.log(showCD4Count)
                             <br/> <br/>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Hepatitis B virus test result </Label>
+                                    <Label>Hepatitis B virus test result *</Label>
                                     <select
                                         className="form-control"
                                         name="hepatitisBTestResult"
@@ -1060,7 +1076,7 @@ console.log(showCD4Count)
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Hepatitis C virus test result </Label>
+                                    <Label>Hepatitis C virus test result *</Label>
                                     <select
                                         className="form-control"
                                         name="hepatitisCTestResult"

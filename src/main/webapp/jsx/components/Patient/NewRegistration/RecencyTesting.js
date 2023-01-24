@@ -404,7 +404,7 @@ const Recency = (props) => {
                             {recency.rencencyInterpretation==='Recent' && (
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Has viral load request been made? *</Label>
+                                    <Label>Has viral load request been made? </Label>
                                     <select
                                         className="form-control"
                                         name="hasViralLoad"
@@ -446,7 +446,7 @@ const Recency = (props) => {
                                 </div>
                                 <div className="form-group  col-md-4">
                                     <FormGroup>
-                                        <Label>Sample Refernce Number *</Label>
+                                        <Label>Sample Reference Number *</Label>
                                         <Input
                                             className="form-control"
                                             name="sampleReferanceNumber"

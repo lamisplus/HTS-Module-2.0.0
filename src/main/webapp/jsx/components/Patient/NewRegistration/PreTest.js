@@ -841,7 +841,7 @@ const BasicInfo = (props) => {
                                 </FormGroup>
                             </div>
                             <Message warning>
-                                <h4>Personal HIV Risk assessment score (sum of all 7 answers)</h4>
+                                <h4> Risk assessment score (sum of all 7 answers)</h4>
                                 <b>Score : {riskCount.length}</b>
                             </Message>
                             <hr/>

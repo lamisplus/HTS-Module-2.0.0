@@ -126,7 +126,8 @@ const BasicInfo = (props) => {
             careProvider:"",
             personId:"",
             riskAssessment: {},
-            entryPoint:""
+            entryPoint:"",
+            communityEntryPoint:""
 
         }
 
@@ -569,6 +570,26 @@ const BasicInfo = (props) => {
                                     ) : "" }
                                 </FormGroup>
                             </div>
+                            <div className="form-group  col-md-6">
+                                <FormGroup>
+                                    <Label>Community Entry Point *</Label>
+                                    <select
+                                        className="form-control"
+                                        name="communityEntryPoint"
+                                        id="communityEntryPoint"
+                                        value={objValues.communityEntryPoint}
+                                        onChange={handleInputChange}
+                                        style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                    >
+                                        <option value={""}>Select</option>                                      
+                                        <option value="Facility">Facility</option>
+                                        <option value="Community">Community</option>
+                                    </select>
+                                    {errors.communityEntryPoint !=="" ? (
+                                    <span className={classes.error}>{errors.communityEntryPoint}</span>
+                                    ) : "" }
+                                </FormGroup>
+                            </div>
                             <div className="form-group mb-3 col-md-6">
                                 <FormGroup>
                                 <Label for="">Visit Date * </Label>
@@ -964,7 +985,7 @@ const BasicInfo = (props) => {
                             </>)}
                             <br/>
                             <Message warning>
-                                <h4>Personal HIV Risk assessment score </h4>
+                                <h4> Risk assessment score </h4>
                                 <b>Score :{riskCount + (objValues.age>15 ?riskCountQuestion.length : 0)}</b>
                             </Message>
                             <hr/>

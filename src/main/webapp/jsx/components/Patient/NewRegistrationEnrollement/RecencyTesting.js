@@ -454,7 +454,7 @@ const BasicInfo = (props) => {
                                 </div>
                                 <div className="form-group  col-md-4">
                                     <FormGroup>
-                                        <Label>Sample Refernce Number *</Label>
+                                        <Label>Sample Reference Number *</Label>
                                         <Input
                                             className="form-control"
                                             name="sampleReferanceNumber"

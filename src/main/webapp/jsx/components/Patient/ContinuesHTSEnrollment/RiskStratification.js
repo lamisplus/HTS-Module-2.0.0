@@ -125,7 +125,8 @@ const RiskStratification = (props) => {
             personId:props.patientObj.id,
             riskAssessment: {},
             entryPoint:"",
-            careProvider:""
+            careProvider:"",
+            communityEntryPoint:""
 
         }
     )
@@ -466,6 +467,26 @@ const RiskStratification = (props) => {
                                     ) : "" }
                                 </FormGroup>
                             </div>
+                            <div className="form-group  col-md-6">
+                                <FormGroup>
+                                    <Label>Community Entry Point *</Label>
+                                    <select
+                                        className="form-control"
+                                        name="communityEntryPoint"
+                                        id="communityEntryPoint"
+                                        value={objValues.communityEntryPoint}
+                                        onChange={handleInputChange}
+                                        style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                    >
+                                        <option value={""}>Select</option>                                      
+                                        <option value="Facility">Facility</option>
+                                        <option value="Community">Community</option>
+                                    </select>
+                                    {errors.communityEntryPoint !=="" ? (
+                                    <span className={classes.error}>{errors.communityEntryPoint}</span>
+                                    ) : "" }
+                                </FormGroup>
+                            </div>
                             <div className="form-group mb-3 col-md-6">
                                 <FormGroup>
                                 <Label for="">Visit Date * </Label>
@@ -570,6 +591,7 @@ const RiskStratification = (props) => {
                                     ) : "" }
                                 </FormGroup>
                             </div>
+                            <div className="row">
                             <div className="form-group  col-md-6">
                                 <FormGroup>
                                     <Label>Is this HIV test based on a Clinician/Doctor/Health Care Provider's  request ? *</Label>
@@ -578,7 +600,7 @@ const RiskStratification = (props) => {
                                         name="lastHivTestBasedOnRequest"
                                         id="lastHivTestBasedOnRequest"
                                         value={riskAssessment.lastHivTestBasedOnRequest}
-                                        onChange={handleInputChange}
+                                        onChange={handleInputChangeRiskAssessment}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}>Select</option>                                      
@@ -590,7 +612,7 @@ const RiskStratification = (props) => {
                                     ) : "" }
                                 </FormGroup>
                             </div>
-
+                            </div>
                             <br />
                              
                             {props.patientAge>15 && objValues.careProvider==='false'&& ( <>
@@ -795,7 +817,7 @@ const RiskStratification = (props) => {
                             
                             <br/>
                             <Message warning>
-                                <h4>Personal HIV Risk assessment score </h4>
+                                <h4>  Risk assessment score </h4>
                                 <b>Score :{riskCount + (props.patientAge>15 ?riskCountQuestion.length : 0)}</b>
                             </Message>
                             <hr/>

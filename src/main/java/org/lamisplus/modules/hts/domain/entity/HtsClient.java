@@ -281,4 +281,10 @@ public class HtsClient extends Audit implements Serializable {
             uuid = UUID.randomUUID().toString();
         }
     }
+
+    @Column(name = "prep_offered")
+    private Boolean prepOffered;
+
+    @Column(name = "prep_accepted")
+    private Boolean prepAccepted;
 }

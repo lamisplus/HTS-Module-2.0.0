@@ -26,4 +26,7 @@ public class HtsRequestResultDto {
     private final Object hepatitisTesting;
     private Object others;
     private Object cd4;
+
+    private Boolean prepOffered;
+    private Boolean prepAccepted;
 }

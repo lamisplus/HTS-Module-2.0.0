@@ -23,5 +23,6 @@ public class RiskStratificationResponseDto {
     private String code;
     private LocalDate visitDate;
     private long personId;
+    private String communityEntryPoint ;
     private  Object riskAssessment;
 }

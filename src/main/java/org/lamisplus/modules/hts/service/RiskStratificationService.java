@@ -65,6 +65,7 @@ public class RiskStratificationService {
         riskStratificationDto.setVisitDate( riskStratification.getVisitDate() );
         riskStratificationDto.setDob(riskStratification.getDob());
         riskStratificationDto.setRiskAssessment( riskStratification.getRiskAssessment() );
+        riskStratificationDto.setCommunityEntryPoint( riskStratification.getCommunityEntryPoint() );
 
         return riskStratificationDto;
     }
@@ -85,6 +86,7 @@ public class RiskStratificationService {
         responseDto.setDob( riskStratification.getDob() );
         responseDto.setVisitDate( riskStratification.getVisitDate() );
         responseDto.setRiskAssessment( riskStratification.getRiskAssessment() );
+        responseDto.setCommunityEntryPoint( riskStratification.getCommunityEntryPoint() );
 
         return responseDto;
     }
@@ -105,6 +107,7 @@ public class RiskStratificationService {
         riskStratification.setVisitDate( riskStratificationDTO.getVisitDate() );
         riskStratification.setDob(riskStratificationDTO.getDob());
         riskStratification.setRiskAssessment( riskStratificationDTO.getRiskAssessment() );
+        riskStratification.setCommunityEntryPoint( riskStratificationDTO.getCommunityEntryPoint() );
 
         riskStratification.setEntryPoint( riskStratificationDTO.getEntryPoint());
 

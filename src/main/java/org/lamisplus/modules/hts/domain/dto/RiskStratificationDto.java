@@ -27,5 +27,6 @@ public class RiskStratificationDto {
     private LocalDate dob;
     private String code;
     private Long personId;
+    private String communityEntryPoint ;
     private  Object riskAssessment;
 }

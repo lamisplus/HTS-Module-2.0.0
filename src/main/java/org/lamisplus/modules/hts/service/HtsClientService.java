@@ -193,6 +193,9 @@ public class HtsClientService {
         updatableHtsClient.setOthers(htsRequestResultDto.getOthers());
         updatableHtsClient.setCd4(htsRequestResultDto.getCd4());
 
+        updatableHtsClient.setPrepOffered(htsRequestResultDto.getPrepOffered());
+        updatableHtsClient.setPrepAccepted(htsRequestResultDto.getPrepAccepted());
+
 
         return updatableHtsClient;
     }

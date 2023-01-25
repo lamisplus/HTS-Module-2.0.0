@@ -127,6 +127,8 @@ const HivTestResult = (props) => {
             hepatitisTesting:{},
             others:{},
             cd4:{},
+            prepOffered:"",
+            prepAccepted:""
         }
     )
     const handleInputChange = e => { 
@@ -880,7 +882,6 @@ const HivTestResult = (props) => {
                                 {(confirmatoryTest.result==='No' && tieBreakerTest.result==='No' && (initialTest1.result==='Yes' || initialTest1.result==='Yes' || initialTest1.result==='')) && (
                                     <>
                                     <b> Result : </b> 
-                                    
                                     <LabelRibbon color="green" >
                                         Non Reactive
                                     </LabelRibbon>
@@ -939,6 +940,49 @@ const HivTestResult = (props) => {
                                  {/* END of  result for Test 2*/}
                             </div>
                             </div>
+                            {(confirmatoryTest2.result2==='No' && tieBreakerTest2.result2==='Yes' ) && (
+                                    <>
+                            <div className="row">
+                            <div className="form-group  col-md-6">
+                                <FormGroup>
+                                    <Label>Prep Accepted</Label>
+                                    <select
+                                        className="form-control"
+                                        name="prepAccepted"
+                                        id="prepAccepted"
+                                        value={objValues.prepAccepted}
+                                        onChange={handleInputChange}
+                                        style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                    >
+                                        <option value={""}></option>
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
+                                        
+                                    </select>
+                                    
+                                </FormGroup>
+                            </div>
+                            <div className="form-group  col-md-6">
+                                <FormGroup>
+                                    <Label>Prep Offered</Label>
+                                    <select
+                                        className="form-control"
+                                        name="prepOffered"
+                                        id="prepOffered"
+                                        value={objValues.prepOffered}
+                                        onChange={handleInputChange}
+                                        style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                    >
+                                        <option value={""}></option>
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
+                                        
+                                    </select>
+                                    
+                                </FormGroup>
+                            </div>
+                            </div>
+                            </>)}
                             {showCD4Count && (<>
                             <LabelRibbon as='a' color='blue' style={{width:'106%', height:'35px'}} ribbon>
                                 <h5 style={{color:'#fff'}}>CD4 Count</h5>

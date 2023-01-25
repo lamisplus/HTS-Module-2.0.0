@@ -99,6 +99,8 @@ const useStyles = makeStyles((theme) => ({
 const BasicInfo = (props) => {
     const classes = useStyles();
     const history = useHistory();
+    const [entryPoint, setEntryPoint] = useState([]);
+    const [entryPointCommunity, setEntryPointCommunity] = useState([]);
     const [enrollSetting, setEnrollSetting] = useState([]);
     let riskCountQuestion=[]
     const [kP, setKP] = useState([]);
@@ -146,6 +148,8 @@ const BasicInfo = (props) => {
     useEffect(() => { 
         KP();
         EnrollmentSetting();
+        EntryPoint();
+        HTS_ENTRY_POINT_COMMUNITY();
         //objValues.dateVisit=moment(new Date()).format("YYYY-MM-DD")        
         if(objValues.age!==''){
             props.setPatientObjAge(objValues.age)
@@ -161,6 +165,32 @@ const BasicInfo = (props) => {
         .then((response) => {
             //console.log(response.data);
             setEnrollSetting(response.data);
+        })
+        .catch((error) => {
+        //console.log(error);
+        });    
+    }
+    const EntryPoint =()=>{
+        axios
+        .get(`${baseUrl}application-codesets/v2/TEST_SETTING`,
+            { headers: {"Authorization" : `Bearer ${token}`} }
+        )
+        .then((response) => {
+            //console.log(response.data);
+            setEntryPoint(response.data);
+        })
+        .catch((error) => {
+        //console.log(error);
+        });    
+    }
+    const HTS_ENTRY_POINT_COMMUNITY =()=>{
+        axios
+        .get(`${baseUrl}application-codesets/v2/HTS_ENTRY_POINT_COMMUNITY`,
+            { headers: {"Authorization" : `Bearer ${token}`} }
+        )
+        .then((response) => {
+            //console.log(response.data);
+            setEntryPointCommunity(response.data);
         })
         .catch((error) => {
         //console.log(error);

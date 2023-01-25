@@ -101,6 +101,8 @@ const RiskStratification = (props) => {
     const history = useHistory();
     //console.log(props)
     const [enrollSetting, setEnrollSetting] = useState([]);
+    const [entryPoint, setEntryPoint] = useState([]);
+    const [entryPointCommunity, setEntryPointCommunity] = useState([]);
     let riskCountQuestion=[]
     const [kP, setKP] = useState([]);
     const [errors, setErrors] = useState({});
@@ -163,6 +165,8 @@ const RiskStratification = (props) => {
     useEffect(() => { 
         KP();
         EnrollmentSetting();
+        EntryPoint();
+        HTS_ENTRY_POINT_COMMUNITY();
     }, [props.patientObj]);
     //Get list of HIV STATUS ENROLLMENT
     const EnrollmentSetting =()=>{
@@ -173,6 +177,32 @@ const RiskStratification = (props) => {
         .then((response) => {
             //console.log(response.data);
             setEnrollSetting(response.data);
+        })
+        .catch((error) => {
+        //console.log(error);
+        });    
+    }
+    const EntryPoint =()=>{
+        axios
+        .get(`${baseUrl}application-codesets/v2/HTS_ENTRY_POINT`,
+            { headers: {"Authorization" : `Bearer ${token}`} }
+        )
+        .then((response) => {
+            //console.log(response.data);
+            setEntryPoint(response.data);
+        })
+        .catch((error) => {
+        //console.log(error);
+        });    
+    }
+    const HTS_ENTRY_POINT_COMMUNITY =()=>{
+        axios
+        .get(`${baseUrl}application-codesets/v2/HTS_ENTRY_POINT_COMMUNITY`,
+            { headers: {"Authorization" : `Bearer ${token}`} }
+        )
+        .then((response) => {
+            //console.log(response.data);
+            setEntryPointCommunity(response.data);
         })
         .catch((error) => {
         //console.log(error);
@@ -458,15 +488,19 @@ const RiskStratification = (props) => {
                                         onChange={handleInputChange}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
-                                        <option value={""}>Select</option>                                      
-                                        <option value="Facility">Facility</option>
-                                        <option value="Community">Community</option>
+                                        <option value={""}>Select</option>
+                                        {entryPoint.map((value) => (
+                                            <option key={value.id} value={value.code}>
+                                                {value.display}
+                                            </option>
+                                        ))}
                                     </select>
                                     {errors.entryPoint !=="" ? (
                                     <span className={classes.error}>{errors.entryPoint}</span>
                                     ) : "" }
                                 </FormGroup>
                             </div>
+                            {objValues.entryPoint==='HTS_ENTRY_POINT_COMMUNITY' &&(
                             <div className="form-group  col-md-6">
                                 <FormGroup>
                                     <Label>Community Entry Point *</Label>
@@ -478,15 +512,18 @@ const RiskStratification = (props) => {
                                         onChange={handleInputChange}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
-                                        <option value={""}>Select</option>                                      
-                                        <option value="Facility">Facility</option>
-                                        <option value="Community">Community</option>
+                                        {entryPointCommunity.map((value) => (
+                                            <option key={value.id} value={value.code}>
+                                                {value.display}
+                                            </option>
+                                        ))}
                                     </select>
                                     {errors.communityEntryPoint !=="" ? (
                                     <span className={classes.error}>{errors.communityEntryPoint}</span>
                                     ) : "" }
                                 </FormGroup>
                             </div>
+                            )}
                             <div className="form-group mb-3 col-md-6">
                                 <FormGroup>
                                 <Label for="">Visit Date * </Label>

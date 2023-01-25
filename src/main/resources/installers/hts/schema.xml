@@ -26,6 +26,7 @@
                 date_modified timestamp without time zone NOT NULL,
                 modified_by character varying NOT NULL,
                 archived integer NOT NULL,
+                facility_id bigint NOT NULL,
                 risk_assessment jsonb,
                 CONSTRAINT unique_hts_risk_stratification_code UNIQUE (code),
                 CONSTRAINT hts_risk_stratification_pkey PRIMARY KEY (id),

@@ -9,7 +9,6 @@ import org.lamisplus.modules.hts.domain.entity.RiskStratification;
 import org.lamisplus.modules.hts.repository.RiskStratificationRepository;
 import org.lamisplus.modules.patient.domain.entity.Person;
 import org.lamisplus.modules.patient.repository.PersonRepository;
-import org.lamisplus.modules.patient.service.PersonService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -19,19 +18,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.lamisplus.modules.base.util.Constants.ArchiveStatus.ARCHIVED;
+import static org.lamisplus.modules.base.util.Constants.ArchiveStatus.UN_ARCHIVED;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class RiskStratificationService {
     private final RiskStratificationRepository stratificationRepository;
     private final PersonRepository personRepository;
+    private final CurrentUserOrganizationService currentFacility;
 
     public RiskStratificationResponseDto save(RiskStratificationDto riskStratificationDTO) {
         Person person = null;
         if(riskStratificationDTO.getPersonId() != null){
             person = this.getPerson(riskStratificationDTO.getPersonId());
         }
-        RiskStratification riskStratification = this.toRiskStratification(riskStratificationDTO, person);
+        RiskStratification riskStratification = this.toRiskStratification(riskStratificationDTO, person.getUuid());
+        riskStratification.setFacilityId(currentFacility.getCurrentUserOrganization());
         return this.toRiskStratificationResponseDTO(stratificationRepository.save(riskStratification));
     }
 
@@ -42,10 +46,19 @@ public class RiskStratificationService {
         }
         return null;
     }
-
     public Person getPerson(Long personId) {
         return personRepository.findById (personId)
                 .orElseThrow (() -> new EntityNotFoundException(Person.class, "id", String.valueOf (personId)));
+    }
+    public RiskStratificationDto update(Long id, RiskStratificationDto stratificationDto){
+        RiskStratification stratification = stratificationRepository
+                .findByIdAndFacilityIdAndArchived(id, currentFacility.getCurrentUserOrganization(), UN_ARCHIVED)
+                .orElseThrow(()-> new EntityNotFoundException(RiskStratification.class, "id", String.valueOf(id)));
+        stratificationDto.setId(id);
+        stratification = toRiskStratification(stratificationDto, stratification.getPersonUuid());
+        stratification.setId(id);
+        stratification.setFacilityId(currentFacility.getCurrentUserOrganization());
+        return toRiskStratificationDTO(stratificationRepository.save(stratification));
     }
 
     private RiskStratificationDto toRiskStratificationDTO(RiskStratification riskStratification) {
@@ -56,7 +69,7 @@ public class RiskStratificationService {
         RiskStratificationDto riskStratificationDto = new RiskStratificationDto();
 
         riskStratificationDto.setAge( riskStratification.getAge() );
-
+        riskStratificationDto.setId(riskStratification.getId());
         riskStratificationDto.setEntryPoint( riskStratification.getEntryPoint() );
 
         riskStratificationDto.setTestingSetting( riskStratification.getTestingSetting() );
@@ -91,15 +104,16 @@ public class RiskStratificationService {
         return responseDto;
     }
 
-    private RiskStratification toRiskStratification(RiskStratificationDto riskStratificationDTO, Person person) {
+    private RiskStratification toRiskStratification(RiskStratificationDto riskStratificationDTO, String personUuid) {
         if ( riskStratificationDTO == null ) {
             return null;
         }
 
         RiskStratification riskStratification = new RiskStratification();
 
+        riskStratification.setId(riskStratificationDTO.getId());
         riskStratification.setAge( riskStratificationDTO.getAge() );
-        if(person != null)riskStratification.setPersonUuid(person.getUuid());
+        riskStratification.setPersonUuid(personUuid);
         riskStratification.setTestingSetting( riskStratificationDTO.getTestingSetting() );
         riskStratification.setModality( riskStratificationDTO.getModality() );
         riskStratification.setCode( riskStratificationDTO.getCode() );

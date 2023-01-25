@@ -13,4 +13,6 @@ public interface RiskStratificationRepository extends PagingAndSortingRepository
     List<RiskStratification> findAllByPersonUuid(String uuid);
 
     Optional<RiskStratification> findByCode(String code);
+
+    Optional<RiskStratification> findByIdAndFacilityIdAndArchived(Long id, Long facilityId, int archived);
 }

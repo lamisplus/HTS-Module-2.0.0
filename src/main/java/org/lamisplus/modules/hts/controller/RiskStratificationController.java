@@ -7,7 +7,10 @@ import org.lamisplus.modules.hts.domain.dto.RiskStratificationDto;
 import org.lamisplus.modules.hts.domain.dto.RiskStratificationResponseDto;
 import org.lamisplus.modules.hts.service.RiskStratificationService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,8 +21,14 @@ public class RiskStratificationController {
 
     @PostMapping(RISK_STRATIFICATION_URL_VERSION_ONE)
     @ResponseStatus(HttpStatus.CREATED)
-    @ApiOperation("Add new data")
+    @ApiOperation("Saving a new Risk Stratification")
     public RiskStratificationResponseDto save(@RequestBody RiskStratificationDto riskStratificationDTO) {
         return riskStratificationService.save(riskStratificationDTO);
+    }
+
+    @PutMapping(RISK_STRATIFICATION_URL_VERSION_ONE +"/{id}")
+    @ApiOperation("Update Risk Stratification by id")
+    public ResponseEntity<RiskStratificationDto> update(@PathVariable Long id, @Valid @RequestBody RiskStratificationDto stratificationDto) {
+        return ResponseEntity.ok(riskStratificationService.update(id, stratificationDto));
     }
 }

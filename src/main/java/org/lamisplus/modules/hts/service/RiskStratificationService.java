@@ -56,7 +56,6 @@ public class RiskStratificationService {
                 .orElseThrow(()-> new EntityNotFoundException(RiskStratification.class, "id", String.valueOf(id)));
         stratificationDto.setId(id);
         stratification = toRiskStratification(stratificationDto, stratification.getPersonUuid());
-        stratification.setId(id);
         stratification.setFacilityId(currentFacility.getCurrentUserOrganization());
         return toRiskStratificationDTO(stratificationRepository.save(stratification));
     }
@@ -82,7 +81,6 @@ public class RiskStratificationService {
 
         return riskStratificationDto;
     }
-
     private RiskStratificationResponseDto toRiskStratificationResponseDTO(RiskStratification riskStratification) {
         if ( riskStratification == null ) {
             return null;
@@ -103,7 +101,6 @@ public class RiskStratificationService {
 
         return responseDto;
     }
-
     private RiskStratification toRiskStratification(RiskStratificationDto riskStratificationDTO, String personUuid) {
         if ( riskStratificationDTO == null ) {
             return null;
@@ -128,7 +125,7 @@ public class RiskStratificationService {
 
         return riskStratification;
     }
-    
+
     public void deleteById(Long id) {
         stratificationRepository.deleteById(id);
     }

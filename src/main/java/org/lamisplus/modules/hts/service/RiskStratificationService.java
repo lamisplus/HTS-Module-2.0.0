@@ -31,10 +31,12 @@ public class RiskStratificationService {
 
     public RiskStratificationResponseDto save(RiskStratificationDto riskStratificationDTO) {
         Person person = null;
+        String personUuid=null;
         if(riskStratificationDTO.getPersonId() != null){
             person = this.getPerson(riskStratificationDTO.getPersonId());
+            personUuid = person.getUuid();
         }
-        RiskStratification riskStratification = this.toRiskStratification(riskStratificationDTO, person.getUuid());
+        RiskStratification riskStratification = toRiskStratification(riskStratificationDTO, personUuid);
         riskStratification.setFacilityId(currentFacility.getCurrentUserOrganization());
         return this.toRiskStratificationResponseDTO(stratificationRepository.save(riskStratification));
     }

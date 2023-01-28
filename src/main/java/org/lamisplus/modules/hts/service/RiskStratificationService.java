@@ -30,11 +30,9 @@ public class RiskStratificationService {
     private final CurrentUserOrganizationService currentFacility;
 
     public RiskStratificationResponseDto save(RiskStratificationDto riskStratificationDTO) {
-        Person person = null;
         String personUuid=null;
         if(riskStratificationDTO.getPersonId() != null){
-            person = this.getPerson(riskStratificationDTO.getPersonId());
-            personUuid = person.getUuid();
+            personUuid = getPerson(riskStratificationDTO.getPersonId()).getUuid();
         }
         RiskStratification riskStratification = toRiskStratification(riskStratificationDTO, personUuid);
         riskStratification.setFacilityId(currentFacility.getCurrentUserOrganization());

@@ -119,8 +119,8 @@ const BasicInfo = (props) => {
     const [objValues, setObjValues]= useState(
         {
             active: true,
-            personId: props.patientObj.personId,
-            clientCode: props.patientObj && props.patientObj.clientCode ? props.patientObj.clientCode :"",  
+            personId: props.patientObject.personId,
+            clientCode: props.patientObject && props.patientObject.clientCode ? props.patientObject.clientCode :"",  
             breastFeeding:props.patientObj && props.patientObj.breastFeeding ? props.patientObj.breastFeeding :"",
             dateVisit: props.patientObj && props.patientObj.dateVisit ? props.patientObj.dateVisit :"",
             firstTimeVisit: props.patientObj && props.patientObj.firstTimeVisit ? props.patientObj.firstTimeVisit :"",
@@ -317,7 +317,7 @@ const BasicInfo = (props) => {
             indexClient: objValues.indexClient,
             numChildren: objValues.numChildren,
             numWives: objValues.numWives,
-            personId: props.patientObj.personId,
+            personId: props.patientObject.personId,
             hospitalNumber:objValues.clientCode,
             previouslyTested: objValues.previouslyTested,
             referredFrom: objValues.referredFrom,
@@ -374,7 +374,7 @@ const BasicInfo = (props) => {
                         <div className="row">
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Target Group *</Label>
+                                    <Label>Target Group <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="targetGroup"
@@ -398,7 +398,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group mb-3 col-md-4">
                                 <FormGroup>
-                                <Label for="">Client Code *</Label>
+                                <Label for="">Client Code <span style={{ color:"red"}}> *</span></Label>
                                 <Input
                                     type="text"
                                     name="clientCode"
@@ -438,7 +438,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Setting*</Label>
+                                    <Label>Setting <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="testingSetting"
@@ -718,9 +718,9 @@ const BasicInfo = (props) => {
                             
                             <br />
                             <div className="row">
-                            <div className="form-group mb-3 col-md-6">
-
-                            <Button content='Save & Continue' type="submit" icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
+                            <div className="form-group mb-3 col-md-12">
+                            <Button content='Back' icon='left arrow' labelPosition='left' style={{backgroundColor:"#992E62", color:'#fff'}} onClick={()=>handleItemClick('risk','risk')}/>
+                            <Button content='Save & Continue' type="submit" icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit} disabled={saving}/>
                             </div>
                             </div>
                         </div>

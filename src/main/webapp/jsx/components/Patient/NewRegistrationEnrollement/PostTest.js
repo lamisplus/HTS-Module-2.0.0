@@ -150,6 +150,7 @@ const PostTest = (props) => {
             handleItemClick('recency-testing', 'post-test')
         }
         if(props.activePage.actionType==='update'){
+            setSaving(true)
         //e.preventDefault();
             objValues.htsClientId= clientId
             objValues.postTestCounselingKnowledgeAssessment= postTest
@@ -195,7 +196,7 @@ const PostTest = (props) => {
                         </LabelRibbon>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>HIV test result *</Label>
+                                    <Label>HIV test result <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="hivTestResult"
@@ -551,10 +552,10 @@ const PostTest = (props) => {
                                 <Button content='Back' icon='left arrow' labelPosition='left' style={{backgroundColor:"#992E62", color:'#fff'}} onClick={()=>handleItemClick('hiv-test', 'hiv-test')}/>
                                 
                                 {props.activePage.actionType==='update' && (
-                                <Button content='Update & Continue' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
+                                <Button content='Update & Continue' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit} disabled={saving}/>
                                 )}
                                 {props.activePage.actionType==='view' && (
-                                    <Button content='Next' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
+                                    <Button content='Next' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit} disabled={saving}/>
                                 )}
                                 
                             </div>

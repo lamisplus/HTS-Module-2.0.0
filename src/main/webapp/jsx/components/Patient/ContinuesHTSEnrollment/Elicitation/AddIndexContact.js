@@ -91,14 +91,14 @@ const useStyles = makeStyles((theme) => ({
 const AddIndexContact = (props) => {
     const classes = useStyles();
     const [saving, setSaving] = useState(false);
-    const [errors, setErrors] = useState({});
     const [sexs, setSexs] = useState([])
     const [notificationContact, setNotificationContact] = useState([])
     const [ageDisabled, setAgeDisabled] = useState(true);
     const [indexTesting, setIndexTesting]= useState([]);
     const [consent, setConsent]= useState([]);
     const [hivTestDate, setHivTestDate] = useState("");
-   
+    const [errors, setErrors] = useState({});
+    let temp = { ...errors }
     const [objValuesIndex, setObjValuesIndex]= useState( {
         htsClientId: null,
         indexNotificationServicesElicitation: {},
@@ -284,8 +284,17 @@ const AddIndexContact = (props) => {
         const result = value.replace(/[^a-z]/gi, '');
         return result
     }
+    const validate = () => {
+        //HTS FORM VALIDATION
+         temp.acceptedIns = objValues.acceptedIns ? "" : "This field is required."
+        temp.offeredIns = objValues.offeredIns ? "" : "This field is required."
+             
+                setErrors({ ...temp })
+        return Object.values(temp).every(x => x == "")
+    }
     const handleSubmit =(e)=>{
-        e.preventDefault();     
+        e.preventDefault(); 
+        if(validate()){    
         objValues.isDateOfBirthEstimated=objValues.isDateOfBirthEstimated==true ? 1 : 0
             axios.post(`${baseUrl}index-elicitation`,objValues,
             { headers: {"Authorization" : `Bearer ${token}`}},
@@ -307,7 +316,7 @@ const AddIndexContact = (props) => {
                     toast.error("Something went wrong. Please try again...",  {position: toast.POSITION.BOTTOM_CENTER});
                 }
             });
-            
+        }   
     }
 
     return (
@@ -331,7 +340,7 @@ const AddIndexContact = (props) => {
                     <div className="row">
                     <div className="form-group  col-md-4">
                         <FormGroup>
-                            <Label>Offered INS ? *</Label>
+                            <Label>Offered INS ?  <span style={{ color:"red"}}> *</span></Label>
                             <select
                                 className="form-control"
                                 name="offeredIns"
@@ -347,12 +356,14 @@ const AddIndexContact = (props) => {
                                     </option>
                                 ))}
                             </select>
-                            
+                            {errors.offeredIns !=="" ? (
+                                    <span className={classes.error}>{errors.offeredIns}</span>
+                                ) : "" }
                         </FormGroup>
                     </div>
                     <div className="form-group  col-md-4">
                         <FormGroup>
-                            <Label>Accepted INS ? *</Label>
+                            <Label>Accepted INS ?  <span style={{ color:"red"}}> *</span></Label>
                             <select
                                 className="form-control"
                                 name="acceptedIns"
@@ -368,7 +379,9 @@ const AddIndexContact = (props) => {
                                     </option>
                                 ))}
                             </select>
-                            
+                            {errors.acceptedIns !=="" ? (
+                                    <span className={classes.error}>{errors.acceptedIns}</span>
+                                ) : "" }
                         </FormGroup>
                     </div>
                     </div>                    

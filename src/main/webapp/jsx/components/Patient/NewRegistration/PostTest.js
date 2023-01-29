@@ -150,8 +150,9 @@ const PostTest = (props) => {
     }
     const handleSubmit =(e)=>{
         e.preventDefault();
+        setSaving(true)
         //handleItemClick('recency-testing', 'post-test')
-        if(!(Object.values(postTest).every(x => x === ""))){
+        //if(!(Object.values(postTest).every(x => x === ""))){
             objValues.htsClientId=  props.patientObj.id
             objValues.postTestCounselingKnowledgeAssessment= postTest
             objValues.personId= props.patientObj.personResponseDto.id
@@ -181,10 +182,10 @@ const PostTest = (props) => {
                     toast.error("Something went wrong. Please try again...");
                 }
             });
-        }else{
-            toast.error("All post test fields are required")  
+        // }else{
+        //     toast.error("All post test fields are required")  
         
-        }
+        // }
             
     }
 
@@ -556,10 +557,10 @@ const PostTest = (props) => {
                             <div className="form-group mb-3 col-md-12">
                                 <Button content='Back' icon='left arrow' labelPosition='left' style={{backgroundColor:"#992E62", color:'#fff'}} onClick={()=>handleItemClick('hiv-test', 'hiv-test')}/>
                                 {postTest.hivTestResult==='true' && (
-                                    <Button content='Save & Continue' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
+                                    <Button content='Save & Continue' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit} disabled={saving}/>
                                 )}
                                 {postTest.hivTestResult==='false' && (
-                                    <Button content='Save & Finish' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
+                                    <Button content='Save & Finish' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit} disabled={saving}/>
                                 )}
                                 </div>
                             </div>

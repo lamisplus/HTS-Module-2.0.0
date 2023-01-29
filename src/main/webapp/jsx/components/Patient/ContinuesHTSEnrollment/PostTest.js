@@ -203,7 +203,7 @@ const PostTest = (props) => {
                         </LabelRibbon>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>HIV test result *</Label>
+                                    <Label>HIV test result <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="hivTestResult"

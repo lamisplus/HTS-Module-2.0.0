@@ -38,17 +38,12 @@ const UserRegistration = (props) => {
     const classes = useStyles();
     const [activeItem, setactiveItem] = useState('basic');
     const [completed, setCompleted] = useState([]);
-    const [patientObj, setPatientObj] = useState("");
+    const [patientObj, setPatientObj] = useState(props.activePage.activeObject);
     const handleItemClick =(activeItem)=>{
         setactiveItem(activeItem)
         //setCompleted({...completed, ...completedMenu})
     }
-    useEffect(() => { 
-        const patientNewObj= props.activePage && props.activePage.activeObject ? props.activePage.activeObject : {}
-        if(patientNewObj){
-            setPatientObj(patientNewObj)           
-        }
-    }, [props.activePage]);
+
     const LoadViewPage =(row, actionType)=>{
         props.setActivePage({...props.activePage, activePage:"home", activeObject:row, actionType:actionType})
     }

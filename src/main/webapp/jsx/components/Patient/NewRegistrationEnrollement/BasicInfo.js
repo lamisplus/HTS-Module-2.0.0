@@ -99,7 +99,7 @@ const BasicInfo = (props) => {
     //console.log(props.activePage)
     const [errors, setErrors] = useState({});
     const [saving, setSaving] = useState(false);
-    const [hideNumChild, setHideNumChild] = useState(false);
+    //const [hideNumChild, setHideNumChild] = useState(false);
     const [kP, setKP] = useState([]);
     const [enrollSetting, setEnrollSetting] = useState([]);
     const [sourceReferral, setSourceReferral] = useState([]);
@@ -141,6 +141,7 @@ const BasicInfo = (props) => {
             sexId: "",
             state:null,
             lga:"",
+            id:"",
             surname: "",
             previouslyTested: "",
             referredFrom: "",
@@ -160,13 +161,14 @@ const BasicInfo = (props) => {
         CounselingType();
         PregnancyStatus()
         IndexTesting();
-        setObjValues(props.patientObj)
+        setObjValues(props.activePage.activeObject)
         // if(props.patientObj){
         //     objValues.referredFrom=props.patientObj.referredFrom
         // }
         //setObjValues({...objectValues, genderId: props.patientObj.personResponseDto.gender.id})
         //objValues.genderId = props.patientObj && props.patientObj.personResponseDto ? props.patientObj.personResponseDto.gender.id : ""
     }, [props.patientObj]);
+    console.log(objValues)
     //Get list of KP
     const KP =()=>{
         axios
@@ -301,6 +303,7 @@ const BasicInfo = (props) => {
             clientCode: objValues.clientCode,
             dateVisit: objValues.dateVisit,
             extra: {},
+            id:objValues.id,
             firstTimeVisit: objValues.firstTimeVisit,
             indexClient: objValues.indexClient,
             numChildren: objValues.numChildren,
@@ -319,6 +322,7 @@ const BasicInfo = (props) => {
             }
 
             if(validate()){
+                setSaving(true)
             axios.put(`${baseUrl}hts/${props.patientObj.id}`,patientForm,
             { headers: {"Authorization" : `Bearer ${token}`}},
             
@@ -349,14 +353,16 @@ const BasicInfo = (props) => {
         }
         if(props.activePage.actionType==='view'){
             //e.preventDefault();
+            setSaving(true)
             if(props.patientAge >14){
+                setSaving(false)
                 handleItemClick('pre-test-counsel', 'basic' )
             }else{
+                setSaving(false)
                 handleItemClick('hiv-test', 'pre-test-counsel')
             }
         }
     }
-
 
     return (
         <>  
@@ -369,7 +375,7 @@ const BasicInfo = (props) => {
                         <div className="row">
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Target Group *</Label>
+                                    <Label>Target Group <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="targetGroup"
@@ -392,7 +398,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group mb-3 col-md-4">
                                 <FormGroup>
-                                <Label for="">Client Code *</Label>
+                                <Label for="">Client Code <span style={{ color:"red"}}> *</span></Label>
                                 <Input
                                     type="number"
                                     name="clientCode"
@@ -409,7 +415,7 @@ const BasicInfo = (props) => {
                             </div>                           
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Referred From *</Label>
+                                    <Label>Referred From <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="referredFrom"
@@ -432,7 +438,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Setting*</Label>
+                                    <Label>Setting <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="testingSetting"
@@ -455,7 +461,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group mb-3 col-md-4">
                                 <FormGroup>
-                                <Label for="">Visit Date  </Label>
+                                <Label for="">Visit Date  <span style={{ color:"red"}}> *</span></Label>
                                 <Input
                                     type="date"
                                     name="dateVisit"
@@ -496,7 +502,7 @@ const BasicInfo = (props) => {
                             </FormGroup>
                             </div>
                             )} */}
-                             {(objValues.age > 9 && objValues.sex==='Male' && objValues.maritalStatusId!==5) && (
+                             {props.patientAge > 9 && (props.patientObj.personResponseDto.sex==='Male' || props.patientObj.personResponseDto.sex==='male' || props.patientObj.personResponseDto.sex==='MALE') && (
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Number of wives/co-wives</Label>
@@ -514,7 +520,7 @@ const BasicInfo = (props) => {
                                 </FormGroup>
                             </div>
                             )}
-                            {(objValues.age>9 ) && (
+                            {(props.patientAge>9 ) && (
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Number of Children {'<5'} years</Label>
@@ -553,7 +559,7 @@ const BasicInfo = (props) => {
                                     ) : "" }   
                                 </FormGroup>
                             </div>
-                            {objValues.indexClient==='true' && (
+                            {objValues.indexClient==='true' || objValues.indexClient===true && (
                             <>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
@@ -594,7 +600,7 @@ const BasicInfo = (props) => {
                             </div>
                             </>
                             )}
-                            {objValues.sex==='Female' && (
+                            {(props.patientObj.personResponseDto.sex==='Female' || props.patientObj.personResponseDto.sex==='female' || props.patientObj.personResponseDto.sex==='FEMALE') && (
                             <>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
@@ -618,7 +624,7 @@ const BasicInfo = (props) => {
                                     
                                 </FormGroup>
                             </div>
-
+                            {objValues.pregnant!== 73 || objValues.pregnant!== "73" && (
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Breast Feeding</Label>
@@ -637,6 +643,7 @@ const BasicInfo = (props) => {
                                     
                                 </FormGroup>
                             </div>
+                            )}
                             </>
                             )}
                            
@@ -710,10 +717,10 @@ const BasicInfo = (props) => {
                             <div className="row">
                             <div className="form-group mb-3 col-md-12">
                             {props.activePage.actionType==='update' && (
-                                <Button content='Update & Continue' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
+                                <Button content='Update & Continue' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit} disabled={saving}/>
                             )}
                             {props.activePage.actionType==='view' && (
-                                <Button content='Next' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
+                                <Button content='Next' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit} disabled={saving}/>
                             )}
                             
                             </div>

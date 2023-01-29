@@ -31,4 +31,10 @@ public class RiskStratificationController {
     public ResponseEntity<RiskStratificationDto> update(@PathVariable Long id, @Valid @RequestBody RiskStratificationDto stratificationDto) {
         return ResponseEntity.ok(riskStratificationService.update(id, stratificationDto));
     }
+
+    @GetMapping(RISK_STRATIFICATION_URL_VERSION_ONE + "/{personId}")
+    @ApiOperation("Get Risk Stratification by person id")
+    public ResponseEntity<RiskStratificationResponseDto> getStratificationByPersonId(@PathVariable Long personId) {
+        return ResponseEntity.ok(riskStratificationService.getStratificationByPersonId(personId));
+    }
 }

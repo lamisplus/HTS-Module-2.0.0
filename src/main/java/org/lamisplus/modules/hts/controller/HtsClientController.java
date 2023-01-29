@@ -1,5 +1,6 @@
 package org.lamisplus.modules.hts.controller;
 
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.lamisplus.modules.base.domain.dto.PageDTO;
 import org.lamisplus.modules.base.util.PaginationUtil;
@@ -89,6 +90,7 @@ public class HtsClientController {
         return new ResponseEntity<>(this.htsClientService.getAllHtsClientDTOSByPerson(page), HttpStatus.OK);
     }
     @GetMapping(HTS_URL_VERSION_ONE + "/persons")
+    @ApiOperation("Get Hts Client")
     public ResponseEntity<PageDTO> getHtsPerson(@RequestParam (required = false, defaultValue = "*")  String searchValue,
                                                  @RequestParam (required = false, defaultValue = "20")int pageSize,
                                                  @RequestParam (required = false, defaultValue = "0") int pageNo) {

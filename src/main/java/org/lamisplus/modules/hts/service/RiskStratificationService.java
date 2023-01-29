@@ -146,4 +146,12 @@ public class RiskStratificationService {
                 .map(riskStratification -> toRiskStratificationResponseDTO(riskStratification))
                 .collect(Collectors.toList());
     }
+
+    public RiskStratificationResponseDto getStratificationByPersonId(Long personId) {
+        RiskStratification stratification = stratificationRepository
+                .findByPersonUuidAndFacilityIdAndArchived(getPerson(personId).getUuid(), currentFacility.getCurrentUserOrganization(), UN_ARCHIVED)
+                .orElseThrow(()-> new EntityNotFoundException(RiskStratification.class, "personId", String.valueOf(personId)));
+
+        return toRiskStratificationResponseDTO(stratification);
+    }
 }

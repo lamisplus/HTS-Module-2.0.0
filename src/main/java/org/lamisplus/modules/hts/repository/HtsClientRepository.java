@@ -29,7 +29,7 @@ public interface HtsClientRepository extends JpaRepository<HtsClient, Long> {
 
     Optional<HtsClient> findTopByPersonUuidAndArchivedAndFacilityId(String personUuid, Integer archived, Long facilityId);
 
-    @Query(value = "SELECT p.id as personId, p.first_name as firstName, p.surname as surname, p.other_name as otherName, " +
+    @Query(value = "SELECT hc.client_code as clientCode, p.id as personId, p.first_name as firstName, p.surname as surname, p.other_name as otherName, " +
             "p.hospital_number as hospitalNumber, CAST (EXTRACT(YEAR from AGE(NOW(),  date_of_birth)) AS INTEGER) as age, " +
             "INITCAP(p.sex) as gender, p.date_of_birth as dateOfBirth, CAST (COUNT(hc.person_uuid) AS INTEGER) as htsCount " +
             "FROM patient_person p " +
@@ -37,11 +37,11 @@ public interface HtsClientRepository extends JpaRepository<HtsClient, Long> {
             "WHERE p.archived=?1 AND p.facility_id=?2 AND (p.first_name ILIKE ?3 " +
             "OR p.surname ILIKE ?3 OR p.other_name ILIKE ?3 " +
             "OR p.hospital_number ILIKE ?3 OR hc.client_code ILIKE ?3) " +
-            "GROUP BY p.id, p.first_name, p.first_name, p.surname, p.other_name, p.hospital_number, p.date_of_birth", nativeQuery = true)
+            "GROUP BY hc.client_code, p.id, p.first_name, p.first_name, p.surname, p.other_name, p.hospital_number, p.date_of_birth", nativeQuery = true)
     Page<HtsPerson> findAllPersonHtsBySearchParam(Integer archived, Long facilityId, String search, Pageable pageable);
 
 
-    @Query(value = "SELECT p.id as personId, p.first_name as firstName, p.surname as surname, p.other_name as otherName, " +
+    @Query(value = "SELECT hc.client_code as clientCode, p.id as personId, p.first_name as firstName, p.surname as surname, p.other_name as otherName, " +
             "p.hospital_number as hospitalNumber, CAST (EXTRACT(YEAR from AGE(NOW(),  date_of_birth)) AS INTEGER) as age, " +
             "INITCAP(p.sex) as gender, p.date_of_birth as dateOfBirth, CAST (COUNT(hc.person_uuid) AS INTEGER) as htsCount " +
             "FROM patient_person p " +
@@ -49,16 +49,16 @@ public interface HtsClientRepository extends JpaRepository<HtsClient, Long> {
             "WHERE p.archived=?1 AND p.facility_id=?2 AND (p.first_name ILIKE ?3 " +
             "OR p.surname ILIKE ?3 OR p.other_name ILIKE ?3 " +
             "OR p.hospital_number ILIKE ?3 OR hc.client_code ILIKE ?3) " +
-            "GROUP BY p.id, p.first_name, p.first_name, p.surname, p.other_name, p.hospital_number, p.date_of_birth", nativeQuery = true)
+            "GROUP BY hc.client_code, p.id, p.first_name, p.first_name, p.surname, p.other_name, p.hospital_number, p.date_of_birth", nativeQuery = true)
     List<HtsPerson> findAllPersonHtsBySearchParam(Integer archived, Long facilityId, String search);
 
 
-    @Query(value = "SELECT p.id as personId, p.first_name as firstName, p.surname as surname, p.other_name as otherName, " +
+    @Query(value = "SELECT hc.client_code as clientCode, p.id as personId, p.first_name as firstName, p.surname as surname, p.other_name as otherName, " +
             "p.hospital_number as hospitalNumber, CAST (EXTRACT(YEAR from AGE(NOW(),  date_of_birth)) AS INTEGER) as age, " +
             "INITCAP(p.sex) as gender, p.date_of_birth as dateOfBirth, CAST (COUNT(hc.person_uuid) AS INTEGER) as htsCount FROM patient_person p " +
             "LEFT JOIN hts_client hc ON hc.person_uuid = p.uuid AND hc.archived = ?1 " +
             "WHERE p.archived=?1 AND p.facility_id=?2 " +
-            "GROUP BY p.id, p.first_name, p.first_name, p.surname, p.other_name, p.hospital_number, p.date_of_birth", nativeQuery = true)
+            "GROUP BY hc.client_code, p.id, p.first_name, p.first_name, p.surname, p.other_name, p.hospital_number, p.date_of_birth", nativeQuery = true)
     Page<HtsPerson> findAllPersonHts(Integer archived, Long facilityId, Pageable pageable);
 
 

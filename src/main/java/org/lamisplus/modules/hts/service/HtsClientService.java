@@ -74,6 +74,26 @@ public class HtsClientService {
         return this.htsClientToHtsClientDto(htsClient);
     }
 
+    public HtsClientDto update(Long id, HtsClientDto htsClientDto){
+        HtsClient htsClient = htsClientRepository
+                .findByIdAndArchivedAndFacilityId(id, UN_ARCHIVED,
+                        currentUserOrganizationService.getCurrentUserOrganization())
+                .orElseThrow(()-> new EntityNotFoundException(HtsClient.class, "id", String.valueOf(id)));
+
+        Person person;
+        if(htsClientDto.getPersonId() == null){
+            throw new EntityNotFoundException(Person.class, "id", "id is null");
+        } else {
+            person = this.getPerson(htsClientDto.getPersonId());
+            htsClient = this.htsClientDtoToHtsClient(htsClientDto, person.getUuid());
+        }
+        htsClient.setId(id);
+        htsClient.setFacilityId(currentUserOrganizationService.getCurrentUserOrganization());
+        htsClient = htsClientRepository.save(htsClient);
+        htsClient.setPerson(person);
+        return this.htsClientToHtsClientDto(htsClient);
+    }
+
     public HtsClientDtos getHtsClientById(Long id){
         List<HtsClient> htsClients = new ArrayList<>();
         HtsClient htsClient = this.getById(id);
@@ -222,6 +242,33 @@ public class HtsClientService {
         htsClient.setBreastFeeding(htsClientRequestDto.getBreastFeeding());
         htsClient.setRiskStratificationCode(htsClientRequestDto.getRiskStratificationCode());
         htsClient.setRelationWithIndexClient(htsClientRequestDto.getRelationWithIndexClient());
+
+        return htsClient;
+    }
+
+    public HtsClient htsClientDtoToHtsClient(HtsClientDto htsClientDto, @NotNull String personUuid) {
+        if ( htsClientDto == null ) {
+            return null;
+        }
+        HtsClient htsClient = new HtsClient();
+        htsClient.setId(htsClientDto.getId());
+        htsClient.setTargetGroup( htsClientDto.getTargetGroup() );
+        htsClient.setClientCode( htsClientDto.getClientCode() );
+        htsClient.setDateVisit( htsClientDto.getDateVisit() );
+        htsClient.setReferredFrom( htsClientDto.getReferredFrom() );
+        htsClient.setTestingSetting( htsClientDto.getTestingSetting() );
+        htsClient.setFirstTimeVisit( htsClientDto.getFirstTimeVisit() );
+        htsClient.setNumChildren( htsClientDto.getNumChildren() );
+        htsClient.setNumWives( htsClientDto.getNumWives() );
+        htsClient.setTypeCounseling( htsClientDto.getTypeCounseling() );
+        htsClient.setIndexClient( htsClientDto.getIndexClient() );
+        htsClient.setPreviouslyTested( htsClientDto.getPreviouslyTested() );
+        htsClient.setExtra( htsClientDto.getExtra() );
+        htsClient.setPersonUuid( personUuid);
+        htsClient.setPregnant(htsClientDto.getPregnant());
+        htsClient.setBreastFeeding(htsClientDto.getBreastFeeding());
+        htsClient.setRiskStratificationCode(htsClientDto.getRiskStratificationCode());
+        htsClient.setRelationWithIndexClient(htsClientDto.getRelationWithIndexClient());
 
         return htsClient;
     }
@@ -498,7 +545,7 @@ public class HtsClientService {
         htsClientRepository.save(htsClient);
     }
 
-    public HtsClientDto update(Long id, HtsClientUpdateRequestDto htsClientUpdateRequestDto) {
+    /*public HtsClientDto update(Long id, HtsClientUpdateRequestDto htsClientUpdateRequestDto) {
         if(!id.equals(htsClientUpdateRequestDto.getId())){
             throw new IllegalTypeException(Person.class, "Id", "id does not match");
         }
@@ -512,7 +559,7 @@ public class HtsClientService {
         htsClient = htsClientRepository.save(htsClient);
         htsClient.setPerson(person);
         return this.htsClientToHtsClientDto(htsClient);
-    }
+    }*/
 
     public HtsClient htsClientUpdateRequestDtoToHtsClient(HtsClientUpdateRequestDto htsClientUpdateRequestDto, @NotNull String personUuid) {
         if ( htsClientUpdateRequestDto == null ) {

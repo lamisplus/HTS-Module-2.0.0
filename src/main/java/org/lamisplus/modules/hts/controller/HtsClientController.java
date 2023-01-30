@@ -32,9 +32,14 @@ public class HtsClientController {
     }
 
     @PutMapping(HTS_URL_VERSION_ONE +"/{id}")
-    public ResponseEntity<HtsClientDto> update(@PathVariable Long id, @Valid @RequestBody HtsClientUpdateRequestDto htsClientUpdateRequestDto) {
-        return ResponseEntity.ok(this.htsClientService.update(id, htsClientUpdateRequestDto));
+    public ResponseEntity<HtsClientDto> update(@PathVariable Long id, @Valid @RequestBody HtsClientDto htsClientDto) {
+        return ResponseEntity.ok(this.htsClientService.update(id, htsClientDto));
     }
+
+    /*@PutMapping(HTS_URL_VERSION_ONE +"/{id}/client-intake")
+    public ResponseEntity<HtsClientDto> updateClientIntake(@PathVariable Long id, @Valid @RequestBody HtsClientDto htsClientDto) {
+        return ResponseEntity.ok(this.htsClientService.updateClientIntake(id, htsClientDto));
+    }*/
 
     @PutMapping(HTS_URL_VERSION_ONE +"/{id}/pre-test-counseling")
     public ResponseEntity<HtsClientDto> updatePreTestCounseling(@PathVariable Long id, @Valid @RequestBody HtsPreTestCounselingDto htsPreTestCounselingDto) {

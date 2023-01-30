@@ -217,6 +217,7 @@ const Recency = (props) => {
             objValues.personId= patientID
             //console.log(recency)
             if(validate()){
+                setSaving(true)
             axios.put(`${baseUrl}hts/${clientId}/recency`,objValues,
             { headers: {"Authorization" : `Bearer ${token}`}},
             

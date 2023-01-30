@@ -103,7 +103,7 @@ const BasicInfo = (props) => {
     const history = useHistory();
     const [errors, setErrors] = useState({});
     const [saving, setSaving] = useState(false);
-    const [hideNumChild, setHideNumChild] = useState(false);
+    //const [hideNumChild, setHideNumChild] = useState(false);
     const [kP, setKP] = useState([]);
     const [enrollSetting, setEnrollSetting] = useState([]);
     const [sourceReferral, setSourceReferral] = useState([]);
@@ -332,6 +332,7 @@ const BasicInfo = (props) => {
             }
 
             if(validate()){
+            setSaving(true);
             axios.post(`${baseUrl}hts`,patientForm,
             { headers: {"Authorization" : `Bearer ${token}`}},
             
@@ -416,7 +417,7 @@ const BasicInfo = (props) => {
                             </div>                           
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Referred From *</Label>
+                                    <Label>Referred From <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="referredFrom"
@@ -461,7 +462,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group mb-3 col-md-4">
                                 <FormGroup>
-                                <Label for="">Visit Date  </Label>
+                                <Label for="">Visit Date <span style={{ color:"red"}}> *</span></Label>
                                 <Input
                                     type="date"
                                     name="dateVisit"
@@ -503,7 +504,7 @@ const BasicInfo = (props) => {
                             </div>
                             )} */}
 
-                            {(objValues.age>9 ) && (
+                            {props.patientAge>9  && (
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Number of Children {'<5'} years</Label>
@@ -521,7 +522,7 @@ const BasicInfo = (props) => {
                                 </FormGroup>
                             </div>
                             )}
-                            {(objValues.age > 9 && objValues.sex==='Male' && objValues.maritalStatusId!==5) && (
+                            {props.patientAge > 9 && (props.patientObject.gender==='Male' || props.patientObject.gender==='MALE' || props.patientObject.gender==='male' ) && (
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Number of wives/co-wives</Label>
@@ -541,7 +542,7 @@ const BasicInfo = (props) => {
                             )}
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Index Testing</Label>
+                                    <Label>Index Testing <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="indexClient"
@@ -603,7 +604,7 @@ const BasicInfo = (props) => {
                             </div>
                             </>
                             )}
-                            {objValues.sex==='Female' && (
+                            {(props.patientObject.gender==='female' || props.patientObject.gender==='FEMALE' || props.patientObject.gender==='Female')  && (
                             <>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
@@ -627,7 +628,7 @@ const BasicInfo = (props) => {
                                     
                                 </FormGroup>
                             </div>
-                            {objValues.pregnant!== 73 && (
+                            {(objValues.pregnant!== 73 || objValues.pregnant!== '73') && (
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Breast Feeding</Label>
@@ -652,7 +653,7 @@ const BasicInfo = (props) => {
                            
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>First time visit</Label>
+                                    <Label>First time visit <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="firstTimeVisit"
@@ -673,7 +674,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Previously tested within the last 3 months</Label>
+                                    <Label>Previously tested within the last 3 months <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="previouslyTested"
@@ -693,7 +694,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Type of Counseling</Label>
+                                    <Label>Type of Counseling <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="typeCounseling"

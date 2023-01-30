@@ -177,6 +177,7 @@ const BasicInfo = (props) => {
         }
         if(props.patientObj.riskStratificationResponseDto!==null){
             setObjValues(props.patientObj.riskStratificationResponseDto)
+            SettingModality(props.patientObj.riskStratificationResponseDto.testingSetting)
             setRiskAssessment(props.patientObj.riskStratificationResponseDto.riskAssessment)
         }
     }, [objValues.age]);

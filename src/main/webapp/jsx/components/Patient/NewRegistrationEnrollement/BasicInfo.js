@@ -168,7 +168,6 @@ const BasicInfo = (props) => {
         //setObjValues({...objectValues, genderId: props.patientObj.personResponseDto.gender.id})
         //objValues.genderId = props.patientObj && props.patientObj.personResponseDto ? props.patientObj.personResponseDto.gender.id : ""
     }, [props.patientObj]);
-    console.log(objValues)
     //Get list of KP
     const KP =()=>{
         axios
@@ -208,7 +207,6 @@ const BasicInfo = (props) => {
         //console.log(error);
         });    
     }
-    
     //Get list of KP
     const CounselingType =()=>{
         axios
@@ -236,7 +234,6 @@ const BasicInfo = (props) => {
         //console.log(error);
         });    
     }
-
     //Get list of Source of Referral
     const SourceReferral =()=>{
             axios
@@ -269,7 +266,6 @@ const BasicInfo = (props) => {
         setErrors({...temp, [e.target.name]:""})        
         setObjValues ({...objValues,  [e.target.name]: e.target.value});            
     }
-
     /*****  Validation  */
     const validate = () => {
         //HTS FORM VALIDATION

@@ -122,7 +122,7 @@ const RiskStratification = (props) => {
             isDateOfBirthEstimated:"", //props.patientObj.personResponseDto.isDateOfBirthEstimated
             targetGroup:"",
             testingSetting:"",//
-            modality  :"", //
+            modality:"", //
             code:"",
             id:"",
             personId:props.patientObj.id,
@@ -170,10 +170,11 @@ const RiskStratification = (props) => {
         HTS_ENTRY_POINT_COMMUNITY();
         if(props.patientObj.riskStratificationResponseDto!==null){
             setObjValues(props.patientObj.riskStratificationResponseDto)
+            SettingModality(props.patientObj.riskStratificationResponseDto.testingSetting)
             setRiskAssessment(props.patientObj.riskStratificationResponseDto && props.patientObj.riskStratificationResponseDto.riskAssessment)
         }
     }, [props.patientObj]);
-    console.log(props)
+
     //Get list of HIV STATUS ENROLLMENT
     const EnrollmentSetting =()=>{
         axios
@@ -340,7 +341,7 @@ const RiskStratification = (props) => {
     const actualRiskCountTrue=Object.values(riskAssessment)
     riskCountQuestion=actualRiskCountTrue.filter((x)=> x==='true')
     const handleInputChangeRiskAssessment = e => { 
-        //setErrors({...temp, [e.target.name]:""}) 
+        setErrors({...temp, [e.target.name]:""}) 
         setRiskAssessment ({...riskAssessment,  [e.target.name]: e.target.value}); 
                             
     }
@@ -488,7 +489,7 @@ const RiskStratification = (props) => {
                             <div className="row">
                             <div className="form-group  col-md-6">
                                 <FormGroup>
-                                    <Label>Entry Point *</Label>
+                                    <Label>Entry Point <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="entryPoint"
@@ -512,7 +513,7 @@ const RiskStratification = (props) => {
                             {objValues.entryPoint==='HTS_ENTRY_POINT_COMMUNITY' &&(
                             <div className="form-group  col-md-6">
                                 <FormGroup>
-                                    <Label>Community Entry Point *</Label>
+                                    <Label>Community Entry Point <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="communityEntryPoint"
@@ -536,7 +537,7 @@ const RiskStratification = (props) => {
                             )}
                             <div className="form-group mb-3 col-md-6">
                                 <FormGroup>
-                                <Label for="">Visit Date * </Label>
+                                <Label for="">Visit Date <span style={{ color:"red"}}> *</span> </Label>
                                 <Input
                                     type="date"
                                     name="visitDate"
@@ -555,7 +556,7 @@ const RiskStratification = (props) => {
                             </div>
                             <div className="form-group  col-md-6">
                                 <FormGroup>
-                                    <Label>Setting *</Label>
+                                    <Label>Setting <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="testingSetting"
@@ -589,7 +590,7 @@ const RiskStratification = (props) => {
                             </div>
                             <div className="form-group  col-md-6">
                                 <FormGroup>
-                                    <Label>Modality *</Label>
+                                    <Label>Modality <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="modality"
@@ -600,7 +601,7 @@ const RiskStratification = (props) => {
                                     >
                                         <option value={""}>Select</option>
                                         {setting.map((value) => (
-                                            <option key={value.code} value={value.code}>
+                                            <option key={value.id} value={value.code}>
                                                 {value.display}
                                             </option>
                                         ))}
@@ -611,13 +612,9 @@ const RiskStratification = (props) => {
                                     ) : "" }
                                 </FormGroup>
                             </div>
-                            
-                            </div>
-                            <br/>
-                           
                             <div className="form-group  col-md-6">
                                 <FormGroup>
-                                    <Label>Target Group *</Label>
+                                    <Label>Target Group <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="targetGroup"
@@ -638,10 +635,12 @@ const RiskStratification = (props) => {
                                     ) : "" }
                                 </FormGroup>
                             </div>
+                            </div>
+                            <br/>
                             <div className="row">
                             <div className="form-group  col-md-6">
                                 <FormGroup>
-                                    <Label>Is this HIV test based on a Clinician/Doctor/Health Care Provider's  request ? *</Label>
+                                    <Label>Is this HIV test based on a Clinician/Doctor/Health Care Provider's  request ? <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="lastHivTestBasedOnRequest"
@@ -668,7 +667,7 @@ const RiskStratification = (props) => {
                             
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>When was your last HIV test done?  </Label>
+                                    <Label>When was your last HIV test done?  <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="lastHivTestDone"
@@ -692,7 +691,7 @@ const RiskStratification = (props) => {
                             {riskAssessment.lastHivTestDone!=="" && riskAssessment.lastHivTestDone!=='Never' && (
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>What was the result? *</Label>
+                                    <Label>What was the result? <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="whatWasTheResult"
@@ -714,7 +713,7 @@ const RiskStratification = (props) => {
                             )}
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Since your last HIV test, have you had anal or vaginal or oral sex without a condom with someone who was HIV positive or unaware of their HIV status? </Label>
+                                    <Label>Since your last HIV test, have you had anal or vaginal or oral sex without a condom with someone who was HIV positive or unaware of their HIV status? <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="lastHivTestVaginalOral"
@@ -735,7 +734,7 @@ const RiskStratification = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Since your last HIV test, have you had a blood or blood product transfusion? *</Label>
+                                    <Label>Since your last HIV test, have you had a blood or blood product transfusion? <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="lastHivTestBloodTransfusion"
@@ -756,7 +755,7 @@ const RiskStratification = (props) => {
                             </div>    
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Since your last HIV test, have you experienced painful urination, lower abdominal pain, vaginal or penile discharge, pain during sexual intercourse, thick, cloudy, or foul smelling discharge and/or small bumps or blisters near the mouth, penis, vagina, or anal areas? </Label>
+                                    <Label>Since your last HIV test, have you experienced painful urination, lower abdominal pain, vaginal or penile discharge, pain during sexual intercourse, thick, cloudy, or foul smelling discharge and/or small bumps or blisters near the mouth, penis, vagina, or anal areas? <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="lastHivTestPainfulUrination"
@@ -777,7 +776,7 @@ const RiskStratification = (props) => {
                             </div>   
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Have you been diagnosed with TB or currently have any of the following symptoms : cough, fever, weight loss, night sweats? </Label>
+                                    <Label>Have you been diagnosed with TB or currently have any of the following symptoms : cough, fever, weight loss, night sweats? <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="diagnosedWithTb"
@@ -798,7 +797,7 @@ const RiskStratification = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Since your last HIV test, have you ever injected drugs, shared needles or other sharp objects with someone known to be HIV positive or who you didn’t know their HIV status? </Label>
+                                    <Label>Since your last HIV test, have you ever injected drugs, shared needles or other sharp objects with someone known to be HIV positive or who you didn’t know their HIV status? <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="lastHivTestInjectedDrugs"
@@ -819,7 +818,7 @@ const RiskStratification = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Since your last HIV test, have you had anal, oral or vaginal sex in exchange for money or other benefits? </Label>
+                                    <Label>Since your last HIV test, have you had anal, oral or vaginal sex in exchange for money or other benefits?<span style={{ color:"red"}}> *</span> </Label>
                                     <select
                                         className="form-control"
                                         name="lastHivTestHadAnal"
@@ -840,7 +839,7 @@ const RiskStratification = (props) => {
                             </div> 
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Since your last HIV test, have you been forced to have sex? </Label>
+                                    <Label>Since your last HIV test, have you been forced to have sex? <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="lastHivTestForceToHaveSex"
@@ -872,7 +871,7 @@ const RiskStratification = (props) => {
                             <div className="row">
                             <div className="form-group mb-3 col-md-6">
                            
-                            <Button content='Save' type="submit" icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit} disabled={saving}/>
+                            <Button content='Save ' type="submit" icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit} disabled={saving}/>
                             </div>
                             </div>
                         </div>

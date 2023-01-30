@@ -151,7 +151,8 @@ const PostTest = (props) => {
     const handleSubmit =(e)=>{
         e.preventDefault();
         //handleItemClick('recency-testing', 'post-test')
-        if(!(Object.values(postTest).every(x => x === ""))){
+        // if(!(Object.values(postTest).every(x => x === ""))){
+            setSaving(true)
             objValues.htsClientId=  props.patientObj.id
             objValues.postTestCounselingKnowledgeAssessment= postTest
             objValues.personId= props.patientObj.personResponseDto.id
@@ -181,10 +182,10 @@ const PostTest = (props) => {
                     toast.error("Something went wrong. Please try again...");
                 }
             });
-        }else{
-            toast.error("All post test fields are required")  
+        // }else{
+        //     toast.error("All post test fields are required")  
         
-        }
+        // }
             
     }
 

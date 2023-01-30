@@ -48,6 +48,8 @@ const UserRegistration = (props) => {
         props.setActivePage({...props.activePage, activePage:"home", activeObject:row, actionType:actionType})
     }
 
+    console.log(patientObj)
+    
     return (
         <>
             <ToastContainer autoClose={3000} hideProgressBar />

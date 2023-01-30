@@ -348,7 +348,8 @@ const HivTestResult = (props) => {
     const handleSubmit =(e)=>{
         e.preventDefault();
         if(validate()){
-                    //logic to get Hiv result test
+            setSaving(true)
+        //logic to get Hiv result test
         if(initialTest12.result2==='No' ){
             objValues.hivTestResult2="Negative"
         }else if(initialTest12.result2==='Yes' && confirmatoryTest2.result2==='Yes'){
@@ -1182,7 +1183,7 @@ const HivTestResult = (props) => {
                             </>)
                             }
                             
-                            <Button content='Save & Continue' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
+                            <Button content='Save & Continue' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit} disabled={saving}/>
                             </div>
                             </div>
                         </div>

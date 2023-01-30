@@ -212,7 +212,7 @@ const AddIndexContact = (props) => {
         props.handleIClickPage(page)
     }
     const handleInputChange = e => { 
-        //setErrors({...temp, [e.target.name]:""})
+        setErrors({...temp, [e.target.name]:""})
         if(e.target.name==='firstName' && e.target.value!==''){
             const name = alphabetOnly(e.target.value)
             setObjValues ({...objValues,  [e.target.name]: name});
@@ -294,8 +294,9 @@ const AddIndexContact = (props) => {
     }
     const handleSubmit =(e)=>{
         e.preventDefault(); 
-        if(validate()){    
-        objValues.isDateOfBirthEstimated=objValues.isDateOfBirthEstimated==true ? 1 : 0
+        if(validate()){
+            setSaving(true)
+            objValues.isDateOfBirthEstimated=objValues.isDateOfBirthEstimated==true ? 1 : 0
             axios.post(`${baseUrl}index-elicitation`,objValues,
             { headers: {"Authorization" : `Bearer ${token}`}},
             
@@ -756,7 +757,7 @@ const AddIndexContact = (props) => {
                         <div className="row">
                         <div className="form-group mb-3 col-md-6">
                         
-                        <Button content='Save' icon='save' labelPosition='left' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
+                        <Button content='Save' icon='save' labelPosition='left' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit} disabled={saving}/>
                         </div>
                         </div>
                     </div>

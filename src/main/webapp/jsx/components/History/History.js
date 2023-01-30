@@ -110,8 +110,9 @@ const PatientnHistory = (props) => {
             icons={tableIcons}
               title="HTS HISTORY "
               columns={[
-              { title: "Date", field: "date" },
-              {title: "Pre Test Counseling",field: "pre",},
+                { title: "HTS ID", field: "id" },
+                { title: "Date", field: "date" },
+                {title: "Pre Test Counseling",field: "pre"},
                 { title: "Recency Test", field: "rencency" },
                 { title: "Post Test", field: "post" },
                 // { title: "Index Notification", field: "indexNotifiation", filtering: false },  
@@ -120,6 +121,7 @@ const PatientnHistory = (props) => {
               ]}
               isLoading={props.loading}
               data={ props.patientList.map((row) => ({
+                id: row.id,
                 date: row.dateVisit,
                 pre: row.knowledgeAssessment? "Filled":"Not Filled ",
                 requestResult:row.confirmatoryTest ? "Filled":"Not Filled ",

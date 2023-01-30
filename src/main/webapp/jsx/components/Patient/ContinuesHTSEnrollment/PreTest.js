@@ -166,7 +166,7 @@ const BasicInfo = (props) => {
         }
     )
     useEffect(() => { 
-        //console.log(props.patientObj)
+
         if(props.patientObj){
             setKnowledgeAssessment(props.patientObj.knowledgeAssessment  && props.patientObj.knowledgeAssessment!==null ? props.patientObj.knowledgeAssessment : {})
             setRiskAssessment(props.patientObj.riskAssessment  && props.patientObj.riskAssessment!==null ? props.patientObj.riskAssessment : {})
@@ -176,8 +176,8 @@ const BasicInfo = (props) => {
             //patientAge=calculate_age(moment(props.patientObj.personResponseDto.dateOfBirth).format("DD-MM-YYYY"))
             //console.log(props.patientObj.riskStratificationResponseDto.riskAssessment)
             if(props.patientObj.riskStratificationResponseDto && Object.keys(props.patientObj.riskStratificationResponseDto.riskAssessment).length !== 0 && props.patientObj.riskAssessment===null){
-                setRiskAssessment({...riskAssessment, ...props.patientObj.riskStratificationResponseDto.riskAssessment})
-                props.extra.riskAssessment.whatWasTheResult!=="" && props.extra.riskAssessment.whatWasTheResult==='Positive' ? knowledgeAssessment.previousTestedHIVNegative='false' :
+                //setRiskAssessment({...riskAssessment, ...props.patientObj.riskStratificationResponseDto.riskAssessment})
+                props.patientObj.riskStratificationResponseDto.riskAssessment.whatWasTheResult!=="" && props.patientObj.riskStratificationResponseDto.riskAssessment.whatWasTheResult==='Positive' ? knowledgeAssessment.previousTestedHIVNegative='false' :
                 knowledgeAssessment.previousTestedHIVNegative='true'
             }else{
                 setRiskAssessment({...riskAssessment, ...props.patientObj.riskAssessment})   
@@ -201,7 +201,7 @@ const BasicInfo = (props) => {
     }
     
     const handleInputChangeRiskAssessment = e => { 
-        //setErrors({...temp, [e.target.name]:""}) 
+        setErrors({...temp, [e.target.name]:""}) 
         setRiskAssessment ({...riskAssessment,  [e.target.name]: e.target.value});                  
     }
     // Getting the number count of riskAssessment True
@@ -305,6 +305,7 @@ const BasicInfo = (props) => {
     const handleSubmit =(e)=>{
         e.preventDefault();
         if(validate()){
+            setSaving(true);
             objValues.htsClientId= clientId
             objValues.knowledgeAssessment= knowledgeAssessment
             objValues.personId= patientID
@@ -1254,7 +1255,7 @@ const BasicInfo = (props) => {
                             <div className="row">
                             <div className="form-group mb-3 col-md-12">
                             <Button content='Back' icon='left arrow' labelPosition='left' style={{backgroundColor:"#992E62", color:'#fff'}} onClick={()=>handleItemClick('basic','basic')}/>
-                            <Button content='Save & Continue' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
+                            <Button content='Save & Continue' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit} disabled={saving}/>
                             </div>
                             </div>
                         </div>

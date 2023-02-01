@@ -259,12 +259,12 @@ const BasicInfo = (props) => {
                     <form >
                         <div className="row">
                         <LabelRibbon as='a' color='blue' style={{width:'106%', height:'35px'}} ribbon>
-                            <h5 style={{color:'#fff'}}>RENCENCY</h5>
+                            <h5 style={{color:'#fff'}}>RECENCY</h5>
                         </LabelRibbon>
                         <br/><br/><br/>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Opt Out of RTRI?*</Label>
+                                    <Label>Opt Out of RTRI? <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="optOutRTRI"
@@ -305,7 +305,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Test Date *</Label>
+                                    <Label>Test Date <span style={{ color:"red"}}> *</span></Label>
                                     <Input
                                         type="date"
                                         name="optOutRTRITestDate"
@@ -322,7 +322,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Recency ID *</Label>
+                                    <Label>Recency ID <span style={{ color:"red"}}> *</span></Label>
                                     <Input
                                         className="form-control"
                                         name="rencencyId"
@@ -338,7 +338,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Control Line *</Label>
+                                    <Label>Control Line <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="controlLine"
@@ -357,7 +357,7 @@ const BasicInfo = (props) => {
                             </div> 
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Verification Line *</Label>
+                                    <Label>Verification Line <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="verififcationLine"
@@ -376,7 +376,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Long Term Line *</Label>
+                                    <Label>Long Term Line <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="longTermLine"
@@ -395,7 +395,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Recency Interpretation *</Label>
+                                    <Label>Recency Interpretation <span style={{ color:"red"}}> *</span></Label>
                                     <Input
                                         className="form-control"
                                         name="rencencyInterpretation"
@@ -454,7 +454,7 @@ const BasicInfo = (props) => {
                                 </div>
                                 <div className="form-group  col-md-4">
                                     <FormGroup>
-                                        <Label>Sample Reference Number *</Label>
+                                        <Label>Sample Reference Number <span style={{ color:"red"}}> *</span></Label>
                                         <Input
                                             className="form-control"
                                             name="sampleReferanceNumber"
@@ -471,7 +471,7 @@ const BasicInfo = (props) => {
                                 </div>
                                 <div className="form-group  col-md-4">
                                     <FormGroup>
-                                        <Label>Sample Type *</Label>
+                                        <Label>Sample Type <span style={{ color:"red"}}> *</span></Label>
                                         <select
                                             className="form-control"
                                             name="sampleType"
@@ -603,10 +603,10 @@ const BasicInfo = (props) => {
                             <Button content='Back' icon='left arrow' labelPosition='left' style={{backgroundColor:"#992E62", color:'#fff'}} onClick={()=>handleItemClick('post-test','post-test')}/>
                             
                             {props.activePage.actionType==='update' && (
-                            <Button content='Update & Continue' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
+                            <Button content='Update & Continue' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit} disabled={saving}/>
                             )}
                             {props.activePage.actionType==='view' && (
-                                <Button content='Next' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
+                                <Button content='Next' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit} disabled={saving}/>
                             )}
                             
                             </div>

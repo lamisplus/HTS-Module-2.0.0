@@ -24,6 +24,7 @@ const Elicitation = (props) => {
         }
     }
     const handleDone=(row, actionType)=>{
+
       props.setActivePage({...props.activePage, activePage:"home", activeObject:row, actionType:actionType})
     }
     

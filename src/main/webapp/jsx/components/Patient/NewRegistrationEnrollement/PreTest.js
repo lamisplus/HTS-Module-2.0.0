@@ -156,6 +156,7 @@ const BasicInfo = (props) => {
     // Getting the number count of riskAssessment True
     const actualRiskCountTrue=Object.values(riskAssessment)
     const riskCount=actualRiskCountTrue.filter((x)=> x==='true')
+
     const [riskAssessmentPartner, setRiskAssessmentPartner]= useState(
         {
             sexPartnerHivPositive:"",
@@ -281,6 +282,7 @@ const BasicInfo = (props) => {
         if(props.activePage.actionType==='update'){
         //e.preventDefault();
         if(validate()){
+            setSaving(true)
             objValues.htsClientId= clientId
             objValues.knowledgeAssessment= knowledgeAssessment
             objValues.personId= patientID
@@ -370,7 +372,7 @@ const BasicInfo = (props) => {
                                 </FormGroup>
                             </div>
                             )}
-                            {sex ==='Female' && (
+                            {sex ==='Female' || sex ==='FEMALE' || sex ==='female' && (
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Client pregnant </Label>
@@ -595,7 +597,7 @@ const BasicInfo = (props) => {
                             <div className="form-group  col-md-12 text-center pt-2 mb-4" style={{backgroundColor:'#992E62', width:'125%', height:'35px', color:'#fff', fontWeight:'bold'}} >HIV Risk Assessment  (Last 3 months)</div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Ever had sexual intercourse <sup style={{ color:"red"}}> *</sup></Label>
+                                    <Label>Ever had sexual intercourse <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="everHadSexualIntercourse"
@@ -616,7 +618,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Blood transfusion in last 3 months <sup style={{ color:"red"}}> *</sup></Label>
+                                    <Label>Blood transfusion in last 3 months <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="bloodtransInlastThreeMonths"
@@ -637,7 +639,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Unprotected sex with casual partner in last 3 months <sup style={{ color:"red"}}> *</sup></Label>
+                                    <Label>Unprotected sex with casual partner in last 3 months <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="uprotectedSexWithCasualLastThreeMonths"
@@ -658,7 +660,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Unprotected sex with regular partner in the last 3months <sup style={{ color:"red"}}> *</sup></Label>
+                                    <Label>Unprotected sex with regular partner in the last 3months <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="uprotectedSexWithRegularPartnerLastThreeMonths"
@@ -679,7 +681,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Unprotected vaginal sex <sup style={{ color:"red"}}> *</sup></Label>
+                                    <Label>Unprotected vaginal sex <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="unprotectedVaginalSex"
@@ -700,7 +702,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Unprotected Anal sex <sup style={{ color:"red"}}> *</sup></Label>
+                                    <Label>Unprotected Anal sex <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="uprotectedAnalSex"
@@ -721,7 +723,7 @@ const BasicInfo = (props) => {
                             </div>         
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>STI in last 3 months <sup style={{ color:"red"}}> *</sup></Label>
+                                    <Label>STI in last 3 months <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="stiLastThreeMonths"
@@ -742,7 +744,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Sex under the influence of drugs or alcohol <sup style={{ color:"red"}}> *</sup></Label>
+                                    <Label>Sex under the influence of drugs or alcohol <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="sexUnderInfluence"
@@ -763,7 +765,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>More than 1 sex partner during last 3 months <sup style={{ color:"red"}}> *</sup></Label>
+                                    <Label>More than 1 sex partner during last 3 months <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="moreThanOneSexPartnerLastThreeMonths"
@@ -783,7 +785,7 @@ const BasicInfo = (props) => {
                                 </FormGroup>
                             </div>
                             <Message warning>
-                                <h4> HIV Risk assessment score (sum of all 7 answers)</h4>
+                                <h4>  Risk assessment score (sum of all 7 answers)</h4>
                                 <b>Score : {riskCount.legth}</b>
                             </Message>
                             <hr/>
@@ -793,7 +795,7 @@ const BasicInfo = (props) => {
                             <div className="form-group  col-md-12 text-center pt-2 mb-4" style={{backgroundColor:'#992E62', width:'125%', height:'35px', color:'#fff', fontWeight:'bold'}} >HIV Risk Assessment  (Last 3 months)</div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Have you/your partner experienced lower abdominal pain, smelly discharge, blisters and wounds around you/partner vagina, penis anus or mouth? <sup style={{ color:"red"}}> *</sup></Label>
+                                    <Label>Have you/your partner experienced lower abdominal pain, smelly discharge, blisters and wounds around you/partner vagina, penis anus or mouth? <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="experiencePain"
@@ -814,7 +816,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Have you/partner had sex without a condom with someone of unknown HIV status, or you/partner raped by person with unknown HIV status? <sup style={{ color:"red"}}> *</sup></Label>
+                                    <Label>Have you/partner had sex without a condom with someone of unknown HIV status, or you/partner raped by person with unknown HIV status? <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="haveSexWithoutCondom"
@@ -835,7 +837,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Have you had a condom burst with your partner during sexual intercourse?  <sup style={{ color:"red"}}> *</sup></Label>
+                                    <Label>Have you had a condom burst with your partner during sexual intercourse?  <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="haveCondomBurst"
@@ -856,7 +858,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Do you/partner share needles/syringes, other sharp objects or used abuse drug substances of any kind? <sup style={{ color:"red"}}> *</sup></Label>
+                                    <Label>Do you/partner share needles/syringes, other sharp objects or used abuse drug substances of any kind? <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="abuseDrug"
@@ -877,7 +879,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Have you/partner had any blood or blood product transfusion? <sup style={{ color:"red"}}> *</sup></Label>
+                                    <Label>Have you/partner had any blood or blood product transfusion? <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="bloodTransfusion"
@@ -898,7 +900,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Have you/partner experienced coughing, weight loss, fever, night sweats consistently? <sup style={{ color:"red"}}> *</sup></Label>
+                                    <Label>Have you/partner experienced coughing, weight loss, fever, night sweats consistently? <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="consistentWeightFeverNightCough"
@@ -919,7 +921,7 @@ const BasicInfo = (props) => {
                             </div>            
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Have you/partner paid or sold vaginal, anal or oral sex? <sup style={{ color:"red"}}> *</sup></Label>
+                                    <Label>Have you/partner paid or sold vaginal, anal or oral sex? <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="soldPaidVaginalSex"
@@ -968,7 +970,7 @@ const BasicInfo = (props) => {
                             {riskAssessmentPartner.sexPartnerHivPositive==='true' && (<>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Is sex partner newly diagnosed with HIV and started treatment less than 3-6 months ago?*</Label>
+                                    <Label>Is sex partner newly diagnosed with HIV and started treatment less than 3-6 months ago? </Label>
                                     <select
                                         className="form-control"
                                         name="newDiagnosedHivlastThreeMonths"
@@ -1180,10 +1182,10 @@ const BasicInfo = (props) => {
                             <div className="form-group mb-3 col-md-12">
                             <Button content='Back' icon='left arrow' labelPosition='left' style={{backgroundColor:"#992E62", color:'#fff'}} onClick={()=>handleItemClick('basic','basic')}/>
                             {props.activePage.actionType==='update' && (
-                                <Button content='Update & Continue' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
+                                <Button content='Update & Continue' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit} disabled={saving}/>
                             )}
                             {props.activePage.actionType==='view' && (
-                                <Button content='Next' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
+                                <Button content='Next' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit} disabled={saving}/>
                             )}
                             </div>
                             </div>

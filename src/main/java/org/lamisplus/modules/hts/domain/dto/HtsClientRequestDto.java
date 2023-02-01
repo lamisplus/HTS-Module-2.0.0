@@ -39,4 +39,8 @@ public class HtsClientRequestDto {
     private final Long pregnant;
     private final Boolean breastFeeding;
     private final Long relationWithIndexClient;
+
+    private String prepGiven;
+    private String otherDrugs;
+    private String hivTestResult;
 }

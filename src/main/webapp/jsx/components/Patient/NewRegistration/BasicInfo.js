@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState} from "react";
 import axios from "axios";
 import {FormGroup, Label , CardBody, Spinner,Input,Form} from "reactstrap";
@@ -899,7 +898,7 @@ const BasicInfo = (props) => {
                                         type="number"
                                         name="age"
                                         id="age"
-                                        value={objValues.age}
+                                        value={objValues.age + 1}
                                         disabled={ageDisabled}
                                         onChange={handleAgeChange}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}

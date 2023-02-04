@@ -120,6 +120,9 @@ const PostTest = (props) => {
             condomProvidedToClient:"", 
             unprotectedSexRegularPartnerLastThreeMonth:"", 
             referredToServices:"",
+            lubricantProvidedToClient: "",
+            condomProvidedToClientCount: "",
+            lubricantProvidedToClientCount: "",
         }
     )
     const handleInputChangePostTest = e => { 
@@ -480,6 +483,59 @@ const PostTest = (props) => {
                                         <option value="false">No</option>
                                         
                                     </select>
+                                    
+                                </FormGroup>
+                            </div>
+                            <div className="form-group  col-md-4">
+                                <FormGroup>
+                                    <Label>How many condoms provided to client </Label>
+                                    <Input
+                                        type="text"
+                                        name="condomProvidedToClientCount"
+                                        id="condomProvidedToClientCount"
+                                        value={postTest.condomProvidedToClientCount}
+                                        onChange={handleInputChangePostTest}
+                                        style={{
+                                            border: "1px solid #014D88",
+                                            borderRadius: "0.25rem",
+                                        }}
+                                    />
+                                    
+                                </FormGroup>
+                            </div>
+                            <div className="form-group  col-md-4">
+                                <FormGroup>
+                                    <Label>Lubricant provided to client </Label>
+                                    <select
+                                        className="form-control"
+                                        name="lubricantProvidedToClient"
+                                        id="lubricantProvidedToClient"
+                                        value={postTest.lubricantProvidedToClient}
+                                        onChange={handleInputChangePostTest}
+                                        style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                    >
+                                        <option value={""}></option>
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
+                                        
+                                    </select>
+                                    
+                                </FormGroup>
+                            </div>
+                            <div className="form-group  col-md-4">
+                                <FormGroup>
+                                    <Label>How many lubricant provided to client </Label>
+                                    <Input
+                                        type="number"
+                                        name="lubricantProvidedToClientCount"
+                                        id="lubricantProvidedToClientCount"
+                                        value={postTest.lubricantProvidedToClientCount}
+                                        onChange={handleInputChangePostTest}
+                                        style={{
+                                            border: "1px solid #014D88",
+                                            borderRadius: "0.25rem",
+                                        }}
+                                    />
                                     
                                 </FormGroup>
                             </div>

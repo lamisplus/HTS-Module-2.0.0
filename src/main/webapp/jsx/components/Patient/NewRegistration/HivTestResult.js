@@ -246,6 +246,7 @@ const HivTestResult = (props) => {
         }
     )
     const handleInputChangeTie = e => { 
+        console.log(e.target.value)
         //setErrors({...temp, [e.target.name]:""}) 
         setTieBreakerTest ({...tieBreakerTest,  [e.target.name]: e.target.value});  
         //This is to show cd4 count section
@@ -766,7 +767,7 @@ const HivTestResult = (props) => {
                                         Negative
                                     </LabelRibbon>
                                 )} */}
-                                {(confirmatoryTest.result==='No' && tieBreakerTest.result==='Yes' ) && (<>
+                                {(confirmatoryTest.result==='No' && tieBreakerTest.result==='Yes' ) ? (<>
                                     
                                     <b> Result : </b>
                                     <LabelRibbon color="red" >
@@ -907,16 +908,21 @@ const HivTestResult = (props) => {
                                         </>)}
                                     </div>
                                     </>
-                                )}
-                                {(confirmatoryTest.result==='No' && tieBreakerTest.result==='No' && (initialTest1.result==='Yes' || initialTest1.result==='Yes' || initialTest1.result==='')) && (
-                                    <>
+                                ) : ( <>
                                     <b> Result : </b>
                                     <LabelRibbon color="green" >
                                         None Reactive
                                     </LabelRibbon>
-                                    </>
+                                    </>)}
+                                {(confirmatoryTest.result==='No' && tieBreakerTest.result==='No' ) && (
+                                     <>
+                                     <b> Result : </b>
+                                     <LabelRibbon color="green" >
+                                         None Reactive
+                                     </LabelRibbon>
+                                     </>
                                 )}
-                                 {/* END of  result for Test 1 */}
+                                {/* END of  result for Test 1 */}
                                 {/* This is result for Test 2 */}
                                 {initialTest12.result2==='No' &&  (
                                     <>

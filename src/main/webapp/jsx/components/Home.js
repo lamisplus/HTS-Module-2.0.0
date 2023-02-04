@@ -47,12 +47,12 @@ const Home = () => {
                     className="mb-3"
                 >
                   
-                  <Tab eventKey="home" title="Find Patients">                   
+                  <Tab eventKey="home" title="Patients">                   
                   <Dashboard />
                   </Tab> 
-                  <Tab eventKey="visualization" title="Data Visualisation ">                   
+                  {/* <Tab eventKey="visualization" title="Data Visualisation ">                   
                   <VisualisationHome />
-                  </Tab>                    
+                  </Tab>                     */}
                 </Tabs>
                 
               </div>

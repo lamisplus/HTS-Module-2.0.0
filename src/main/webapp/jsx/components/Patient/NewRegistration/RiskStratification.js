@@ -113,27 +113,27 @@ const BasicInfo = (props) => {
     const [setting, setSetting] = useState([]);
     const [riskCount, setRiskCount] = useState(0);
     const [targetGroupValue, setTargetGroupValue] = useState(null);
-    const [objValues, setObjValues]= useState(
-        {
-            age:"",
-            dob:"",
-            code:"",
-            visitDate: "", //        
-            dateOfBirth: null,
-            dateOfRegistration:null,
-            isDateOfBirthEstimated: "",
-            targetGroup:"",
-            testingSetting:"",//
-            modality  :"", //
-            careProvider:"",
-            personId:"",
-            riskAssessment: {},
-            entryPoint:"",
-            communityEntryPoint:""
+    const obj = localStorage.getItem("objValues");
+    //console.log(JSON.parse(obj))
+    const [objValues, setObjValues]= useState(obj !== null ? JSON.parse(obj) : {
+        age:"",
+        dob:"",
+        code:"",
+        visitDate: "", //        
+        dateOfBirth: null,
+        dateOfRegistration:null,
+        isDateOfBirthEstimated: "",
+        targetGroup:"",
+        testingSetting:"",//
+        modality  :"", //
+        careProvider:"",
+        personId:"",
+        riskAssessment: {},
+        entryPoint:"",
+        communityEntryPoint:""
 
-        }
+    })
 
-    )
     const [riskAssessment, setRiskAssessment]= useState(
         {
             everHadSexualIntercourse:"",
@@ -164,6 +164,8 @@ const BasicInfo = (props) => {
             lastHivTestBasedOnRequest:""
         }
     )
+    const [careProviderQuestion, setCareProviderQuestion] = useState(false);
+
     useEffect(() => { 
         KP();
         TargetGroupSetup();
@@ -222,7 +224,7 @@ const BasicInfo = (props) => {
             { headers: {"Authorization" : `Bearer ${token}`} }
         )
         .then((response) => {
-            console.log(response.data);
+            //console.log(response.data);
             setTargetGroupValue(response.data);
         })
         .catch((error) => {
@@ -383,7 +385,6 @@ const BasicInfo = (props) => {
     /*****  Validation  */
     const validate = () => {
         //HTS FORM VALIDATION
-
             temp.visitDate = objValues.visitDate ? "" : "This field is required."  
             temp.entryPoint = objValues.entryPoint ? "" : "This field is required." 
             temp.testingSetting = objValues.testingSetting ? "" : "This field is required."
@@ -397,14 +398,14 @@ const BasicInfo = (props) => {
             
             //Risk Assement section
             objValues.age>15 && riskAssessment.lastHivTestBasedOnRequest==='false' && (temp.lastHivTestDone = riskAssessment.lastHivTestDone ? "" : "This field is required." )             
-            objValues.age>15 && riskAssessment.lastHivTestBasedOnRequest==='false' && riskAssessment.lastHivTestDone!=="" && riskAssessment.lastHivTestDone!=='Never' && (temp.whatWasTheResult = riskAssessment.whatWasTheResult ? "" : "This field is required." )             
-            objValues.age>15 && riskAssessment.lastHivTestBasedOnRequest==='false' && (temp.lastHivTestVaginalOral = riskAssessment.lastHivTestVaginalOral ? "" : "This field is required." )             
-            objValues.age>15 && riskAssessment.lastHivTestBasedOnRequest==='false' && (temp.lastHivTestBloodTransfusion = riskAssessment.lastHivTestBloodTransfusion ? "" : "This field is required." )             
-            objValues.age>15 && riskAssessment.lastHivTestBasedOnRequest==='false' && (temp.lastHivTestPainfulUrination = riskAssessment.lastHivTestPainfulUrination ? "" : "This field is required." )             
+            //objValues.age>15 && riskAssessment.lastHivTestBasedOnRequest==='false' && riskAssessment.lastHivTestDone!=="" && riskAssessment.lastHivTestDone!=='Never' && (temp.whatWasTheResult = riskAssessment.whatWasTheResult ? "" : "This field is required." )             
+            // objValues.age>15 && riskAssessment.lastHivTestBasedOnRequest==='false' && (temp.lastHivTestVaginalOral = riskAssessment.lastHivTestVaginalOral ? "" : "This field is required." )             
+            // objValues.age>15 && riskAssessment.lastHivTestBasedOnRequest==='false' && (temp.lastHivTestBloodTransfusion = riskAssessment.lastHivTestBloodTransfusion ? "" : "This field is required." )             
+            // objValues.age>15 && riskAssessment.lastHivTestBasedOnRequest==='false' && (temp.lastHivTestPainfulUrination = riskAssessment.lastHivTestPainfulUrination ? "" : "This field is required." )             
             objValues.age>15 && riskAssessment.lastHivTestBasedOnRequest==='false' && (temp.diagnosedWithTb = riskAssessment.diagnosedWithTb ? "" : "This field is required." )  
-            objValues.age>15 && riskAssessment.lastHivTestBasedOnRequest==='false' && (temp.lastHivTestInjectedDrugs = riskAssessment.lastHivTestInjectedDrugs ? "" : "This field is required." )           
-            objValues.age>15 && riskAssessment.lastHivTestBasedOnRequest==='false' && (temp.lastHivTestHadAnal = riskAssessment.lastHivTestHadAnal ? "" : "This field is required." )
-            objValues.age>15 && riskAssessment.lastHivTestBasedOnRequest==='false' && (temp.lastHivTestForceToHaveSex = riskAssessment.lastHivTestForceToHaveSex ? "" : "This field is required." )
+            // objValues.age>15 && riskAssessment.lastHivTestBasedOnRequest==='false' && (temp.lastHivTestInjectedDrugs = riskAssessment.lastHivTestInjectedDrugs ? "" : "This field is required." )           
+            // objValues.age>15 && riskAssessment.lastHivTestBasedOnRequest==='false' && (temp.lastHivTestHadAnal = riskAssessment.lastHivTestHadAnal ? "" : "This field is required." )
+            // objValues.age>15 && riskAssessment.lastHivTestBasedOnRequest==='false' && (temp.lastHivTestForceToHaveSex = riskAssessment.lastHivTestForceToHaveSex ? "" : "This field is required." )
                 setErrors({ ...temp })
         return Object.values(temp).every(x => x == "")
     }
@@ -430,8 +431,32 @@ const BasicInfo = (props) => {
     //     }
     // )
     const handleInputChangeRiskAssessment = e => { 
-        //setErrors({...temp, [e.target.name]:""}) 
-        setRiskAssessment ({...riskAssessment,  [e.target.name]: e.target.value});                         
+        //console.log(e.target.name, e.target.value)
+        if (e.target.name === "lastHivTestBasedOnRequest" && e.target.value === 'true') {
+            setCareProviderQuestion(true)
+
+        }else if (e.target.name === "lastHivTestBasedOnRequest" && e.target.value === 'false') {
+            setCareProviderQuestion(false)
+        }
+
+        if (careProviderQuestion === true) {
+            setRiskAssessment ({
+                ...riskAssessment,  
+                lastHivTestForceToHaveSex:"", 
+                lastHivTestHadAnal:"",
+                lastHivTestInjectedDrugs:"",
+                whatWasTheResult:"",
+                lastHivTestDone:"",
+                diagnosedWithTb:"",
+                lastHivTestPainfulUrination:"",
+                lastHivTestBloodTransfusion:"",
+                lastHivTestVaginalOral:"",
+                lastHivTestBasedOnRequest: e.target.value
+            }); 
+        }else {
+            setRiskAssessment ({...riskAssessment,  [e.target.name]: e.target.value}); 
+        }
+        //setRiskAssessment ({...riskAssessment,  [e.target.name]: e.target.value});                          
     }
     const handleSubmit =(e)=>{
         e.preventDefault();
@@ -450,12 +475,15 @@ const BasicInfo = (props) => {
                     handleItemClick('basic', 'risk' )
                     
                     props.setHideOtherMenu(false)
+                    console.log("submitted",objValues)
+                    localStorage.setItem("objValues", JSON.stringify(objValues));
                     axios.post(`${baseUrl}risk-stratification`,objValues,
                     { headers: {"Authorization" : `Bearer ${token}`}},
                     
                     )
                     .then(response => {
                         setSaving(false);
+                        console.log(response.data)
                         props.patientObj.riskStratificationResponseDto=response.data
                         objValues.code=response.data.code
                         props.setExtra(objValues)
@@ -871,6 +899,7 @@ const BasicInfo = (props) => {
                                 </FormGroup>
                             </div> 
                             )}
+                            {riskAssessment.lastHivTestDone!=="" && riskAssessment.lastHivTestDone!=='Never' && (
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Since your last HIV test, have you had anal or vaginal or oral sex without a condom with someone who was HIV positive or unaware of their HIV status? *</Label>
@@ -892,7 +921,9 @@ const BasicInfo = (props) => {
                                     ) : "" }
                                 </FormGroup>
                             </div>
-                            <div className="form-group  col-md-4">
+                            )}
+                            {riskAssessment.lastHivTestDone!=="" && riskAssessment.lastHivTestDone!=='Never' && (
+                                <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Since your last HIV test, have you had a blood or blood product transfusion? * </Label>
                                     <select
@@ -912,28 +943,31 @@ const BasicInfo = (props) => {
                                     <span className={classes.error}>{errors.lastHivTestBloodTransfusion}</span>
                                     ) : "" }
                                 </FormGroup> 
-                            </div>    
-                            <div className="form-group  col-md-4">
-                                <FormGroup>
-                                    <Label>Since your last HIV test, have you experienced painful urination, lower abdominal pain, vaginal or penile discharge, pain during sexual intercourse, thick, cloudy, or foul smelling discharge and/or small bumps or blisters near the mouth, penis, vagina, or anal areas? *</Label>
-                                    <select
-                                        className="form-control"
-                                        name="lastHivTestPainfulUrination"
-                                        id="lastHivTestPainfulUrination"
-                                        value={riskAssessment.lastHivTestPainfulUrination}
-                                        onChange={handleInputChangeRiskAssessment}
-                                        style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
-                                    >
-                                        <option value={""}></option>
-                                        <option value="true">Yes</option>
-                                        <option value="false">No</option>
-                                        
-                                    </select>
-                                    {errors.lastHivTestPainfulUrination !=="" ? (
-                                    <span className={classes.error}>{errors.lastHivTestPainfulUrination}</span>
-                                    ) : "" }
-                                </FormGroup>
                             </div>   
+                            )}
+                            {riskAssessment.lastHivTestDone!=="" && riskAssessment.lastHivTestDone!=='Never' && (
+                            <div className="form-group  col-md-4">
+                                 <FormGroup>
+                                     <Label>Since your last HIV test, have you experienced painful urination, lower abdominal pain, vaginal or penile discharge, pain during sexual intercourse, thick, cloudy, or foul smelling discharge and/or small bumps or blisters near the mouth, penis, vagina, or anal areas? *</Label>
+                                     <select
+                                         className="form-control"
+                                         name="lastHivTestPainfulUrination"
+                                         id="lastHivTestPainfulUrination"
+                                         value={riskAssessment.lastHivTestPainfulUrination}
+                                         onChange={handleInputChangeRiskAssessment}
+                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                     >
+                                         <option value={""}></option>
+                                         <option value="true">Yes</option>
+                                         <option value="false">No</option>
+                                         
+                                     </select>
+                                     {errors.lastHivTestPainfulUrination !=="" ? (
+                                     <span className={classes.error}>{errors.lastHivTestPainfulUrination}</span>
+                                     ) : "" }
+                                 </FormGroup>
+                             </div>  
+                            )}
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Have you been diagnosed with TB or currently have any of the following symptoms : cough, fever, weight loss, night sweats? *</Label>
@@ -955,6 +989,7 @@ const BasicInfo = (props) => {
                                     ) : "" }
                                 </FormGroup>
                             </div>
+                            {riskAssessment.lastHivTestDone!=="" && riskAssessment.lastHivTestDone!=='Never' && (
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Since your last HIV test, have you ever injected drugs, shared needles or other sharp objects with someone known to be HIV positive or who you didn’t know their HIV status? *</Label>
@@ -976,6 +1011,8 @@ const BasicInfo = (props) => {
                                     ) : "" }
                                 </FormGroup>
                             </div>
+                            )}
+                            {riskAssessment.lastHivTestDone!=="" && riskAssessment.lastHivTestDone!=='Never' && (
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Since your last HIV test, have you had anal, oral or vaginal sex in exchange for money or other benefits? *</Label>
@@ -996,27 +1033,30 @@ const BasicInfo = (props) => {
                                     <span className={classes.error}>{errors.lastHivTestHadAnal}</span>
                                     ) : "" }
                                 </FormGroup>
-                            </div> 
-                            <div className="form-group  col-md-4">
-                                <FormGroup>
-                                    <Label>Since your last HIV test, have you been forced to have sex? *</Label>
-                                    <select
-                                        className="form-control"
-                                        name="lastHivTestForceToHaveSex"
-                                        value={riskAssessment.lastHivTestForceToHaveSex}
-                                        onChange={handleInputChangeRiskAssessment}
-                                        style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
-                                    >
-                                        <option value={""}></option>
-                                        <option value="true">Yes</option>
-                                        <option value="false">No</option>
-                                        
-                                    </select>
-                                    {errors.lastHivTestForceToHaveSex !=="" ? (
-                                    <span className={classes.error}>{errors.lastHivTestForceToHaveSex}</span>
-                                    ) : "" }
-                                </FormGroup>
                             </div>
+                            )}
+                            {riskAssessment.lastHivTestDone!=="" && riskAssessment.lastHivTestDone!=='Never' && (
+                            <div className="form-group  col-md-4">
+                                 <FormGroup>
+                                     <Label>Since your last HIV test, have you been forced to have sex? *</Label>
+                                     <select
+                                         className="form-control"
+                                         name="lastHivTestForceToHaveSex"
+                                         value={riskAssessment.lastHivTestForceToHaveSex}
+                                         onChange={handleInputChangeRiskAssessment}
+                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                     >
+                                         <option value={""}></option>
+                                         <option value="true">Yes</option>
+                                         <option value="false">No</option>
+                                         
+                                     </select>
+                                     {errors.lastHivTestForceToHaveSex !=="" ? (
+                                     <span className={classes.error}>{errors.lastHivTestForceToHaveSex}</span>
+                                     ) : "" }
+                                 </FormGroup>
+                             </div>
+                            )}
                             <br/>
                             
                             </>)}

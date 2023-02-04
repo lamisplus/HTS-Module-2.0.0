@@ -25,8 +25,11 @@ const Elicitation = (props) => {
         }
     }
     const handleDone=()=>{
-      props.setActivePage({...props.activePage, activePage:"home",})
+      //window.location.reload(false);
+      props.setActivePage({...props.activePage, activePage:"home"})
+     
     }
+
 
   return (
     <Fragment>  

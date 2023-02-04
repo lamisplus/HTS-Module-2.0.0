@@ -113,44 +113,45 @@ const BasicInfo = (props) => {
     const [setting, setSetting] = useState([]);
     const [riskCount, setRiskCount] = useState(0);
     const [targetGroupValue, setTargetGroupValue] = useState(null);
-    const obj = localStorage.getItem("objValues");
-    //console.log(JSON.parse(obj))
-    const [objValues, setObjValues]= useState(obj !== null ? JSON.parse(obj) : {
-        age:"",
-        dob:"",
-        code:"",
-        visitDate: "", //        
-        dateOfBirth: null,
-        dateOfRegistration:null,
-        isDateOfBirthEstimated: "",
-        targetGroup:"",
-        testingSetting:"",//
-        modality  :"", //
-        careProvider:"",
-        personId:"",
-        riskAssessment: {},
-        entryPoint:"",
-        communityEntryPoint:""
+    const [objValues, setObjValues]= useState(
+        {
+            age:"",
+            dob:"",
+            code:"",
+            visitDate: "", //        
+            dateOfBirth: null,
+            dateOfRegistration:null,
+            isDateOfBirthEstimated: "",
+            targetGroup:"",
+            testingSetting:"",//
+            modality  :"", //
+            careProvider:"",
+            personId:"",
+            id:"",
+            riskAssessment: {},
+            entryPoint:"",
+            communityEntryPoint:""
 
-    })
+        }
 
+    )
     const [riskAssessment, setRiskAssessment]= useState(
         {
-            everHadSexualIntercourse:"",
-            bloodtransInlastThreeMonths:"",
-            uprotectedSexWithCasualLastThreeMonths:"",
-            uprotectedSexWithRegularPartnerLastThreeMonths:"", 
-            unprotectedVaginalSex:"",  
-            uprotectedAnalSex:"",   
-            stiLastThreeMonths:"",
-            sexUnderInfluence :"",
-            moreThanOneSexPartnerLastThreeMonths:"",
-            experiencePain:"",
-            haveSexWithoutCondom:"",
-            abuseDrug:"",
-            bloodTransfusion:"",
-            consistentWeightFeverNightCough:"",
-            soldPaidVaginalSex:"",
+            // everHadSexualIntercourse:"",
+            // bloodtransInlastThreeMonths:"",
+            // uprotectedSexWithCasualLastThreeMonths:"",
+            // uprotectedSexWithRegularPartnerLastThreeMonths:"", 
+            // unprotectedVaginalSex:"",  
+            // uprotectedAnalSex:"",   
+            // stiLastThreeMonths:"",
+            // sexUnderInfluence :"",
+            // moreThanOneSexPartnerLastThreeMonths:"",
+            // experiencePain:"",
+            // haveSexWithoutCondom:"",
+            // abuseDrug:"",
+            // bloodTransfusion:"",
+            // consistentWeightFeverNightCough:"",
+            // soldPaidVaginalSex:"",
             //New Question
             lastHivTestForceToHaveSex:"", 
             lastHivTestHadAnal:"",
@@ -164,8 +165,6 @@ const BasicInfo = (props) => {
             lastHivTestBasedOnRequest:""
         }
     )
-    const [careProviderQuestion, setCareProviderQuestion] = useState(false);
-
     useEffect(() => { 
         KP();
         TargetGroupSetup();
@@ -176,7 +175,11 @@ const BasicInfo = (props) => {
         if(objValues.age!==''){
             props.setPatientObjAge(objValues.age)
         }
-        
+        if(props.patientObj.riskStratificationResponseDto!==null){
+            setObjValues(props.patientObj.riskStratificationResponseDto)
+            SettingModality(props.patientObj.riskStratificationResponseDto.testingSetting)
+            setRiskAssessment(props.patientObj.riskStratificationResponseDto.riskAssessment)
+        }
     }, [objValues.age]);
     //Get list of HIV STATUS ENROLLMENT
     const EnrollmentSetting =()=>{
@@ -224,7 +227,7 @@ const BasicInfo = (props) => {
             { headers: {"Authorization" : `Bearer ${token}`} }
         )
         .then((response) => {
-            //console.log(response.data);
+            console.log(response.data);
             setTargetGroupValue(response.data);
         })
         .catch((error) => {
@@ -385,6 +388,7 @@ const BasicInfo = (props) => {
     /*****  Validation  */
     const validate = () => {
         //HTS FORM VALIDATION
+
             temp.visitDate = objValues.visitDate ? "" : "This field is required."  
             temp.entryPoint = objValues.entryPoint ? "" : "This field is required." 
             temp.testingSetting = objValues.testingSetting ? "" : "This field is required."
@@ -395,20 +399,22 @@ const BasicInfo = (props) => {
             temp.lastHivTestBasedOnRequest = riskAssessment.lastHivTestBasedOnRequest ? "" : "This field is required." 
                        
             objValues.age>15 && (temp.targetGroup = objValues.targetGroup ? "" : "This field is required." )
+            objValues.entryPoint!=='' && objValues.entryPoint==='HTS_ENTRY_POINT_COMMUNITY' && (temp.communityEntryPoint = objValues.communityEntryPoint  ? "" : "This field is required." )
             
             //Risk Assement section
             objValues.age>15 && riskAssessment.lastHivTestBasedOnRequest==='false' && (temp.lastHivTestDone = riskAssessment.lastHivTestDone ? "" : "This field is required." )             
-            //objValues.age>15 && riskAssessment.lastHivTestBasedOnRequest==='false' && riskAssessment.lastHivTestDone!=="" && riskAssessment.lastHivTestDone!=='Never' && (temp.whatWasTheResult = riskAssessment.whatWasTheResult ? "" : "This field is required." )             
-            // objValues.age>15 && riskAssessment.lastHivTestBasedOnRequest==='false' && (temp.lastHivTestVaginalOral = riskAssessment.lastHivTestVaginalOral ? "" : "This field is required." )             
-            // objValues.age>15 && riskAssessment.lastHivTestBasedOnRequest==='false' && (temp.lastHivTestBloodTransfusion = riskAssessment.lastHivTestBloodTransfusion ? "" : "This field is required." )             
-            // objValues.age>15 && riskAssessment.lastHivTestBasedOnRequest==='false' && (temp.lastHivTestPainfulUrination = riskAssessment.lastHivTestPainfulUrination ? "" : "This field is required." )             
+            riskAssessment.lastHivTestDone!=='' && riskAssessment.lastHivTestDone!=='Never' && (temp.whatWasTheResult = riskAssessment.whatWasTheResult ? "" : "This field is required." )             
+            objValues.age>15 && riskAssessment.lastHivTestBasedOnRequest==='false' && (temp.lastHivTestVaginalOral = riskAssessment.lastHivTestVaginalOral ? "" : "This field is required." )             
+            objValues.age>15 && riskAssessment.lastHivTestBasedOnRequest==='false' && (temp.lastHivTestBloodTransfusion = riskAssessment.lastHivTestBloodTransfusion ? "" : "This field is required." )             
+            objValues.age>15 && riskAssessment.lastHivTestBasedOnRequest==='false' && (temp.lastHivTestPainfulUrination = riskAssessment.lastHivTestPainfulUrination ? "" : "This field is required." )             
             objValues.age>15 && riskAssessment.lastHivTestBasedOnRequest==='false' && (temp.diagnosedWithTb = riskAssessment.diagnosedWithTb ? "" : "This field is required." )  
-            // objValues.age>15 && riskAssessment.lastHivTestBasedOnRequest==='false' && (temp.lastHivTestInjectedDrugs = riskAssessment.lastHivTestInjectedDrugs ? "" : "This field is required." )           
-            // objValues.age>15 && riskAssessment.lastHivTestBasedOnRequest==='false' && (temp.lastHivTestHadAnal = riskAssessment.lastHivTestHadAnal ? "" : "This field is required." )
-            // objValues.age>15 && riskAssessment.lastHivTestBasedOnRequest==='false' && (temp.lastHivTestForceToHaveSex = riskAssessment.lastHivTestForceToHaveSex ? "" : "This field is required." )
+            objValues.age>15 && riskAssessment.lastHivTestBasedOnRequest==='false' && (temp.lastHivTestInjectedDrugs = riskAssessment.lastHivTestInjectedDrugs ? "" : "This field is required." )           
+            objValues.age>15 && riskAssessment.lastHivTestBasedOnRequest==='false' && (temp.lastHivTestHadAnal = riskAssessment.lastHivTestHadAnal ? "" : "This field is required." )
+            objValues.age>15 && riskAssessment.lastHivTestBasedOnRequest==='false' && (temp.lastHivTestForceToHaveSex = riskAssessment.lastHivTestForceToHaveSex ? "" : "This field is required." )
                 setErrors({ ...temp })
         return Object.values(temp).every(x => x == "")
     }
+    
     const handleItemClick =(page, completedMenu)=>{
         props.handleItemClick(page)
         if(props.completed.includes(completedMenu)) {
@@ -420,47 +426,15 @@ const BasicInfo = (props) => {
          // Getting the number count of riskAssessment True
     const actualRiskCountTrue=Object.values(riskAssessment)
      riskCountQuestion=actualRiskCountTrue.filter((x)=> x==='true')
-    // const [riskAssessmentPartner, setRiskAssessmentPartner]= useState(
-    //     {
-    //         sexPartnerHivPositive:"",
-    //         newDiagnosedHivlastThreeMonths:"",
-    //         currentlyArvForPmtct :"",
-    //         knowHivPositiveOnArv :"",
-    //         knowHivPositiveAfterLostToFollowUp:"", 
-    //         uprotectedAnalSex  :"",
-    //     }
-    // )
+
     const handleInputChangeRiskAssessment = e => { 
-        //console.log(e.target.name, e.target.value)
-        if (e.target.name === "lastHivTestBasedOnRequest" && e.target.value === 'true') {
-            setCareProviderQuestion(true)
-
-        }else if (e.target.name === "lastHivTestBasedOnRequest" && e.target.value === 'false') {
-            setCareProviderQuestion(false)
-        }
-
-        if (careProviderQuestion === true) {
-            setRiskAssessment ({
-                ...riskAssessment,  
-                lastHivTestForceToHaveSex:"", 
-                lastHivTestHadAnal:"",
-                lastHivTestInjectedDrugs:"",
-                whatWasTheResult:"",
-                lastHivTestDone:"",
-                diagnosedWithTb:"",
-                lastHivTestPainfulUrination:"",
-                lastHivTestBloodTransfusion:"",
-                lastHivTestVaginalOral:"",
-                lastHivTestBasedOnRequest: e.target.value
-            }); 
-        }else {
-            setRiskAssessment ({...riskAssessment,  [e.target.name]: e.target.value}); 
-        }
-        //setRiskAssessment ({...riskAssessment,  [e.target.name]: e.target.value});                          
+        setErrors({...temp, [e.target.name]:""}) 
+        setRiskAssessment ({...riskAssessment,  [e.target.name]: e.target.value});                         
     }
+    
     const handleSubmit =(e)=>{
         e.preventDefault();
-            //props.patientObj.personResponseDto.age = objValues.age
+            props.patientObj.riskStratificationResponseDto = objValues
             props.patientObj.personResponseDto.dob = objValues.dob
             props.patientObj.personResponseDto.dateOfBirth = objValues.dob
             props.patientObj.personResponseDto.isDateOfBirthEstimated = objValues.isDateOfBirthEstimated
@@ -468,22 +442,22 @@ const BasicInfo = (props) => {
             props.patientObj.testingSetting = objValues.testingSetting
             props.patientObj.modality = objValues.modality
             props.patientObj.dateVisit= objValues.visitDate
-            props.patientObj.riskAssessment =riskAssessment 
+            
+            //props.patientObj.riskAssessment =riskAssessment 
             objValues.riskAssessment=riskAssessment
-            if((riskCount>0 || riskCountQuestion.length>0) && objValues.age>15){
+            //Check if riskStratificationResponseDto is null or empty then call the update method 
+            if(props.patientObj.riskStratificationResponseDto && props.patientObj.riskStratificationResponseDto!==null && props.patientObj.riskStratificationResponseDto.code!==""){
                 if(validate()){
+                    setSaving(true);
                     handleItemClick('basic', 'risk' )
                     
                     props.setHideOtherMenu(false)
-                    console.log("submitted",objValues)
-                    localStorage.setItem("objValues", JSON.stringify(objValues));
-                    axios.post(`${baseUrl}risk-stratification`,objValues,
+                    axios.put(`${baseUrl}risk-stratification/${props.patientObj.riskStratificationResponseDto.id}`,objValues,
                     { headers: {"Authorization" : `Bearer ${token}`}},
                     
                     )
                     .then(response => {
                         setSaving(false);
-                        console.log(response.data)
                         props.patientObj.riskStratificationResponseDto=response.data
                         objValues.code=response.data.code
                         props.setExtra(objValues)
@@ -499,101 +473,100 @@ const BasicInfo = (props) => {
                             toast.error("Something went wrong. Please try again...",  {position: toast.POSITION.BOTTOM_CENTER});
                         }
                     });
-                }else{
-                    toast.error("All fields are required",  {position: toast.POSITION.BOTTOM_CENTER});
                 }
-                
-            }
-            // else {
-            //     if(validate()){
-                    
-            //         axios.post(`${baseUrl}risk-stratification`,objValues,
-            //         { headers: {"Authorization" : `Bearer ${token}`}},
-                    
-            //         )
-            //         .then(response => {
-            //             setSaving(false);
-            //             props.patientObj.riskStratificationResponseDto=response.data
-            //             toast.success("Risk stratification save succesfully!",  {position: toast.POSITION.BOTTOM_CENTER});
-            //             history.push({
-            //                 pathname: '/',
-                            
-            //             });
-            //             //
-            //         })
-            //         .catch(error => {
-            //             setSaving(false);
-            //             if(error.response && error.response.data){
-            //                 let errorMessage = error.response.data.apierror && error.response.data.apierror.message!=="" ? error.response.data.apierror.message :  "Something went wrong, please try again";
-            //                 toast.error(errorMessage,  {position: toast.POSITION.BOTTOM_CENTER});
-            //             }
-            //             else{
-            //                 toast.error("Something went wrong. Please try again...",  {position: toast.POSITION.BOTTOM_CENTER});
-            //             }
-            //         });
-            //     }else{
-            //         toast.error("All fields are required",  {position: toast.POSITION.BOTTOM_CENTER});
-            //     }
-            // }
-            if(objValues.age<15){
-                if(validate()){
-                    axios.post(`${baseUrl}risk-stratification`,objValues,
-                    { headers: {"Authorization" : `Bearer ${token}`}},
-                    
-                    )
-                    .then(response => {
-                        setSaving(false);
-                        props.patientObj.riskStratificationResponseDto=response.data
-                        objValues.code=response.data.code
-                        props.setExtra(objValues)
+            }else{//if riskStratificationResponseDto is null then make a new call to save the record 
+                if((riskCount>0 || riskCountQuestion.length>0) && objValues.age>15){
+                    if(validate()){
+                        setSaving(true);
                         handleItemClick('basic', 'risk' )
-                        //toast.success("Risk stratification save succesfully!");
-                    })
-                    .catch(error => {
-                        setSaving(false);
-                        if(error.response && error.response.data){
-                            let errorMessage = error.response.data.apierror && error.response.data.apierror.message!=="" ? error.response.data.apierror.message :  "Something went wrong, please try again";
-                            toast.error(errorMessage,  {position: toast.POSITION.BOTTOM_CENTER});
-                        }
-                        else{
-                            toast.error("Something went wrong. Please try again...",  {position: toast.POSITION.BOTTOM_CENTER});
-                        }
-                    });
-                }else{
-                    toast.error("All fields are required",  {position: toast.POSITION.BOTTOM_CENTER});
-                }
-                
-            }else{
-                props.setHideOtherMenu(false)
-                props.setExtra(objValues)
-                if(validate()){
-                    axios.post(`${baseUrl}risk-stratification`,objValues,
-                    { headers: {"Authorization" : `Bearer ${token}`}},
+                        
+                        props.setHideOtherMenu(false)
+                        axios.post(`${baseUrl}risk-stratification`,objValues,
+                        { headers: {"Authorization" : `Bearer ${token}`}},
+                        
+                        )
+                        .then(response => {
+                            setSaving(false);
+                            props.patientObj.riskStratificationResponseDto=response.data
+                            objValues.code=response.data.code
+                            props.setExtra(objValues)
+                            //toast.success("Risk stratification save succesfully!");
+                        })
+                        .catch(error => {
+                            setSaving(false);
+                            if(error.response && error.response.data){
+                                let errorMessage = error.response.data.apierror && error.response.data.apierror.message!=="" ? error.response.data.apierror.message :  "Something went wrong, please try again";
+                                toast.error(errorMessage,  {position: toast.POSITION.BOTTOM_CENTER});
+                            }
+                            else{
+                                toast.error("Something went wrong. Please try again...",  {position: toast.POSITION.BOTTOM_CENTER});
+                            }
+                        });
+                    }else{
+                        toast.error("All fields are required",  {position: toast.POSITION.BOTTOM_CENTER});
+                    }
                     
-                    )
-                    .then(response => {
-                        setSaving(false);
-                        props.patientObj.riskStratificationResponseDto=response.data
-                        objValues.code=response.data.code
-                        props.setExtra(objValues)
-                        //toast.success("Risk stratification save succesfully!");
-                    })
-                    .catch(error => {
-                        setSaving(false);
-                        if(error.response && error.response.data){
-                            let errorMessage = error.response.data.apierror && error.response.data.apierror.message!=="" ? error.response.data.apierror.message :  "Something went wrong, please try again";
-                            toast.error(errorMessage,  {position: toast.POSITION.BOTTOM_CENTER});
-                        }
-                        else{
-                            toast.error("Something went wrong. Please try again...",  {position: toast.POSITION.BOTTOM_CENTER});
-                        }
-                    });
+                }else if(objValues.age<15){
+                    if(validate()){
+                        setSaving(true);
+                        axios.post(`${baseUrl}risk-stratification`,objValues,
+                        { headers: {"Authorization" : `Bearer ${token}`}},
+                        
+                        )
+                        .then(response => {
+                            setSaving(false);
+                            props.patientObj.riskStratificationResponseDto=response.data
+                            objValues.code=response.data.code
+                            props.setExtra(objValues)
+                            handleItemClick('basic', 'risk' )
+                            //toast.success("Risk stratification save succesfully!");
+                        })
+                        .catch(error => {
+                            setSaving(false);
+                            if(error.response && error.response.data){
+                                let errorMessage = error.response.data.apierror && error.response.data.apierror.message!=="" ? error.response.data.apierror.message :  "Something went wrong, please try again";
+                                toast.error(errorMessage,  {position: toast.POSITION.BOTTOM_CENTER});
+                            }
+                            else{
+                                toast.error("Something went wrong. Please try again...",  {position: toast.POSITION.BOTTOM_CENTER});
+                            }
+                        });
+                    }else{
+                        toast.error("All fields are required",  {position: toast.POSITION.BOTTOM_CENTER});
+                    }
+                    
                 }else{
-                    toast.error("All fields are required",  {position: toast.POSITION.BOTTOM_CENTER});
-                }
+                    props.setHideOtherMenu(false)
+                    props.setExtra(objValues)
+                    if(validate()){
+                        setSaving(true);
+                        axios.post(`${baseUrl}risk-stratification`,objValues,
+                        { headers: {"Authorization" : `Bearer ${token}`}},
+                        
+                        )
+                        .then(response => {
+                            setSaving(false);
+                            props.patientObj.riskStratificationResponseDto=response.data
+                            objValues.code=response.data.code
+                            props.setExtra(objValues)
+                            //toast.success("Risk stratification save succesfully!");
+                        })
+                        .catch(error => {
+                            setSaving(false);
+                            if(error.response && error.response.data){
+                                let errorMessage = error.response.data.apierror && error.response.data.apierror.message!=="" ? error.response.data.apierror.message :  "Something went wrong, please try again";
+                                toast.error(errorMessage,  {position: toast.POSITION.BOTTOM_CENTER});
+                            }
+                            else{
+                                toast.error("Something went wrong. Please try again...",  {position: toast.POSITION.BOTTOM_CENTER});
+                            }
+                        });
+                    }else{
+                        toast.error("All fields are required",  {position: toast.POSITION.BOTTOM_CENTER});
+                    }
 
+                }
             }
-            
     }
 
 
@@ -610,7 +583,7 @@ const BasicInfo = (props) => {
                             <div className="row">
                             <div className="form-group  col-md-6">
                                 <FormGroup>
-                                    <Label>Entry Point *</Label>
+                                    <Label>Entry Point <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="entryPoint"
@@ -634,7 +607,7 @@ const BasicInfo = (props) => {
                             {objValues.entryPoint==='HTS_ENTRY_POINT_COMMUNITY' &&(
                             <div className="form-group  col-md-6">
                                 <FormGroup>
-                                    <Label>Community Entry Point *</Label>
+                                    <Label>Community Entry Point <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="communityEntryPoint"
@@ -643,6 +616,7 @@ const BasicInfo = (props) => {
                                         onChange={handleInputChange}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
+                                        <option value={""}>Select</option>
                                         {entryPointCommunity.map((value) => (
                                             <option key={value.id} value={value.code}>
                                                 {value.display}
@@ -657,7 +631,7 @@ const BasicInfo = (props) => {
                             )}
                             <div className="form-group mb-3 col-md-6">
                                 <FormGroup>
-                                <Label for="">Visit Date * </Label>
+                                <Label for="">Visit Date <span style={{ color:"red"}}> *</span> </Label>
                                 <Input
                                     type="date"
                                     name="visitDate"
@@ -676,7 +650,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-6">
                                 <FormGroup>
-                                    <Label>Setting *</Label>
+                                    <Label>Setting <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="testingSetting"
@@ -710,7 +684,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-6">
                                 <FormGroup>
-                                    <Label>Modality *</Label>
+                                    <Label>Modality <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="modality"
@@ -738,7 +712,7 @@ const BasicInfo = (props) => {
                            
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Target Group *</Label>
+                                    <Label>Target Group <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="targetGroup"
@@ -761,7 +735,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group mb-2 col-md-2">
                                 <FormGroup>
-                                    <Label>Date Of Birth *</Label>
+                                    <Label>Date Of Birth <span style={{ color:"red"}}> *</span></Label>
                                     <div className="radio">
                                         <label>
                                             <input
@@ -791,7 +765,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group mb-3 col-md-3">
                                 <FormGroup>
-                                    <Label>Date *</Label>
+                                    <Label>Date <span style={{ color:"red"}}> *</span></Label>
                                     <input
                                         className="form-control"
                                         type="date"
@@ -810,7 +784,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group mb-3 col-md-3">
                                 <FormGroup>
-                                    <Label>Age *</Label>
+                                    <Label>Age <span style={{ color:"red"}}> *</span></Label>
                                     <input
                                         className="form-control"
                                         type="number"
@@ -828,7 +802,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-6">
                                 <FormGroup>
-                                    <Label>Is this HIV test based on a Clinician/Doctor/Health Care Provider's  request ? *</Label>
+                                    <Label>Is this HIV test based on a Clinician/Doctor/Health Care Provider's  request ? <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="lastHivTestBasedOnRequest"
@@ -854,7 +828,7 @@ const BasicInfo = (props) => {
                            
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>When was your last HIV test done? * </Label>
+                                    <Label>When was your last HIV test done? <span style={{ color:"red"}}> *</span> </Label>
                                     <select
                                         className="form-control"
                                         name="lastHivTestDone"
@@ -879,7 +853,7 @@ const BasicInfo = (props) => {
                             {riskAssessment.lastHivTestDone!=="" && riskAssessment.lastHivTestDone!=='Never' && (
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>What was the result? *</Label>
+                                    <Label>What was the result? <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="whatWasTheResult"
@@ -899,10 +873,9 @@ const BasicInfo = (props) => {
                                 </FormGroup>
                             </div> 
                             )}
-                            {riskAssessment.lastHivTestDone!=="" && riskAssessment.lastHivTestDone!=='Never' && (
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Since your last HIV test, have you had anal or vaginal or oral sex without a condom with someone who was HIV positive or unaware of their HIV status? *</Label>
+                                    <Label>Since your last HIV test, have you had anal or vaginal or oral sex without a condom with someone who was HIV positive or unaware of their HIV status? <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="lastHivTestVaginalOral"
@@ -921,11 +894,9 @@ const BasicInfo = (props) => {
                                     ) : "" }
                                 </FormGroup>
                             </div>
-                            )}
-                            {riskAssessment.lastHivTestDone!=="" && riskAssessment.lastHivTestDone!=='Never' && (
-                                <div className="form-group  col-md-4">
+                            <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Since your last HIV test, have you had a blood or blood product transfusion? * </Label>
+                                    <Label>Since your last HIV test, have you had a blood or blood product transfusion? <span style={{ color:"red"}}> *</span> </Label>
                                     <select
                                         className="form-control"
                                         name="lastHivTestBloodTransfusion"
@@ -943,34 +914,31 @@ const BasicInfo = (props) => {
                                     <span className={classes.error}>{errors.lastHivTestBloodTransfusion}</span>
                                     ) : "" }
                                 </FormGroup> 
-                            </div>   
-                            )}
-                            {riskAssessment.lastHivTestDone!=="" && riskAssessment.lastHivTestDone!=='Never' && (
-                            <div className="form-group  col-md-4">
-                                 <FormGroup>
-                                     <Label>Since your last HIV test, have you experienced painful urination, lower abdominal pain, vaginal or penile discharge, pain during sexual intercourse, thick, cloudy, or foul smelling discharge and/or small bumps or blisters near the mouth, penis, vagina, or anal areas? *</Label>
-                                     <select
-                                         className="form-control"
-                                         name="lastHivTestPainfulUrination"
-                                         id="lastHivTestPainfulUrination"
-                                         value={riskAssessment.lastHivTestPainfulUrination}
-                                         onChange={handleInputChangeRiskAssessment}
-                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
-                                     >
-                                         <option value={""}></option>
-                                         <option value="true">Yes</option>
-                                         <option value="false">No</option>
-                                         
-                                     </select>
-                                     {errors.lastHivTestPainfulUrination !=="" ? (
-                                     <span className={classes.error}>{errors.lastHivTestPainfulUrination}</span>
-                                     ) : "" }
-                                 </FormGroup>
-                             </div>  
-                            )}
+                            </div>    
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Have you been diagnosed with TB or currently have any of the following symptoms : cough, fever, weight loss, night sweats? *</Label>
+                                    <Label>Since your last HIV test, have you experienced painful urination, lower abdominal pain, vaginal or penile discharge, pain during sexual intercourse, thick, cloudy, or foul smelling discharge and/or small bumps or blisters near the mouth, penis, vagina, or anal areas? <span style={{ color:"red"}}> *</span></Label>
+                                    <select
+                                        className="form-control"
+                                        name="lastHivTestPainfulUrination"
+                                        id="lastHivTestPainfulUrination"
+                                        value={riskAssessment.lastHivTestPainfulUrination}
+                                        onChange={handleInputChangeRiskAssessment}
+                                        style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                    >
+                                        <option value={""}></option>
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
+                                        
+                                    </select>
+                                    {errors.lastHivTestPainfulUrination !=="" ? (
+                                    <span className={classes.error}>{errors.lastHivTestPainfulUrination}</span>
+                                    ) : "" }
+                                </FormGroup>
+                            </div>   
+                            <div className="form-group  col-md-4">
+                                <FormGroup>
+                                    <Label>Have you been diagnosed with TB or currently have any of the following symptoms : cough, fever, weight loss, night sweats? <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="diagnosedWithTb"
@@ -989,10 +957,9 @@ const BasicInfo = (props) => {
                                     ) : "" }
                                 </FormGroup>
                             </div>
-                            {riskAssessment.lastHivTestDone!=="" && riskAssessment.lastHivTestDone!=='Never' && (
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Since your last HIV test, have you ever injected drugs, shared needles or other sharp objects with someone known to be HIV positive or who you didn’t know their HIV status? *</Label>
+                                    <Label>Since your last HIV test, have you ever injected drugs, shared needles or other sharp objects with someone known to be HIV positive or who you didn’t know their HIV status? <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="lastHivTestInjectedDrugs"
@@ -1011,11 +978,9 @@ const BasicInfo = (props) => {
                                     ) : "" }
                                 </FormGroup>
                             </div>
-                            )}
-                            {riskAssessment.lastHivTestDone!=="" && riskAssessment.lastHivTestDone!=='Never' && (
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Since your last HIV test, have you had anal, oral or vaginal sex in exchange for money or other benefits? *</Label>
+                                    <Label>Since your last HIV test, have you had anal, oral or vaginal sex in exchange for money or other benefits? <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="lastHivTestHadAnal"
@@ -1033,30 +998,27 @@ const BasicInfo = (props) => {
                                     <span className={classes.error}>{errors.lastHivTestHadAnal}</span>
                                     ) : "" }
                                 </FormGroup>
-                            </div>
-                            )}
-                            {riskAssessment.lastHivTestDone!=="" && riskAssessment.lastHivTestDone!=='Never' && (
+                            </div> 
                             <div className="form-group  col-md-4">
-                                 <FormGroup>
-                                     <Label>Since your last HIV test, have you been forced to have sex? *</Label>
-                                     <select
-                                         className="form-control"
-                                         name="lastHivTestForceToHaveSex"
-                                         value={riskAssessment.lastHivTestForceToHaveSex}
-                                         onChange={handleInputChangeRiskAssessment}
-                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
-                                     >
-                                         <option value={""}></option>
-                                         <option value="true">Yes</option>
-                                         <option value="false">No</option>
-                                         
-                                     </select>
-                                     {errors.lastHivTestForceToHaveSex !=="" ? (
-                                     <span className={classes.error}>{errors.lastHivTestForceToHaveSex}</span>
-                                     ) : "" }
-                                 </FormGroup>
-                             </div>
-                            )}
+                                <FormGroup>
+                                    <Label>Since your last HIV test, have you been forced to have sex? <span style={{ color:"red"}}> *</span></Label>
+                                    <select
+                                        className="form-control"
+                                        name="lastHivTestForceToHaveSex"
+                                        value={riskAssessment.lastHivTestForceToHaveSex}
+                                        onChange={handleInputChangeRiskAssessment}
+                                        style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                    >
+                                        <option value={""}></option>
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
+                                        
+                                    </select>
+                                    {errors.lastHivTestForceToHaveSex !=="" ? (
+                                    <span className={classes.error}>{errors.lastHivTestForceToHaveSex}</span>
+                                    ) : "" }
+                                </FormGroup>
+                            </div>
                             <br/>
                             
                             </>)}
@@ -1070,7 +1032,7 @@ const BasicInfo = (props) => {
                             <div className="row">
                             <div className="form-group mb-3 col-md-6">
                            
-                            <Button content='Save' type="submit" icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
+                            <Button content='Save' type="submit" icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit} disabled={saving}/>
                             </div>
                             </div>
                         </div>

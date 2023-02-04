@@ -355,7 +355,8 @@ const HivTestResult = (props) => {
         e.preventDefault();
         
         if(validate()){
-                    //logic to get Hiv result test
+        //logic to get Hiv result test
+        setSaving(true)
         if(initialTest12.result2==='No' ){
             objValues.hivTestResult2="Negative"
         }else if(initialTest12.result2==='Yes' && confirmatoryTest2.result2==='Yes'){
@@ -581,25 +582,32 @@ const HivTestResult = (props) => {
                             <div className="row">
                             <div className="form-group  col-md-12">  
                                 {initialTest1.result==='No' &&  (
+                                    <>
+                                    <b> Result : </b> 
                                     <LabelRibbon color="green" >
-                                        Negative
+                                        None Reactive
                                     </LabelRibbon>
+                                    </>
                                 )}                       
                                 {initialTest1.result==='No' && confirmatoryTest.result==='No' &&  (
+                                    <>
+                                    <b> Result : </b> 
                                     <LabelRibbon color="green" >
-                                    Negative
-                                </LabelRibbon>
+                                        None Reactive
+                                    </LabelRibbon>
+                                    </>
                                 )}
                                 
                                 {(initialTest1.result==='Yes' && confirmatoryTest.result==='Yes' ) && (
                                     <>
+                                    <b> Result : </b> 
                                     <LabelRibbon color="red" >
-                                        Positive
+                                        Reactive
                                     </LabelRibbon>
                                     <br/>
                                     <hr/>
                                     <div className="row">
-                                        <h4>Retesting:</h4>
+                                        <h4>RETESTING:</h4>
                                         <div className="form-group mb-3 col-md-5">
                                             <FormGroup>
                                             <Label for=""> Date </Label>
@@ -740,8 +748,9 @@ const HivTestResult = (props) => {
                                     </LabelRibbon>
                                 )} */}
                                 {(confirmatoryTest.result==='No' && tieBreakerTest.result==='Yes' ) && (<>
+                                    <b> Result : </b> 
                                     <LabelRibbon color="red" >
-                                        Positive
+                                        Reactive
                                     </LabelRibbon>
                                     <br/>
                                     <hr/>
@@ -879,38 +888,38 @@ const HivTestResult = (props) => {
                                     </div>
                                     </>
                                 )}
-                                {(confirmatoryTest.result==='No' && tieBreakerTest.result==='No' && (initialTest1.result==='Yes' || initialTest1.result==='Yes' || initialTest1.result==='')) && (
+                                {/* {(confirmatoryTest.result==='No' && tieBreakerTest.result==='No' && (initialTest1.result==='Yes' || initialTest1.result==='Yes' || initialTest1.result==='')) && (
                                     <>
                                     <b> Result : </b> 
                                     <LabelRibbon color="green" >
                                         Non Reactive
                                     </LabelRibbon>
                                     </>
-                                )}
+                                )} */}
                                  {/* END of  result for Test 1 */}
                                 {/* This is result for Test 2 */}
                                 {initialTest12.result2==='No' &&  (
                                     <>
-                                   <b> Result : </b>
+                                   <b> Final Result : </b>
                                     <LabelRibbon color="green" >
-                                    Non Reactive
+                                        Negative
                                     </LabelRibbon>
                                     </>
                                 )} 
                                 {initialTest12.result2==='No' && confirmatoryTest2.result2==='No'  && (
                                     <>
-                                    <b> Result : </b>
+                                    <b> FinalnResult : </b>
                                     <LabelRibbon color="green" >
-                                    Non Reactive
+                                        Negative
                                     </LabelRibbon>
                                     </>
                                 )}
                                 
                                 {(initialTest12.result2==='Yes' && confirmatoryTest2.result2==='Yes' ) && (
                                     <>
-                                    <b> Result : </b>
+                                    <b> Final Result : </b>
                                     <LabelRibbon color="red" >
-                                      Reactive
+                                      Positive
                                     </LabelRibbon>
                                     <br/>
                                     </>
@@ -945,7 +954,7 @@ const HivTestResult = (props) => {
                             <div className="row">
                             <div className="form-group  col-md-6">
                                 <FormGroup>
-                                    <Label>Prep Accepted</Label>
+                                    <Label>Prep Accepted <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="prepAccepted"
@@ -964,7 +973,7 @@ const HivTestResult = (props) => {
                             </div>
                             <div className="form-group  col-md-6">
                                 <FormGroup>
-                                    <Label>Prep Offered</Label>
+                                    <Label>Prep Offered <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="prepOffered"
@@ -1054,7 +1063,7 @@ const HivTestResult = (props) => {
                         <br/> <br/>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Syphilis test result *</Label>
+                                    <Label>Syphilis test result <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="syphilisTestResult"
@@ -1080,7 +1089,7 @@ const HivTestResult = (props) => {
                             <br/> <br/>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Hepatitis B virus test result *</Label>
+                                    <Label>Hepatitis B virus test result <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="hepatitisBTestResult"
@@ -1101,7 +1110,7 @@ const HivTestResult = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Hepatitis C virus test result *</Label>
+                                    <Label>Hepatitis C virus test result <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="hepatitisCTestResult"
@@ -1184,10 +1193,10 @@ const HivTestResult = (props) => {
                             </>)
                             }
                             {props.activePage.actionType==='update' && (
-                            <Button content='Update & Continue' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
+                            <Button content='Update & Continue' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit} disabled={saving}/>
                             )}
                             {props.activePage.actionType==='view' && (
-                                <Button content='Next' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
+                                <Button content='Next' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit} disabled={saving}/>
                             )}
                            
                             </div>

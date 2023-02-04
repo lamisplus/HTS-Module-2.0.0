@@ -66,7 +66,7 @@ function PatientCard(props) {
   const patientObjs = props.patientObj ? props.patientObj : {}
   //const permissions= props.permissions ? props.permissions : [];
   const [patientObj, setPatientObj] = useState(null)
-
+  console.log(props.patientObj)
   useEffect(() => {
     PatientCurrentObject();
   }, [props.patientObj]);
@@ -112,7 +112,9 @@ function PatientCard(props) {
     const getAddress = (identifier) => {     
       const identifiers = identifier;
       const address = identifiers.address.find(obj => obj.city);      
-      return address ? address.line[0] + " " + address.city: '';
+      const houseAddress=address && address.line[0]!==null ? address.line[0] :""      
+      const landMark=address && address.city && address.city!==null ? address.city :""    
+      return address ? houseAddress + " " + landMark : '';
     };
     
   

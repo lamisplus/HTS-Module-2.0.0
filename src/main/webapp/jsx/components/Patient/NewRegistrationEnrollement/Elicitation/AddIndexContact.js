@@ -92,12 +92,13 @@ const AddIndexContact = (props) => {
     const classes = useStyles();
 
     const [saving, setSaving] = useState(false);
-    const [errors, setErrors] = useState({});
     const [sexs, setSexs] = useState([])
     const [notificationContact, setNotificationContact] = useState([])
     const [ageDisabled, setAgeDisabled] = useState(true);
     const [indexTesting, setIndexTesting]= useState([]);
     const [consent, setConsent]= useState([]);
+    const [errors, setErrors] = useState({});
+    let temp = { ...errors }
     const handleItemClick =(page, completedMenu)=>{
         props.handleItemClick(page)
         if(props.completed.includes(completedMenu)) {
@@ -273,9 +274,19 @@ const AddIndexContact = (props) => {
         const result = value.replace(/[^a-z]/gi, '');
         return result
     }
+    const validate = () => {
+        //HTS FORM VALIDATION
+         temp.acceptedIns = objValues.acceptedIns ? "" : "This field is required."
+        temp.offeredIns = objValues.offeredIns ? "" : "This field is required."
+             
+                setErrors({ ...temp })
+        return Object.values(temp).every(x => x == "")
+    }
     const handleSubmit =(e)=>{
-        e.preventDefault();     
-        objValues.isDateOfBirthEstimated=objValues.isDateOfBirthEstimated==true ? 1 : 0
+        e.preventDefault();
+        if(validate()) { 
+            setSaving(true)      
+            objValues.isDateOfBirthEstimated=objValues.isDateOfBirthEstimated==true ? 1 : 0
             axios.post(`${baseUrl}index-elicitation`,objValues,
             { headers: {"Authorization" : `Bearer ${token}`}},
             
@@ -296,7 +307,7 @@ const AddIndexContact = (props) => {
                     toast.error("Something went wrong. Please try again...");
                 }
             });
-            
+        }  
     }
 
     return (
@@ -320,7 +331,7 @@ const AddIndexContact = (props) => {
                     <div className="row">
                     <div className="form-group  col-md-4">
                         <FormGroup>
-                            <Label>Offered INS ? *</Label>
+                            <Label>Offered INS ? <span style={{ color:"red"}}> *</span></Label>
                             <select
                                 className="form-control"
                                 name="offeredIns"
@@ -341,7 +352,7 @@ const AddIndexContact = (props) => {
                     </div>
                     <div className="form-group  col-md-4">
                         <FormGroup>
-                            <Label>Accepted INS ? *</Label>
+                            <Label>Accepted INS ? <span style={{ color:"red"}}> *</span></Label>
                             <select
                                 className="form-control"
                                 name="acceptedIns"
@@ -729,7 +740,7 @@ const AddIndexContact = (props) => {
                             <div className="row">
                             <div className="form-group mb-3 col-md-6">
                            
-                            <Button content='Save' icon='save' labelPosition='left' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
+                            <Button content='Save' icon='save' labelPosition='left' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit} disabled={saving}/>
                             </div>
                             </div>
                         </div>

@@ -1,23 +1,13 @@
 package org.lamisplus.modules.hts.controller;
 
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.lamisplus.modules.hts.domain.dto.*;
-import org.lamisplus.modules.hts.domain.entity.HtsClient;
-import org.lamisplus.modules.hts.domain.entity.IndexElicitation;
-import org.lamisplus.modules.hts.service.HtsClientService;
 import org.lamisplus.modules.hts.service.IndexElicitationService;
-import org.lamisplus.modules.hts.util.PaginationUtil;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -41,6 +31,7 @@ public class IndexElicitationController {
     }
 
     @DeleteMapping(INDEX_ELICITATION_URL_VERSION_ONE + "/{id}")
+    @ApiOperation("Deleting index Elicitation")
     public void delete(@PathVariable Long id) {
         this.indexElicitationService.delete(id);
     }

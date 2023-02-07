@@ -386,6 +386,7 @@ const AddIndexContact = (props) => {
                         </FormGroup>
                     </div>
                     </div>
+                    {/*objValues.offeredIns !== null && objValues.acceptedIns !== null && ()*/}
                         <div className="row">
                             <div className="form-group mb-3 col-md-4">
                                 <FormGroup>
@@ -634,7 +635,7 @@ const AddIndexContact = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>As far as you know, as this partner ever tested positive for HIV </Label>
+                                    <Label>As far as you know, has this partner ever tested positive for HIV </Label>
                                     <select
                                         className="form-control"
                                         name="partnerTestedPositive"
@@ -682,7 +683,7 @@ const AddIndexContact = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Has this partner ever threaten to hurt you? </Label>
+                                    <Label>Has this partner ever threatened to hurt you? </Label>
                                     <select
                                         className="form-control"
                                         name="threatenToHurt"
@@ -706,7 +707,7 @@ const AddIndexContact = (props) => {
                            
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Has this partner ever threaten force you to do something sexually that made you uncomfortable ?  </Label>
+                                    <Label>Has this partner ever threatened to force you to do something sexually that made you uncomfortable ?  </Label>
                                     <select
                                         className="form-control"
                                         name="sexuallyUncomfortable"

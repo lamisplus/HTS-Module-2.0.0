@@ -656,7 +656,7 @@ const BasicInfo = (props) => {
         
             <Card className={classes.root}>
                 <CardBody>   
-                <h2 style={{color:'#000'}}>BASIC INFORMATION - CLIENT INTAKE FORM</h2>
+                <h2 style={{color:'#000'}}>CLIENT INTAKE FORM</h2>
                 <br/>
                     <form >
                         <div className="row">
@@ -1100,7 +1100,7 @@ const BasicInfo = (props) => {
                            
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Index Testing *</Label>
+                                    <Label>Index Testing <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="indexClient"
@@ -1122,7 +1122,7 @@ const BasicInfo = (props) => {
                             <>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Relationship of the index client *</Label>
+                                    <Label>Relationship of the index client <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="relationshipWithIndexClient"
@@ -1213,7 +1213,7 @@ const BasicInfo = (props) => {
                             
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>First time visit *</Label>
+                                    <Label>First time visit <span style={{ color:"red"}}>*</span></Label>
                                     <select
                                         className="form-control"
                                         name="firstTimeVisit"
@@ -1234,7 +1234,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Previously tested within the last 3 months *</Label>
+                                    <Label>Previously tested within the last 3 months <span style={{ color:"red"}}>*</span></Label>
                                     <select
                                         className="form-control"
                                         name="previouslyTested"
@@ -1254,7 +1254,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Type of Counseling *</Label>
+                                    <Label>Type of Counseling <span style={{ color:"red"}}>*</span></Label>
                                     <select
                                         className="form-control"
                                         name="typeCounseling"

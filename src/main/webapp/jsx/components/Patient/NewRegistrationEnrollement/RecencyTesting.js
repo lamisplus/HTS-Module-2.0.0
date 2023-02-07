@@ -162,12 +162,12 @@ const BasicInfo = (props) => {
     }
     useEffect(() => { 
         if(recency.longTermLine==='true' && recency.verififcationLine==='true' && recency.controlLine==='true'){
-            recency.rencencyInterpretation="Long Term"
-            setRecency ({...recency,  ['rencencyInterpretation']: 'Long Term'}); 
+            recency.rencencyInterpretation="RTRI Long Term"
+            setRecency ({...recency,  ['rencencyInterpretation']: 'RTRI Long Term'}); 
             //console.log("Long Term")
         }else if(recency.longTermLine==='false' && recency.verififcationLine==='true' && recency.controlLine==='true'){
-            recency.rencencyInterpretation="Recent"
-            setRecency ({...recency,  ['rencencyInterpretation']: 'Recent'});
+            recency.rencencyInterpretation="RTRI Recent"
+            setRecency ({...recency,  ['rencencyInterpretation']: 'RTRI Recent'});
             setRecency ({...recency,  ['hasViralLoad']: 'true'});
             
         }else if(recency.longTermLine==='false' && recency.verififcationLine==='false' && recency.controlLine==='true'){

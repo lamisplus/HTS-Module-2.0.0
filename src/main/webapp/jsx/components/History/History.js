@@ -110,7 +110,7 @@ const PatientnHistory = (props) => {
             icons={tableIcons}
               title="HTS HISTORY "
               columns={[
-                { title: "HTS ID", field: "id" },
+                // { title: "HTS ID", field: "id" },
                 { title: "Date", field: "date" },
                 {title: "Pre Test Counseling",field: "pre"},
                 { title: "Recency Test", field: "rencency" },
@@ -121,7 +121,7 @@ const PatientnHistory = (props) => {
               ]}
               isLoading={props.loading}
               data={ props.patientList.map((row) => ({
-                id: row.id,
+               // id: row.id,
                 date: row.dateVisit,
                 pre: row.knowledgeAssessment? "Filled":"Not Filled ",
                 requestResult:row.confirmatoryTest ? "Filled":"Not Filled ",
@@ -155,22 +155,22 @@ const PatientnHistory = (props) => {
                   
                   }))}
             
-                        options={{
-                          headerStyle: {
-                              //backgroundColor: "#9F9FA5",
-                              color: "#000",
-                          },
-                          searchFieldStyle: {
-                              width : '200%',
-                              margingLeft: '250px',
-                          },
-                          filtering: false,
-                          exportButton: false,
-                          searchFieldAlignment: 'left',
-                          pageSizeOptions:[10,20,100],
-                          pageSize:10,
-                          debounceInterval: 400
-                      }}
+                options={{
+                    headerStyle: {
+                        //backgroundColor: "#9F9FA5",
+                        color: "#000",
+                    },
+                    searchFieldStyle: {
+                        width : '200%',
+                        margingLeft: '250px',
+                    },
+                    filtering: false,
+                    exportButton: false,
+                    searchFieldAlignment: 'left',
+                    pageSizeOptions:[10,20,100],
+                    pageSize:10,
+                    debounceInterval: 400
+                }}
             />
 
     </div>

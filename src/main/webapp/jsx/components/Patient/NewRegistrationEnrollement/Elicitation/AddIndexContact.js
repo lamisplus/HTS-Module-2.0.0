@@ -98,6 +98,9 @@ const AddIndexContact = (props) => {
     const [indexTesting, setIndexTesting]= useState([]);
     const [consent, setConsent]= useState([]);
     const [errors, setErrors] = useState({});
+    const [stateUnitOptions, setStateUnitOptions]= useState([]);
+    const [districtUnitOptions, setDistrictUnitOptions]= useState([]);
+
     let temp = { ...errors }
     const handleItemClick =(page, completedMenu)=>{
         props.handleItemClick(page)
@@ -140,6 +143,42 @@ const AddIndexContact = (props) => {
             acceptedIns:""
         }
     )
+
+    // const loadOrganisationUnitsByParentId = async (parentId) => {
+    //     const response = await axios.get(`${baseUrl}organisation-units/parent-organisation-units/${parentId}`, { headers: {"Authorization" : `Bearer ${token}`} });
+    //     console.log(response)
+    //     return response.data;
+    // };
+
+    // const onCountryChange = async (e) => {
+    //     if (e.target.value) {
+    //         const stateOptions = await loadOrganisationUnitsByParentId(e.target.value);
+    //         setStateUnitOptions(stateOptions);
+    //     } else {
+    //         setStateUnitOptions([]);
+    //     }
+    // };
+    // const onStateChange = async (e) => {
+    //     if (e.target.value) {
+    //         const districtOptions = await loadOrganisationUnitsByParentId(e.target.value);
+    //         setDistrictUnitOptions(districtOptions);
+    //     } else {
+    //         setDistrictUnitOptions([]);
+    //     }
+    // };
+
+    // //states
+    // if (stateUnitOptions && stateUnitOptions.length > 0) {
+    //     stateRows = stateUnitOptions.map((stateUnitOption, index) => (
+    //         <option key={stateUnitOption.id} value={stateUnitOption.id}>{stateUnitOption.name}</option>
+    //     ));
+    // }
+    // if (districtUnitOptions && districtUnitOptions.length > 0) {
+    //     districtRows = districtUnitOptions.map((districtUnitOption, index) => (
+    //         <option key={districtUnitOption.id} value={districtUnitOption.id}>{districtUnitOption.name}</option>
+    //     ));
+    // }
+
            
     useEffect(() => { 
         Sex();
@@ -610,7 +649,7 @@ const AddIndexContact = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>As far as you know, as this partner ever tested positive for HIV *</Label>
+                                    <Label>As far as you know, has this partner ever tested positive for HIV *</Label>
                                     <select
                                         className="form-control"
                                         name="partnerTestedPositive"
@@ -631,7 +670,7 @@ const AddIndexContact = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>As this partner ever hit, kick, slapped or otherwise physical hurt you? *</Label>
+                                    <Label>Has this partner ever hit, kick, slapped or otherwise physical hurt you? *</Label>
                                     <select
                                         className="form-control"
                                         name="physicalHurt"
@@ -652,7 +691,7 @@ const AddIndexContact = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Has this partner ever threaten to hurt you? *</Label>
+                                    <Label>Has this partner ever threatened to hurt you? *</Label>
                                     <select
                                         className="form-control"
                                         name="threatenToHurt"
@@ -674,7 +713,7 @@ const AddIndexContact = (props) => {
                            
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Has this partner ever threaten force you to do something sexually that made you uncomfortable ?  *</Label>
+                                    <Label>Has this partner ever threatened to force you to do something sexually that made you uncomfortable ?  *</Label>
                                     <select
                                         className="form-control"
                                         name="sexuallyUncomfortable"

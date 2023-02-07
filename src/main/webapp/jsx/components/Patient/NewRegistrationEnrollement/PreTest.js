@@ -245,14 +245,14 @@ const BasicInfo = (props) => {
            
             props.patientObj.targetGroup==="TARGET_GROUP_GEN_POP" && (temp.everHadSexualIntercourse = riskAssessment.everHadSexualIntercourse ? "" : "This field is required.")
             props.patientObj.targetGroup==="TARGET_GROUP_GEN_POP" && (temp.bloodtransInlastThreeMonths = riskAssessment.bloodtransInlastThreeMonths ? "" : "This field is required.")
-            props.patientObj.targetGroup==="TARGET_GROUP_GEN_POP" && (temp.uprotectedSexWithCasualLastThreeMonths = riskAssessment.uprotectedSexWithCasualLastThreeMonths ? "" : "This field is required.")
-            props.patientObj.targetGroup==="TARGET_GROUP_GEN_POP" && (temp.uprotectedSexWithRegularPartnerLastThreeMonths = riskAssessment.uprotectedSexWithRegularPartnerLastThreeMonths ? "" : "This field is required.")
-            props.patientObj.targetGroup==="TARGET_GROUP_GEN_POP" && (temp.unprotectedVaginalSex = riskAssessment.unprotectedVaginalSex ? "" : "This field is required.")
+            // props.patientObj.targetGroup==="TARGET_GROUP_GEN_POP" && (temp.uprotectedSexWithCasualLastThreeMonths = riskAssessment.uprotectedSexWithCasualLastThreeMonths ? "" : "This field is required.")
+            // props.patientObj.targetGroup==="TARGET_GROUP_GEN_POP" && (temp.uprotectedSexWithRegularPartnerLastThreeMonths = riskAssessment.uprotectedSexWithRegularPartnerLastThreeMonths ? "" : "This field is required.")
+            // props.patientObj.targetGroup==="TARGET_GROUP_GEN_POP" && (temp.unprotectedVaginalSex = riskAssessment.unprotectedVaginalSex ? "" : "This field is required.")
 
-            props.patientObj.targetGroup==="TARGET_GROUP_GEN_POP" && (temp.uprotectedAnalSex = riskAssessment.uprotectedAnalSex ? "" : "This field is required.")
-            props.patientObj.targetGroup==="TARGET_GROUP_GEN_POP" && (temp.sexUnderInfluence = riskAssessment.sexUnderInfluence ? "" : "This field is required.")
-            props.patientObj.targetGroup==="TARGET_GROUP_GEN_POP" && (temp.uprotectedSexWithCasualLastThreeMonths = riskAssessment.uprotectedSexWithCasualLastThreeMonths ? "" : "This field is required.")
-            props.patientObj.targetGroup==="TARGET_GROUP_GEN_POP" && (temp.moreThanOneSexPartnerLastThreeMonths = riskAssessment.moreThanOneSexPartnerLastThreeMonths ? "" : "This field is required.")
+            // props.patientObj.targetGroup==="TARGET_GROUP_GEN_POP" && (temp.uprotectedAnalSex = riskAssessment.uprotectedAnalSex ? "" : "This field is required.")
+            // props.patientObj.targetGroup==="TARGET_GROUP_GEN_POP" && (temp.sexUnderInfluence = riskAssessment.sexUnderInfluence ? "" : "This field is required.")
+            // props.patientObj.targetGroup==="TARGET_GROUP_GEN_POP" && (temp.uprotectedSexWithCasualLastThreeMonths = riskAssessment.uprotectedSexWithCasualLastThreeMonths ? "" : "This field is required.")
+            // props.patientObj.targetGroup==="TARGET_GROUP_GEN_POP" && (temp.moreThanOneSexPartnerLastThreeMonths = riskAssessment.moreThanOneSexPartnerLastThreeMonths ? "" : "This field is required.")
             
             
             props.patientObj.targetGroup!=="TARGET_GROUP_GEN_POP" && (temp.experiencePain = riskAssessment.experiencePain ? "" : "This field is required.")
@@ -637,6 +637,7 @@ const BasicInfo = (props) => {
                                 ) : "" }
                                 </FormGroup>
                             </div>
+                            {riskAssessment.everHadSexualIntercourse!=="" && riskAssessment.everHadSexualIntercourse==='true' && (
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Unprotected sex with casual partner in last 3 months <span style={{ color:"red"}}> *</span></Label>
@@ -658,6 +659,8 @@ const BasicInfo = (props) => {
                                 ) : "" }
                                 </FormGroup>
                             </div>
+                            )}
+                            {riskAssessment.everHadSexualIntercourse!=="" && riskAssessment.everHadSexualIntercourse==='true' && (
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Unprotected sex with regular partner in the last 3months <span style={{ color:"red"}}> *</span></Label>
@@ -679,6 +682,8 @@ const BasicInfo = (props) => {
                                 ) : "" }
                                 </FormGroup>
                             </div>
+                            )}
+                            {riskAssessment.everHadSexualIntercourse!=="" && riskAssessment.everHadSexualIntercourse==='true' && (
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Unprotected vaginal sex <span style={{ color:"red"}}> *</span></Label>
@@ -700,6 +705,8 @@ const BasicInfo = (props) => {
                                 ) : "" }
                                 </FormGroup>
                             </div>
+                            )}
+                            {riskAssessment.everHadSexualIntercourse!=="" && riskAssessment.everHadSexualIntercourse==='true' && (
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Unprotected Anal sex <span style={{ color:"red"}}> *</span></Label>
@@ -720,7 +727,9 @@ const BasicInfo = (props) => {
                                     <span className={classes.error}>{errors.uprotectedAnalSex}</span>
                                 ) : "" }
                                 </FormGroup>
-                            </div>         
+                            </div>  
+                            )} 
+                            {riskAssessment.everHadSexualIntercourse!=="" && riskAssessment.everHadSexualIntercourse==='true' && (      
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>STI in last 3 months <span style={{ color:"red"}}> *</span></Label>
@@ -742,6 +751,8 @@ const BasicInfo = (props) => {
                                 ) : "" }
                                 </FormGroup>
                             </div>
+                            )}
+                            {riskAssessment.everHadSexualIntercourse!=="" && riskAssessment.everHadSexualIntercourse==='true' && ( 
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Sex under the influence of drugs or alcohol <span style={{ color:"red"}}> *</span></Label>
@@ -763,6 +774,8 @@ const BasicInfo = (props) => {
                                 ) : "" }
                                 </FormGroup>
                             </div>
+                            )}
+                            {riskAssessment.everHadSexualIntercourse!=="" && riskAssessment.everHadSexualIntercourse==='true' && ( 
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>More than 1 sex partner during last 3 months <span style={{ color:"red"}}> *</span></Label>
@@ -784,6 +797,7 @@ const BasicInfo = (props) => {
                                 ) : "" }
                                 </FormGroup>
                             </div>
+                             )}
                             <Message warning>
                                 <h4>  Risk assessment score (sum of all 7 answers)</h4>
                                 <b>Score : {riskCount.legth}</b>

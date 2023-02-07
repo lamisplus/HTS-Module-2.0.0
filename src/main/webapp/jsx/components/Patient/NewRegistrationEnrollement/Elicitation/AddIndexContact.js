@@ -92,12 +92,16 @@ const AddIndexContact = (props) => {
     const classes = useStyles();
 
     const [saving, setSaving] = useState(false);
-    const [errors, setErrors] = useState({});
     const [sexs, setSexs] = useState([])
     const [notificationContact, setNotificationContact] = useState([])
     const [ageDisabled, setAgeDisabled] = useState(true);
     const [indexTesting, setIndexTesting]= useState([]);
     const [consent, setConsent]= useState([]);
+    const [errors, setErrors] = useState({});
+    const [stateUnitOptions, setStateUnitOptions]= useState([]);
+    const [districtUnitOptions, setDistrictUnitOptions]= useState([]);
+
+    let temp = { ...errors }
     const handleItemClick =(page, completedMenu)=>{
         props.handleItemClick(page)
         if(props.completed.includes(completedMenu)) {
@@ -135,8 +139,46 @@ const AddIndexContact = (props) => {
             sexuallyUncomfortable: "", 
             notificationMethod : "",
             datePartnerCameForTesting: "",
+            offeredIns:"",
+            acceptedIns:""
         }
     )
+
+    // const loadOrganisationUnitsByParentId = async (parentId) => {
+    //     const response = await axios.get(`${baseUrl}organisation-units/parent-organisation-units/${parentId}`, { headers: {"Authorization" : `Bearer ${token}`} });
+    //     console.log(response)
+    //     return response.data;
+    // };
+
+    // const onCountryChange = async (e) => {
+    //     if (e.target.value) {
+    //         const stateOptions = await loadOrganisationUnitsByParentId(e.target.value);
+    //         setStateUnitOptions(stateOptions);
+    //     } else {
+    //         setStateUnitOptions([]);
+    //     }
+    // };
+    // const onStateChange = async (e) => {
+    //     if (e.target.value) {
+    //         const districtOptions = await loadOrganisationUnitsByParentId(e.target.value);
+    //         setDistrictUnitOptions(districtOptions);
+    //     } else {
+    //         setDistrictUnitOptions([]);
+    //     }
+    // };
+
+    // //states
+    // if (stateUnitOptions && stateUnitOptions.length > 0) {
+    //     stateRows = stateUnitOptions.map((stateUnitOption, index) => (
+    //         <option key={stateUnitOption.id} value={stateUnitOption.id}>{stateUnitOption.name}</option>
+    //     ));
+    // }
+    // if (districtUnitOptions && districtUnitOptions.length > 0) {
+    //     districtRows = districtUnitOptions.map((districtUnitOption, index) => (
+    //         <option key={districtUnitOption.id} value={districtUnitOption.id}>{districtUnitOption.name}</option>
+    //     ));
+    // }
+
            
     useEffect(() => { 
         Sex();
@@ -271,9 +313,19 @@ const AddIndexContact = (props) => {
         const result = value.replace(/[^a-z]/gi, '');
         return result
     }
+    const validate = () => {
+        //HTS FORM VALIDATION
+         temp.acceptedIns = objValues.acceptedIns ? "" : "This field is required."
+        temp.offeredIns = objValues.offeredIns ? "" : "This field is required."
+             
+                setErrors({ ...temp })
+        return Object.values(temp).every(x => x == "")
+    }
     const handleSubmit =(e)=>{
-        e.preventDefault();     
-        objValues.isDateOfBirthEstimated=objValues.isDateOfBirthEstimated==true ? 1 : 0
+        e.preventDefault();
+        if(validate()) { 
+            setSaving(true)      
+            objValues.isDateOfBirthEstimated=objValues.isDateOfBirthEstimated==true ? 1 : 0
             axios.post(`${baseUrl}index-elicitation`,objValues,
             { headers: {"Authorization" : `Bearer ${token}`}},
             
@@ -294,7 +346,7 @@ const AddIndexContact = (props) => {
                     toast.error("Something went wrong. Please try again...");
                 }
             });
-            
+        }  
     }
 
     return (
@@ -315,6 +367,50 @@ const AddIndexContact = (props) => {
                 </h2>
                 <br/><br/>    
                     <form >
+                    <div className="row">
+                    <div className="form-group  col-md-4">
+                        <FormGroup>
+                            <Label>Offered INS ? <span style={{ color:"red"}}> *</span></Label>
+                            <select
+                                className="form-control"
+                                name="offeredIns"
+                                id="offeredIns"
+                                value={objValues.offeredIns}
+                                onChange={handleInputChange}
+                                style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                            >
+                                <option value={""}></option>
+                                {consent.map((value) => (
+                                    <option key={value.id} value={value.id}>
+                                        {value.display}
+                                    </option>
+                                ))}
+                            </select>
+                            
+                        </FormGroup>
+                    </div>
+                    <div className="form-group  col-md-4">
+                        <FormGroup>
+                            <Label>Accepted INS ? <span style={{ color:"red"}}> *</span></Label>
+                            <select
+                                className="form-control"
+                                name="acceptedIns"
+                                id="acceptedIns"
+                                value={objValues.acceptedIns}
+                                onChange={handleInputChange}
+                                style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                            >
+                                <option value={""}></option>
+                                {consent.map((value) => (
+                                    <option key={value.id} value={value.id}>
+                                        {value.display}
+                                    </option>
+                                ))}
+                            </select>
+                            
+                        </FormGroup>
+                    </div>
+                    </div>
                         <div className="row">
                             <div className="form-group mb-3 col-md-4">
                                 <FormGroup>
@@ -553,7 +649,7 @@ const AddIndexContact = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>As far as you know, as this partner ever tested positive for HIV *</Label>
+                                    <Label>As far as you know, has this partner ever tested positive for HIV *</Label>
                                     <select
                                         className="form-control"
                                         name="partnerTestedPositive"
@@ -574,7 +670,7 @@ const AddIndexContact = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>As this partner ever hit, kick, slapped or otherwise physical hurt you? *</Label>
+                                    <Label>Has this partner ever hit, kick, slapped or otherwise physical hurt you? *</Label>
                                     <select
                                         className="form-control"
                                         name="physicalHurt"
@@ -595,7 +691,7 @@ const AddIndexContact = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Has this partner ever threaten to hurt you? *</Label>
+                                    <Label>Has this partner ever threatened to hurt you? *</Label>
                                     <select
                                         className="form-control"
                                         name="threatenToHurt"
@@ -617,7 +713,7 @@ const AddIndexContact = (props) => {
                            
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Has this partner ever threaten force you to do something sexually that made you uncomfortable ?  *</Label>
+                                    <Label>Has this partner ever threatened to force you to do something sexually that made you uncomfortable ?  *</Label>
                                     <select
                                         className="form-control"
                                         name="sexuallyUncomfortable"
@@ -683,7 +779,7 @@ const AddIndexContact = (props) => {
                             <div className="row">
                             <div className="form-group mb-3 col-md-6">
                            
-                            <Button content='Save' icon='save' labelPosition='left' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
+                            <Button content='Save' icon='save' labelPosition='left' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit} disabled={saving}/>
                             </div>
                             </div>
                         </div>

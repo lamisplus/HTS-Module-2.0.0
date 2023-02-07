@@ -44,6 +44,11 @@ public class RiskStratification extends Audit implements Serializable {
     private int age;
 
     @Basic
+    @Column(name = "entry_point")
+    private String entryPoint;
+
+
+    @Basic
     @Column(name = "dob")
     private LocalDate dob;
 
@@ -54,8 +59,6 @@ public class RiskStratification extends Audit implements Serializable {
     @Basic
     @Column(name = "modality")
     private String modality;
-
-
     @Basic
     @Column(name = "code")
     private String code;
@@ -81,6 +84,13 @@ public class RiskStratification extends Audit implements Serializable {
     @Column(name = "person_uuid")
     private String personUuid;
 
+    @Basic
+    @Column(name = "community_entry_point ")
+    private String communityEntryPoint ;
+
+    @Basic
+    @Column(name = "facility_id ")
+    private Long facilityId;
 
     @PrePersist
     public void setFields(){

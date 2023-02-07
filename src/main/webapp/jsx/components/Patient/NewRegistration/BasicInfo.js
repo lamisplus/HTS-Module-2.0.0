@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState} from "react";
 import axios from "axios";
 import {FormGroup, Label , CardBody, Spinner,Input,Form} from "reactstrap";
@@ -99,7 +98,7 @@ const useStyles = makeStyles((theme) => ({
 
 const BasicInfo = (props) => {
     const classes = useStyles();
-    console.log(props)
+    //console.log(props)
     const history = useHistory();
     const [errors, setErrors] = useState({});
     const [saving, setSaving] = useState(false);
@@ -183,7 +182,8 @@ const BasicInfo = (props) => {
             otherName: props.patientObj.personResponseDto && props.patientObj.personResponseDto.otherName ? props.patientObj.personResponseDto.otherName :"",
             sex: props.patientObj.personResponseDto && props.patientObj.personResponseDto.sex ? props.patientObj.personResponseDto.sex :"",
             stateId:country && country.stateId ? country.stateId :"",
-                                               
+            riskAssessment:  props.extra && props.extra.riskAssessment ? props.extra.riskAssessment : {},                                 
+            riskStratificationCode:props.extra && props.extra.code!=='' ? props.extra.code : "",
             lga:country && country.district ? country.district :"",
             surname: props.patientObj.personResponseDto && props.patientObj.personResponseDto.surname ? props.patientObj.personResponseDto.surname :"",
             previouslyTested: props.patientObj ? props.patientObj.previouslyTested :"",
@@ -192,7 +192,7 @@ const BasicInfo = (props) => {
             testingSetting:props.patientObj ? props.patientObj.testingSetting :"",
             typeCounseling: props.patientObj ? props.patientObj.typeCounseling :"",
             relationshipWithIndexClient:props.patientObj ? props.patientObj.relationshipWithIndexClient :"",
-            indexClientCode:props.patientObj ? props.patientObj.indexClientCode :"",
+            indexClientCode:"",
         }
     )
 
@@ -220,7 +220,6 @@ const BasicInfo = (props) => {
             getProvincesId(country.stateId)
         }
     }, [objValues.age, props.patientObj, props.extra.age]);
-
     //Get list of KP
     const KP =()=>{
         axios
@@ -260,7 +259,6 @@ const BasicInfo = (props) => {
         //console.log(error);
         });    
     }
-    
     //Get list of KP
     const CounselingType =()=>{
         axios
@@ -422,6 +420,7 @@ const BasicInfo = (props) => {
                 if(response.data!=='Record Not Found'){
                     setclientCodeetail2("")
                     setclientCodeetail(response.data)
+                    //setObjValues ({...objValues,  [e.target.name]: e.target.value});
                     
                 }else{
                     setclientCodeetail("")
@@ -518,7 +517,7 @@ const BasicInfo = (props) => {
             temp.previouslyTested = objValues.previouslyTested ? "" : "This field is required."
             temp.surname = objValues.surname ? "" : "This field is required."
             temp.sex = objValues.sex ? "" : "This field is required."
-            //temp.maritalStatusId = objValues.maritalStatusId ? "" : "This field is required."
+            temp.clientCode = objValues.clientCode ? "" : "This field is required."
             temp.phoneNumber = objValues.phoneNumber ? "" : "This field is required."
            // temp.isDateOfBirthEstimated = objValues.isDateOfBirthEstimated ? "" : "This field is required."    
             temp.firstName = objValues.firstName ? "" : "This field is required."  
@@ -544,6 +543,8 @@ const BasicInfo = (props) => {
 
     const handleSubmit =(e)=>{
         e.preventDefault();
+        if(validate()){
+        setSaving(true)
         const getSexId=  sexs.find((x)=> x.display===objValues.sex)//get patient sex ID by filtering the request
         //basicInfo.sexId=getSexId.id
         const patientForm ={
@@ -608,11 +609,14 @@ const BasicInfo = (props) => {
             testingSetting: objValues.testingSetting,
             typeCounseling:objValues.typeCounseling,
             breastFeeding:objValues.breastFeeding,
+            indexClientCode:objValues.indexClientCode,
             pregnant:objValues.pregnant,
-            relationshipWithIndexClient:objValues.relationshipWithIndexClient
+            relationshipWithIndexClient:objValues.relationshipWithIndexClient,
+            riskStratificationCode:props.extra && props.extra.code!=='' ? props.extra.code : "",
             }
             props.setPatientObj({...props.patientObj, ...objValues})
-            if(validate()){
+            
+            //console.log(patientForm)
             axios.post(`${baseUrl}hts`,patientForm,
             { headers: {"Authorization" : `Bearer ${token}`}},
             
@@ -635,12 +639,14 @@ const BasicInfo = (props) => {
                 setSaving(false);
                 if(error.response && error.response.data){
                     let errorMessage = error.response.data.apierror && error.response.data.apierror.message!=="" ? error.response.data.apierror.message :  "Something went wrong, please try again";
-                    toast.error(errorMessage);
+                    toast.error(errorMessage,  {position: toast.POSITION.BOTTOM_CENTER});
                 }
                 else{
-                    toast.error("Something went wrong. Please try again...");
+                    toast.error("Something went wrong. Please try again...",  {position: toast.POSITION.BOTTOM_CENTER});
                 }
             });
+            }else{
+                toast.error("All fields are required",  {position: toast.POSITION.BOTTOM_CENTER});
             }
     }
 
@@ -650,14 +656,14 @@ const BasicInfo = (props) => {
         
             <Card className={classes.root}>
                 <CardBody>   
-                <h2 style={{color:'#000'}}>BASIC INFORMATION - CLIENT INTAKE FORM</h2>
+                <h2 style={{color:'#000'}}>CLIENT INTAKE FORM</h2>
                 <br/>
                     <form >
                         <div className="row">
                              <div className="row">
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Target Group *</Label>
+                                    <Label>Target Group <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="targetGroup"
@@ -681,7 +687,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group mb-3 col-md-4">
                                 <FormGroup>
-                                <Label for="">Client Code</Label>
+                                <Label for="">Client Code <span style={{ color:"red"}}> *</span></Label>
                                 <Input
                                     type="text"
                                     name="clientCode"
@@ -723,7 +729,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Referred From *</Label>
+                                    <Label>Referred From <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="referredFrom"
@@ -746,7 +752,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Setting*</Label>
+                                    <Label>Setting <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="testingSetting"
@@ -769,7 +775,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group mb-3 col-md-4">
                                 <FormGroup>
-                                <Label for="">Visit Date  </Label>
+                                <Label for="">Visit Date <span style={{ color:"red"}}> *</span> </Label>
                                 <Input
                                     type="date"
                                     name="dateVisit"
@@ -788,7 +794,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group mb-3 col-md-4">
                                 <FormGroup>
-                                <Label for="">First Name *</Label>
+                                <Label for="">First Name <span style={{ color:"red"}}> *</span></Label>
                                 <Input
                                     type="text"
                                     name="firstName"
@@ -822,7 +828,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group mb-3 col-md-4">
                                 <FormGroup>
-                                <Label for="">Last Name *</Label>
+                                <Label for="">Last Name <span style={{ color:"red"}}> *</span></Label>
                                 <Input
                                     type="text"
                                     name="surname"
@@ -892,7 +898,7 @@ const BasicInfo = (props) => {
                                         type="number"
                                         name="age"
                                         id="age"
-                                        value={objValues.age}
+                                        value={objValues.age + 1}
                                         disabled={ageDisabled}
                                         onChange={handleAgeChange}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
@@ -901,7 +907,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group mb-3 col-md-4">
                                 <FormGroup>
-                                <Label for="">Phone Number *</Label>
+                                <Label for="">Phone Number <span style={{ color:"red"}}> *</span></Label>
                                 
                                     <PhoneInput
                                         containerStyle={{width:'100%',border: "1px solid #014D88"}}
@@ -923,7 +929,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>State *</Label>
+                                    <Label>State <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="state"
@@ -946,7 +952,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>LGA *</Label>
+                                    <Label>LGA <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="lga"
@@ -969,7 +975,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Address *</Label>
+                                    <Label>Address <span style={{ color:"red"}}> *</span></Label>
                                     <Input
                                         type="textarea"
                                         name="address"
@@ -986,7 +992,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Sex*</Label>
+                                    <Label>Sex <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="sex"
@@ -1053,7 +1059,7 @@ const BasicInfo = (props) => {
                                 </FormGroup>
                             </div>
                             )}
-                             {( objValues.age > 9 && objValues.sex=='Male') && (
+                             {( objValues.age > 9 && objValues.sex==='Male' && objValues.maritalStatusId!==5) && (
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Number of wives/co-wives</Label>
@@ -1094,7 +1100,7 @@ const BasicInfo = (props) => {
                            
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Index Testing</Label>
+                                    <Label>Index Testing <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="indexClient"
@@ -1116,7 +1122,7 @@ const BasicInfo = (props) => {
                             <>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Relationship of the index client</Label>
+                                    <Label>Relationship of the index client <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="relationshipWithIndexClient"
@@ -1158,7 +1164,7 @@ const BasicInfo = (props) => {
                             </div>
                             </>
                             )}
-                            {objValues.sex==='Female' && (
+                            {objValues.sex==='Female' || objValues.sex==='female' || objValues.sex==='FEMALE' && (
                             <>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
@@ -1182,7 +1188,7 @@ const BasicInfo = (props) => {
                                     
                                 </FormGroup>
                             </div>
-
+                            {objValues.pregnant!== 73 || objValues.pregnant!== "73" && (
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Breast Feeding</Label>
@@ -1201,12 +1207,13 @@ const BasicInfo = (props) => {
                                     
                                 </FormGroup>
                             </div>
+                            )}
                             </>
                             )}
                             
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>First time visit</Label>
+                                    <Label>First time visit <span style={{ color:"red"}}>*</span></Label>
                                     <select
                                         className="form-control"
                                         name="firstTimeVisit"
@@ -1227,7 +1234,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Previously tested within the last 3 months</Label>
+                                    <Label>Previously tested within the last 3 months <span style={{ color:"red"}}>*</span></Label>
                                     <select
                                         className="form-control"
                                         name="previouslyTested"
@@ -1247,7 +1254,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Type of Counseling</Label>
+                                    <Label>Type of Counseling <span style={{ color:"red"}}>*</span></Label>
                                     <select
                                         className="form-control"
                                         name="typeCounseling"
@@ -1272,23 +1279,9 @@ const BasicInfo = (props) => {
                             
                             <br />
                             <div className="row">
-                            <div className="form-group mb-3 col-md-6">
-                            {/* <MatButton
-                            type="button"
-                            variant="contained"
-                            color="primary"
-                            className={classes.button}
-                            startIcon={<SaveIcon />}
-                            //onClick={()=>handleItemClick('basic','others')}
-                            style={{backgroundColor:"#014d88"}}
-                            >
-                            {!saving ? (
-                            <span style={{ textTransform: "capitalize" }}>Save</span>
-                            ) : (
-                            <span style={{ textTransform: "capitalize" }}>Saving...</span>
-                            )}
-                            </MatButton> */}
-                            <Button content='Save & Continue' type="submit" icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
+                            <div className="form-group mb-3 col-md-12">
+                            <Button content='Back' icon='left arrow' labelPosition='left' style={{backgroundColor:"#992E62", color:'#fff'}} onClick={()=>handleItemClick('risk','risk')}/>
+                            <Button content='Save & Continue' type="submit" icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit} disabled={saving}/>
                             </div>
                             </div>
                         </div>

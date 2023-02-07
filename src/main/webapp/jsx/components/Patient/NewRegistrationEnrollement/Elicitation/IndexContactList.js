@@ -158,7 +158,7 @@ const PatientnHistory = (props) => {
         <br/><br/><br/><br/>
             <MaterialTable
             icons={tableIcons}
-              title="List of index client "
+              title="List of  client contact"
               columns={[
               { title: "Name", field: "name" },
               { title: "Age", field: "age" },

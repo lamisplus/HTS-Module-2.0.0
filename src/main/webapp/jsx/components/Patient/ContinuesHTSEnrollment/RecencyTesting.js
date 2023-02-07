@@ -1,9 +1,9 @@
-import React, {useCallback, useEffect, useState} from "react";
+import React, { useEffect, useState} from "react";
 import axios from "axios";
 import {FormGroup, Label , CardBody, Spinner,Input,Form} from "reactstrap";
 import * as moment from 'moment';
 import {makeStyles} from "@material-ui/core/styles";
-import {Card, CardContent} from "@material-ui/core";
+import {Card,} from "@material-ui/core";
 import { toast} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
@@ -165,7 +165,7 @@ const Recency = (props) => {
             setRecency ({...recency,  ['rencencyInterpretation']: ''});
         }
     },[recency.longTermLine,recency.verififcationLine, recency.controlLine, props.patientObj]);
-    console.log(props.patientObj)
+    //console.log(props.patientObj)
     const handleInputChangeRecency = e => { 
         setErrors({...temp, [e.target.name]:""})        
         if(e.target.name ==='viralLoadResultClassification'){
@@ -199,23 +199,25 @@ const Recency = (props) => {
         const acceptedNumber= e.slice(0, limit)
         return  acceptedNumber   
     }
+    
     /*****  Validation  */
     const validate = () => {
+        
         //HTS FORM VALIDATION
-            {recency.sampleCollectedDate!=='' && (temp.sampleReferanceNumber = recency.sampleReferanceNumber ? "" : "This field is required.")}
-            {  recency.sampleCollectedDate!=='' && (temp.dateSampleSentToPCRLab = recency.dateSampleSentToPCRLab ? "" : "This field is required.")}
-            { recency.sampleCollectedDate!=='' && (temp.sampleType = recency.sampleType ? "" : "This field is required.")}
+            {recency.hasViralLoad=='true' && (temp.sampleReferanceNumber = recency.sampleReferanceNumber ? "" : "This field is required.")}
+           // {  recency.sampleCollectedDate!=='' && (temp.dateSampleSentToPCRLab = recency.dateSampleSentToPCRLab ? "" : "This field is required.")}
+            {recency.hasViralLoad=='true' && (temp.sampleType = recency.sampleType ? "" : "This field is required.")}
             setErrors({ ...temp })
         return Object.values(temp).every(x => x == "")
     }
     const handleSubmit =(e)=>{
         e.preventDefault();
-       
-
             objValues.htsClientId= clientId
             objValues.recency= recency
             objValues.personId= patientID
-            console.log(recency)
+            //console.log(recency)
+            if(validate()){
+                setSaving(true)
             axios.put(`${baseUrl}hts/${clientId}/recency`,objValues,
             { headers: {"Authorization" : `Bearer ${token}`}},
             
@@ -237,7 +239,7 @@ const Recency = (props) => {
                     toast.error("Something went wrong. Please try again...");
                 }
             });
-        
+            }
             
     }
 
@@ -251,12 +253,12 @@ const Recency = (props) => {
                     <form >
                         <div className="row">
                         <LabelRibbon as='a' color='blue' style={{width:'106%', height:'35px'}} ribbon>
-                            <h5 style={{color:'#fff'}}>RENCENCY</h5>
+                            <h5 style={{color:'#fff'}}>RECENCY</h5>
                         </LabelRibbon>
                         <br/><br/><br/>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Opt Out of RTRI?*</Label>
+                                    <Label>Opt Out of RTRI? <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="optOutRTRI"
@@ -278,7 +280,7 @@ const Recency = (props) => {
                             <>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Test Name *</Label>
+                                    <Label>Test Name <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="optOutRTRITestName"
@@ -297,7 +299,7 @@ const Recency = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Test Date *</Label>
+                                    <Label>Test Date <span style={{ color:"red"}}> *</span></Label>
                                     <Input
                                         type="date"
                                         name="optOutRTRITestDate"
@@ -314,7 +316,7 @@ const Recency = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Recency ID *</Label>
+                                    <Label>Recency ID <span style={{ color:"red"}}> *</span></Label>
                                     <Input
                                         className="form-control"
                                         name="rencencyId"
@@ -330,7 +332,7 @@ const Recency = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Control Line *</Label>
+                                    <Label>Control Line <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="controlLine"
@@ -349,7 +351,7 @@ const Recency = (props) => {
                             </div> 
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Verification Line *</Label>
+                                    <Label>Verification Line <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="verififcationLine"
@@ -368,7 +370,7 @@ const Recency = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Long Term Line *</Label>
+                                    <Label>Long Term Line <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="longTermLine"
@@ -388,7 +390,7 @@ const Recency = (props) => {
 
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Recency Interpretation *</Label>
+                                    <Label>Recency Interpretation <span style={{ color:"red"}}> *</span></Label>
                                     <Input
                                         className="form-control"
                                         name="rencencyInterpretation"
@@ -405,7 +407,7 @@ const Recency = (props) => {
                             {recency.rencencyInterpretation==='Recent' && (
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Has viral load request been made? *</Label>
+                                    <Label>Has viral load request been made? </Label>
                                     <select
                                         className="form-control"
                                         name="hasViralLoad"
@@ -447,7 +449,7 @@ const Recency = (props) => {
                                 </div>
                                 <div className="form-group  col-md-4">
                                     <FormGroup>
-                                        <Label>Sample Refernce Number</Label>
+                                        <Label>Sample Reference Number <span style={{ color:"red"}}> *</span></Label>
                                         <Input
                                             className="form-control"
                                             name="sampleReferanceNumber"
@@ -464,7 +466,7 @@ const Recency = (props) => {
                                 </div>
                                 <div className="form-group  col-md-4">
                                     <FormGroup>
-                                        <Label>Sample Type</Label>
+                                        <Label>Sample Type <span style={{ color:"red"}}> *</span></Label>
                                         <select
                                             className="form-control"
                                             name="sampleType"
@@ -594,7 +596,7 @@ const Recency = (props) => {
                             {saving ? <Spinner /> : ""}
                             <br />
                             <div className="row">
-                            <div className="form-group mb-3 col-md-6">
+                            <div className="form-group mb-3 col-md-12">
                             <Button content='Back' icon='left arrow' labelPosition='left' style={{backgroundColor:"#992E62", color:'#fff'}} onClick={()=>handleItemClick('post-test','post-test')}/>
                             <Button content='Save & Continue' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
                             </div>

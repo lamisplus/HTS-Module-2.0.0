@@ -9,7 +9,7 @@ import {Link} from "react-router-dom";
 //import {TiArrowBack} from 'react-icons/ti'
 //import {token, url as baseUrl } from "../../../api";
 import 'react-phone-input-2/lib/style.css'
-import { Icon, Menu } from 'semantic-ui-react'
+import { Icon, Menu, Sticky } from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css';
 import BasicInfo from './NewRegistrationEnrollement/BasicInfo'
 import PreTest from './NewRegistrationEnrollement/PreTest'
@@ -38,17 +38,12 @@ const UserRegistration = (props) => {
     const classes = useStyles();
     const [activeItem, setactiveItem] = useState('basic');
     const [completed, setCompleted] = useState([]);
-    const [patientObj, setPatientObj] = useState("");
+    const [patientObj, setPatientObj] = useState(props.activePage.activeObject);
     const handleItemClick =(activeItem)=>{
         setactiveItem(activeItem)
         //setCompleted({...completed, ...completedMenu})
     }
-    useEffect(() => { 
-        const patientNewObj= props.activePage && props.activePage.activeObject ? props.activePage.activeObject : {}
-        if(patientNewObj){
-            setPatientObj(patientNewObj)           
-        }
-    }, [props.activePage]);
+
     const LoadViewPage =(row, actionType)=>{
         props.setActivePage({...props.activePage, activePage:"home", activeObject:row, actionType:actionType})
     }
@@ -77,7 +72,9 @@ const UserRegistration = (props) => {
                     </h3>
                         <br/>
                         <br/>
+                       
                         <div className="col-md-3 col-sm-3 col-lg-3">
+                       
                         <Menu  size='large'  vertical  style={{backgroundColor:"#014D88"}}>
                             <Menu.Item
                                 name='inbox'
@@ -85,10 +82,12 @@ const UserRegistration = (props) => {
                                 onClick={()=>handleItemClick('basic')}
                                 style={{backgroundColor:activeItem === 'basic' ? '#000': ""}}
                             >               
-                                <span style={{color:'#fff'}}> Basic Information</span>
-                                {completed.includes('basic') && (
-                                    <Icon name='check' color='green' />
-                                )}
+                                <span style={{color:'#fff'}}> Basic Information
+                                    {completed.includes('basic') && (
+                                        <Icon name='check' color='green' />
+                                    )}
+                                </span>
+                                
                             </Menu.Item>
                             {props.patientAge>14 && (
                             <Menu.Item
@@ -99,10 +98,11 @@ const UserRegistration = (props) => {
                                 //disabled={activeItem !== 'pre-test-counsel' ? true : false}
                             >
                             {/* <Label>2</Label> */}
-                            <span style={{color:'#fff'}}>Pre Test Counseling</span>
-                            {completed.includes('pre-test-counsel') && (
-                                <Icon name='check' color='green' />
-                            )}
+                                <span style={{color:'#fff'}}>Pre Test Counseling
+                                {completed.includes('pre-test-counsel') && (
+                                    <Icon name='check' color='green' />
+                                )}
+                                </span>
                             </Menu.Item>
                             )}
                             <Menu.Item
@@ -112,10 +112,11 @@ const UserRegistration = (props) => {
                                 style={{backgroundColor:activeItem === 'hiv-test' ? '#000': ""}}
                                 //disabled={activeItem !== 'hiv-test' ? true : false}
                             >               
-                                <span style={{color:'#fff'}}>Request {"&"} Result Form</span>
+                                <span style={{color:'#fff'}}>Request {"&"} Result Form
                                 {completed.includes('hiv-test') && (
                                     <Icon name='check' color='green' />
                                 )}
+                                </span>
                                 {/* <Label color='teal'>3</Label> */}
                             </Menu.Item>
                             <Menu.Item
@@ -126,10 +127,11 @@ const UserRegistration = (props) => {
                                 //disabled={activeItem !== 'post-test' ? true : false}
                             >
                             {/* <Label>4</Label> */}
-                            <span style={{color:'#fff'}}>Post Test Counseling</span>
+                            <span style={{color:'#fff'}}>Post Test Counseling
                             {completed.includes('post-test') && (
                                 <Icon name='check' color='green' />
                             )}
+                            </span>
                             </Menu.Item>
                             
                             <Menu.Item
@@ -140,10 +142,11 @@ const UserRegistration = (props) => {
                                 //disabled={activeItem !== 'recency-testing' ? true : false}
                             >
                             {/* <Label>4</Label> */}
-                            <span style={{color:'#fff'}}>HIV Recency Testing</span>
+                            <span style={{color:'#fff'}}>HIV Recency Testing
                             {completed.includes('recency-testing') && (
                                 <Icon name='check' color='green' />
                             )}
+                            </span>
                             </Menu.Item>
                             
                             <Menu.Item
@@ -154,14 +157,17 @@ const UserRegistration = (props) => {
                                 //disabled={activeItem !== 'indexing' ? true : false}
                             >
                             {/* <Label>4</Label> */}
-                            <span style={{color:'#fff'}}>Index Notification Services - Elicitation</span>
+                            <span style={{color:'#fff'}}>Index Notification Services - Elicitation
                             {completed.includes('indexing') && (
                                 <Icon name='check' color='green' />
                             )}
+                            </span>
                             </Menu.Item>
                            
                         </Menu>
+                       
                         </div>
+                       
                         <div className="col-md-9 col-sm-9 col-lg-9 " style={{ backgroundColor:"#fff", margingLeft:"-50px", paddingLeft:"-20px"}}>
                             {activeItem==='basic' && (<BasicInfo handleItemClick={handleItemClick} setCompleted={setCompleted} completed={completed} setPatientObj={setPatientObj} patientObj={patientObj} activePage={props.activePage} setActivePage={props.setActivePage} patientAge={props.patientAge}/>)}
                             {activeItem==='pre-test-counsel' && (<PreTest handleItemClick={handleItemClick} setCompleted={setCompleted} completed={completed} setPatientObj={setPatientObj} patientObj={patientObj} activePage={props.activePage} setActivePage={props.setActivePage} patientAge={props.patientAge}/>)}

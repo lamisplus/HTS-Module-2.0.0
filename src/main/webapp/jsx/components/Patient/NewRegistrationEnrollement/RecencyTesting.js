@@ -162,12 +162,12 @@ const BasicInfo = (props) => {
     }
     useEffect(() => { 
         if(recency.longTermLine==='true' && recency.verififcationLine==='true' && recency.controlLine==='true'){
-            recency.rencencyInterpretation="Long Term"
-            setRecency ({...recency,  ['rencencyInterpretation']: 'Long Term'}); 
+            recency.rencencyInterpretation="RTRI Long Term"
+            setRecency ({...recency,  ['rencencyInterpretation']: 'RTRI Long Term'}); 
             //console.log("Long Term")
         }else if(recency.longTermLine==='false' && recency.verififcationLine==='true' && recency.controlLine==='true'){
-            recency.rencencyInterpretation="Recent"
-            setRecency ({...recency,  ['rencencyInterpretation']: 'Recent'});
+            recency.rencencyInterpretation="RTRI Recent"
+            setRecency ({...recency,  ['rencencyInterpretation']: 'RTRI Recent'});
             setRecency ({...recency,  ['hasViralLoad']: 'true'});
             
         }else if(recency.longTermLine==='false' && recency.verififcationLine==='false' && recency.controlLine==='true'){
@@ -204,13 +204,13 @@ const BasicInfo = (props) => {
         
 
     }, [ props.patientObj]);
-   //console.log(props.patientObj)
+     //console.log(recency.hasViralLoad)
      /*****  Validation  */
      const validate = () => {
         //HTS FORM VALIDATION
-            {objValues.sampleCollectedDate!=='' && (temp.sampleReferanceNumber = objValues.sampleReferanceNumber ? "" : "This field is required.")}
-            {objValues.sampleCollectedDate!=='' && (temp.dateSampleSentToPCRLab = objValues.dateSampleSentToPCRLab ? "" : "This field is required.")}
-            {objValues.sampleCollectedDate!=='' && (temp.sampleType = objValues.sampleType ? "" : "This field is required.")}
+            {recency.hasViralLoad=='true' && (temp.sampleReferanceNumber = recency.sampleReferanceNumber ? "" : "This field is required.")}
+            //{objValues.sampleCollectedDate!=='' && (temp.dateSampleSentToPCRLab = objValues.dateSampleSentToPCRLab ? "" : "This field is required.")}
+            {recency.hasViralLoad=='true' && (temp.sampleType = recency.sampleType ? "" : "This field is required.")}
             setErrors({ ...temp })
         return Object.values(temp).every(x => x == "")
     }
@@ -233,7 +233,7 @@ const BasicInfo = (props) => {
             .then(response => {
                 setSaving(false);
                 props.setPatientObj(props && props.patientObj ? props.patientObj : "")
-                toast.success("Risk Assesment successful");
+                //toast.success("Risk Assesment successful");
                 handleItemClick('indexing', 'recency-testing' )
 
             })
@@ -259,12 +259,12 @@ const BasicInfo = (props) => {
                     <form >
                         <div className="row">
                         <LabelRibbon as='a' color='blue' style={{width:'106%', height:'35px'}} ribbon>
-                            <h5 style={{color:'#fff'}}>RENCENCY</h5>
+                            <h5 style={{color:'#fff'}}>RECENCY</h5>
                         </LabelRibbon>
                         <br/><br/><br/>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Opt Out of RTRI?*</Label>
+                                    <Label>Opt Out of RTRI? <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="optOutRTRI"
@@ -305,7 +305,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Test Date *</Label>
+                                    <Label>Test Date <span style={{ color:"red"}}> *</span></Label>
                                     <Input
                                         type="date"
                                         name="optOutRTRITestDate"
@@ -322,7 +322,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Recency ID *</Label>
+                                    <Label>Recency ID <span style={{ color:"red"}}> *</span></Label>
                                     <Input
                                         className="form-control"
                                         name="rencencyId"
@@ -338,7 +338,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Control Line *</Label>
+                                    <Label>Control Line <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="controlLine"
@@ -357,7 +357,7 @@ const BasicInfo = (props) => {
                             </div> 
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Verification Line *</Label>
+                                    <Label>Verification Line <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="verififcationLine"
@@ -376,7 +376,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Long Term Line *</Label>
+                                    <Label>Long Term Line <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="longTermLine"
@@ -395,7 +395,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Recency Interpretation *</Label>
+                                    <Label>Recency Interpretation <span style={{ color:"red"}}> *</span></Label>
                                     <Input
                                         className="form-control"
                                         name="rencencyInterpretation"
@@ -412,7 +412,7 @@ const BasicInfo = (props) => {
                             {recency.rencencyInterpretation==='Recent' && (
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Has viral load request been made? *</Label>
+                                    <Label>Has viral load request been made? </Label>
                                     <select
                                         className="form-control"
                                         name="hasViralLoad"
@@ -454,7 +454,7 @@ const BasicInfo = (props) => {
                                 </div>
                                 <div className="form-group  col-md-4">
                                     <FormGroup>
-                                        <Label>Sample Refernce Number</Label>
+                                        <Label>Sample Reference Number <span style={{ color:"red"}}> *</span></Label>
                                         <Input
                                             className="form-control"
                                             name="sampleReferanceNumber"
@@ -471,7 +471,7 @@ const BasicInfo = (props) => {
                                 </div>
                                 <div className="form-group  col-md-4">
                                     <FormGroup>
-                                        <Label>Sample Type</Label>
+                                        <Label>Sample Type <span style={{ color:"red"}}> *</span></Label>
                                         <select
                                             className="form-control"
                                             name="sampleType"
@@ -599,13 +599,14 @@ const BasicInfo = (props) => {
                             {saving ? <Spinner /> : ""}
                             <br />
                             <div className="row">
-                            <div className="form-group mb-3 col-md-6">
+                            <div className="form-group mb-3 col-md-12">
                             <Button content='Back' icon='left arrow' labelPosition='left' style={{backgroundColor:"#992E62", color:'#fff'}} onClick={()=>handleItemClick('post-test','post-test')}/>
+                            
                             {props.activePage.actionType==='update' && (
-                            <Button content='Update & Continue' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
+                            <Button content='Update & Continue' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit} disabled={saving}/>
                             )}
                             {props.activePage.actionType==='view' && (
-                                <Button content='Next' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
+                                <Button content='Next' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit} disabled={saving}/>
                             )}
                             
                             </div>

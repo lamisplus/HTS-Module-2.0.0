@@ -113,6 +113,9 @@ public class IndexElicitationService {
             indexElicitation.setSexuallyUncomfortable(indexElicitationDto.getSexuallyUncomfortable());
             indexElicitation.setCurrentlyLiveWithPartner(indexElicitationDto.getCurrentlyLiveWithPartner());
             indexElicitation.setDatePartnerCameForTesting(indexElicitationDto.getDatePartnerCameForTesting());
+
+            indexElicitation.setOfferedIns(indexElicitationDto.getOfferedIns());
+            indexElicitation.setAcceptedIns(indexElicitationDto.getAcceptedIns());
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -149,6 +152,9 @@ public class IndexElicitationService {
         indexElicitation.setCurrentlyLiveWithPartner( indexElicitationResponseDto.getCurrentlyLiveWithPartner() );
         indexElicitation.setDatePartnerCameForTesting( indexElicitationResponseDto.getDatePartnerCameForTesting() );
 
+        indexElicitation.setOfferedIns(indexElicitationResponseDto.getOfferedIns() );
+        indexElicitation.setAcceptedIns( indexElicitationResponseDto.getAcceptedIns() );
+
         return indexElicitation;
     }
 
@@ -183,6 +189,9 @@ public class IndexElicitationService {
         indexElicitationResponseDto.setSexuallyUncomfortable( indexElicitation.getSexuallyUncomfortable() );
         indexElicitationResponseDto.setCurrentlyLiveWithPartner( indexElicitation.getCurrentlyLiveWithPartner() );
         indexElicitationResponseDto.setDatePartnerCameForTesting( indexElicitation.getDatePartnerCameForTesting() );
+
+        indexElicitationResponseDto.setOfferedIns(indexElicitation.getOfferedIns() );
+        indexElicitationResponseDto.setAcceptedIns( indexElicitation.getAcceptedIns() );
 
         return indexElicitationResponseDto;
     }

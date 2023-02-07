@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom'
 import { withStyles } from '@material-ui/core/styles';
@@ -52,6 +52,10 @@ function PatientCard(props) {
     let history = useHistory();
     const [activePage, setActivePage] = useState({activePage:"home", activeObject:{}, actionType:""});
     const { classes } = props;
+    useEffect(() => { 
+
+    }, [activePage]);
+    const patientObject= history.location && history.location.state ? history.location.state.patientObject : {}
     const patientObj = history.location && history.location.state ? history.location.state.patientObj : {}
     const clientCode =history.location && history.location.state ? history.location.state.clientCode : ""
     const calculate_age = dob => {
@@ -80,12 +84,12 @@ function PatientCard(props) {
 		  </div>
       <Card >
         <CardContent>
-            <PatientCardDetail patientObj={patientObj} clientCode={clientCode}/>
+            <PatientCardDetail patientObj={patientObj} clientCode={clientCode} patientObject={patientObject}/>
             {activePage.activePage==="home" && (
-              <PatientHistory patientObj={patientObj} activePage={activePage} setActivePage={setActivePage} clientCode={clientCode} patientAge={patientAge}/>
+              <PatientHistory patientObj={patientObj} activePage={activePage} setActivePage={setActivePage} clientCode={clientCode} patientAge={patientAge} patientObject={patientObject}/>
             )}
             {activePage.activePage==="view" && (
-              <PatientHtsEnrollment patientObj={patientObj} activePage={activePage} setActivePage={setActivePage} clientCode={clientCode} patientAge={patientAge}/>
+              <PatientHtsEnrollment patientObj={patientObj} activePage={activePage} setActivePage={setActivePage} clientCode={clientCode} patientAge={patientAge} patientObject={patientObject}/>
             )}
          </CardContent>
       </Card>

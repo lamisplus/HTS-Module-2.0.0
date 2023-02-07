@@ -94,34 +94,26 @@ const BasicInfo = (props) => {
     const [saving, setSaving] = useState(false);
     const [errors, setErrors] = useState({});
     let temp = { ...errors }
-    useEffect(() => { 
-        //console.log(props.patientObj)
-        if(props.patientObj){
-            setKnowledgeAssessment(props.patientObj.knowledgeAssessment  && props.patientObj.knowledgeAssessment!==null ? props.patientObj.knowledgeAssessment : {})
-            setRiskAssessment(props.patientObj.riskAssessment  && props.patientObj.riskAssessment!==null ? props.patientObj.riskAssessment : {})
-            setRiskAssessmentPartner(props.patientObj.riskAssessmentPartner && props.patientObj.riskAssessmentPartner!==null ? props.patientObj.riskAssessmentPartner : {})
-            setStiScreening(props.patientObj.stiScreening  && props.patientObj.stiScreening!==null? props.patientObj.stiScreening : {})
-            setTbScreening(props.patientObj.tbScreening  && props.patientObj.tbScreening!==null? props.patientObj.tbScreening : {})
-            //patientAge=calculate_age(moment(props.patientObj.personResponseDto.dateOfBirth).format("DD-MM-YYYY"))
+    const [riskAssessmentPartner, setRiskAssessmentPartner]= useState(
+        {
+            sexPartnerHivPositive:"",
+            newDiagnosedHivlastThreeMonths:"",
+            currentlyArvForPmtct :"",
+            knowHivPositiveOnArv :"",
+            knowHivPositiveAfterLostToFollowUp:"", 
+            uprotectedAnalSex  :"",
         }
-    }, [props.patientObj]);
-    const handleItemClick =(page, completedMenu)=>{        
-        if(props.completed.includes(completedMenu)) {
-        }else{
-            props.setCompleted([...props.completed, completedMenu])
-        }
-        props.handleItemClick(page)
-    }
+    )
     const [objValues, setObjValues]= useState(
-            {
-                htsClientId: clientId,
-                knowledgeAssessment: {},
-                personId: patientID,
-                riskAssessment: {},
-                stiScreening: {},
-                tbScreening: {},
-                sexPartnerRiskAssessment:{}
-            }
+        {
+            htsClientId: clientId,
+            knowledgeAssessment: {},
+            personId: patientID,
+            riskAssessment: {},
+            stiScreening: {},
+            tbScreening: {},
+            sexPartnerRiskAssessment:{}
+        }
     )
     const [knowledgeAssessment, setKnowledgeAssessment]= useState(
         {
@@ -132,15 +124,9 @@ const BasicInfo = (props) => {
             clientInformRiskkHivTrans:"",
             clientInformPreventingsHivTrans:"", 
             clientInformPossibleTestResult:"",
-            informCosentHivTest:"",
+            informConsentHivTest:"",
         }
     )
-    const handleInputChangeKnowledgeAssessment = e => { 
-        //setErrors({...temp, [e.target.name]:""})
-        
-        setKnowledgeAssessment ({...knowledgeAssessment,  [e.target.name]: e.target.value}); 
-          
-    }
     const [riskAssessment, setRiskAssessment]= useState(
         {
             everHadSexualIntercourse:"",
@@ -160,30 +146,6 @@ const BasicInfo = (props) => {
             soldPaidVaginalSex:"",
         }
     )
-    const handleInputChangeRiskAssessment = e => { 
-        //setErrors({...temp, [e.target.name]:""}) 
-        setRiskAssessment ({...riskAssessment,  [e.target.name]: e.target.value});                  
-    }
-    // Getting the number count of riskAssessment True
-    const actualRiskCountTrue=Object.values(riskAssessment)
-    const riskCount=actualRiskCountTrue.filter((x)=> x==='true')
-    const [riskAssessmentPartner, setRiskAssessmentPartner]= useState(
-        {
-            sexPartnerHivPositive:"",
-            newDiagnosedHivlastThreeMonths:"",
-            currentlyArvForPmtct :"",
-            knowHivPositiveOnArv :"",
-            knowHivPositiveAfterLostToFollowUp:"", 
-            uprotectedAnalSex  :"",
-        }
-    )
-    const handleInputChangeRiskAssessmentPartner = e => { 
-        //setErrors({...temp, [e.target.name]:""}) 
-        setRiskAssessmentPartner ({...riskAssessmentPartner,  [e.target.name]: e.target.value});                       
-    }
-    // Getting the number count of sexPartRiskCount True
-    const actualSexPartRiskCountTrue=Object.values(riskAssessmentPartner)
-    const sexPartRiskCount=actualSexPartRiskCountTrue.filter((x)=> x==='true')
     const [stiScreening, setStiScreening]= useState(
         {
             vaginalDischarge:"",
@@ -194,13 +156,6 @@ const BasicInfo = (props) => {
                 
         }
     )
-    const handleInputChangeStiScreening = e => { 
-        //setErrors({...temp, [e.target.name]:""}) 
-        setStiScreening ({...stiScreening,  [e.target.name]: e.target.value});            
-    }
-    // Getting the number count of STI True
-    const actualStiTrue=Object.values(stiScreening)
-    const stiCount=actualStiTrue.filter((x)=> x==='true')
     const [tbScreening, setTbScreening]= useState(
         {
             currentCough :"",
@@ -210,6 +165,65 @@ const BasicInfo = (props) => {
             nightSweats :"",
         }
     )
+    useEffect(() => { 
+
+        if(props.patientObj){
+            setKnowledgeAssessment(props.patientObj.knowledgeAssessment  && props.patientObj.knowledgeAssessment!==null ? props.patientObj.knowledgeAssessment : {})
+            setRiskAssessment(props.patientObj.riskAssessment  && props.patientObj.riskAssessment!==null ? props.patientObj.riskAssessment : {})
+            setRiskAssessmentPartner(props.patientObj.sexPartnerRiskAssessment && props.patientObj.sexPartnerRiskAssessment!==null ? props.patientObj.sexPartnerRiskAssessment : {})
+            setStiScreening(props.patientObj.stiScreening  && props.patientObj.stiScreening!==null? props.patientObj.stiScreening : {})
+            setTbScreening(props.patientObj.tbScreening  && props.patientObj.tbScreening!==null? props.patientObj.tbScreening : {})
+            //patientAge=calculate_age(moment(props.patientObj.personResponseDto.dateOfBirth).format("DD-MM-YYYY"))
+            //console.log(props.patientObj.riskStratificationResponseDto.riskAssessment)
+            if(props.patientObj.riskStratificationResponseDto && Object.keys(props.patientObj.riskStratificationResponseDto.riskAssessment).length !== 0 && props.patientObj.riskAssessment===null){
+                //setRiskAssessment({...riskAssessment, ...props.patientObj.riskStratificationResponseDto.riskAssessment})
+                props.patientObj.riskStratificationResponseDto.riskAssessment.whatWasTheResult!=="" && props.patientObj.riskStratificationResponseDto.riskAssessment.whatWasTheResult==='Positive' ? knowledgeAssessment.previousTestedHIVNegative='false' :
+                knowledgeAssessment.previousTestedHIVNegative='true'
+            }else{
+                setRiskAssessment({...riskAssessment, ...props.patientObj.riskAssessment})   
+            } 
+            knowledgeAssessment.clientPregnant=props.patientObj.pregnant===73 ? "true" :"" ;
+        }
+    }, [props.patientObj]);
+    const handleItemClick =(page, completedMenu)=>{        
+        if(props.completed.includes(completedMenu)) {
+        }else{
+            props.setCompleted([...props.completed, completedMenu])
+        }
+        props.handleItemClick(page)
+    }
+
+    const handleInputChangeKnowledgeAssessment = e => { 
+        //setErrors({...temp, [e.target.name]:""})
+        
+        setKnowledgeAssessment ({...knowledgeAssessment,  [e.target.name]: e.target.value}); 
+          
+    }
+    
+    const handleInputChangeRiskAssessment = e => { 
+        setErrors({...temp, [e.target.name]:""}) 
+        setRiskAssessment ({...riskAssessment,  [e.target.name]: e.target.value});                  
+    }
+    // Getting the number count of riskAssessment True
+    const actualRiskCountTrue=Object.values(riskAssessment)
+    const riskCount=actualRiskCountTrue.filter((x)=> x==='true')
+   
+    const handleInputChangeRiskAssessmentPartner = e => { 
+        //setErrors({...temp, [e.target.name]:""}) 
+        setRiskAssessmentPartner ({...riskAssessmentPartner,  [e.target.name]: e.target.value});                       
+    }
+    // Getting the number count of sexPartRiskCount True
+    const actualSexPartRiskCountTrue=Object.values(riskAssessmentPartner)
+    const sexPartRiskCount=actualSexPartRiskCountTrue.filter((x)=> x==='true')
+
+    const handleInputChangeStiScreening = e => { 
+        //setErrors({...temp, [e.target.name]:""}) 
+        setStiScreening ({...stiScreening,  [e.target.name]: e.target.value});            
+    }
+    // Getting the number count of STI True
+    const actualStiTrue=Object.values(stiScreening)
+    const stiCount=actualStiTrue.filter((x)=> x==='true')
+    
     const [tbCount, settbCount] = useState(0);
     const handleInputChangeTbScreening = e => { 
         //setErrors({...temp, [e.target.name]:""}) 
@@ -234,62 +248,64 @@ const BasicInfo = (props) => {
         setTbScreening ({...tbScreening,  [e.target.name]: e.target.value});          
     }
      /*****  Validation  */
+     /*****  Validation  */
      const validate = () => {
         //HTS FORM VALIDATION
-           temp.previousTestedHIVNegative = knowledgeAssessment.previousTestedHIVNegative ? "" : "This field is required."
-           {knowledgeAssessment.previousTestedHIVNegative==='true' && ( temp.timeLastHIVNegativeTestResult = knowledgeAssessment.timeLastHIVNegativeTestResult ? "" : "This field is required.")}
-           temp.clientPregnant = knowledgeAssessment.clientPregnant ? "" : "This field is required."
-           temp.clientInformHivTransRoutes = knowledgeAssessment.clientInformHivTransRoutes ? "" : "This field is required."
-           temp.clientInformRiskkHivTrans = knowledgeAssessment.clientInformRiskkHivTrans ? "" : "This field is required."
-           temp.clientInformPreventingsHivTrans = knowledgeAssessment.clientInformPreventingsHivTrans ? "" : "This field is required."
-           temp.clientInformPossibleTestResult = knowledgeAssessment.clientInformPossibleTestResult ? "" : "This field is required."
-           temp.informCosentHivTest = knowledgeAssessment.informCosentHivTest ? "" : "This field is required."  
+           //temp.previousTestedHIVNegative = knowledgeAssessment.previousTestedHIVNegative ? "" : "This field is required."
+        //    {knowledgeAssessment.previousTestedHIVNegative==='true' && ( temp.timeLastHIVNegativeTestResult = knowledgeAssessment.timeLastHIVNegativeTestResult ? "" : "This field is required.")}
+        //    temp.clientPregnant = knowledgeAssessment.clientPregnant ? "" : "This field is required."
+        //    temp.clientInformHivTransRoutes = knowledgeAssessment.clientInformHivTransRoutes ? "" : "This field is required."
+        //    temp.clientInformRiskkHivTrans = knowledgeAssessment.clientInformRiskkHivTrans ? "" : "This field is required."
+        //    temp.clientInformPreventingsHivTrans = knowledgeAssessment.clientInformPreventingsHivTrans ? "" : "This field is required."
+        //    temp.clientInformPossibleTestResult = knowledgeAssessment.clientInformPossibleTestResult ? "" : "This field is required."
+        //    temp.informConsentHivTest = knowledgeAssessment.informConsentHivTest ? "" : "This field is required."  
 
-            temp.currentCough = tbScreening.currentCough ? "" : "This field is required."
-            temp.weightLoss = tbScreening.weightLoss ? "" : "This field is required."
-            temp.lymphadenopathy = tbScreening.lymphadenopathy ? "" : "This field is required."
-            temp.fever = tbScreening.fever ? "" : "This field is required."
-            temp.nightSweats = tbScreening.nightSweats ? "" : "This field is required."
+        //     temp.currentCough = tbScreening.currentCough ? "" : "This field is required."
+        //     temp.weightLoss = tbScreening.weightLoss ? "" : "This field is required."
+        //     temp.lymphadenopathy = tbScreening.lymphadenopathy ? "" : "This field is required."
+        //     temp.fever = tbScreening.fever ? "" : "This field is required."
+        //     temp.nightSweats = tbScreening.nightSweats ? "" : "This field is required."
 
-            {props.patientObj && props.patientObj.personResponseDto.sex==='Female' && (temp.vaginalDischarge = stiScreening.vaginalDischarge ? "" : "This field is required." )}
-            {props.patientObj && props.patientObj.personResponseDto.sex==='Female' && (temp.lowerAbdominalPains = stiScreening.lowerAbdominalPains ? "" : "This field is required.")}
-            {props.patientObj.personResponseDto && props.patientObj.personResponseDto.sex==='Male' && (temp.urethralDischarge = stiScreening.urethralDischarge ? "" : "This field is required.")}
-            {props.patientObj.personResponseDto && props.patientObj.personResponseDto.sex==='Male' && (temp.complaintsOfScrotal = stiScreening.complaintsOfScrotal ? "" : "This field is required.")}
-            {props.patientObj.personResponseDto && props.patientObj.personResponseDto.sex==='Male' && (temp.complaintsGenitalSore = stiScreening.complaintsGenitalSore ? "" : "This field is required.")}
+            // props.patientObj && props.patientObj.personResponseDto.sex==='Female' && (temp.vaginalDischarge = stiScreening.vaginalDischarge ? "" : "This field is required." )
+            // props.patientObj && props.patientObj.personResponseDto.sex==='Female' && (temp.lowerAbdominalPains = stiScreening.lowerAbdominalPains ? "" : "This field is required.")
+            // props.patientObj.personResponseDto && props.patientObj.personResponseDto.sex==='Male' && (temp.urethralDischarge = stiScreening.urethralDischarge ? "" : "This field is required.")
+            // props.patientObj.personResponseDto && props.patientObj.personResponseDto.sex==='Male' && (temp.complaintsOfScrotal = stiScreening.complaintsOfScrotal ? "" : "This field is required.")
+            // props.patientObj.personResponseDto && props.patientObj.personResponseDto.sex==='Male' && (temp.complaintsGenitalSore = stiScreening.complaintsGenitalSore ? "" : "This field is required.")
  
-            {props.patientObj.targetGroup==="473" && (temp.everHadSexualIntercourse = riskAssessment.everHadSexualIntercourse ? "" : "This field is required.")}
-            {props.patientObj.targetGroup==="473" && (temp.bloodtransInlastThreeMonths = riskAssessment.bloodtransInlastThreeMonths ? "" : "This field is required.")}
-            {props.patientObj.targetGroup==="473" && (temp.uprotectedSexWithCasualLastThreeMonths = riskAssessment.uprotectedSexWithCasualLastThreeMonths ? "" : "This field is required.")}
-            {props.patientObj.targetGroup==="473" && (temp.uprotectedSexWithRegularPartnerLastThreeMonths = riskAssessment.uprotectedSexWithRegularPartnerLastThreeMonths ? "" : "This field is required.")}
-            {props.patientObj.targetGroup==="473" && (temp.unprotectedVaginalSex = riskAssessment.unprotectedVaginalSex ? "" : "This field is required.")}
+            props.patientObj.targetGroup==="TARGET_GROUP_GEN_POP" && (temp.everHadSexualIntercourse = riskAssessment.everHadSexualIntercourse ? "" : "This field is required.")
+            props.patientObj.targetGroup==="TARGET_GROUP_GEN_POP" && (temp.bloodtransInlastThreeMonths = riskAssessment.bloodtransInlastThreeMonths ? "" : "This field is required.")
+            // props.patientObj.targetGroup==="TARGET_GROUP_GEN_POP" && (temp.uprotectedSexWithCasualLastThreeMonths = riskAssessment.uprotectedSexWithCasualLastThreeMonths ? "" : "This field is required.")
+            // props.patientObj.targetGroup==="TARGET_GROUP_GEN_POP" && (temp.uprotectedSexWithRegularPartnerLastThreeMonths = riskAssessment.uprotectedSexWithRegularPartnerLastThreeMonths ? "" : "This field is required.")
+            // props.patientObj.targetGroup==="TARGET_GROUP_GEN_POP" && (temp.unprotectedVaginalSex = riskAssessment.unprotectedVaginalSex ? "" : "This field is required.")
 
-            {props.patientObj.targetGroup==="473" && (temp.uprotectedAnalSex = riskAssessment.uprotectedAnalSex ? "" : "This field is required.")}
-            {props.patientObj.targetGroup==="473" && (temp.sexUnderInfluence = riskAssessment.sexUnderInfluence ? "" : "This field is required.")}
-            {props.patientObj.targetGroup==="473" && (temp.uprotectedSexWithCasualLastThreeMonths = riskAssessment.uprotectedSexWithCasualLastThreeMonths ? "" : "This field is required.")}
-            {props.patientObj.targetGroup==="473" && (temp.moreThanOneSexPartnerLastThreeMonths = riskAssessment.moreThanOneSexPartnerLastThreeMonths ? "" : "This field is required.")}
+            // props.patientObj.targetGroup==="TARGET_GROUP_GEN_POP" && (temp.uprotectedAnalSex = riskAssessment.uprotectedAnalSex ? "" : "This field is required.")
+            // props.patientObj.targetGroup==="TARGET_GROUP_GEN_POP" && (temp.sexUnderInfluence = riskAssessment.sexUnderInfluence ? "" : "This field is required.")
+            // props.patientObj.targetGroup==="TARGET_GROUP_GEN_POP" && (temp.uprotectedSexWithCasualLastThreeMonths = riskAssessment.uprotectedSexWithCasualLastThreeMonths ? "" : "This field is required.")
+            // props.patientObj.targetGroup==="TARGET_GROUP_GEN_POP" && (temp.moreThanOneSexPartnerLastThreeMonths = riskAssessment.moreThanOneSexPartnerLastThreeMonths ? "" : "This field is required.")
             
             
-            {props.patientObj.targetGroup!=="473" && (temp.experiencePain = riskAssessment.experiencePain ? "" : "This field is required.")}
+            props.patientObj.targetGroup!=="TARGET_GROUP_GEN_POP" && (temp.experiencePain = riskAssessment.experiencePain ? "" : "This field is required.")
 
-            {props.patientObj.targetGroup!=="473" && (temp.haveSexWithoutCondom = riskAssessment.haveSexWithoutCondom ? "" : "This field is required.")}
-            {props.patientObj.targetGroup!=="473" && (temp.abuseDrug = riskAssessment.abuseDrug ? "" : "This field is required.")}
-            {props.patientObj.targetGroup!=="473" && (temp.bloodTransfusion = riskAssessment.bloodTransfusion ? "" : "This field is required.")}
-            {props.patientObj.targetGroup!=="473" && (temp.consistentWeightFeverNightCough = riskAssessment.consistentWeightFeverNightCough ? "" : "This field is required.")}
-            {props.patientObj.targetGroup!=="473" && (temp.soldPaidVaginalSex = riskAssessment.soldPaidVaginalSex ? "" : "This field is required.")}
+            props.patientObj.targetGroup!=="TARGET_GROUP_GEN_POP" && (temp.haveSexWithoutCondom = riskAssessment.haveSexWithoutCondom ? "" : "This field is required.")
+            props.patientObj.targetGroup!=="TARGET_GROUP_GEN_POP" && (temp.abuseDrug = riskAssessment.abuseDrug ? "" : "This field is required.")
+            props.patientObj.targetGroup!=="TARGET_GROUP_GEN_POP" && (temp.bloodTransfusion = riskAssessment.bloodTransfusion ? "" : "This field is required.")
+            props.patientObj.targetGroup!=="TARGET_GROUP_GEN_POP" && (temp.consistentWeightFeverNightCough = riskAssessment.consistentWeightFeverNightCough ? "" : "This field is required.")
+            props.patientObj.targetGroup!=="TARGET_GROUP_GEN_POP" && (temp.soldPaidVaginalSex = riskAssessment.soldPaidVaginalSex ? "" : "This field is required.")
 
-            temp.sexPartnerHivPositive = tbScreening.sexPartnerHivPositive ? "" : "This field is required."
-            {riskAssessmentPartner.sexPartnerHivPositive==='true' && (temp.newDiagnosedHivlastThreeMonths = tbScreening.newDiagnosedHivlastThreeMonths ? "" : "This field is required.")}
-            {riskAssessmentPartner.sexPartnerHivPositive==='true' && (temp.currentlyArvForPmtct = tbScreening.currentlyArvForPmtct ? "" : "This field is required.")}
-            {riskAssessmentPartner.sexPartnerHivPositive==='true' && ( temp.knowHivPositiveOnArv = tbScreening.knowHivPositiveOnArv ? "" : "This field is required.")}
-            {riskAssessmentPartner.sexPartnerHivPositive==='true' && (temp.knowHivPositiveAfterLostToFollowUp = tbScreening.knowHivPositiveAfterLostToFollowUp ? "" : "This field is required.")}
-            {riskAssessmentPartner.sexPartnerHivPositive==='true' && (temp.uprotectedAnalSex = tbScreening.uprotectedAnalSex ? "" : "This field is required.")}
+            // temp.sexPartnerHivPositive = tbScreening.sexPartnerHivPositive ? "" : "This field is required."
+            // {riskAssessmentPartner.sexPartnerHivPositive==='true' && (temp.newDiagnosedHivlastThreeMonths = tbScreening.newDiagnosedHivlastThreeMonths ? "" : "This field is required.")}
+            // {riskAssessmentPartner.sexPartnerHivPositive==='true' && (temp.currentlyArvForPmtct = tbScreening.currentlyArvForPmtct ? "" : "This field is required.")}
+            // {riskAssessmentPartner.sexPartnerHivPositive==='true' && ( temp.knowHivPositiveOnArv = tbScreening.knowHivPositiveOnArv ? "" : "This field is required.")}
+            // {riskAssessmentPartner.sexPartnerHivPositive==='true' && (temp.knowHivPositiveAfterLostToFollowUp = tbScreening.knowHivPositiveAfterLostToFollowUp ? "" : "This field is required.")}
+            // {riskAssessmentPartner.sexPartnerHivPositive==='true' && (temp.uprotectedAnalSex = tbScreening.uprotectedAnalSex ? "" : "This field is required.")}
             
             setErrors({ ...temp })
-        return Object.values(temp).every(x => x == "")
+        return Object.values(temp).every(x => x === "")
     }
     const handleSubmit =(e)=>{
         e.preventDefault();
-
+        if(validate()){
+            setSaving(true);
             objValues.htsClientId= clientId
             objValues.knowledgeAssessment= knowledgeAssessment
             objValues.personId= patientID
@@ -318,9 +334,12 @@ const BasicInfo = (props) => {
                     toast.error("Something went wrong. Please try again...");
                 }
             });
-            
+        }else{
+            toast.error("All fields are required",  {position: toast.POSITION.BOTTOM_CENTER});
+                
+        }
     }
-    console.log(sex)
+    //console.log(riskAssessmentPartner)
 
     return (
         <>
@@ -335,7 +354,7 @@ const BasicInfo = (props) => {
                      
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Previously tested HIV negative *</Label>
+                                    <Label>Previously tested HIV negative <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="previousTestedHIVNegative"
@@ -357,7 +376,7 @@ const BasicInfo = (props) => {
                             {knowledgeAssessment.previousTestedHIVNegative==='true' && (
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Time of last HIV Negative test Result*</Label>
+                                    <Label>Time of last HIV Negative test Result</Label>
                                     <select
                                         className="form-control"
                                         name="timeLastHIVNegativeTestResult"
@@ -371,6 +390,7 @@ const BasicInfo = (props) => {
                                         <option value="1-3 Months">1-3 Months</option>
                                         <option value="4-6 Months">4-6 Months</option>
                                         <option value=">6 Months"> {">6"} Months</option>
+                                        <option value="Never">Never</option> 
                                         
                                     </select>
                                     {errors.timeLastHIVNegativeTestResult !=="" ? (
@@ -382,7 +402,7 @@ const BasicInfo = (props) => {
                             {sex ==='Female' && (
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Client pregnant *</Label>
+                                    <Label>Client pregnant </Label>
                                     <select
                                         className="form-control"
                                         name="clientPregnant"
@@ -404,7 +424,7 @@ const BasicInfo = (props) => {
                              )}
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Client informed about HIV transmission routes *</Label>
+                                    <Label>Client informed about HIV transmission routes </Label>
                                     <select
                                         className="form-control"
                                         name="clientInformHivTransRoutes"
@@ -425,7 +445,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Client informed about risk factors for HIV transmission *</Label>
+                                    <Label>Client informed about risk factors for HIV transmission </Label>
                                     <select
                                         className="form-control"
                                         name="clientInformRiskkHivTrans"
@@ -446,7 +466,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Client informed on preventing HIV transmission methods *</Label>
+                                    <Label>Client informed on preventing HIV transmission methods </Label>
                                     <select
                                         className="form-control"
                                         name="clientInformPreventingsHivTrans"
@@ -467,7 +487,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Client informed about possible test results *</Label>
+                                    <Label>Client informed about possible test results </Label>
                                     <select
                                         className="form-control"
                                         name="clientInformPossibleTestResult"
@@ -489,12 +509,12 @@ const BasicInfo = (props) => {
                             
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Informed consent for HIV testing given *</Label>
+                                    <Label>Informed consent for HIV testing given </Label>
                                     <select
                                         className="form-control"
-                                        name="informCosentHivTest"
-                                        id="informCosentHivTest"
-                                        value={knowledgeAssessment.informCosentHivTest}
+                                        name="informConsentHivTest"
+                                        id="informConsentHivTest"
+                                        value={knowledgeAssessment.informConsentHivTest}
                                         onChange={handleInputChangeKnowledgeAssessment}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
@@ -503,8 +523,8 @@ const BasicInfo = (props) => {
                                         <option value="false">No</option>
                                         
                                     </select>
-                                    {errors.informCosentHivTest !=="" ? (
-                                    <span className={classes.error}>{errors.informCosentHivTest}</span>
+                                    {errors.informConsentHivTest !=="" ? (
+                                    <span className={classes.error}>{errors.informConsentHivTest}</span>
                                     ) : "" }
                                 </FormGroup>
                             </div>
@@ -513,7 +533,7 @@ const BasicInfo = (props) => {
                             <div className="form-group  col-md-12 text-center pt-2 mb-4" style={{backgroundColor:'#000', width:'125%', height:'35px', color:'#fff', fontWeight:'bold'}} >Clinical TB screening</div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Current cough *</Label>
+                                    <Label>Current cough </Label>
                                     <select
                                         className="form-control"
                                         name="currentCough"
@@ -534,7 +554,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Weight loss *</Label>
+                                    <Label>Weight loss </Label>
                                     <select
                                         className="form-control"
                                         name="weightLoss"
@@ -555,7 +575,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Lymphadenopathy (swelling of the lymph nodes) *</Label>
+                                    <Label>Lymphadenopathy (swelling of the lymph nodes) </Label>
                                     <select
                                         className="form-control"
                                         name="lymphadenopathy"
@@ -576,7 +596,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Fever *</Label>
+                                    <Label>Fever </Label>
                                     <select
                                         className="form-control"
                                         name="fever"
@@ -597,7 +617,7 @@ const BasicInfo = (props) => {
                             </div> 
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Night sweats*</Label>
+                                    <Label>Night sweats</Label>
                                     <select
                                         className="form-control"
                                         name="nightSweats"
@@ -626,7 +646,7 @@ const BasicInfo = (props) => {
                             <div className="form-group  col-md-12 text-center pt-2 mb-4" style={{backgroundColor:'#992E62', width:'125%', height:'35px', color:'#fff', fontWeight:'bold'}} >HIV Risk Assessment  (Last 3 months)</div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Ever had sexual intercourse </Label>
+                                    <Label>Ever had sexual intercourse <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="everHadSexualIntercourse"
@@ -647,7 +667,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Blood transfusion in last 3 months *</Label>
+                                    <Label>Blood transfusion in last 3 months <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="bloodtransInlastThreeMonths"
@@ -666,9 +686,10 @@ const BasicInfo = (props) => {
                                     ) : "" }
                                 </FormGroup>
                             </div>
-                            <div className="form-group  col-md-4">
+                            {riskAssessment.everHadSexualIntercourse!=="" && riskAssessment.everHadSexualIntercourse==='true' && (
+                                <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Unprotected sex with casual partner in last 3 months *</Label>
+                                    <Label>Unprotected sex with casual partner in last 3 months <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="uprotectedSexWithCasualLastThreeMonths"
@@ -687,9 +708,11 @@ const BasicInfo = (props) => {
                                     ) : "" }
                                 </FormGroup>
                             </div>
-                            <div className="form-group  col-md-4">
+                            )}
+                            {riskAssessment.everHadSexualIntercourse!=="" && riskAssessment.everHadSexualIntercourse==='true' && (
+                                <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Unprotected sex with regular partner in the last 3months</Label>
+                                    <Label>Unprotected sex with regular partner in the last 3months <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="uprotectedSexWithRegularPartnerLastThreeMonths"
@@ -708,9 +731,11 @@ const BasicInfo = (props) => {
                                     ) : "" }
                                 </FormGroup>
                             </div>
-                            <div className="form-group  col-md-4">
+                            )}
+                            {riskAssessment.everHadSexualIntercourse!=="" && riskAssessment.everHadSexualIntercourse==='true' && (
+                                <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Unprotected vaginal sex</Label>
+                                    <Label>Unprotected vaginal sex <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="unprotectedVaginalSex"
@@ -729,9 +754,11 @@ const BasicInfo = (props) => {
                                     ) : "" }
                                 </FormGroup>
                             </div>
-                            <div className="form-group  col-md-4">
+                            )}
+                            {riskAssessment.everHadSexualIntercourse!=="" && riskAssessment.everHadSexualIntercourse==='true' && (
+                                <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Unprotected Anal sex</Label>
+                                    <Label>Unprotected Anal sex <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="uprotectedAnalSex"
@@ -749,10 +776,12 @@ const BasicInfo = (props) => {
                                     <span className={classes.error}>{errors.uprotectedAnalSex}</span>
                                     ) : "" }
                                 </FormGroup>
-                            </div>         
-                            <div className="form-group  col-md-4">
+                            </div> 
+                            )}
+                            {riskAssessment.everHadSexualIntercourse!=="" && riskAssessment.everHadSexualIntercourse==='true' && (
+                                <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>STI in last 3 months *</Label>
+                                    <Label>STI in last 3 months <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="stiLastThreeMonths"
@@ -771,9 +800,11 @@ const BasicInfo = (props) => {
                                     ) : "" }
                                 </FormGroup>
                             </div>
-                            <div className="form-group  col-md-4">
+                            )}
+                            {riskAssessment.everHadSexualIntercourse!=="" && riskAssessment.everHadSexualIntercourse==='true' && (
+                                <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Sex under the influence of drugs or alcohol*</Label>
+                                    <Label>Sex under the influence of drugs or alcohol <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="sexUnderInfluence"
@@ -792,29 +823,32 @@ const BasicInfo = (props) => {
                                     ) : "" }
                                 </FormGroup>
                             </div>
-                            <div className="form-group  col-md-4">
-                                <FormGroup>
-                                    <Label>More than 1 sex partner during last 3 months*</Label>
-                                    <select
-                                        className="form-control"
-                                        name="moreThanOneSexPartnerLastThreeMonths"
-                                        id="moreThanOneSexPartnerLastThreeMonths"
-                                        value={riskAssessment.moreThanOneSexPartnerLastThreeMonths}
-                                        onChange={handleInputChangeRiskAssessment}
-                                        style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
-                                    >
-                                        <option value={""}></option>
-                                        <option value="true">Yes</option>
-                                        <option value="false">No</option>
-                                        
-                                    </select>
-                                    {errors.moreThanOneSexPartnerLastThreeMonths !=="" ? (
-                                    <span className={classes.error}>{errors.moreThanOneSexPartnerLastThreeMonths}</span>
-                                    ) : "" }
-                                </FormGroup>
-                            </div>
+                            )}
+                            {riskAssessment.everHadSexualIntercourse!=="" && riskAssessment.everHadSexualIntercourse==='true' && (
+                                 <div className="form-group  col-md-4">
+                                 <FormGroup>
+                                     <Label>More than 1 sex partner during last 3 months <span style={{ color:"red"}}> *</span></Label>
+                                     <select
+                                         className="form-control"
+                                         name="moreThanOneSexPartnerLastThreeMonths"
+                                         id="moreThanOneSexPartnerLastThreeMonths"
+                                         value={riskAssessment.moreThanOneSexPartnerLastThreeMonths}
+                                         onChange={handleInputChangeRiskAssessment}
+                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                     >
+                                         <option value={""}></option>
+                                         <option value="true">Yes</option>
+                                         <option value="false">No</option>
+                                         
+                                     </select>
+                                     {errors.moreThanOneSexPartnerLastThreeMonths !=="" ? (
+                                     <span className={classes.error}>{errors.moreThanOneSexPartnerLastThreeMonths}</span>
+                                     ) : "" }
+                                 </FormGroup>
+                             </div>
+                            )}
                             <Message warning>
-                                <h4>Personal HIV Risk assessment score (sum of all 7 answers)</h4>
+                                <h4>  Risk assessment score (sum of all 7 answers)</h4>
                                 <b>Score : {riskCount.length}</b>
                             </Message>
                             <hr/>
@@ -824,7 +858,7 @@ const BasicInfo = (props) => {
                             <div className="form-group  col-md-12 text-center pt-2 mb-4" style={{backgroundColor:'#992E62', width:'125%', height:'35px', color:'#fff', fontWeight:'bold'}} >HIV Risk Assessment  (Last 3 months)</div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Have you/your partner experienced lower abdominal pain, smelly discharge, blisters and wounds around you/partner vagina, penis anus or mouth?</Label>
+                                    <Label>Have you/your partner experienced lower abdominal pain, smelly discharge, blisters and wounds around you/partner vagina, penis anus or mouth? <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="experiencePain"
@@ -845,7 +879,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Have you/partner had sex without a condom with someone of unknown HIV status, or you/partner raped by person with unknown HIV status? *</Label>
+                                    <Label>Have you/partner had sex without a condom with someone of unknown HIV status, or you/partner raped by person with unknown HIV status? <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="haveSexWithoutCondom"
@@ -866,7 +900,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Have you had a condom burst with your partner during sexual intercourse?  *</Label>
+                                    <Label>Have you had a condom burst with your partner during sexual intercourse? <span style={{ color:"red"}}> *</span> </Label>
                                     <select
                                         className="form-control"
                                         name="haveCondomBurst"
@@ -887,7 +921,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Do you/partner share needles/syringes, other sharp objects or used abuse drug substances of any kind?</Label>
+                                    <Label>Do you/partner share needles/syringes, other sharp objects or used abuse drug substances of any kind? <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="abuseDrug"
@@ -908,7 +942,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Have you/partner had any blood or blood product transfusion?</Label>
+                                    <Label>Have you/partner had any blood or blood product transfusion? <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="bloodTransfusion"
@@ -929,7 +963,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Have you/partner experienced coughing, weight loss, fever, night sweats consistently?</Label>
+                                    <Label>Have you/partner experienced coughing, weight loss, fever, night sweats consistently? <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="consistentWeightFeverNightCough"
@@ -950,7 +984,7 @@ const BasicInfo = (props) => {
                             </div>            
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Have you/partner paid or sold vaginal, anal or oral sex? *</Label>
+                                    <Label>Have you/partner paid or sold vaginal, anal or oral sex? <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="soldPaidVaginalSex"
@@ -970,7 +1004,7 @@ const BasicInfo = (props) => {
                                 </FormGroup>
                             </div>
                             <Message warning>
-                                <h4>Personal HIV Risk assessment score (sum of all 7 answers)</h4>
+                                <h4>  Risk assessment score (sum of all 7 answers)</h4>
                                 <b>Score :{riskCount.length}</b>
                             </Message>
                             <hr/>
@@ -1001,7 +1035,7 @@ const BasicInfo = (props) => {
                             {riskAssessmentPartner.sexPartnerHivPositive==='true' && (<>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Is sex partner newly diagnosed with HIV and started treatment less than 3-6 months ago?*</Label>
+                                    <Label>Is sex partner newly diagnosed with HIV and started treatment less than 3-6 months ago?</Label>
                                     <select
                                         className="form-control"
                                         name="newDiagnosedHivlastThreeMonths"
@@ -1022,7 +1056,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Is sex partner pregnant and currently receiving ARV for PMTCT?*</Label>
+                                    <Label>Is sex partner pregnant and currently receiving ARV for PMTCT?</Label>
                                     <select
                                         className="form-control"
                                         name="currentlyArvForPmtct"
@@ -1233,9 +1267,9 @@ const BasicInfo = (props) => {
                             {saving ? <Spinner /> : ""}
                             <br />
                             <div className="row">
-                            <div className="form-group mb-3 col-md-6">
+                            <div className="form-group mb-3 col-md-12">
                             <Button content='Back' icon='left arrow' labelPosition='left' style={{backgroundColor:"#992E62", color:'#fff'}} onClick={()=>handleItemClick('basic','basic')}/>
-                            <Button content='Save & Continue' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
+                            <Button content='Save & Continue' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit} disabled={saving}/>
                             </div>
                             </div>
                         </div>

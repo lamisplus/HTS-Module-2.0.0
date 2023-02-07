@@ -9,7 +9,6 @@ import org.lamisplus.modules.hts.domain.entity.RiskStratification;
 import org.lamisplus.modules.hts.repository.RiskStratificationRepository;
 import org.lamisplus.modules.patient.domain.entity.Person;
 import org.lamisplus.modules.patient.repository.PersonRepository;
-import org.lamisplus.modules.patient.service.PersonService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -19,26 +18,46 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.lamisplus.modules.base.util.Constants.ArchiveStatus.ARCHIVED;
+import static org.lamisplus.modules.base.util.Constants.ArchiveStatus.UN_ARCHIVED;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class RiskStratificationService {
     private final RiskStratificationRepository stratificationRepository;
     private final PersonRepository personRepository;
-    private final PersonService personService;
-    
+    private final CurrentUserOrganizationService currentFacility;
+
     public RiskStratificationResponseDto save(RiskStratificationDto riskStratificationDTO) {
-        Person person = null;
+        String personUuid=null;
         if(riskStratificationDTO.getPersonId() != null){
-            person = this.getPerson(riskStratificationDTO.getPersonId());
+            personUuid = getPerson(riskStratificationDTO.getPersonId()).getUuid();
         }
-        RiskStratification riskStratification = this.toRiskStratification(riskStratificationDTO, person);
+        RiskStratification riskStratification = toRiskStratification(riskStratificationDTO, personUuid);
+        riskStratification.setFacilityId(currentFacility.getCurrentUserOrganization());
         return this.toRiskStratificationResponseDTO(stratificationRepository.save(riskStratification));
     }
 
+    public RiskStratificationResponseDto getByCode(String code){
+        RiskStratification riskStratification = stratificationRepository.findByCode(code).orElse(null);
+        if(riskStratification != null){
+            return this.toRiskStratificationResponseDTO(riskStratification);
+        }
+        return null;
+    }
     public Person getPerson(Long personId) {
         return personRepository.findById (personId)
                 .orElseThrow (() -> new EntityNotFoundException(Person.class, "id", String.valueOf (personId)));
+    }
+    public RiskStratificationDto update(Long id, RiskStratificationDto stratificationDto){
+        RiskStratification stratification = stratificationRepository
+                .findByIdAndFacilityIdAndArchived(id, currentFacility.getCurrentUserOrganization(), UN_ARCHIVED)
+                .orElseThrow(()-> new EntityNotFoundException(RiskStratification.class, "id", String.valueOf(id)));
+        stratificationDto.setId(id);
+        stratification = toRiskStratification(stratificationDto, stratification.getPersonUuid());
+        stratification.setFacilityId(currentFacility.getCurrentUserOrganization());
+        return toRiskStratificationDTO(stratificationRepository.save(stratification));
     }
 
     private RiskStratificationDto toRiskStratificationDTO(RiskStratification riskStratification) {
@@ -49,16 +68,19 @@ public class RiskStratificationService {
         RiskStratificationDto riskStratificationDto = new RiskStratificationDto();
 
         riskStratificationDto.setAge( riskStratification.getAge() );
+        riskStratificationDto.setId(riskStratification.getId());
+        riskStratificationDto.setEntryPoint( riskStratification.getEntryPoint() );
+
         riskStratificationDto.setTestingSetting( riskStratification.getTestingSetting() );
         riskStratificationDto.setModality( riskStratification.getModality() );
         riskStratificationDto.setTargetGroup( riskStratification.getTargetGroup() );
         riskStratificationDto.setVisitDate( riskStratification.getVisitDate() );
         riskStratificationDto.setDob(riskStratification.getDob());
         riskStratificationDto.setRiskAssessment( riskStratification.getRiskAssessment() );
+        riskStratificationDto.setCommunityEntryPoint( riskStratification.getCommunityEntryPoint() );
 
         return riskStratificationDto;
     }
-
     private RiskStratificationResponseDto toRiskStratificationResponseDTO(RiskStratification riskStratification) {
         if ( riskStratification == null ) {
             return null;
@@ -66,6 +88,7 @@ public class RiskStratificationService {
 
         RiskStratificationResponseDto responseDto = new RiskStratificationResponseDto();
         responseDto.setId(riskStratification.getId());
+        responseDto.setEntryPoint( riskStratification.getEntryPoint());
         responseDto.setAge( riskStratification.getAge() );
         responseDto.setTestingSetting( riskStratification.getTestingSetting() );
         responseDto.setModality( riskStratification.getModality() );
@@ -74,19 +97,20 @@ public class RiskStratificationService {
         responseDto.setDob( riskStratification.getDob() );
         responseDto.setVisitDate( riskStratification.getVisitDate() );
         responseDto.setRiskAssessment( riskStratification.getRiskAssessment() );
+        responseDto.setCommunityEntryPoint( riskStratification.getCommunityEntryPoint() );
 
         return responseDto;
     }
-
-    private RiskStratification toRiskStratification(RiskStratificationDto riskStratificationDTO, Person person) {
+    private RiskStratification toRiskStratification(RiskStratificationDto riskStratificationDTO, String personUuid) {
         if ( riskStratificationDTO == null ) {
             return null;
         }
 
         RiskStratification riskStratification = new RiskStratification();
 
+        riskStratification.setId(riskStratificationDTO.getId());
         riskStratification.setAge( riskStratificationDTO.getAge() );
-        if(person != null)riskStratification.setPersonUuid(person.getUuid());
+        riskStratification.setPersonUuid(personUuid);
         riskStratification.setTestingSetting( riskStratificationDTO.getTestingSetting() );
         riskStratification.setModality( riskStratificationDTO.getModality() );
         riskStratification.setCode( riskStratificationDTO.getCode() );
@@ -94,10 +118,14 @@ public class RiskStratificationService {
         riskStratification.setVisitDate( riskStratificationDTO.getVisitDate() );
         riskStratification.setDob(riskStratificationDTO.getDob());
         riskStratification.setRiskAssessment( riskStratificationDTO.getRiskAssessment() );
+        riskStratification.setCommunityEntryPoint( riskStratificationDTO.getCommunityEntryPoint() );
+
+        riskStratification.setEntryPoint( riskStratificationDTO.getEntryPoint());
+
 
         return riskStratification;
     }
-    
+
     public void deleteById(Long id) {
         stratificationRepository.deleteById(id);
     }
@@ -117,5 +145,13 @@ public class RiskStratificationService {
                 .stream()
                 .map(riskStratification -> toRiskStratificationResponseDTO(riskStratification))
                 .collect(Collectors.toList());
+    }
+
+    public RiskStratificationResponseDto getStratificationByPersonId(Long personId) {
+        RiskStratification stratification = stratificationRepository
+                .findByPersonUuidAndFacilityIdAndArchived(getPerson(personId).getUuid(), currentFacility.getCurrentUserOrganization(), UN_ARCHIVED)
+                .orElseThrow(()-> new EntityNotFoundException(RiskStratification.class, "personId", String.valueOf(personId)));
+
+        return toRiskStratificationResponseDTO(stratification);
     }
 }

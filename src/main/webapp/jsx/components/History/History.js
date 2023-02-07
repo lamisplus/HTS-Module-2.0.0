@@ -95,10 +95,6 @@ const useStyles = makeStyles(theme => ({
 
 
 const PatientnHistory = (props) => {
-    const [patientList, setPatientList] = useState([])
-    //const [patientObj, setpatientObj] = useState([])
-    const patientId = props.patientObj && props.patientObj.id ? props.patientObj.id: null
-    
     useEffect(() => {
         //patients()
       }, [props.patientObj]);
@@ -112,10 +108,11 @@ const PatientnHistory = (props) => {
     <div> 
             <MaterialTable
             icons={tableIcons}
-              title="HTS History "
+              title="HTS HISTORY "
               columns={[
-              { title: "Date", field: "date" },
-              {title: "Pre Test Counseling",field: "pre",},
+                // { title: "HTS ID", field: "id" },
+                { title: "Date", field: "date" },
+                {title: "Pre Test Counseling",field: "pre"},
                 { title: "Recency Test", field: "rencency" },
                 { title: "Post Test", field: "post" },
                 // { title: "Index Notification", field: "indexNotifiation", filtering: false },  
@@ -124,10 +121,11 @@ const PatientnHistory = (props) => {
               ]}
               isLoading={props.loading}
               data={ props.patientList.map((row) => ({
+               // id: row.id,
                 date: row.dateVisit,
                 pre: row.knowledgeAssessment? "Filled":"Not Filled ",
                 requestResult:row.confirmatoryTest ? "Filled":"Not Filled ",
-                rencency: row.knowledgeAssessment ? "Filled":"Not Filled ",
+                rencency: row.recency ? "Filled":"Not Filled ",
                 post:row.postTestCounselingKnowledgeAssessment ? "Filled":"Not Filled ",
                 //indexNotifiation:row.indexNotificationServicesElicitation ? "Filled":"Not Filled ",
 
@@ -157,22 +155,22 @@ const PatientnHistory = (props) => {
                   
                   }))}
             
-                        options={{
-                          headerStyle: {
-                              //backgroundColor: "#9F9FA5",
-                              color: "#000",
-                          },
-                          searchFieldStyle: {
-                              width : '200%',
-                              margingLeft: '250px',
-                          },
-                          filtering: false,
-                          exportButton: false,
-                          searchFieldAlignment: 'left',
-                          pageSizeOptions:[10,20,100],
-                          pageSize:10,
-                          debounceInterval: 400
-                      }}
+                options={{
+                    headerStyle: {
+                        //backgroundColor: "#9F9FA5",
+                        color: "#000",
+                    },
+                    searchFieldStyle: {
+                        width : '200%',
+                        margingLeft: '250px',
+                    },
+                    filtering: false,
+                    exportButton: false,
+                    searchFieldAlignment: 'left',
+                    pageSizeOptions:[10,20,100],
+                    pageSize:10,
+                    debounceInterval: 400
+                }}
             />
 
     </div>

@@ -9,7 +9,7 @@ import {Link, useHistory, useLocation} from "react-router-dom";
 //import {TiArrowBack} from 'react-icons/ti'
 //import {token, url as baseUrl } from "../../../api";
 import 'react-phone-input-2/lib/style.css'
-import { Icon, Menu } from 'semantic-ui-react'
+import { Icon, Menu, Sticky } from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css';
 import BasicInfo from './NewRegistration/BasicInfo'
 import PreTest from './NewRegistration/PreTest'
@@ -61,6 +61,7 @@ const UserRegistration = (props) => {
     const [patientObj, setPatientObj] = useState({
         breastFeeding: "",
         capturedBy: "",
+        riskStratificationCode:"",
         cd4: {},
         clientCode: "",
         confirmatoryTest: {},
@@ -242,6 +243,7 @@ const UserRegistration = (props) => {
         testingSetting: "",
         tieBreakerTest: {},
         typeCounseling: "",
+        riskStratificationResponseDto:null
         
       });
     useEffect(() => { 
@@ -278,7 +280,9 @@ const UserRegistration = (props) => {
                     </h3>
                         <br/>
                         <br/>
+                        
                         <div className="col-md-3 col-sm-3 col-lg-3">
+                       
                         <Menu  size='large'  vertical  style={{backgroundColor:"#014D88"}}>
                             <Menu.Item
                                 name='inbox'
@@ -387,7 +391,9 @@ const UserRegistration = (props) => {
                             </Menu.Item>
                         </>)}   
                         </Menu>
+                     
                         </div>
+                       
                         <div className="col-md-9 col-sm-9 col-lg-9 " style={{ backgroundColor:"#fff", margingLeft:"-50px", paddingLeft:"-20px"}}>
                             {activeItem==='risk' && (<RiskStratification handleItemClick={handleItemClick} setCompleted={setCompleted} completed={completed} setPatientObj={setPatientObj} patientObj={patientObj} setPatientObjAge={setPatientObjAge} setHideOtherMenu={setHideOtherMenu} setExtra={setExtra} extra={extra}/>)}
                             {activeItem==='basic' && (<BasicInfo handleItemClick={handleItemClick} setCompleted={setCompleted} completed={completed} setPatientObj={setPatientObj} patientObj={patientObj} setPatientObjAge={setPatientObjAge} setExtra={setExtra} extra={extra}/>)}
@@ -400,7 +406,6 @@ const UserRegistration = (props) => {
                             
                         </div>                                   
                     </div>
-
                 
                     </form>
                 </CardBody>

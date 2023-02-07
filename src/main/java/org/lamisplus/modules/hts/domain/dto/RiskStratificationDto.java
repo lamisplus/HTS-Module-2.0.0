@@ -12,8 +12,11 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class RiskStratificationDto {
+    private Long id;
     @NotNull(message = "age is mandatory")
     private Integer age;
+    @NotBlank(message = "entryPoint is mandatory")
+    private String entryPoint;
     @NotBlank(message = "testingSetting is mandatory")
     private String testingSetting;
     @NotBlank(message = "modality is mandatory")
@@ -25,5 +28,6 @@ public class RiskStratificationDto {
     private LocalDate dob;
     private String code;
     private Long personId;
+    private String communityEntryPoint ;
     private  Object riskAssessment;
 }

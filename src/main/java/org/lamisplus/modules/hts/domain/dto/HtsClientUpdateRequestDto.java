@@ -24,7 +24,7 @@ public class HtsClientUpdateRequestDto {
     private final String testingSetting;
     @NotNull(message = "firstTimeVisit is mandatory")
     private final Boolean firstTimeVisit;
-    @NotNull(message = "numChildren is mandatory")
+
     private final Integer numChildren;
     private final Integer numWives;
     @NotNull(message = "typeCounseling is mandatory")
@@ -41,4 +41,6 @@ public class HtsClientUpdateRequestDto {
     private final Long pregnant;
     private final Boolean breastFeeding;
     private final Long relationWithIndexClient;
+
+    private String riskStratificationCode;
 }

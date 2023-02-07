@@ -120,6 +120,9 @@ const PostTest = (props) => {
             condomProvidedToClient:"", 
             unprotectedSexRegularPartnerLastThreeMonth:"", 
             referredToServices:"",
+            lubricantProvidedToClient: "",
+            condomProvidedToClientCount: "",
+            lubricantProvidedToClientCount: "",
         }
     )
     const handleInputChangePostTest = e => { 
@@ -135,7 +138,8 @@ const PostTest = (props) => {
             props.setCompleted([...props.completed, completedMenu])
         }
     }
-    useEffect(() => { 
+    useEffect(() => {
+        //console.log(props.patientObj.postTestCounselingKnowledgeAssessment) 
         setPostTest({...postTest, ...props.patientObj.postTestCounselingKnowledgeAssessment}) 
         if(props.patientObj && (props.patientObj.hivTestResult==='Positive' || props.patientObj.hivTestResult2!=='Positive')){
             postTest.hivTestResult='Positive'
@@ -149,6 +153,7 @@ const PostTest = (props) => {
             handleItemClick('recency-testing', 'post-test')
         }
         if(props.activePage.actionType==='update'){
+            setSaving(true)
         //e.preventDefault();
             objValues.htsClientId= clientId
             objValues.postTestCounselingKnowledgeAssessment= postTest
@@ -161,9 +166,9 @@ const PostTest = (props) => {
                 setSaving(false);
                 props.setPatientObj(response.data)
                 //toast.success("Risk Assesment successful");
-                if(postTest.hivTestResult==='True'){
+                if(postTest.hivTestResult==='true'){
                     handleItemClick('recency-testing', 'post-test')
-                }else if(postTest.hivTestResult==='False'){
+                }else if(postTest.hivTestResult==='false'){
                     history.push('/');
                 }
 
@@ -194,7 +199,7 @@ const PostTest = (props) => {
                         </LabelRibbon>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>HIV test result *</Label>
+                                    <Label>HIV test result <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="hivTestResult"
@@ -204,7 +209,7 @@ const PostTest = (props) => {
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>
-                                        <option value="True" >Positive</option>
+                                        <option value="true" >Positive</option>
                                         <option value="false">Negative</option>
                                         
                                     </select>
@@ -213,7 +218,7 @@ const PostTest = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Have you been tested for HIV before within this year? *</Label>
+                                    <Label>Have you been tested for HIV before within this year? </Label>
                                     <select
                                         className="form-control"
                                         name="hivTestBefore"
@@ -234,7 +239,7 @@ const PostTest = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>HIV Request and Result form signed by tester *</Label>
+                                    <Label>HIV Request and Result form signed by tester </Label>
                                     <select
                                         className="form-control"
                                         name="hivRequestResult"
@@ -253,7 +258,7 @@ const PostTest = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>HIV Request and Result form filled with CT Intake Form *</Label>
+                                    <Label>HIV Request and Result form filled with CT Intake Form </Label>
                                     <select
                                         className="form-control"
                                         name="hivRequestResultCt"
@@ -272,7 +277,7 @@ const PostTest = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Client received HIV test result *</Label>
+                                    <Label>Client received HIV test result </Label>
                                     <select
                                         className="form-control"
                                         name="clientReceivedHivTestResult"
@@ -291,7 +296,7 @@ const PostTest = (props) => {
                             </div> 
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Post test counseling done *</Label>
+                                    <Label>Post test counseling done </Label>
                                     <select
                                         className="form-control"
                                         name="postTestCounseling"
@@ -310,7 +315,7 @@ const PostTest = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Risk reduction plan developed *</Label>
+                                    <Label>Risk reduction plan developed </Label>
                                     <select
                                         className="form-control"
                                         name="riskReduction"
@@ -330,7 +335,7 @@ const PostTest = (props) => {
 
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Post test disclosure plan developed *</Label>
+                                    <Label>Post test disclosure plan developed </Label>
                                     <select
                                         className="form-control"
                                         name="postTestDisclosure"
@@ -349,7 +354,7 @@ const PostTest = (props) => {
                             </div>                            
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Will bring partner(s) for HIV testing *</Label>
+                                    <Label>Will bring partner(s) for HIV testing </Label>
                                     <select
                                         className="form-control"
                                         name="bringPartnerHivtesting"
@@ -368,7 +373,7 @@ const PostTest = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Will bring own children {'<5'} years for HIV testing *</Label>
+                                    <Label>Will bring own children {'<5'} years for HIV testing </Label>
                                     <select
                                         className="form-control"
                                         name="childrenHivtesting"
@@ -387,7 +392,7 @@ const PostTest = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Provided with information on FP and dual contraception *</Label>
+                                    <Label>Provided with information on FP and dual contraception </Label>
                                     <select
                                         className="form-control"
                                         name="informationFp"
@@ -406,7 +411,7 @@ const PostTest = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Client/Partner use FP methods (other than condom)*</Label>
+                                    <Label>Client/Partner use FP methods (other than condom)</Label>
                                     <select
                                         className="form-control"
                                         name="partnerFpThanCondom"
@@ -445,7 +450,7 @@ const PostTest = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Correct condom use demonstrated *</Label>
+                                    <Label>Correct condom use demonstrated </Label>
                                     <select
                                         className="form-control"
                                         name="correctCondomUse"
@@ -464,7 +469,7 @@ const PostTest = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Condoms provided to client *</Label>
+                                    <Label>Condoms provided to client </Label>
                                     <select
                                         className="form-control"
                                         name="condomProvidedToClient"
@@ -481,7 +486,67 @@ const PostTest = (props) => {
                                     
                                 </FormGroup>
                             </div>
+                            {postTest.condomProvidedToClient !== null && postTest.condomProvidedToClient === 'true' && (
+                                <div className="form-group  col-md-4">
+                                   <FormGroup>
+                                       <Label>How many condoms were provided to client </Label>
+                                       <Input
+                                           type="text"
+                                           name="condomProvidedToClientCount"
+                                           id="condomProvidedToClientCount"
+                                           value={postTest.condomProvidedToClientCount}
+                                           onChange={handleInputChangePostTest}
+                                           style={{
+                                               border: "1px solid #014D88",
+                                               borderRadius: "0.25rem",
+                                           }}
+                                       />
+                                       
+                                   </FormGroup>
+                               </div>
+                            )}
+                         
+                      
                             <div className="form-group  col-md-4">
+                                <FormGroup>
+                                    <Label>Lubricant were provided to client </Label>
+                                    <select
+                                        className="form-control"
+                                        name="lubricantProvidedToClient"
+                                        id="lubricantProvidedToClient"
+                                        value={postTest.lubricantProvidedToClient}
+                                        onChange={handleInputChangePostTest}
+                                        style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                    >
+                                        <option value={""}></option>
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
+                                        
+                                    </select>
+                                    
+                                </FormGroup>
+                            </div>
+                            {postTest.lubricantProvidedToClient !== null && postTest.lubricantProvidedToClient === 'true' && (
+                            <div className="form-group  col-md-4">
+                                 <FormGroup>
+                                     <Label>How many lubricant provided to client </Label>
+                                     <Input
+                                         type="number"
+                                         name="lubricantProvidedToClientCount"
+                                         id="lubricantProvidedToClientCount"
+                                         value={postTest.lubricantProvidedToClientCount}
+                                         onChange={handleInputChangePostTest}
+                                         style={{
+                                             border: "1px solid #014D88",
+                                             borderRadius: "0.25rem",
+                                         }}
+                                     />
+                                     
+                                 </FormGroup>
+                             </div>
+                            )}
+                           
+                            {/* <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Unprotected sex with regular partner in the last 3months</Label>
                                     <select
@@ -499,7 +564,7 @@ const PostTest = (props) => {
                                     </select>
                                     
                                 </FormGroup>
-                            </div>
+                            </div> */}
                             {/* <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Unprotected sex with regular particular in the last 3 months</Label>
@@ -520,7 +585,7 @@ const PostTest = (props) => {
                             </div> */}
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Client referred to other services *</Label>
+                                    <Label>Client referred to other services </Label>
                                     <select
                                         className="form-control"
                                         name="referredToServices"
@@ -546,14 +611,14 @@ const PostTest = (props) => {
                             {saving ? <Spinner /> : ""}
                             <br />
                             <div className="row">
-                            <div className="form-group mb-3 col-md-6">
+                            <div className="form-group mb-3 col-md-12">
                                 <Button content='Back' icon='left arrow' labelPosition='left' style={{backgroundColor:"#992E62", color:'#fff'}} onClick={()=>handleItemClick('hiv-test', 'hiv-test')}/>
                                 
                                 {props.activePage.actionType==='update' && (
-                                <Button content='Update & Continue' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
+                                <Button content='Update & Continue' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit} disabled={saving}/>
                                 )}
                                 {props.activePage.actionType==='view' && (
-                                    <Button content='Next' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
+                                    <Button content='Next' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit} disabled={saving}/>
                                 )}
                                 
                             </div>

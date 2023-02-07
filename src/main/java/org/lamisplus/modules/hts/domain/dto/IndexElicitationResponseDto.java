@@ -34,4 +34,7 @@ public class IndexElicitationResponseDto {
     private Boolean currentlyLiveWithPartner;
     private LocalDate datePartnerCameForTesting;
     private PersonResponseDto personResponseDto;
+
+    private String offeredIns;
+    private String acceptedIns;
 }

@@ -21,6 +21,7 @@ public class HtsClientRequestDto {
     private final Long referredFrom;
     @NotBlank(message = "testingSetting is mandatory")
     private final String testingSetting;
+    private final String riskStratificationCode;
     @NotNull(message = "firstTimeVisit is mandatory")
     private final Boolean firstTimeVisit;
     private final Integer numChildren;

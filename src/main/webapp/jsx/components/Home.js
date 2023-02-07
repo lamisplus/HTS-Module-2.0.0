@@ -2,7 +2,7 @@ import React, {useState, Fragment } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Row, Col, Card,  Tab, Tabs, } from "react-bootstrap";
 import Dashboard from './Patient/PatientList'
-//import CheckedInPatients from './Patient/CheckedInPatients'
+import VisualisationHome from './Visualisation/Index'
 import { FaUserPlus } from "react-icons/fa";
 import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
@@ -21,14 +21,8 @@ const Home = () => {
       <div className="row page-titles mx-0" style={{marginTop:"0px", marginBottom:"-10px"}}>
 			<ol className="breadcrumb">
 				<li className="breadcrumb-item active"><h4>HTS</h4></li>
-			</ol>
-      
+			</ol>  
 		  </div>
-      
-      <Row>       
-        <Col xl={12}>
-        
-        <Card style={divStyle}>
         <Link to={"register-patient"}>
               <Button
                   variant="contained"
@@ -40,12 +34,11 @@ const Home = () => {
                   <span style={{ textTransform: "capitalize" }}>New Patient</span>
               </Button>
         </Link>            
-          <Card.Body>          
-          <Dashboard />
-          </Card.Body>
-        </Card>
-          {/* 
-
+        <br/><br/> <br/>      
+        <Row>       
+        <Col xl={12}>
+        <Card style={divStyle}>
+        <Card.Body>   
               <div className="custom-tab-1">
                 <Tabs
                     id="controlled-tab-example"
@@ -53,16 +46,18 @@ const Home = () => {
                     onSelect={(k) => setKey(k)}
                     className="mb-3"
                 >
-                  {/* <Tab eventKey="checked-in" title="Checked In Patients">                   
-                    <CheckedInPatients />
+                  
+                  <Tab eventKey="home" title="Patients">                   
+                  <Dashboard />
                   </Tab> 
-                  <Tab eventKey="home" title="Find Patients">                   
-                    
-                  </Tab>                    
+                  {/* <Tab eventKey="visualization" title="Data Visualisation ">                   
+                  <VisualisationHome />
+                  </Tab>                     */}
                 </Tabs>
                 
               </div>
-             */}
+              </Card.Body>
+        </Card>
         </Col>
         
       </Row>

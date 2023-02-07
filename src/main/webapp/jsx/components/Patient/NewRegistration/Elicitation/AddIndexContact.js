@@ -91,14 +91,14 @@ const useStyles = makeStyles((theme) => ({
 const AddIndexContact = (props) => {
     const classes = useStyles();
     const [saving, setSaving] = useState(false);
-    const [errors, setErrors] = useState({});
     const [sexs, setSexs] = useState([])
     const [notificationContact, setNotificationContact] = useState([])
     const [ageDisabled, setAgeDisabled] = useState(true);
     const [indexTesting, setIndexTesting]= useState([]);
     const [consent, setConsent]= useState([]);
     const [hivTestDate, setHivTestDate] = useState("");
-   
+    const [errors, setErrors] = useState({});
+    let temp = { ...errors }
     const [objValuesIndex, setObjValuesIndex]= useState( {
         htsClientId: null,
         indexNotificationServicesElicitation: {},
@@ -125,6 +125,8 @@ const AddIndexContact = (props) => {
             sexuallyUncomfortable: "", 
             notificationMethod : "",
             datePartnerCameForTesting: "",
+            offeredIns:"",
+            acceptedIns:""
         }
     )
            
@@ -252,10 +254,10 @@ const AddIndexContact = (props) => {
         
     }
     const handleDateOfBirthChange = (e) => {
-        if (e.target.value == "Actual") {
+        if (e.target.value === "Actual") {
             objValues.isDateOfBirthEstimated=false
             setAgeDisabled(true);
-        } else if (e.target.value == "Estimated") {
+        } else if (e.target.value === "Estimated") {
             objValues.isDateOfBirthEstimated=true
             setAgeDisabled(false);
         }
@@ -282,16 +284,26 @@ const AddIndexContact = (props) => {
         const result = value.replace(/[^a-z]/gi, '');
         return result
     }
+    const validate = () => {
+        //HTS FORM VALIDATION
+         temp.acceptedIns = objValues.acceptedIns ? "" : "This field is required."
+        temp.offeredIns = objValues.offeredIns ? "" : "This field is required."
+             
+                setErrors({ ...temp })
+        return Object.values(temp).every(x => x == "")
+    }
     const handleSubmit =(e)=>{
-        e.preventDefault();     
-        objValues.isDateOfBirthEstimated=objValues.isDateOfBirthEstimated==true ? 1 : 0
+        e.preventDefault();
+        if(validate()) { 
+            setSaving(true)   
+            objValues.isDateOfBirthEstimated=objValues.isDateOfBirthEstimated==true ? 1 : 0
             axios.post(`${baseUrl}index-elicitation`,objValues,
             { headers: {"Authorization" : `Bearer ${token}`}},
             
             )
             .then(response => {
                 setSaving(false);
-                toast.success("Record save successful");
+                toast.success("Record save successful",  {position: toast.POSITION.BOTTOM_CENTER});
                 handleItemClickPage('list')
 
             })
@@ -299,13 +311,13 @@ const AddIndexContact = (props) => {
                 setSaving(false);
                 if(error.response && error.response.data){
                     let errorMessage = error.response.data.apierror && error.response.data.apierror.message!=="" ? error.response.data.apierror.message :  "Something went wrong, please try again";
-                    toast.error(errorMessage);
+                    toast.error(errorMessage,  {position: toast.POSITION.BOTTOM_CENTER});
                 }
                 else{
-                    toast.error("Something went wrong. Please try again...");
+                    toast.error("Something went wrong. Please try again...",  {position: toast.POSITION.BOTTOM_CENTER});
                 }
             });
-            
+        }   
     }
 
     return (
@@ -326,6 +338,55 @@ const AddIndexContact = (props) => {
                 </h2>
                 <br/><br/>    
                     <form >
+                    <div className="row">
+                    <div className="form-group  col-md-4">
+                        <FormGroup>
+                            <Label>Offered INS ? <span style={{ color:"red"}}> *</span></Label>
+                            <select
+                                className="form-control"
+                                name="offeredIns"
+                                id="offeredIns"
+                                value={objValues.offeredIns}
+                                onChange={handleInputChange}
+                                style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                            >
+                                <option value={""}></option>
+                                {consent.map((value) => (
+                                    <option key={value.id} value={value.id}>
+                                        {value.display}
+                                    </option>
+                                ))}
+                            </select>
+                            {errors.offeredIns !=="" ? (
+                                    <span className={classes.error}>{errors.offeredIns}</span>
+                                ) : "" }
+                        </FormGroup>
+                    </div>
+                    <div className="form-group  col-md-4">
+                        <FormGroup>
+                            <Label>Accepted INS ? <span style={{ color:"red"}}> *</span></Label>
+                            <select
+                                className="form-control"
+                                name="acceptedIns"
+                                id="acceptedIns"
+                                value={objValues.acceptedIns}
+                                onChange={handleInputChange}
+                                style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                            >
+                                <option value={""}></option>
+                                {consent.map((value) => (
+                                    <option key={value.id} value={value.id}>
+                                        {value.display}
+                                    </option>
+                                ))}
+                            </select>
+                            {errors.acceptedIns !=="" ? (
+                                    <span className={classes.error}>{errors.acceptedIns}</span>
+                                ) : "" }
+                        </FormGroup>
+                    </div>
+                    </div>
+                    {/*objValues.offeredIns !== null && objValues.acceptedIns !== null && ()*/}
                         <div className="row">
                             <div className="form-group mb-3 col-md-4">
                                 <FormGroup>
@@ -339,7 +400,9 @@ const AddIndexContact = (props) => {
                                     style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
                                    
                                 />
-                                
+                                {errors.firstName !=="" ? (
+                                    <span className={classes.error}>{errors.firstName}</span>
+                                ) : "" }
                                 </FormGroup>
                             </div>
                             <div className="form-group mb-3 col-md-4">
@@ -369,7 +432,9 @@ const AddIndexContact = (props) => {
                                     style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
                                    
                                 />
-                                
+                                {errors.lastName !=="" ? (
+                                    <span className={classes.error}>{errors.lastName}</span>
+                                ) : "" }
                                 </FormGroup>
                             </div>
                             <div className="form-group mb-2 col-md-2">
@@ -477,7 +542,7 @@ const AddIndexContact = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Sex *</Label>
+                                    <Label>Sex </Label>
                                     <select
                                         className="form-control"
                                         name="sex"
@@ -493,7 +558,9 @@ const AddIndexContact = (props) => {
                                             </option>
                                         ))}
                                     </select>
-                                    
+                                    {errors.sex !=="" ? (
+                                    <span className={classes.error}>{errors.sex}</span>
+                                ) : "" }
                                 </FormGroup>
                             </div>                           
                             <div className="form-group mb-3 col-md-4">
@@ -525,7 +592,7 @@ const AddIndexContact = (props) => {
 
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Relationship to Index Client *</Label>
+                                    <Label>Relationship to Index Client </Label>
                                     <select
                                         className="form-control"
                                         name="relativeToIndexClient"
@@ -541,12 +608,14 @@ const AddIndexContact = (props) => {
                                             </option>
                                             ))}
                                     </select>
-                                    
+                                    {errors.relativeToIndexClient !=="" ? (
+                                    <span className={classes.error}>{errors.relativeToIndexClient}</span>
+                                    ) : "" }
                                 </FormGroup>
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Do you currently live with this partner? *</Label>
+                                    <Label>Do you currently live with this partner? </Label>
                                     <select
                                         className="form-control"
                                         name="currentlyLiveWithPartner"
@@ -559,12 +628,14 @@ const AddIndexContact = (props) => {
                                         <option value={"true"}>Yes</option>
                                         <option value={"false"}>No</option>
                                     </select>
-                                    
+                                    {errors.currentlyLiveWithPartner !=="" ? (
+                                    <span className={classes.error}>{errors.currentlyLiveWithPartner}</span>
+                                    ) : "" }
                                 </FormGroup>
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>As far as you know, as this partner ever tested positive for HIV *</Label>
+                                    <Label>As far as you know, has this partner ever tested positive for HIV </Label>
                                     <select
                                         className="form-control"
                                         name="partnerTestedPositive"
@@ -581,12 +652,14 @@ const AddIndexContact = (props) => {
                                         ))}
                                         
                                     </select>
-                                    
+                                    {errors.partnerTestedPositive !=="" ? (
+                                    <span className={classes.error}>{errors.partnerTestedPositive}</span>
+                                    ) : "" }
                                 </FormGroup>
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>As this partner ever hit, kick, slapped or otherwise physical hurt you? *</Label>
+                                    <Label>Has this partner ever hit, kick, slapped or otherwise physical hurt you? </Label>
                                     <select
                                         className="form-control"
                                         name="physicalHurt"
@@ -603,12 +676,14 @@ const AddIndexContact = (props) => {
                                         ))}
                                         
                                     </select>
-                                    
+                                    {errors.physicalHurt !=="" ? (
+                                    <span className={classes.error}>{errors.physicalHurt}</span>
+                                    ) : "" }
                                 </FormGroup>
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Has this partner ever threaten to hurt you? *</Label>
+                                    <Label>Has this partner ever threatened to hurt you? </Label>
                                     <select
                                         className="form-control"
                                         name="threatenToHurt"
@@ -624,13 +699,15 @@ const AddIndexContact = (props) => {
                                             </option>
                                         ))}
                                     </select>
-                                    
+                                    {errors.threatenToHurt !=="" ? (
+                                    <span className={classes.error}>{errors.threatenToHurt}</span>
+                                    ) : "" }
                                 </FormGroup>
                             </div>
                            
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Has this partner ever threaten force you to do something sexually that made you uncomfortable ?  *</Label>
+                                    <Label>Has this partner ever threatened to force you to do something sexually that made you uncomfortable ?  </Label>
                                     <select
                                         className="form-control"
                                         name="sexuallyUncomfortable"
@@ -646,12 +723,15 @@ const AddIndexContact = (props) => {
                                             </option>
                                         ))}
                                     </select>
+                                    {errors.sexuallyUncomfortable !=="" ? (
+                                    <span className={classes.error}>{errors.sexuallyUncomfortable}</span>
+                                    ) : "" }
                                     
                                 </FormGroup>
                             </div> 
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Notification Method selected*</Label>
+                                    <Label>Notification Method selected</Label>
                                     <select
                                         className="form-control"
                                         name="notificationMethod"
@@ -668,7 +748,9 @@ const AddIndexContact = (props) => {
                                         ))}
                                         
                                     </select>
-                                    
+                                    {errors.notificationMethod !=="" ? (
+                                    <span className={classes.error}>{errors.notificationMethod}</span>
+                                    ) : "" }
                                 </FormGroup>
                             </div>
 
@@ -697,7 +779,7 @@ const AddIndexContact = (props) => {
                             <div className="row">
                             <div className="form-group mb-3 col-md-6">
                            
-                            <Button content='Save' icon='save' labelPosition='left' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit}/>
+                            <Button content='Save' icon='save' labelPosition='left' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit} disabled={saving}/>
                             </div>
                             </div>
                         </div>

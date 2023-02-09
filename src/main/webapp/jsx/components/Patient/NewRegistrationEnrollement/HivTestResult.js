@@ -1511,7 +1511,7 @@ const HivTestResult = (props) => {
               <br /> <br />
               {props.patientObj.riskStratificationResponseDto !== null &&
                 props.patientObj.riskStratificationResponseDto
-                  .communityEntryPoint === "community" && (
+                  .communityEntryPoint !== "" && (
                   <>
                     <div className="form-group mb-3 col-md-4">
                       <FormGroup>

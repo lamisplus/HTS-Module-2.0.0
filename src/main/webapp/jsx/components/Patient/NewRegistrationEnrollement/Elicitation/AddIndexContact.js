@@ -140,7 +140,8 @@ const AddIndexContact = (props) => {
             notificationMethod : "",
             datePartnerCameForTesting: "",
             offeredIns:"",
-            acceptedIns:""
+            acceptedIns:"",
+            elicited: ""
         }
     )           
     useEffect(() => { 
@@ -349,13 +350,15 @@ const AddIndexContact = (props) => {
                                         </option>
                                     ))}
                                 </select>
-                                
+                                {errors.offeredIns !=="" ? (
+                                        <span className={classes.error}>{errors.offeredIns}</span>
+                                    ) : "" }
                             </FormGroup>
                         </div>
                             {objValues.offeredIns !== "" && objValues.offeredIns !== '616' && (
                                 <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Accepted INS ? <span style={{ color:"red"}}> *</span></Label>
+                                    <Label>Accepted INS ? <span style={{ color:"red"}}> </span></Label>
                                     <select
                                         className="form-control"
                                         name="acceptedIns"
@@ -375,10 +378,33 @@ const AddIndexContact = (props) => {
                                 </FormGroup>
                                 </div>
                             )}
+                            {objValues.acceptedIns !== "" && objValues.acceptedIns !== '616' && (
+                                <div className="form-group  col-md-4">
+                                <FormGroup>
+                                    <Label>Elicited ? <span style={{ color:"red"}}> </span></Label>
+                                    <select
+                                        className="form-control"
+                                        name="elicited"
+                                        id="elicited"
+                                        value={objValues.elicited}
+                                        onChange={handleInputChange}
+                                        style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                    >
+                                        <option value={""}></option>
+                                        {consent.map((value) => (
+                                            <option key={value.id} value={value.id}>
+                                                {value.display}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    
+                                </FormGroup>
+                                </div>
+                            )}
                         </div>
                      
                         <div className="row">
-                            {objValues.acceptedIns !== "" && objValues.acceptedIns !== "616" && (
+                            {objValues.elicited !== "" && objValues.elicited !== "616" && (
                             <>    
                                 <div className="form-group mb-3 col-md-4">
                                        <FormGroup>

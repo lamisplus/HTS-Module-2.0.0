@@ -226,7 +226,6 @@ const UserRegistration = (props) => {
         tieBreakerTest: {},
         typeCounseling: "",
         riskStratificationResponseDto:null
-        
     });
     const [extra, setExtra] = useState({
     risk:"",

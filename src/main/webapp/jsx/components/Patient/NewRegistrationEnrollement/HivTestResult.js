@@ -88,7 +88,7 @@ const HivTestResult = (props) => {
   const [saving, setSaving] = useState(false);
   const [errors, setErrors] = useState({});
   let temp = { ...errors };
-  console.log(props.patientObj);
+  //console.log("data3", props.patientObj);
   const patientID =
     props.patientObj && props.patientObj.personResponseDto
       ? props.patientObj.personResponseDto.id
@@ -468,6 +468,8 @@ const HivTestResult = (props) => {
 
         objValues.cd4 = cd4Count;
         objValues.others = others;
+
+        //console.log(clientId, objValues)
         axios
           .put(`${baseUrl}hts/${clientId}/request-result`, objValues, {
             headers: { Authorization: `Bearer ${token}` },
@@ -475,7 +477,7 @@ const HivTestResult = (props) => {
           .then((response) => {
             setSaving(false);
             props.setPatientObj(response.data);
-            console.log(response.data);
+            console.log("saved", response.data);
             //props.setPatientObj(props && props.patientObj ? props.patientObj : "")
             //toast.success("HIV test successful");
             handleItemClick("post-test", "hiv-test");
@@ -1045,8 +1047,7 @@ const HivTestResult = (props) => {
                   {confirmatoryTest.result === "No" &&
                     tieBreakerTest.result === "No" &&
                     (initialTest1.result === "Yes" ||
-                      initialTest1.result === "Yes" ||
-                      initialTest1.result === "") && (
+                      initialTest1.result !== "") && (
                       <>
                         <b> Result : </b>
                         <LabelRibbon color="green">Non Reactive</LabelRibbon>

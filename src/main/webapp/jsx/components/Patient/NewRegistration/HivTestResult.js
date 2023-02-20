@@ -88,6 +88,7 @@ const HivTestResult = (props) => {
   const [saving, setSaving] = useState(false);
   const [errors, setErrors] = useState({});
   let temp = { ...errors };
+  console.log("data2", props.patientObj);
   const patientID =
     props.patientObj && props.patientObj.personResponseDto
       ? props.patientObj.personResponseDto.id
@@ -1058,8 +1059,7 @@ const HivTestResult = (props) => {
                   {confirmatoryTest.result === "No" &&
                     tieBreakerTest.result === "No" &&
                     (initialTest1.result === "Yes" ||
-                      initialTest1.result === "Yes" ||
-                      initialTest1.result === "") && (
+                      initialTest1.result !== "") && (
                       <>
                         <b> Result : </b>
                         <LabelRibbon color="green">Non Reactive</LabelRibbon>

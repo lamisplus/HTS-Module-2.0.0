@@ -88,7 +88,7 @@ const HivTestResult = (props) => {
   const [saving, setSaving] = useState(false);
   const [errors, setErrors] = useState({});
   let temp = { ...errors };
-  console.log(props.patientObj);
+  console.log("data1", props.patientObj);
   const patientID =
     props.patientObj && props.patientObj.personResponseDto
       ? props.patientObj.personResponseDto.id
@@ -1018,8 +1018,7 @@ const HivTestResult = (props) => {
                   {confirmatoryTest.result === "No" &&
                     tieBreakerTest.result === "No" &&
                     (initialTest1.result === "Yes" ||
-                      initialTest1.result === "Yes" ||
-                      initialTest1.result === "") && (
+                      initialTest1.result !== "") && (
                       <>
                         <b> Result : </b>
                         <LabelRibbon color="green">Non Reactive</LabelRibbon>
@@ -1169,8 +1168,7 @@ const HivTestResult = (props) => {
                   {confirmatoryTest2.result2 === "No" &&
                     tieBreakerTest2.result2 === "No" &&
                     (initialTest12.result2 === "Yes" ||
-                      initialTest12.result2 === "Yes" ||
-                      initialTest12.result2 === "") && (
+                      initialTest12.result2 !== "") && (
                       <>
                         <b>Final Result : </b>
                         <LabelRibbon color="green">Negative</LabelRibbon>
@@ -1290,7 +1288,7 @@ const HivTestResult = (props) => {
                     </div>
                   </>
                 )} */}
-              {initialTest1.result === "No" && (
+              {/* {initialTest1.result === "No" && (
                 <>
                   <div className="row">
                     <div className="form-group  col-md-4">
@@ -1343,7 +1341,7 @@ const HivTestResult = (props) => {
                       )}
                   </div>
                 </>
-              )}
+              )} */}
               {confirmatoryTest2.result2 === "No" &&
                 tieBreakerTest2.result2 === "No" && (
                   <>

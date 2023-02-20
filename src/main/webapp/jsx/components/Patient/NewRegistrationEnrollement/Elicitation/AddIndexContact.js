@@ -100,6 +100,8 @@ const AddIndexContact = (props) => {
     const [errors, setErrors] = useState({});
     const [stateUnitOptions, setStateUnitOptions]= useState([]);
     const [districtUnitOptions, setDistrictUnitOptions]= useState([]);
+    const [states, setStates] = useState([]);
+    const [provinces, setProvinces] = useState([]);
 
     let temp = { ...errors }
     const handleItemClick =(page, completedMenu)=>{
@@ -141,15 +143,65 @@ const AddIndexContact = (props) => {
             datePartnerCameForTesting: "",
             offeredIns:"",
             acceptedIns:"",
-            elicited: ""
+            elicited: "",
+            stateId: "",
+            lga:"",
         }
     )           
-    useEffect(() => { 
+    useEffect(() => {
+        getStates();
         Sex();
         NotificationContact();
         IndexTesting();
         Consent();
     }, []);
+
+    function getStateByCountryId(getCountryId) {
+            axios
+            .get(`${baseUrl}organisation-units/parent-organisation-units/${getCountryId}`,
+                { headers: {"Authorization" : `Bearer ${token}`} }
+            )
+            .then((response) => {
+                setStates(response.data);
+            })
+            .catch((error) => {
+            //console.log(error);
+            });
+        }
+
+    function getProvincesId(getStateId) {
+            axios
+            .get(`${baseUrl}organisation-units/parent-organisation-units/${getStateId}`,
+                { headers: {"Authorization" : `Bearer ${token}`} }
+            )
+            .then((response) => {
+                setProvinces(response.data);
+            })
+            .catch((error) => {
+            //console.log(error);
+            });
+        }
+
+    const getProvinces = e => {
+        const stateId = e.target.value;
+        setObjValues({ ...objValues, stateId: e.target.value });
+        axios
+        .get(`${baseUrl}organisation-units/parent-organisation-units/${stateId}`,
+            { headers: {"Authorization" : `Bearer ${token}`} }
+        )
+        .then((response) => {
+            setProvinces(response.data);
+        })
+        .catch((error) => {
+        //console.log(error);
+        });
+    };
+
+    const getStates = () => {
+        getStateByCountryId('1');
+        setObjValues({ ...objValues, countryId: 1 });
+    };
+
     //Get list of Genders from 
     const Sex =()=>{
         axios
@@ -556,7 +608,7 @@ const AddIndexContact = (props) => {
                                    </div>
                                    <div className="form-group  col-md-4">
                                        <FormGroup>
-                                           <Label>Sex *</Label>
+                                           <Label>Sex <span style={{ color:"red"}}> *</span></Label>
                                            <select
                                                className="form-control"
                                                name="sex"
@@ -574,10 +626,56 @@ const AddIndexContact = (props) => {
                                            </select>
                                            
                                        </FormGroup>
-                                   </div>                           
+                                   </div>
+                                   <div className="form-group  col-md-4">
+                                       <FormGroup>
+                                           <Label>State <span style={{ color:"red"}}> *</span></Label>
+                                           <select
+                                               className="form-control"
+                                               name="state"
+                                               id="state"
+                                               onChange={getProvinces}
+                                               value={objValues.stateId}
+                                               style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                           >
+                                               <option value={""}></option>
+                                               {states.map((value) => (
+                                                   <option key={value.id} value={value.id}>
+                                                       {value.name}
+                                                   </option>
+                                               ))}
+                                           </select>
+                                           {errors.stateId !=="" ? (
+                                               <span className={classes.error}>{errors.stateId}</span>
+                                           ) : "" }
+                                       </FormGroup>
+                                   </div>
+                                   <div className="form-group  col-md-4">
+                                       <FormGroup>
+                                           <Label>LGA <span style={{ color:"red"}}> *</span></Label>
+                                           <select
+                                               className="form-control"
+                                               name="lga"
+                                               id="lga"
+                                               value={objValues.lga}
+                                               onChange={handleInputChange}
+                                               style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                           >
+                                               <option value={""}></option>
+                                               {provinces.map((value, index) => (
+                                                   <option key={index} value={value.id}>
+                                                       {value.name}
+                                                   </option>
+                                               ))}
+                                           </select>
+                                           {errors.lga !=="" ? (
+                                               <span className={classes.error}>{errors.lga}</span>
+                                           ) : "" }
+                                       </FormGroup>
+                                   </div>
                                    <div className="form-group mb-3 col-md-4">
                                        <FormGroup>
-                                       <Label for="">Address</Label>
+                                       <Label for="">Address <span style={{ color:"red"}}> *</span></Label>
                                        <Input
                                            type="text"
                                            name="address"
@@ -604,7 +702,7 @@ const AddIndexContact = (props) => {
        
                                    <div className="form-group  col-md-4">
                                        <FormGroup>
-                                           <Label>Relationship to Index Client *</Label>
+                                           <Label>Relationship to Index Client <span style={{ color:"red"}}> *</span></Label>
                                            <select
                                                className="form-control"
                                                name="relativeToIndexClient"
@@ -625,7 +723,7 @@ const AddIndexContact = (props) => {
                                    </div>
                                    <div className="form-group  col-md-4">
                                        <FormGroup>
-                                           <Label>Do you currently live with this partner? *</Label>
+                                           <Label>Do you currently live with this partner? <span style={{ color:"red"}}> *</span></Label>
                                            <select
                                                className="form-control"
                                                name="currentlyLiveWithPartner"
@@ -643,7 +741,7 @@ const AddIndexContact = (props) => {
                                    </div>
                                    <div className="form-group  col-md-4">
                                        <FormGroup>
-                                           <Label>As far as you know, has this partner ever tested positive for HIV *</Label>
+                                           <Label>As far as you know, has this partner ever tested positive for HIV <span style={{ color:"red"}}> *</span></Label>
                                            <select
                                                className="form-control"
                                                name="partnerTestedPositive"
@@ -664,7 +762,7 @@ const AddIndexContact = (props) => {
                                    </div>
                                    <div className="form-group  col-md-4">
                                        <FormGroup>
-                                           <Label>Has this partner ever hit, kick, slapped or otherwise physical hurt you? *</Label>
+                                           <Label>Has this partner ever hit, kick, slapped or otherwise physical hurt you? <span style={{ color:"red"}}> *</span></Label>
                                            <select
                                                className="form-control"
                                                name="physicalHurt"
@@ -685,7 +783,7 @@ const AddIndexContact = (props) => {
                                    </div>
                                    <div className="form-group  col-md-4">
                                        <FormGroup>
-                                           <Label>Has this partner ever threatened to hurt you? *</Label>
+                                           <Label>Has this partner ever threatened to hurt you? <span style={{ color:"red"}}> *</span></Label>
                                            <select
                                                className="form-control"
                                                name="threatenToHurt"
@@ -707,7 +805,7 @@ const AddIndexContact = (props) => {
                                   
                                    <div className="form-group  col-md-4">
                                        <FormGroup>
-                                           <Label>Has this partner ever threatened to force you to do something sexually that made you uncomfortable ?  *</Label>
+                                           <Label>Has this partner ever threatened to force you to do something sexually that made you uncomfortable ? <span style={{ color:"red"}}> *</span></Label>
                                            <select
                                                className="form-control"
                                                name="sexuallyUncomfortable"
@@ -728,7 +826,7 @@ const AddIndexContact = (props) => {
                                    </div> 
                                    <div className="form-group  col-md-4">
                                        <FormGroup>
-                                           <Label>Notification Method selected*</Label>
+                                           <Label>Notification Method selected <span style={{ color:"red"}}> *</span></Label>
                                            <select
                                                className="form-control"
                                                name="notificationMethod"

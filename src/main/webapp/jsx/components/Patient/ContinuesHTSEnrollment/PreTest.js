@@ -17,8 +17,6 @@ import {Label as LabelRibbon, Button, Message} from 'semantic-ui-react'
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
 
-
-
 const useStyles = makeStyles((theme) => ({
     card: {
         margin: theme.spacing(20),
@@ -85,7 +83,6 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-
 const BasicInfo = (props) => {
     const classes = useStyles();
     const patientID= props.patientObj && props.patientObj.personResponseDto ? props.patientObj.personResponseDto.id : "";
@@ -94,6 +91,7 @@ const BasicInfo = (props) => {
     const [saving, setSaving] = useState(false);
     const [errors, setErrors] = useState({});
     let temp = { ...errors }
+    console.log("data1", props.patientObj)
     const [riskAssessmentPartner, setRiskAssessmentPartner]= useState(
         {
             sexPartnerHivPositive:"",

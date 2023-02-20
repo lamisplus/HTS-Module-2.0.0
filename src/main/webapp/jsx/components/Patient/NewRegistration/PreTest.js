@@ -18,8 +18,6 @@ import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
 //import * as moment from 'moment';
 
-
-
 const useStyles = makeStyles((theme) => ({
     card: {
         margin: theme.spacing(20),
@@ -86,7 +84,6 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-
 const BasicInfo = (props) => {
     const classes = useStyles();
     //let patientAge=""
@@ -95,6 +92,7 @@ const BasicInfo = (props) => {
     const [saving, setSaving] = useState(false);
     const [errors, setErrors] = useState({});
     let temp = { ...errors }
+    console.log("data2", props.patientObj)
     // const calculate_age = dob => {
     //     var today = new Date();
     //     var dateParts = dob.split("-");

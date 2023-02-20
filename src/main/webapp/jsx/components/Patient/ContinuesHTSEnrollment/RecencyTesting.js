@@ -243,8 +243,6 @@ const Recency = (props) => {
             
     }
 
-
-
     return (
         <>
             <Card className={classes.root}>
@@ -404,10 +402,10 @@ const Recency = (props) => {
                                     
                                 </FormGroup>
                             </div>
-                            {recency.rencencyInterpretation==='Recent' && (
+                            {recency.rencencyInterpretation==='RTRI Recent' && (
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Has viral load request been made? </Label>
+                                    <Label>Has Viral Load been ordered? </Label>
                                     <select
                                         className="form-control"
                                         name="hasViralLoad"

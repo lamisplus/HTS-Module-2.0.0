@@ -434,18 +434,18 @@ const BasicInfo = (props) => {
     //checkClientCode
     const checkClientCode = e => { 
 
-            async function getIndexClientCode() {
-                const indexClientCode=objValues.clientCode
-                const response = await axios.get(`${baseUrl}hts/client/${indexClientCode}`,
-                        { headers: {"Authorization" : `Bearer ${token}`, 'Content-Type': 'text/plain'} }
-                    );
-                if(response.data!=='Record Not Found'){
-                    setClientCodeCheck("Client code already exist")
-                }else{
-                    setClientCodeCheck("")
-                }
+        async function getIndexClientCode() {
+            const indexClientCode=objValues.clientCode
+            const response = await axios.get(`${baseUrl}hts/client/${indexClientCode}`,
+                    { headers: {"Authorization" : `Bearer ${token}`, 'Content-Type': 'text/plain'} }
+                );
+            if(response.data!=='Record Not Found'){
+                setClientCodeCheck("Client code already exist")
+            }else{
+                setClientCodeCheck("")
             }
-            getIndexClientCode();
+        }
+        getIndexClientCode();
                               
     }
     //Date of Birth and Age handle 

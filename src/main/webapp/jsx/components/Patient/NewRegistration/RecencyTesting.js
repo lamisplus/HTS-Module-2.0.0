@@ -90,6 +90,7 @@ const Recency = (props) => {
     const [errors, setErrors] = useState({});
     const [hivTestDate, setHivTestDate] = useState("");
     let temp = { ...errors }
+
     const handleItemClick =(page, completedMenu)=>{
         props.handleItemClick(page)
         if(props.completed.includes(completedMenu)) {
@@ -165,6 +166,7 @@ const Recency = (props) => {
             setRecency ({...recency,  ['rencencyInterpretation']: ''});
         }
     },[recency.longTermLine,recency.verififcationLine, recency.controlLine, props.patientObj]);
+
     //console.log(props.patientObj)
     const handleInputChangeRecency = e => { 
         setErrors({...temp, [e.target.name]:""})        
@@ -402,10 +404,10 @@ const Recency = (props) => {
                                     
                                 </FormGroup>
                             </div>
-                            {recency.rencencyInterpretation==='Recent' && (
+                              {recency.rencencyInterpretation==='RTRI Recent' && (
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Has viral load request been made? </Label>
+                                    <Label>Has Viral Load been ordered? </Label>
                                     <select
                                         className="form-control"
                                         name="hasViralLoad"

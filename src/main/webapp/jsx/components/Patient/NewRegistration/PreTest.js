@@ -122,7 +122,7 @@ const BasicInfo = (props) => {
     )
     useEffect(() => { 
         //console.log(props.patientObj)
-        console.log(props.extra.riskAssessment)
+        console.log("pre test new", props.patientObj)
         if(props.patientObj){
             setKnowledgeAssessment(props.patientObj.knowledgeAssessment  && props.patientObj.knowledgeAssessment!==null ? props.patientObj.knowledgeAssessment : {})
             
@@ -184,6 +184,9 @@ const BasicInfo = (props) => {
             bloodTransfusion:"",
             consistentWeightFeverNightCough:"",
             soldPaidVaginalSex:"",
+            consistentWeightFeverNightCough: "",
+            soldPaidVaginalSex: "",
+            haveCondomBurst: ""
         }
     )
 

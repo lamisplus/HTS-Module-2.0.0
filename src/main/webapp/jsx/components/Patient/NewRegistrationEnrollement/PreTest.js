@@ -143,6 +143,9 @@ const BasicInfo = (props) => {
             bloodTransfusion:"",
             consistentWeightFeverNightCough:"",
             soldPaidVaginalSex:"",
+            consistentWeightFeverNightCough: "",
+            soldPaidVaginalSex: "",
+            haveCondomBurst: ""
         }
     )
     const handleInputChangeRiskAssessment = e => { 

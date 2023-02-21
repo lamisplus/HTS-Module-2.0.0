@@ -146,6 +146,8 @@ const AddIndexContact = (props) => {
             elicited: "",
             stateId: "",
             lga:"",
+            dateTested: "",
+            currentHivStatus: ""
         }
     )           
     useEffect(() => {
@@ -342,6 +344,8 @@ const AddIndexContact = (props) => {
         if(validate()) { 
             setSaving(true)      
             objValues.isDateOfBirthEstimated=objValues.isDateOfBirthEstimated==true ? 1 : 0
+
+            //console.log("obj", objValues)
             axios.post(`${baseUrl}index-elicitation`,objValues,
             { headers: {"Authorization" : `Bearer ${token}`}},
             
@@ -865,6 +869,42 @@ const AddIndexContact = (props) => {
                                        ) : "" }
                                        </FormGroup>
                                    </div>
+
+                                   <div className="form-group mb-3 col-md-4">
+                                      <FormGroup>
+                                      <Label for="">Date Tested? <span style={{ color:"red"}}> *</span></Label>
+                                      <Input
+                                          type="date"
+                                          name="dateTested"
+                                          id="dateTested"
+                                          value={objValues.dateTested}
+                                          onChange={handleInputChange}
+                                          max= {moment(new Date()).format("YYYY-MM-DD") }
+                                          style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
+
+                                      />
+
+                                      </FormGroup>
+                                  </div>
+
+                                   <div className="form-group  col-md-4">
+                                     <FormGroup>
+                                         <Label>HIV Status of Index Client <span style={{ color:"red"}}> *</span></Label>
+                                         <select
+                                             className="form-control"
+                                             name="currentHivStatus"
+                                             id="currentHivStatus"
+                                             value={objValues.currentHivStatus}
+                                             onChange={handleInputChange}
+                                             style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                         >
+                                             <option value={""}></option>
+                                             <option value="Negative">Negative</option>
+                                             <option value="Positive">Positive</option>
+                                         </select>
+
+                                     </FormGroup>
+                                 </div>
                                </>
                             )}
                      

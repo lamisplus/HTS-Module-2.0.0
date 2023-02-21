@@ -98,6 +98,8 @@ const AddIndexContact = (props) => {
     const [consent, setConsent]= useState([]);
     const [hivTestDate, setHivTestDate] = useState("");
     const [errors, setErrors] = useState({});
+    const [states, setStates] = useState([]);
+    const [provinces, setProvinces] = useState([]);
     let temp = { ...errors }
     const [objValuesIndex, setObjValuesIndex]= useState( {
         htsClientId: null,
@@ -127,12 +129,17 @@ const AddIndexContact = (props) => {
             datePartnerCameForTesting: "",
             offeredIns:"",
             acceptedIns:"",
-            elicited: ""
+            elicited: "",
+            stateId: "",
+            lga:"",
+            dateTested: "",
+            currentHivStatus: ""
         }
     )
            
     useEffect(() => { 
         Sex();
+        getStates();
         NotificationContact();
         IndexTesting();
         Consent();
@@ -145,6 +152,52 @@ const AddIndexContact = (props) => {
             }
         }
     }, [props.patientObj]);
+
+    function getStateByCountryId(getCountryId) {
+                    axios
+                    .get(`${baseUrl}organisation-units/parent-organisation-units/${getCountryId}`,
+                        { headers: {"Authorization" : `Bearer ${token}`} }
+                    )
+                    .then((response) => {
+                        setStates(response.data);
+                    })
+                    .catch((error) => {
+                    //console.log(error);
+                    });
+                }
+
+    function getProvincesId(getStateId) {
+            axios
+            .get(`${baseUrl}organisation-units/parent-organisation-units/${getStateId}`,
+                { headers: {"Authorization" : `Bearer ${token}`} }
+            )
+            .then((response) => {
+                setProvinces(response.data);
+            })
+            .catch((error) => {
+            //console.log(error);
+            });
+        }
+
+    const getProvinces = e => {
+        const stateId = e.target.value;
+        setObjValues({ ...objValues, stateId: e.target.value });
+        axios
+        .get(`${baseUrl}organisation-units/parent-organisation-units/${stateId}`,
+            { headers: {"Authorization" : `Bearer ${token}`} }
+        )
+        .then((response) => {
+            setProvinces(response.data);
+        })
+        .catch((error) => {
+        //console.log(error);
+        });
+    };
+
+    const getStates = () => {
+        getStateByCountryId('1');
+        setObjValues({ ...objValues, countryId: 1 });
+    };
 
     //Get list of Genders from 
     const Sex =()=>{
@@ -582,7 +635,53 @@ const AddIndexContact = (props) => {
                                            </select>
                                            
                                        </FormGroup>
-                                   </div>                           
+                                   </div>
+                                   <div className="form-group  col-md-4">
+                                     <FormGroup>
+                                         <Label>State <span style={{ color:"red"}}> *</span></Label>
+                                         <select
+                                             className="form-control"
+                                             name="state"
+                                             id="state"
+                                             onChange={getProvinces}
+                                             value={objValues.stateId}
+                                             style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                         >
+                                             <option value={""}></option>
+                                             {states.map((value) => (
+                                                 <option key={value.id} value={value.id}>
+                                                     {value.name}
+                                                 </option>
+                                             ))}
+                                         </select>
+                                         {errors.stateId !=="" ? (
+                                             <span className={classes.error}>{errors.stateId}</span>
+                                         ) : "" }
+                                     </FormGroup>
+                                 </div>
+                                 <div className="form-group  col-md-4">
+                                     <FormGroup>
+                                         <Label>LGA <span style={{ color:"red"}}> *</span></Label>
+                                         <select
+                                             className="form-control"
+                                             name="lga"
+                                             id="lga"
+                                             value={objValues.lga}
+                                             onChange={handleInputChange}
+                                             style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                         >
+                                             <option value={""}></option>
+                                             {provinces.map((value, index) => (
+                                                 <option key={index} value={value.id}>
+                                                     {value.name}
+                                                 </option>
+                                             ))}
+                                         </select>
+                                         {errors.lga !=="" ? (
+                                             <span className={classes.error}>{errors.lga}</span>
+                                         ) : "" }
+                                     </FormGroup>
+                                 </div>
                                    <div className="form-group mb-3 col-md-4">
                                        <FormGroup>
                                        <Label for="">Address</Label>
@@ -774,6 +873,43 @@ const AddIndexContact = (props) => {
                                            <span className={classes.error}>{errors.datePartnerComeForTesting}</span>
                                        ) : "" }
                                        </FormGroup>
+                                   </div>
+
+
+                                   <div className="form-group mb-3 col-md-4">
+                                      <FormGroup>
+                                      <Label for="">Date Tested? <span style={{ color:"red"}}> *</span></Label>
+                                      <Input
+                                          type="date"
+                                          name="dateTested"
+                                          id="dateTested"
+                                          value={objValues.dateTested}
+                                          onChange={handleInputChange}
+                                          max= {moment(new Date()).format("YYYY-MM-DD") }
+                                          style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
+
+                                      />
+
+                                      </FormGroup>
+                                  </div>
+
+                                   <div className="form-group  col-md-4">
+                                     <FormGroup>
+                                         <Label>HIV Status of Index Client <span style={{ color:"red"}}> *</span></Label>
+                                         <select
+                                             className="form-control"
+                                             name="currentHivStatus"
+                                             id="currentHivStatus"
+                                             value={objValues.currentHivStatus}
+                                             onChange={handleInputChange}
+                                             style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                         >
+                                             <option value={""}></option>
+                                             <option value="Negative">Negative</option>
+                                             <option value="Positive">Positive</option>
+                                         </select>
+
+                                     </FormGroup>
                                    </div>
                                </>
                             )}

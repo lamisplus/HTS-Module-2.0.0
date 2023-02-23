@@ -96,7 +96,7 @@ const useStyles = makeStyles((theme) => ({
 const BasicInfo = (props) => {
     const classes = useStyles();
     const history = useHistory();
-    //console.log(props.activePage)
+    console.log( "enr", props.activePage)
     const [errors, setErrors] = useState({});
     const [saving, setSaving] = useState(false);
     //const [hideNumChild, setHideNumChild] = useState(false);
@@ -314,7 +314,7 @@ const BasicInfo = (props) => {
             breastFeeding:objValues.breastFeeding,
             indexClientCode:objValues.indexClientCode,
             pregnant:objValues.pregnant,
-            relationshipWithIndexClient:objValues.relationshipWithIndexClient
+            relationWithIndexClient:objValues.relationshipWithIndexClient
             }
 
             if(validate()){

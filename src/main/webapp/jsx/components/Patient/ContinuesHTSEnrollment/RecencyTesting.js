@@ -83,6 +83,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Recency = (props) => {
+    //console.log("data1", props.patientObj)
     const classes = useStyles();
     const patientID= props.patientObj && props.patientObj.personResponseDto ? props.patientObj.personResponseDto.id : "";
     const clientId = props.patientObj && props.patientObj ? props.patientObj.id : "";
@@ -107,30 +108,53 @@ const Recency = (props) => {
     )
     const [recency, setRecency]= useState(
         {
-            optOutRTRI:"", 
-            optOutRTRITestName:"", 
-            optOutRTRITestDate:"", 
-            rencencyId:"",  
-            controlLine:"",  
-            verififcationLine:"", 
-            longTermLine:"",  
-            rencencyInterpretation:"", 
-            hasViralLoad:"", 
-            sampleCollectedDate:"",
-            sampleReferanceNumber:"",
-            dateSampleSentToPCRLab:"",
-            sampleTestDate:"",
-            sampleType:"", 
-            receivingPcrLab:"", 
-            viralLoadResultClassification:"",
-            recencyResult:"", 
-            finalRecencyResult:"",
+            optOutRTRI: props.patientObj && props.patientObj.recency !== null ?  props.patientObj.recency.optOutRTRI : "" ,
+            optOutRTRITestName: props.patientObj && props.patientObj.recency !== null ?  props.patientObj.recency.optOutRTRITestName : "" ,
+            optOutRTRITestDate: props.patientObj && props.patientObj.recency !== null ?  props.patientObj.recency.optOutRTRITestDate : "" ,
+            rencencyId: props.patientObj && props.patientObj.recency !== null ?  props.patientObj.recency.rencencyId : "" ,
+            controlLine: props.patientObj && props.patientObj.recency !== null ?  props.patientObj.recency.controlLine : "" ,
+            verififcationLine: props.patientObj && props.patientObj.recency !== null ?  props.patientObj.recency.verififcationLine : "" ,
+            longTermLine: props.patientObj && props.patientObj.recency !== null ?  props.patientObj.recency.longTermLine : "" ,
+            rencencyInterpretation: props.patientObj && props.patientObj.recency !== null ?  props.patientObj.recency.rencencyInterpretation : "",
+            hasViralLoad: props.patientObj && props.patientObj.recency !== null ?  props.patientObj.recency.hasViralLoad : "",
+            sampleCollectedDate: props.patientObj && props.patientObj.recency !== null ?  props.patientObj.recency.sampleCollectedDate : "",
+            sampleReferanceNumber: props.patientObj && props.patientObj.recency !== null ?  props.patientObj.recency.sampleReferanceNumber : "",
+            dateSampleSentToPCRLab: props.patientObj && props.patientObj.recency !== null ?  props.patientObj.recency.dateSampleSentToPCRLab : "",
+            sampleTestDate: props.patientObj && props.patientObj.recency !== null ?  props.patientObj.recency.sampleTestDate : "",
+            sampleType: props.patientObj && props.patientObj.recency !== null ?  props.patientObj.recency.sampleType : "",
+            receivingPcrLab: props.patientObj && props.patientObj.recency !== null ?  props.patientObj.recency.receivingPcrLab : "",
+            viralLoadResultClassification: props.patientObj && props.patientObj.recency !== null ?  props.patientObj.recency.viralLoadResultClassification : "",
+            recencyResult: props.patientObj && props.patientObj.recency !== null ?  props.patientObj.recency.recencyResult : "",
+            finalRecencyResult: props.patientObj && props.patientObj.recency !== null ?  props.patientObj.recency.finalRecencyResult : "",
         }
     )
     
     useEffect(() => { 
-        if(props.patientObj){
-            setRecency(props.patientObj && props.patientObj.recency!==null ? props.patientObj.recency : {})
+        if(props.patientObj && props.patientObj.recency!==null){
+            console.log(props.patientObj.recency)
+            setRecency(props.patientObj.recency)
+            if (recency.optOutRTRI === "true") {
+                setRecency( {
+                   optOutRTRI: props.patientObj && props.patientObj.recency !== null ?  props.patientObj.recency.optOutRTRI : "" ,
+                   optOutRTRITestName: "" ,
+                   optOutRTRITestDate: "" ,
+                   rencencyId: "" ,
+                   controlLine: "" ,
+                   verififcationLine: "" ,
+                   longTermLine: "" ,
+                   rencencyInterpretation: "",
+                   hasViralLoad: "",
+                   sampleCollectedDate: "",
+                   sampleReferanceNumber: "",
+                   dateSampleSentToPCRLab: "",
+                   sampleTestDate: "",
+                   sampleType: "",
+                   receivingPcrLab: "",
+                   viralLoadResultClassification: "",
+                   recencyResult: "",
+                   finalRecencyResult: "",
+               })
+            }
             if(props.patientObj.confirmatoryTest && props.patientObj.confirmatoryTest.date!=='' ){
                 setHivTestDate(props.patientObj.confirmatoryTest.date)
             }else if(props.patientObj.confirmatoryTest2 && props.patientObj.confirmatoryTest2.date2!=='' ){
@@ -147,21 +171,17 @@ const Recency = (props) => {
             recency.rencencyInterpretation="RTRI Recent"
             setRecency ({...recency,  ['rencencyInterpretation']: 'RTRI Recent'});
             //setRecency ({...recency,  ['hasViralLoad']: 'true'});
-            
         }else if(recency.longTermLine==='false' && recency.verififcationLine==='false' && recency.controlLine==='true'){
             recency.rencencyInterpretation="Negative"
             setRecency ({...recency,  ['rencencyInterpretation']: 'Negative'});
-            
         }else if(recency.longTermLine==='true' && recency.verififcationLine==='true' && recency.controlLine==='false'){
             recency.rencencyInterpretation="Invalid"
             setRecency ({...recency,  ['rencencyInterpretation']: 'Invalid'});
-           
         }else if(recency.longTermLine==='true' && recency.verififcationLine==='false' && recency.controlLine==='true'){
             recency.rencencyInterpretation="Invalid"
             setRecency ({...recency,  ['rencencyInterpretation']: 'Invalid'});
             
         }else{
-            
             setRecency ({...recency,  ['rencencyInterpretation']: ''});
         }
     },[recency.longTermLine,recency.verififcationLine, recency.controlLine, props.patientObj]);

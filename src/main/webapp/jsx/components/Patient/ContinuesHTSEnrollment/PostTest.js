@@ -91,7 +91,7 @@ const PostTest = (props) => {
     const clientId = props.patientObj && props.patientObj ? props.patientObj.id : "";
     const [saving, setSaving] = useState(false);
     
-    console.log("data3", props.patientObj)
+    //console.log("data3", props.patientObj)
     ///const [errors, setErrors] = useState({});
     const [objValues, setObjValues]= useState(
         {

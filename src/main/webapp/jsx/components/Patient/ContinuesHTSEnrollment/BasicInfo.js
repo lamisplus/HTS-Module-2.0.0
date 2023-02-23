@@ -98,7 +98,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 const BasicInfo = (props) => {
-    //console.log(props)
+    //console.log("basic", props.patientObj)
     const classes = useStyles();
     const history = useHistory();
     const [errors, setErrors] = useState({});
@@ -119,8 +119,8 @@ const BasicInfo = (props) => {
     const [objValues, setObjValues]= useState(
         {
             active: true,
-            personId: props.patientObject.personId,
-            clientCode: props.patientObject && props.patientObject.clientCode ? props.patientObject.clientCode :"",  
+            personId: props.patientObj.personId,
+            clientCode: props.patientObj && props.patientObj.clientCode ? props.patientObj.clientCode :"",
             breastFeeding:props.patientObj && props.patientObj.breastFeeding ? props.patientObj.breastFeeding :"",
             dateVisit: props.patientObj && props.patientObj.dateVisit ? props.patientObj.dateVisit :"",
             firstTimeVisit: props.patientObj && props.patientObj.firstTimeVisit ? props.patientObj.firstTimeVisit :"",
@@ -147,6 +147,7 @@ const BasicInfo = (props) => {
         CounselingType();
         PregnancyStatus()
         IndexTesting();
+        setObjValues(props.patientObj)
     }, [ props.patientObj]);
     //Get list of KP
     const KP =()=>{
@@ -223,7 +224,7 @@ const BasicInfo = (props) => {
                 { headers: {"Authorization" : `Bearer ${token}`} }
             )
             .then((response) => {
-                //console.log(response.data);
+
                 setSourceReferral(response.data);
             })
             .catch((error) => {
@@ -363,7 +364,6 @@ const BasicInfo = (props) => {
             }
     }
 
-
     return (
         <>  
         
@@ -423,6 +423,7 @@ const BasicInfo = (props) => {
                                         name="referredFrom"
                                         id="referredFrom"
                                         onChange={handleInputChange}
+                                        value={objValues.referredFrom}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
                                         <option value={""}></option>

@@ -115,34 +115,32 @@ const BasicInfo = (props) => {
             clientPregnant:"",
             clientInformHivTransRoutes:"",
             clientInformRiskkHivTrans:"",
-            clientInformPreventingsHivTrans:"", 
+            clientInformPreventingsHivTrans:"",
             clientInformPossibleTestResult:"",
             informConsentHivTest:"",
         }
     )
-    useEffect(() => { 
-        //console.log(props.patientObj)
-        console.log("pre test new", props.patientObj)
+    useEffect(() => {
         if(props.patientObj){
             setKnowledgeAssessment(props.patientObj.knowledgeAssessment  && props.patientObj.knowledgeAssessment!==null ? props.patientObj.knowledgeAssessment : {})
-            
-            setRiskAssessmentPartner(props.patientObj.riskAssessmentPartner && props.patientObj.riskAssessmentPartner!==null ? props.patientObj.riskAssessmentPartner : {})
+            setRiskAssessment(props.patientObj.riskAssessment  && props.patientObj.riskAssessment!==null ? props.patientObj.riskAssessment : {})
+            setRiskAssessmentPartner(props.patientObj.sexPartnerRiskAssessment && props.patientObj.sexPartnerRiskAssessment!==null ? props.patientObj.sexPartnerRiskAssessment : {})
             setStiScreening(props.patientObj.stiScreening  && props.patientObj.stiScreening!==null? props.patientObj.stiScreening : {})
             setTbScreening(props.patientObj.tbScreening  && props.patientObj.tbScreening!==null? props.patientObj.tbScreening : {})
             //patientAge=calculate_age(moment(props.patientObj.personResponseDto.dateOfBirth).format("DD-MM-YYYY"))
-            if(props.extra.riskAssessment){
-                setRiskAssessment(props.extra.riskAssessment  && props.extra.riskAssessment!==null ? props.extra.riskAssessment : {})
-                props.extra.riskAssessment.whatWasTheResult!=="" && props.extra.riskAssessment.whatWasTheResult==='Positive' ? knowledgeAssessment.previousTestedHIVNegative='false' :
+            //console.log(props.patientObj.riskStratificationResponseDto.riskAssessment)
+            if(props.patientObj.riskStratificationResponseDto && Object.keys(props.patientObj.riskStratificationResponseDto.riskAssessment).length !== 0 && props.patientObj.riskAssessment===null){
+                //setRiskAssessment({...riskAssessment, ...props.patientObj.riskStratificationResponseDto.riskAssessment})
+                props.patientObj.riskStratificationResponseDto.riskAssessment.whatWasTheResult!=="" && props.patientObj.riskStratificationResponseDto.riskAssessment.whatWasTheResult==='Positive' ? knowledgeAssessment.previousTestedHIVNegative='false' :
                 knowledgeAssessment.previousTestedHIVNegative='true'
             }else{
-                setRiskAssessment(props.patientObj.riskAssessment  && props.patientObj.riskAssessment!==null ? props.patientObj.riskAssessment : {})
+                setRiskAssessment({...riskAssessment, ...props.patientObj.riskAssessment})
             }
             knowledgeAssessment.clientPregnant=props.patientObj.pregnant===73 ? "true" :"" ;
-            
         }
     }, [props.patientObj]);
 
-    const handleItemClick =(page, completedMenu)=>{        
+    const handleItemClick =(page, completedMenu)=>{
         if(props.completed.includes(completedMenu)) {
         }else{
             props.setCompleted([...props.completed, completedMenu])
@@ -161,20 +159,20 @@ const BasicInfo = (props) => {
             }
     )
 
-    const handleInputChangeKnowledgeAssessment = e => { 
+    const handleInputChangeKnowledgeAssessment = e => {
         //setErrors({...temp, [e.target.name]:""})
-        
-        setKnowledgeAssessment ({...knowledgeAssessment,  [e.target.name]: e.target.value}); 
-          
+
+        setKnowledgeAssessment ({...knowledgeAssessment,  [e.target.name]: e.target.value});
+
     }
     const [riskAssessment, setRiskAssessment]= useState(
         {
             everHadSexualIntercourse:"",
             bloodtransInlastThreeMonths:"",
             uprotectedSexWithCasualLastThreeMonths:"",
-            uprotectedSexWithRegularPartnerLastThreeMonths:"", 
-            unprotectedVaginalSex:"",  
-            uprotectedAnalSex:"",   
+            uprotectedSexWithRegularPartnerLastThreeMonths:"",
+            unprotectedVaginalSex:"",
+            uprotectedAnalSex:"",
             stiLastThreeMonths:"",
             sexUnderInfluence :"",
             moreThanOneSexPartnerLastThreeMonths:"",
@@ -190,10 +188,10 @@ const BasicInfo = (props) => {
         }
     )
 
-    const handleInputChangeRiskAssessment = e => { 
-        //setErrors({...temp, [e.target.name]:""}) 
-        setRiskAssessment ({...riskAssessment,  [e.target.name]: e.target.value}); 
-                          
+    const handleInputChangeRiskAssessment = e => {
+        //setErrors({...temp, [e.target.name]:""})
+        setRiskAssessment ({...riskAssessment,  [e.target.name]: e.target.value});
+
     }
     // Getting the number count of riskAssessment True
     const actualRiskCountTrue=Object.values(riskAssessment)
@@ -204,12 +202,12 @@ const BasicInfo = (props) => {
             newDiagnosedHivlastThreeMonths:"",
             currentlyArvForPmtct :"",
             knowHivPositiveOnArv :"",
-            knowHivPositiveAfterLostToFollowUp:"", 
+            knowHivPositiveAfterLostToFollowUp:"",
             uprotectedAnalSex  :"",
         }
     )
-    const handleInputChangeRiskAssessmentPartner = e => { 
-        //setErrors({...temp, [e.target.name]:""}) 
+    const handleInputChangeRiskAssessmentPartner = e => {
+        //setErrors({...temp, [e.target.name]:""})
         setRiskAssessmentPartner ({...riskAssessmentPartner,  [e.target.name]: e.target.value});
         // if(riskAssessmentPartner.sexPartnerHivPositive==='false' || (e.target.name==='sexPartnerHivPositive' &&  e.target.value==='false')){
         //     setRiskAssessmentPartner ({
@@ -217,10 +215,10 @@ const BasicInfo = (props) => {
         //         newDiagnosedHivlastThreeMonths:"",
         //         currentlyArvForPmtct :"",
         //         knowHivPositiveOnArv :"",
-        //         knowHivPositiveAfterLostToFollowUp:"", 
+        //         knowHivPositiveAfterLostToFollowUp:"",
         //         uprotectedAnalSex  :"",
         //     })
-        // }                     
+        // }
     }
     // Getting the number count of sexPartRiskCount True
     const actualSexPartRiskCountTrue=Object.values(riskAssessmentPartner)
@@ -230,15 +228,15 @@ const BasicInfo = (props) => {
             vaginalDischarge:"",
             lowerAbdominalPains :"",
             urethralDischarge :"",
-            complaintsOfScrotal:"", 
+            complaintsOfScrotal:"",
             complaintsGenitalSore  :"",
-                
+
         }
     )
-    const handleInputChangeStiScreening = e => { 
-        //setErrors({...temp, [e.target.name]:""}) 
-        setStiScreening ({...stiScreening,  [e.target.name]: e.target.value});   
-                
+    const handleInputChangeStiScreening = e => {
+        //setErrors({...temp, [e.target.name]:""})
+        setStiScreening ({...stiScreening,  [e.target.name]: e.target.value});
+
     }
     // Getting the number count of STI True
     const actualStiTrue=Object.values(stiScreening)
@@ -247,14 +245,14 @@ const BasicInfo = (props) => {
         {
             currentCough:"",
             weightLoss:"",
-            lymphadenopathy:"", 
-            fever:"",  
+            lymphadenopathy:"",
+            fever:"",
             nightSweats:"",
         }
     )
-    const handleInputChangeTbScreening = e => { 
-        //setErrors({...temp, [e.target.name]:""}) 
-        setTbScreening ({...tbScreening,  [e.target.name]: e.target.value});         
+    const handleInputChangeTbScreening = e => {
+        //setErrors({...temp, [e.target.name]:""})
+        setTbScreening ({...tbScreening,  [e.target.name]: e.target.value});
     }
     // Getting the number count of TB True
     const actualTBTrue=Object.values(tbScreening)
@@ -269,7 +267,7 @@ const BasicInfo = (props) => {
         //    temp.clientInformRiskkHivTrans = knowledgeAssessment.clientInformRiskkHivTrans ? "" : "This field is required."
         //    temp.clientInformPreventingsHivTrans = knowledgeAssessment.clientInformPreventingsHivTrans ? "" : "This field is required."
         //    temp.clientInformPossibleTestResult = knowledgeAssessment.clientInformPossibleTestResult ? "" : "This field is required."
-        //    temp.informConsentHivTest = knowledgeAssessment.informConsentHivTest ? "" : "This field is required."  
+        //    temp.informConsentHivTest = knowledgeAssessment.informConsentHivTest ? "" : "This field is required."
 
         //     temp.currentCough = tbScreening.currentCough ? "" : "This field is required."
         //     temp.weightLoss = tbScreening.weightLoss ? "" : "This field is required."
@@ -282,7 +280,7 @@ const BasicInfo = (props) => {
             // props.patientObj.personResponseDto && props.patientObj.personResponseDto.sex==='Male' && (temp.urethralDischarge = stiScreening.urethralDischarge ? "" : "This field is required.")
             // props.patientObj.personResponseDto && props.patientObj.personResponseDto.sex==='Male' && (temp.complaintsOfScrotal = stiScreening.complaintsOfScrotal ? "" : "This field is required.")
             // props.patientObj.personResponseDto && props.patientObj.personResponseDto.sex==='Male' && (temp.complaintsGenitalSore = stiScreening.complaintsGenitalSore ? "" : "This field is required.")
- 
+
             props.patientObj.targetGroup==="TARGET_GROUP_GEN_POP" && (temp.everHadSexualIntercourse = riskAssessment.everHadSexualIntercourse ? "" : "This field is required.")
             props.patientObj.targetGroup==="TARGET_GROUP_GEN_POP" && (temp.bloodtransInlastThreeMonths = riskAssessment.bloodtransInlastThreeMonths ? "" : "This field is required.")
             //props.patientObj.targetGroup==="TARGET_GROUP_GEN_POP" && (temp.uprotectedSexWithCasualLastThreeMonths = riskAssessment.uprotectedSexWithCasualLastThreeMonths ? "" : "This field is required.")
@@ -293,8 +291,8 @@ const BasicInfo = (props) => {
             //props.patientObj.targetGroup==="TARGET_GROUP_GEN_POP" && (temp.sexUnderInfluence = riskAssessment.sexUnderInfluence ? "" : "This field is required.")
             //props.patientObj.targetGroup==="TARGET_GROUP_GEN_POP" && (temp.uprotectedSexWithCasualLastThreeMonths = riskAssessment.uprotectedSexWithCasualLastThreeMonths ? "" : "This field is required.")
            // props.patientObj.targetGroup==="TARGET_GROUP_GEN_POP" && (temp.moreThanOneSexPartnerLastThreeMonths = riskAssessment.moreThanOneSexPartnerLastThreeMonths ? "" : "This field is required.")
-            
-            
+
+
             props.patientObj.targetGroup!=="TARGET_GROUP_GEN_POP" && (temp.experiencePain = riskAssessment.experiencePain ? "" : "This field is required.")
 
             props.patientObj.targetGroup!=="TARGET_GROUP_GEN_POP" && (temp.haveSexWithoutCondom = riskAssessment.haveSexWithoutCondom ? "" : "This field is required.")
@@ -309,7 +307,7 @@ const BasicInfo = (props) => {
             // {riskAssessmentPartner.sexPartnerHivPositive==='true' && ( temp.knowHivPositiveOnArv = tbScreening.knowHivPositiveOnArv ? "" : "This field is required.")}
             // {riskAssessmentPartner.sexPartnerHivPositive==='true' && (temp.knowHivPositiveAfterLostToFollowUp = tbScreening.knowHivPositiveAfterLostToFollowUp ? "" : "This field is required.")}
             // {riskAssessmentPartner.sexPartnerHivPositive==='true' && (temp.uprotectedAnalSex = tbScreening.uprotectedAnalSex ? "" : "This field is required.")}
-            
+
             setErrors({ ...temp })
         return Object.values(temp).every(x => x === "")
     }
@@ -345,9 +343,9 @@ const BasicInfo = (props) => {
             });
         }else{
             toast.error("All fields are required",  {position: toast.POSITION.BOTTOM_CENTER});
-                
+
         }
-            
+
     }
 
 
@@ -355,13 +353,13 @@ const BasicInfo = (props) => {
         <>
             <Card className={classes.root}>
                 <CardBody>
-               
+
                 <h2>PRE TEST COUNSELING</h2>
                     <form >
                         <div className="row">
 
                         <div className="form-group  col-md-12 text-center pt-2 mb-4" style={{backgroundColor:'rgb(0,181,173)', width:'125%', height:'35px', color:'#fff', fontWeight:'bold'}} >Knowledge Assessment</div>
-                     
+
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Previously tested HIV negative <span style={{ color:"red"}}> *</span></Label>
@@ -376,7 +374,7 @@ const BasicInfo = (props) => {
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
                                         <option value="false">No</option>
-                                        
+
                                     </select>
                                     {errors.previousTestedHIVNegative !=="" ? (
                                     <span className={classes.error}>{errors.previousTestedHIVNegative}</span>
@@ -400,7 +398,7 @@ const BasicInfo = (props) => {
                                         <option value="1-3 Months">1-3 Months</option>
                                         <option value="4-6 Months">4-6 Months</option>
                                         <option value=">6 Months"> {">6"} Months</option>
-                                        <option value="Never"> Never</option> 
+                                        <option value="Never"> Never</option>
                                     </select>
                                     {errors.timeLastHIVNegativeTestResult !=="" ? (
                                     <span className={classes.error}>{errors.timeLastHIVNegativeTestResult}</span>
@@ -423,7 +421,7 @@ const BasicInfo = (props) => {
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
                                         <option value="false">No</option>
-                                        
+
                                     </select>
                                     {errors.clientPregnant !=="" ? (
                                     <span className={classes.error}>{errors.clientPregnant}</span>
@@ -445,7 +443,7 @@ const BasicInfo = (props) => {
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
                                         <option value="false">No</option>
-                                        
+
                                     </select>
                                     {errors.clientInformHivTransRoutes !=="" ? (
                                     <span className={classes.error}>{errors.clientInformHivTransRoutes}</span>
@@ -466,7 +464,7 @@ const BasicInfo = (props) => {
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
                                         <option value="false">No</option>
-                                        
+
                                     </select>
                                     {errors.clientInformRiskkHivTrans !=="" ? (
                                     <span className={classes.error}>{errors.clientInformRiskkHivTrans}</span>
@@ -487,7 +485,7 @@ const BasicInfo = (props) => {
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
                                         <option value="false">No</option>
-                                        
+
                                     </select>
                                     {errors.clientInformPreventingsHivTrans !=="" ? (
                                     <span className={classes.error}>{errors.clientInformPreventingsHivTrans}</span>
@@ -508,14 +506,14 @@ const BasicInfo = (props) => {
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
                                         <option value="false">No</option>
-                                        
+
                                     </select>
                                     {errors.clientInformPossibleTestResult !=="" ? (
                                     <span className={classes.error}>{errors.clientInformPossibleTestResult}</span>
                                     ) : "" }
                                 </FormGroup>
                             </div>
-                            
+
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Informed consent for HIV testing given </Label>
@@ -530,7 +528,7 @@ const BasicInfo = (props) => {
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
                                         <option value="false">No</option>
-                                        
+
                                     </select>
                                     {errors.informConsentHivTest !=="" ? (
                                     <span className={classes.error}>{errors.informConsentHivTest}</span>
@@ -554,7 +552,7 @@ const BasicInfo = (props) => {
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
                                         <option value="false">No</option>
-                                        
+
                                     </select>
                                     {errors.currentCough !=="" ? (
                                     <span className={classes.error}>{errors.currentCough}</span>
@@ -575,7 +573,7 @@ const BasicInfo = (props) => {
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
                                         <option value="false">No</option>
-                                        
+
                                     </select>
                                     {errors.weightLoss !=="" ? (
                                     <span className={classes.error}>{errors.weightLoss}</span>
@@ -596,7 +594,7 @@ const BasicInfo = (props) => {
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
                                         <option value="false">No</option>
-                                        
+
                                     </select>
                                     {errors.lymphadenopathy !=="" ? (
                                     <span className={classes.error}>{errors.lymphadenopathy}</span>
@@ -617,13 +615,13 @@ const BasicInfo = (props) => {
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
                                         <option value="false">No</option>
-                                        
+
                                     </select>
                                     {errors.fever !=="" ? (
                                     <span className={classes.error}>{errors.fever}</span>
                                     ) : "" }
                                 </FormGroup>
-                            </div> 
+                            </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Night sweats</Label>
@@ -638,13 +636,13 @@ const BasicInfo = (props) => {
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
                                         <option value="false">No</option>
-                                        
+
                                     </select>
                                     {errors.nightSweats !=="" ? (
                                     <span className={classes.error}>{errors.nightSweats}</span>
                                     ) : "" }
                                 </FormGroup>
-                            </div> 
+                            </div>
                             <Message warning>
                                 <h4>TB Screening score (calculate the sum of the TB assessment) If score {">= 1"}, test for Xper MTB RIF or refer to TB service </h4>
                                 <b>Score : {newTbTrue.length}</b>
@@ -667,7 +665,7 @@ const BasicInfo = (props) => {
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
                                         <option value="false">No</option>
-                                        
+
                                     </select>
                                     {errors.everHadSexualIntercourse !=="" ? (
                                     <span className={classes.error}>{errors.everHadSexualIntercourse}</span>
@@ -688,7 +686,7 @@ const BasicInfo = (props) => {
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
                                         <option value="false">No</option>
-                                        
+
                                     </select>
                                     {errors.bloodtransInlastThreeMonths !=="" ? (
                                     <span className={classes.error}>{errors.bloodtransInlastThreeMonths}</span>
@@ -710,7 +708,7 @@ const BasicInfo = (props) => {
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
                                         <option value="false">No</option>
-                                        
+
                                     </select>
                                     {errors.uprotectedSexWithCasualLastThreeMonths !=="" ? (
                                     <span className={classes.error}>{errors.uprotectedSexWithCasualLastThreeMonths}</span>
@@ -733,7 +731,7 @@ const BasicInfo = (props) => {
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
                                         <option value="false">No</option>
-                                        
+
                                     </select>
                                     {errors.uprotectedSexWithRegularPartnerLastThreeMonths !=="" ? (
                                     <span className={classes.error}>{errors.uprotectedSexWithRegularPartnerLastThreeMonths}</span>
@@ -756,7 +754,7 @@ const BasicInfo = (props) => {
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
                                         <option value="false">No</option>
-                                        
+
                                     </select>
                                     {errors.unprotectedVaginalSex !=="" ? (
                                     <span className={classes.error}>{errors.unprotectedVaginalSex}</span>
@@ -779,13 +777,13 @@ const BasicInfo = (props) => {
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
                                         <option value="false">No</option>
-                                        
+
                                     </select>
                                     {errors.uprotectedAnalSex !=="" ? (
                                     <span className={classes.error}>{errors.uprotectedAnalSex}</span>
                                     ) : "" }
                                 </FormGroup>
-                            </div> 
+                            </div>
                             )}
                             {riskAssessment.everHadSexualIntercourse!=="" && riskAssessment.everHadSexualIntercourse==='true' && (
                                 <div className="form-group  col-md-4">
@@ -802,7 +800,7 @@ const BasicInfo = (props) => {
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
                                         <option value="false">No</option>
-                                        
+
                                     </select>
                                     {errors.stiLastThreeMonths !=="" ? (
                                     <span className={classes.error}>{errors.stiLastThreeMonths}</span>
@@ -825,7 +823,7 @@ const BasicInfo = (props) => {
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
                                         <option value="false">No</option>
-                                        
+
                                     </select>
                                     {errors.sexUnderInfluence !=="" ? (
                                     <span className={classes.error}>{errors.sexUnderInfluence}</span>
@@ -848,7 +846,7 @@ const BasicInfo = (props) => {
                                          <option value={""}></option>
                                          <option value="true">Yes</option>
                                          <option value="false">No</option>
-                                         
+
                                      </select>
                                      {errors.moreThanOneSexPartnerLastThreeMonths !=="" ? (
                                      <span className={classes.error}>{errors.moreThanOneSexPartnerLastThreeMonths}</span>
@@ -856,7 +854,7 @@ const BasicInfo = (props) => {
                                  </FormGroup>
                              </div>
                             )}
-                            
+
                             <Message warning>
                                 <h4> Risk assessment score (sum of all 7 answers)</h4>
                                 <b>Score : {riskCount.length}</b>
@@ -880,7 +878,7 @@ const BasicInfo = (props) => {
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
                                         <option value="false">No</option>
-                                        
+
                                     </select>
                                     {errors.experiencePain !=="" ? (
                                     <span className={classes.error}>{errors.experiencePain}</span>
@@ -901,7 +899,7 @@ const BasicInfo = (props) => {
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
                                         <option value="false">No</option>
-                                        
+
                                     </select>
                                     {errors.haveSexWithoutCondom !=="" ? (
                                     <span className={classes.error}>{errors.haveSexWithoutCondom}</span>
@@ -922,7 +920,7 @@ const BasicInfo = (props) => {
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
                                         <option value="false">No</option>
-                                        
+
                                     </select>
                                     {errors.haveCondomBurst !=="" ? (
                                     <span className={classes.error}>{errors.haveCondomBurst}</span>
@@ -943,7 +941,7 @@ const BasicInfo = (props) => {
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
                                         <option value="false">No</option>
-                                        
+
                                     </select>
                                     {errors.abuseDrug !=="" ? (
                                     <span className={classes.error}>{errors.abuseDrug}</span>
@@ -964,7 +962,7 @@ const BasicInfo = (props) => {
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
                                         <option value="false">No</option>
-                                        
+
                                     </select>
                                     {errors.bloodTransfusion !=="" ? (
                                     <span className={classes.error}>{errors.bloodTransfusion}</span>
@@ -985,13 +983,13 @@ const BasicInfo = (props) => {
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
                                         <option value="false">No</option>
-                                        
+
                                     </select>
                                     {errors.consistentWeightFeverNightCough !=="" ? (
                                     <span className={classes.error}>{errors.consistentWeightFeverNightCough}</span>
                                     ) : "" }
                                 </FormGroup>
-                            </div>            
+                            </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Have you/partner paid or sold vaginal, anal or oral sex? <span style={{ color:"red"}}> *</span></Label>
@@ -1006,7 +1004,7 @@ const BasicInfo = (props) => {
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
                                         <option value="false">No</option>
-                                        
+
                                     </select>
                                     {errors.soldPaidVaginalSex !=="" ? (
                                     <span className={classes.error}>{errors.soldPaidVaginalSex}</span>
@@ -1035,7 +1033,7 @@ const BasicInfo = (props) => {
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
                                         <option value="false">No</option>
-                                        
+
                                     </select>
                                     {errors.sexPartnerHivPositive !=="" ? (
                                     <span className={classes.error}>{errors.sexPartnerHivPositive}</span>
@@ -1057,7 +1055,7 @@ const BasicInfo = (props) => {
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
                                         <option value="false">No</option>
-                                        
+
                                     </select>
                                     {errors.newDiagnosedHivlastThreeMonths !=="" ? (
                                     <span className={classes.error}>{errors.newDiagnosedHivlastThreeMonths}</span>
@@ -1078,7 +1076,7 @@ const BasicInfo = (props) => {
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
                                         <option value="false">No</option>
-                                        
+
                                     </select>
                                     {errors.currentlyArvForPmtct !=="" ? (
                                     <span className={classes.error}>{errors.currentlyArvForPmtct}</span>
@@ -1099,7 +1097,7 @@ const BasicInfo = (props) => {
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
                                         <option value="false">No</option>
-                                        
+
                                     </select>
                                     {errors.knowHivPositiveOnArv !=="" ? (
                                     <span className={classes.error}>{errors.knowHivPositiveOnArv}</span>
@@ -1120,7 +1118,7 @@ const BasicInfo = (props) => {
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
                                         <option value="false">No</option>
-                                        
+
                                     </select>
                                     {errors.knowHivPositiveAfterLostToFollowUp !=="" ? (
                                     <span className={classes.error}>{errors.knowHivPositiveAfterLostToFollowUp}</span>
@@ -1141,7 +1139,7 @@ const BasicInfo = (props) => {
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
                                         <option value="false">No</option>
-                                        
+
                                     </select>
                                     {errors.uprotectedAnalSex !=="" ? (
                                     <span className={classes.error}>{errors.uprotectedAnalSex}</span>
@@ -1152,8 +1150,8 @@ const BasicInfo = (props) => {
                             <Message warning>
                                 <h4>Sex Partner Risk Assessment score (sum of all 6 answers)</h4>
                                 <b>Score :{sexPartRiskCount.length}</b>
-                            </Message>        
-                            
+                            </Message>
+
                             <hr/>
                             <br/>
                             <div className="form-group  col-md-12 text-center pt-2 mb-4" style={{backgroundColor:'#014D88', width:'125%', height:'35px', color:'#fff', fontWeight:'bold'}} >Syndromic STI Screening</div>

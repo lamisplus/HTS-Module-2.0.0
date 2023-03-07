@@ -23,7 +23,6 @@ import { Button} from 'semantic-ui-react'
 import {  Modal } from "react-bootstrap";
 import { fontWeight } from "@mui/system";
 
-
 const useStyles = makeStyles((theme) => ({
     card: {
         margin: theme.spacing(20),
@@ -384,7 +383,7 @@ const BasicInfo = (props) => {
                 { headers: {"Authorization" : `Bearer ${token}`} }
             )
             .then((response) => {
-                setProvinces(response.data);
+                setProvinces(response.data.sort((x,y) => { return x.id - y.id}));
             })
             .catch((error) => {
             //console.log(error);
@@ -650,7 +649,6 @@ const BasicInfo = (props) => {
             }
     }
 
-
     return (
         <>  
         
@@ -660,31 +658,8 @@ const BasicInfo = (props) => {
                 <br/>
                     <form >
                         <div className="row">
-                             <div className="row">
-                            <div className="form-group  col-md-4">
-                                <FormGroup>
-                                    <Label>Target Group <span style={{ color:"red"}}> *</span></Label>
-                                    <select
-                                        className="form-control"
-                                        name="targetGroup"
-                                        id="targetGroup"
-                                        onChange={handleInputChange}
-                                        value={objValues.targetGroup}
-                                        style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
-                                        disabled
-                                    >
-                                        <option value={""}></option>
-                                        {kP.map((value) => (
-                                            <option key={value.id} value={value.code}>
-                                                {value.display}
-                                            </option>
-                                        ))}
-                                    </select>
-                                    {errors.targetGroup !=="" ? (
-                                        <span className={classes.error}>{errors.targetGroup}</span>
-                                    ) : "" }
-                                </FormGroup>
-                            </div>
+                            <div className="row">
+
                             <div className="form-group mb-3 col-md-4">
                                 <FormGroup>
                                 <Label for="">Client Code <span style={{ color:"red"}}> *</span></Label>
@@ -1097,7 +1072,35 @@ const BasicInfo = (props) => {
                             </div>
                             )}
                             {/* objValues.maritalStatusId==='6' && */}
-                           
+                            <div className="form-group  col-md-4">
+                               <FormGroup>
+                                   <Label>Target Group <span style={{ color:"red"}}> *</span></Label>
+                                   <select
+                                       className="form-control"
+                                       name="targetGroup"
+                                       id="targetGroup"
+                                       onChange={handleInputChange}
+                                       value={objValues.targetGroup}
+                                       style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                       //disabled
+                                   >
+                                       <option value={""}></option>
+                                       {/*kP.map((value) => (
+                                           <option key={value.id} value={value.code}>
+                                               {value.display}
+                                           </option>
+                                       ))*/}
+                                       {(objValues.sex ==='Female' || objValues.sex ==='female') && ( <> {kP.filter((x)=>x.display!=='FSW').map((value) =>
+                                       ( <option key={value.id} value={value.code}>{value.display}</option>))}</>)}
+
+                                       {(objValues.sex ==='Male' || objValues.sex ==='male') && ( <> {kP.filter((x)=>x.display!=='MSM').map((value) =>
+                                       (<option key={value.id} value={value.code}>{value.display}</option>))} </> )}
+                                   </select>
+                                   {errors.targetGroup !=="" ? (
+                                       <span className={classes.error}>{errors.targetGroup}</span>
+                                   ) : "" }
+                               </FormGroup>
+                           </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Index Testing <span style={{ color:"red"}}> *</span></Label>

@@ -96,7 +96,7 @@ const useStyles = makeStyles((theme) => ({
 const BasicInfo = (props) => {
     const classes = useStyles();
     const history = useHistory();
-    console.log( "enr", props.activePage)
+    //console.log( "enr", props.activePage)
     const [errors, setErrors] = useState({});
     const [saving, setSaving] = useState(false);
     //const [hideNumChild, setHideNumChild] = useState(false);

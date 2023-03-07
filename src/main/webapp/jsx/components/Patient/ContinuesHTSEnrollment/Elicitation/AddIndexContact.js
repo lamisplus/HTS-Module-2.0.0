@@ -19,8 +19,6 @@ import "react-widgets/dist/css/react-widgets.css";
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
 
-
-
 const useStyles = makeStyles((theme) => ({
     card: {
         margin: theme.spacing(20),
@@ -187,7 +185,7 @@ const AddIndexContact = (props) => {
             { headers: {"Authorization" : `Bearer ${token}`} }
         )
         .then((response) => {
-            setProvinces(response.data);
+            setProvinces(response.data.sort((x,y) => { return x.id - y.id}));
         })
         .catch((error) => {
         //console.log(error);
@@ -875,24 +873,6 @@ const AddIndexContact = (props) => {
                                        </FormGroup>
                                    </div>
 
-
-                                   <div className="form-group mb-3 col-md-4">
-                                      <FormGroup>
-                                      <Label for="">Date Tested? <span style={{ color:"red"}}> *</span></Label>
-                                      <Input
-                                          type="date"
-                                          name="dateTested"
-                                          id="dateTested"
-                                          value={objValues.dateTested}
-                                          onChange={handleInputChange}
-                                          max= {moment(new Date()).format("YYYY-MM-DD") }
-                                          style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
-
-                                      />
-
-                                      </FormGroup>
-                                  </div>
-
                                    <div className="form-group  col-md-4">
                                      <FormGroup>
                                          <Label>HIV Status of Index Client <span style={{ color:"red"}}> *</span></Label>
@@ -905,12 +885,31 @@ const AddIndexContact = (props) => {
                                              style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                          >
                                              <option value={""}></option>
-                                             <option value="Negative">Negative</option>
-                                             <option value="Positive">Positive</option>
+                                             <option value="negative">Negative</option>
+                                             <option value="positive">Positive</option>
+                                             <option value="unknown">Unknown</option>
                                          </select>
 
                                      </FormGroup>
                                    </div>
+                                   {objValues.currentHivStatus !== "" && objValues.currentHivStatus === 'positive' && (
+                                        <div className="form-group mb-3 col-md-4">
+                                            <FormGroup>
+                                            <Label for="">Date Tested? <span style={{ color:"red"}}> *</span></Label>
+                                            <Input
+                                                type="date"
+                                                name="dateTested"
+                                                id="dateTested"
+                                                value={objValues.dateTested}
+                                                onChange={handleInputChange}
+                                                max= {moment(new Date()).format("YYYY-MM-DD") }
+                                                style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
+        
+                                            />
+        
+                                            </FormGroup>
+                                        </div>
+                                   )}
                                </>
                             )}
                      

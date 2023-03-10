@@ -89,7 +89,7 @@ const Patients = (props) => {
                 field: "name",
                 hidden:showPPI
             },
-            { title: "Hospital Number", field: "hospital_number", filtering: false },
+            // { title: "Hospital Number", field: "hospital_number", filtering: false },
             { title: "Client Code", field: "clientCode", filtering: false },
             { title: "Sex", field: "gender", filtering: false },
             { title: "Age", field: "age", filtering: false },
@@ -109,7 +109,7 @@ const Patients = (props) => {
                                 data: result.data.records.map((row) => ({
                                     //name:   row.hivPositive && row.hivPositive===true ? ( <><sup><b style={{color:"red"}}><Icon name='circle' size="small"/></b></sup> { " " + row.personResponseDto.firstName + " " + row.personResponseDto.surname} </>) :row.personResponseDto.firstName + " " + row.personResponseDto.surname,
                                     name: row.firstName + " " + row.surname,
-                                    hospital_number: row.hospitalNumber,
+                                    // hospital_number: row.hospitalNumber,
                                     clientCode: row.clientCode,
                                     gender: row.gender,
                                     age: row.age,

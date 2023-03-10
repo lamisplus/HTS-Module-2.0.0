@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState} from "react";
 import axios from "axios";
 import {FormGroup, Label , CardBody, Spinner,Input,Form} from "reactstrap";
@@ -23,7 +22,6 @@ import 'react-phone-input-2/lib/style.css'
 import { Button} from 'semantic-ui-react'
 import {  Modal } from "react-bootstrap";
 import { fontWeight } from "@mui/system";
-
 
 const useStyles = makeStyles((theme) => ({
     card: {
@@ -385,7 +383,7 @@ const BasicInfo = (props) => {
                 { headers: {"Authorization" : `Bearer ${token}`} }
             )
             .then((response) => {
-                setProvinces(response.data);
+                setProvinces(response.data.sort((x,y) => { return x.id - y.id}));
             })
             .catch((error) => {
             //console.log(error);
@@ -435,18 +433,18 @@ const BasicInfo = (props) => {
     //checkClientCode
     const checkClientCode = e => { 
 
-            async function getIndexClientCode() {
-                const indexClientCode=objValues.clientCode
-                const response = await axios.get(`${baseUrl}hts/client/${indexClientCode}`,
-                        { headers: {"Authorization" : `Bearer ${token}`, 'Content-Type': 'text/plain'} }
-                    );
-                if(response.data!=='Record Not Found'){
-                    setClientCodeCheck("Client code already exist")
-                }else{
-                    setClientCodeCheck("")
-                }
+        async function getIndexClientCode() {
+            const indexClientCode=objValues.clientCode
+            const response = await axios.get(`${baseUrl}hts/client/${indexClientCode}`,
+                    { headers: {"Authorization" : `Bearer ${token}`, 'Content-Type': 'text/plain'} }
+                );
+            if(response.data!=='Record Not Found'){
+                setClientCodeCheck("Client code already exist")
+            }else{
+                setClientCodeCheck("")
             }
-            getIndexClientCode();
+        }
+        getIndexClientCode();
                               
     }
     //Date of Birth and Age handle 
@@ -651,41 +649,17 @@ const BasicInfo = (props) => {
             }
     }
 
-
     return (
         <>  
         
             <Card className={classes.root}>
                 <CardBody>   
-                <h2 style={{color:'#000'}}>BASIC INFORMATION - CLIENT INTAKE FORM</h2>
+                <h2 style={{color:'#000'}}>CLIENT INTAKE FORM</h2>
                 <br/>
                     <form >
                         <div className="row">
-                             <div className="row">
-                            <div className="form-group  col-md-4">
-                                <FormGroup>
-                                    <Label>Target Group <span style={{ color:"red"}}> *</span></Label>
-                                    <select
-                                        className="form-control"
-                                        name="targetGroup"
-                                        id="targetGroup"
-                                        onChange={handleInputChange}
-                                        value={objValues.targetGroup}
-                                        style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
-                                        disabled
-                                    >
-                                        <option value={""}></option>
-                                        {kP.map((value) => (
-                                            <option key={value.id} value={value.code}>
-                                                {value.display}
-                                            </option>
-                                        ))}
-                                    </select>
-                                    {errors.targetGroup !=="" ? (
-                                        <span className={classes.error}>{errors.targetGroup}</span>
-                                    ) : "" }
-                                </FormGroup>
-                            </div>
+                            <div className="row">
+
                             <div className="form-group mb-3 col-md-4">
                                 <FormGroup>
                                 <Label for="">Client Code <span style={{ color:"red"}}> *</span></Label>
@@ -899,7 +873,7 @@ const BasicInfo = (props) => {
                                         type="number"
                                         name="age"
                                         id="age"
-                                        value={objValues.age}
+                                        value={objValues.age + 1}
                                         disabled={ageDisabled}
                                         onChange={handleAgeChange}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
@@ -1098,10 +1072,38 @@ const BasicInfo = (props) => {
                             </div>
                             )}
                             {/* objValues.maritalStatusId==='6' && */}
-                           
+                            <div className="form-group  col-md-4">
+                               <FormGroup>
+                                   <Label>Target Group <span style={{ color:"red"}}> *</span></Label>
+                                   <select
+                                       className="form-control"
+                                       name="targetGroup"
+                                       id="targetGroup"
+                                       onChange={handleInputChange}
+                                       value={objValues.targetGroup}
+                                       style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                       //disabled
+                                   >
+                                       <option value={""}></option>
+                                       {/*kP.map((value) => (
+                                           <option key={value.id} value={value.code}>
+                                               {value.display}
+                                           </option>
+                                       ))*/}
+                                       {(objValues.sex ==='Female' || objValues.sex ==='female') && ( <> {kP.filter((x)=>x.display!=='FSW').map((value) =>
+                                       ( <option key={value.id} value={value.code}>{value.display}</option>))}</>)}
+
+                                       {(objValues.sex ==='Male' || objValues.sex ==='male') && ( <> {kP.filter((x)=>x.display!=='MSM').map((value) =>
+                                       (<option key={value.id} value={value.code}>{value.display}</option>))} </> )}
+                                   </select>
+                                   {errors.targetGroup !=="" ? (
+                                       <span className={classes.error}>{errors.targetGroup}</span>
+                                   ) : "" }
+                               </FormGroup>
+                           </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Index Testing</Label>
+                                    <Label>Index Testing <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="indexClient"
@@ -1123,7 +1125,7 @@ const BasicInfo = (props) => {
                             <>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Relationship of the index client</Label>
+                                    <Label>Relationship of the index client <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="relationshipWithIndexClient"
@@ -1214,7 +1216,7 @@ const BasicInfo = (props) => {
                             
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>First time visit</Label>
+                                    <Label>First time visit <span style={{ color:"red"}}>*</span></Label>
                                     <select
                                         className="form-control"
                                         name="firstTimeVisit"
@@ -1235,7 +1237,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Previously tested within the last 3 months</Label>
+                                    <Label>Previously tested within the last 3 months <span style={{ color:"red"}}>*</span></Label>
                                     <select
                                         className="form-control"
                                         name="previouslyTested"
@@ -1255,7 +1257,7 @@ const BasicInfo = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Type of Counseling</Label>
+                                    <Label>Type of Counseling <span style={{ color:"red"}}>*</span></Label>
                                     <select
                                         className="form-control"
                                         name="typeCounseling"

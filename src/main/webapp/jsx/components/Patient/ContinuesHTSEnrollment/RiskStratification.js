@@ -99,7 +99,7 @@ const useStyles = makeStyles((theme) => ({
 const RiskStratification = (props) => {
     const classes = useStyles();
     const history = useHistory();
-    //console.log(props)
+    //console.log("con", props.patientObj)
     const [enrollSetting, setEnrollSetting] = useState([]);
     const [entryPoint, setEntryPoint] = useState([]);
     const [entryPointCommunity, setEntryPointCommunity] = useState([]);
@@ -477,8 +477,7 @@ const RiskStratification = (props) => {
 
 
     return (
-        <>  
-        
+        <>
             <Card className={classes.root}>
                 <CardBody>   
                 <h2 style={{color:'#000'}}>RISK STRATIFICATION</h2>
@@ -629,6 +628,7 @@ const RiskStratification = (props) => {
                                                 {value.display}
                                             </option>
                                         ))}
+
                                     </select>
                                     {errors.targetGroup !=="" ? (
                                         <span className={classes.error}>{errors.targetGroup}</span>

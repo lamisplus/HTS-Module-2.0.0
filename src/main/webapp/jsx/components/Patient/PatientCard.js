@@ -191,7 +191,7 @@ function PatientCard(props) {
                         Client Code : <b style={{color:'#0B72AA'}}>{patientObj && patientObj.clientCode ? patientObj.clientCode : ""} </b>
                     </span>
                     </Col>
-                    <Col md={12}>
+                    {/* <Col md={12}>
                        <div >
                             <Typography variant="caption">
                                 <Label color={patientObj && patientObj.hivPositive===true ? "red" : "teal"} size={"mini"}>
@@ -200,7 +200,7 @@ function PatientCard(props) {
                               
                             </Typography>
                        </div>                 
-                    </Col>     
+                    </Col>      */}
                      </>
                     )
                     :

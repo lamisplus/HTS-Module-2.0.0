@@ -4,6 +4,7 @@ import lombok.*;
 import org.lamisplus.modules.hts.domain.entity.IndexElicitation;
 import org.lamisplus.modules.patient.domain.dto.PersonResponseDto;
 
+import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.List;
@@ -84,4 +85,8 @@ public class HtsClientDto {
 
     private RiskStratificationResponseDto riskStratificationResponseDto;
     private String riskStratificationCode;
+
+    private String prepGiven;
+
+    private String otherDrugs;
 }

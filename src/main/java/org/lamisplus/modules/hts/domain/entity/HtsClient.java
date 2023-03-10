@@ -287,4 +287,10 @@ public class HtsClient extends Audit implements Serializable {
 
     @Column(name = "prep_accepted")
     private Boolean prepAccepted;
+
+    @Column(name = "prep_given")
+    private String prepGiven;
+
+    @Column(name = "other_drugs")
+    private String otherDrugs;
 }

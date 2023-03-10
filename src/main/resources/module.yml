@@ -13,7 +13,7 @@ webModules:
     name: HtsModule
     path: hts
     position: 99
-#permissions:
-#  - name: hts_view
-#    description: View hts
-#    moduleName: HtsModule
+permissions:
+  - name: hts_view
+    description: View hts
+    moduleName: HtsModule

@@ -216,7 +216,6 @@ public class HtsClientService {
         updatableHtsClient.setPrepOffered(htsRequestResultDto.getPrepOffered());
         updatableHtsClient.setPrepAccepted(htsRequestResultDto.getPrepAccepted());
 
-
         return updatableHtsClient;
     }
 
@@ -242,6 +241,10 @@ public class HtsClientService {
         htsClient.setBreastFeeding(htsClientRequestDto.getBreastFeeding());
         htsClient.setRiskStratificationCode(htsClientRequestDto.getRiskStratificationCode());
         htsClient.setRelationWithIndexClient(htsClientRequestDto.getRelationWithIndexClient());
+
+        htsClient.setPrepGiven(htsClientRequestDto.getPrepGiven());
+        htsClient.setOtherDrugs(htsClientRequestDto.getOtherDrugs());
+        htsClient.setHivTestResult(htsClientRequestDto.getHivTestResult());
 
         return htsClient;
     }
@@ -269,6 +272,10 @@ public class HtsClientService {
         htsClient.setBreastFeeding(htsClientDto.getBreastFeeding());
         htsClient.setRiskStratificationCode(htsClientDto.getRiskStratificationCode());
         htsClient.setRelationWithIndexClient(htsClientDto.getRelationWithIndexClient());
+
+        htsClient.setPrepGiven(htsClientDto.getPrepGiven());
+        htsClient.setOtherDrugs(htsClientDto.getOtherDrugs());
+        htsClient.setHivTestResult(htsClientDto.getHivTestResult());
 
         return htsClient;
     }
@@ -301,6 +308,10 @@ public class HtsClientService {
         htsClient.setPregnant( htsClientRequestDto.getPregnant() );
         htsClient.setBreastFeeding( htsClientRequestDto.getBreastFeeding() );
         htsClient.setRelationWithIndexClient( htsClientRequestDto.getRelationWithIndexClient() );
+
+        htsClient.setPrepGiven(htsClientRequestDto.getPrepGiven());
+        htsClient.setOtherDrugs(htsClientRequestDto.getOtherDrugs());
+        htsClient.setHivTestResult(htsClientRequestDto.getHivTestResult());
 
         return htsClient;
     }
@@ -426,6 +437,10 @@ public class HtsClientService {
                     = riskStratificationService.getByCode(htsClient.getRiskStratificationCode());
             htsClientDto.setRiskStratificationResponseDto(riskStratificationResponseDto);
         }
+
+        htsClientDto.setPrepGiven(htsClient.getPrepGiven());
+        htsClientDto.setOtherDrugs(htsClient.getOtherDrugs());
+        htsClientDto.setHivTestResult(htsClient.getHivTestResult());
 
         return htsClientDto;
     }

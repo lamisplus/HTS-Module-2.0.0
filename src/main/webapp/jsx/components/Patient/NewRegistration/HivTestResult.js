@@ -88,6 +88,7 @@ const HivTestResult = (props) => {
   const [saving, setSaving] = useState(false);
   const [errors, setErrors] = useState({});
   let temp = { ...errors };
+  console.log("data2", props.patientObj);
   const patientID =
     props.patientObj && props.patientObj.personResponseDto
       ? props.patientObj.personResponseDto.id
@@ -1058,11 +1059,62 @@ const HivTestResult = (props) => {
                   {confirmatoryTest.result === "No" &&
                     tieBreakerTest.result === "No" &&
                     (initialTest1.result === "Yes" ||
-                      initialTest1.result === "Yes" ||
-                      initialTest1.result === "") && (
+                      initialTest1.result !== "") && (
                       <>
                         <b> Result : </b>
                         <LabelRibbon color="green">Non Reactive</LabelRibbon>
+                        <br/>
+                        <div className="row">
+                        <div className="form-group  col-md-6">
+                            <FormGroup>
+                            <Label>
+                                Prep Offered{" "}
+                                <span style={{ color: "red" }}> *</span>
+                            </Label>
+                            <select
+                                className="form-control"
+                                name="prepOffered"
+                                id="prepOffered"
+                                value={objValues.prepOffered}
+                                onChange={handleInputChange}
+                                style={{
+                                border: "1px solid #014D88",
+                                borderRadius: "0.2rem",
+                                }}
+                            >
+                                <option value={""}></option>
+                                <option value="true">Yes</option>
+                                <option value="false">No</option>
+                            </select>
+                            </FormGroup>
+                        </div>
+                        {objValues.prepOffered !== "" &&
+                            objValues.prepOffered === "true" && (
+                            <div className="form-group  col-md-6">
+                                <FormGroup>
+                                <Label>
+                                    Prep Accepted{" "}
+                                    <span style={{ color: "red" }}> *</span>
+                                </Label>
+                                <select
+                                    className="form-control"
+                                    name="prepAccepted"
+                                    id="prepAccepted"
+                                    value={objValues.prepAccepted}
+                                    onChange={handleInputChange}
+                                    style={{
+                                    border: "1px solid #014D88",
+                                    borderRadius: "0.2rem",
+                                    }}
+                                >
+                                    <option value={""}></option>
+                                    <option value="true">Yes</option>
+                                    <option value="false">No</option>
+                                </select>
+                                </FormGroup>
+                            </div>
+                            )}
+                        </div>
                       </>
                     )}
                   {/* END of  result for Test 1 */}
@@ -1071,6 +1123,59 @@ const HivTestResult = (props) => {
                     <>
                       <b> Final Result : </b>
                       <LabelRibbon color="green">Negative</LabelRibbon>
+                      <br/>
+                      <br/>
+                      <div className="row">
+                        <div className="form-group  col-md-5">
+                            <FormGroup>
+                            <Label>
+                                Prep Offered{" "}
+                                <span style={{ color: "red" }}> *</span>
+                            </Label>
+                            <select
+                                className="form-control"
+                                name="prepOffered"
+                                id="prepOffered"
+                                value={objValues.prepOffered}
+                                onChange={handleInputChange}
+                                style={{
+                                border: "1px solid #014D88",
+                                borderRadius: "0.2rem",
+                                }}
+                            >
+                                <option value={""}></option>
+                                <option value="true">Yes</option>
+                                <option value="false">No</option>
+                            </select>
+                            </FormGroup>
+                        </div>
+                        {objValues.prepOffered !== "" &&
+                            objValues.prepOffered === "true" && (
+                            <div className="form-group  col-md-5">
+                                <FormGroup>
+                                <Label>
+                                    Prep Accepted{" "}
+                                    <span style={{ color: "red" }}> *</span>
+                                </Label>
+                                <select
+                                    className="form-control"
+                                    name="prepAccepted"
+                                    id="prepAccepted"
+                                    value={objValues.prepAccepted}
+                                    onChange={handleInputChange}
+                                    style={{
+                                    border: "1px solid #014D88",
+                                    borderRadius: "0.2rem",
+                                    }}
+                                >
+                                    <option value={""}></option>
+                                    <option value="true">Yes</option>
+                                    <option value="false">No</option>
+                                </select>
+                                </FormGroup>
+                            </div>
+                            )}
+                        </div>
                     </>
                   )}
                   {initialTest12.result2 === "No" &&
@@ -1419,7 +1524,7 @@ const HivTestResult = (props) => {
               <br /> <br />
               {props.patientObj.riskStratificationResponseDto !== null &&
                 props.patientObj.riskStratificationResponseDto
-                  .communityEntryPoint === "community" && (
+                  .communityEntryPoint !== "" && (
                   <>
                     <div className="form-group mb-3 col-md-4">
                       <FormGroup>

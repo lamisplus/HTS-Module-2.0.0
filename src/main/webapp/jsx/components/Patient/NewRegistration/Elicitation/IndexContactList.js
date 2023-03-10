@@ -164,7 +164,7 @@ const PatientnHistory = (props) => {
               { title: "Age", field: "age" },
               { title: "Phone Number", field: "phone" },  
               {title: "Adress",field: "address",},   
-              { title: "Actions", field: "actions", filtering: false }, 
+             // { title: "Actions", field: "actions", filtering: false },
               ]}
               data={ indexClientList.map((row) => ({
                 name: row.firstName + " " + row.lastName,

@@ -78,6 +78,10 @@ public class RiskStratificationService {
         riskStratificationDto.setDob(riskStratification.getDob());
         riskStratificationDto.setRiskAssessment( riskStratification.getRiskAssessment() );
         riskStratificationDto.setCommunityEntryPoint( riskStratification.getCommunityEntryPoint() );
+        riskStratificationDto.setCode(riskStratification.getCode());
+        /*riskStratificationDto.setPersonId(personRepository
+                        .findByUuid(riskStratification.getPersonUuid())
+                        .orElse(null).getId());*/
 
         return riskStratificationDto;
     }

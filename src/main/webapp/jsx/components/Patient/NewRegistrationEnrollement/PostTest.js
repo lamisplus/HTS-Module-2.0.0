@@ -88,11 +88,14 @@ const useStyles = makeStyles((theme) => ({
 
 
 const PostTest = (props) => {
+    console.log("post",props)
     const classes = useStyles();
     const history = useHistory();
-    const patientID= props.patientObj && props.patientObj.personResponseDto ? props.patientObj.personResponseDto.id : "";
+    const patientID = props.patientObj && props.patientObj.personResponseDto ? props.patientObj.personResponseDto.id : "";
     const clientId = props.patientObj && props.patientObj ? props.patientObj.id : "";
     const [saving, setSaving] = useState(false);
+    const {postTestCounselingKnowledgeAssessment} = props.patientObj;
+    console.log(postTestCounselingKnowledgeAssessment)
     ///const [errors, setErrors] = useState({});
     const [objValues, setObjValues]= useState(
         {
@@ -104,25 +107,25 @@ const PostTest = (props) => {
     const [postTest, setPostTest]= useState(
         {
             hivTestResult:"", 
-            hivTestBefore:"", 
-            hivRequestResult:"", 
-            hivRequestResultCt:"",                             
-            clientReceivedHivTestResult:"", 
-            postTestCounseling:"", 
-            riskReduction:"", 
-            postTestDisclosure:"",
-            bringPartnerHivtesting:"", 
-            childrenHivtesting:"", 
-            informationFp:"", 
-            partnerFpThanCondom:"", 
-            partnerFpUseCondom:"",
-            correctCondomUse:"", 
-            condomProvidedToClient:"", 
-            unprotectedSexRegularPartnerLastThreeMonth:"", 
-            referredToServices:"",
-            lubricantProvidedToClient: "",
-            condomProvidedToClientCount: "",
-            lubricantProvidedToClientCount: "",
+            hivTestBefore: postTestCounselingKnowledgeAssessment?.hivTestBefore, 
+            hivRequestResult:postTestCounselingKnowledgeAssessment?.hivRequestResult, 
+            hivRequestResultCt:postTestCounselingKnowledgeAssessment?.hivRequestResultCt,                             
+            clientReceivedHivTestResult:postTestCounselingKnowledgeAssessment?.clientReceivedHivTestResult, 
+            postTestCounseling:postTestCounselingKnowledgeAssessment?.postTestCounseling, 
+            riskReduction:postTestCounselingKnowledgeAssessment?.riskReduction, 
+            postTestDisclosure:postTestCounselingKnowledgeAssessment?.postTestDisclosure,
+            bringPartnerHivtesting:postTestCounselingKnowledgeAssessment?.bringPartnerHivtesting, 
+            childrenHivtesting:postTestCounselingKnowledgeAssessment?.childrenHivtesting, 
+            informationFp:postTestCounselingKnowledgeAssessment?.informationFp, 
+            partnerFpThanCondom:postTestCounselingKnowledgeAssessment?.partnerFpThanCondom, 
+            partnerFpUseCondom:postTestCounselingKnowledgeAssessment?.partnerFpUseCondom,
+            correctCondomUse:postTestCounselingKnowledgeAssessment?.correctCondomUse, 
+            condomProvidedToClient:postTestCounselingKnowledgeAssessment?.condomProvidedToClient, 
+            unprotectedSexRegularPartnerLastThreeMonth:postTestCounselingKnowledgeAssessment?.unprotectedSexRegularPartnerLastThreeMonth, 
+            referredToServices:postTestCounselingKnowledgeAssessment?.referredToServices,
+            lubricantProvidedToClient: postTestCounselingKnowledgeAssessment?.lubricantProvidedToClient,
+            condomProvidedToClientCount: postTestCounselingKnowledgeAssessment?.condomProvidedToClientCount,
+            lubricantProvidedToClientCount: postTestCounselingKnowledgeAssessment?.lubricantProvidedToClientCount,
         }
     )
     const handleInputChangePostTest = e => { 
@@ -144,7 +147,7 @@ const PostTest = (props) => {
 
         if (props.patientObj?.hivTestResult2?.length > 0 && props.patientObj.hivTestResult2==='Positive') {
             postTest.hivTestResult='true'
-            setPostTest({...postTest, hivTestResult:'true' })
+            setPostTest({ ...postTest, hivTestResult:'true' })
         }else if (props.patientObj?.hivTestResult2?.length > 0 && props.patientObj.hivTestResult2==='Negative') {
             postTest.hivTestResult='false'
             setPostTest({...postTest, hivTestResult:'false' })
@@ -221,6 +224,7 @@ const PostTest = (props) => {
                                         value={postTest.hivTestResult}
                                         onChange={handleInputChangePostTest}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         <option value="true" >Positive</option>
@@ -240,6 +244,7 @@ const PostTest = (props) => {
                                         value={postTest.hivTestBefore}
                                         onChange={handleInputChangePostTest}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         <option value="Not previously tested">Not previously tested</option>
@@ -261,6 +266,7 @@ const PostTest = (props) => {
                                         value={postTest.hivRequestResult}
                                         onChange={handleInputChangePostTest}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
@@ -280,6 +286,7 @@ const PostTest = (props) => {
                                         value={postTest.hivRequestResultCt}
                                         onChange={handleInputChangePostTest}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
@@ -299,6 +306,7 @@ const PostTest = (props) => {
                                         value={postTest.clientReceivedHivTestResult}
                                         onChange={handleInputChangePostTest}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
@@ -318,6 +326,7 @@ const PostTest = (props) => {
                                         value={postTest.postTestCounseling}
                                         onChange={handleInputChangePostTest}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
@@ -337,6 +346,7 @@ const PostTest = (props) => {
                                         value={postTest.riskReduction}
                                         onChange={handleInputChangePostTest}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
@@ -357,6 +367,7 @@ const PostTest = (props) => {
                                         value={postTest.postTestDisclosure}
                                         onChange={handleInputChangePostTest}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
@@ -376,6 +387,7 @@ const PostTest = (props) => {
                                         value={postTest.bringPartnerHivtesting}
                                         onChange={handleInputChangePostTest}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
@@ -395,6 +407,7 @@ const PostTest = (props) => {
                                         value={postTest.childrenHivtesting}
                                         onChange={handleInputChangePostTest}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
@@ -414,6 +427,7 @@ const PostTest = (props) => {
                                         value={postTest.informationFp}
                                         onChange={handleInputChangePostTest}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
@@ -433,6 +447,7 @@ const PostTest = (props) => {
                                         value={postTest.partnerFpThanCondom}
                                         onChange={handleInputChangePostTest}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
@@ -453,6 +468,7 @@ const PostTest = (props) => {
                                         value={postTest.partnerFpUseCondom}
                                         onChange={handleInputChangePostTest}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
@@ -472,6 +488,7 @@ const PostTest = (props) => {
                                         value={postTest.correctCondomUse}
                                         onChange={handleInputChangePostTest}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
@@ -491,6 +508,7 @@ const PostTest = (props) => {
                                         value={postTest.condomProvidedToClient}
                                         onChange={handleInputChangePostTest}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
@@ -514,6 +532,7 @@ const PostTest = (props) => {
                                                border: "1px solid #014D88",
                                                borderRadius: "0.25rem",
                                            }}
+                                           readOnly={props.activePage.actionType === "view"}
                                        />
                                        
                                    </FormGroup>
@@ -531,6 +550,7 @@ const PostTest = (props) => {
                                         value={postTest.lubricantProvidedToClient}
                                         onChange={handleInputChangePostTest}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
@@ -554,6 +574,7 @@ const PostTest = (props) => {
                                              border: "1px solid #014D88",
                                              borderRadius: "0.25rem",
                                          }}
+                                         readOnly={props.activePage.actionType === "view"}
                                      />
                                      
                                  </FormGroup>
@@ -607,6 +628,7 @@ const PostTest = (props) => {
                                         value={postTest.referredToServices}
                                         onChange={handleInputChangePostTest}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         <option value="true">Yes</option>

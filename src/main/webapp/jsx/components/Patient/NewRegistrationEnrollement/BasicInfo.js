@@ -108,7 +108,7 @@ const BasicInfo = (props) => {
     const [pregnancyStatus, setPregnancyStatus] = useState([]);
     const [indexTesting, setIndexTesting]= useState([]);
     let temp = { ...errors }
-    //console.log(props.patientObj)
+    //console.log(props?.patientObj?.dateVisit)
 
     const [objValues, setObjValues]= useState(
         {
@@ -117,7 +117,7 @@ const BasicInfo = (props) => {
             age:"",
             dob:"",
             breastFeeding:"",
-            dateVisit: "",
+            dateVisit: props?.patientObj?.dateVisit,
             firstTimeVisit: null,
             indexClient: null,
             numChildren: "",
@@ -379,6 +379,7 @@ const BasicInfo = (props) => {
                                         onChange={handleInputChange}
                                         value={objValues.targetGroup}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         {kP.map((value) => (
@@ -402,7 +403,7 @@ const BasicInfo = (props) => {
                                     value={objValues.clientCode}
                                     onChange={handleInputChange}
                                     style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
-                                   
+                                    readOnly={props.activePage.actionType === "view"}
                                 />
                                 {errors.clientCode !=="" ? (
                                     <span className={classes.error}>{errors.clientCode}</span>
@@ -419,6 +420,7 @@ const BasicInfo = (props) => {
                                         value={objValues.referredFrom}
                                         onChange={handleInputChange}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         {sourceReferral.map((value) => (
@@ -442,6 +444,7 @@ const BasicInfo = (props) => {
                                         value={objValues.testingSetting}
                                         onChange={handleInputChange}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         {enrollSetting.map((value) => (
@@ -462,12 +465,12 @@ const BasicInfo = (props) => {
                                     type="date"
                                     name="dateVisit"
                                     id="dateVisit"
-                                    value={moment(new Date()).format("YYYY-MM-DD")}
+                                    value={objValues.dateVisit}
                                     onChange={handleInputChange}
                                     min={objValues.dateOfRegistration}
                                     max= {moment(new Date()).format("YYYY-MM-DD")}
                                     style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
-                                    
+                                    readOnly={props.activePage.actionType === "view"}
                                 />
                                 {errors.dateVisit !=="" ? (
                                     <span className={classes.error}>{errors.dateVisit}</span>
@@ -510,7 +513,7 @@ const BasicInfo = (props) => {
                                         value={objValues.numWives}
                                         onChange={handleInputChange}
                                         style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
-                                   
+                                        readOnly={props.activePage.actionType === "view"}
                                     />
                                     
                                 </FormGroup>
@@ -528,7 +531,7 @@ const BasicInfo = (props) => {
                                         value={objValues.numChildren}
                                         onChange={handleInputChange}
                                         style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
-                                   
+                                        readOnly={props.activePage.actionType === "view"}
                                     /> 
                                      
                                 </FormGroup>
@@ -545,6 +548,7 @@ const BasicInfo = (props) => {
                                         value={objValues.indexClient}
                                         onChange={handleInputChange}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         <option value="true">YES</option>
@@ -567,6 +571,7 @@ const BasicInfo = (props) => {
                                         value={objValues.relationshipWithIndexClient}
                                         onChange={handleInputChange}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         {indexTesting.map((value) => (
@@ -589,7 +594,7 @@ const BasicInfo = (props) => {
                                      value={objValues.indexClientCode}
                                      onChange={handleInputChange}
                                      style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
-                                
+                                     readOnly={props.activePage.actionType === "view"}
                                  />
                                    
                              </FormGroup>
@@ -600,7 +605,7 @@ const BasicInfo = (props) => {
                             <>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Pregnant</Label>
+                                    <Label>Pregnant Status</Label>
                                     <select
                                         className="form-control"
                                         name="pregnant"
@@ -608,6 +613,7 @@ const BasicInfo = (props) => {
                                         value={objValues.pregnant}
                                         onChange={handleInputChange}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         {pregnancyStatus.map((value) => (
@@ -653,6 +659,7 @@ const BasicInfo = (props) => {
                                         value={objValues.firstTimeVisit}
                                         onChange={handleInputChange}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         <option value="true">YES</option>
@@ -674,6 +681,7 @@ const BasicInfo = (props) => {
                                         value={objValues.previouslyTested}
                                         onChange={handleInputChange}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         <option value="true">YES</option>
@@ -694,6 +702,7 @@ const BasicInfo = (props) => {
                                         value={objValues.typeCounseling}
                                         onChange={handleInputChange}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         {counselingType.map((value) => (

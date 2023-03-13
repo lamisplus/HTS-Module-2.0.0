@@ -532,6 +532,7 @@ const HivTestResult = (props) => {
                       borderRadius: "0.25rem",
                     }}
                     required
+                    disabled={props.activePage.actionType === "view"}
                   />
                   {errors.date !== "" ? (
                     <span className={classes.error}>{errors.date}</span>
@@ -554,7 +555,8 @@ const HivTestResult = (props) => {
                         border: "1px solid #014D88",
                         borderRadius: "0.2rem",
                       }}
-                      disabled={initialTest1.date === "" ? true : false}
+                      //disabled={initialTest1.date === "" ? true : false}
+                      disabled={props.activePage.actionType === "view"}
                     >
                       <option value={""}></option>
                       <option value="Yes">Reactive</option>
@@ -588,6 +590,7 @@ const HivTestResult = (props) => {
                           borderRadius: "0.25rem",
                         }}
                         required
+                        readOnly={props.activePage.actionType === "view"}
                       />
                       {errors.dateOfEac1 !== "" ? (
                         <span className={classes.error}>
@@ -612,7 +615,7 @@ const HivTestResult = (props) => {
                             border: "1px solid #014D88",
                             borderRadius: "0.2rem",
                           }}
-                          disabled={confirmatoryTest.date === "" ? true : false}
+                          disabled={props.activePage.actionType === "view"}
                         >
                           <option value={""}></option>
                           <option value="Yes">Reactive</option>
@@ -643,6 +646,7 @@ const HivTestResult = (props) => {
                           borderRadius: "0.25rem",
                         }}
                         required
+                        readOnly={props.activePage.actionType === "view"}
                       />
                     </FormGroup>
                   </div>
@@ -660,7 +664,8 @@ const HivTestResult = (props) => {
                             border: "1px solid #014D88",
                             borderRadius: "0.2rem",
                           }}
-                          disabled={tieBreakerTest.date === "" ? true : false}
+                          //disabled={tieBreakerTest.date === "" ? true : false}
+                          disabled={props.activePage.actionType === "view"}
                         >
                           <option value={""}></option>
                           <option value="Yes">Reactive</option>
@@ -713,6 +718,9 @@ const HivTestResult = (props) => {
                                   borderRadius: "0.25rem",
                                 }}
                                 required
+                                readOnly={
+                                  props.activePage.actionType === "view"
+                                }
                               />
                               {errors.date2 !== "" ? (
                                 <span className={classes.error}>
@@ -737,8 +745,11 @@ const HivTestResult = (props) => {
                                   border: "1px solid #014D88",
                                   borderRadius: "0.2rem",
                                 }}
+                                // disabled={
+                                //   initialTest12.date2 === "" ? true : false
+                                // }
                                 disabled={
-                                  initialTest12.date2 === "" ? true : false
+                                  props.activePage.actionType === "view"
                                 }
                               >
                                 <option value={""}></option>
@@ -777,6 +788,9 @@ const HivTestResult = (props) => {
                                       borderRadius: "0.25rem",
                                     }}
                                     required
+                                    readOnly={
+                                      props.activePage.actionType === "view"
+                                    }
                                   />
                                 </FormGroup>
                               </div>
@@ -793,10 +807,13 @@ const HivTestResult = (props) => {
                                       border: "1px solid #014D88",
                                       borderRadius: "0.2rem",
                                     }}
+                                    // disabled={
+                                    //   confirmatoryTest2.date2 === ""
+                                    //     ? true
+                                    //     : false
+                                    // }
                                     disabled={
-                                      confirmatoryTest2.date2 === ""
-                                        ? true
-                                        : false
+                                      props.activePage.actionType === "view"
                                     }
                                   >
                                     <option value={""}></option>
@@ -829,6 +846,9 @@ const HivTestResult = (props) => {
                                       borderRadius: "0.25rem",
                                     }}
                                     required
+                                    readOnly={
+                                      props.activePage.actionType === "view"
+                                    }
                                   />
                                 </FormGroup>
                               </div>
@@ -957,6 +977,9 @@ const HivTestResult = (props) => {
                                       borderRadius: "0.25rem",
                                     }}
                                     required
+                                    readOnly={
+                                      props.activePage.actionType === "view"
+                                    }
                                   />
                                 </FormGroup>
                               </div>
@@ -973,10 +996,13 @@ const HivTestResult = (props) => {
                                       border: "1px solid #014D88",
                                       borderRadius: "0.2rem",
                                     }}
+                                    // disabled={
+                                    //   confirmatoryTest2.date2 === ""
+                                    //     ? true
+                                    //     : false
+                                    // }
                                     disabled={
-                                      confirmatoryTest2.date2 === ""
-                                        ? true
-                                        : false
+                                      props.activePage.actionType === "view"
                                     }
                                   >
                                     <option value={""}></option>
@@ -1009,6 +1035,9 @@ const HivTestResult = (props) => {
                                       borderRadius: "0.25rem",
                                     }}
                                     required
+                                    readOnly={
+                                      props.activePage.actionType === "view"
+                                    }
                                   />
                                 </FormGroup>
                               </div>
@@ -1025,10 +1054,13 @@ const HivTestResult = (props) => {
                                       border: "1px solid #014D88",
                                       borderRadius: "0.2rem",
                                     }}
+                                    // disabled={
+                                    //   tieBreakerTest2.date2 === ""
+                                    //     ? true
+                                    //     : false
+                                    // }
                                     disabled={
-                                      tieBreakerTest2.date2 === ""
-                                        ? true
-                                        : false
+                                      props.activePage.actionType === "view"
                                     }
                                   >
                                     <option value={""}></option>
@@ -1051,56 +1083,62 @@ const HivTestResult = (props) => {
                       <>
                         <b> Result : </b>
                         <LabelRibbon color="green">Non Reactive</LabelRibbon>
-                        <br/>
+                        <br />
                         <div className="row">
-                        <div className="form-group  col-md-6">
+                          <div className="form-group  col-md-6">
                             <FormGroup>
-                            <Label>
+                              <Label>
                                 Prep Offered{" "}
                                 <span style={{ color: "red" }}> *</span>
-                            </Label>
-                            <select
+                              </Label>
+                              <select
                                 className="form-control"
                                 name="prepOffered"
                                 id="prepOffered"
                                 value={objValues.prepOffered}
                                 onChange={handleInputChange}
                                 style={{
-                                border: "1px solid #014D88",
-                                borderRadius: "0.2rem",
+                                  border: "1px solid #014D88",
+                                  borderRadius: "0.2rem",
                                 }}
-                            >
+                                disabled={
+                                  props.activePage.actionType === "view"
+                                }
+                              >
                                 <option value={""}></option>
                                 <option value="true">Yes</option>
                                 <option value="false">No</option>
-                            </select>
+                              </select>
                             </FormGroup>
-                        </div>
-                        {objValues.prepOffered !== "" &&
+                          </div>
+                          {objValues.prepOffered !== "" &&
                             objValues.prepOffered === "true" && (
-                            <div className="form-group  col-md-6">
+                              <div className="form-group  col-md-6">
                                 <FormGroup>
-                                <Label>
+                                  <Label>
                                     Prep Accepted{" "}
                                     <span style={{ color: "red" }}> *</span>
-                                </Label>
-                                <select
+                                  </Label>
+                                  <select
                                     className="form-control"
                                     name="prepAccepted"
                                     id="prepAccepted"
                                     value={objValues.prepAccepted}
                                     onChange={handleInputChange}
                                     style={{
-                                    border: "1px solid #014D88",
-                                    borderRadius: "0.2rem",
+                                      border: "1px solid #014D88",
+                                      borderRadius: "0.2rem",
                                     }}
-                                >
+                                    disabled={
+                                      props.activePage.actionType === "view"
+                                    }
+                                  >
                                     <option value={""}></option>
                                     <option value="true">Yes</option>
                                     <option value="false">No</option>
-                                </select>
+                                  </select>
                                 </FormGroup>
-                            </div>
+                              </div>
                             )}
                         </div>
                       </>
@@ -1111,59 +1149,63 @@ const HivTestResult = (props) => {
                     <>
                       <b> Final Result : </b>
                       <LabelRibbon color="green">Negative</LabelRibbon>
-                      <br/>
-                      <br/>
+                      <br />
+                      <br />
                       <div className="row">
                         <div className="form-group  col-md-5">
-                            <FormGroup>
+                          <FormGroup>
                             <Label>
-                                Prep Offered{" "}
-                                <span style={{ color: "red" }}> *</span>
+                              Prep Offered{" "}
+                              <span style={{ color: "red" }}> *</span>
                             </Label>
                             <select
-                                className="form-control"
-                                name="prepOffered"
-                                id="prepOffered"
-                                value={objValues.prepOffered}
-                                onChange={handleInputChange}
-                                style={{
+                              className="form-control"
+                              name="prepOffered"
+                              id="prepOffered"
+                              value={objValues.prepOffered}
+                              onChange={handleInputChange}
+                              style={{
                                 border: "1px solid #014D88",
                                 borderRadius: "0.2rem",
-                                }}
+                              }}
+                              disabled={props.activePage.actionType === "view"}
                             >
-                                <option value={""}></option>
-                                <option value="true">Yes</option>
-                                <option value="false">No</option>
+                              <option value={""}></option>
+                              <option value="true">Yes</option>
+                              <option value="false">No</option>
                             </select>
-                            </FormGroup>
+                          </FormGroup>
                         </div>
                         {objValues.prepOffered !== "" &&
-                            objValues.prepOffered === "true" && (
+                          objValues.prepOffered === "true" && (
                             <div className="form-group  col-md-5">
-                                <FormGroup>
+                              <FormGroup>
                                 <Label>
-                                    Prep Accepted{" "}
-                                    <span style={{ color: "red" }}> *</span>
+                                  Prep Accepted{" "}
+                                  <span style={{ color: "red" }}> *</span>
                                 </Label>
                                 <select
-                                    className="form-control"
-                                    name="prepAccepted"
-                                    id="prepAccepted"
-                                    value={objValues.prepAccepted}
-                                    onChange={handleInputChange}
-                                    style={{
+                                  className="form-control"
+                                  name="prepAccepted"
+                                  id="prepAccepted"
+                                  value={objValues.prepAccepted}
+                                  onChange={handleInputChange}
+                                  style={{
                                     border: "1px solid #014D88",
                                     borderRadius: "0.2rem",
-                                    }}
+                                  }}
+                                  disabled={
+                                    props.activePage.actionType === "view"
+                                  }
                                 >
-                                    <option value={""}></option>
-                                    <option value="true">Yes</option>
-                                    <option value="false">No</option>
+                                  <option value={""}></option>
+                                  <option value="true">Yes</option>
+                                  <option value="false">No</option>
                                 </select>
-                                </FormGroup>
+                              </FormGroup>
                             </div>
-                            )}
-                        </div>
+                          )}
+                      </div>
                     </>
                   )}
                   {initialTest12.result2 === "No" &&
@@ -1226,6 +1268,7 @@ const HivTestResult = (props) => {
                             border: "1px solid #014D88",
                             borderRadius: "0.2rem",
                           }}
+                          disabled={props.activePage.actionType === "view"}
                         >
                           <option value={""}></option>
                           <option value="true">Yes</option>
@@ -1251,6 +1294,7 @@ const HivTestResult = (props) => {
                                 border: "1px solid #014D88",
                                 borderRadius: "0.2rem",
                               }}
+                              disabled={props.activePage.actionType === "view"}
                             >
                               <option value={""}></option>
                               <option value="true">Yes</option>
@@ -1282,6 +1326,7 @@ const HivTestResult = (props) => {
                               border: "1px solid #014D88",
                               borderRadius: "0.2rem",
                             }}
+                            disabled={props.activePage.actionType === "view"}
                           >
                             <option value={""}></option>
                             <option value="true">Yes</option>
@@ -1342,6 +1387,7 @@ const HivTestResult = (props) => {
                           border: "1px solid #014D88",
                           borderRadius: "0.2rem",
                         }}
+                        disabled={props.activePage.actionType === "view"}
                       >
                         <option value={""}></option>
                         <option value="Semi-Quantitative">
@@ -1365,6 +1411,7 @@ const HivTestResult = (props) => {
                             border: "1px solid #014D88",
                             borderRadius: "0.2rem",
                           }}
+                          disabled={props.activePage.actionType === "view"}
                         >
                           <option value={""}></option>
                           <option value="<200">{"<200"}</option>
@@ -1387,6 +1434,7 @@ const HivTestResult = (props) => {
                             border: "1px solid #014D88",
                             borderRadius: "0.25rem",
                           }}
+                          disabled={props.activePage.actionType === "view"}
                         />
                       </FormGroup>
                     </div>
@@ -1418,6 +1466,7 @@ const HivTestResult = (props) => {
                       border: "1px solid #014D88",
                       borderRadius: "0.2rem",
                     }}
+                    disabled={props.activePage.actionType === "view"}
                   >
                     <option value={""}></option>
                     <option value="Yes">Reactive</option>
@@ -1457,6 +1506,7 @@ const HivTestResult = (props) => {
                       border: "1px solid #014D88",
                       borderRadius: "0.2rem",
                     }}
+                    disabled={props.activePage.actionType === "view"}
                   >
                     <option value={""}></option>
                     <option value="Yes">Positive</option>
@@ -1487,6 +1537,7 @@ const HivTestResult = (props) => {
                       border: "1px solid #014D88",
                       borderRadius: "0.2rem",
                     }}
+                    disabled={props.activePage.actionType === "view"}
                   >
                     <option value={""}></option>
                     <option value="Yes">Positive</option>
@@ -1527,6 +1578,7 @@ const HivTestResult = (props) => {
                             border: "1px solid #014D88",
                             borderRadius: "0.25rem",
                           }}
+                          readOnly={props.activePage.actionType === "view"}
                         />
                       </FormGroup>
                     </div>
@@ -1543,6 +1595,7 @@ const HivTestResult = (props) => {
                             border: "1px solid #014D88",
                             borderRadius: "0.25rem",
                           }}
+                          readOnly={props.activePage.actionType === "view"}
                         />
                       </FormGroup>
                     </div>
@@ -1561,10 +1614,10 @@ const HivTestResult = (props) => {
                       border: "1px solid #014D88",
                       borderRadius: "0.25rem",
                     }}
+                    readOnly={props.activePage.actionType === "view"}
                   />
                 </FormGroup>
               </div>
-              
               {saving ? <Spinner /> : ""}
               <br />
               <div className="row">

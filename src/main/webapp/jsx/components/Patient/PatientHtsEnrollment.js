@@ -38,6 +38,14 @@ const UserRegistration = (props) => {
   const [completed, setCompleted] = useState([]);
   const [hideOtherMenu, setHideOtherMenu] = useState(true);
   const [patientObj, setPatientObj] = useState(props.activePage.activeObject);
+  const [extra, setExtra] = useState({
+    risk: "",
+    index: "",
+    pre: "",
+    post: "",
+    recency: "",
+    elicitation: "",
+  });
   const handleItemClick = (activeItem) => {
     setactiveItem(activeItem);
     //setCompleted({...completed, ...completedMenu})
@@ -115,7 +123,7 @@ const UserRegistration = (props) => {
                       )}
                     </span>
                   </Menu.Item>
-                  {props.patientAge > 14 && (
+                  {props.patientAge >= 15 && (
                     <Menu.Item
                       name="spam"
                       active={activeItem === "pre-test-counsel"}
@@ -225,6 +233,8 @@ const UserRegistration = (props) => {
                     setPatientObj={setPatientObj}
                     patientObj={patientObj}
                     setHideOtherMenu={setHideOtherMenu}
+                    setExtra={setExtra}
+                    extra={extra}
                     activePage={props.activePage}
                     setActivePage={props.setActivePage}
                     patientAge={props.patientAge}

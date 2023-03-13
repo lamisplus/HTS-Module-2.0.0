@@ -98,7 +98,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 const BasicInfo = (props) => {
-    //console.log("basic", props.patientObj)
+    console.log("basic", props.patientObj, props.sex)
     const classes = useStyles();
     const history = useHistory();
     const [errors, setErrors] = useState({});
@@ -178,7 +178,7 @@ const BasicInfo = (props) => {
     //Get list of KP
     const PregnancyStatus =()=>{
         axios
-        .get(`${baseUrl}application-codesets/v2/PREGANACY_STATUS`,
+        .get(`${baseUrl}application-codesets/v2/PREGNANCY_STATUS`,
             { headers: {"Authorization" : `Bearer ${token}`} }
         )
         .then((response) => {
@@ -299,11 +299,11 @@ const BasicInfo = (props) => {
             const response = await axios.get(`${baseUrl}hts/client/${indexClientCode}`,
                     { headers: {"Authorization" : `Bearer ${token}`, 'Content-Type': 'text/plain'} }
                 );
-            if(response.data!=='Record Not Found'){
-                setClientCodeCheck("Client code already exist")
-            }else{
-                setClientCodeCheck("")
-            }
+            // if(response.data!=='Record Not Found'){
+            //     setClientCodeCheck("Client code already exist")
+            // }else{
+            //     setClientCodeCheck("")
+            // }
         }
         getIndexClientCode();
                           
@@ -369,7 +369,7 @@ const BasicInfo = (props) => {
         
             <Card className={classes.root}>
                 <CardBody>   
-                <h2 style={{color:'#000'}}>CLIENT INTAKE FORM </h2>
+                <h2 style={{color:'#000'}}>CLIENT INTAKE FORMs </h2>
                 <br/>
                     <form >
                         <div className="row">
@@ -385,12 +385,17 @@ const BasicInfo = (props) => {
                                         disabled
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                     >
-                                        <option value={""}></option>
+                                        {/* <option value={""}></option>
                                         {kP.map((value) => (
                                             <option key={value.id} value={value.code}>
                                                 {value.display}
                                             </option>
-                                        ))}
+                                        ))} */}
+                                       {(props.sex ==='Female' || props.sex ==='female') && ( <> {kP.filter((x)=>x.display!=='MSM').map((value) =>
+                                       ( <option key={value.id} value={value.code}>{value.display}</option>))}</>)}
+
+                                       {(props.sex ==='Male' || props.sex ==='male') && ( <> {kP.filter((x)=>x.display!=='FSW').map((value) =>
+                                       (<option key={value.id} value={value.code}>{value.display}</option>))} </> )}
                                     </select>
                                     {errors.targetGroup !=="" ? (
                                         <span className={classes.error}>{errors.targetGroup}</span>
@@ -629,7 +634,7 @@ const BasicInfo = (props) => {
                                     
                                 </FormGroup>
                             </div>
-                            {(objValues.pregnant!== 73 || objValues.pregnant!== '73') && (
+                            {/* objValues.pregnant === "" && (objValues.pregnant!== 73 || objValues.pregnant!== '73') && (
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Breast Feeding</Label>
@@ -648,7 +653,7 @@ const BasicInfo = (props) => {
                                     
                                 </FormGroup>
                             </div>
-                            )}
+                            )*/}
                             </>
                             )}
                            

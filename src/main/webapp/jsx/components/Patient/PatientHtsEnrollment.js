@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const UserRegistration = (props) => {
-  console.log(props)
+  console.log("con out",props)
   const classes = useStyles();
   const [activeItem, setactiveItem] = useState("basic");
   const [completed, setCompleted] = useState([]);

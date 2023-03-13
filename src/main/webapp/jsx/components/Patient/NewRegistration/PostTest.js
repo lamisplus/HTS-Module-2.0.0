@@ -128,11 +128,23 @@ const PostTest = (props) => {
             setPostTest(props.patientObj.postTestCounselingKnowledgeAssessment) 
         }else{
             ///setPostTest(props.patientObj && props.patientObj.postTestCounselingKnowledgeAssessment!==null ? props.patientObj.postTestCounselingKnowledgeAssessment : {}) 
-            if(postTest.hivTestResult==="" && props.patientObj.hivTestResult!=="" && props.patientObj.hivTestResult!==null && (props.patientObj.hivTestResult==='Positive' || props.patientObj.hivTestResult2==='Positive')){
+            if (postTest.hivTestResult==="" && props.patientObj.hivTestResult2!=="" 
+            && props.patientObj.hivTestResult2!==null && props.patientObj.hivTestResult2==='Positive') {
                 postTest.hivTestResult='true'
                 setPostTest({...postTest, hivTestResult:'true' })
-            }else if(postTest.hivTestResult===""  && props.patientObj.hivTestResult!=="" && props.patientObj.hivTestResult!==null && (props.patientObj.hivTestResult==='Negative' || props.patientObj.hivTestResult2==='Negative')){
+            }else if (postTest.hivTestResult==="" && props.patientObj.hivTestResult2!=="" 
+            && props.patientObj.hivTestResult2!==null && props.patientObj.hivTestResult2==='Negative') {
+                postTest.hivTestResult='false'
+                setPostTest({...postTest, hivTestResult:'false' })
+            }
+            else if (postTest.hivTestResult==="" && props.patientObj.hivTestResult!=="" 
+            && props.patientObj.hivTestResult!==null && props.patientObj.hivTestResult==='Positive') {
                 postTest.hivTestResult='true'
+                setPostTest({...postTest, hivTestResult:'true' })
+            }
+            else if (postTest.hivTestResult==="" && props.patientObj.hivTestResult!=="" 
+            && props.patientObj.hivTestResult!==null && props.patientObj.hivTestResult==='Negative') {
+                postTest.hivTestResult='false'
                 setPostTest({...postTest, hivTestResult:'false' })
             }
         }

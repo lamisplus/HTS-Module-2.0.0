@@ -242,7 +242,7 @@ const UserRegistration = (props) => {
     // }
     console.log("Continuous HTS ")
   }, []);
-  //console.log(props)
+  console.log("in",props)
 
   return (
     <>
@@ -432,6 +432,7 @@ const UserRegistration = (props) => {
                     patientObj={patientObj2}
                     clientCode={props.clientCode}
                     patientAge={props.patientAge}
+                    sex={props.patientObj.gender}
                     setExtra={setExtra}
                     extra={extra}
                     patientObject={locationState.patientObject}

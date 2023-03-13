@@ -96,7 +96,7 @@ const useStyles = makeStyles((theme) => ({
 const BasicInfo = (props) => {
     const classes = useStyles();
     const history = useHistory();
-    console.log( "enr", props.activePage)
+    console.log( "enr",  props)
     const [errors, setErrors] = useState({});
     const [saving, setSaving] = useState(false);
     //const [hideNumChild, setHideNumChild] = useState(false);
@@ -197,7 +197,7 @@ const BasicInfo = (props) => {
     //Get list of KP
     const PregnancyStatus =()=>{
         axios
-        .get(`${baseUrl}application-codesets/v2/PREGANACY_STATUS`,
+        .get(`${baseUrl}application-codesets/v2/PREGNANCY_STATUS`,
             { headers: {"Authorization" : `Bearer ${token}`} }
         )
         .then((response) => {
@@ -369,9 +369,9 @@ const BasicInfo = (props) => {
                 <br/>
                     <form >
                         <div className="row">
-                            <div className="form-group  col-md-4">
+                        <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Target Group <span style={{ color:"red"}}> *</span></Label>
+                                    <Label>Target Groups <span style={{ color:"red"}}> *</span></Label>
                                     <select
                                         className="form-control"
                                         name="targetGroup"
@@ -620,7 +620,7 @@ const BasicInfo = (props) => {
                                     
                                 </FormGroup>
                             </div>
-                            {objValues.pregnant!== 73 || objValues.pregnant!== "73" && (
+                            {/*objValues.pregnant!== 73 || objValues.pregnant!== "73" && (
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Breast Feeding</Label>
@@ -639,7 +639,7 @@ const BasicInfo = (props) => {
                                     
                                 </FormGroup>
                             </div>
-                            )}
+                            )*/}
                             </>
                             )}
                            

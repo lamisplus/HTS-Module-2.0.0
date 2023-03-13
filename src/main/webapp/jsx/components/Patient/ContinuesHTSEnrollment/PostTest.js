@@ -91,7 +91,7 @@ const PostTest = (props) => {
     const clientId = props.patientObj && props.patientObj ? props.patientObj.id : "";
     const [saving, setSaving] = useState(false);
     
-    //console.log("data3", props.patientObj)
+    console.log("data3", props.patientObj)
     ///const [errors, setErrors] = useState({});
     const [objValues, setObjValues]= useState(
         {
@@ -126,19 +126,46 @@ const PostTest = (props) => {
         }
     )
     useEffect(() => { 
-        //console.log(props.patientObj)
-        if(props.patientObj && props.patientObj.postTestCounselingKnowledgeAssessment){
-            setPostTest(props.patientObj.postTestCounselingKnowledgeAssessment) 
-        }else{
-            ///setPostTest(props.patientObj && props.patientObj.postTestCounselingKnowledgeAssessment!==null ? props.patientObj.postTestCounselingKnowledgeAssessment : {}) 
-            if(postTest.hivTestResult==="" && props.patientObj.hivTestResult!=="" && props.patientObj.hivTestResult!==null && (props.patientObj.hivTestResult==='Positive' || props.patientObj.hivTestResult2==='Positive')){
-                postTest.hivTestResult='true'
-                setPostTest({...postTest, hivTestResult:'true' })
-            }else if(postTest.hivTestResult===""  && props.patientObj.hivTestResult!=="" && props.patientObj.hivTestResult!==null && (props.patientObj.hivTestResult==='Negative' || props.patientObj.hivTestResult2==='Negative')){
-                postTest.hivTestResult='false'
-                setPostTest({...postTest, hivTestResult:'true' })
-            }
+        setPostTest({...postTest, ...props.patientObj.postTestCounselingKnowledgeAssessment}) 
+
+        if (props.patientObj?.hivTestResult2?.length > 0 && props.patientObj.hivTestResult2==='Positive') {
+            postTest.hivTestResult='true'
+            setPostTest({...postTest, hivTestResult:'true' })
+        }else if (props.patientObj?.hivTestResult2?.length > 0 && props.patientObj.hivTestResult2==='Negative') {
+            postTest.hivTestResult='false'
+            setPostTest({...postTest, hivTestResult:'false' })
         }
+        else if (props.patientObj?.hivTestResult?.length > 0 && props.patientObj.hivTestResult==='Positive') {
+            postTest.hivTestResult='true'
+            setPostTest({...postTest, hivTestResult:'true' })
+        }
+        else if (props.patientObj?.hivTestResult?.length > 0 && props.patientObj.hivTestResult==='Negative') {
+            postTest.hivTestResult='false'
+            setPostTest({...postTest, hivTestResult:'false' })
+        }
+        // if(props.patientObj && props.patientObj.postTestCounselingKnowledgeAssessment){
+        //     setPostTest(props.patientObj.postTestCounselingKnowledgeAssessment) 
+        // }else{
+        //     if (postTest.hivTestResult==="" && props.patientObj.hivTestResult2!=="" 
+        //     && props.patientObj.hivTestResult2!==null && props.patientObj.hivTestResult2==='Positive') {
+        //         postTest.hivTestResult='true'
+        //         setPostTest({...postTest, hivTestResult:'true' })
+        //     }else if (postTest.hivTestResult==="" && props.patientObj.hivTestResult2!=="" 
+        //     && props.patientObj.hivTestResult2!==null && props.patientObj.hivTestResult2==='Negative') {
+        //         postTest.hivTestResult='false'
+        //         setPostTest({...postTest, hivTestResult:'false' })
+        //     }
+        //     else if (postTest.hivTestResult==="" && props.patientObj.hivTestResult!=="" 
+        //     && props.patientObj.hivTestResult!==null && props.patientObj.hivTestResult==='Positive') {
+        //         postTest.hivTestResult='true'
+        //         setPostTest({...postTest, hivTestResult:'true' })
+        //     }
+        //     else if (postTest.hivTestResult==="" && props.patientObj.hivTestResult!=="" 
+        //     && props.patientObj.hivTestResult!==null && props.patientObj.hivTestResult==='Negative') {
+        //         postTest.hivTestResult='false'
+        //         setPostTest({...postTest, hivTestResult:'false' })
+        //     }
+        // }
     }, [props.patientObj,postTest.hivTestResult]);
     const handleInputChangePostTest = e => { 
         //setErrors({...temp, [e.target.name]:""})        

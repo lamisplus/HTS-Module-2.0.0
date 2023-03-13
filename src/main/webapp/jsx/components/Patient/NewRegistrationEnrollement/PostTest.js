@@ -141,9 +141,23 @@ const PostTest = (props) => {
     useEffect(() => {
         //console.log(props.patientObj.postTestCounselingKnowledgeAssessment) 
         setPostTest({...postTest, ...props.patientObj.postTestCounselingKnowledgeAssessment}) 
-        if(props.patientObj && (props.patientObj.hivTestResult==='Positive' || props.patientObj.hivTestResult2!=='Positive')){
-            postTest.hivTestResult='Positive'
+
+        if (props.patientObj?.hivTestResult2?.length > 0 && props.patientObj.hivTestResult2==='Positive') {
+            postTest.hivTestResult='true'
+            setPostTest({...postTest, hivTestResult:'true' })
+        }else if (props.patientObj?.hivTestResult2?.length > 0 && props.patientObj.hivTestResult2==='Negative') {
+            postTest.hivTestResult='false'
+            setPostTest({...postTest, hivTestResult:'false' })
         }
+        else if (props.patientObj?.hivTestResult?.length > 0 && props.patientObj.hivTestResult==='Positive') {
+            postTest.hivTestResult='true'
+            setPostTest({...postTest, hivTestResult:'true' })
+        }
+        else if (props.patientObj?.hivTestResult?.length > 0 && props.patientObj.hivTestResult==='Negative') {
+            postTest.hivTestResult='false'
+            setPostTest({...postTest, hivTestResult:'false' })
+        }
+
     }, [ props.patientObj]);
     
     const handleSubmit =(e)=>{

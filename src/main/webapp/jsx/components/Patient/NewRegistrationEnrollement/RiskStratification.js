@@ -387,7 +387,8 @@ const RiskStratification = (props) => {
                         // }
                     });
                 }
-            }else {
+            }
+            else {
                 if((riskCount>0 || riskCountQuestion.length>0) && props.patientAge>15){
                     if(validate()){
                         setSaving(true);

@@ -98,6 +98,8 @@
                 sex_partner_risk_assessment jsonb,
                 others jsonb,
                 cd4 jsonb,
+                prep_given character varying,
+                other_drugs character varying,
                 date_created timestamp without time zone,
                 created_by character varying,
                 date_modified timestamp without time zone,

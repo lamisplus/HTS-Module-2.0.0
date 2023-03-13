@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
 
-    <changeSet failOnError="true" author="Emeka" id="hts-1">
+    <changeSet failOnError="true" author="Emeka" id="hts-11">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="hts_risk_stratification"/>
@@ -44,7 +44,7 @@
         </sql>
     </changeSet>
 
-    <changeSet failOnError="true" author="Emeka" id="hts-2">
+    <changeSet failOnError="true" author="Emeka" id="hts-22">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="hts_client"/>
@@ -98,8 +98,6 @@
                 sex_partner_risk_assessment jsonb,
                 others jsonb,
                 cd4 jsonb,
-                prep_given character varying,
-                other_drugs character varying,
                 date_created timestamp without time zone,
                 created_by character varying,
                 date_modified timestamp without time zone,
@@ -141,7 +139,7 @@
         </sql>
     </changeSet>
 
-    <changeSet failOnError="true" author="Emeka" id="hts-1=3">
+    <changeSet failOnError="true" author="Emeka" id="hts-33">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="hts_index_elicitation"/>
@@ -223,5 +221,33 @@
                     NOT VALID
             )
         </sql>
+    </changeSet>
+
+    <changeSet failOnError="true" author="Dr Java" id="hts-44">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*)
+                FROM pg_attribute
+                WHERE attrelid = (SELECT oid FROM pg_class WHERE relname = 'hts_client')
+                  AND attname = 'prep_given';
+            </sqlCheck>
+        </preConditions>
+        <addColumn tableName="hts_client" >
+            <column name="prep_given" afterColumn="id" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet failOnError="true" author="Dr Java" id="hts-55">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*)
+                FROM pg_attribute
+                WHERE attrelid = (SELECT oid FROM pg_class WHERE relname = 'hts_client')
+                  AND attname = 'other_drugs';
+            </sqlCheck>
+        </preConditions>
+        <addColumn tableName="hts_client" >
+            <column name="other_drugs" afterColumn="id" type="varchar(255)"/>
+        </addColumn>
     </changeSet>
 </databaseChangeLog>

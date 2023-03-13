@@ -97,7 +97,7 @@ const useStyles = makeStyles((theme) => ({
 const RiskStratification = (props) => {
   const classes = useStyles();
   const history = useHistory();
-  console.log("con", props.patientObj);
+  console.log("con", props.activePage.activeObject);
   const [enrollSetting, setEnrollSetting] = useState([]);
   const [entryPoint, setEntryPoint] = useState([]);
   const [entryPointCommunity, setEntryPointCommunity] = useState([]);
@@ -407,7 +407,7 @@ const RiskStratification = (props) => {
     if (
         props.patientObj.riskStratificationResponseDto &&
         props.patientObj.riskStratificationResponseDto !== null &&
-        props.patientObj.personId !== "" ||
+        props.patientObj.personId !== "" &&
         props.patientObj.riskStratificationResponseDto.code !== ""
     ) {
         if (validate()) {
@@ -448,6 +448,42 @@ const RiskStratification = (props) => {
         }
     } else {
         console.log("post")
+        if (validate()) {
+          setSaving(true);
+          axios
+            .post(`${baseUrl}risk-stratification`, objValues, {
+              headers: { Authorization: `Bearer ${token}` },
+            })
+            .then((response) => {
+              setSaving(false);
+              objValues.code = response.data.code;
+              props.setExtra(objValues);
+              handleItemClick("basic", "risk");
+              props.setHideOtherMenu(false);
+              //toast.success("Risk stratification save succesfully!");
+            })
+            .catch((error) => {
+              setSaving(false);
+              if (error.response && error.response.data) {
+                let errorMessage =
+                  error.response.data.apierror &&
+                  error.response.data.apierror.message !== ""
+                    ? error.response.data.apierror.message
+                    : "Something went wrong, please try again";
+                toast.error(errorMessage, {
+                  position: toast.POSITION.BOTTOM_CENTER,
+                });
+              } else {
+                toast.error("Something went wrong. Please try again...", {
+                  position: toast.POSITION.BOTTOM_CENTER,
+                });
+              }
+            });
+        } else {
+          toast.error("All fields are required", {
+            position: toast.POSITION.BOTTOM_CENTER,
+          });
+        }
     }
   };
 
@@ -487,6 +523,7 @@ const RiskStratification = (props) => {
                         border: "1px solid #014D88",
                         borderRadius: "0.2rem",
                       }}
+                      disabled={props.activePage.actionType === "view"}
                     >
                       <option value={""}>Select</option>
                       {entryPoint.map((value) => (
@@ -519,6 +556,7 @@ const RiskStratification = (props) => {
                           border: "1px solid #014D88",
                           borderRadius: "0.2rem",
                         }}
+                        disabled={props.activePage.actionType === "view"}
                       >
                         <option value={""}>Select</option>
                         {entryPointCommunity.map((value) => (
@@ -554,6 +592,7 @@ const RiskStratification = (props) => {
                         border: "1px solid #014D88",
                         borderRadius: "0.25rem",
                       }}
+                      readOnly={props.activePage.actionType === "view"}
                     />
                     {errors.dateVisit !== "" ? (
                       <span className={classes.error}>{errors.dateVisit}</span>
@@ -577,6 +616,7 @@ const RiskStratification = (props) => {
                         border: "1px solid #014D88",
                         borderRadius: "0.2rem",
                       }}
+                      disabled={props.activePage.actionType === "view"}
                     >
                       <option value={""}>Select</option>
                       {enrollSetting.map((value) => (
@@ -619,6 +659,7 @@ const RiskStratification = (props) => {
                         border: "1px solid #014D88",
                         borderRadius: "0.2rem",
                       }}
+                      disabled={props.activePage.actionType === "view"}
                     >
                       <option value={""}>Select</option>
                       {setting.map((value) => (
@@ -649,6 +690,7 @@ const RiskStratification = (props) => {
                         border: "1px solid #014D88",
                         borderRadius: "0.2rem",
                       }}
+                      disabled={props.activePage.actionType === "view"}
                     >
                       <option value={""}></option>
                       {kP.map((value) => (
@@ -686,6 +728,7 @@ const RiskStratification = (props) => {
                         border: "1px solid #014D88",
                         borderRadius: "0.2rem",
                       }}
+                      disabled={props.activePage.actionType === "view"}
                     >
                       <option value={""}>Select</option>
                       <option value="true">Yes</option>
@@ -735,6 +778,7 @@ const RiskStratification = (props) => {
                             border: "1px solid #014D88",
                             borderRadius: "0.2rem",
                           }}
+                          disabled={props.activePage.actionType === "view"}
                         >
                           <option value={""}></option>
                           <option value="<1"> {"< 1"} month</option>
@@ -770,6 +814,7 @@ const RiskStratification = (props) => {
                                 border: "1px solid #014D88",
                                 borderRadius: "0.2rem",
                               }}
+                              disabled={props.activePage.actionType === "view"}
                             >
                               <option value={""}></option>
                               <option value="Positive">Positive</option>
@@ -803,6 +848,7 @@ const RiskStratification = (props) => {
                             border: "1px solid #014D88",
                             borderRadius: "0.2rem",
                           }}
+                          disabled={props.activePage.actionType === "view"}
                         >
                           <option value={""}></option>
                           <option value="true">Yes</option>
@@ -834,6 +880,7 @@ const RiskStratification = (props) => {
                             border: "1px solid #014D88",
                             borderRadius: "0.2rem",
                           }}
+                          disabled={props.activePage.actionType === "view"}
                         >
                           <option value={""}></option>
                           <option value="true">Yes</option>
@@ -868,6 +915,7 @@ const RiskStratification = (props) => {
                             border: "1px solid #014D88",
                             borderRadius: "0.2rem",
                           }}
+                          disabled={props.activePage.actionType === "view"}
                         >
                           <option value={""}></option>
                           <option value="true">Yes</option>
@@ -899,6 +947,7 @@ const RiskStratification = (props) => {
                             border: "1px solid #014D88",
                             borderRadius: "0.2rem",
                           }}
+                          disabled={props.activePage.actionType === "view"}
                         >
                           <option value={""}></option>
                           <option value="true">Yes</option>
@@ -932,6 +981,7 @@ const RiskStratification = (props) => {
                             border: "1px solid #014D88",
                             borderRadius: "0.2rem",
                           }}
+                          disabled={props.activePage.actionType === "view"}
                         >
                           <option value={""}></option>
                           <option value="true">Yes</option>
@@ -963,6 +1013,7 @@ const RiskStratification = (props) => {
                             border: "1px solid #014D88",
                             borderRadius: "0.2rem",
                           }}
+                          disabled={props.activePage.actionType === "view"}
                         >
                           <option value={""}></option>
                           <option value="true">Yes</option>
@@ -993,6 +1044,7 @@ const RiskStratification = (props) => {
                             border: "1px solid #014D88",
                             borderRadius: "0.2rem",
                           }}
+                          disabled={props.activePage.actionType === "view"}
                         >
                           <option value={""}></option>
                           <option value="true">Yes</option>

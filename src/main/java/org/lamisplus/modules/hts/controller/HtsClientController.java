@@ -73,6 +73,12 @@ public class HtsClientController {
     public ResponseEntity<String> getClientNameByCode(@PathVariable String code) {
         return ResponseEntity.ok(this.htsClientService.getClientNameByCode(code));
     }
+
+    @GetMapping(HTS_URL_VERSION_ONE + "/client")
+    public ResponseEntity<String> getClientNameByCodeName(@RequestParam String code) {
+        return ResponseEntity.ok(this.htsClientService.getClientNameByCode(code));
+    }
+
     @GetMapping(HTS_URL_VERSION_ONE)
     public ResponseEntity<PageDTO> getHtsClients(@RequestParam (required = false, defaultValue = "*")  String searchValue,
                                                  @RequestParam (required = false, defaultValue = "20")int pageSize,

@@ -614,7 +614,7 @@ const BasicInfo = (props) => {
                             <>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label>Pregnant</Label>
+                                    <Label>Pregnant Status</Label>
                                     <select
                                         className="form-control"
                                         name="pregnant"

@@ -360,6 +360,7 @@ const BasicInfo = (props) => {
                                         value={knowledgeAssessment.previousTestedHIVNegative}
                                         onChange={handleInputChangeKnowledgeAssessment}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
@@ -382,6 +383,7 @@ const BasicInfo = (props) => {
                                         value={knowledgeAssessment.timeLastHIVNegativeTestResult}
                                         onChange={handleInputChangeKnowledgeAssessment}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         <option value="<1"> {"< 1"} month</option>
@@ -408,6 +410,7 @@ const BasicInfo = (props) => {
                                         value={knowledgeAssessment.clientPregnant}
                                         onChange={handleInputChangeKnowledgeAssessment}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
@@ -430,6 +433,7 @@ const BasicInfo = (props) => {
                                         value={knowledgeAssessment.clientInformHivTransRoutes}
                                         onChange={handleInputChangeKnowledgeAssessment}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
@@ -451,6 +455,7 @@ const BasicInfo = (props) => {
                                         value={knowledgeAssessment.clientInformRiskkHivTrans}
                                         onChange={handleInputChangeKnowledgeAssessment}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
@@ -472,6 +477,7 @@ const BasicInfo = (props) => {
                                         value={knowledgeAssessment.clientInformPreventingsHivTrans}
                                         onChange={handleInputChangeKnowledgeAssessment}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
@@ -493,6 +499,7 @@ const BasicInfo = (props) => {
                                         value={knowledgeAssessment.clientInformPossibleTestResult}
                                         onChange={handleInputChangeKnowledgeAssessment}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
@@ -515,6 +522,7 @@ const BasicInfo = (props) => {
                                         value={knowledgeAssessment.informConsentHivTest}
                                         onChange={handleInputChangeKnowledgeAssessment}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
@@ -539,6 +547,7 @@ const BasicInfo = (props) => {
                                         value={tbScreening.currentCough}
                                         onChange={handleInputChangeTbScreening}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
@@ -560,6 +569,7 @@ const BasicInfo = (props) => {
                                         value={tbScreening.weightLoss}
                                         onChange={handleInputChangeTbScreening}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
@@ -581,6 +591,7 @@ const BasicInfo = (props) => {
                                         value={tbScreening.lymphadenopathy}
                                         onChange={handleInputChangeTbScreening}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
@@ -602,6 +613,7 @@ const BasicInfo = (props) => {
                                         value={tbScreening.fever}
                                         onChange={handleInputChangeTbScreening}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
@@ -623,6 +635,7 @@ const BasicInfo = (props) => {
                                         value={tbScreening.nightSweats}
                                         onChange={handleInputChangeTbScreening}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
@@ -652,6 +665,7 @@ const BasicInfo = (props) => {
                                         value={riskAssessment.everHadSexualIntercourse}
                                         onChange={handleInputChangeRiskAssessment}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
@@ -673,6 +687,7 @@ const BasicInfo = (props) => {
                                         value={riskAssessment.bloodtransInlastThreeMonths}
                                         onChange={handleInputChangeRiskAssessment}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
@@ -695,6 +710,7 @@ const BasicInfo = (props) => {
                                         value={riskAssessment.uprotectedSexWithCasualLastThreeMonths}
                                         onChange={handleInputChangeRiskAssessment}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
@@ -718,6 +734,7 @@ const BasicInfo = (props) => {
                                         value={riskAssessment.uprotectedSexWithRegularPartnerLastThreeMonths}
                                         onChange={handleInputChangeRiskAssessment}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
@@ -741,6 +758,7 @@ const BasicInfo = (props) => {
                                         value={riskAssessment.unprotectedVaginalSex}
                                         onChange={handleInputChangeRiskAssessment}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
@@ -764,6 +782,7 @@ const BasicInfo = (props) => {
                                         value={riskAssessment.uprotectedAnalSex}
                                         onChange={handleInputChangeRiskAssessment}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
@@ -787,6 +806,7 @@ const BasicInfo = (props) => {
                                         value={riskAssessment.stiLastThreeMonths}
                                         onChange={handleInputChangeRiskAssessment}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
@@ -810,6 +830,7 @@ const BasicInfo = (props) => {
                                         value={riskAssessment.sexUnderInfluence}
                                         onChange={handleInputChangeRiskAssessment}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
@@ -833,6 +854,7 @@ const BasicInfo = (props) => {
                                          value={riskAssessment.moreThanOneSexPartnerLastThreeMonths}
                                          onChange={handleInputChangeRiskAssessment}
                                          style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                         disabled={props.activePage.actionType === "view"}
                                      >
                                          <option value={""}></option>
                                          <option value="true">Yes</option>
@@ -864,6 +886,7 @@ const BasicInfo = (props) => {
                                         value={riskAssessment.experiencePain}
                                         onChange={handleInputChangeRiskAssessment}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
@@ -885,6 +908,7 @@ const BasicInfo = (props) => {
                                         value={riskAssessment.haveSexWithoutCondom}
                                         onChange={handleInputChangeRiskAssessment}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
@@ -906,6 +930,7 @@ const BasicInfo = (props) => {
                                         value={riskAssessment.haveCondomBurst}
                                         onChange={handleInputChangeRiskAssessment}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
@@ -927,6 +952,7 @@ const BasicInfo = (props) => {
                                         value={riskAssessment.abuseDrug}
                                         onChange={handleInputChangeRiskAssessment}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
@@ -948,6 +974,7 @@ const BasicInfo = (props) => {
                                         value={riskAssessment.bloodTransfusion}
                                         onChange={handleInputChangeRiskAssessment}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
@@ -969,6 +996,7 @@ const BasicInfo = (props) => {
                                         value={riskAssessment.consistentWeightFeverNightCough}
                                         onChange={handleInputChangeRiskAssessment}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
@@ -990,6 +1018,7 @@ const BasicInfo = (props) => {
                                         value={riskAssessment.soldPaidVaginalSex}
                                         onChange={handleInputChangeRiskAssessment}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
@@ -1019,6 +1048,7 @@ const BasicInfo = (props) => {
                                         value={riskAssessmentPartner.sexPartnerHivPositive}
                                         onChange={handleInputChangeRiskAssessmentPartner}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
@@ -1041,6 +1071,7 @@ const BasicInfo = (props) => {
                                         value={riskAssessmentPartner.newDiagnosedHivlastThreeMonths}
                                         onChange={handleInputChangeRiskAssessmentPartner}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
@@ -1062,6 +1093,7 @@ const BasicInfo = (props) => {
                                         value={riskAssessmentPartner.currentlyArvForPmtct}
                                         onChange={handleInputChangeRiskAssessmentPartner}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
@@ -1083,6 +1115,7 @@ const BasicInfo = (props) => {
                                         value={riskAssessmentPartner.knowHivPositiveOnArv}
                                         onChange={handleInputChangeRiskAssessmentPartner}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
@@ -1104,6 +1137,7 @@ const BasicInfo = (props) => {
                                         value={riskAssessmentPartner.knowHivPositiveAfterLostToFollowUp}
                                         onChange={handleInputChangeRiskAssessmentPartner}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
@@ -1125,6 +1159,7 @@ const BasicInfo = (props) => {
                                         value={riskAssessmentPartner.uprotectedAnalSex}
                                         onChange={handleInputChangeRiskAssessmentPartner}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
@@ -1157,6 +1192,7 @@ const BasicInfo = (props) => {
                                         value={stiScreening.vaginalDischarge}
                                         onChange={handleInputChangeStiScreening}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
@@ -1179,6 +1215,7 @@ const BasicInfo = (props) => {
                                         value={stiScreening.lowerAbdominalPains}
                                         onChange={handleInputChangeStiScreening}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
@@ -1203,6 +1240,7 @@ const BasicInfo = (props) => {
                                         value={stiScreening.urethralDischarge}
                                         onChange={handleInputChangeStiScreening}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
@@ -1224,6 +1262,7 @@ const BasicInfo = (props) => {
                                         value={stiScreening.complaintsOfScrotal}
                                         onChange={handleInputChangeStiScreening}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         <option value="true">Yes</option>
@@ -1245,6 +1284,7 @@ const BasicInfo = (props) => {
                                         value={stiScreening.complaintsGenitalSore}
                                         onChange={handleInputChangeStiScreening}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={props.activePage.actionType === "view"}
                                     >
                                         <option value={""}></option>
                                         <option value="true">Yes</option>

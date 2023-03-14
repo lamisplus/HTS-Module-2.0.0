@@ -333,7 +333,7 @@ const UserRegistration = (props) => {
                           )}
                         </span>
                       </Menu.Item>
-                      {patientObjAge > 14 && (
+                      {props.patientAge >= 15 && (
                         <Menu.Item
                           name="spam"
                           active={activeItem === "pre-test-counsel"}

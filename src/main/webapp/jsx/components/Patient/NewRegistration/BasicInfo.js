@@ -517,14 +517,14 @@ const BasicInfo = (props) => {
       async function getIndexClientCode() {
         const indexClientCode = e.target.value;
         const response = await axios.get(
-          `${baseUrl}hts/client/${indexClientCode}`,
+          `${baseUrl}hts/client?code=${indexClientCode}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
               "Content-Type": "text/plain",
             },
           }
-        );
+        )
         if (response.data !== "Record Not Found") {
           setclientCodeetail2("");
           setclientCodeetail(response.data);
@@ -1439,7 +1439,7 @@ const BasicInfo = (props) => {
                   <>
                     <div className="form-group  col-md-4">
                       <FormGroup>
-                        <Label>Pregnant</Label>
+                        <Label>Pregnant Status</Label>
                         <select
                           className="form-control"
                           name="pregnant"

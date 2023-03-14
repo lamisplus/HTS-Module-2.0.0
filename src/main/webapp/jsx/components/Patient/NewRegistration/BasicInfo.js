@@ -517,14 +517,14 @@ const BasicInfo = (props) => {
       async function getIndexClientCode() {
         const indexClientCode = e.target.value;
         const response = await axios.get(
-          `${baseUrl}hts/client/${indexClientCode}`,
+          `${baseUrl}hts/client?code=${indexClientCode}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
               "Content-Type": "text/plain",
             },
           }
-        );
+        )
         if (response.data !== "Record Not Found") {
           setclientCodeetail2("");
           setclientCodeetail(response.data);

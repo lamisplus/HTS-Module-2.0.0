@@ -98,9 +98,12 @@ function PatientCard(props) {
     var birthDate = new Date(dateObject); // create a date object directlyfrom`dob1`argument
     var age_now = today.getFullYear() - birthDate.getFullYear();
     var m = today.getMonth() - birthDate.getMonth();
-    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+    if (age_now <= 0 && m < 0 && today.getDate() < birthDate.getDate()) {
       age_now--;
     }
+    // if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+    //   age_now--;
+    // }
     if (age_now === 0) {
       return m + " month(s)";
     }

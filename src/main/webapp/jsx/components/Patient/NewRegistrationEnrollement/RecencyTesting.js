@@ -815,6 +815,12 @@ const Recency = (props) => {
                     labelPosition="right"
                     style={{ backgroundColor: "#014d88", color: "#fff" }}
                     onClick={handleSubmit}
+                    disabled={
+                      props.patientObj?.postTestCounselingKnowledgeAssessment
+                        ?.hivTestResult === "true" && recency.optOutRTRI === ""
+                        ? true
+                        : false
+                    }
                   />
                 </div>
               </div>

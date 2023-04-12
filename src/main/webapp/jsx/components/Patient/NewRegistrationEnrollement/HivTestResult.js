@@ -380,6 +380,18 @@ const HivTestResult = (props) => {
     //HTS FORM VALIDATION
     initialTest1.date !== "" &&
       (temp.date = initialTest1.result ? "" : "This field is required.");
+
+    initialTest1.date !== "" &&
+      initialTest1.result === "No" &&
+      (temp.prepOffered = objValues.prepOffered
+        ? ""
+        : "The Prep Offered field is required.");
+    initialTest1.date !== "" &&
+      initialTest1.result === "No" &&
+      objValues.prepOffered === "true" &&
+      (temp.prepAccepted = objValues.prepAccepted
+        ? ""
+        : "The Prep Accepted field is required.");
     // initialTest1.result!==""  && (temp.date = confirmatoryTest.date ? "" : "This field is required.")
     // initialTest1.result!==""  && (temp.date = tieBreakerTest.date ? "" : "This field is required.")
     // temp.syphilisTestResult = syphills.syphilisTestResult
@@ -397,7 +409,7 @@ const HivTestResult = (props) => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-
+    console.log(errors);
     if (validate()) {
       //logic to get Hiv result test
       setSaving(true);
@@ -1075,7 +1087,16 @@ const HivTestResult = (props) => {
                         </div>
                       </>
                     )}
-
+                  {errors.prepOffered !== "" ? (
+                    <span className={classes.error}>{errors.prepOffered}</span>
+                  ) : (
+                    ""
+                  )}
+                  {errors.prepAccepted !== "" ? (
+                    <span className={classes.error}>{errors.prepAccepted}</span>
+                  ) : (
+                    ""
+                  )}
                   {confirmatoryTest.result === "No" &&
                     tieBreakerTest.result === "No" &&
                     (initialTest1.result === "Yes" ||

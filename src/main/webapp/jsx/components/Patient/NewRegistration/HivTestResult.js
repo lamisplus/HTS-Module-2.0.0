@@ -176,6 +176,7 @@ const HivTestResult = (props) => {
       setShowCD4Count(false);
     } else {
       setInitailTest({ ...initialTest1, [e.target.name]: e.target.value });
+      setErrors({date: "", prepOffered: "", prepAccepted: ""})
       //This is to show cd4 count section
       setShowCD4Count(true);
     }

@@ -18,6 +18,8 @@ import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
+import Badge from '@mui/material/Badge';
+import PersonIcon from '@mui/icons-material/Person';
 
 
 
@@ -102,6 +104,7 @@ const AddIndexContact = (props) => {
     const [districtUnitOptions, setDistrictUnitOptions]= useState([]);
     const [states, setStates] = useState([]);
     const [provinces, setProvinces] = useState([]);
+    const [elicitedCount, setElicitedCount] = useState(0);
 
     let temp = { ...errors }
     const handleItemClick =(page, completedMenu)=>{
@@ -354,7 +357,37 @@ const AddIndexContact = (props) => {
             .then(response => {
                 setSaving(false);
                 toast.success("Record save successful");
-                handleItemClickPage('list')
+                setElicitedCount(elicitedCount + 1);
+                setObjValues( {
+                    firstName: "",
+                    middleName: "",
+                    lastName:"",
+                    dob:"",
+                    phoneNumber:"",
+                    altPhoneNumber: "",
+                    sex: "",
+                    htsClientId:props  && props.patientObj ? props.patientObj.id : "",
+                    physicalHurt: "",
+                    threatenToHurt: "",
+                    address: "", 
+                    hangOutSpots: "",
+                    relativeToIndexClient: "",
+                    currentlyLiveWithPartner: "", 
+                    partnerTestedPositive: "",
+                    sexuallyUncomfortable: "", 
+                    notificationMethod : "",
+                    datePartnerCameForTesting: "",
+                    age: "",
+                    isDateOfBirthEstimated: false,
+                    //offeredIns:"",
+                    //acceptedIns:"",
+                    //elicited: "",
+                    stateId: "",
+                    lga:"",
+                    dateTested: "",
+                    currentHivStatus: ""
+                })
+               // handleItemClickPage('list')
 
             })
             .catch(error => {
@@ -386,6 +419,11 @@ const AddIndexContact = (props) => {
                     <span style={{ textTransform: "capitalize" }}> Back To Client Index List</span>
                 </Button>
                 </h2>
+                {
+                    elicitedCount === 0 ? "" : <Badge badgeContent={elicitedCount} color="primary">
+                    Elicited Clients<PersonIcon color="action" />
+                    </Badge>
+                }
                 <br/><br/>    
                     <form >
                         <div className="row">

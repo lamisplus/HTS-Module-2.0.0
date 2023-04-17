@@ -309,9 +309,12 @@ const BasicInfo = (props) => {
       const birthDate = new Date(e.target.value);
       let age_now = today.getFullYear() - birthDate.getFullYear();
       const m = today.getMonth() - birthDate.getMonth();
-      if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      if (age_now <= 0 && m < 0 && today.getDate() < birthDate.getDate()) {
         age_now--;
       }
+      // if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      //   age_now--;
+      // }
       objValues.age = age_now;
 
       //setBasicInfo({...basicInfo, age: age_now});

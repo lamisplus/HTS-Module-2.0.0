@@ -181,6 +181,10 @@ const Recency = (props) => {
       props.patientObj && props.patientObj.recency !== null
         ? props.patientObj.recency.finalRecencyResult
         : "",
+    viralLoadConfirmationResult:
+      props.patientObj && props.patientObj.recency !== null
+        ? props.patientObj.recency.viralLoadConfirmationResult
+        : "",
   });
 
   useEffect(() => {
@@ -263,6 +267,7 @@ const Recency = (props) => {
         viralLoadResultClassification: "",
         recencyResult: "",
         finalRecencyResult: "",
+        viralLoadConfirmationResult: ""
       });
     }
   }, [
@@ -274,6 +279,17 @@ const Recency = (props) => {
   //console.log(props.patientObj)
   const handleInputChangeRecency = (e) => {
     setErrors({ ...temp, [e.target.name]: "" });
+    if (e.target.name === "viralLoadConfirmationResult") {
+      if (e.target.value >= 1000) {
+        recency.viralLoadResultClassification = ">=1000";
+        recency.finalRecencyResult = "RITA Recent";
+        setRecency({ ...recency, [e.target.name]: e.target.value });
+      }else if (e.target.value < 1000) {
+        recency.viralLoadResultClassification = "<1000";
+        recency.finalRecencyResult = "RITA Long term";
+        setRecency({ ...recency, [e.target.name]: e.target.value });
+      }
+    }
     if (e.target.name === "viralLoadResultClassification") {
       if (e.target.value === ">=1000") {
         recency.finalRecencyResult = "RITA Recent";
@@ -731,6 +747,21 @@ const Recency = (props) => {
                           </FormGroup>
                         </div>
                         <div className="form-group  col-md-4">
+                            <FormGroup>
+                                <Label>Viral Load Confirmation Result (copies/ml)</Label>
+                                <Input
+                                    className="form-control"
+                                    name="viralLoadConfirmationResult"
+                                    id="viralLoadConfirmationResult"
+                                    type="number"
+                                    value={recency.viralLoadConfirmationResult}
+                                    onChange={handleInputChangeRecency}
+                                    style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                />
+
+                            </FormGroup>
+                        </div>
+                        <div className="form-group  col-md-4">
                           <FormGroup>
                             <Label>
                               Viral Load Result Classification and Result
@@ -815,6 +846,12 @@ const Recency = (props) => {
                     labelPosition="right"
                     style={{ backgroundColor: "#014d88", color: "#fff" }}
                     onClick={handleSubmit}
+                    disabled={
+                      props.patientObj?.postTestCounselingKnowledgeAssessment
+                        ?.hivTestResult === "true" && recency.optOutRTRI === ""
+                        ? true
+                        : false
+                    }
                   />
                 </div>
               </div>

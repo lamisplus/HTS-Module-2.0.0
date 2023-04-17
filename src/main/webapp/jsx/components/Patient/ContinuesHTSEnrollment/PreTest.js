@@ -388,7 +388,9 @@ const BasicInfo = (props) => {
                                         <option value="1-3 Months">1-3 Months</option>
                                         <option value="4-6 Months">4-6 Months</option>
                                         <option value=">6 Months"> {">6"} Months</option>
-                                        <option value="Never">Never</option> 
+                                        {
+                                            knowledgeAssessment.previousTestedHIVNegative !== "true" && <option value="Never"> Never</option>
+                                        }
                                         
                                     </select>
                                     {errors.timeLastHIVNegativeTestResult !=="" ? (

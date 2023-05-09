@@ -68,6 +68,7 @@ function PatientCard(props) {
   //const permissions= props.permissions ? props.permissions : [];
   const [patientObj, setPatientObj] = useState(null);
   const [hivStatus, setHivStatus] = useState("false");
+  const [htscount, setHtscount] = useState(0);
 
   useEffect(() => {
     PatientCurrentObject();
@@ -87,6 +88,7 @@ function PatientCard(props) {
             response.data.htsClientDtoList.length - 1
           ].postTestCounselingKnowledgeAssessment.hivTestResult
         );
+        setHtscount(response.data.htsCount);
       })
       .catch((error) => {});
   }
@@ -251,19 +253,19 @@ function PatientCard(props) {
                       <Col md={12}>
                         <div>
                           <Typography variant="caption">
-                            <Label
-                              color={
-                                patientObj && hivStatus === "true"
-                                  ? "red"
-                                  : "teal"
-                              }
-                              size={"mini"}
-                            >
-                              STATUS :{" "}
-                              {patientObj && hivStatus === "true"
-                                ? "Positive"
-                                : "Negative"}
-                            </Label>
+                            {htscount < 1 ? (
+                              <Label color="blue" size={"mini"}>
+                                STATUS : Not Tested
+                              </Label>
+                            ) : patientObj && hivStatus === "true" ? (
+                              <Label color={"red"} size={"mini"}>
+                                STATUS : Positive
+                              </Label>
+                            ) : (
+                              <Label color="teal" size={"mini"}>
+                                STATUS : Negative
+                              </Label>
+                            )}
                           </Typography>
                         </div>
                       </Col>

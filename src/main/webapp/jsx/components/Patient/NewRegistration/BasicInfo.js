@@ -96,7 +96,7 @@ const useStyles = makeStyles((theme) => ({
 
 const BasicInfo = (props) => {
   const classes = useStyles();
-  //console.log("new", props.patientObj);
+  console.log("new", props.patientObj);
   const history = useHistory();
   const [errors, setErrors] = useState({});
   const [saving, setSaving] = useState(false);
@@ -139,9 +139,12 @@ const BasicInfo = (props) => {
     var birthDate = new Date(dateObject); // create a date object directlyfrom`dob1`argument
     var age_now = today.getFullYear() - birthDate.getFullYear();
     var m = today.getMonth() - birthDate.getMonth();
-    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+    if (age_now <= 0 && m < 0 && today.getDate() < birthDate.getDate()) {
       age_now--;
     }
+    // if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+    //   age_now--;
+    // }
     if (age_now === 0) {
       return m + " month(s)";
     }
@@ -153,7 +156,8 @@ const BasicInfo = (props) => {
       ? address.address[0]
       : null;
   const patientAge = calculate_age(
-    moment(props.patientObj.personResponseDto.dateOfBirth).format("DD-MM-YYYY")
+    //moment(props.patientObj.personResponseDto.dateOfBirth).format("DD-MM-YYYY")
+    props.patientObj.personResponseDto.dateOfBirth
   );
 
   const [objValues, setObjValues] = useState({
@@ -165,7 +169,7 @@ const BasicInfo = (props) => {
     age:
       props.patientObj.personResponseDto &&
       props.patientObj.personResponseDto.dateOfBirth
-        ? patientAge
+        ? props.patientObj?.riskStratificationResponseDto?.age
         : "",
     dob:
       props.patientObj.personResponseDto &&
@@ -524,7 +528,7 @@ const BasicInfo = (props) => {
               "Content-Type": "text/plain",
             },
           }
-        )
+        );
         if (response.data !== "Record Not Found") {
           setclientCodeetail2("");
           setclientCodeetail(response.data);
@@ -567,9 +571,12 @@ const BasicInfo = (props) => {
       const birthDate = new Date(e.target.value);
       let age_now = today.getFullYear() - birthDate.getFullYear();
       const m = today.getMonth() - birthDate.getMonth();
-      if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      if (age_now <= 0 && m < 0 && today.getDate() < birthDate.getDate()) {
         age_now--;
       }
+      // if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      //   age_now--;
+      // }
       objValues.age = age_now;
 
       //setBasicInfo({...basicInfo, age: age_now});
@@ -1048,7 +1055,7 @@ const BasicInfo = (props) => {
                     type="number"
                     name="age"
                     id="age"
-                    value={objValues.age + 1}
+                    value={objValues.age}
                     disabled={ageDisabled}
                     onChange={handleAgeChange}
                     style={{
@@ -1435,32 +1442,32 @@ const BasicInfo = (props) => {
 
               {(objValues.sex === "Female" ||
                 objValues.sex === "female" ||
-                objValues.sex === "FEMALE") && ((
-                  <>
-                    <div className="form-group  col-md-4">
-                      <FormGroup>
-                        <Label>Pregnant Status</Label>
-                        <select
-                          className="form-control"
-                          name="pregnant"
-                          id="pregnant"
-                          value={objValues.pregnant}
-                          onChange={handleInputChange}
-                          style={{
-                            border: "1px solid #014D88",
-                            borderRadius: "0.2rem",
-                          }}
-                        >
-                          <option value={""}></option>
-                          {pregnancyStatus.map((value) => (
-                            <option key={value.id} value={value.id}>
-                              {value.display}
-                            </option>
-                          ))}
-                        </select>
-                      </FormGroup>
-                    </div>
-                    {/*objValues.pregnant === "" &&
+                objValues.sex === "FEMALE") && (
+                <>
+                  <div className="form-group  col-md-4">
+                    <FormGroup>
+                      <Label>Pregnant Status</Label>
+                      <select
+                        className="form-control"
+                        name="pregnant"
+                        id="pregnant"
+                        value={objValues.pregnant}
+                        onChange={handleInputChange}
+                        style={{
+                          border: "1px solid #014D88",
+                          borderRadius: "0.2rem",
+                        }}
+                      >
+                        <option value={""}></option>
+                        {pregnancyStatus.map((value) => (
+                          <option key={value.id} value={value.id}>
+                            {value.display}
+                          </option>
+                        ))}
+                      </select>
+                    </FormGroup>
+                  </div>
+                  {/*objValues.pregnant === "" &&
                       (objValues.pregnant !== 73 ||
                         objValues.pregnant !== "73") && (
                         <div className="form-group  col-md-4">
@@ -1484,8 +1491,8 @@ const BasicInfo = (props) => {
                           </FormGroup>
                         </div>
                             )*/}
-                  </>
-                ))}
+                </>
+              )}
 
               <div className="form-group  col-md-4">
                 <FormGroup>

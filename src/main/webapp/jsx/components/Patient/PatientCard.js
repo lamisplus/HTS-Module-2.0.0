@@ -68,6 +68,7 @@ function PatientCard(props) {
   //const permissions= props.permissions ? props.permissions : [];
   const [patientObj, setPatientObj] = useState(null);
   const [hivStatus, setHivStatus] = useState("false");
+  const [htscount, setHtscount] = useState(0);
 
   useEffect(() => {
     PatientCurrentObject();
@@ -87,6 +88,7 @@ function PatientCard(props) {
             response.data.htsClientDtoList.length - 1
           ].postTestCounselingKnowledgeAssessment.hivTestResult
         );
+        setHtscount(response.data.htsCount);
       })
       .catch((error) => {});
   }
@@ -98,9 +100,12 @@ function PatientCard(props) {
     var birthDate = new Date(dateObject); // create a date object directlyfrom`dob1`argument
     var age_now = today.getFullYear() - birthDate.getFullYear();
     var m = today.getMonth() - birthDate.getMonth();
-    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+    if (age_now <= 0 && m < 0 && today.getDate() < birthDate.getDate()) {
       age_now--;
     }
+    // if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+    //   age_now--;
+    // }
     if (age_now === 0) {
       return m + " month(s)";
     }
@@ -248,19 +253,19 @@ function PatientCard(props) {
                       <Col md={12}>
                         <div>
                           <Typography variant="caption">
-                            <Label
-                              color={
-                                patientObj && hivStatus === "true"
-                                  ? "red"
-                                  : "teal"
-                              }
-                              size={"mini"}
-                            >
-                              STATUS :{" "}
-                              {patientObj && hivStatus === "true"
-                                ? "Positive"
-                                : "Negative"}
-                            </Label>
+                            {htscount < 1 ? (
+                              <Label color="blue" size={"mini"}>
+                                STATUS : Not Tested
+                              </Label>
+                            ) : patientObj && hivStatus === "true" ? (
+                              <Label color={"red"} size={"mini"}>
+                                STATUS : Positive
+                              </Label>
+                            ) : (
+                              <Label color="teal" size={"mini"}>
+                                STATUS : Negative
+                              </Label>
+                            )}
                           </Typography>
                         </div>
                       </Col>

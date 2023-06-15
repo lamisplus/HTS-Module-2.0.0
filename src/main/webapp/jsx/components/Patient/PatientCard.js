@@ -62,13 +62,15 @@ const styles = (theme) => ({
 
 function PatientCard(props) {
   const { classes } = props;
-  console.log(props.patientObj);
+  //console.log(props.patientObj);
   //const patientCurrentStatus=props.patientObj && props.patientObj.currentStatus==="Died (Confirmed)" ? true : false ;
   const patientObjs = props.patientObj ? props.patientObj : {};
   //const permissions= props.permissions ? props.permissions : [];
   const [patientObj, setPatientObj] = useState(null);
   const [hivStatus, setHivStatus] = useState("false");
   const [htscount, setHtscount] = useState(0);
+  const [htsResult, setHtsResult] = useState("");
+  const [htsResult2, setHtsResult2] = useState("");
 
   useEffect(() => {
     PatientCurrentObject();
@@ -81,14 +83,20 @@ function PatientCard(props) {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        console.log("data", response.data);
+        //console.log("data", response.data);
         setPatientObj(response.data);
-        setHivStatus(
+
+        setHtscount(response.data.htsCount);
+        setHtsResult(
           response.data.htsClientDtoList[
             response.data.htsClientDtoList.length - 1
-          ].postTestCounselingKnowledgeAssessment.hivTestResult
+          ].hivTestResult
         );
-        setHtscount(response.data.htsCount);
+        setHtsResult2(
+          response.data.htsClientDtoList[
+            response.data.htsClientDtoList.length - 1
+          ].hivTestResult2
+        );
       })
       .catch((error) => {});
   }
@@ -257,7 +265,9 @@ function PatientCard(props) {
                               <Label color="blue" size={"mini"}>
                                 STATUS : Not Tested
                               </Label>
-                            ) : patientObj && hivStatus === "true" ? (
+                            ) : patientObj &&
+                              (htsResult === "Positive" ||
+                                htsResult === "Positive") ? (
                               <Label color={"red"} size={"mini"}>
                                 STATUS : Positive
                               </Label>

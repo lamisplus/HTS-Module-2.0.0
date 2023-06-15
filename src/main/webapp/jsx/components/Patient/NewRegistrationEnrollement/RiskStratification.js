@@ -593,7 +593,7 @@ const RiskStratification = (props) => {
                       id="visitDate"
                       value={objValues.visitDate}
                       onChange={handleInputChange}
-                      min="1983-12-31"
+                      min="1929-12-31"
                       max={moment(new Date()).format("YYYY-MM-DD")}
                       style={{
                         border: "1px solid #014D88",

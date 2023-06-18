@@ -8,6 +8,7 @@ import org.lamisplus.modules.hts.domain.dto.*;
 import org.lamisplus.modules.hts.domain.entity.HtsPerson;
 import org.lamisplus.modules.hts.service.HtsClientService;
 import org.lamisplus.modules.hts.service.IndexElicitationService;
+import org.lamisplus.modules.hts.service.RiskStratificationService;
 import org.lamisplus.modules.patient.domain.entity.Person;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,7 @@ public class HtsClientController {
     private final HtsClientService htsClientService;
     private final String HTS_URL_VERSION_ONE = "/api/v1/hts";
     private final IndexElicitationService indexElicitationService;
+    private final RiskStratificationService riskStratificationService;
 
     @PostMapping(HTS_URL_VERSION_ONE)
     public ResponseEntity<HtsClientDto> save(@Valid @RequestBody HtsClientRequestDto htsClientRequestDto) {
@@ -60,6 +62,12 @@ public class HtsClientController {
     public ResponseEntity<HtsClientDtos> getHtsClientByPersonId(@PathVariable Long personId) {
         return ResponseEntity.ok(this.htsClientService.getHtsClientByPersonId(personId));
     }
+
+    @GetMapping(HTS_URL_VERSION_ONE + "/get-facility-code")
+    public ResponseEntity<String> getFacilityShortCode() {
+        return ResponseEntity.ok(this.riskStratificationService.getFacilityShortCode());
+    }
+
     @GetMapping(HTS_URL_VERSION_ONE + "/persons/{personId}/current-hts")
     public ResponseEntity<HtsClientDto> getLatestHtsByPersonId(@PathVariable Long personId) {
         return ResponseEntity.ok(this.htsClientService.getLatestHtsByPersonId(personId));
@@ -76,7 +84,7 @@ public class HtsClientController {
 
     @GetMapping(HTS_URL_VERSION_ONE + "/client")
     public ResponseEntity<String> getClientNameByCodeName(@RequestParam String code) {
-        return ResponseEntity.ok(this.htsClientService.getClientNameByCode(code));
+        return ResponseEntity.ok(this.htsClientService.getClientNameByCode(code.replace("_", "/")));
     }
 
     @GetMapping(HTS_URL_VERSION_ONE)

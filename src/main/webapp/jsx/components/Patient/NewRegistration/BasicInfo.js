@@ -119,6 +119,8 @@ const BasicInfo = (props) => {
   const [clientCodeetail, setclientCodeetail] = useState("");
   const [clientCodeetail2, setclientCodeetail2] = useState("");
   const [clientCodeCheck, setClientCodeCheck] = useState("");
+  const [createdCode, setCreatedCode] = useState("");
+  const [facilityCode, setFacilityCode] = useState("");
   const getPhoneNumber = (identifier) => {
     const identifiers = identifier;
     const phoneNumber = identifiers.contactPoint.find(
@@ -308,6 +310,7 @@ const BasicInfo = (props) => {
     CounselingType();
     PregnancyStatus();
     IndexTesting();
+    CreateClientCode();
     //objValues.dateVisit=moment(new Date()).format("YYYY-MM-DD")
     //setObjValues(props.patientObj)
 
@@ -444,6 +447,49 @@ const BasicInfo = (props) => {
       });
   };
 
+  const CreateClientCode = () => {
+    let facilityShortCode = '';
+    axios
+        .get(`${baseUrl}hts/get-facility-code`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((response) => {
+          facilityShortCode = response.data;
+          console.log('Response Facility Short Code **** ', facilityShortCode);
+          setFacilityCode(facilityShortCode);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+
+    let visitDate = new Date(props.patientObj.dateVisit);
+    console.log('Modality **** ', visitDate);
+    let modality = props.patientObj.modality;
+    let modalityCode = '';
+    if(modality === 'TEST_SETTING_CT_STI') {
+      modalityCode = 'STI';
+    }else if (modality === 'TEST_SETTING_CT_EMERGENCY') {
+      modalityCode = 'EME';
+    }else if (modality === 'TEST_SETTING_CT_INDEX') {
+      modalityCode = 'IND';
+    }else if (modality === 'TEST_SETTING_CT_INPATIENT') {
+      modalityCode = 'INP';
+    }else if (modality === 'TEST_SETTING_CT_PMTCT') {
+      modalityCode = 'PMTCT';
+    }else if (modality === 'TEST_SETTING_CT_TB') {
+      modalityCode = 'TB';
+    }else if (modality === 'TEST_SETTING_CT_VCT') {
+      modalityCode = 'VCT';
+    }
+    console.log('Modality **** ', modality);
+    let month = visitDate.getMonth();
+    let year = visitDate.getFullYear();
+    console.log('Facility Short Code **** ', facilityCode);
+    let createdCode = 'C' + facilityCode + '/' +modalityCode + '/' +month + '/' + year + '/';
+    setCreatedCode(createdCode);
+    console.log('Created Code **** ', createdCode);
+  }
+
   //Get States from selected country
   const getStates = () => {
     setStateByCountryId("1");
@@ -511,6 +557,7 @@ const BasicInfo = (props) => {
       const name = alphabetOnly(e.target.value);
       setObjValues({ ...objValues, [e.target.name]: name });
     }
+
     // if((e.target.name !=='maritalStatusId' && e.target.value!=='5' )){//logic for marital status
     //     setHideNumChild(true)
     // }else{
@@ -544,6 +591,11 @@ const BasicInfo = (props) => {
   };
   //checkClientCode
   const checkClientCode = (e) => {
+    if(e.target.name === "clientCode"){
+      let code = createdCode + e.target.value;
+      code = code.replaceAll('/', '_');
+      setCreatedCode(code);
+    }
     async function getIndexClientCode() {
       const indexClientCode = objValues.clientCode;
       console.log(indexClientCode);
@@ -795,7 +847,8 @@ const BasicInfo = (props) => {
                       Client Code <span style={{ color: "red" }}> *</span>
                     </Label>
                     <Input
-                      type="text"
+                      min={1}
+                      type="number"
                       name="clientCode"
                       id="clientCode"
                       //value={Math.floor(Math.random() * 1093328)}
@@ -812,6 +865,7 @@ const BasicInfo = (props) => {
                     ) : (
                       ""
                     )}
+                    <span>Client Code: <b>{createdCode}</b></span>
                   </FormGroup>
                   {clientCodeCheck !== "" ? (
                     <span className={classes.error}>{clientCodeCheck}</span>

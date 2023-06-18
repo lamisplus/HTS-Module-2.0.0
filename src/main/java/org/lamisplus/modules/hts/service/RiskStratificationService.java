@@ -12,6 +12,7 @@ import org.lamisplus.modules.patient.repository.PersonRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ public class RiskStratificationService {
     private final RiskStratificationRepository stratificationRepository;
     private final PersonRepository personRepository;
     private final CurrentUserOrganizationService currentFacility;
+    private final JdbcTemplate jdbcTemplate;
 
     public RiskStratificationResponseDto save(RiskStratificationDto riskStratificationDTO) {
         String personUuid=null;
@@ -37,6 +39,14 @@ public class RiskStratificationService {
         RiskStratification riskStratification = toRiskStratification(riskStratificationDTO, personUuid);
         riskStratification.setFacilityId(currentFacility.getCurrentUserOrganization());
         return this.toRiskStratificationResponseDTO(stratificationRepository.save(riskStratification));
+    }
+
+    public String getFacilityShortCode(){
+        String query = "select code from base_organisation_unit_identifier " +
+                "where organisation_unit_id = ? and name = 'SHORT_CODE' ";
+        return jdbcTemplate.queryForObject(
+                query, new Object[] {currentFacility.getCurrentUserOrganization()}, String.class
+        );
     }
 
     public RiskStratificationResponseDto getByCode(String code){

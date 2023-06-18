@@ -158,6 +158,8 @@ const BasicInfo = (props) => {
     lastHivTestBasedOnRequest: "",
   });
   useEffect(() => {
+    console.log("HTS Data **** ", objValues);
+    console.log("Testing Modality is **** ", objValues.riskAssessment.modality);
     KP();
     TargetGroupSetup();
     EnrollmentSetting();

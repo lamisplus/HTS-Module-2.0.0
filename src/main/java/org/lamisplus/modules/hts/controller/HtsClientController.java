@@ -95,6 +95,17 @@ public class HtsClientController {
         Page<HtsPerson> page = htsClientService.getAllPersonHts(searchValue, pageNo, pageSize);
         return new ResponseEntity<>(PaginationUtil.generatePagination(page, page.getContent()), HttpStatus.OK);
     }
+
+    @GetMapping(HTS_URL_VERSION_ONE + "/only/persons")
+    @ApiOperation("Get Hts Client")
+    @PreAuthorize("hasAnyAuthority('hts_view')")
+    public ResponseEntity<PageDTO> getHtsOnlyPerson(@RequestParam (required = false, defaultValue = "*")  String searchValue,
+                                                @RequestParam (required = false, defaultValue = "20")int pageSize,
+                                                @RequestParam (required = false, defaultValue = "0") int pageNo) {
+        Page<HtsPerson> page = htsClientService.getOnlyPersonHts(searchValue, pageNo, pageSize);
+        return new ResponseEntity<>(PaginationUtil.generatePagination(page, page.getContent()), HttpStatus.OK);
+    }
+
     @GetMapping(HTS_URL_VERSION_ONE+ "/risk-stratification/person/{personId}")
     public ResponseEntity<HtsClientDtos> getRiskStratificationHtsClients(@PathVariable Long personId) {
         return ResponseEntity.ok(htsClientService.getRiskStratificationHtsClients(personId));

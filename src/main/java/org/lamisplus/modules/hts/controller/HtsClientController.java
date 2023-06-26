@@ -8,6 +8,7 @@ import org.lamisplus.modules.hts.domain.dto.*;
 import org.lamisplus.modules.hts.domain.entity.HtsPerson;
 import org.lamisplus.modules.hts.service.HtsClientService;
 import org.lamisplus.modules.hts.service.IndexElicitationService;
+import org.lamisplus.modules.hts.service.RiskStratificationService;
 import org.lamisplus.modules.patient.domain.entity.Person;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,7 @@ public class HtsClientController {
     private final HtsClientService htsClientService;
     private final String HTS_URL_VERSION_ONE = "/api/v1/hts";
     private final IndexElicitationService indexElicitationService;
+    private final RiskStratificationService riskStratificationService;
 
     @PostMapping(HTS_URL_VERSION_ONE)
     public ResponseEntity<HtsClientDto> save(@Valid @RequestBody HtsClientRequestDto htsClientRequestDto) {
@@ -35,6 +37,10 @@ public class HtsClientController {
         return ResponseEntity.ok(this.htsClientService.update(id, htsClientDto));
     }
 
+    @GetMapping(HTS_URL_VERSION_ONE + "/get-facility-code")
+    public ResponseEntity<String> getFacilityShortCode() {
+        return ResponseEntity.ok(this.riskStratificationService.getFacilityShortCode());
+    }
     @PutMapping(HTS_URL_VERSION_ONE +"/{id}/pre-test-counseling")
     public ResponseEntity<HtsClientDto> updatePreTestCounseling(@PathVariable Long id, @Valid @RequestBody HtsPreTestCounselingDto htsPreTestCounselingDto) {
         return ResponseEntity.ok(this.htsClientService.updatePreTestCounseling(id, htsPreTestCounselingDto));

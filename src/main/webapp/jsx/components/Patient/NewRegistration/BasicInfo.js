@@ -119,6 +119,9 @@ const BasicInfo = (props) => {
   const [clientCodeetail, setclientCodeetail] = useState("");
   const [clientCodeetail2, setclientCodeetail2] = useState("");
   const [clientCodeCheck, setClientCodeCheck] = useState("");
+  const [createdCode, setCreatedCode] = useState("");
+  const [facilityCode, setFacilityCode] = useState("");
+  const [serialNumber, setSerialNumber] = useState(null);
   const getPhoneNumber = (identifier) => {
     const identifiers = identifier;
     const phoneNumber = identifiers.contactPoint.find(
@@ -297,6 +300,57 @@ const BasicInfo = (props) => {
     indexClientCode: "",
   });
 
+  const CreateClientCode = () => {
+      let facilityShortCode = '';
+      axios
+          .get(`${baseUrl}hts/get-facility-code`, {
+            headers: { Authorization: `Bearer ${token}` },
+          })
+          .then((response) => {
+            // console.log('Response Facility Short Code **** ', response.data);
+            setFacilityCode(response.data)
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+
+      let visitDate = new Date(props.patientObj.dateVisit);
+
+      let modality = props.patientObj.modality;
+      let modalityCode = '';
+      if(modality?.includes('STI')) {
+        modalityCode = 'STI';
+      }else if (modality?.includes('EMERGENCY')) {
+        modalityCode = 'EME';
+      }else if (modality?.includes('INDEX')) {
+        modalityCode = 'IND';
+      }else if (modality?.includes('INPATIENT')) {
+        modalityCode = 'INP';
+      }else if (modality?.includes('PMTCT')) {
+        modalityCode = 'PMTCT';
+      }else if (modality?.includes('TB')) {
+        modalityCode = 'TB';
+      }else if (modality?.includes('VCT')) {
+        modalityCode = 'VCT';
+      }
+      else if (modality?.includes('MOBILE')) {
+        modalityCode = 'MOB';
+      }
+      else if (modality?.includes('SNS')) {
+        modalityCode = 'SNS';
+      }
+      else if (modality?.includes('OTHER')) {
+        modalityCode = 'OTH';
+      }
+
+      let month = visitDate.getMonth();
+      let year = visitDate.getFullYear();
+      let codeCreated = 'C' + facilityCode + '/' +modalityCode + '/' +month + '/' + year + '/';
+      setCreatedCode(codeCreated);
+      setObjValues({...objValues, clientCode: createdCode})
+      // console.log('Created Code **** ', createdCode);
+    }
+
   useEffect(() => {
     KP();
     EnrollmentSetting();
@@ -308,6 +362,7 @@ const BasicInfo = (props) => {
     CounselingType();
     PregnancyStatus();
     IndexTesting();
+    CreateClientCode();
     //objValues.dateVisit=moment(new Date()).format("YYYY-MM-DD")
     //setObjValues(props.patientObj)
 
@@ -320,7 +375,7 @@ const BasicInfo = (props) => {
     if (country && country.stateId !== "") {
       getProvincesId(country.stateId);
     }
-  }, [objValues.age, props.patientObj, props.extra.age]);
+  }, [objValues.age, props.patientObj, props.extra.age, facilityCode]);
   //Get list of KP
   const KP = () => {
     axios
@@ -544,6 +599,13 @@ const BasicInfo = (props) => {
   };
   //checkClientCode
   const checkClientCode = (e) => {
+     let code = '';
+        if(e.target.name === "serialNumber"){
+          code = createdCode + e.target.value;
+          setCreatedCode(code);
+          console.log("Code created is &&&& ", createdCode);
+          setObjValues({...objValues, clientCode: code})
+        }
     async function getIndexClientCode() {
       const indexClientCode = objValues.clientCode;
       console.log(indexClientCode);
@@ -792,14 +854,35 @@ const BasicInfo = (props) => {
                 <div className="form-group mb-3 col-md-4">
                   <FormGroup>
                     <Label for="">
+                      Serial Number <span style={{ color: "red" }}> *</span>
+                    </Label>
+                    <Input
+                        type="text"
+                        name="serialNumber"
+                        id="serialNumber"
+                        value={serialNumber}
+                        //value={Math.floor(Math.random() * 1093328)}
+                        onBlur={checkClientCode}
+                        onChange={handleInputChange}
+                        style={{
+                          border: "1px solid #014D88",
+                          borderRadius: "0.25rem",
+                        }}
+                    />
+                  </FormGroup>
+                </div>
+                <div className="form-group mb-3 col-md-4">
+                  <FormGroup>
+                    <Label for="">
                       Client Code <span style={{ color: "red" }}> *</span>
                     </Label>
                     <Input
                       type="text"
                       name="clientCode"
                       id="clientCode"
-                      //value={Math.floor(Math.random() * 1093328)}
                       value={objValues.clientCode}
+                      disabled={true}
+                      //value={Math.floor(Math.random() * 1093328)}
                       onBlur={checkClientCode}
                       onChange={handleInputChange}
                       style={{

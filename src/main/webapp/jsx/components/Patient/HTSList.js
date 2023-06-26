@@ -120,7 +120,7 @@ const HTSList = (props) => {
                       // hospital_number: row.hospitalNumber,
                       clientCode: row.clientCode,
                       gender: row.gender,
-                      age: row.age + 1,
+                      age: row.age,
                       count: (
                         <Label color="blue" size="mini">
                           {row.htsCount}

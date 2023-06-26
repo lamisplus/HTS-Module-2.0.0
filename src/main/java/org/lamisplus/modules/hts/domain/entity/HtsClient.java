@@ -123,7 +123,7 @@ public class HtsClient extends Audit implements Serializable {
     private String personUuid;
 
     @Basic
-    @Column(name = "uuid")
+    @Column(name = "uuid", updatable = false)
     private String uuid;
 
     @OneToOne

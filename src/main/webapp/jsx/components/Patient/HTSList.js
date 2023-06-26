@@ -103,7 +103,7 @@ const HTSList = (props) => {
           new Promise((resolve, reject) =>
             axios
               .get(
-                `${baseUrl}hts/persons?pageSize=${query.pageSize}&pageNo=${query.page}&searchValue=${query.search}`,
+                `${baseUrl}hts/only/persons?pageSize=${query.pageSize}&pageNo=${query.page}&searchValue=${query.search}`,
                 { headers: { Authorization: `Bearer ${token}` } }
               )
               .then((response) => response)

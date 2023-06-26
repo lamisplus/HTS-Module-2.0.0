@@ -477,6 +477,20 @@ public class HtsClientService {
                 .findAllPersonHts(UN_ARCHIVED, facilityId, pageable);
     }
 
+    public Page<HtsPerson> getOnlyPersonHts(String search, int pageNo, int pageSize) {
+        Long facilityId = currentUserOrganizationService.getCurrentUserOrganization();
+        //List<HtsPerson> htsPeople = new ArrayList<>();
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        if(!String.valueOf(search).equals("null") && !search.equals("*")){
+            search = search.replaceAll("\\s", "");
+            String queryParam = "%"+search+"%";
+            return htsClientRepository
+                    .findOnlyPersonHtsBySearchParam(UN_ARCHIVED, facilityId, queryParam, pageable);
+        }
+        return htsClientRepository
+                .findOnlyPersonHts(UN_ARCHIVED, facilityId, pageable);
+    }
+
     public HtsClientDtos getAllHtsClientDtos(Page<HtsClient> page) {
         return getAllHtsClientDtos(page, null);
     }

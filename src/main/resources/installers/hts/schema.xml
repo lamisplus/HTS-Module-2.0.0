@@ -251,7 +251,7 @@
         </addColumn>
     </changeSet>
 
-    <changeSet id="HTS-20230618-001-001" author="Anana">
+    <changeSet id="HTS-20230705-001-0001" author="Anana">
         <sqlFile path="installers/hts/facility_short_code.sql" splitStatements="false"/>
     </changeSet>
 </databaseChangeLog>

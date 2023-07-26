@@ -13,6 +13,7 @@ import java.util.Optional;
 
 public interface HtsClientRepository extends JpaRepository<HtsClient, Long> {
     List<HtsClient> findAllByPerson(Person person);
+    List<HtsClient> findAllByPersonAndArchived(Person person, Integer archived);
     List<HtsClient> findAllByPersonOrderByIdDesc(Person person);
     Page<HtsClient> findAll(Pageable pageable);
     Optional<HtsClient> findByUuid(String uuid);

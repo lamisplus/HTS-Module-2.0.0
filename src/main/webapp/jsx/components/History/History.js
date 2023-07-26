@@ -3,6 +3,7 @@ import MaterialTable from "material-table";
 import axios from "axios";
 import { url as baseUrl } from "./../../../api";
 import { token as token } from "./../../../api";
+import { toast } from "react-toastify";
 import { forwardRef } from "react";
 import "semantic-ui-css/semantic.min.css";
 import AddBox from "@material-ui/icons/AddBox";
@@ -23,7 +24,7 @@ import ViewColumn from "@material-ui/icons/ViewColumn";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
 import { makeStyles } from "@material-ui/core/styles";
-//import { useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { FaUserPlus } from "react-icons/fa";
 import "@reach/menu-button/styles.css";
 import { Dropdown, Button, Menu, Icon } from "semantic-ui-react";
@@ -96,6 +97,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const PatientnHistory = (props) => {
+  let history = useHistory();
   useEffect(() => {
     //patients()
   }, [props.patientObj]);
@@ -107,6 +109,24 @@ const PatientnHistory = (props) => {
       activeObject: row,
       actionType: actionType,
     });
+  };
+
+  const handleHTSDelete = (row) => {
+    console.log(props.patientList);
+    axios
+      .delete(`${baseUrl}hts/${row.id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        console.log(response);
+        toast.success(
+          `HTS patient with client code ${row.clientCode}, deleted successfully`
+        );
+        history.push("/");
+      })
+      .catch((err) => {
+        console.err(err);
+      });
   };
 
   return (
@@ -159,6 +179,10 @@ const PatientnHistory = (props) => {
                         >
                           <Icon name="edit" />
                           Edit
+                        </Dropdown.Item>
+                        <Dropdown.Item onClick={() => handleHTSDelete(row)}>
+                          <Icon name="delete" />
+                          Delete
                         </Dropdown.Item>
                       </Dropdown.Menu>
                     </Dropdown>

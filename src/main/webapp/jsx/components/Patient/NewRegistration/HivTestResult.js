@@ -1,9 +1,19 @@
 import React, { useCallback, useEffect, useState } from "react";
 
-import { FormGroup, Label, CardBody, Spinner, Input, Form } from "reactstrap";
+import {
+  Badge,
+  FormGroup,
+  Label,
+  CardBody,
+  Spinner,
+  Input,
+  Form,
+} from "reactstrap";
 import * as moment from "moment";
 import { makeStyles } from "@material-ui/core/styles";
 import { Card, CardContent } from "@material-ui/core";
+import Alert from "@mui/material/Alert";
+import Stack from "@mui/material/Stack";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
 import { toast } from "react-toastify";
@@ -84,6 +94,29 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const HivTestResult = (props) => {
+  const mldata = JSON.parse(localStorage.getItem("mldata"));
+  let predictions = Object.values(mldata);
+
+  const predictionRanges = (prediction) => {
+    if (parseFloat(prediction) <= 0.2) {
+      return <Badge color="success">Low Risk</Badge>;
+    } else if (
+      parseFloat(prediction) >= 0.21 &&
+      parseFloat(prediction) <= 0.4
+    ) {
+      return <Badge color="info">Medium Risk</Badge>;
+    } else if (
+      parseFloat(prediction) >= 0.41 &&
+      parseFloat(prediction) <= 0.8
+    ) {
+      return <Badge color="warning">High Risk</Badge>;
+    } else if (parseFloat(prediction) >= 0.81) {
+      return <Badge color="danger">Highest Risk</Badge>;
+    } else {
+      return <Badge color="dark">None</Badge>;
+    }
+  };
+
   const classes = useStyles();
   const [saving, setSaving] = useState(false);
   const [errors, setErrors] = useState({});
@@ -176,7 +209,7 @@ const HivTestResult = (props) => {
       setShowCD4Count(false);
     } else {
       setInitailTest({ ...initialTest1, [e.target.name]: e.target.value });
-      setErrors({date: "", prepOffered: "", prepAccepted: ""})
+      setErrors({ date: "", prepOffered: "", prepAccepted: "" });
       //This is to show cd4 count section
       setShowCD4Count(true);
     }
@@ -529,6 +562,15 @@ const HivTestResult = (props) => {
       <Card className={classes.root}>
         <CardBody>
           <h2 style={{ color: "#000" }}>REQUEST AND RESULT FORM</h2>
+
+          <h4>ML Predictions for HTS Client</h4>
+          <Stack sx={{ width: "50%" }} spacing={2}>
+            <Alert severity="info" style={{ fontSize: "16px", color: "000" }}>
+              <b>Prediction Result:</b> is <b>{predictions[1]}</b> and the
+              patient is {predictionRanges(predictions[1])}
+            </Alert>
+          </Stack>
+          <br />
           <form>
             <div className="row">
               <LabelRibbon

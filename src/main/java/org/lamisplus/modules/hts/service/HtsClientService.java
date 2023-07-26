@@ -104,7 +104,7 @@ public class HtsClientService {
     public HtsClientDtos getHtsClientByPersonId(Long personId){
         Person person = personRepository.findById(personId).orElse(new Person());
 
-        return this.htsClientToHtsClientDtos(person, htsClientRepository.findAllByPerson(person));
+        return this.htsClientToHtsClientDtos(person, htsClientRepository.findAllByPersonAndArchived(person, UN_ARCHIVED));
     }
 
     public HtsClientDto getLatestHtsByPersonId(Long personId){
@@ -118,7 +118,7 @@ public class HtsClientService {
     }
 
     public HtsClientDtos getHtsClientByPersonId(Person person){
-        return this.htsClientToHtsClientDtos(person, htsClientRepository.findAllByPerson(person));
+        return this.htsClientToHtsClientDtos(person, htsClientRepository.findAllByPersonAndArchived(person, UN_ARCHIVED));
     }
 
     private HtsClient getById(Long id){

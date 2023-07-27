@@ -1,10 +1,18 @@
 import React, { useCallback, useEffect, useState } from "react";
 import axios from "axios";
-import { FormGroup, Label, CardBody, Spinner, Input, Form } from "reactstrap";
+import {
+  FormGroup,
+  Label,
+  CardBody,
+  Spinner,
+  Badge,
+  Input,
+  Form,
+} from "reactstrap";
 import { makeStyles } from "@material-ui/core/styles";
 import { Card, CardContent } from "@material-ui/core";
-// import AddIcon from "@material-ui/icons/Add";
-// import CancelIcon from "@material-ui/icons/Cancel";
+import Alert from "@mui/material/Alert";
+import Stack from "@mui/material/Stack";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
@@ -16,6 +24,7 @@ import { Label as LabelRibbon, Button, Message } from "semantic-ui-react";
 // import 'semantic-ui-css/semantic.min.css';
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
+import PanToolIcon from "@mui/icons-material/PanTool";
 //import * as moment from 'moment';
 
 const useStyles = makeStyles((theme) => ({
@@ -85,6 +94,28 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const BasicInfo = (props) => {
+  const [predictionValue, setPredictionValue] = useState(0);
+
+  const predictionRanges = (prediction) => {
+    if (parseFloat(prediction) <= 0.2) {
+      return <Badge color="success">Low Risk</Badge>;
+    } else if (
+      parseFloat(prediction) >= 0.21 &&
+      parseFloat(prediction) <= 0.4
+    ) {
+      return <Badge color="info">Medium Risk</Badge>;
+    } else if (
+      parseFloat(prediction) >= 0.41 &&
+      parseFloat(prediction) <= 0.8
+    ) {
+      return <Badge color="warning">High Risk</Badge>;
+    } else if (parseFloat(prediction) >= 0.81) {
+      return <Badge color="danger">Highest Risk</Badge>;
+    } else {
+      return <Badge color="dark">No Prediction Result</Badge>;
+    }
+  };
+
   const classes = useStyles();
   //let patientAge=""
   const patientID =
@@ -94,9 +125,11 @@ const BasicInfo = (props) => {
   const clientId =
     props.patientObj && props.patientObj ? props.patientObj.id : "";
   const [saving, setSaving] = useState(false);
+  const [savingPrediction, setSavingPrediction] = useState(false);
+  const [savingResult, setSavingRsult] = useState(false);
   const [errors, setErrors] = useState({});
   let temp = { ...errors };
-  console.log("data_pre_test", props.patientObj);
+  //console.log("data_pre_test", props.patientObj);
   // const calculate_age = dob => {
   //     var today = new Date();
   //     var dateParts = dob.split("-");
@@ -225,9 +258,62 @@ const BasicInfo = (props) => {
     haveCondomBurst: "",
   });
 
+  const postPredictions = (name, value) => {
+    if (name === "soldPaidVaginalSex" && value !== "null") {
+      setSavingRsult(true);
+      let mlData = {
+        modelConfigs: {
+          debug: "true",
+          encounterDate: props.patientObj?.dateVisit,
+          facilityId: "LBgwDTw2C8u",
+          modelId: "hts_v1",
+        },
+        variableValues: {
+          age: props.patientObj?.riskStratificationResponseDto.age,
+          client_pregnant_X0: props.patientObj?.pregnant === null ? 0 : 1,
+          first_time_visit_Y:
+            props.patientObj?.firstTimeVisit === false ? 0 : 1,
+          hts_setting_Other: 0,
+          hts_setting_Others: 0,
+          hts_setting_Outreach: 1,
+          marital_status_Divorced: 0,
+          marital_status_Married:
+            props.patientObj?.personResponseDto?.maritalStatus === null ? 0 : 1,
+          marital_status_Widowed: 0,
+          previously_tested_hiv_negative_Missing: 0,
+          previously_tested_hiv_negative_TRUE: 0,
+          referred_from_Other: 0,
+          referred_from_Self: 1,
+          session_type_Individual: 0,
+          sex_F: props.patientObj?.personResponseDto?.sex === "Female" ? 1 : 0,
+          sex_M: props.patientObj?.personResponseDto?.sex === "Male" ? 1 : 0,
+          tested_for_hiv_before_within_this_year_NotPreviouslyTested: 1,
+          tested_for_hiv_before_within_this_year_PreviouslyTestedNegative: 0,
+          tested_for_hiv_before_within_this_year_PreviouslyTestedPositiveInHIVCare: 0,
+          tested_for_hiv_before_within_this_year_PreviouslyTestedPositiveNotInHIVCare: 0,
+        },
+      };
+      //ML Post
+      axios
+        .post(`${baseUrl}machine-learning/evaluate`, mlData, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((resp) => {
+          console.log("ML", resp);
+          let predictions = Object.values(resp.data.result.predictions);
+          setPredictionValue(predictions);
+          setSavingPrediction(true);
+          setSavingRsult(false);
+        })
+        .catch((err) => {
+          console.error("ML_err", err);
+        });
+    }
+  };
+
   const handleInputChangeRiskAssessment = (e) => {
-    //setErrors({...temp, [e.target.name]:""})
     setRiskAssessment({ ...riskAssessment, [e.target.name]: e.target.value });
+    postPredictions(e.target.name, e.target.value);
   };
   // Getting the number count of riskAssessment True
   const actualRiskCountTrue = Object.values(riskAssessment);
@@ -381,76 +467,28 @@ const BasicInfo = (props) => {
       objValues.tbScreening = tbScreening;
       objValues.sexPartnerRiskAssessment = riskAssessmentPartner;
 
-      let mlData = {
-        modelConfigs: {
-          debug: "true",
-          encounterDate: props.patientObj?.dateVisit,
-          facilityId: "LBgwDTw2C8u",
-          modelId: "hts_v1",
-        },
-        variableValues: {
-          age: props.patientObj?.riskStratificationResponseDto.age,
-          client_pregnant_X0: props.patientObj?.pregnant === null ? 0 : 1,
-          first_time_visit_Y:
-            props.patientObj?.firstTimeVisit === false ? 0 : 1,
-          hts_setting_Other: 0,
-          hts_setting_Others: 0,
-          hts_setting_Outreach: 1,
-          marital_status_Divorced: 0,
-          marital_status_Married:
-            props.patientObj?.personResponseDto?.maritalStatus === null ? 0 : 1,
-          marital_status_Widowed: 0,
-          previously_tested_hiv_negative_Missing: 0,
-          previously_tested_hiv_negative_TRUE: 0,
-          referred_from_Other: 0,
-          referred_from_Self: 1,
-          session_type_Individual: 0,
-          sex_F: props.patientObj?.personResponseDto?.sex === "Female" ? 1 : 0,
-          sex_M: props.patientObj?.personResponseDto?.sex === "Male" ? 1 : 0,
-          tested_for_hiv_before_within_this_year_NotPreviouslyTested: 1,
-          tested_for_hiv_before_within_this_year_PreviouslyTestedNegative: 0,
-          tested_for_hiv_before_within_this_year_PreviouslyTestedPositiveInHIVCare: 0,
-          tested_for_hiv_before_within_this_year_PreviouslyTestedPositiveNotInHIVCare: 0,
-        },
-      };
-
-      //ML Post
       axios
-        .post(`${baseUrl}machine-learning/evaluate`, mlData, {
+        .put(`${baseUrl}hts/${clientId}/pre-test-counseling`, objValues, {
           headers: { Authorization: `Bearer ${token}` },
         })
-        .then((resp) => {
-          console.log("ML", resp);
-          localStorage.setItem(
-            "mldata",
-            JSON.stringify(resp.data.result.predictions)
-          );
-          axios
-            .put(`${baseUrl}hts/${clientId}/pre-test-counseling`, objValues, {
-              headers: { Authorization: `Bearer ${token}` },
-            })
-            .then((response) => {
-              setSaving(false);
-              props.setPatientObj(response.data);
-              //toast.success("Risk Assesment successful");
-              handleItemClick("hiv-test", "pre-test-counsel");
-            })
-            .catch((error) => {
-              setSaving(false);
-              if (error.response && error.response.data) {
-                let errorMessage =
-                  error.response.data.apierror &&
-                  error.response.data.apierror.message !== ""
-                    ? error.response.data.apierror.message
-                    : "Something went wrong, please try again";
-                toast.error(errorMessage);
-              } else {
-                toast.error("Something went wrong. Please try again...");
-              }
-            });
+        .then((response) => {
+          setSaving(false);
+          props.setPatientObj(response.data);
+          //toast.success("Risk Assesment successful");
+          handleItemClick("hiv-test", "pre-test-counsel");
         })
-        .error((err) => {
-          console.log("ML_err", err);
+        .catch((error) => {
+          setSaving(false);
+          if (error.response && error.response.data) {
+            let errorMessage =
+              error.response.data.apierror &&
+              error.response.data.apierror.message !== ""
+                ? error.response.data.apierror.message
+                : "Something went wrong, please try again";
+            toast.error(errorMessage);
+          } else {
+            toast.error("Something went wrong. Please try again...");
+          }
         });
     } else {
       toast.error("All fields are required", {
@@ -464,6 +502,17 @@ const BasicInfo = (props) => {
       <Card className={classes.root}>
         <CardBody>
           <h2>PRE TEST COUNSELING</h2>
+          {savingPrediction ? (
+            <Stack sx={{ width: "50%" }} spacing={2}>
+              <Alert severity="info" style={{ fontSize: "16px", color: "000" }}>
+                <b>ML Prediction Result for HTS Patient :</b>{" "}
+                {predictionRanges(predictionValue[1])}
+              </Alert>
+            </Stack>
+          ) : (
+            ""
+          )}
+          <br />
           <form>
             <div className="row">
               <div
@@ -716,154 +765,23 @@ const BasicInfo = (props) => {
               </div>
               <hr />
               <br />
-              <div
-                className="form-group  col-md-12 text-center pt-2 mb-4"
-                style={{
-                  backgroundColor: "#000",
-                  width: "125%",
-                  height: "35px",
-                  color: "#fff",
-                  fontWeight: "bold",
-                }}
-              >
-                Clinical TB screening
-              </div>
-              <div className="form-group  col-md-4">
-                <FormGroup>
-                  <Label>Current cough </Label>
-                  <select
-                    className="form-control"
-                    name="currentCough"
-                    id="currentCough"
-                    value={tbScreening.currentCough}
-                    onChange={handleInputChangeTbScreening}
-                    style={{
-                      border: "1px solid #014D88",
-                      borderRadius: "0.2rem",
-                    }}
-                  >
-                    <option value={""}></option>
-                    <option value="true">Yes</option>
-                    <option value="false">No</option>
-                  </select>
-                  {errors.currentCough !== "" ? (
-                    <span className={classes.error}>{errors.currentCough}</span>
-                  ) : (
-                    ""
-                  )}
-                </FormGroup>
-              </div>
-              <div className="form-group  col-md-4">
-                <FormGroup>
-                  <Label>Weight loss </Label>
-                  <select
-                    className="form-control"
-                    name="weightLoss"
-                    id="weightLoss"
-                    value={tbScreening.weightLoss}
-                    onChange={handleInputChangeTbScreening}
-                    style={{
-                      border: "1px solid #014D88",
-                      borderRadius: "0.2rem",
-                    }}
-                  >
-                    <option value={""}></option>
-                    <option value="true">Yes</option>
-                    <option value="false">No</option>
-                  </select>
-                  {errors.weightLoss !== "" ? (
-                    <span className={classes.error}>{errors.weightLoss}</span>
-                  ) : (
-                    ""
-                  )}
-                </FormGroup>
-              </div>
-              <div className="form-group  col-md-4">
-                <FormGroup>
-                  <Label>Lymphadenopathy (swelling of the lymph nodes) </Label>
-                  <select
-                    className="form-control"
-                    name="lymphadenopathy"
-                    id="lymphadenopathy"
-                    value={tbScreening.lymphadenopathy}
-                    onChange={handleInputChangeTbScreening}
-                    style={{
-                      border: "1px solid #014D88",
-                      borderRadius: "0.2rem",
-                    }}
-                  >
-                    <option value={""}></option>
-                    <option value="true">Yes</option>
-                    <option value="false">No</option>
-                  </select>
-                  {errors.lymphadenopathy !== "" ? (
-                    <span className={classes.error}>
-                      {errors.lymphadenopathy}
-                    </span>
-                  ) : (
-                    ""
-                  )}
-                </FormGroup>
-              </div>
-              <div className="form-group  col-md-4">
-                <FormGroup>
-                  <Label>Fever </Label>
-                  <select
-                    className="form-control"
-                    name="fever"
-                    id="fever"
-                    value={tbScreening.fever}
-                    onChange={handleInputChangeTbScreening}
-                    style={{
-                      border: "1px solid #014D88",
-                      borderRadius: "0.2rem",
-                    }}
-                  >
-                    <option value={""}></option>
-                    <option value="true">Yes</option>
-                    <option value="false">No</option>
-                  </select>
-                  {errors.fever !== "" ? (
-                    <span className={classes.error}>{errors.fever}</span>
-                  ) : (
-                    ""
-                  )}
-                </FormGroup>
-              </div>
-              <div className="form-group  col-md-4">
-                <FormGroup>
-                  <Label>Night sweats</Label>
-                  <select
-                    className="form-control"
-                    name="nightSweats"
-                    id="nightSweats"
-                    value={tbScreening.nightSweats}
-                    onChange={handleInputChangeTbScreening}
-                    style={{
-                      border: "1px solid #014D88",
-                      borderRadius: "0.2rem",
-                    }}
-                  >
-                    <option value={""}></option>
-                    <option value="true">Yes</option>
-                    <option value="false">No</option>
-                  </select>
-                  {errors.nightSweats !== "" ? (
-                    <span className={classes.error}>{errors.nightSweats}</span>
-                  ) : (
-                    ""
-                  )}
-                </FormGroup>
-              </div>
-              <Message warning>
-                <h4>
-                  TB Screening score (calculate the sum of the TB assessment) If
-                  score {">= 1"}, test for Xper MTB RIF or refer to TB service{" "}
-                </h4>
-                <b>Score : {newTbTrue.length}</b>
-              </Message>
-              <hr />
-              <br />
+              {savingResult ? (
+                <div
+                  style={{
+                    display: "block",
+                    width: 1000,
+                    padding: 10,
+                  }}
+                >
+                  <Spinner style={{ width: "2rem", height: "2rem" }} />
+                  <b style={{ color: "#992E62", fontSize: "14px" }}>
+                    {" "}
+                    <PanToolIcon /> requesting HTS ML predictions...
+                  </b>
+                </div>
+              ) : (
+                " "
+              )}
               {props.patientObj.targetGroup === "TARGET_GROUP_GEN_POP" && (
                 <>
                   <div
@@ -1428,6 +1346,155 @@ const BasicInfo = (props) => {
                   <br />
                 </>
               )}
+
+              <div
+                className="form-group  col-md-12 text-center pt-2 mb-4"
+                style={{
+                  backgroundColor: "#000",
+                  width: "125%",
+                  height: "35px",
+                  color: "#fff",
+                  fontWeight: "bold",
+                }}
+              >
+                Clinical TB screening
+              </div>
+              <div className="form-group  col-md-4">
+                <FormGroup>
+                  <Label>Current cough </Label>
+                  <select
+                    className="form-control"
+                    name="currentCough"
+                    id="currentCough"
+                    value={tbScreening.currentCough}
+                    onChange={handleInputChangeTbScreening}
+                    style={{
+                      border: "1px solid #014D88",
+                      borderRadius: "0.2rem",
+                    }}
+                  >
+                    <option value={""}></option>
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                  </select>
+                  {errors.currentCough !== "" ? (
+                    <span className={classes.error}>{errors.currentCough}</span>
+                  ) : (
+                    ""
+                  )}
+                </FormGroup>
+              </div>
+              <div className="form-group  col-md-4">
+                <FormGroup>
+                  <Label>Weight loss </Label>
+                  <select
+                    className="form-control"
+                    name="weightLoss"
+                    id="weightLoss"
+                    value={tbScreening.weightLoss}
+                    onChange={handleInputChangeTbScreening}
+                    style={{
+                      border: "1px solid #014D88",
+                      borderRadius: "0.2rem",
+                    }}
+                  >
+                    <option value={""}></option>
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                  </select>
+                  {errors.weightLoss !== "" ? (
+                    <span className={classes.error}>{errors.weightLoss}</span>
+                  ) : (
+                    ""
+                  )}
+                </FormGroup>
+              </div>
+              <div className="form-group  col-md-4">
+                <FormGroup>
+                  <Label>Lymphadenopathy (swelling of the lymph nodes) </Label>
+                  <select
+                    className="form-control"
+                    name="lymphadenopathy"
+                    id="lymphadenopathy"
+                    value={tbScreening.lymphadenopathy}
+                    onChange={handleInputChangeTbScreening}
+                    style={{
+                      border: "1px solid #014D88",
+                      borderRadius: "0.2rem",
+                    }}
+                  >
+                    <option value={""}></option>
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                  </select>
+                  {errors.lymphadenopathy !== "" ? (
+                    <span className={classes.error}>
+                      {errors.lymphadenopathy}
+                    </span>
+                  ) : (
+                    ""
+                  )}
+                </FormGroup>
+              </div>
+              <div className="form-group  col-md-4">
+                <FormGroup>
+                  <Label>Fever </Label>
+                  <select
+                    className="form-control"
+                    name="fever"
+                    id="fever"
+                    value={tbScreening.fever}
+                    onChange={handleInputChangeTbScreening}
+                    style={{
+                      border: "1px solid #014D88",
+                      borderRadius: "0.2rem",
+                    }}
+                  >
+                    <option value={""}></option>
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                  </select>
+                  {errors.fever !== "" ? (
+                    <span className={classes.error}>{errors.fever}</span>
+                  ) : (
+                    ""
+                  )}
+                </FormGroup>
+              </div>
+              <div className="form-group  col-md-4">
+                <FormGroup>
+                  <Label>Night sweats</Label>
+                  <select
+                    className="form-control"
+                    name="nightSweats"
+                    id="nightSweats"
+                    value={tbScreening.nightSweats}
+                    onChange={handleInputChangeTbScreening}
+                    style={{
+                      border: "1px solid #014D88",
+                      borderRadius: "0.2rem",
+                    }}
+                  >
+                    <option value={""}></option>
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                  </select>
+                  {errors.nightSweats !== "" ? (
+                    <span className={classes.error}>{errors.nightSweats}</span>
+                  ) : (
+                    ""
+                  )}
+                </FormGroup>
+              </div>
+              <Message warning>
+                <h4>
+                  TB Screening score (calculate the sum of the TB assessment) If
+                  score {">= 1"}, test for Xper MTB RIF or refer to TB service{" "}
+                </h4>
+                <b>Score : {newTbTrue.length}</b>
+              </Message>
+              <hr />
+              <br />
               <div
                 className="form-group  col-md-12 text-center pt-2 mb-4"
                 style={{

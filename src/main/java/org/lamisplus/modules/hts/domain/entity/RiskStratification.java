@@ -41,7 +41,7 @@ public class RiskStratification extends Audit implements Serializable {
 
     @Basic
     @Column(name = "age")
-    private int age;
+    private Integer age=0;
 
     @Basic
     @Column(name = "entry_point")

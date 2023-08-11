@@ -405,29 +405,29 @@ const BasicInfo = (props) => {
                 </FormGroup>
               </div>
               <div className="form-group mb-3 col-md-4">
-              <FormGroup>
-                <Label for="">
-                  Client Code <span style={{ color: "red" }}> *</span>
-                </Label>
-                <Input
-                  type="text"
-                  name="clientCode"
-                  id="clientCode"
-                  value={objValues.clientCode}
-                  onChange={handleInputChange}
-                  style={{
-                    border: "1px solid #014D88",
-                    borderRadius: "0.25rem",
-                  }}
-                  readOnly={props.activePage.actionType === "view"}
-                />
-                {errors.clientCode !== "" ? (
-                  <span className={classes.error}>{errors.clientCode}</span>
-                ) : (
-                  ""
-                )}
-              </FormGroup>
-            </div>
+                <FormGroup>
+                  <Label for="">
+                    Client Code <span style={{ color: "red" }}> *</span>
+                  </Label>
+                  <Input
+                    type="text"
+                    name="clientCode"
+                    id="clientCode"
+                    value={objValues.clientCode}
+                    onChange={handleInputChange}
+                    style={{
+                      border: "1px solid #014D88",
+                      borderRadius: "0.25rem",
+                    }}
+                    readOnly={props.activePage.actionType === "view"}
+                  />
+                  {errors.clientCode !== "" ? (
+                    <span className={classes.error}>{errors.clientCode}</span>
+                  ) : (
+                    ""
+                  )}
+                </FormGroup>
+              </div>
               <div className="form-group  col-md-4">
                 <FormGroup>
                   <Label>

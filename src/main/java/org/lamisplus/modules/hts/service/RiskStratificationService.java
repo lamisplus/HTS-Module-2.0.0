@@ -102,7 +102,10 @@ public class RiskStratificationService {
         RiskStratificationResponseDto responseDto = new RiskStratificationResponseDto();
         responseDto.setId(riskStratification.getId());
         responseDto.setEntryPoint( riskStratification.getEntryPoint());
-        responseDto.setAge( riskStratification.getAge() );
+        //LOG.info("riskStratification is {}", riskStratification);
+
+        responseDto.setAge( riskStratification.getAge() != null ? riskStratification.getAge():0);
+
         responseDto.setTestingSetting( riskStratification.getTestingSetting() );
         responseDto.setModality( riskStratification.getModality() );
         responseDto.setCode( riskStratification.getCode() );

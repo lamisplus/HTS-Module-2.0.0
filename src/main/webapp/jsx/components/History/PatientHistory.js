@@ -89,6 +89,7 @@ const Home = (props) => {
                   <Tab eventKey="home" title="HTS HISTORY">
                     <History
                       patientObj={props.patientObj}
+                      setPatientObj={props.setPatientObj}
                       activePage={props.activePage}
                       setActivePage={props.setActivePage}
                       clientCode={props.clientCode}

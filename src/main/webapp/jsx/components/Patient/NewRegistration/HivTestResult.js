@@ -4,6 +4,7 @@ import { FormGroup, Label, CardBody, Spinner, Input, Form } from "reactstrap";
 import * as moment from "moment";
 import { makeStyles } from "@material-ui/core/styles";
 import { Card, CardContent } from "@material-ui/core";
+
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
 import { toast } from "react-toastify";
@@ -176,7 +177,7 @@ const HivTestResult = (props) => {
       setShowCD4Count(false);
     } else {
       setInitailTest({ ...initialTest1, [e.target.name]: e.target.value });
-      setErrors({date: "", prepOffered: "", prepAccepted: ""})
+      setErrors({ date: "", prepOffered: "", prepAccepted: "" });
       //This is to show cd4 count section
       setShowCD4Count(true);
     }

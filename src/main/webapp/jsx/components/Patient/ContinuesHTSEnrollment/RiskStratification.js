@@ -409,6 +409,37 @@ const RiskStratification = (props) => {
       props.patientObj.riskStratificationResponseDto.code !== ""
     ) {
       console.log("put");
+      axios
+        .put(
+          `${baseUrl}risk-stratification/${props.patientObj.riskStratificationResponseDto.id}`,
+          objValues,
+          { headers: { Authorization: `Bearer ${token}` } }
+        )
+        .then((response) => {
+          setSaving(false);
+          props.patientObj.riskStratificationResponseDto = response.data;
+          objValues.code = response.data.code;
+          props.setExtra(objValues);
+          //toast.success("Risk stratification save succesfully!");
+        })
+        .catch((error) => {
+          console.log(error);
+          setSaving(false);
+          if (error.response && error.response.data) {
+            let errorMessage =
+              error.response.data.apierror &&
+              error.response.data.apierror.message !== ""
+                ? error.response.data.apierror.message
+                : "Something went wrong, please try again";
+            toast.error(errorMessage, {
+              position: toast.POSITION.BOTTOM_CENTER,
+            });
+          } else {
+            toast.error("Something went wrong. Please try again...", {
+              position: toast.POSITION.BOTTOM_CENTER,
+            });
+          }
+        });
     } else {
       if (validate()) {
         setSaving(true);

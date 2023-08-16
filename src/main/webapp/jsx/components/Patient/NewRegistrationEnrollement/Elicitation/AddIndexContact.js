@@ -346,44 +346,52 @@ const AddIndexContact = (props) => {
       objValues.isDateOfBirthEstimated =
         objValues.isDateOfBirthEstimated == true ? 1 : 0;
 
-      //console.log("obj", objValues)
+      //console.log("obj", objValues);
       axios
         .post(`${baseUrl}index-elicitation`, objValues, {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((response) => {
           setSaving(false);
-          toast.success("Record save successful");
-          setElicitedCount(elicitedCount + 1);
-          setObjValues({
-            firstName: "",
-            middleName: "",
-            lastName: "",
-            dob: "",
-            phoneNumber: "",
-            altPhoneNumber: "",
-            sex: "",
-            htsClientId: props && props.patientObj ? props.patientObj.id : "",
-            physicalHurt: "",
-            threatenToHurt: "",
-            address: "",
-            hangOutSpots: "",
-            relativeToIndexClient: "",
-            currentlyLiveWithPartner: "",
-            partnerTestedPositive: "",
-            sexuallyUncomfortable: "",
-            notificationMethod: "",
-            datePartnerCameForTesting: "",
-            age: "",
-            isDateOfBirthEstimated: false,
-            //offeredIns:"",
-            //acceptedIns:"",
-            //elicited: "",
-            stateId: "",
-            lga: "",
-            dateTested: "",
-            currentHivStatus: "",
-          });
+          toast.success("Record save successfully");
+
+          if (
+            objValues.offeredIns !== "No" &&
+            objValues.acceptedIns !== "No" &&
+            objValues.elicited !== "No"
+          ) {
+            setElicitedCount(elicitedCount + 1);
+            setObjValues({
+              firstName: "",
+              middleName: "",
+              lastName: "",
+              dob: "",
+              phoneNumber: "",
+              altPhoneNumber: "",
+              sex: "",
+              htsClientId: props && props.patientObj ? props.patientObj.id : "",
+              physicalHurt: "",
+              threatenToHurt: "",
+              address: "",
+              hangOutSpots: "",
+              relativeToIndexClient: "",
+              currentlyLiveWithPartner: "",
+              partnerTestedPositive: "",
+              sexuallyUncomfortable: "",
+              notificationMethod: "",
+              datePartnerCameForTesting: "",
+              age: "",
+              isDateOfBirthEstimated: false,
+              //offeredIns:"",
+              //acceptedIns:"",
+              //elicited: "",
+              stateId: "",
+              lga: "",
+              dateTested: "",
+              currentHivStatus: "",
+            });
+          }
+
           // handleItemClickPage('list')
         })
         .catch((error) => {
@@ -451,7 +459,7 @@ const AddIndexContact = (props) => {
                   >
                     <option value={""}></option>
                     {consent.map((value) => (
-                      <option key={value.id} value={value.id}>
+                      <option key={value.id} value={value.display}>
                         {value.display}
                       </option>
                     ))}
@@ -463,36 +471,35 @@ const AddIndexContact = (props) => {
                   )}
                 </FormGroup>
               </div>
-              {objValues.offeredIns !== "" &&
-                objValues.offeredIns !== "616" && (
-                  <div className="form-group  col-md-4">
-                    <FormGroup>
-                      <Label>
-                        Accepted INS ? <span style={{ color: "red" }}> </span>
-                      </Label>
-                      <select
-                        className="form-control"
-                        name="acceptedIns"
-                        id="acceptedIns"
-                        value={objValues.acceptedIns}
-                        onChange={handleInputChange}
-                        style={{
-                          border: "1px solid #014D88",
-                          borderRadius: "0.2rem",
-                        }}
-                      >
-                        <option value={""}></option>
-                        {consent.map((value) => (
-                          <option key={value.id} value={value.id}>
-                            {value.display}
-                          </option>
-                        ))}
-                      </select>
-                    </FormGroup>
-                  </div>
-                )}
+              {objValues.offeredIns !== "" && objValues.offeredIns !== "No" && (
+                <div className="form-group  col-md-4">
+                  <FormGroup>
+                    <Label>
+                      Accepted INS ? <span style={{ color: "red" }}> </span>
+                    </Label>
+                    <select
+                      className="form-control"
+                      name="acceptedIns"
+                      id="acceptedIns"
+                      value={objValues.acceptedIns}
+                      onChange={handleInputChange}
+                      style={{
+                        border: "1px solid #014D88",
+                        borderRadius: "0.2rem",
+                      }}
+                    >
+                      <option value={""}></option>
+                      {consent.map((value) => (
+                        <option key={value.id} value={value.display}>
+                          {value.display}
+                        </option>
+                      ))}
+                    </select>
+                  </FormGroup>
+                </div>
+              )}
               {objValues.acceptedIns !== "" &&
-                objValues.acceptedIns !== "616" && (
+                objValues.acceptedIns !== "No" && (
                   <div className="form-group  col-md-4">
                     <FormGroup>
                       <Label>
@@ -511,7 +518,7 @@ const AddIndexContact = (props) => {
                       >
                         <option value={""}></option>
                         {consent.map((value) => (
-                          <option key={value.id} value={value.id}>
+                          <option key={value.id} value={value.display}>
                             {value.display}
                           </option>
                         ))}
@@ -522,7 +529,7 @@ const AddIndexContact = (props) => {
             </div>
 
             <div className="row">
-              {objValues.elicited !== "" && objValues.elicited !== "616" && (
+              {objValues.elicited !== "" && objValues.elicited !== "No" && (
                 <>
                   <div className="form-group mb-3 col-md-4">
                     <FormGroup>

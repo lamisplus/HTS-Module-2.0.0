@@ -258,62 +258,62 @@ const BasicInfo = (props) => {
     haveCondomBurst: "",
   });
 
-  const postPredictions = (name, value) => {
-    if (name === "soldPaidVaginalSex" && value !== "null") {
-      setSavingRsult(true);
-      let mlData = {
-        modelConfigs: {
-          debug: "true",
-          encounterDate: props.patientObj?.dateVisit,
-          facilityId: "LBgwDTw2C8u",
-          modelId: "hts_v1",
-        },
-        variableValues: {
-          age: props.patientObj?.riskStratificationResponseDto.age,
-          client_pregnant_X0: props.patientObj?.pregnant === null ? 0 : 1,
-          first_time_visit_Y:
-            props.patientObj?.firstTimeVisit === false ? 0 : 1,
-          hts_setting_Other: 0,
-          hts_setting_Others: 0,
-          hts_setting_Outreach: 1,
-          marital_status_Divorced: 0,
-          marital_status_Married:
-            props.patientObj?.personResponseDto?.maritalStatus === null ? 0 : 1,
-          marital_status_Widowed: 0,
-          previously_tested_hiv_negative_Missing: 0,
-          previously_tested_hiv_negative_TRUE: 0,
-          referred_from_Other: 0,
-          referred_from_Self: 1,
-          session_type_Individual: 0,
-          sex_F: props.patientObj?.personResponseDto?.sex === "Female" ? 1 : 0,
-          sex_M: props.patientObj?.personResponseDto?.sex === "Male" ? 1 : 0,
-          tested_for_hiv_before_within_this_year_NotPreviouslyTested: 1,
-          tested_for_hiv_before_within_this_year_PreviouslyTestedNegative: 0,
-          tested_for_hiv_before_within_this_year_PreviouslyTestedPositiveInHIVCare: 0,
-          tested_for_hiv_before_within_this_year_PreviouslyTestedPositiveNotInHIVCare: 0,
-        },
-      };
-      //ML Post
-      axios
-        .post(`${baseUrl}machine-learning/evaluate`, mlData, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((resp) => {
-          console.log("ML", resp);
-          let predictions = Object.values(resp.data.result.predictions);
-          setPredictionValue(predictions);
-          setSavingPrediction(true);
-          setSavingRsult(false);
-        })
-        .catch((err) => {
-          console.error("ML_err", err);
-        });
-    }
-  };
+  // const postPredictions = (name, value) => {
+  //   if (name === "soldPaidVaginalSex" && value !== "null") {
+  //     setSavingRsult(true);
+  //     let mlData = {
+  //       modelConfigs: {
+  //         debug: "true",
+  //         encounterDate: props.patientObj?.dateVisit,
+  //         facilityId: "LBgwDTw2C8u",
+  //         modelId: "hts_v1",
+  //       },
+  //       variableValues: {
+  //         age: props.patientObj?.riskStratificationResponseDto.age,
+  //         client_pregnant_X0: props.patientObj?.pregnant === null ? 0 : 1,
+  //         first_time_visit_Y:
+  //           props.patientObj?.firstTimeVisit === false ? 0 : 1,
+  //         hts_setting_Other: 0,
+  //         hts_setting_Others: 0,
+  //         hts_setting_Outreach: 1,
+  //         marital_status_Divorced: 0,
+  //         marital_status_Married:
+  //           props.patientObj?.personResponseDto?.maritalStatus === null ? 0 : 1,
+  //         marital_status_Widowed: 0,
+  //         previously_tested_hiv_negative_Missing: 0,
+  //         previously_tested_hiv_negative_TRUE: 0,
+  //         referred_from_Other: 0,
+  //         referred_from_Self: 1,
+  //         session_type_Individual: 0,
+  //         sex_F: props.patientObj?.personResponseDto?.sex === "Female" ? 1 : 0,
+  //         sex_M: props.patientObj?.personResponseDto?.sex === "Male" ? 1 : 0,
+  //         tested_for_hiv_before_within_this_year_NotPreviouslyTested: 1,
+  //         tested_for_hiv_before_within_this_year_PreviouslyTestedNegative: 0,
+  //         tested_for_hiv_before_within_this_year_PreviouslyTestedPositiveInHIVCare: 0,
+  //         tested_for_hiv_before_within_this_year_PreviouslyTestedPositiveNotInHIVCare: 0,
+  //       },
+  //     };
+  //     //ML Post
+  //     axios
+  //       .post(`${baseUrl}machine-learning/evaluate`, mlData, {
+  //         headers: { Authorization: `Bearer ${token}` },
+  //       })
+  //       .then((resp) => {
+  //         console.log("ML", resp);
+  //         let predictions = Object.values(resp.data.result.predictions);
+  //         setPredictionValue(predictions);
+  //         setSavingPrediction(true);
+  //         setSavingRsult(false);
+  //       })
+  //       .catch((err) => {
+  //         console.error("ML_err", err);
+  //       });
+  //   }
+  // };
 
   const handleInputChangeRiskAssessment = (e) => {
     setRiskAssessment({ ...riskAssessment, [e.target.name]: e.target.value });
-    postPredictions(e.target.name, e.target.value);
+    //postPredictions(e.target.name, e.target.value);
   };
   // Getting the number count of riskAssessment True
   const actualRiskCountTrue = Object.values(riskAssessment);

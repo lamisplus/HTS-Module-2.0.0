@@ -95,7 +95,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const BasicInfo = (props) => {
-  console.log("basic", props, props.sex);
+  console.log("basic", props.patientObj.clientCode);
   const classes = useStyles();
   const history = useHistory();
   const [errors, setErrors] = useState({});
@@ -216,6 +216,7 @@ const BasicInfo = (props) => {
     let codeCreated =
       "C" + facilityCode + "/" + modalityCode + "/" + month + "/" + year + "/";
     setCreatedCode(codeCreated);
+    setObjValues({ ...objValues, clientCode: createdCode });
     //setObjValues({ ...objValues, clientCode: props.clientCode });
     // console.log('Created Code **** ', createdCode);
   };
@@ -228,8 +229,11 @@ const BasicInfo = (props) => {
     CounselingType();
     PregnancyStatus();
     IndexTesting();
-    setObjValues({ ...props.patientObj, clientCode: props.clientCode });
-    //CreateClientCode();
+    setObjValues({
+      ...props.patientObj,
+      clientCode: props.patientObj.clientCode,
+    });
+    CreateClientCode();
   }, [props.patientObj, facilityCode]);
   //Get list of KP
   const KP = () => {
@@ -414,20 +418,20 @@ const BasicInfo = (props) => {
       console.log("Code created is &&&& ", createdCode);
       setObjValues({ ...objValues, clientCode: code });
     }
-    // async function getIndexClientCode() {
-    //   const indexClientCode = objValues.clientCode;
-    //   console.log(indexClientCode);
-    //   const response = await axios.get(
-    //     `${baseUrl}hts/client/${indexClientCode}`,
-    //     {
-    //       headers: {
-    //         Authorization: `Bearer ${token}`,
-    //         "Content-Type": "text/plain",
-    //       },
-    //     }
-    //   );
-    // }
-    // getIndexClientCode();
+    async function getIndexClientCode() {
+      const indexClientCode = objValues.clientCode;
+      console.log(indexClientCode);
+      const response = await axios.get(
+        `${baseUrl}hts/client/${indexClientCode}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "text/plain",
+          },
+        }
+      );
+    }
+    getIndexClientCode();
   };
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -558,7 +562,7 @@ const BasicInfo = (props) => {
                   )}
                 </FormGroup>
               </div>
-              {/* <div className="form-group mb-3 col-md-4">
+              <div className="form-group mb-3 col-md-4">
                 <FormGroup>
                   <Label for="">
                     Serial Number <span style={{ color: "red" }}> *</span>
@@ -577,7 +581,7 @@ const BasicInfo = (props) => {
                     }}
                   />
                 </FormGroup>
-              </div> */}
+              </div>
               <div className="form-group mb-3 col-md-4">
                 <FormGroup>
                   <Label for="">

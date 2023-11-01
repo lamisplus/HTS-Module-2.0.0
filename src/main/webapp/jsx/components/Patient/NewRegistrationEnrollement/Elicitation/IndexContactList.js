@@ -169,14 +169,16 @@ const PatientnHistory = (props) => {
           { title: "Adress", field: "address" },
           //{ title: "Actions", field: "actions", filtering: false },
         ]}
-        data={indexClientList.map((row) => ({
-          name: row.firstName + " " + row.lastName,
-          age: calculate_age(moment(row.dob).format("DD-MM-YYYY")),
-          phone: row.phoneNumber,
-          address: row.address,
-          actions: (
-            <>
-              {/* <Menu.Menu position='right'  >
+        data={indexClientList
+          .filter((b) => b.firstName !== "")
+          .map((row) => ({
+            name: row.firstName + " " + row.lastName,
+            age: calculate_age(moment(row.dob).format("DD-MM-YYYY")),
+            phone: row.phoneNumber,
+            address: row.address,
+            actions: (
+              <>
+                {/* <Menu.Menu position='right'  >
                             <Menu.Item >
                                 <Button style={{backgroundColor:'rgb(153,46,98)'}} primary>
                                 <Dropdown item text='Action'>
@@ -195,9 +197,9 @@ const PatientnHistory = (props) => {
                                 </Button>
                             </Menu.Item>
                         </Menu.Menu> */}
-            </>
-          ),
-        }))}
+              </>
+            ),
+          }))}
         options={{
           headerStyle: {
             //backgroundColor: "#9F9FA5",

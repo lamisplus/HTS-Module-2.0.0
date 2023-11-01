@@ -95,7 +95,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const BasicInfo = (props) => {
-  console.log("basic", props.patientObj, props.sex);
+  console.log("basic", props.patientObj.clientCode);
   const classes = useStyles();
   const history = useHistory();
   const [errors, setErrors] = useState({});
@@ -217,6 +217,7 @@ const BasicInfo = (props) => {
       "C" + facilityCode + "/" + modalityCode + "/" + month + "/" + year + "/";
     setCreatedCode(codeCreated);
     setObjValues({ ...objValues, clientCode: createdCode });
+    //setObjValues({ ...objValues, clientCode: props.clientCode });
     // console.log('Created Code **** ', createdCode);
   };
 
@@ -228,7 +229,10 @@ const BasicInfo = (props) => {
     CounselingType();
     PregnancyStatus();
     IndexTesting();
-    setObjValues(props.patientObj);
+    setObjValues({
+      ...props.patientObj,
+      clientCode: props.patientObj.clientCode,
+    });
     CreateClientCode();
   }, [props.patientObj, facilityCode]);
   //Get list of KP
@@ -588,40 +592,19 @@ const BasicInfo = (props) => {
                     name="clientCode"
                     id="clientCode"
                     value={objValues.clientCode}
-                    //value={Math.floor(Math.random() * 1093328)}
-                    onBlur={checkClientCode}
                     onChange={handleInputChange}
-                    disabled={
-                      props.clientCode !== "" && props.clientCode !== null
-                        ? true
-                        : false
-                    }
                     style={{
                       border: "1px solid #014D88",
                       borderRadius: "0.25rem",
                     }}
+                    //readOnly={props.activePage.actionType === "view"}
                   />
-                  {/* <Input
-                                    type="text"
-                                    name="clientCode"
-                                    id="clientCode"
-                                    value={objValues.clientCode}
-                                    onChange={handleInputChange}
-                                    disabled={props.clientCode!=="" && props.clientCode!==null? true : false}
-                                    style={{border: "1px solid #014D88", borderRadius:"0.25rem"}}
-                                   
-                                /> */}
                   {errors.clientCode !== "" ? (
                     <span className={classes.error}>{errors.clientCode}</span>
                   ) : (
                     ""
                   )}
                 </FormGroup>
-                {clientCodeCheck !== "" ? (
-                  <span className={classes.error}>{clientCodeCheck}</span>
-                ) : (
-                  ""
-                )}
               </div>
               <div className="form-group  col-md-4">
                 <FormGroup>

@@ -15,6 +15,7 @@ import org.lamisplus.modules.patient.service.PersonService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static org.lamisplus.modules.base.util.Constants.ArchiveStatus.ARCHIVED;
@@ -45,6 +46,12 @@ public class IndexElicitationService {
         HtsClient htsClient = htsClientRepository.findByIdAndArchivedAndFacilityId(indexElicitationDto.getHtsClientId(), UN_ARCHIVED, facilityId)
                 .orElseThrow(()-> new EntityNotFoundException(HtsClient.class, "htsClientId", "" + indexElicitationDto.getHtsClientId()));
 
+        HashMap<String, String> ins = new HashMap<>();
+        ins.put("AcceptedIns", indexElicitationDto.getAcceptedIns());
+        ins.put("OfferedIns", indexElicitationDto.getOfferedIns());
+
+        htsClient.setIndexNotificationServicesElicitation(ins);
+        htsClientRepository.save(htsClient);
         IndexElicitation indexElicitation = this.convertToIndexElicitation(indexElicitationDto);
         indexElicitation.setFacilityId(facilityId);
         indexElicitation.setHtsClientUuid(htsClient.getUuid());

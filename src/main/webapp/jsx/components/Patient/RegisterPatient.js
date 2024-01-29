@@ -19,6 +19,7 @@ import Others from "./NewRegistration/Others";
 import PostTest from "./NewRegistration/PostTest";
 import RecencyTesting from "./NewRegistration/RecencyTesting";
 import RiskStratification from "./NewRegistration/RiskStratification";
+import ClientRefferalForm from "./NewRegistration/RefferalForm";
 
 const useStyles = makeStyles((theme) => ({
   error: {
@@ -36,7 +37,7 @@ const UserRegistration = (props) => {
   const location = useLocation();
   const locationState = location.state;
   const [saving, setSaving] = useState(false);
-  const [activeItem, setactiveItem] = useState("risk");
+  const [activeItem, setactiveItem] = useState("refferal");
   const [completed, setCompleted] = useState([]);
 
   const [patientObjAge, setPatientObjAge] = useState(0);
@@ -314,6 +315,22 @@ const UserRegistration = (props) => {
                       )}
                     </span>
                   </Menu.Item>
+                  <Menu.Item
+                    name="inbox"
+                    active={activeItem === "refferal"}
+                    onClick={() => handleItemClick("refferal")}
+                    style={{
+                      backgroundColor: activeItem === "refferal" ? "#000" : "",
+                    }}
+                  >
+                    <span style={{ color: "#fff" }}>
+                      {" "}
+                      Client Refferral Form
+                      {completed.includes("risk") && (
+                        <Icon name="check" color="green" />
+                      )}
+                    </span>
+                  </Menu.Item>
                   {hideOtherMenu == false && (
                     <>
                       <Menu.Item
@@ -333,6 +350,7 @@ const UserRegistration = (props) => {
                           )}
                         </span>
                       </Menu.Item>
+
                       {props.patientAge >= 15 && (
                         <Menu.Item
                           name="spam"
@@ -532,6 +550,19 @@ const UserRegistration = (props) => {
                     completed={completed}
                     setPatientObj={setPatientObj}
                     patientObj={patientObj}
+                    setExtra={setExtra}
+                    extra={extra}
+                  />
+                )}
+                {activeItem === "refferal" && (
+                  <ClientRefferalForm
+                    handleItemClick={handleItemClick}
+                    setCompleted={setCompleted}
+                    completed={completed}
+                    setPatientObj={setPatientObj}
+                    patientObj={patientObj}
+                    setPatientObjAge={setPatientObjAge}
+                    setHideOtherMenu={setHideOtherMenu}
                     setExtra={setExtra}
                     extra={extra}
                   />

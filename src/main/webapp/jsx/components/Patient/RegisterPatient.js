@@ -37,7 +37,7 @@ const UserRegistration = (props) => {
   const location = useLocation();
   const locationState = location.state;
   const [saving, setSaving] = useState(false);
-  const [activeItem, setactiveItem] = useState("refferal");
+  const [activeItem, setactiveItem] = useState("risk");
   const [completed, setCompleted] = useState([]);
 
   const [patientObjAge, setPatientObjAge] = useState(0);
@@ -315,7 +315,7 @@ const UserRegistration = (props) => {
                       )}
                     </span>
                   </Menu.Item>
-                  <Menu.Item
+                  {/* <Menu.Item
                     name="inbox"
                     active={activeItem === "refferal"}
                     onClick={() => handleItemClick("refferal")}
@@ -330,7 +330,7 @@ const UserRegistration = (props) => {
                         <Icon name="check" color="green" />
                       )}
                     </span>
-                  </Menu.Item>
+                  </Menu.Item> */}
                   {hideOtherMenu == false && (
                     <>
                       <Menu.Item
@@ -554,7 +554,7 @@ const UserRegistration = (props) => {
                     extra={extra}
                   />
                 )}
-                {activeItem === "refferal" && (
+                {/* {activeItem === "refferal" && (
                   <ClientRefferalForm
                     handleItemClick={handleItemClick}
                     setCompleted={setCompleted}
@@ -566,7 +566,7 @@ const UserRegistration = (props) => {
                     setExtra={setExtra}
                     extra={extra}
                   />
-                )}
+                )} */}
               </div>
             </div>
           </form>

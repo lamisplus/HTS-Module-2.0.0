@@ -131,7 +131,7 @@ const RefferralUnit = (props) => {
     age: "",
     dateOfBirth: "",
     hivStatus: "",
-    referredFromFacility: "",
+    referreFromFacility: "",
     nameOfPersonRefferringClient: "",
     nameOfReferringFacility: "",
     addressOfReferrringFacility: "",
@@ -168,12 +168,21 @@ const RefferralUnit = (props) => {
       .catch(() => {});
   };
   const checkPhoneNumberBasic = (e, inputName) => {
-    console.log(e, inputName);
     if (e) {
       setErrors({ ...errors, phoneNumber: "" });
     }
     const limit = 10;
-    setPayload({ ...payload, phoneNumber: e.slice(0, limit) });
+
+    if (inputName === "phoneNumber") {
+      setPayload({ ...payload, phoneNumber: e.slice(0, limit) });
+    } else if (inputName === "phoneNoOfReferrringFacility") {
+      setPayload({
+        ...payload,
+        phoneNoOfReferrringFacility: e.slice(0, limit),
+      });
+    } else if (inputName === "phoneNoOfRecievingFacility") {
+      setPayload({ ...payload, phoneNoOfRecievingFacility: e.slice(0, limit) });
+    }
   };
 
   //fetch province
@@ -213,6 +222,18 @@ const RefferralUnit = (props) => {
       const name = alphabetOnly(e.target.value);
       setPayload({ ...payload, [e.target.name]: name });
     } else if (e.target.name === "middleName" && e.target.value !== "") {
+      const name = alphabetOnly(e.target.value);
+      setPayload({ ...payload, [e.target.name]: name });
+    } else if (
+      e.target.name === "nameOfContactPerson" &&
+      e.target.value !== ""
+    ) {
+      const name = alphabetOnly(e.target.value);
+      setPayload({ ...payload, [e.target.name]: name });
+    } else if (
+      e.target.name === "nameOfPersonRefferringClient" &&
+      e.target.value !== ""
+    ) {
       const name = alphabetOnly(e.target.value);
       setPayload({ ...payload, [e.target.name]: name });
     } else if (e.target.name === "hospitalNumber" && e.target.value !== "") {
@@ -325,10 +346,14 @@ const RefferralUnit = (props) => {
     temp.dob = payload.dob ? "" : "This field is required.";
     temp.age = payload.age ? "" : "This field is required.";
     temp.hivStatus = payload.hivStatus ? "" : "This field is required.";
-    temp.referredFromFacility = payload.referredFromFacility
+    temp.referreFromFacility = payload.referreFromFacility
       ? ""
       : "This field is required.";
     temp.nameOfPersonRefferringClient = payload.nameOfPersonRefferringClient
+      ? ""
+      : "This field is required.";
+
+    temp.nameOfReferringFacility = payload.nameOfReferringFacility
       ? ""
       : "This field is required.";
     temp.addressOfReferrringFacility = payload.addressOfReferrringFacility
@@ -351,7 +376,7 @@ const RefferralUnit = (props) => {
       : "This field is required.";
     temp.serviceNeeded = payload.serviceNeeded ? "" : "This field is required.";
     temp.age = payload.age ? "" : "This field is required.";
-
+    temp.referredTo = payload.referredTo ? "" : "This field is required.";
     setErrors({ ...temp });
     return Object.values(temp).every((x) => x == "");
   };
@@ -386,7 +411,7 @@ const RefferralUnit = (props) => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-
+    console.log(payload);
     if (validate()) {
       setSaving(true);
 
@@ -741,11 +766,12 @@ const RefferralUnit = (props) => {
                       }}
                     >
                       <option value={""}>Select</option>
-                      {genders.map((gender, index) => (
-                        <option key={gender.id} value={gender.id}>
-                          {gender.display}
-                        </option>
-                      ))}
+                      {genders &&
+                        genders.map((gender, index) => (
+                          <option key={gender.id} value={gender.id}>
+                            {gender.display}
+                          </option>
+                        ))}
                     </select>
                     {errors.sexId !== "" ? (
                       <span className={classes.error}>{errors.sexId}</span>
@@ -754,7 +780,7 @@ const RefferralUnit = (props) => {
                     )}
                   </FormGroup>
                 </div>
-                <div className="form-group mb-2 col-md-4">
+                {/* <div className="form-group mb-2 col-md-4">
                   <FormGroup>
                     <Label>
                       Date Of Birth <span style={{ color: "red" }}> *</span>
@@ -791,11 +817,11 @@ const RefferralUnit = (props) => {
                       </label>
                     </div>
                   </FormGroup>
-                </div>
+                </div> */}
                 <div className="form-group mb-3 col-md-4">
                   <FormGroup>
                     <Label>
-                      Date <span style={{ color: "red" }}> *</span>
+                      Date Of Birth<span style={{ color: "red" }}> *</span>
                     </Label>
                     <input
                       className="form-control"
@@ -877,24 +903,24 @@ const RefferralUnit = (props) => {
                 <div className="form-group mb-3 col-md-4">
                   <FormGroup>
                     <Label for="firstName">
-                      Referred from (Facility):
+                      Referred from (Department):
                       <span style={{ color: "red" }}> *</span>
                     </Label>
                     <Input
                       className="form-control"
-                      type="text"
-                      name="referredFromFacility"
-                      id="referredFromFacility"
-                      value={payload.referredFromFacility}
+                      name="referreFromFacility"
+                      id="referreFromFacility"
+                      value={payload.referreFromFacility}
                       onChange={handleInputChange}
                       style={{
                         border: "1px solid #014D88",
                         borderRadius: "0.2rem",
                       }}
                     />
-                    {errors.referredFromFacility !== "" ? (
+
+                    {errors.referreFromFacility !== "" ? (
                       <span className={classes.error}>
-                        {errors.referredFromFacility}
+                        {errors.referreFromFacility}
                       </span>
                     ) : (
                       ""
@@ -986,20 +1012,27 @@ const RefferralUnit = (props) => {
                   <FormGroup>
                     <Label for="firstName">
                       Phone Number of Refering Facility
-                      <span style={{ color: "red" }}> *</span>
+                      {/* <span style={{ color: "red" }}> *</span> */}
                     </Label>
-                    <Input
-                      className="form-control"
-                      type="text"
+                    <PhoneInput
+                      containerStyle={{
+                        width: "100%",
+                        border: "1px solid #014D88",
+                      }}
+                      inputStyle={{ width: "100%", borderRadius: "0px" }}
+                      country={"ng"}
+                      placeholder="(234)7099999999"
+                      maxLength={5}
                       name="phoneNoOfReferrringFacility"
                       id="phoneNoOfReferrringFacility"
+                      masks={{ ng: "...-...-....", at: "(....) ...-...." }}
                       value={payload.phoneNoOfReferrringFacility}
-                      onChange={handleInputChange}
-                      style={{
-                        border: "1px solid #014D88",
-                        borderRadius: "0.2rem",
+                      onChange={(e) => {
+                        checkPhoneNumberBasic(e, "phoneNoOfReferrringFacility");
                       }}
+                      //onChange={(e)=>{handleInputChangeBasic(e,'phoneNumber')}}
                     />
+
                     {errors.phoneNoOfReferrringFacility !== "" ? (
                       <span className={classes.error}>
                         {errors.phoneNoOfReferrringFacility}
@@ -1012,7 +1045,7 @@ const RefferralUnit = (props) => {
                 <div className="form-group mb-3 col-md-4">
                   <FormGroup>
                     <Label for="firstName">
-                      Referred to (Facility)
+                      Referred to (Department)
                       <span style={{ color: "red" }}> *</span>
                     </Label>
                     <Input
@@ -1121,18 +1154,25 @@ const RefferralUnit = (props) => {
                       Phone No of Receiving Facility
                       <span style={{ color: "red" }}> *</span>
                     </Label>
-                    <Input
-                      className="form-control"
-                      type="text"
+                    <PhoneInput
+                      containerStyle={{
+                        width: "100%",
+                        border: "1px solid #014D88",
+                      }}
+                      inputStyle={{ width: "100%", borderRadius: "0px" }}
+                      country={"ng"}
+                      placeholder="(234)7099999999"
+                      maxLength={5}
                       name="phoneNoOfRecievingFacility"
                       id="phoneNoOfRecievingFacility"
+                      masks={{ ng: "...-...-....", at: "(....) ...-...." }}
                       value={payload.phoneNoOfRecievingFacility}
-                      onChange={handleInputChange}
-                      style={{
-                        border: "1px solid #014D88",
-                        borderRadius: "0.2rem",
+                      onChange={(e) => {
+                        checkPhoneNumberBasic(e, "phoneNoOfRecievingFacility");
                       }}
+                      //onChange={(e)=>{handleInputChangeBasic(e,'phoneNumber')}}
                     />
+
                     {errors.phoneNoOfRecievingFacility !== "" ? (
                       <span className={classes.error}>
                         {errors.phoneNoOfRecievingFacility}
@@ -1173,7 +1213,7 @@ const RefferralUnit = (props) => {
                   <FormGroup>
                     <Label for="firstName">
                       Comments
-                      <span style={{ color: "red" }}> *</span>
+                      {/* <span style={{ color: "red" }}> *</span> */}
                     </Label>
                     <Input
                       className="form-control"

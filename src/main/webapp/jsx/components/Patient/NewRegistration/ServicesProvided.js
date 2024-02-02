@@ -20,8 +20,6 @@ import { Label as LabelRibbon, Message } from "semantic-ui-react";
 import PhoneInput from "react-phone-input-2";
 import { getAllGenders, alphabetOnly } from "../../../../utility";
 
-
-
 const useStyles = makeStyles((theme) => ({
   card: {
     margin: theme.spacing(20),
@@ -109,7 +107,9 @@ const ServicesProvided = (props) => {
     addressOfFacilityProvider: "",
     referralDate: "",
     comments: "",
-    clientName: "",
+    clientFirstName: "",
+    clientLastName: "",
+    clientMiddleName: "",
     nameOfServiceProvider: "",
     signature: "",
     phoneNumber: "",
@@ -151,7 +151,13 @@ const ServicesProvided = (props) => {
     ) {
       const name = alphabetOnly(e.target.value);
       setPayload({ ...payload, [e.target.name]: name });
-    } else if (e.target.name === "clientName" && e.target.value !== "") {
+    } else if (e.target.name === "clientFirstName" && e.target.value !== "") {
+      const name = alphabetOnly(e.target.value);
+      setPayload({ ...payload, [e.target.name]: name });
+    } else if (e.target.name === "clientMiddleName" && e.target.value !== "") {
+      const name = alphabetOnly(e.target.value);
+      setPayload({ ...payload, [e.target.name]: name });
+    } else if (e.target.name === "clientLastName" && e.target.value !== "") {
       const name = alphabetOnly(e.target.value);
       setPayload({ ...payload, [e.target.name]: name });
     } else if (
@@ -207,8 +213,12 @@ const ServicesProvided = (props) => {
       ? ""
       : "This field is required.";
     temp.referralDate = payload.referralDate ? "" : "This field is required.";
-    temp.clientName = payload.clientName ? "" : "This field is required.";
-
+    temp.clientFirstName = payload.clientFirstName
+      ? ""
+      : "This field is required.";
+    temp.clientLastName = payload.clientLastName
+      ? ""
+      : "This field is required.";
     temp.nameOfServiceProvider = payload.nameOfServiceProvider
       ? ""
       : "This field is required.";
@@ -226,7 +236,7 @@ const ServicesProvided = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
+    console.log(payload);
     if (validate()) {
       console.log(payload);
       //   postPayload(payload);
@@ -237,6 +247,8 @@ const ServicesProvided = (props) => {
     <>
       {" "}
       <div>
+        <h2 style={{ color: "#000" }}>Client Referral Form </h2>
+        <br />
         <div className="row">
           <div
             className="form-group  col-md-12 text-center pt-2 mb-4"
@@ -341,22 +353,69 @@ const ServicesProvided = (props) => {
             <div className="form-group mb-3 col-md-6">
               <FormGroup>
                 <Label for="firstName">
-                  Client Name <span style={{ color: "red" }}> *</span>
+                  Client First Name <span style={{ color: "red" }}> *</span>
                 </Label>
                 <Input
                   className="form-control"
                   type="text"
-                  name="clientName"
-                  id="clientName"
-                  value={payload.clientName}
+                  name="clientFirstName"
+                  id="clientFirstName"
+                  value={payload.clientFirstName}
                   onChange={handleInputChange}
                   style={{
                     border: "1px solid #014D88",
                     borderRadius: "0.2rem",
                   }}
                 />
-                {errors.clientName !== "" ? (
-                  <span className={classes.error}>{errors.clientName}</span>
+                {errors.clientFirstName !== "" ? (
+                  <span className={classes.error}>
+                    {errors.clientFirstName}
+                  </span>
+                ) : (
+                  ""
+                )}
+              </FormGroup>
+            </div>
+            <div className="form-group mb-3 col-md-6">
+              <FormGroup>
+                <Label for="clientMiddleName">
+                  Client Middle Name
+                  {/* <span style={{ color: "red" }}> *</span> */}
+                </Label>
+                <Input
+                  className="form-control"
+                  type="text"
+                  name="clientMiddleName"
+                  id="clientMiddleName"
+                  value={payload.clientMiddleName}
+                  onChange={handleInputChange}
+                  style={{
+                    border: "1px solid #014D88",
+                    borderRadius: "0.2rem",
+                  }}
+                />
+              </FormGroup>
+            </div>
+
+            <div className="form-group mb-3 col-md-6">
+              <FormGroup>
+                <Label for="clientLastName">
+                  Client Last Name <span style={{ color: "red" }}> *</span>
+                </Label>
+                <Input
+                  className="form-control"
+                  type="text"
+                  name="clientLastName"
+                  id="clientLastName"
+                  value={payload.clientLastName}
+                  onChange={handleInputChange}
+                  style={{
+                    border: "1px solid #014D88",
+                    borderRadius: "0.2rem",
+                  }}
+                />
+                {errors.clientLastName !== "" ? (
+                  <span className={classes.error}>{errors.clientLastName}</span>
                 ) : (
                   ""
                 )}

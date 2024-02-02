@@ -94,6 +94,11 @@ const useStyles = makeStyles((theme) => ({
 const ClientRefferalForm = (props) => {
   const classes = useStyles();
 
+  const [content, setContent] = useState({
+    showReferringUnit: false,
+    showServiceProviderUnit: false,
+  });
+
   const [enrollSetting, setEnrollSetting] = useState([]);
   const [entryPoint, setEntryPoint] = useState([]);
   const [entryPointCommunity, setEntryPointCommunity] = useState([]);
@@ -132,22 +137,6 @@ const ClientRefferalForm = (props) => {
     communityEntryPoint: "",
   });
   const [riskAssessment, setRiskAssessment] = useState({
-    // everHadSexualIntercourse:"",
-    // bloodtransInlastThreeMonths:"",
-    // uprotectedSexWithCasualLastThreeMonths:"",
-    // uprotectedSexWithRegularPartnerLastThreeMonths:"",
-    // unprotectedVaginalSex:"",
-    // uprotectedAnalSex:"",
-    // stiLastThreeMonths:"",
-    // sexUnderInfluence :"",
-    // moreThanOneSexPartnerLastThreeMonths:"",
-    // experiencePain:"",
-    // haveSexWithoutCondom:"",
-    // abuseDrug:"",
-    // bloodTransfusion:"",
-    // consistentWeightFeverNightCough:"",
-    // soldPaidVaginalSex:"",
-    //New Question
     lastHivTestForceToHaveSex: "",
     lastHivTestHadAnal: "",
     lastHivTestInjectedDrugs: "",
@@ -160,12 +149,26 @@ const ClientRefferalForm = (props) => {
     lastHivTestBasedOnRequest: "",
   });
 
-  const [payload, setPayload] = useState({
-    referralDate: "",
-    firstName: "",
-    countryId: "1",
-    hivStatus: "",
-  });
+  const [contentDropDown, setContentDropDown] = useState("");
+
+  const handleContentChange = (e) => {
+    console.log(e.target.value);
+    setContentDropDown(e.target.value);
+    if (e.target.value === "showReferringUnit") {
+      setContent({
+        showReferringUnit: true,
+        showServiceProviderUnit: false,
+      });
+    }
+
+    if (e.target.value === "showServiceProviderUnit") {
+      setContent({
+        showReferringUnit: false,
+        showServiceProviderUnit: true,
+      });
+    }
+  };
+
   const loadGenders = useCallback(async () => {
     try {
       const response = await axios.get(
@@ -216,34 +219,7 @@ const ClientRefferalForm = (props) => {
       })
       .catch((error) => {});
   };
-  const checkPhoneNumberBasic = (e, inputName) => {
-    console.log(e, inputName);
-    if (e) {
-      setErrors({ ...errors, phoneNumber: "" });
-    }
-    const limit = 10;
-    setPayload({ ...payload, phoneNumber: e.slice(0, limit) });
-  };
 
-  //fetch province
-  const getProvinces = (e) => {
-    const stateId = e.target.value;
-    if (e.target.value) {
-      setErrors({ ...errors, stateId: "" });
-    }
-    setPayload({ ...payload, stateId: e.target.value });
-    axios
-      .get(
-        `${baseUrl}organisation-units/parent-organisation-units/${stateId}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      )
-      .then((response) => {
-        setProvinces(response.data);
-      })
-      .catch((error) => {
-        //console.log(error);
-      });
-  };
   const GetCountry = () => {
     axios
       .get(`${baseUrl}organisation-units/parent-organisation-units/0`, {
@@ -320,102 +296,6 @@ const ClientRefferalForm = (props) => {
       .catch((error) => {
         //console.log(error);
       });
-  };
-  const handleInputChange = (e) => {
-    setErrors({ ...temp, [e.target.name]: "" });
-
-    if (e.target.name === "firstName" && e.target.value !== "") {
-      const name = alphabetOnly(e.target.value);
-      setPayload({ ...payload, [e.target.name]: name });
-    }
-    if (e.target.name === "lastName" && e.target.value !== "") {
-      const name = alphabetOnly(e.target.value);
-      setPayload({ ...payload, [e.target.name]: name });
-    }
-    if (e.target.name === "middleName" && e.target.value !== "") {
-      const name = alphabetOnly(e.target.value);
-      setPayload({ ...payload, [e.target.name]: name });
-    }
-
-    if (e.target.name === "hospitalNumber" && e.target.value !== "") {
-      async function getHosiptalNumber() {
-        const hosiptalNumber = e.target.value;
-        const response = await axios.post(
-          `${baseUrl}patient/exist/hospital-number`,
-          hosiptalNumber,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "text/plain",
-            },
-          }
-        );
-        if (response.data !== true) {
-          setHospitalNumStatus(false);
-          errors.hospitalNumber = "";
-        } else {
-          errors.hospitalNumber = "";
-          toast.error("Error! Hosiptal Number already exist");
-          setHospitalNumStatus(true);
-        }
-      }
-      getHosiptalNumber();
-    }
-    if (e.target.name === "testingSetting" && e.target.value !== "") {
-      SettingModality(e.target.value);
-      setObjValues({ ...objValues, [e.target.name]: e.target.value });
-    }
-    if (e.target.name === "modality" && e.target.value !== "") {
-      //SettingModality(e.target.value)
-      if (e.target.value === "TEST_SETTING_STANDALONE_HTS_PMTCT_(ANC1_ONLY)") {
-        setRiskCount(1);
-        setObjValues({ ...objValues, [e.target.name]: e.target.value });
-      } else if (e.target.value === "TEST_SETTING_STANDALONE_HTS_EMERGENCY") {
-        //setRiskCount(1)
-        setObjValues({ ...objValues, [e.target.name]: e.target.value });
-      } else if (e.target.value === "TEST_SETTING_STANDALONE_HTS_INDEX") {
-        setRiskCount(1);
-        setObjValues({ ...objValues, [e.target.name]: e.target.value });
-      } else if (
-        e.target.value ===
-        "TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)"
-      ) {
-        setRiskCount(1);
-        setObjValues({ ...objValues, [e.target.name]: e.target.value });
-      } else if (e.target.value === "TEST_SETTING_STANDALONE_HTS_STI") {
-        setRiskCount(1);
-        setObjValues({ ...objValues, [e.target.name]: e.target.value });
-      } else if (e.target.value === "TEST_SETTING_STANDALONE_HTS_TB") {
-        setRiskCount(1);
-        setObjValues({ ...objValues, [e.target.name]: e.target.value });
-      } else if (e.target.value === "TEST_SETTING_CT_STI") {
-        setRiskCount(1);
-        setObjValues({ ...objValues, [e.target.name]: e.target.value });
-      } else if (e.target.value === "TEST_SETTING_CT_PMTCT") {
-        setRiskCount(1);
-        setObjValues({ ...objValues, [e.target.name]: e.target.value });
-      } else if (e.target.value === "TEST_SETTING_CT_TB") {
-        setRiskCount(1);
-        setObjValues({ ...objValues, [e.target.name]: e.target.value });
-      } else if (e.target.value === "TEST_SETTING_TB_TB") {
-        setRiskCount(1);
-        setObjValues({ ...objValues, [e.target.name]: e.target.value });
-      } else if (e.target.value === "TEST_SETTING_STI_STI") {
-        setRiskCount(1);
-        setObjValues({ ...objValues, [e.target.name]: e.target.value });
-      } else if (e.target.value === "TEST_SETTING_OPD_STI") {
-        //setRiskCount(1)
-        setObjValues({ ...objValues, [e.target.name]: e.target.value });
-      } else if (e.target.value === "TEST_SETTING_OUTREACH_INDEX") {
-        setRiskCount(1);
-        setObjValues({ ...objValues, [e.target.name]: e.target.value });
-      } else {
-        setRiskCount(0);
-        setObjValues({ ...objValues, [e.target.name]: e.target.value });
-      }
-    }
-
-    setObjValues({ ...objValues, [e.target.name]: e.target.value });
   };
 
   //Date of Birth and Age handle
@@ -774,11 +654,38 @@ const ClientRefferalForm = (props) => {
 
   return (
     <>
+      <div>
+        <div className="form-group  col-md-8">
+          <FormGroup>
+            <Label>
+              Referral Type <span style={{ color: "red" }}> *</span>
+            </Label>
+            <select
+              className="form-control"
+              name="contentDropDown"
+              id="contentDropDown"
+              onChange={handleContentChange}
+              style={{
+                border: "1px solid #014D88",
+                borderRadius: "0.2rem",
+              }}
+            >
+              <option value={""}>Select Refarral form type</option>
+              <option value={"showReferringUnit"}>Referral form</option>
+              <option value={"showServiceProviderUnit"}>
+                Service Provider form
+              </option>
+            </select>
+          </FormGroup>
+        </div>
+      </div>
       <Card className={classes.root}>
-        <RefferralUnit />
-        <CardBody>
-          <ServicesProvided />
-        </CardBody>
+        {content.showReferringUnit && <RefferralUnit />}
+        {content.showServiceProviderUnit && (
+          <CardBody>
+            <ServicesProvided />
+          </CardBody>
+        )}
         {/* recieving facility  */}
       </Card>
       <Modal

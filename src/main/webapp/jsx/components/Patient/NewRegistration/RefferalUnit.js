@@ -18,7 +18,9 @@ import { Button } from "semantic-ui-react";
 import { Modal } from "react-bootstrap";
 import { Label as LabelRibbon, Message } from "semantic-ui-react";
 import PhoneInput from "react-phone-input-2";
-import ServicesProvided from "./ServicesProvided";
+import Select from "react-select";
+// import { getAcount } from "../../../../utility";
+import Cookies from "js-cookie";
 import {
   getAllStateByCountryId,
   getAllCountry,
@@ -113,6 +115,12 @@ const RefferralUnit = (props) => {
 
   const [states, setStates] = useState([]);
   const [genders, setGenders] = useState([]);
+  const [hivStatus, setHivStatus] = useState([]);
+  const [serviceNeeded, setServiceNeeded] = useState([]);
+
+  const [facilityName, setFacilityName] = useState(Cookies.get("facilityName"));
+  const [allFacilities, setAllFacilities] = useState([]);
+  // console.log(Cookies.get("facilityName"));
 
   const [payload, setPayload] = useState({
     referralDate: "",
@@ -133,7 +141,7 @@ const RefferralUnit = (props) => {
     hivStatus: "",
     referreFromFacility: "",
     nameOfPersonRefferringClient: "",
-    nameOfReferringFacility: "",
+    nameOfReferringFacility: Cookies.get("facilityName"),
     addressOfReferrringFacility: "",
     phoneNoOfReferrringFacility: "",
     referredTo: "",
@@ -157,6 +165,7 @@ const RefferralUnit = (props) => {
     loadGenders();
     getCountry();
     getStateByCountryId();
+    getAllFacilities();
   }, []);
 
   //Get list of State
@@ -183,6 +192,45 @@ const RefferralUnit = (props) => {
     } else if (inputName === "phoneNoOfRecievingFacility") {
       setPayload({ ...payload, phoneNoOfRecievingFacility: e.slice(0, limit) });
     }
+  };
+
+  // handle Facility Name to slect drop down
+  const handleInputChangeObject = (e) => {
+    // console.log(e);
+    setPayload({
+      ...payload,
+      nameOfRecievingFacility: e.name,
+      addressOfRecievingFacility: e.parentParentOrganisationUnitName,
+      // lgaTransferTo: e.parentOrganisationUnitName,
+    });
+    setErrors({ ...errors, nameOfRecievingFacility: "" });
+    // setSelectedState(e.parentParentOrganisationUnitName);
+    // setSelectedLga(e.parentOrganisationUnitName);
+  };
+
+  // get all facilities
+  const getAllFacilities = () => {
+    axios
+      .get(
+        `${baseUrl}organisation-units/parent-organisation-units/1/organisation-units-level/4/hierarchy`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
+      .then((response) => {
+        // console.log(response.data);
+
+        let updatedFaclilties = response.data.map((each, id) => {
+          return {
+            ...each,
+            value: each.id,
+            label: each.name,
+          };
+        });
+
+        setAllFacilities(updatedFaclilties);
+      })
+      .catch((error) => {});
   };
 
   //fetch province
@@ -465,6 +513,7 @@ const RefferralUnit = (props) => {
                         border: "1px solid #014D88",
                         borderRadius: "0.25rem",
                       }}
+                      disabled
                     />
                     {errors.referralDate !== "" ? (
                       <span className={classes.error}>
@@ -491,6 +540,7 @@ const RefferralUnit = (props) => {
                         border: "1px solid #014D88",
                         borderRadius: "0.2rem",
                       }}
+                      disabled
                     />
                     {errors.firstName !== "" ? (
                       <span className={classes.error}>{errors.firstName}</span>
@@ -514,6 +564,7 @@ const RefferralUnit = (props) => {
                         border: "1px solid #014D88",
                         borderRadius: "0.2rem",
                       }}
+                      disabled
                     />
                   </FormGroup>
                 </div>
@@ -534,6 +585,7 @@ const RefferralUnit = (props) => {
                         border: "1px solid #014D88",
                         borderRadius: "0.2rem",
                       }}
+                      disabled
                     />
                     {errors.lastName !== "" ? (
                       <span className={classes.error}>{errors.lastName}</span>
@@ -558,6 +610,7 @@ const RefferralUnit = (props) => {
                         border: "1px solid #014D88",
                         borderRadius: "0.2rem",
                       }}
+                      disabled
                     />
                     {errors.hospitalNumber !== "" ? (
                       <span className={classes.error}>
@@ -622,6 +675,7 @@ const RefferralUnit = (props) => {
                         borderRadius: "0.2rem",
                       }}
                       onChange={getProvinces}
+                      disabled
                     >
                       <option value="">Select</option>
                       {states.map((value, index) => (
@@ -654,6 +708,7 @@ const RefferralUnit = (props) => {
                         border: "1px solid #014D88",
                         borderRadius: "0.2rem",
                       }}
+                      disabled
                       onChange={handleInputChange}
                     >
                       <option value="">Select</option>
@@ -681,6 +736,7 @@ const RefferralUnit = (props) => {
                       name="address"
                       id="address"
                       value={payload.address}
+                      disabled
                       onChange={handleInputChange}
                       style={{
                         border: "1px solid #014D88",
@@ -704,6 +760,7 @@ const RefferralUnit = (props) => {
                       name="landmark"
                       id="landmark"
                       value={payload.landmark}
+                      disabled
                       onChange={handleInputChange}
                       style={{
                         border: "1px solid #014D88",
@@ -719,6 +776,7 @@ const RefferralUnit = (props) => {
                       Phone Number <span style={{ color: "red" }}> *</span>
                     </Label>
                     <PhoneInput
+                      disabled={true}
                       containerStyle={{
                         width: "100%",
                         border: "1px solid #014D88",
@@ -764,6 +822,7 @@ const RefferralUnit = (props) => {
                         border: "1px solid #014D88",
                         borderRadius: "0.2rem",
                       }}
+                      disabled
                     >
                       <option value={""}>Select</option>
                       {genders &&
@@ -836,6 +895,7 @@ const RefferralUnit = (props) => {
                         border: "1px solid #014D88",
                         borderRadius: "0.2rem",
                       }}
+                      disabled
                     />
                     {errors.dob !== "" ? (
                       <span className={classes.error}>{errors.dob}</span>
@@ -886,7 +946,7 @@ const RefferralUnit = (props) => {
                       }}
                     >
                       <option value={""}>Select</option>
-                      {genders.map((gender, index) => (
+                      {hivStatus.map((gender, index) => (
                         <option key={gender.id} value={gender.id}>
                           {gender.display}
                         </option>
@@ -971,6 +1031,7 @@ const RefferralUnit = (props) => {
                         border: "1px solid #014D88",
                         borderRadius: "0.2rem",
                       }}
+                      disabled
                     />
                     {errors.nameOfReferringFacility !== "" ? (
                       <span className={classes.error}>
@@ -998,6 +1059,7 @@ const RefferralUnit = (props) => {
                         border: "1px solid #014D88",
                         borderRadius: "0.2rem",
                       }}
+                      // disabled
                     />
                     {errors.addressOfReferrringFacility !== "" ? (
                       <span className={classes.error}>
@@ -1096,6 +1158,39 @@ const RefferralUnit = (props) => {
                 </div>
                 <div className="form-group mb-3 col-md-4">
                   <FormGroup>
+                    <Label for="testGroup">
+                      Name of the Receiving Facility{" "}
+                      <span style={{ color: "red" }}> *</span>
+                    </Label>
+
+                    <Select
+                      //value={selectedOption}
+                      onChange={handleInputChangeObject}
+                      name="nameOfRecievingFacility"
+                      options={allFacilities}
+                      theme={(theme) => ({
+                        ...theme,
+                        borderRadius: "0.25rem",
+                        border: "1px solid #014D88",
+                        colors: {
+                          ...theme.colors,
+                          primary25: "#014D88",
+                          primary: "#014D88",
+                        },
+                      })}
+                    />
+                    {errors.nameOfRecievingFacility !== "" ? (
+                      <span className={classes.error}>
+                        {errors.nameOfRecievingFacility}
+                      </span>
+                    ) : (
+                      ""
+                    )}
+                  </FormGroup>
+                </div>
+
+                {/* <div className="form-group mb-3 col-md-4">
+                  <FormGroup>
                     <Label for="firstName">
                       Name of the Receiving Facility
                       <span style={{ color: "red" }}> *</span>
@@ -1120,7 +1215,7 @@ const RefferralUnit = (props) => {
                       ""
                     )}
                   </FormGroup>
-                </div>
+                </div> */}
                 <div className="form-group mb-3 col-md-4">
                   <FormGroup>
                     <Label for="firstName">
@@ -1188,18 +1283,25 @@ const RefferralUnit = (props) => {
                       Services needed
                       <span style={{ color: "red" }}> *</span>
                     </Label>
-                    <Input
+                    <select
                       className="form-control"
-                      type="text-area"
                       name="serviceNeeded"
                       id="serviceNeeded"
-                      value={payload.serviceNeeded}
                       onChange={handleInputChange}
+                      value={payload.serviceNeeded}
                       style={{
                         border: "1px solid #014D88",
                         borderRadius: "0.2rem",
                       }}
-                    />
+                    >
+                      <option value={""}>Select Service</option>
+                      {serviceNeeded.map((gender, index) => (
+                        <option key={gender.id} value={gender.id}>
+                          {gender.display}
+                        </option>
+                      ))}
+                    </select>
+
                     {errors.serviceNeeded !== "" ? (
                       <span className={classes.error}>
                         {errors.serviceNeeded}

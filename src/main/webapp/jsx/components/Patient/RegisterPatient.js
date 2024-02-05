@@ -20,7 +20,7 @@ import PostTest from "./NewRegistration/PostTest";
 import RecencyTesting from "./NewRegistration/RecencyTesting";
 import RiskStratification from "./NewRegistration/RiskStratification";
 import ClientRefferalForm from "./NewRegistration/RefferalForm";
-
+import { getAcount } from "../../../utility";
 const useStyles = makeStyles((theme) => ({
   error: {
     color: "#f85032",
@@ -46,6 +46,13 @@ const UserRegistration = (props) => {
   const handleItemClick = (activeItem) => {
     setactiveItem(activeItem);
     //setCompleted({...completed, ...completedMenu})
+  };
+  const getFacilityAccount = () => {
+    getAcount()
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch(() => {});
   };
   const [extra, setExtra] = useState({
     risk: "",
@@ -243,6 +250,7 @@ const UserRegistration = (props) => {
     riskStratificationResponseDto: null,
   });
   useEffect(() => {
+    getFacilityAccount();
     if (locationState && locationState.patientObj) {
       setPatientObj(locationState.patientObj);
     }
@@ -554,7 +562,7 @@ const UserRegistration = (props) => {
                     extra={extra}
                   />
                 )}
-                {/* {activeItem === "refferal" && (
+                {activeItem === "refferal" && (
                   <ClientRefferalForm
                     handleItemClick={handleItemClick}
                     setCompleted={setCompleted}
@@ -566,7 +574,7 @@ const UserRegistration = (props) => {
                     setExtra={setExtra}
                     extra={extra}
                   />
-                )} */}
+                )}
               </div>
             </div>
           </form>

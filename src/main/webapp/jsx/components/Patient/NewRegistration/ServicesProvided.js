@@ -19,6 +19,7 @@ import { Modal } from "react-bootstrap";
 import { Label as LabelRibbon, Message } from "semantic-ui-react";
 import PhoneInput from "react-phone-input-2";
 import { getAllGenders, alphabetOnly } from "../../../../utility";
+import Select from "react-select";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -101,6 +102,7 @@ const ServicesProvided = (props) => {
   const [open, setOpen] = React.useState(false);
   const toggle = () => setOpen(!open);
   const [genders, setGenders] = useState([]);
+  const [allFacilities, setAllFacilities] = useState([]);
 
   const [payload, setPayload] = useState({
     nameOfFacilityProvider: "",
@@ -126,9 +128,22 @@ const ServicesProvided = (props) => {
       });
     // ;
   };
-
+  // handle Facility Name to slect drop down
+  const handleInputChangeObject = (e) => {
+    // console.log(e);
+    setPayload({
+      ...payload,
+      nameOfFacilityProvider: e.name,
+      addressOfFacilityProvider: e.parentParentOrganisationUnitName,
+      // lgaTransferTo: e.parentOrganisationUnitName,
+    });
+    setErrors({ ...errors, nameOfRecievingFacility: "" });
+    // setSelectedState(e.parentParentOrganisationUnitName);
+    // setSelectedLga(e.parentOrganisationUnitName);
+  };
   useEffect(() => {
     getGenders();
+    getAllFacilities();
   }, []);
 
   const checkPhoneNumberBasic = (e, inputName) => {
@@ -137,6 +152,31 @@ const ServicesProvided = (props) => {
     }
     const limit = 10;
     setPayload({ ...payload, phoneNumber: e.slice(0, limit) });
+  };
+
+  // get all facilities
+  const getAllFacilities = () => {
+    axios
+      .get(
+        `${baseUrl}organisation-units/parent-organisation-units/1/organisation-units-level/4/hierarchy`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
+      .then((response) => {
+        // console.log(response.data);
+
+        let updatedFaclilties = response.data.map((each, id) => {
+          return {
+            ...each,
+            value: each.id,
+            label: each.name,
+          };
+        });
+
+        setAllFacilities(updatedFaclilties);
+      })
+      .catch((error) => {});
   };
 
   const handleInputChange = (e) => {
@@ -276,7 +316,23 @@ const ServicesProvided = (props) => {
                   Name of Facility providing the service
                   <span style={{ color: "red" }}> *</span>
                 </Label>
-                <Input
+                <Select
+                  //value={selectedOption}
+                  onChange={handleInputChangeObject}
+                  name="nameOfFacilityProvider"
+                  options={allFacilities}
+                  theme={(theme) => ({
+                    ...theme,
+                    borderRadius: "0.25rem",
+                    border: "1px solid #014D88",
+                    colors: {
+                      ...theme.colors,
+                      primary25: "#014D88",
+                      primary: "#014D88",
+                    },
+                  })}
+                />
+                {/* <Input
                   className="form-control"
                   type="text"
                   name="nameOfFacilityProvider"
@@ -287,7 +343,7 @@ const ServicesProvided = (props) => {
                     border: "1px solid #014D88",
                     borderRadius: "0.2rem",
                   }}
-                />
+                /> */}
                 {errors.nameOfFacilityProvider !== "" ? (
                   <span className={classes.error}>
                     {errors.nameOfFacilityProvider}

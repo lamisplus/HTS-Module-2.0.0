@@ -19,6 +19,7 @@ import Others from "./NewRegistration/Others";
 import PostTest from "./NewRegistration/PostTest";
 import RecencyTesting from "./NewRegistration/RecencyTesting";
 import RiskStratification from "./NewRegistration/RiskStratification";
+import FamilyIndexTesting from "./NewRegistrationEnrollement/familyIndexTesting";
 
 const useStyles = makeStyles((theme) => ({
   error: {
@@ -432,6 +433,7 @@ const UserRegistration = (props) => {
                           )}
                         </span>
                       </Menu.Item>
+                      
                     </>
                   )}
                 </Menu>
@@ -524,6 +526,17 @@ const UserRegistration = (props) => {
                     setExtra={setExtra}
                     extra={extra}
                   />
+                )}
+                {activeItem === "family-index-test" && (
+                    <FamilyIndexTesting
+                        handleItemClick={handleItemClick}
+                        setCompleted={setCompleted}
+                        completed={completed}
+                        setPatientObj={setPatientObj}
+                        patientObj={patientObj}
+                        setExtra={setExtra}
+                        extra={extra}
+                    />
                 )}
                 {activeItem === "others" && (
                   <Others

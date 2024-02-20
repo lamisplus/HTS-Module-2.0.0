@@ -692,7 +692,7 @@ const BasicInfo = (props) => {
     temp.typeCounseling = objValues.typeCounseling
       ? ""
       : "This field is required.";
-    temp.testingSetting = objValues.testingSetting
+    temp.testingx = objValues.testingSetting
       ? ""
       : "This field is required.";
     temp.targetGroup = objValues.targetGroup ? "" : "This field is required.";

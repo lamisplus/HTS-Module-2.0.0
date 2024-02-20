@@ -21,6 +21,11 @@ import RecencyTesting from "./NewRegistration/RecencyTesting";
 import RiskStratification from "./NewRegistration/RiskStratification";
 import ClientRefferalForm from "./NewRegistration/RefferalForm";
 import { getAcount } from "../../../utility";
+
+
+import FamilyIndexTestingForm from "./NewRegistration/FamilyIndexTestingForm";
+import PnsForm from "./NewRegistration/PartnerNotificationServices/PnsForm";
+
 const useStyles = makeStyles((theme) => ({
   error: {
     color: "#f85032",
@@ -323,22 +328,54 @@ const UserRegistration = (props) => {
                       )}
                     </span>
                   </Menu.Item>
-                  {/* <Menu.Item
-                    name="inbox"
-                    active={activeItem === "refferal"}
-                    onClick={() => handleItemClick("refferal")}
-                    style={{
-                      backgroundColor: activeItem === "refferal" ? "#000" : "",
-                    }}
-                  >
-                    <span style={{ color: "#fff" }}>
-                      {" "}
-                      Client Refferral Form
-                      {completed.includes("risk") && (
-                        <Icon name="check" color="green" />
-                      )}
-                    </span>
-                  </Menu.Item> */}
+                  {/* <Menu.Item*/}
+                  {/*  name="inbox"*/}
+                  {/*  active={activeItem === "refferal"}*/}
+                  {/*  onClick={() => handleItemClick("refferal")}*/}
+                  {/*  style={{*/}
+                  {/*    backgroundColor: activeItem === "refferal" ? "#000" : "",*/}
+                  {/*  }}*/}
+                  {/*>*/}
+                  {/*  <span style={{ color: "#fff" }}>*/}
+                  {/*    {" "}*/}
+                  {/*    Client Refferral Form*/}
+                  {/*    {completed.includes("risk") && (*/}
+                  {/*      <Icon name="check" color="green" />*/}
+                  {/*    )}*/}
+                  {/*  </span>*/}
+                  {/*</Menu.Item>*/}
+                  {/*<Menu.Item*/}
+                  {/*    name="inbox"*/}
+                  {/*    active={activeItem === "fit"}*/}
+                  {/*    onClick={() => handleItemClick("fit")}*/}
+                  {/*    style={{*/}
+                  {/*      backgroundColor: activeItem === "fit" ? "#000" : "",*/}
+                  {/*    }}*/}
+                  {/*>*/}
+                  {/*  <span style={{ color: "#fff" }}>*/}
+                  {/*    {" "}*/}
+                  {/*     Family Index Testing form*/}
+                  {/*    {completed.includes("fit") && (*/}
+                  {/*        <Icon name="check" color="green" />*/}
+                  {/*    )}*/}
+                  {/*  </span>*/}
+                  {/*</Menu.Item>*/}
+                  {/*<Menu.Item*/}
+                  {/*    name="inbox"*/}
+                  {/*    active={activeItem === "pns"}*/}
+                  {/*    onClick={() => handleItemClick("pns")}*/}
+                  {/*    style={{*/}
+                  {/*      backgroundColor: activeItem === "pns" ? "#000" : "",*/}
+                  {/*    }}*/}
+                  {/*>*/}
+                  {/*  <span style={{ color: "#fff" }}>*/}
+                  {/*    {" "}*/}
+                  {/*    Partner Notification Services*/}
+                  {/*    {completed.includes("pns") && (*/}
+                  {/*        <Icon name="check" color="green" />*/}
+                  {/*    )}*/}
+                  {/*  </span>*/}
+                  {/*</Menu.Item>*/}
                   {hideOtherMenu == false && (
                     <>
                       <Menu.Item
@@ -552,17 +589,6 @@ const UserRegistration = (props) => {
                     extra={extra}
                   />
                 )}
-                {activeItem === "family-index-test" && (
-                    <FamilyIndexTesting
-                        handleItemClick={handleItemClick}
-                        setCompleted={setCompleted}
-                        completed={completed}
-                        setPatientObj={setPatientObj}
-                        patientObj={patientObj}
-                        setExtra={setExtra}
-                        extra={extra}
-                    />
-                )}
                 {activeItem === "others" && (
                   <Others
                     handleItemClick={handleItemClick}
@@ -586,6 +612,28 @@ const UserRegistration = (props) => {
                     setExtra={setExtra}
                     extra={extra}
                   />
+                )}
+                {activeItem === "fit" && (
+                    <FamilyIndexTestingForm
+                        handleItemClick={handleItemClick}
+                        setCompleted={setCompleted}
+                        completed={completed}
+                        setPatientObj={setPatientObj}
+                        patientObj={patientObj}
+                        setExtra={setExtra}
+                        extra={extra}
+                    />
+                )}
+                {activeItem === "pns" && (
+                    <PnsForm
+                        handleItemClick={handleItemClick}
+                        setCompleted={setCompleted}
+                        completed={completed}
+                        setPatientObj={setPatientObj}
+                        patientObj={patientObj}
+                        setExtra={setExtra}
+                        extra={extra}
+                    />
                 )}
               </div>
             </div>

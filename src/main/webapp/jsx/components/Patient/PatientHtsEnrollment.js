@@ -19,8 +19,8 @@ import Others from "./NewRegistrationEnrollement/Others";
 import PostTest from "./NewRegistrationEnrollement/PostTest";
 import RecencyTesting from "./NewRegistrationEnrollement/RecencyTesting";
 import RiskStratification from "./NewRegistrationEnrollement/RiskStratification";
-import FamilyIndexTesting from "./NewRegistrationEnrollement/familyIndexTesting";
-import PartnerNotificationService from "./NewRegistrationEnrollement/partnerNotificationService";
+// import FamilyIndexTesting from "./NewRegistrationEnrollement/familyIndexTesting";
+// import PartnerNotificationService from "./NewRegistrationEnrollement/partnerNotificationService";
 
 const useStyles = makeStyles((theme) => ({
   error: {
@@ -218,39 +218,6 @@ const UserRegistration = (props) => {
                       )}
                     </span>
                   </Menu.Item>
-
-                  <Menu.Item
-                      name="spam"
-                      active={activeItem === "family-index-test"}
-                      onClick={() => handleItemClick("family-index-test")}
-                      style={{
-                        backgroundColor: activeItem === "family-index-test" ? "#000" : "",
-                      }}
-                      //disabled={activeItem !== 'indexing' ? true : false}
-                  >
-                    <span style={{ color: "#fff" }}>
-                      Family Index Testing
-                      {completed.includes("family-index-test") && (
-                          <Icon name="check" color="green" />
-                      )}
-                    </span>
-                  </Menu.Item>
-                  <Menu.Item
-                      name="spam"
-                      active={activeItem === "pns"}
-                      onClick={() => handleItemClick("pns")}
-                      style={{
-                        backgroundColor: activeItem === "pns" ? "#000" : "",
-                      }}
-                      //disabled={activeItem !== 'indexing' ? true : false}
-                  >
-                    <span style={{ color: "#fff" }}>
-                      Partner Notification Service
-                      {completed.includes("pns") && (
-                          <Icon name="check" color="green" />
-                      )}
-                    </span>
-                  </Menu.Item>
                 </Menu>
               </div>
 
@@ -339,30 +306,6 @@ const UserRegistration = (props) => {
                 )}
                 {activeItem === "recency-testing" && (
                   <RecencyTesting
-                    handleItemClick={handleItemClick}
-                    setCompleted={setCompleted}
-                    completed={completed}
-                    setPatientObj={setPatientObj}
-                    patientObj={patientObj}
-                    activePage={props.activePage}
-                    setActivePage={props.setActivePage}
-                    patientAge={props.patientAge}
-                  />
-                )}
-                {activeItem === "family-index-test" && (
-                  <FamilyIndexTesting
-                    handleItemClick={handleItemClick}
-                    setCompleted={setCompleted}
-                    completed={completed}
-                    setPatientObj={setPatientObj}
-                    patientObj={patientObj}
-                    activePage={props.activePage}
-                    setActivePage={props.setActivePage}
-                    patientAge={props.patientAge}
-                  />
-                )}
-                  {activeItem === "pns" && (
-                  <PartnerNotificationService
                     handleItemClick={handleItemClick}
                     setCompleted={setCompleted}
                     completed={completed}

@@ -410,7 +410,7 @@ const PnsForm = (props) => {
                         objValues.acceptedPns !== "No"
                         // objValues.elicited !== "No"
                     ) {
-                        setElicitedCount(elicitedCount + 1);
+                        // setElicitedCount(elicitedCount + 1);
                         setObjValues({
                             providerNameCompletingForm: "",
                             clientName: "",
@@ -487,7 +487,7 @@ const PnsForm = (props) => {
                     <br />
                     <form>
                         <div className="row">
-                            <div className="form-group  col-md-4">
+                            <div className="form-group  col-md-6">
                                 <FormGroup>
                                     <Label>
                                         Offered PNS ? <span style={{ color: "red" }}> *</span>
@@ -518,7 +518,7 @@ const PnsForm = (props) => {
                                 </FormGroup>
                             </div>
                             {objValues.offeredPns !== "" && objValues.offeredPns !== "No" && (
-                                <div className="form-group  col-md-4">
+                                <div className="form-group  col-md-6">
                                     <FormGroup>
                                         <Label>
                                             Accepted PNS ? <span style={{ color: "red" }}> </span>
@@ -544,38 +544,39 @@ const PnsForm = (props) => {
                                     </FormGroup>
                                 </div>
                             )}
-                            {objValues.acceptedPns !== "" &&
-                                objValues.acceptedPns !== "No" && (
-                                    <div className="form-group  col-md-4">
-                                        <FormGroup>
-                                            <Label>
-                                                Elicited ? <span style={{ color: "red" }}> </span>
-                                            </Label>
-                                            <select
-                                                className="form-control"
-                                                name="elicited"
-                                                id="elicited"
-                                                value={objValues.elicited}
-                                                onChange={handleInputChange}
-                                                style={{
-                                                    border: "1px solid #014D88",
-                                                    borderRadius: "0.2rem",
-                                                }}
-                                            >
-                                                <option value={""}></option>
-                                                {consent.map((value) => (
-                                                    <option key={value.id} value={value.display}>
-                                                        {value.display}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                        </FormGroup>
-                                    </div>
-                                )}
+                            {/*{objValues.acceptedPns !== "" &&*/}
+                            {/*    objValues.acceptedPns !== "No" && (*/}
+                            {/*        <div className="form-group  col-md-4">*/}
+                            {/*            <FormGroup>*/}
+                            {/*                <Label>*/}
+                            {/*                    Elicited ? <span style={{ color: "red" }}> </span>*/}
+                            {/*                </Label>*/}
+                            {/*                <select*/}
+                            {/*                    className="form-control"*/}
+                            {/*                    name="elicited"*/}
+                            {/*                    id="elicited"*/}
+                            {/*                    value={objValues.elicited}*/}
+                            {/*                    onChange={handleInputChange}*/}
+                            {/*                    style={{*/}
+                            {/*                        border: "1px solid #014D88",*/}
+                            {/*                        borderRadius: "0.2rem",*/}
+                            {/*                    }}*/}
+                            {/*                >*/}
+                            {/*                    <option value={""}></option>*/}
+                            {/*                    {consent.map((value) => (*/}
+                            {/*                        <option key={value.id} value={value.display}>*/}
+                            {/*                            {value.display}*/}
+                            {/*                        </option>*/}
+                            {/*                    ))}*/}
+                            {/*                </select>*/}
+                            {/*            </FormGroup>*/}
+                            {/*        </div>*/}
+                            {/*    )}*/}
                         </div>
 
                         <div className="row">
-                            {objValues.elicited !== "" && objValues.elicited !== "No" && (
+                            {objValues.acceptedPns !== "" &&
+                                objValues.acceptedPns !== "No" &&  (
                                 <>
                                     <div className="form-group  col-md-4">
                                         <FormGroup>
@@ -1014,7 +1015,7 @@ const PnsForm = (props) => {
                                     <div className="form-group col-md-4">
                                         <FormGroup>
                                             <Label for="">
-                                                Date Of Index Client's confrimed HIV-positive test results <span
+                                                Date Of Index Client's confirmed HIV-positive test results <span
                                                 style={{color: "red"}}> *</span>{" "}
                                             </Label>
                                             <Input

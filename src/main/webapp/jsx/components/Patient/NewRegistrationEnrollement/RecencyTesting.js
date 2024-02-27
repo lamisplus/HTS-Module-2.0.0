@@ -265,9 +265,11 @@ const Recency = (props) => {
         sampleType: "",
         receivingPcrLab: "",
         viralLoadResultClassification: "",
+
         recencyResult: "",
         finalRecencyResult: "",
-        viralLoadConfirmationResult: ""
+        viralLoadConfirmationResult: "",
+        receivedResultDate:"",
       });
     }
   }, [
@@ -309,7 +311,12 @@ const Recency = (props) => {
     } else if (e.target.name === "rencencyId" && e.target.value !== "") {
       const recencyIdNumberValue = checkRecencyLimit(e.target.value);
       setRecency({ ...recency, [e.target.name]: recencyIdNumberValue });
-    } else {
+    }
+    else if(e.target.name=== "receivedResultDate"){
+      console.log("#############  receivedResultDate",e.target.value);
+      setRecency({...recency, [e.target.name]: e.target.value});
+    }
+    else {
       setRecency({ ...recency, [e.target.name]: e.target.value });
     }
   };
@@ -601,24 +608,24 @@ const Recency = (props) => {
                     <>
                       <div className="row">
                         <h4>Viral Load Classification :</h4>
-                        <br />
+                        <br/>
                         <div className="form-group  col-md-4">
                           <FormGroup>
                             <Label>Sample Collected Date</Label>
                             <Input
-                              className="form-control"
-                              name="sampleCollectedDate"
-                              id="sampleCollectedDate"
-                              type="date"
-                              value={recency.sampleCollectedDate}
-                              min={recency.optOutRTRITestDate}
-                              max={moment(new Date()).format("YYYY-MM-DD")}
-                              onChange={handleInputChangeRecency}
-                              style={{
-                                border: "1px solid #014D88",
-                                borderRadius: "0.2rem",
-                              }}
-                              readOnly={props.activePage.actionType === "view"}
+                                className="form-control"
+                                name="sampleCollectedDate"
+                                id="sampleCollectedDate"
+                                type="date"
+                                value={recency.sampleCollectedDate}
+                                min={recency.optOutRTRITestDate}
+                                max={moment(new Date()).format("YYYY-MM-DD")}
+                                onChange={handleInputChangeRecency}
+                                style={{
+                                  border: "1px solid #014D88",
+                                  borderRadius: "0.2rem",
+                                }}
+                                readOnly={props.activePage.actionType === "view"}
                             />
                           </FormGroup>
                         </div>
@@ -626,27 +633,27 @@ const Recency = (props) => {
                           <FormGroup>
                             <Label>
                               Sample Reference Number{" "}
-                              <span style={{ color: "red" }}> *</span>
+                              <span style={{color: "red"}}> *</span>
                             </Label>
                             <Input
-                              className="form-control"
-                              name="sampleReferanceNumber"
-                              id="sampleReferanceNumber"
-                              type="text"
-                              value={recency.sampleReferanceNumber}
-                              onChange={handleInputChangeRecency}
-                              style={{
-                                border: "1px solid #014D88",
-                                borderRadius: "0.2rem",
-                              }}
-                              disabled={props.activePage.actionType === "view"}
+                                className="form-control"
+                                name="sampleReferanceNumber"
+                                id="sampleReferanceNumber"
+                                type="text"
+                                value={recency.sampleReferanceNumber}
+                                onChange={handleInputChangeRecency}
+                                style={{
+                                  border: "1px solid #014D88",
+                                  borderRadius: "0.2rem",
+                                }}
+                                disabled={props.activePage.actionType === "view"}
                             />
                             {errors.sampleReferanceNumber !== "" ? (
-                              <span className={classes.error}>
+                                <span className={classes.error}>
                                 {errors.sampleReferanceNumber}
                               </span>
                             ) : (
-                              ""
+                                ""
                             )}
                           </FormGroup>
                         </div>
@@ -654,30 +661,30 @@ const Recency = (props) => {
                           <FormGroup>
                             <Label>
                               Sample Type{" "}
-                              <span style={{ color: "red" }}> *</span>
+                              <span style={{color: "red"}}> *</span>
                             </Label>
                             <select
-                              className="form-control"
-                              name="sampleType"
-                              id="sampleType"
-                              value={recency.sampleType}
-                              onChange={handleInputChangeRecency}
-                              style={{
-                                border: "1px solid #014D88",
-                                borderRadius: "0.2rem",
-                              }}
-                              disabled={props.activePage.actionType === "view"}
+                                className="form-control"
+                                name="sampleType"
+                                id="sampleType"
+                                value={recency.sampleType}
+                                onChange={handleInputChangeRecency}
+                                style={{
+                                  border: "1px solid #014D88",
+                                  borderRadius: "0.2rem",
+                                }}
+                                disabled={props.activePage.actionType === "view"}
                             >
                               <option value={""}></option>
                               <option value="DBS">DBS</option>
                               <option value="Plasma">Plasma</option>
                             </select>
                             {errors.sampleType !== "" ? (
-                              <span className={classes.error}>
+                                <span className={classes.error}>
                                 {errors.sampleType}
                               </span>
                             ) : (
-                              ""
+                                ""
                             )}
                           </FormGroup>
                         </div>
@@ -685,26 +692,26 @@ const Recency = (props) => {
                           <FormGroup>
                             <Label>Date Sample Sent to PCR Lab</Label>
                             <Input
-                              className="form-control"
-                              name="dateSampleSentToPCRLab"
-                              id="dateSampleSentToPCRLab"
-                              type="date"
-                              min={recency.optOutRTRITestDate}
-                              value={recency.dateSampleSentToPCRLab}
-                              max={moment(new Date()).format("YYYY-MM-DD")}
-                              onChange={handleInputChangeRecency}
-                              style={{
-                                border: "1px solid #014D88",
-                                borderRadius: "0.2rem",
-                              }}
-                              readOnly={props.activePage.actionType === "view"}
+                                className="form-control"
+                                name="dateSampleSentToPCRLab"
+                                id="dateSampleSentToPCRLab"
+                                type="date"
+                                min={recency.optOutRTRITestDate}
+                                value={recency.dateSampleSentToPCRLab}
+                                max={moment(new Date()).format("YYYY-MM-DD")}
+                                onChange={handleInputChangeRecency}
+                                style={{
+                                  border: "1px solid #014D88",
+                                  borderRadius: "0.2rem",
+                                }}
+                                readOnly={props.activePage.actionType === "view"}
                             />
                             {errors.dateSampleSentToPCRLab !== "" ? (
-                              <span className={classes.error}>
+                                <span className={classes.error}>
                                 {errors.dateSampleSentToPCRLab}
                               </span>
                             ) : (
-                              ""
+                                ""
                             )}
                           </FormGroup>
                         </div>
@@ -712,19 +719,19 @@ const Recency = (props) => {
                           <FormGroup>
                             <Label>Sample Test Date</Label>
                             <Input
-                              className="form-control"
-                              name="sampleTestDate"
-                              id="sampleTestDate"
-                              type="date"
-                              min={recency.optOutRTRITestDate}
-                              max={moment(new Date()).format("YYYY-MM-DD")}
-                              value={recency.sampleTestDate}
-                              onChange={handleInputChangeRecency}
-                              style={{
-                                border: "1px solid #014D88",
-                                borderRadius: "0.2rem",
-                              }}
-                              readOnly={props.activePage.actionType === "view"}
+                                className="form-control"
+                                name="sampleTestDate"
+                                id="sampleTestDate"
+                                type="date"
+                                min={recency.optOutRTRITestDate}
+                                max={moment(new Date()).format("YYYY-MM-DD")}
+                                value={recency.sampleTestDate}
+                                onChange={handleInputChangeRecency}
+                                style={{
+                                  border: "1px solid #014D88",
+                                  borderRadius: "0.2rem",
+                                }}
+                                readOnly={props.activePage.actionType === "view"}
                             />
                           </FormGroup>
                         </div>
@@ -732,34 +739,55 @@ const Recency = (props) => {
                           <FormGroup>
                             <Label>Receiving PCR Lab</Label>
                             <Input
-                              className="form-control"
-                              name="receivingPcrLab"
-                              id="receivingPcrLab"
-                              type="text"
-                              value={recency.receivingPcrLab}
-                              onChange={handleInputChangeRecency}
-                              style={{
-                                border: "1px solid #014D88",
-                                borderRadius: "0.2rem",
-                              }}
-                              readOnly={props.activePage.actionType === "view"}
+                                className="form-control"
+                                name="receivingPcrLab"
+                                id="receivingPcrLab"
+                                type="text"
+                                value={recency.receivingPcrLab}
+                                onChange={handleInputChangeRecency}
+                                style={{
+                                  border: "1px solid #014D88",
+                                  borderRadius: "0.2rem",
+                                }}
+                                readOnly={props.activePage.actionType === "view"}
                             />
                           </FormGroup>
                         </div>
                         <div className="form-group  col-md-4">
-                            <FormGroup>
-                                <Label>Viral Load Confirmation Result (copies/ml)</Label>
-                                <Input
-                                    className="form-control"
-                                    name="viralLoadConfirmationResult"
-                                    id="viralLoadConfirmationResult"
-                                    type="number"
-                                    value={recency.viralLoadConfirmationResult}
-                                    onChange={handleInputChangeRecency}
-                                    style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
-                                />
+                          <FormGroup>
+                            <Label>Viral Load Confirmation Result (copies/ml)</Label>
+                            <Input
+                                className="form-control"
+                                name="viralLoadConfirmationResult"
+                                id="viralLoadConfirmationResult"
+                                type="number"
+                                value={recency.viralLoadConfirmationResult}
+                                onChange={handleInputChangeRecency}
+                                style={{border: "1px solid #014D88", borderRadius: "0.2rem"}}
+                            />
 
-                            </FormGroup>
+                          </FormGroup>
+                        </div>
+
+                        <div className="form-group  col-md-4">
+                          <FormGroup>
+                            <Label>Viral Load Result Received Date</Label>
+                            <Input
+                                className="form-control"
+                                name="receivedResultDate"
+                                id="receivedResultDate"
+                                type="date"
+                                min={recency.optOutRTRITestDate}
+                                max={moment(new Date()).format("YYYY-MM-DD")}
+                                value={recency.receivedResultDate}
+                                onChange={handleInputChangeRecency}
+                                style={{
+                                  border: "1px solid #014D88",
+                                  borderRadius: "0.2rem",
+                                }}
+                                readOnly={props.activePage.actionType === "view"}
+                            />
+                          </FormGroup>
                         </div>
                         <div className="form-group  col-md-4">
                           <FormGroup>
@@ -768,16 +796,16 @@ const Recency = (props) => {
                               (copies/ml)
                             </Label>
                             <select
-                              className="form-control"
-                              name="viralLoadResultClassification"
-                              id="viralLoadResultClassification"
-                              value={recency.viralLoadResultClassification}
-                              onChange={handleInputChangeRecency}
-                              style={{
-                                border: "1px solid #014D88",
-                                borderRadius: "0.2rem",
-                              }}
-                              disabled={props.activePage.actionType === "view"}
+                                className="form-control"
+                                name="viralLoadResultClassification"
+                                id="viralLoadResultClassification"
+                                value={recency.viralLoadResultClassification}
+                                onChange={handleInputChangeRecency}
+                                style={{
+                                  border: "1px solid #014D88",
+                                  borderRadius: "0.2rem",
+                                }}
+                                disabled={props.activePage.actionType === "view"}
                             >
                               <option value={""}>Select</option>
                               <option value=">=1000">{">= "} 1000</option>
@@ -808,18 +836,18 @@ const Recency = (props) => {
                           <FormGroup>
                             <Label>Final Recency Result</Label>
                             <Input
-                              className="form-control"
-                              name="finalRecencyResult"
-                              id="finalRecencyResult"
-                              type="text"
-                              disabled
-                              value={recency.finalRecencyResult}
-                              onChange={handleInputChangeRecency}
-                              style={{
-                                border: "1px solid #014D88",
-                                borderRadius: "0.2rem",
-                              }}
-                              readOnly={props.activePage.actionType === "view"}
+                                className="form-control"
+                                name="finalRecencyResult"
+                                id="finalRecencyResult"
+                                type="text"
+                                disabled
+                                value={recency.finalRecencyResult}
+                                onChange={handleInputChangeRecency}
+                                style={{
+                                  border: "1px solid #014D88",
+                                  borderRadius: "0.2rem",
+                                }}
+                                readOnly={props.activePage.actionType === "view"}
                             />
                           </FormGroup>
                         </div>
@@ -829,28 +857,28 @@ const Recency = (props) => {
                 </>
               )}
 
-              {saving ? <Spinner /> : ""}
-              <br />
+              {saving ? <Spinner/> : ""}
+              <br/>
               <div className="row">
                 <div className="form-group mb-3 col-md-12">
                   <Button
-                    content="Back"
-                    icon="left arrow"
-                    labelPosition="left"
-                    style={{ backgroundColor: "#992E62", color: "#fff" }}
-                    onClick={() => handleItemClick("post-test", "post-test")}
+                      content="Back"
+                      icon="left arrow"
+                      labelPosition="left"
+                      style={{backgroundColor: "#992E62", color: "#fff"}}
+                      onClick={() => handleItemClick("post-test", "post-test")}
                   />
                   <Button
-                    content="Save & Continue"
-                    icon="right arrow"
-                    labelPosition="right"
-                    style={{ backgroundColor: "#014d88", color: "#fff" }}
-                    onClick={handleSubmit}
-                    disabled={
-                      props.patientObj?.postTestCounselingKnowledgeAssessment
-                        ?.hivTestResult === "true" && recency.optOutRTRI === ""
-                        ? true
-                        : false
+                      content="Save & Continue"
+                      icon="right arrow"
+                      labelPosition="right"
+                      style={{backgroundColor: "#014d88", color: "#fff"}}
+                      onClick={handleSubmit}
+                      disabled={
+                        props.patientObj?.postTestCounselingKnowledgeAssessment
+                            ?.hivTestResult === "true" && recency.optOutRTRI === ""
+                            ? true
+                            : false
                     }
                   />
                 </div>

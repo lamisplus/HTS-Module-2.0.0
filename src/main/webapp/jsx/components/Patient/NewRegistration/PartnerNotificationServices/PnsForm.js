@@ -577,507 +577,469 @@ const PnsForm = (props) => {
                         <div className="row">
                             {objValues.acceptedPns !== "" &&
                                 objValues.acceptedPns !== "No" &&  (
-                                <>
-                                    <div className="form-group  col-md-4">
-                                        <FormGroup>
-                                            <Label>
-                                                State <span style={{color: "red"}}> *</span>
-                                            </Label>
-                                            <select
-                                                className="form-control"
-                                                name="state"
-                                                id="state"
-                                                onChange={getProvinces}
-                                                value={objValues.stateId}
-                                                style={{
-                                                    border: "1px solid #014D88",
-                                                    borderRadius: "0.2rem",
-                                                }}
-                                            >
-                                                <option value={""}></option>
-                                                {states.map((value) => (
-                                                    <option key={value.id} value={value.id}>
-                                                        {value.name}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                            {errors.stateId !== "" ? (
-                                                <span className={classes.error}>{errors.stateId}</span>
-                                            ) : (
-                                                ""
-                                            )}
-                                        </FormGroup>
-                                    </div>
-                                    <div className="form-group  col-md-4">
-                                        <FormGroup>
-                                            <Label>
-                                                LGA <span style={{color: "red"}}> *</span>
-                                            </Label>
-                                            <select
-                                                className="form-control"
-                                                name="lga"
-                                                id="lga"
-                                                value={objValues.lga}
-                                                onChange={handleInputChange}
-                                                style={{
-                                                    border: "1px solid #014D88",
-                                                    borderRadius: "0.2rem",
-                                                }}
-                                            >
-                                                <option value={""}></option>
-                                                {provinces.map((value, index) => (
-                                                    <option key={index} value={value.id}>
-                                                        {value.name}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                            {errors.lga !== "" ? (
-                                                <span className={classes.error}>{errors.lga}</span>
-                                            ) : (
-                                                ""
-                                            )}
-                                        </FormGroup>
-                                    </div>
-                                    <div className="form-group mb-3 col-md-4">
-                                        <FormGroup>
-                                            <Label for="providerNameCompletingForm">
-                                                Facility Name
-                                                <span style={{color: "red"}}> *</span>
-                                            </Label>
-                                            <Input
-                                                className="form-control"
-                                                type="text"
-                                                name="facilityName"
-                                                id="facilityName"
-                                                value={objValues.facilityName}
-                                                onChange={handleInputChange}
-                                                style={{
-                                                    border: "1px solid #014D88",
-                                                    borderRadius: "0.2rem",
-                                                }}
-                                                // disabled
-                                            />
-                                            {errors.facilityName !== "" ? (
-                                                <span className={classes.error}>
+                                    <>
+                                        <div className="form-group  col-md-4">
+                                            <FormGroup>
+                                                <Label>
+                                                    State <span style={{color: "red"}}> *</span>
+                                                </Label>
+                                                <select
+                                                    className="form-control"
+                                                    name="state"
+                                                    id="state"
+                                                    onChange={getProvinces}
+                                                    value={objValues.stateId}
+                                                    style={{
+                                                        border: "1px solid #014D88",
+                                                        borderRadius: "0.2rem",
+                                                    }}
+                                                >
+                                                    <option value={""}></option>
+                                                    {states.map((value) => (
+                                                        <option key={value.id} value={value.id}>
+                                                            {value.name}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                                {errors.stateId !== "" ? (
+                                                    <span className={classes.error}>{errors.stateId}</span>
+                                                ) : (
+                                                    ""
+                                                )}
+                                            </FormGroup>
+                                        </div>
+                                        <div className="form-group  col-md-4">
+                                            <FormGroup>
+                                                <Label>
+                                                    LGA <span style={{color: "red"}}> *</span>
+                                                </Label>
+                                                <select
+                                                    className="form-control"
+                                                    name="lga"
+                                                    id="lga"
+                                                    value={objValues.lga}
+                                                    onChange={handleInputChange}
+                                                    style={{
+                                                        border: "1px solid #014D88",
+                                                        borderRadius: "0.2rem",
+                                                    }}
+                                                >
+                                                    <option value={""}></option>
+                                                    {provinces.map((value, index) => (
+                                                        <option key={index} value={value.id}>
+                                                            {value.name}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                                {errors.lga !== "" ? (
+                                                    <span className={classes.error}>{errors.lga}</span>
+                                                ) : (
+                                                    ""
+                                                )}
+                                            </FormGroup>
+                                        </div>
+                                        <div className="form-group mb-3 col-md-4">
+                                            <FormGroup>
+                                                <Label for="providerNameCompletingForm">
+                                                    Facility Name
+                                                    <span style={{color: "red"}}> *</span>
+                                                </Label>
+                                                <Input
+                                                    className="form-control"
+                                                    type="text"
+                                                    name="facilityName"
+                                                    id="facilityName"
+                                                    value={objValues.facilityName}
+                                                    onChange={handleInputChange}
+                                                    style={{
+                                                        border: "1px solid #014D88",
+                                                        borderRadius: "0.2rem",
+                                                    }}
+                                                    // disabled
+                                                />
+                                                {errors.facilityName !== "" ? (
+                                                    <span className={classes.error}>
                                                     {errors.facilityName}
                                                 </span>
-                                            ) : (
-                                                ""
-                                            )}
-                                        </FormGroup>
-                                    </div>
-                                    <div className="form-group mb-3 col-md-4">
-                                        <FormGroup>
-                                            <Label>Date</Label>
-                                            <input
-                                                className="form-control"
-                                                type="date"
-                                                name="dob"
-                                                id="dob"
-                                                max={moment(new Date()).format("YYYY-MM-DD")}
-                                                value={objValues.dob}
-                                                onChange={handleDobChange}
-                                                style={{
-                                                    border: "1px solid #014D88",
-                                                    borderRadius: "0.2rem",
-                                                }}
-                                            />
-                                        </FormGroup>
-                                    </div>
-                                    <div className="form-group  col-md-4">
-                                        <FormGroup>
-                                            <Label>
-                                                Setting <span style={{color: "red"}}> *</span>
-                                            </Label>
-                                            <select
-                                                className="form-control"
-                                                name="testingSetting"
-                                                id="testingSetting"
-                                                value={objValues.testingSetting}
-                                                onChange={handleInputChange}
-                                                style={{
-                                                    border: "1px solid #014D88",
-                                                    borderRadius: "0.2rem",
-                                                }}
-                                                // disabled={props.activePage.actionType === "view"}
-                                            >
-                                                <option value={""}></option>
-                                                {setting.map((value) => (
-                                                    <option key={value.id} value={value.code}>
-                                                        {value.display}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                            {errors.testingSetting !== "" ? (
-                                                <span className={classes.error}>
+                                                ) : (
+                                                    ""
+                                                )}
+                                            </FormGroup>
+                                        </div>
+                                        <div className="form-group mb-3 col-md-4">
+                                            <FormGroup>
+                                                <Label>Date</Label>
+                                                <input
+                                                    className="form-control"
+                                                    type="date"
+                                                    name="dob"
+                                                    id="dob"
+                                                    max={moment(new Date()).format("YYYY-MM-DD")}
+                                                    value={objValues.dob}
+                                                    onChange={handleDobChange}
+                                                    style={{
+                                                        border: "1px solid #014D88",
+                                                        borderRadius: "0.2rem",
+                                                    }}
+                                                />
+                                            </FormGroup>
+                                        </div>
+                                        <div className="form-group  col-md-4">
+                                            <FormGroup>
+                                                <Label>
+                                                    Setting <span style={{color: "red"}}> *</span>
+                                                </Label>
+                                                <select
+                                                    className="form-control"
+                                                    name="testingSetting"
+                                                    id="testingSetting"
+                                                    value={objValues.testingSetting}
+                                                    onChange={handleInputChange}
+                                                    style={{
+                                                        border: "1px solid #014D88",
+                                                        borderRadius: "0.2rem",
+                                                    }}
+                                                    // disabled={props.activePage.actionType === "view"}
+                                                >
+                                                    <option value={""}></option>
+                                                    {setting.map((value) => (
+                                                        <option key={value.id} value={value.code}>
+                                                            {value.display}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                                {errors.testingSetting !== "" ? (
+                                                    <span className={classes.error}>
                                                     {errors.testingSetting}
                                                 </span>
-                                            ) : (
-                                                ""
-                                            )}
-                                        </FormGroup>
-                                    </div>
-                                    <div className="form-group mb-3 col-md-4">
-                                        <FormGroup>
-                                            <Label for="">Name of provider completing the form</Label>
-                                            <Input
-                                                type="text"
-                                                name="providerNameCompletingForm"
-                                                id="providerNameCompletingForm"
-                                                value={objValues.providerNameCompletingForm}
-                                                onChange={handleInputChange}
-                                                style={{
-                                                    border: "1px solid #014D88",
-                                                    borderRadius: "0.25rem",
-                                                }}
-                                            />
-                                        </FormGroup>
-                                    </div>
-                                    <div className="form-group  col-md-4">
-                                        <FormGroup>
-                                            <Label>
-                                                Role of the provider completing Form<span
-                                                style={{color: "red"}}> *</span>
-                                            </Label>
-                                            <select
-                                                className="form-control"
-                                                name="providerRoleCompletingForm"
-                                                id="providerRoleCompletingForm"
-                                                value={objValues.providerRoleCompletingForm}
-                                                onChange={handleInputChange}
-                                                style={{
-                                                    border: "1px solid #014D88",
-                                                    borderRadius: "0.2rem",
-                                                }}
-                                                // disabled={props.activePage.actionType === "view"}
-                                            >
-                                                <option value={""}></option>
-                                                {setting.map((value) => (
-                                                    <option key={value.id} value={value.code}>
-                                                        {value.display}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                            {errors.testingSetting !== "" ? (
-                                                <span className={classes.error}>
+                                                ) : (
+                                                    ""
+                                                )}
+                                            </FormGroup>
+                                        </div>
+                                        <div className="form-group mb-3 col-md-4">
+                                            <FormGroup>
+                                                <Label for="">Name of provider completing the form</Label>
+                                                <Input
+                                                    type="text"
+                                                    name="providerNameCompletingForm"
+                                                    id="providerNameCompletingForm"
+                                                    value={objValues.providerNameCompletingForm}
+                                                    onChange={handleInputChange}
+                                                    style={{
+                                                        border: "1px solid #014D88",
+                                                        borderRadius: "0.25rem",
+                                                    }}
+                                                />
+                                            </FormGroup>
+                                        </div>
+                                        <div className="form-group  col-md-4">
+                                            <FormGroup>
+                                                <Label>
+                                                    Role of the provider completing Form<span
+                                                    style={{color: "red"}}> *</span>
+                                                </Label>
+                                                <select
+                                                    className="form-control"
+                                                    name="providerRoleCompletingForm"
+                                                    id="providerRoleCompletingForm"
+                                                    value={objValues.providerRoleCompletingForm}
+                                                    onChange={handleInputChange}
+                                                    style={{
+                                                        border: "1px solid #014D88",
+                                                        borderRadius: "0.2rem",
+                                                    }}
+                                                    // disabled={props.activePage.actionType === "view"}
+                                                >
+                                                    <option value={""}></option>
+                                                    {setting.map((value) => (
+                                                        <option key={value.id} value={value.code}>
+                                                            {value.display}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                                {errors.testingSetting !== "" ? (
+                                                    <span className={classes.error}>
                                                     {errors.testingSetting}
                                                 </span>
-                                            ) : (
-                                                ""
-                                            )}
-                                        </FormGroup>
-                                    </div>
-                                    <div
-                                        className="form-group  col-md-12 text-center pt-2 mb-4"
-                                        style={{
-                                            backgroundColor: "#992E62",
-                                            width: "125%",
-                                            height: "35px",
-                                            color: "#fff",
-                                            fontWeight: "bold",
-                                        }}
-                                    >
-                                        SECTION 1 : INFORMATION ABOUT THE INDEX CLIENT
-                                    </div>
+                                                ) : (
+                                                    ""
+                                                )}
+                                            </FormGroup>
+                                        </div>
+                                        <div
+                                            className="form-group  col-md-12 text-center pt-2 mb-4"
+                                            style={{
+                                                backgroundColor: "#992E62",
+                                                width: "125%",
+                                                height: "35px",
+                                                color: "#fff",
+                                                fontWeight: "bold",
+                                            }}
+                                        >
+                                            SECTION 1 : INFORMATION ABOUT THE INDEX CLIENT
+                                        </div>
 
-                                    <div className="form-group mb-3 col-md-4">
-                                        <FormGroup>
-                                            <Label for="">Client's Name</Label>
-                                            <Input
-                                                type="text"
-                                                name="clientName"
-                                                id="clientName"
-                                                value={objValues.clientName}
-                                                onChange={handleInputChange}
-                                                style={{
-                                                    border: "1px solid #014D88",
-                                                    borderRadius: "0.25rem",
-                                                }}
-                                            />
-                                        </FormGroup>
-                                    </div>
-                                    <div className="form-group mb-3 col-md-4">
-                                        <FormGroup>
-                                            <Label for="">Index Client ID </Label>
-                                            <Input
-                                                type="text"
-                                                name="indexClientId"
-                                                id="indexClientId"
-                                                value={objValues.indexClientId}
-                                                onChange={handleInputChange}
-                                                style={{
-                                                    border: "1px solid #014D88",
-                                                    borderRadius: "0.25rem",
-                                                }}
-                                            />
-                                        </FormGroup>
-                                    </div>
-                                    <div className="form-group  col-md-4">
-                                        <FormGroup>
-                                            <Label>Sex </Label>
-                                            <select
-                                                className="form-control"
-                                                name="sex"
-                                                id="sex"
-                                                value={objValues.sex}
-                                                onChange={handleInputChange}
-                                                style={{
-                                                    border: "1px solid #014D88",
-                                                    borderRadius: "0.2rem",
-                                                }}
-                                            >
-                                                <option value={""}></option>
-                                                {sexs.map((value) => (
-                                                    <option key={value.id} value={value.id}>
-                                                        {value.display}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                        </FormGroup>
-                                    </div>
-                                    {/*<div className="form-group mb-3 col-md-4">*/}
-                                    {/*    <FormGroup>*/}
-                                    {/*        <Label for="">Last Name</Label>*/}
-                                    {/*        <Input*/}
-                                    {/*            type="text"*/}
-                                    {/*            name="lastName"*/}
-                                    {/*            id="lastName"*/}
-                                    {/*            value={objValues.lastName}*/}
-                                    {/*            onChange={handleInputChange}*/}
-                                    {/*            style={{*/}
-                                    {/*                border: "1px solid #014D88",*/}
-                                    {/*                borderRadius: "0.25rem",*/}
-                                    {/*            }}*/}
-                                    {/*        />*/}
-                                    {/*    </FormGroup>*/}
-                                    {/*</div>*/}
-                                    <div className="form-group mb-2 col-md-4">
-                                        <FormGroup>
-                                            <Label>Date Of Birth</Label>
-                                            <div className="radio">
-                                                <label>
-                                                    <input
-                                                        type="radio"
-                                                        value="Actual"
-                                                        name="dateOfBirth"
-                                                        defaultChecked
-                                                        onChange={(e) => handleDateOfBirthChange(e)}
-                                                        style={{
-                                                            border: "1px solid #014D88",
-                                                            borderRadius: "0.2rem",
-                                                        }}
-                                                    />{" "}
-                                                    Actual
-                                                </label>
-                                            </div>
-                                            <div className="radio">
-                                                <label>
-                                                    <input
-                                                        type="radio"
-                                                        value="Estimated"
-                                                        name="dateOfBirth"
-                                                        onChange={(e) => handleDateOfBirthChange(e)}
-                                                        style={{
-                                                            border: "1px solid #014D88",
-                                                            borderRadius: "0.2rem",
-                                                        }}
-                                                    />{" "}
-                                                    Estimated
-                                                </label>
-                                            </div>
-                                        </FormGroup>
-                                    </div>
-
-                                    <div className="form-group mb-3 col-md-4">
-                                        <FormGroup>
-                                            <Label>Age</Label>
-                                            <input
-                                                className="form-control"
-                                                type="number"
-                                                name="age"
-                                                id="age"
-                                                value={objValues.age}
-                                                disabled={ageDisabled}
-                                                onChange={handleAgeChange}
-                                                style={{
-                                                    border: "1px solid #014D88",
-                                                    borderRadius: "0.2rem",
-                                                }}
-                                            />
-                                        </FormGroup>
-                                    </div>
-                                    <div className="form-group  col-md-4">
-                                        <FormGroup>
-                                            <Label>
-                                                Marital Status <span style={{color: "red"}}> *</span>
-                                            </Label>
-                                            <select
-                                                className="form-control"
-                                                name="maritalStatus"
-                                                id="maritalStatus"
-                                                value={objValues.maritalStatus}
-                                                onChange={handleInputChange}
-                                                style={{
-                                                    border: "1px solid #014D88",
-                                                    borderRadius: "0.2rem",
-                                                }}
-                                                // disabled={props.activePage.actionType === "view"}
-                                            >
-                                                <option value={""}></option>
-                                                {setting.map((value) => (
-                                                    <option key={value.id} value={value.code}>
-                                                        {value.display}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                            {/* {errors.testingSetting !== "" ? (
+                                        <div className="form-group mb-3 col-md-4">
+                                            <FormGroup>
+                                                <Label for="">Client's Name</Label>
+                                                <Input
+                                                    type="text"
+                                                    name="clientName"
+                                                    id="clientName"
+                                                    value={objValues.clientName}
+                                                    onChange={handleInputChange}
+                                                    style={{
+                                                        border: "1px solid #014D88",
+                                                        borderRadius: "0.25rem",
+                                                    }}
+                                                />
+                                            </FormGroup>
+                                        </div>
+                                        <div className="form-group mb-3 col-md-4">
+                                            <FormGroup>
+                                                <Label for="">Index Client ID </Label>
+                                                <Input
+                                                    type="text"
+                                                    name="indexClientId"
+                                                    id="indexClientId"
+                                                    value={objValues.indexClientId}
+                                                    onChange={handleInputChange}
+                                                    style={{
+                                                        border: "1px solid #014D88",
+                                                        borderRadius: "0.25rem",
+                                                    }}
+                                                />
+                                            </FormGroup>
+                                        </div>
+                                        <div className="form-group  col-md-4">
+                                            <FormGroup>
+                                                <Label>Sex </Label>
+                                                <select
+                                                    className="form-control"
+                                                    name="sex"
+                                                    id="sex"
+                                                    value={objValues.sex}
+                                                    onChange={handleInputChange}
+                                                    style={{
+                                                        border: "1px solid #014D88",
+                                                        borderRadius: "0.2rem",
+                                                    }}
+                                                >
+                                                    <option value={""}></option>
+                                                    {sexs.map((value) => (
+                                                        <option key={value.id} value={value.id}>
+                                                            {value.display}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </FormGroup>
+                                        </div>
+                                        {/*<div className="form-group mb-3 col-md-4">*/}
+                                        {/*    <FormGroup>*/}
+                                        {/*        <Label for="">Last Name</Label>*/}
+                                        {/*        <Input*/}
+                                        {/*            type="text"*/}
+                                        {/*            name="lastName"*/}
+                                        {/*            id="lastName"*/}
+                                        {/*            value={objValues.lastName}*/}
+                                        {/*            onChange={handleInputChange}*/}
+                                        {/*            style={{*/}
+                                        {/*                border: "1px solid #014D88",*/}
+                                        {/*                borderRadius: "0.25rem",*/}
+                                        {/*            }}*/}
+                                        {/*        />*/}
+                                        {/*    </FormGroup>*/}
+                                        {/*</div>*/}
+                                        <div className="form-group mb-2 col-md-4">
+                                            <FormGroup>
+                                                <Label>Date Of Birth</Label>
+                                                <div className="radio">
+                                                    <label>
+                                                        <input
+                                                            type="radio"
+                                                            value="Actual"
+                                                            name="dateOfBirth"
+                                                            defaultChecked
+                                                            onChange={(e) => handleDateOfBirthChange(e)}
+                                                            style={{
+                                                                border: "1px solid #014D88",
+                                                                borderRadius: "0.2rem",
+                                                            }}
+                                                        />{" "}
+                                                        Actual
+                                                    </label>
+                                                </div>
+                                                <div className="radio">
+                                                    <label>
+                                                        <input
+                                                            type="radio"
+                                                            value="Estimated"
+                                                            name="dateOfBirth"
+                                                            onChange={(e) => handleDateOfBirthChange(e)}
+                                                            style={{
+                                                                border: "1px solid #014D88",
+                                                                borderRadius: "0.2rem",
+                                                            }}
+                                                        />{" "}
+                                                        Estimated
+                                                    </label>
+                                                </div>
+                                            </FormGroup>
+                                        </div>
+                                        <div className="form-group mb-2 col-md-4">
+                                            <FormGroup>
+                                                <Label>Date</Label>
+                                                <input
+                                                    className="form-control"
+                                                    type="date"
+                                                    name="dob"
+                                                    id="dob"
+                                                    max={moment(new Date()).format("YYYY-MM-DD")}
+                                                    value={objValues.dob}
+                                                    onChange={handleDobChange}
+                                                    style={{
+                                                        border: "1px solid #014D88",
+                                                        borderRadius: "0.2rem",
+                                                    }}
+                                                />
+                                            </FormGroup>
+                                        </div>
+                                        <div className="form-group mb-2 col-md-4">
+                                            <FormGroup>
+                                                <Label>Age</Label>
+                                                <input
+                                                    className="form-control"
+                                                    type="number"
+                                                    name="age"
+                                                    id="age"
+                                                    value={objValues.age}
+                                                    disabled={ageDisabled}
+                                                    onChange={handleAgeChange}
+                                                    style={{
+                                                        border: "1px solid #014D88",
+                                                        borderRadius: "0.2rem",
+                                                    }}
+                                                />
+                                            </FormGroup>
+                                        </div>
+                                        <div className="form-group  col-md-4">
+                                            <FormGroup>
+                                                <Label>
+                                                    Marital Status <span style={{color: "red"}}> *</span>
+                                                </Label>
+                                                <select
+                                                    className="form-control"
+                                                    name="maritalStatus"
+                                                    id="maritalStatus"
+                                                    value={objValues.maritalStatus}
+                                                    onChange={handleInputChange}
+                                                    style={{
+                                                        border: "1px solid #014D88",
+                                                        borderRadius: "0.2rem",
+                                                    }}
+                                                    // disabled={props.activePage.actionType === "view"}
+                                                >
+                                                    <option value={""}></option>
+                                                    {setting.map((value) => (
+                                                        <option key={value.id} value={value.code}>
+                                                            {value.display}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                                {/* {errors.testingSetting !== "" ? (
                                             <span className={classes.error}>
                                                 {errors.testingSetting}
                                             </span>
                                         ) : (
                                             ""
                                         )} */}
-                                        </FormGroup>
-                                    </div>
-                                    <div className="form-group mb-3 col-md-4">
-                                        <FormGroup>
-                                            <Label for="">Phone Number</Label>
-
-                                            <PhoneInput
-                                                containerStyle={{
-                                                    width: "100%",
-                                                    border: "1px solid #014D88",
-                                                }}
-                                                inputStyle={{width: "100%", borderRadius: "0px"}}
-                                                country={"ng"}
-                                                placeholder="(234)7099999999"
-                                                minLength={10}
-                                                name="phoneNumber"
-                                                id="phoneNumber"
-                                                masks={{ng: "...-...-....", at: "(....) ...-...."}}
-                                                value={objValues.phoneNumber}
-                                                onChange={(e) => {
-                                                    checkPhoneNumberBasic(e, "phoneNumber");
-                                                }}
-                                                //onChange={(e)=>{handleInputChangeBasic(e,'phoneNumber')}}
-                                            />
-                                            {errors.phoneNumber !== "" ? (
-                                                <span className={classes.error}>
-                                                    {errors.phoneNumber}
-                                                </span>
-                                            ) : (
-                                                ""
-                                            )}
-                                        </FormGroup>
-                                    </div>
-
-                                    <div className="form-group mb-3 col-md-4">
-                                        <FormGroup>
-                                            <Label for="">Alternative Phone Number</Label>
-                                            <PhoneInput
-                                                containerStyle={{
-                                                    width: "100%",
-                                                    border: "1px solid #014D88",
-                                                }}
-                                                inputStyle={{width: "100%", borderRadius: "0px"}}
-                                                country={"ng"}
-                                                placeholder="(234)7099999999"
-                                                minLength={10}
-                                                name="altPhoneNumber"
-                                                id="altPhoneNumber"
-                                                masks={{ng: "...-...-....", at: "(....) ...-...."}}
-                                                value={objValues.altPhoneNumber}
-                                                onChange={(e) => {
-                                                    checkPhoneNumberBasic(e, "altPhoneNumber");
-                                                }}
-                                                //onChange={(e)=>{handleInputChangeBasic(e,'phoneNumber')}}
-                                            />
-                                        </FormGroup>
-                                    </div>
-                                    <div className="form-group mb-3 col-md-4">
-                                        <FormGroup>
-                                            <Label for=""> Descriptive Residential Address </Label>
-                                            <Input
-                                                type="text"
-                                                name="descriptiveResidentialAddress"
-                                                id="descriptiveResidentialAddress"
-                                                value={objValues.descriptiveResidentialAddress}
-                                                onChange={handleInputChange}
-                                                style={{
-                                                    border: "1px solid #014D88",
-                                                    borderRadius: "0.25rem",
-                                                }}
-                                            />
-                                        </FormGroup>
-                                    </div>
-
-
-                                    <div className="form-group col-md-4">
-                                        <FormGroup>
-                                            <Label for="">
-                                                Date Of Index Client's confirmed HIV-positive test results <span
-                                                style={{color: "red"}}> *</span>{" "}
-                                            </Label>
-                                            <Input
-                                                type="date"
-                                                name="dateIndexClientConfrimedHiv"
-                                                id="dateIndexClientConfrimedHiv"
-                                                value={objValues.dateIndexClientConfirmedHiv}
-                                                onChange={handleInputChange}
-                                                min="1929-12-31"
-                                                max={moment(new Date()).format("YYYY-MM-DD")}
-                                                style={{
-                                                    border: "1px solid #014D88",
-                                                    borderRadius: "0.25rem",
-                                                }}
-                                                // disabled
-                                            />
-                                            {errors.dateIndexClientConfrimedHiv !== "" ? (
-                                                <span className={classes.error}>
-                                                    {errors.referralDate}
-                                                </span>
-                                            ) : (
-                                                ""
-                                            )}
-                                        </FormGroup>
-                                    </div>
-                                    {/* {indexClientConfirmedHivPositive && ( */}
-
-                                    {/* )} */}
-                                    {/* if index client is hiv positive, and date is selected */}
-                                    <div className="form-group col-md-4 ">
-                                        <Label>Is client current on HIV treatment?</Label>
-                                        <FormGroup>
-                                            <select
-                                                className="form-control"
-                                                name="hivTreatment"
-                                                id="hivTreatment"
-                                                onChange={handleInputChange}
-                                                value={objValues.hivTreatment}
-                                                style={{
-                                                    border: "1px solid #014D88",
-                                                    borderRadius: "0.2rem",
-                                                }}
-                                            >
-                                                <option value="">Select</option>
-                                                <option value="Yes">Yes</option>
-                                                <option value="No">No</option>
-                                            </select>
-
-                                        </FormGroup>
-                                    </div>
-                                    {isClientCurrentlyOnHiv && (
+                                            </FormGroup>
+                                        </div>
                                         <div className="form-group mb-3 col-md-4">
                                             <FormGroup>
+                                                <Label for="">Phone Number</Label>
+
+                                                <PhoneInput
+                                                    containerStyle={{
+                                                        width: "100%",
+                                                        border: "1px solid #014D88",
+                                                    }}
+                                                    inputStyle={{width: "100%", borderRadius: "0px"}}
+                                                    country={"ng"}
+                                                    placeholder="(234)7099999999"
+                                                    minLength={10}
+                                                    name="phoneNumber"
+                                                    id="phoneNumber"
+                                                    masks={{ng: "...-...-....", at: "(....) ...-...."}}
+                                                    value={objValues.phoneNumber}
+                                                    onChange={(e) => {
+                                                        checkPhoneNumberBasic(e, "phoneNumber");
+                                                    }}
+                                                    //onChange={(e)=>{handleInputChangeBasic(e,'phoneNumber')}}
+                                                />
+                                                {errors.phoneNumber !== "" ? (
+                                                    <span className={classes.error}>
+                                                    {errors.phoneNumber}
+                                                </span>
+                                                ) : (
+                                                    ""
+                                                )}
+                                            </FormGroup>
+                                        </div>
+
+                                        <div className="form-group mb-3 col-md-4">
+                                            <FormGroup>
+                                                <Label for="">Alternative Phone Number</Label>
+                                                <PhoneInput
+                                                    containerStyle={{
+                                                        width: "100%",
+                                                        border: "1px solid #014D88",
+                                                    }}
+                                                    inputStyle={{width: "100%", borderRadius: "0px"}}
+                                                    country={"ng"}
+                                                    placeholder="(234)7099999999"
+                                                    minLength={10}
+                                                    name="altPhoneNumber"
+                                                    id="altPhoneNumber"
+                                                    masks={{ng: "...-...-....", at: "(....) ...-...."}}
+                                                    value={objValues.altPhoneNumber}
+                                                    onChange={(e) => {
+                                                        checkPhoneNumberBasic(e, "altPhoneNumber");
+                                                    }}
+                                                    //onChange={(e)=>{handleInputChangeBasic(e,'phoneNumber')}}
+                                                />
+                                            </FormGroup>
+                                        </div>
+                                        <div className="form-group mb-3 col-md-4">
+                                            <FormGroup>
+                                                <Label for=""> Descriptive Residential Address </Label>
+                                                <Input
+                                                    type="text"
+                                                    name="descriptiveResidentialAddress"
+                                                    id="descriptiveResidentialAddress"
+                                                    value={objValues.descriptiveResidentialAddress}
+                                                    onChange={handleInputChange}
+                                                    style={{
+                                                        border: "1px solid #014D88",
+                                                        borderRadius: "0.25rem",
+                                                    }}
+                                                />
+                                            </FormGroup>
+                                        </div>
+
+
+                                        <div className="form-group col-md-4">
+                                            <FormGroup>
                                                 <Label for="">
-                                                    Date of Treatment Initiation <span
+                                                    Date Of Index Client's confirmed HIV-positive test results <span
                                                     style={{color: "red"}}> *</span>{" "}
                                                 </Label>
                                                 <Input
                                                     type="date"
-                                                    name="treatDateInititial"
-                                                    id="treatmentDateInitiation"
-                                                    value={objValues.treatmentDateInitiation}
+                                                    name="dateIndexClientConfrimedHiv"
+                                                    id="dateIndexClientConfrimedHiv"
+                                                    value={objValues.dateIndexClientConfirmedHiv}
                                                     onChange={handleInputChange}
                                                     min="1929-12-31"
                                                     max={moment(new Date()).format("YYYY-MM-DD")}
@@ -1085,558 +1047,595 @@ const PnsForm = (props) => {
                                                         border: "1px solid #014D88",
                                                         borderRadius: "0.25rem",
                                                     }}
-                                                    //   disabledg
+                                                    // disabled
                                                 />
-                                                {/* {errors.treatmentDateI !== "" ? (
+                                                {errors.dateIndexClientConfrimedHiv !== "" ? (
+                                                    <span className={classes.error}>
+                                                    {errors.referralDate}
+                                                </span>
+                                                ) : (
+                                                    ""
+                                                )}
+                                            </FormGroup>
+                                        </div>
+                                        {/* {indexClientConfirmedHivPositive && ( */}
+
+                                        {/* )} */}
+                                        {/* if index client is hiv positive, and date is selected */}
+                                        <div className="form-group col-md-4 ">
+                                            <Label>Is client current on HIV treatment?</Label>
+                                            <FormGroup>
+                                                <select
+                                                    className="form-control"
+                                                    name="hivTreatment"
+                                                    id="hivTreatment"
+                                                    onChange={handleInputChange}
+                                                    value={objValues.hivTreatment}
+                                                    style={{
+                                                        border: "1px solid #014D88",
+                                                        borderRadius: "0.2rem",
+                                                    }}
+                                                >
+                                                    <option value="">Select</option>
+                                                    <option value="Yes">Yes</option>
+                                                    <option value="No">No</option>
+                                                </select>
+
+                                            </FormGroup>
+                                        </div>
+                                        {isClientCurrentlyOnHiv && (
+                                            <div className="form-group mb-3 col-md-4">
+                                                <FormGroup>
+                                                    <Label for="">
+                                                        Date of Treatment Initiation <span
+                                                        style={{color: "red"}}> *</span>{" "}
+                                                    </Label>
+                                                    <Input
+                                                        type="date"
+                                                        name="treatDateInititial"
+                                                        id="treatmentDateInitiation"
+                                                        value={objValues.treatmentDateInitiation}
+                                                        onChange={handleInputChange}
+                                                        min="1929-12-31"
+                                                        max={moment(new Date()).format("YYYY-MM-DD")}
+                                                        style={{
+                                                            border: "1px solid #014D88",
+                                                            borderRadius: "0.25rem",
+                                                        }}
+                                                        //   disabledg
+                                                    />
+                                                    {/* {errors.treatmentDateI !== "" ? (
                                           <span className={classes.error}>
                                             {errors.referralDate}
                                           </span>
                                         ) : (
                                           ""
                                         )} */}
-                                            </FormGroup>
-                                        </div>
-                                    )}
-
-                                    <div className="form-group col-md-4 ">
-                                        <Label>Recency Testing</Label>
-                                        <FormGroup>
-                                            <select
-                                                className="form-control"
-                                                name="recencyTesting"
-                                                id="recencyTesting"
-                                                onChange={handleInputChange}
-                                                value={objValues.recencyTesting}
-                                                style={{
-                                                    border: "1px solid #014D88",
-                                                    borderRadius: "0.2rem",
-                                                }}
-                                            >
-                                                <option value="">Select</option>
-                                                <option value="Recent Infection">Recent Infection</option>
-                                                <option value="Long Infection">Recent Infection</option>
-                                                <option value="Not Done">Note Done</option>
-                                            </select>
-
-                                        </FormGroup>
-                                    </div>
-
-                                    <div className="form-group mb-3 col-md-4">
-                                        <FormGroup>
-                                            <Label for=""> ART Enrollment Number </Label>
-                                            <Input
-                                                type="text"
-                                                name="artEnrollmentNumber"
-                                                id="artEnrollmentNumber"
-                                                value={objValues.artEnrollmentNumber}
-                                                onChange={handleInputChange}
-                                                style={{
-                                                    border: "1px solid #014D88",
-                                                    borderRadius: "0.25rem",
-                                                }}
-                                            />
-                                        </FormGroup>
-                                    </div>
-                                    <div className="form-group mb-3 col-md-4">
-                                        <FormGroup>
-                                            <Label for=""> Facility Of Enrollment </Label>
-                                            <Input
-                                                type="text"
-                                                name="facilityOfEnrollment"
-                                                id="facilityOfEnrollment"
-                                                value={objValues.facilityOfEnrollment}
-                                                onChange={handleInputChange}
-                                                style={{
-                                                    border: "1px solid #014D88",
-                                                    borderRadius: "0.25rem",
-                                                }}
-                                            />
-                                        </FormGroup>
-                                    </div>
-                                    <div className="form-group  col-md-4">
-                                        <FormGroup>
-                                            <Label>Notification Method selected*</Label>
-                                            <select
-                                                className="form-control"
-                                                name="notificationMethod"
-                                                id="notificationMethod"
-                                                value={objValues.notificationMethod}
-                                                onChange={handleInputChange}
-                                                style={{
-                                                    border: "1px solid #014D88",
-                                                    borderRadius: "0.2rem",
-                                                }}
-                                            >
-                                                <option value={""}></option>
-                                                {notificationContact.map((value) => (
-                                                    <option key={value.id} value={value.id}>
-                                                        {value.display}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                        </FormGroup>
-                                    </div>
-
-                                    <div className="form-group  col-md-4">
-                                        <FormGroup>
-                                            <Label>Notification Method selected*</Label>
-                                            <select
-                                                className="form-control"
-                                                name="notificationMethod"
-                                                id="notificationMethod"
-                                                value={objValues.notificationMethod}
-                                                onChange={handleInputChange}
-                                                style={{
-                                                    border: "1px solid #014D88",
-                                                    borderRadius: "0.2rem",
-                                                }}
-                                            >
-                                                <option value={""}></option>
-                                                {notificationContact.map((value) => (
-                                                    <option key={value.id} value={value.id}>
-                                                        {value.display}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                        </FormGroup>
-                                    </div>
-
-                                    <div className="form-group mb-3 col-md-4">
-                                        <FormGroup>
-                                            <Label for=""> Number of Partner <span> {" "} (sexual or social) identified/elicited from index </span>
-                                            </Label>
-                                            <Input
-                                                type="number"
-                                                name="numberOfPartnerIdentifiedFromClientIndex"
-                                                id="numberOfPartnerIdentifiedFromClientIndex"
-                                                value={objValues.numberOfPartnerIdentifiedFromClientIndex}
-                                                onChange={handleInputChange}
-                                                style={{
-                                                    border: "1px solid #014D88",
-                                                    borderRadius: "0.25rem",
-                                                }}
-                                                disabled
-                                            />
-                                        </FormGroup>
-                                    </div>
-
-                                    <div
-                                        className="form-group  col-md-12 text-center pt-2 mb-4"
-                                        style={{
-                                            backgroundColor: "#992E62",
-                                            width: "125%",
-                                            height: "35px",
-                                            color: "#fff",
-                                            fontWeight: "bold",
-                                        }}
-                                    >
-                                        SECTION 2 : LISTING INDEX CLIENT PARTNER
-                                    </div>
-                                    <p style={{color: "black", marginBottom: "20px"}}>
-                                        <i>
-                                            Instruction: Ask index client to list all the client that have had sex with
-                                            in the last 12 months. who may be risk to HIV and or partners who they share
-                                            needle for injection of drugs where index client alluded to injection drugs
-                                        </i>
-                                    </p>
-
-                                    <div className="form-group mb-3 col-md-4">
-                                        <FormGroup>
-                                            <Label for="">Partner ID </Label>
-                                            <Input
-                                                type="text"
-                                                name="partnerId"
-                                                id="partnerId"
-                                                value={objValues.partnerId}
-                                                onChange={handleInputChange}
-                                                style={{
-                                                    border: "1px solid #014D88",
-                                                    borderRadius: "0.25rem",
-                                                }}
-                                            />
-                                        </FormGroup>
-                                    </div>
-                                    <div className="form-group mb-3 col-md-4">
-                                        <FormGroup>
-                                            <Label for=""> Name of Partner <span> {" "} (Enter surname first) </span>
-                                            </Label>
-                                            <Input
-                                                type="text"
-                                                name="partnerName"
-                                                id="partnerName"
-                                                value={objValues.partnerName}
-                                                onChange={handleInputChange}
-                                                style={{
-                                                    border: "1px solid #014D88",
-                                                    borderRadius: "0.25rem",
-                                                }}
-                                            />
-                                        </FormGroup>
-                                    </div>
-                                    <div className="form-group  col-md-4">
-                                        <FormGroup>
-                                            <Label>Sex </Label>
-                                            <select
-                                                className="form-control"
-                                                name="partnerSex"
-                                                id="partnerSex"
-                                                value={objValues.partnerSex}
-                                                onChange={handleInputChange}
-                                                style={{
-                                                    border: "1px solid #014D88",
-                                                    borderRadius: "0.2rem",
-                                                }}
-                                            >
-                                                <option value={""}></option>
-                                                {sexs.map((value) => (
-                                                    <option key={value.id} value={value.id}>
-                                                        {value.display}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                        </FormGroup>
-                                    </div>
-                                    <div className="form-group mb-3 col-md-4">
-                                        <FormGroup>
-                                            <Label>Age <span>{" "} (In years) </span> </Label>
-                                            <input
-                                                className="form-control"
-                                                type="number"
-                                                name="partnerAge"
-                                                id="partnerAge"
-                                                value={objValues.partnerAge}
-                                                // disabled={ageDisabled}
-                                                onChange={handleAgeChange}
-                                                style={{
-                                                    border: "1px solid #014D88",
-                                                    borderRadius: "0.2rem",
-                                                }}
-                                            />
-                                        </FormGroup>
-                                    </div>
-                                    <div className="form-group mb-3 col-md-4">
-                                        <FormGroup>
-                                            <Label for=""> Home/Contact Address <span> {" "} include landmark </span>
-                                            </Label>
-                                            <Input
-                                                type="text"
-                                                name="partnerAdress"
-                                                id="partnerAddress"
-                                                value={objValues.partnerAddress}
-                                                onChange={handleInputChange}
-                                                style={{
-                                                    border: "1px solid #014D88",
-                                                    borderRadius: "0.25rem",
-                                                }}
-                                            />
-                                        </FormGroup>
-                                    </div>
-                                    <div className="form-group mb-3 col-md-4">
-                                        <FormGroup>
-                                            <Label for=""> Contact Phone Number</Label>
-
-                                            <PhoneInput
-                                                containerStyle={{
-                                                    width: "100%",
-                                                    border: "1px solid #014D88",
-                                                }}
-                                                inputStyle={{width: "100%", borderRadius: "0px"}}
-                                                country={"ng"}
-                                                placeholder="(234)7099999999"
-                                                minLength={10}
-                                                name="partnerPhoneNumber"
-                                                id="partnerPhoneNumber"
-                                                masks={{ng: "...-...-....", at: "(....) ...-...."}}
-                                                value={objValues.partnerPhoneNumber}
-                                                onChange={(e) => {
-                                                    checkPhoneNumberBasic(e, "phoneNumber");
-                                                }}
-                                                //onChange={(e)=>{handleInputChangeBasic(e,'phoneNumber')}}
-                                            />
-                                            {errors.phoneNumber !== "" ? (
-                                                <span className={classes.error}>
-                                                    {errors.phoneNumber}
-                                                </span>
-                                            ) : (
-                                                ""
-                                            )}
-                                        </FormGroup>
-                                    </div>
-                                    <div className="form-group  col-md-4">
-                                        <FormGroup>
-                                            <Label>
-                                                Relationship to Index Client{" "}
-                                                <span style={{color: "red"}}> *</span>
-                                            </Label>
-                                            <select
-                                                className="form-control"
-                                                name="relativeToIndexClient"
-                                                id="relativeToIndexClient"
-                                                value={objValues.relativeToIndexClient}
-                                                onChange={handleInputChange}
-                                                style={{
-                                                    border: "1px solid #014D88",
-                                                    borderRadius: "0.2rem",
-                                                }}
-                                            >
-                                                <option value={""}></option>
-                                                {indexTesting.map((value) => (
-                                                    <option key={value.id} value={value.id}>
-                                                        {value.display}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                        </FormGroup>
-                                    </div>
-                                    <div className="form-group  col-md-4">
-                                        <FormGroup>
-                                            <Label>
-                                                Contact tracing
-                                            </Label>
-                                            <select
-                                                className="form-control"
-                                                name="contactTarcing"
-                                                id="contactTracing"
-                                                value={objValues.contactTracing}
-                                                onChange={handleInputChange}
-                                                style={{
-                                                    border: "1px solid #014D88",
-                                                    borderRadius: "0.2rem",
-                                                }}
-                                            >
-                                                <option value={""}>select</option>
-                                                <option value="Phone calls">
-                                                    Phone calls
-                                                </option>
-                                                <option value="Physical visit">
-                                                    Physical visit
-                                                </option>
-                                            </select>
-                                        </FormGroup>
-                                    </div>
-
-                                    <div className="form-group mb-3 col-md-4">
-                                        <FormGroup>
-                                            <Label for=""> Number of Attempt
-                                            </Label>
-                                            <Input
-                                                type="number"
-                                                name="numberOfAttempt"
-                                                id="numberOfAttempt"
-                                                value={objValues.numberOfAttempt}
-                                                onChange={handleInputChange}
-                                                style={{
-                                                    border: "1px solid #014D88",
-                                                    borderRadius: "0.25rem",
-                                                }}
-                                                // disabled
-                                            />
-                                        </FormGroup>
-                                    </div>
-                                    <div className="form-group  col-md-4">
-                                        <FormGroup>
-                                            <Label>
-                                                Has this partner ever denied you of food, shelter, freedom of
-                                                movement,livehood?
-                                            </Label>
-                                            <select
-                                                className="form-control"
-                                                name="freedomDenial"
-                                                id="freedomDenial"
-                                                value={objValues.freedomDenial}
-                                                onChange={handleInputChange}
-                                                style={{
-                                                    border: "1px solid #014D88",
-                                                    borderRadius: "0.2rem",
-                                                }}
-                                            >
-                                                <option value={""}></option>
-                                                {consent.map((value) => (
-                                                    <option key={value.id} value={value.id}>
-                                                        {value.display}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                        </FormGroup>
-                                    </div>
-
-                                    <div className="form-group  col-md-4">
-                                        <FormGroup>
-                                            <Label>
-                                                Has this partner ever threatened to hurt you? *
-                                            </Label>
-                                            <select
-                                                className="form-control"
-                                                name="threatenToHurt"
-                                                id="threatenToHurt"
-                                                value={objValues.threatenToHurt}
-                                                onChange={handleInputChange}
-                                                style={{
-                                                    border: "1px solid #014D88",
-                                                    borderRadius: "0.2rem",
-                                                }}
-                                            >
-                                                <option value={""}></option>
-                                                {consent.map((value) => (
-                                                    <option key={value.id} value={value.id}>
-                                                        {value.display}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                        </FormGroup>
-                                    </div>
-
-                                    <div className="form-group  col-md-4">
-                                        <FormGroup>
-                                            <Label>
-                                                Has this partner ever threatened to rape and force to have sex with you
-                                                ? *
-                                            </Label>
-                                            <select
-                                                className="form-control"
-                                                name="sexuallyUncomfortable"
-                                                id="sexuallyUncomfortable"
-                                                value={objValues.sexuallyUncomfortable}
-                                                onChange={handleInputChange}
-                                                style={{
-                                                    border: "1px solid #014D88",
-                                                    borderRadius: "0.2rem",
-                                                }}
-                                            >
-                                                <option value={""}></option>
-                                                {consent.map((value) => (
-                                                    <option key={value.id} value={value.id}>
-                                                        {value.display}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                        </FormGroup>
-                                    </div>
-                                    <div className="form-group col-md-4 ">
-                                        <Label>Known HIV Positive ?</Label>
-                                        <FormGroup>
-                                            <select
-                                                className="form-control"
-                                                name="partnerKnownHivPositive"
-                                                id="partnerKnownHivPositive"
-                                                onChange={handleInputChange}
-                                                value={objValues.partnerKnownHivPositive}
-                                                style={{
-                                                    border: "1px solid #014D88",
-                                                    borderRadius: "0.2rem",
-                                                }}
-                                            >
-                                                <option value="">Select</option>
-                                                <option value="Yes">Yes</option>
-                                                <option value="No">No</option>
-                                            </select>
-
-                                        </FormGroup>
-                                    </div>
-                                    <div className="form-group  col-md-4">
-                                        <FormGroup>
-                                            <Label>
-                                              Accepted HTS ? <span style={{color: "red"}}> </span>
-                                            </Label>
-                                            <select
-                                                className="form-control"
-                                                name="acceptedHts"
-                                                id="acceptedHts"
-                                                value={objValues.acceptedHts}
-                                                onChange={handleInputChange}
-                                                style={{
-                                                    border: "1px solid #014D88",
-                                                    borderRadius: "0.2rem",
-                                                }}
-                                            >
-                                                <option value={""}></option>
-                                                {consent.map((value) => (
-                                                    <option key={value.id} value={value.id}>
-                                                        {value.display}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                        </FormGroup>
-                                    </div>
-
-                                    <div className="form-group  col-md-4">
-                                        <FormGroup>
-                                            <Label>
-                                                HIV Test Result{" "}
-                                                <span style={{color: "red"}}> *</span>
-                                            </Label>
-                                            <select
-                                                className="form-control"
-                                                name="partnerCurrentHivStatus "
-                                                id="partnerCurrentHivStatus "
-                                                value={objValues.partnerCurrentHivStatus}
-                                                onChange={handleInputChange}
-                                                style={{
-                                                    border: "1px solid #014D88",
-                                                    borderRadius: "0.2rem",
-                                                }}
-                                            >
-                                                <option value={""}></option>
-                                                <option value="negative">Negative</option>
-                                                <option value="positive">Positive</option>
-                                            </select>
-                                        </FormGroup>
-                                    </div>
-
-                                    {objValues.partnerCurrentHivStatus !== "" &&
-                                        objValues.partnerCurrentHivStatus === "positive" && (
-                                            <div className="form-group mb-3 col-md-4">
-                                                <FormGroup>
-                                                    <Label for="">
-                                                        Date Tested?{" "}
-                                                        <span style={{color: "red"}}> *</span>
-                                                    </Label>
-                                                    <Input
-                                                        type="date"
-                                                        name="datePartnerTested"
-                                                        id="datePartnerTested"
-                                                        value={objValues.datePartnerTested}
-                                                        onChange={handleInputChange}
-                                                        max={moment(new Date()).format("YYYY-MM-DD")}
-                                                        style={{
-                                                            border: "1px solid #014D88",
-                                                            borderRadius: "0.25rem",
-                                                        }}
-                                                    />
                                                 </FormGroup>
                                             </div>
                                         )}
-                                    <div className="form-group mb-3 col-md-4">
-                                        <FormGroup>
-                                            <Label for="">
-                                                Date Enrolled On ART
-                                            </Label>
-                                            <Input
-                                                type="date"
-                                                name="datePartnerEnrolledOnArt"
-                                                id="datePartnerEnrolledOnArt"
-                                                value={objValues.datePartnerEnrolledOnArt}
-                                                onChange={handleInputChange}
-                                                min="1929-12-31"
-                                                max={moment(new Date()).format("YYYY-MM-DD")}
-                                                style={{
-                                                    border: "1px solid #014D88",
-                                                    borderRadius: "0.25rem",
-                                                }}
-                                                // disabled
-                                            />
-                                            {errors.referralDate !== "" ? (
-                                                <span className={classes.error}>
+
+                                        <div className="form-group col-md-4 ">
+                                            <Label>Recency Testing</Label>
+                                            <FormGroup>
+                                                <select
+                                                    className="form-control"
+                                                    name="recencyTesting"
+                                                    id="recencyTesting"
+                                                    onChange={handleInputChange}
+                                                    value={objValues.recencyTesting}
+                                                    style={{
+                                                        border: "1px solid #014D88",
+                                                        borderRadius: "0.2rem",
+                                                    }}
+                                                >
+                                                    <option value="">Select</option>
+                                                    <option value="Recent Infection">Recent Infection</option>
+                                                    <option value="Long Infection">Recent Infection</option>
+                                                    <option value="Not Done">Note Done</option>
+                                                </select>
+
+                                            </FormGroup>
+                                        </div>
+
+                                        <div className="form-group mb-3 col-md-4">
+                                            <FormGroup>
+                                                <Label for=""> ART Enrollment Number </Label>
+                                                <Input
+                                                    type="text"
+                                                    name="artEnrollmentNumber"
+                                                    id="artEnrollmentNumber"
+                                                    value={objValues.artEnrollmentNumber}
+                                                    onChange={handleInputChange}
+                                                    style={{
+                                                        border: "1px solid #014D88",
+                                                        borderRadius: "0.25rem",
+                                                    }}
+                                                />
+                                            </FormGroup>
+                                        </div>
+                                        <div className="form-group mb-3 col-md-4">
+                                            <FormGroup>
+                                                <Label for=""> Facility Of Enrollment </Label>
+                                                <Input
+                                                    type="text"
+                                                    name="facilityOfEnrollment"
+                                                    id="facilityOfEnrollment"
+                                                    value={objValues.facilityOfEnrollment}
+                                                    onChange={handleInputChange}
+                                                    style={{
+                                                        border: "1px solid #014D88",
+                                                        borderRadius: "0.25rem",
+                                                    }}
+                                                />
+                                            </FormGroup>
+                                        </div>
+                                        <div className="form-group  col-md-4">
+                                            <FormGroup>
+                                                <Label>Notification Method selected*</Label>
+                                                <select
+                                                    className="form-control"
+                                                    name="notificationMethod"
+                                                    id="notificationMethod"
+                                                    value={objValues.notificationMethod}
+                                                    onChange={handleInputChange}
+                                                    style={{
+                                                        border: "1px solid #014D88",
+                                                        borderRadius: "0.2rem",
+                                                    }}
+                                                >
+                                                    <option value={""}></option>
+                                                    {notificationContact.map((value) => (
+                                                        <option key={value.id} value={value.id}>
+                                                            {value.display}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </FormGroup>
+                                        </div>
+
+                                        <div className="form-group mb-3 col-md-4">
+                                            <FormGroup>
+                                                <Label for=""> Number of Partner <span> {" "} (sexual or social) identified/elicited from index </span>
+                                                </Label>
+                                                <Input
+                                                    type="number"
+                                                    name="numberOfPartnerIdentifiedFromClientIndex"
+                                                    id="numberOfPartnerIdentifiedFromClientIndex"
+                                                    value={objValues.numberOfPartnerIdentifiedFromClientIndex}
+                                                    onChange={handleInputChange}
+                                                    style={{
+                                                        border: "1px solid #014D88",
+                                                        borderRadius: "0.25rem",
+                                                    }}
+                                                    disabled
+                                                />
+                                            </FormGroup>
+                                        </div>
+
+                                        <div
+                                            className="form-group  col-md-12 text-center pt-2 mb-4"
+                                            style={{
+                                                backgroundColor: "#992E62",
+                                                width: "125%",
+                                                height: "35px",
+                                                color: "#fff",
+                                                fontWeight: "bold",
+                                            }}
+                                        >
+                                            SECTION 2 : LISTING INDEX CLIENT PARTNER
+                                        </div>
+                                        <p style={{color: "black", marginBottom: "20px"}}>
+                                            <i>
+                                                Instruction: Ask index client to list all the client that have had sex
+                                                with
+                                                in the last 12 months. who may be risk to HIV and or partners who they
+                                                share
+                                                needle for injection of drugs where index client alluded to injection
+                                                drugs
+                                            </i>
+                                        </p>
+
+                                        <div className="form-group mb-3 col-md-4">
+                                            <FormGroup>
+                                                <Label for="">Partner ID </Label>
+                                                <Input
+                                                    type="text"
+                                                    name="partnerId"
+                                                    id="partnerId"
+                                                    value={objValues.partnerId}
+                                                    onChange={handleInputChange}
+                                                    style={{
+                                                        border: "1px solid #014D88",
+                                                        borderRadius: "0.25rem",
+                                                    }}
+                                                />
+                                            </FormGroup>
+                                        </div>
+                                        <div className="form-group mb-3 col-md-4">
+                                            <FormGroup>
+                                                <Label for=""> Name of
+                                                    Partner <span> {" "} (Enter surname first) </span>
+                                                </Label>
+                                                <Input
+                                                    type="text"
+                                                    name="partnerName"
+                                                    id="partnerName"
+                                                    value={objValues.partnerName}
+                                                    onChange={handleInputChange}
+                                                    style={{
+                                                        border: "1px solid #014D88",
+                                                        borderRadius: "0.25rem",
+                                                    }}
+                                                />
+                                            </FormGroup>
+                                        </div>
+                                        <div className="form-group  col-md-4">
+                                            <FormGroup>
+                                                <Label>Sex </Label>
+                                                <select
+                                                    className="form-control"
+                                                    name="partnerSex"
+                                                    id="partnerSex"
+                                                    value={objValues.partnerSex}
+                                                    onChange={handleInputChange}
+                                                    style={{
+                                                        border: "1px solid #014D88",
+                                                        borderRadius: "0.2rem",
+                                                    }}
+                                                >
+                                                    <option value={""}></option>
+                                                    {sexs.map((value) => (
+                                                        <option key={value.id} value={value.id}>
+                                                            {value.display}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </FormGroup>
+                                        </div>
+                                        <div className="form-group mb-3 col-md-4">
+                                            <FormGroup>
+                                                <Label>Age <span>{" "} (In years) </span> </Label>
+                                                <input
+                                                    className="form-control"
+                                                    type="number"
+                                                    name="partnerAge"
+                                                    id="partnerAge"
+                                                    value={objValues.partnerAge}
+                                                    // disabled={ageDisabled}
+                                                    onChange={handleAgeChange}
+                                                    style={{
+                                                        border: "1px solid #014D88",
+                                                        borderRadius: "0.2rem",
+                                                    }}
+                                                />
+                                            </FormGroup>
+                                        </div>
+                                        <div className="form-group mb-3 col-md-4">
+                                            <FormGroup>
+                                                <Label for=""> Home/Contact
+                                                    Address <span> {" "} include landmark </span>
+                                                </Label>
+                                                <Input
+                                                    type="text"
+                                                    name="partnerAdress"
+                                                    id="partnerAddress"
+                                                    value={objValues.partnerAddress}
+                                                    onChange={handleInputChange}
+                                                    style={{
+                                                        border: "1px solid #014D88",
+                                                        borderRadius: "0.25rem",
+                                                    }}
+                                                />
+                                            </FormGroup>
+                                        </div>
+                                        <div className="form-group mb-3 col-md-4">
+                                            <FormGroup>
+                                                <Label for=""> Contact Phone Number</Label>
+
+                                                <PhoneInput
+                                                    containerStyle={{
+                                                        width: "100%",
+                                                        border: "1px solid #014D88",
+                                                    }}
+                                                    inputStyle={{width: "100%", borderRadius: "0px"}}
+                                                    country={"ng"}
+                                                    placeholder="(234)7099999999"
+                                                    minLength={10}
+                                                    name="partnerPhoneNumber"
+                                                    id="partnerPhoneNumber"
+                                                    masks={{ng: "...-...-....", at: "(....) ...-...."}}
+                                                    value={objValues.partnerPhoneNumber}
+                                                    onChange={(e) => {
+                                                        checkPhoneNumberBasic(e, "phoneNumber");
+                                                    }}
+                                                    //onChange={(e)=>{handleInputChangeBasic(e,'phoneNumber')}}
+                                                />
+                                                {errors.phoneNumber !== "" ? (
+                                                    <span className={classes.error}>
+                                                    {errors.phoneNumber}
+                                                </span>
+                                                ) : (
+                                                    ""
+                                                )}
+                                            </FormGroup>
+                                        </div>
+                                        <div className="form-group  col-md-4">
+                                            <FormGroup>
+                                                <Label>
+                                                    Relationship to Index Client{" "}
+                                                    <span style={{color: "red"}}> *</span>
+                                                </Label>
+                                                <select
+                                                    className="form-control"
+                                                    name="relativeToIndexClient"
+                                                    id="relativeToIndexClient"
+                                                    value={objValues.relativeToIndexClient}
+                                                    onChange={handleInputChange}
+                                                    style={{
+                                                        border: "1px solid #014D88",
+                                                        borderRadius: "0.2rem",
+                                                    }}
+                                                >
+                                                    <option value={""}></option>
+                                                    {indexTesting.map((value) => (
+                                                        <option key={value.id} value={value.id}>
+                                                            {value.display}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </FormGroup>
+                                        </div>
+                                        <div className="form-group  col-md-4">
+                                            <FormGroup>
+                                                <Label>
+                                                    Contact tracing
+                                                </Label>
+                                                <select
+                                                    className="form-control"
+                                                    name="contactTarcing"
+                                                    id="contactTracing"
+                                                    value={objValues.contactTracing}
+                                                    onChange={handleInputChange}
+                                                    style={{
+                                                        border: "1px solid #014D88",
+                                                        borderRadius: "0.2rem",
+                                                    }}
+                                                >
+                                                    <option value={""}>select</option>
+                                                    <option value="Phone calls">
+                                                        Phone calls
+                                                    </option>
+                                                    <option value="Physical visit">
+                                                        Physical visit
+                                                    </option>
+                                                </select>
+                                            </FormGroup>
+                                        </div>
+
+                                        <div className="form-group mb-3 col-md-4">
+                                            <FormGroup>
+                                                <Label for=""> Number of Attempt
+                                                </Label>
+                                                <Input
+                                                    type="number"
+                                                    name="numberOfAttempt"
+                                                    id="numberOfAttempt"
+                                                    value={objValues.numberOfAttempt}
+                                                    onChange={handleInputChange}
+                                                    style={{
+                                                        border: "1px solid #014D88",
+                                                        borderRadius: "0.25rem",
+                                                    }}
+                                                    // disabled
+                                                />
+                                            </FormGroup>
+                                        </div>
+                                        <div className="form-group  col-md-4">
+                                            <FormGroup>
+                                                <Label>
+                                                    Has this partner ever denied you of food, shelter, freedom of
+                                                    movement,livehood?
+                                                </Label>
+                                                <select
+                                                    className="form-control"
+                                                    name="freedomDenial"
+                                                    id="freedomDenial"
+                                                    value={objValues.freedomDenial}
+                                                    onChange={handleInputChange}
+                                                    style={{
+                                                        border: "1px solid #014D88",
+                                                        borderRadius: "0.2rem",
+                                                    }}
+                                                >
+                                                    <option value={""}></option>
+                                                    {consent.map((value) => (
+                                                        <option key={value.id} value={value.id}>
+                                                            {value.display}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </FormGroup>
+                                        </div>
+
+                                        <div className="form-group  col-md-4">
+                                            <FormGroup>
+                                                <Label>
+                                                    Has this partner ever threatened to hurt you? *
+                                                </Label>
+                                                <select
+                                                    className="form-control"
+                                                    name="threatenToHurt"
+                                                    id="threatenToHurt"
+                                                    value={objValues.threatenToHurt}
+                                                    onChange={handleInputChange}
+                                                    style={{
+                                                        border: "1px solid #014D88",
+                                                        borderRadius: "0.2rem",
+                                                    }}
+                                                >
+                                                    <option value={""}></option>
+                                                    {consent.map((value) => (
+                                                        <option key={value.id} value={value.id}>
+                                                            {value.display}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </FormGroup>
+                                        </div>
+
+                                        <div className="form-group  col-md-4">
+                                            <FormGroup>
+                                                <Label>
+                                                    Has this partner ever threatened to rape and force to have sex with
+                                                    you
+                                                    ? *
+                                                </Label>
+                                                <select
+                                                    className="form-control"
+                                                    name="sexuallyUncomfortable"
+                                                    id="sexuallyUncomfortable"
+                                                    value={objValues.sexuallyUncomfortable}
+                                                    onChange={handleInputChange}
+                                                    style={{
+                                                        border: "1px solid #014D88",
+                                                        borderRadius: "0.2rem",
+                                                    }}
+                                                >
+                                                    <option value={""}></option>
+                                                    {consent.map((value) => (
+                                                        <option key={value.id} value={value.id}>
+                                                            {value.display}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </FormGroup>
+                                        </div>
+                                        <div className="form-group col-md-4 ">
+                                            <Label>Known HIV Positive ?</Label>
+                                            <FormGroup>
+                                                <select
+                                                    className="form-control"
+                                                    name="partnerKnownHivPositive"
+                                                    id="partnerKnownHivPositive"
+                                                    onChange={handleInputChange}
+                                                    value={objValues.partnerKnownHivPositive}
+                                                    style={{
+                                                        border: "1px solid #014D88",
+                                                        borderRadius: "0.2rem",
+                                                    }}
+                                                >
+                                                    <option value="">Select</option>
+                                                    <option value="Yes">Yes</option>
+                                                    <option value="No">No</option>
+                                                </select>
+
+                                            </FormGroup>
+                                        </div>
+                                        <div className="form-group  col-md-4">
+                                            <FormGroup>
+                                                <Label>
+                                                    Accepted HTS ? <span style={{color: "red"}}> </span>
+                                                </Label>
+                                                <select
+                                                    className="form-control"
+                                                    name="acceptedHts"
+                                                    id="acceptedHts"
+                                                    value={objValues.acceptedHts}
+                                                    onChange={handleInputChange}
+                                                    style={{
+                                                        border: "1px solid #014D88",
+                                                        borderRadius: "0.2rem",
+                                                    }}
+                                                >
+                                                    <option value={""}></option>
+                                                    {consent.map((value) => (
+                                                        <option key={value.id} value={value.id}>
+                                                            {value.display}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </FormGroup>
+                                        </div>
+
+                                        <div className="form-group  col-md-4">
+                                            <FormGroup>
+                                                <Label>
+                                                    HIV Test Result{" "}
+                                                    <span style={{color: "red"}}> *</span>
+                                                </Label>
+                                                <select
+                                                    className="form-control"
+                                                    name="partnerCurrentHivStatus "
+                                                    id="partnerCurrentHivStatus "
+                                                    value={objValues.partnerCurrentHivStatus}
+                                                    onChange={handleInputChange}
+                                                    style={{
+                                                        border: "1px solid #014D88",
+                                                        borderRadius: "0.2rem",
+                                                    }}
+                                                >
+                                                    <option value={""}></option>
+                                                    <option value="negative">Negative</option>
+                                                    <option value="positive">Positive</option>
+                                                </select>
+                                            </FormGroup>
+                                        </div>
+
+                                        {objValues.partnerCurrentHivStatus !== "" &&
+                                            objValues.partnerCurrentHivStatus === "positive" && (
+                                                <div className="form-group mb-3 col-md-4">
+                                                    <FormGroup>
+                                                        <Label for="">
+                                                            Date Tested?{" "}
+                                                            <span style={{color: "red"}}> *</span>
+                                                        </Label>
+                                                        <Input
+                                                            type="date"
+                                                            name="datePartnerTested"
+                                                            id="datePartnerTested"
+                                                            value={objValues.datePartnerTested}
+                                                            onChange={handleInputChange}
+                                                            max={moment(new Date()).format("YYYY-MM-DD")}
+                                                            style={{
+                                                                border: "1px solid #014D88",
+                                                                borderRadius: "0.25rem",
+                                                            }}
+                                                        />
+                                                    </FormGroup>
+                                                </div>
+                                            )}
+                                        <div className="form-group mb-3 col-md-4">
+                                            <FormGroup>
+                                                <Label for="">
+                                                    Date Enrolled On ART
+                                                </Label>
+                                                <Input
+                                                    type="date"
+                                                    name="datePartnerEnrolledOnArt"
+                                                    id="datePartnerEnrolledOnArt"
+                                                    value={objValues.datePartnerEnrolledOnArt}
+                                                    onChange={handleInputChange}
+                                                    min="1929-12-31"
+                                                    max={moment(new Date()).format("YYYY-MM-DD")}
+                                                    style={{
+                                                        border: "1px solid #014D88",
+                                                        borderRadius: "0.25rem",
+                                                    }}
+                                                    // disabled
+                                                />
+                                                {errors.referralDate !== "" ? (
+                                                    <span className={classes.error}>
                                                     {errors.referralDate}
                                                 </span>
-                                            ) : (
-                                                ""
-                                            )}
-                                        </FormGroup>
-                                    </div>
+                                                ) : (
+                                                    ""
+                                                )}
+                                            </FormGroup>
+                                        </div>
 
-                                </>
-                            )}
+                                    </>
+                                )}
 
                             {saving ? <Spinner/> : ""}
                             <br/>

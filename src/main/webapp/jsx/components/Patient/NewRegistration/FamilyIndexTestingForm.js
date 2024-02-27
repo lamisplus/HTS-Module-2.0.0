@@ -164,23 +164,25 @@ const FamilyIndexTestingForm = (props) => {
         hivTestResult:"",
         dateEnrolledInOVC:"",
         dateEnrolledOnArt:"",
+        recencyTesting:"",
+        attempt:""
 
 
 
-        landmark: "",
-        hivStatus: "",
-        referreFromFacility: "",
-        nameOfPersonRefferringClient: "",
-        addressOfReferrringFacility: "",
-        phoneNoOfReferrringFacility: "",
-        referredTo: "",
-        nameOfContactPerson: "",
-        nameOfRecievingFacility: "",
-        addressOfRecievingFacility: "",
-        phoneNoOfRecievingFacility: "",
-        isDateOfBirthEstimated: false,
-        serviceNeeded: "",
-        comments: "",
+        // landmark: "",
+        // hivStatus: "",
+        // referreFromFacility: "",
+        // nameOfPersonRefferringClient: "",
+        // addressOfReferrringFacility: "",
+        // phoneNoOfReferrringFacility: "",
+        // referredTo: "",
+        // nameOfContactPerson: "",
+        // nameOfRecievingFacility: "",
+        // addressOfRecievingFacility: "",
+        // phoneNoOfRecievingFacility: "",
+        // isDateOfBirthEstimated: false,
+        // serviceNeeded: "",
+        // comments: "",
     });
 
 
@@ -574,7 +576,7 @@ const FamilyIndexTestingForm = (props) => {
                                 <div className="form-group  col-md-4">
                                     <FormGroup>
                                         <Label>
-                                            State <span style={{ color: "red" }}> *</span>
+                                            State <span style={{color: "red"}}> *</span>
                                         </Label>
                                         <select
                                             className="form-control"
@@ -587,7 +589,7 @@ const FamilyIndexTestingForm = (props) => {
                                                 borderRadius: "0.2rem",
                                             }}
                                             onChange={getProvinces}
-                                        // disabled={false}
+                                            // disabled={false}
                                         >
                                             <option value="">Select</option>
                                             {states.map((value, index) => (
@@ -607,7 +609,7 @@ const FamilyIndexTestingForm = (props) => {
                                     <FormGroup>
                                         <Label>
                                             Province/District/LGA{" "}
-                                            <span style={{ color: "red" }}> *</span>
+                                            <span style={{color: "red"}}> *</span>
                                         </Label>
                                         <select
                                             className="form-control"
@@ -640,7 +642,7 @@ const FamilyIndexTestingForm = (props) => {
                                     <FormGroup>
                                         <Label for="firstName">
                                             Facility Name
-                                            <span style={{ color: "red" }}> *</span>
+                                            <span style={{color: "red"}}> *</span>
                                         </Label>
                                         <Input
                                             className="form-control"
@@ -653,7 +655,7 @@ const FamilyIndexTestingForm = (props) => {
                                                 border: "1px solid #014D88",
                                                 borderRadius: "0.2rem",
                                             }}
-                                        // disabled
+                                            // disabled
                                         />
                                         {errors.facilityName !== "" ? (
                                             <span className={classes.error}>
@@ -667,7 +669,7 @@ const FamilyIndexTestingForm = (props) => {
                                 <div className="form-group mb-3 col-md-4">
                                     <FormGroup>
                                         <Label for="">
-                                            Date <span style={{ color: "red" }}> *</span>{" "}
+                                            Date <span style={{color: "red"}}> *</span>{" "}
                                         </Label>
                                         <Input
                                             type="date"
@@ -681,7 +683,7 @@ const FamilyIndexTestingForm = (props) => {
                                                 border: "1px solid #014D88",
                                                 borderRadius: "0.25rem",
                                             }}
-                                        // disabled
+                                            // disabled
                                         />
                                         {errors.referralDate !== "" ? (
                                             <span className={classes.error}>
@@ -696,7 +698,7 @@ const FamilyIndexTestingForm = (props) => {
                                 <div className="form-group  col-md-4">
                                     <FormGroup>
                                         <Label>
-                                            Setting <span style={{ color: "red" }}> *</span>
+                                            Setting <span style={{color: "red"}}> *</span>
                                         </Label>
                                         <select
                                             className="form-control"
@@ -708,7 +710,7 @@ const FamilyIndexTestingForm = (props) => {
                                                 border: "1px solid #014D88",
                                                 borderRadius: "0.2rem",
                                             }}
-                                        // disabled={props.activePage.actionType === "view"}
+                                            // disabled={props.activePage.actionType === "view"}
                                         >
                                             <option value={""}></option>
                                             {setting.map((value) => (
@@ -730,7 +732,7 @@ const FamilyIndexTestingForm = (props) => {
                                 <div className="form-group  col-md-4">
                                     <FormGroup>
                                         <Label>
-                                            Family Index Client <span style={{ color: "red" }}> *</span>
+                                            Family Index Client <span style={{color: "red"}}> *</span>
                                         </Label>
                                         <select
                                             className="form-control"
@@ -742,7 +744,7 @@ const FamilyIndexTestingForm = (props) => {
                                                 border: "1px solid #014D88",
                                                 borderRadius: "0.2rem",
                                             }}
-                                        // disabled={props.activePage.actionType === "view"}
+                                            // disabled={props.activePage.actionType === "view"}
                                         >
                                             <option value={""}></option>
                                             {setting.map((value) => (
@@ -763,7 +765,7 @@ const FamilyIndexTestingForm = (props) => {
                                 <div className="form-group mb-3 col-md-4">
                                     <FormGroup>
                                         <Label for="firstName">
-                                            Name <span style={{ color: "red" }}> *</span>
+                                            Name <span style={{color: "red"}}> *</span>
                                         </Label>
                                         <Input
                                             className="form-control"
@@ -776,7 +778,7 @@ const FamilyIndexTestingForm = (props) => {
                                                 border: "1px solid #014D88",
                                                 borderRadius: "0.2rem",
                                             }}
-                                        // disabled
+                                            // disabled
                                         />
                                         {errors.name !== "" ? (
                                             <span className={classes.error}>{errors.name}</span>
@@ -789,7 +791,7 @@ const FamilyIndexTestingForm = (props) => {
                                     <FormGroup>
                                         <Label for="firstName">
                                             Index Client ID
-                                            <span style={{ color: "red" }}> *</span>
+                                            <span style={{color: "red"}}> *</span>
                                         </Label>
                                         <Input
                                             className="form-control"
@@ -802,7 +804,7 @@ const FamilyIndexTestingForm = (props) => {
                                                 border: "1px solid #014D88",
                                                 borderRadius: "0.2rem",
                                             }}
-                                        // disabled
+                                            // disabled
                                         />
                                         {errors.indexCleintId !== "" ? (
                                             <span className={classes.error}>
@@ -816,7 +818,7 @@ const FamilyIndexTestingForm = (props) => {
                                 <div className="form-group  col-md-4">
                                     <FormGroup>
                                         <Label>
-                                            Sex <span style={{ color: "red" }}> *</span>
+                                            Sex <span style={{color: "red"}}> *</span>
                                         </Label>
                                         <select
                                             className="form-control"
@@ -828,7 +830,7 @@ const FamilyIndexTestingForm = (props) => {
                                                 border: "1px solid #014D88",
                                                 borderRadius: "0.2rem",
                                             }}
-                                        // disabled
+                                            // disabled
                                         >
                                             <option value={""}>Select</option>
                                             {genders &&
@@ -849,7 +851,7 @@ const FamilyIndexTestingForm = (props) => {
                                 <div className="form-group mb-3 col-md-4">
                                     <FormGroup>
                                         <Label>
-                                            Date Of Birth<span style={{ color: "red" }}> *</span>
+                                            Date Of Birth<span style={{color: "red"}}> *</span>
                                         </Label>
                                         <input
                                             className="form-control"
@@ -864,7 +866,7 @@ const FamilyIndexTestingForm = (props) => {
                                                 border: "1px solid #014D88",
                                                 borderRadius: "0.2rem",
                                             }}
-                                        // disabled
+                                            // disabled
                                         />
                                         {errors.dob !== "" ? (
                                             <span className={classes.error}>{errors.dob}</span>
@@ -876,7 +878,7 @@ const FamilyIndexTestingForm = (props) => {
                                 <div className="form-group mb-3 col-md-4">
                                     <FormGroup>
                                         <Label>
-                                            Age <span style={{ color: "red" }}> *</span>
+                                            Age <span style={{color: "red"}}> *</span>
                                         </Label>
                                         <input
                                             className="form-control"
@@ -902,7 +904,7 @@ const FamilyIndexTestingForm = (props) => {
                                 <div className="form-group  col-md-4">
                                     <FormGroup>
                                         <Label>
-                                            Marital Status <span style={{ color: "red" }}> *</span>
+                                            Marital Status <span style={{color: "red"}}> *</span>
                                         </Label>
                                         <select
                                             className="form-control"
@@ -914,7 +916,7 @@ const FamilyIndexTestingForm = (props) => {
                                                 border: "1px solid #014D88",
                                                 borderRadius: "0.2rem",
                                             }}
-                                        // disabled={props.activePage.actionType === "view"}
+                                            // disabled={props.activePage.actionType === "view"}
                                         >
                                             <option value={""}></option>
                                             {setting.map((value) => (
@@ -935,26 +937,26 @@ const FamilyIndexTestingForm = (props) => {
                                 <div className="form-group  col-md-4">
                                     <FormGroup>
                                         <Label>
-                                            Phone Number <span style={{ color: "red" }}> *</span>
+                                            Phone Number <span style={{color: "red"}}> *</span>
                                         </Label>
                                         <PhoneInput
-                                            disabled={true}
+                                            // disabled={true}
                                             containerStyle={{
                                                 width: "100%",
                                                 border: "1px solid #014D88",
                                             }}
-                                            inputStyle={{ width: "100%", borderRadius: "0px" }}
+                                            inputStyle={{width: "100%", borderRadius: "0px"}}
                                             country={"ng"}
                                             placeholder="(234)7099999999"
                                             maxLength={5}
                                             name="phoneNumber"
                                             id="phoneNumber"
-                                            masks={{ ng: "...-...-....", at: "(....) ...-...." }}
+                                            masks={{ng: "...-...-....", at: "(....) ...-...."}}
                                             value={payload.phoneNumber}
                                             onChange={(e) => {
                                                 checkPhoneNumberBasic(e, "phoneNumber");
                                             }}
-                                        //onChange={(e)=>{handleInputChangeBasic(e,'phoneNumber')}}
+                                            //onChange={(e)=>{handleInputChangeBasic(e,'phoneNumber')}}
                                         />
 
                                         {errors.phoneNumber !== "" ? (
@@ -972,48 +974,43 @@ const FamilyIndexTestingForm = (props) => {
                                 <div className="form-group  col-md-4">
                                     <FormGroup>
                                         <Label>
-                                            Alternative Contact Number <span style={{ color: "red" }}> *</span>
+                                            Alternative Contact Number
                                         </Label>
                                         <PhoneInput
-                                            disabled={true}
+                                            // disabled={true}
                                             containerStyle={{
                                                 width: "100%",
                                                 border: "1px solid #014D88",
                                             }}
-                                            inputStyle={{ width: "100%", borderRadius: "0px" }}
+                                            inputStyle={{width: "100%", borderRadius: "0px"}}
                                             country={"ng"}
                                             placeholder="(234)7099999999"
                                             maxLength={5}
                                             name="alternativeContactNumber"
                                             id="alternativeContactNumber"
-                                            masks={{ ng: "...-...-....", at: "(....) ...-...." }}
+                                            masks={{ng: "...-...-....", at: "(....) ...-...."}}
                                             value={payload.alternativeContactNumber}
                                             onChange={(e) => {
                                                 checkPhoneNumberBasic(e, "alternativeContactNumber");
                                             }}
-                                        //onChange={(e)=>{handleInputChangeBasic(e,'phoneNumber')}}
+                                            //onChange={(e)=>{handleInputChangeBasic(e,'phoneNumber')}}
                                         />
 
-                                        {errors.phoneNumber !== "" ? (
-                                            <span className={classes.error}>
-                                                {errors.phoneNumber}
-                                            </span>
-                                        ) : (
-                                            ""
-                                        )}
-                                        {/* {basicInfo.phoneNumber.length >13 ||  basicInfo.phoneNumber.length <13? (
-                                                <span className={classes.error}>{"The maximum and minimum required number is 13 digit"}</span>
-                                                ) : "" } */}
+                                        {/*{errors.phoneNumber !== "" ? (*/}
+                                        {/*    <span className={classes.error}>*/}
+                                        {/*        {errors.phoneNumber}*/}
+                                        {/*    </span>*/}
+                                        {/*) : (*/}
+                                        {/*    ""*/}
+                                        {/*)}*/}
                                     </FormGroup>
                                 </div>
-
-
 
 
                                 <div className="form-group  col-md-4">
                                     <FormGroup>
                                         <Label>
-                                            Descriptiven Residential Address <span style={{ color: "red" }}> *</span>
+                                            Descriptiven Residential Address <span style={{color: "red"}}> *</span>
                                         </Label>
                                         <input
                                             className="form-control"
@@ -1021,7 +1018,7 @@ const FamilyIndexTestingForm = (props) => {
                                             name="address"
                                             id="address"
                                             value={payload.address}
-                                            disabled
+                                            // disabled
                                             onChange={handleInputChange}
                                             style={{
                                                 border: "1px solid #014D88",
@@ -1039,7 +1036,8 @@ const FamilyIndexTestingForm = (props) => {
                                 <div className="form-group col-md-4">
                                     <FormGroup>
                                         <Label for="">
-                                            Date Of Index Client's confrimed HIV-positive test results <span style={{ color: "red" }}> *</span>{" "}
+                                            Date Of Index Client's confrimed HIV-positive test results <span
+                                            style={{color: "red"}}> *</span>{" "}
                                         </Label>
                                         <Input
                                             type="date"
@@ -1053,7 +1051,7 @@ const FamilyIndexTestingForm = (props) => {
                                                 border: "1px solid #014D88",
                                                 borderRadius: "0.25rem",
                                             }}
-                                        // disabled
+                                            // disabled
                                         />
                                         {errors.dateIndexClientConfrimedHiv !== "" ? (
                                             <span className={classes.error}>
@@ -1066,7 +1064,8 @@ const FamilyIndexTestingForm = (props) => {
                                 </div>
                                 {/* {indexClientConfirmedHivPositive && ( */}
                                 <div className="form-group col-md-4">
-                                    <Label > Why is Date Of Index Client's confrimed HIV-positive test results not selected</Label>
+                                    <Label> Why is Date Of Index Client's confrimed HIV-positive test results not
+                                        selected</Label>
                                     <FormGroup>
                                         <select
                                             className="form-control"
@@ -1088,7 +1087,7 @@ const FamilyIndexTestingForm = (props) => {
                                 {/* )} */}
                                 {/* if index client is hiv positive, and date is selected */}
                                 <div className="form-group col-md-4 ">
-                                    <Label >Is client current on HIV treatment?</Label>
+                                    <Label>Is client current on HIV treatment?</Label>
                                     <FormGroup>
                                         <select
                                             className="form-control"
@@ -1109,11 +1108,11 @@ const FamilyIndexTestingForm = (props) => {
                                     </FormGroup>
                                 </div>
 
-                                {isClientCurrentlyOnHiv && (
+                                {payload.hivTreatment === "Yes" && (
                                     <div className="form-group mb-3 col-md-4">
                                         <FormGroup>
                                             <Label for="">
-                                                Date of Treatment Initiation <span style={{ color: "red" }}> *</span>{" "}
+                                                Date of Treatment Initiation <span style={{color: "red"}}> *</span>{" "}
                                             </Label>
                                             <Input
                                                 type="date"
@@ -1127,21 +1126,42 @@ const FamilyIndexTestingForm = (props) => {
                                                     border: "1px solid #014D88",
                                                     borderRadius: "0.25rem",
                                                 }}
-                                            //   disabledg
+                                                //   disabledg
                                             />
-                                            {/* {errors.treatmentDateI !== "" ? (
+                                            {errors.treatmentDate !== "" ? (
                                           <span className={classes.error}>
                                             {errors.referralDate}
                                           </span>
                                         ) : (
                                           ""
-                                        )} */}
+                                        )}
                                         </FormGroup>
                                     </div>
                                 )}
-
                                 <div className="form-group col-md-4 ">
-                                    <Label >virally unsuppressed</Label>
+                                    <Label> Recency Testing <span> (for newly tested HIV-positive only) </span> </Label>
+                                    <FormGroup>
+                                        <select
+                                            className="form-control"
+                                            name="recencyTesting"
+                                            id="reccencyTesting"
+                                            onChange={handleInputChange}
+                                            value={payload.recencyTesting}
+                                            style={{
+                                                border: "1px solid #014D88",
+                                                borderRadius: "0.2rem",
+                                            }}
+                                        >
+                                            <option value="">Select</option>
+                                            <option value="Recent Infection">Recent Infection</option>
+                                            <option value="Long Term Infection"> Long Term Infection</option>
+                                            <option value="Not Done">Not Done</option>
+                                        </select>
+
+                                    </FormGroup>
+                                </div>
+                                <div className="form-group col-md-4 ">
+                                    <Label>virally unsuppressed</Label>
                                     <FormGroup>
                                         <select
                                             className="form-control"
@@ -1163,7 +1183,7 @@ const FamilyIndexTestingForm = (props) => {
                                 </div>
                             </div>
 
-                            <br />
+                            <br/>
 
                         </div>
                         <div className="row">
@@ -1192,7 +1212,7 @@ const FamilyIndexTestingForm = (props) => {
                                         onChange={handleFamilyRelationshipChange}
                                         value={payload.familyRelationship}
                                     >
-                                        <option value="">Select</option>
+                                    <option value="">Select</option>
                                         <option value="Mother">Mother</option>
                                         <option value="Father">Father</option>
                                         <option value="Biological Child">Biological Child</option>
@@ -1398,7 +1418,7 @@ const FamilyIndexTestingForm = (props) => {
                                     <div className="form-group mb-3 col-md-4">
                                         <FormGroup>
                                             <Label for="">
-                                                Schedule Visit Date <span style={{ color: "red" }}> *</span>{" "}
+                                                Schedule Visit Date <span style={{color: "red"}}> *</span>{" "}
                                             </Label>
                                             <Input
                                                 type="date"
@@ -1412,7 +1432,7 @@ const FamilyIndexTestingForm = (props) => {
                                                     border: "1px solid #014D88",
                                                     borderRadius: "0.25rem",
                                                 }}
-                                            // disabled
+                                                // disabled
                                             />
                                             {errors.referralDate !== "" ? (
                                                 <span className={classes.error}>
@@ -1426,7 +1446,7 @@ const FamilyIndexTestingForm = (props) => {
                                     <div className="form-group mb-3 col-md-4">
                                         <FormGroup>
                                             <Label for="">
-                                                Date  visit <span style={{ color: "red" }}> *</span>{" "}
+                                                Date visit <span style={{color: "red"}}> *</span>{" "}
                                             </Label>
                                             <Input
                                                 type="date"
@@ -1440,7 +1460,7 @@ const FamilyIndexTestingForm = (props) => {
                                                     border: "1px solid #014D88",
                                                     borderRadius: "0.25rem",
                                                 }}
-                                            // disabled
+                                                // disabled
                                             />
                                             {errors.referralDate !== "" ? (
                                                 <span className={classes.error}>
@@ -1451,8 +1471,33 @@ const FamilyIndexTestingForm = (props) => {
                                             )}
                                         </FormGroup>
                                     </div>
+                                    <div className="form-group mb-3 col-md-4">
+                                        <FormGroup>
+                                            <Label for="">
+                                                Attempts <span style={{color: "red"}}> *</span>{" "}
+                                            </Label>
+                                            <select
+                                                className="form-control"
+                                                name="attempt"
+                                                id="attempt"
+                                                onChange={handleInputChange}
+                                                value={payload.attempt}
+                                                style={{
+                                                    border: "1px solid #014D88",
+                                                    borderRadius: "0.2rem",
+                                                }}
+                                            >
+                                                <option value="">Select</option>
+                                                <option value="1st Attempt">1st Attempt</option>
+                                                <option value="2nd Attempt">2nd Attempt</option>
+                                                <option value="3rd Attempt">3rd Attempt</option>
+                                                <option value="4th Attempt">4th Attempt</option>
+                                                <option value="5th Attempt">5th Attempt</option>
+                                            </select>
+                                        </FormGroup>
+                                    </div>
                                     <div className="form-group col-md-4 ">
-                                        <Label >Known HIV Positive ?</Label>
+                                        <Label>Known HIV Positive ?</Label>
                                         <FormGroup>
                                             <select
                                                 className="form-control"
@@ -1465,14 +1510,14 @@ const FamilyIndexTestingForm = (props) => {
                                                     borderRadius: "0.2rem",
                                                 }}
                                             >
-                                                <option value="">Select</option>
+                                            <option value="">Select</option>
                                                 <option value="Yes">Yes</option>
                                                 <option value="No">No</option>
                                             </select>
 
                                         </FormGroup>
                                     </div>
-                                    <div className="form-group mb-3 col-md-4">
+                                    {payload.knownHivPositive === "Yes" && <div className="form-group mb-3 col-md-4">
                                         <FormGroup>
                                             <Label for="">
                                                 Date Tested
@@ -1489,7 +1534,7 @@ const FamilyIndexTestingForm = (props) => {
                                                     border: "1px solid #014D88",
                                                     borderRadius: "0.25rem",
                                                 }}
-                                            // disabled
+                                                // disabled
                                             />
                                             {errors.referralDate !== "" ? (
                                                 <span className={classes.error}>
@@ -1499,9 +1544,9 @@ const FamilyIndexTestingForm = (props) => {
                                                 ""
                                             )}
                                         </FormGroup>
-                                    </div>
+                                    </div>}
                                     <div className="form-group col-md-4 ">
-                                        <Label >HIV Test Result </Label>
+                                        <Label>HIV Test Result </Label>
                                         <FormGroup>
                                             <select
                                                 className="form-control"
@@ -1538,7 +1583,7 @@ const FamilyIndexTestingForm = (props) => {
                                                     border: "1px solid #014D88",
                                                     borderRadius: "0.25rem",
                                                 }}
-                                            // disabled
+                                                // disabled
                                             />
                                             {errors.referralDate !== "" ? (
                                                 <span className={classes.error}>
@@ -1566,7 +1611,7 @@ const FamilyIndexTestingForm = (props) => {
                                                     border: "1px solid #014D88",
                                                     borderRadius: "0.25rem",
                                                 }}
-                                            // disabled
+                                                // disabled
                                             />
                                             {errors.referralDate !== "" ? (
                                                 <span className={classes.error}>
@@ -1577,12 +1622,12 @@ const FamilyIndexTestingForm = (props) => {
                                             )}
                                         </FormGroup>
                                     </div>
-                                
+
                                 </div>
                             </div>
                         )}
 
-                        <br />
+                        <br/>
                         <div className="row">
                             <div className="form-group mb-3 col-md-6">
                                 <Button
@@ -1590,7 +1635,7 @@ const FamilyIndexTestingForm = (props) => {
                                     type="submit"
                                     icon="right arrow"
                                     labelPosition="right"
-                                    style={{ backgroundColor: "#014d88", color: "#fff" }}
+                                    style={{backgroundColor: "#014d88", color: "#fff"}}
                                     onClick={handleSubmit}
                                     disabled={saving}
                                 />
@@ -1624,9 +1669,9 @@ const FamilyIndexTestingForm = (props) => {
                 <Modal.Footer>
                     <Button
                         onClick={toggle}
-                        style={{ backgroundColor: "#014d88", color: "#fff" }}
+                        style={{backgroundColor: "#014d88", color: "#fff"}}
                     >
-                        Yes
+                    Yes
                     </Button>
                 </Modal.Footer>
             </Modal>

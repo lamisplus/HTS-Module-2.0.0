@@ -185,6 +185,10 @@ const Recency = (props) => {
       props.patientObj && props.patientObj.recency !== null
         ? props.patientObj.recency.viralLoadConfirmationResult
         : "",
+    receivedResultDate:
+        props.patientObj && props.patientObj.recency !==null
+      ? props.patientObj.recency.receivedResultDate
+          :""
   });
 
   useEffect(() => {

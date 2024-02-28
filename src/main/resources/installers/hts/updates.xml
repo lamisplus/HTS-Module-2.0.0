@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet failOnError="true" author="Peter Abiodun" id="hts_89">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="1">
+                SELECT count(column_name)
+                FROM information_schema.columns
+                WHERE table_schema = 'public'
+                  AND table_name = 'hts_risk_stratification'
+                  AND column_name = 'modality';
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            UPDATE base_application_codeset
+            SET archived = 1
+            WHERE code = 'TEST_SETTING_OTHERS_PMTCT_(POST_ANC1:_PREGNANCYL'|| chr(38) || 'DBF)'
+               OR code = 'TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL'|| chr(38) || 'DBF)';
+            UPDATE hts_risk_stratification
+            SET modality = 'TEST_SETTING_OTHERS_POST_ANC1_PREGNANT_L'|| chr(38) || 'D'
+            WHERE modality = 'TEST_SETTING_OTHERS_PMTCT_(POST_ANC1:_PREGNANCYL'|| chr(38) || 'DBF)';
+            UPDATE hts_risk_stratification
+            SET modality = 'TEST_SETTING_STANDALONE_HTS_POST_ANC1_PREGNANT_L'|| chr(38) || 'D'
+            WHERE modality = 'TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL'|| chr(38) || 'DBF)';
+        </sql>
+    </changeSet>
+</databaseChangeLog>

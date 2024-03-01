@@ -1496,7 +1496,7 @@ const BasicInfo = (props) => {
                   </div>
                   <div className="form-group  col-md-4">
                     <FormGroup>
-                      <Label>Index Client Code/IDAAAAA</Label>
+                      <Label>Index Client Code/ID</Label>
                       <Input
                         type="text"
                         name="indexClientCode"
@@ -1543,9 +1543,13 @@ const BasicInfo = (props) => {
                       >
                         <option value={""}></option>
                         {pregnancyStatus.map((value) => (
-                          <option key={value.id} value={value.id}>
-                            {value.display}
-                          </option>
+                            ((props.patientObj.riskStratificationResponseDto.modality === "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" || props.patientObj.riskStratificationResponseDto.modality ==="TEST_SETTING_OTHERS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" || props.patientObj.riskStratificationResponseDto.testingSetting==="TEST_SETTING_CPMTCT" || props.patientObj.riskStratificationResponseDto.modality ==="TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)")  && value.code === "PREGANACY_STATUS_NOT_PREGNANT") ? (
+                                <></>
+                            ) : (
+                                <option key={value.id} value={value.id}>
+                                  {value.display}
+                                </option>
+                            )
                         ))}
                       </select>
                     </FormGroup>

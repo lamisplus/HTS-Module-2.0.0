@@ -96,6 +96,8 @@ const useStyles = makeStyles((theme) => ({
 
 const BasicInfo = (props) => {
   console.log("basic", props.patientObj.clientCode);
+  console.log("############# Continues model")
+
   const classes = useStyles();
   const history = useHistory();
   const [errors, setErrors] = useState({});
@@ -222,6 +224,8 @@ const BasicInfo = (props) => {
   };
 
   useEffect(() => {
+    console.log("############# Continues model")
+
     KP();
     EnrollmentSetting();
     SourceReferral();

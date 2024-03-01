@@ -34,12 +34,16 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const UserRegistration = (props) => {
+
+
   console.log("con out",props)
   const classes = useStyles();
   const [activeItem, setactiveItem] = useState("basic");
   const [completed, setCompleted] = useState([]);
   const [hideOtherMenu, setHideOtherMenu] = useState(true);
   const [patientObj, setPatientObj] = useState(props.activePage.activeObject);
+  const [modality,setmodality]= useState("");
+
   const [extra, setExtra] = useState({
     risk: "",
     index: "",
@@ -232,6 +236,8 @@ const UserRegistration = (props) => {
                 {activeItem === "risk" && (
                   <RiskStratification
                     handleItemClick={handleItemClick}
+                    modality={modality}
+                    setModality={setmodality}
                     setCompleted={setCompleted}
                     completed={completed}
                     setPatientObj={setPatientObj}
@@ -247,6 +253,8 @@ const UserRegistration = (props) => {
                 {activeItem === "basic" && (
                   <BasicInfo
                     handleItemClick={handleItemClick}
+                    modality={modality}
+                    setModality={setmodality}
                     setCompleted={setCompleted}
                     completed={completed}
                     setPatientObj={setPatientObj}

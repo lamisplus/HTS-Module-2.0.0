@@ -91,6 +91,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const BasicInfo = (props) => {
+  console.log("#############",props);
   const classes = useStyles();
   const history = useHistory();
   //console.log("enr", props.activePage.activeObject);
@@ -678,10 +679,15 @@ const BasicInfo = (props) => {
                         disabled={props.activePage.actionType === "view"}
                       >
                         <option value={""}></option>
+
                         {pregnancyStatus.map((value) => (
-                          <option key={value.id} value={value.id}>
-                            {value.display}
-                          </option>
+                            (props.modality === "TEST_SETTING_CT_PMTCT" && value.code === "PREGANACY_STATUS_NOT_PREGNANT") ? (
+                                <></>
+                            ) : (
+                                <option key={value.id} value={value.id}>
+                                  {value.display}
+                                </option>
+                            )
                         ))}
                       </select>
                     </FormGroup>

@@ -406,6 +406,7 @@ const RiskStratification = (props) => {
     props.patientObj.testingSetting = objValues.testingSetting;
     props.patientObj.dateVisit = objValues.visitDate;
     props.patientObj.modality = objValues.modality;
+    props.setModality(objValues.modality);
     props.patientObj.riskStratificationResponseDto = objValues;
     //props.patientObj.riskAssessment =riskAssessment
 

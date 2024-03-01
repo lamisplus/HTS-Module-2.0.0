@@ -97,6 +97,7 @@ const useStyles = makeStyles((theme) => ({
 const BasicInfo = (props) => {
   const classes = useStyles();
   console.log("new", props.patientObj);
+  console.log("#############New Registration")
   const history = useHistory();
   const [errors, setErrors] = useState({});
   const [saving, setSaving] = useState(false);
@@ -352,6 +353,8 @@ const BasicInfo = (props) => {
     }
 
   useEffect(() => {
+    console.log("#############New Registration")
+
     KP();
     EnrollmentSetting();
     SourceReferral();

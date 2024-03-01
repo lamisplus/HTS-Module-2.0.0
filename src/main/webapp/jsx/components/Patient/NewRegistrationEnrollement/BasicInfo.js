@@ -679,9 +679,8 @@ const BasicInfo = (props) => {
                         disabled={props.activePage.actionType === "view"}
                       >
                         <option value={""}></option>
-
                         {pregnancyStatus.map((value) => (
-                            ((props.patientObj.riskStratificationResponseDto.modality === "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" || props.patientObj.riskStratificationResponseDto.testingSetting==="TEST_SETTING_CPMTCT")  && value.code === "PREGANACY_STATUS_NOT_PREGNANT") ? (
+                            ((props.patientObj.riskStratificationResponseDto.modality === "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" || props.patientObj.riskStratificationResponseDto.modality ==="TEST_SETTING_OTHERS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" || props.patientObj.riskStratificationResponseDto.testingSetting==="TEST_SETTING_CPMTCT" || props.patientObj.riskStratificationResponseDto.modality ==="TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)")  && value.code === "PREGANACY_STATUS_NOT_PREGNANT") ? (
                                 <></>
                             ) : (
                                 <option key={value.id} value={value.id}>

@@ -300,6 +300,7 @@ const BasicInfo = (props) => {
     if (props.activePage.actionType === "update") {
       //e.preventDefault();
       const patientForm = {
+        ...props.patientObj,
         clientCode: objValues.clientCode,
         dateVisit: objValues.dateVisit,
         extra: {},

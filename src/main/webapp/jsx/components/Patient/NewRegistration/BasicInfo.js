@@ -96,7 +96,7 @@ const useStyles = makeStyles((theme) => ({
 
 const BasicInfo = (props) => {
   const classes = useStyles();
-  console.log("new", props.patientObj);
+  // console.log("new", props.patientObj);
   const history = useHistory();
   const [errors, setErrors] = useState({});
   const [saving, setSaving] = useState(false);
@@ -1496,7 +1496,7 @@ const BasicInfo = (props) => {
                   </div>
                   <div className="form-group  col-md-4">
                     <FormGroup>
-                      <Label>Index Client Code/ID</Label>
+                      <Label>Index Client Code/IDAAAAA</Label>
                       <Input
                         type="text"
                         name="indexClientCode"

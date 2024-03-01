@@ -30,6 +30,7 @@ public class HtsClientRequestDto {
     private final Long typeCounseling;
     @NotNull(message = "indexClient is mandatory")
     private final Boolean indexClient;
+    private final String indexClientCode;
     @NotNull(message = "previouslyTested is mandatory")
     private final Boolean previouslyTested;
     private final Object extra;
@@ -39,8 +40,10 @@ public class HtsClientRequestDto {
     private final Long pregnant;
     private final Boolean breastFeeding;
     private final Long relationWithIndexClient;
-
     private String prepGiven;
+    private boolean prepOffered;
+    private boolean prepAccepted;
     private String otherDrugs;
     private String hivTestResult;
+    private String ConfirmatoryTest2;
 }

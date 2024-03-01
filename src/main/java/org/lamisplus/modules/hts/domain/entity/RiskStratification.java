@@ -13,6 +13,8 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
 import org.lamisplus.modules.base.domain.entities.Audit;
+import org.lamisplus.modules.hts.domain.dto.RiskStratificationDto;
+import org.lamisplus.modules.hts.domain.dto.RiskStratificationResponseDto;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -97,5 +99,30 @@ public class RiskStratification extends Audit implements Serializable {
         if(StringUtils.isEmpty(code)){
             code = UUID.randomUUID().toString();
         }
+    }
+
+    public static RiskStratification toRiskStratification(RiskStratificationResponseDto riskStratificationDTO, String personUuid) {
+        if ( riskStratificationDTO == null ) {
+            return null;
+        }
+
+        RiskStratification riskStratification = new RiskStratification();
+
+        riskStratification.setId(riskStratificationDTO.getId());
+        riskStratification.setAge( riskStratificationDTO.getAge() );
+        riskStratification.setPersonUuid(personUuid);
+        riskStratification.setTestingSetting( riskStratificationDTO.getTestingSetting() );
+        riskStratification.setModality( riskStratificationDTO.getModality() );
+        riskStratification.setCode( riskStratificationDTO.getCode() );
+        riskStratification.setTargetGroup( riskStratificationDTO.getTargetGroup() );
+        riskStratification.setVisitDate( riskStratificationDTO.getVisitDate() );
+        riskStratification.setDob(riskStratificationDTO.getDob());
+        riskStratification.setRiskAssessment( riskStratificationDTO.getRiskAssessment() );
+        riskStratification.setCommunityEntryPoint( riskStratificationDTO.getCommunityEntryPoint() );
+
+        riskStratification.setEntryPoint( riskStratificationDTO.getEntryPoint());
+
+
+        return riskStratification;
     }
 }

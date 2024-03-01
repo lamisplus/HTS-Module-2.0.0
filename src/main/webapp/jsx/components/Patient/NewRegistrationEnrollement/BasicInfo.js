@@ -91,7 +91,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const BasicInfo = (props) => {
-  console.log("#############",props);
+  console.log("#############",props.patientObj);
   const classes = useStyles();
   const history = useHistory();
   //console.log("enr", props.activePage.activeObject);
@@ -681,7 +681,7 @@ const BasicInfo = (props) => {
                         <option value={""}></option>
 
                         {pregnancyStatus.map((value) => (
-                            (props.modality === "TEST_SETTING_CT_PMTCT" && value.code === "PREGANACY_STATUS_NOT_PREGNANT") ? (
+                            ((props.patientObj.riskStratificationResponseDto.modality === "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" || props.patientObj.riskStratificationResponseDto.testingSetting==="TEST_SETTING_CPMTCT")  && value.code === "PREGANACY_STATUS_NOT_PREGNANT") ? (
                                 <></>
                             ) : (
                                 <option key={value.id} value={value.id}>

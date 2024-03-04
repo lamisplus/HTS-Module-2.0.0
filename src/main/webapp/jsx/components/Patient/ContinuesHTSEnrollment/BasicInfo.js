@@ -167,8 +167,8 @@ const BasicInfo = (props) => {
         : "",
     testingSetting: props.patientObj ? props.patientObj.testingSetting : "",
     typeCounseling: props.patientObj ? props.patientObj.typeCounseling : "",
-    relationshipWithIndexClient: props.patientObj
-      ? props.patientObj.relationshipWithIndexClient
+    relationWithIndexClient: props.patientObj
+      ? props.patientObj.relationWithIndexClient
       : "",
     indexClientCode: "",
   });
@@ -457,7 +457,7 @@ const BasicInfo = (props) => {
       breastFeeding: objValues.breastFeeding,
       pregnant: objValues.pregnant,
       indexClientCode: objValues.indexClientCode,
-      relationshipWithIndexClient: objValues.relationshipWithIndexClient,
+      relationWithIndexClient: objValues.relationWithIndexClient,
       riskStratificationCode:
         props.extra && props.extra.code !== "" ? props.extra.code : "",
     };
@@ -797,9 +797,9 @@ const BasicInfo = (props) => {
                       <Label>Relationship of the index client</Label>
                       <select
                         className="form-control"
-                        name="relationshipWithIndexClient"
-                        id="relationshipWithIndexClient"
-                        value={objValues.relationshipWithIndexClient}
+                        name="relationWithIndexClient"
+                        id="relationWithIndexClient"
+                        value={objValues.relationWithIndexClient}
                         onChange={handleInputChange}
                         style={{
                           border: "1px solid #014D88",

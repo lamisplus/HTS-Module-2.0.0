@@ -145,7 +145,7 @@ const BasicInfo = (props) => {
     targetGroup: "",
     testingSetting: "",
     typeCounseling: "",
-    relationshipWithIndexClient:
+    relationWithIndexClient:
       props.activePage?.activeObject?.relationWithIndexClient,
     indexClientCode: "",
   });
@@ -320,7 +320,7 @@ const BasicInfo = (props) => {
         breastFeeding: objValues.breastFeeding,
         indexClientCode: objValues.indexClientCode,
         pregnant: objValues.pregnant,
-        relationWithIndexClient: objValues.relationshipWithIndexClient,
+        relationWithIndexClient: objValues.relationWithIndexClient,
       };
 
       if (validate()) {
@@ -622,9 +622,9 @@ const BasicInfo = (props) => {
                         <Label>Relationship of the index client</Label>
                         <select
                           className="form-control"
-                          name="relationshipWithIndexClient"
-                          id="relationshipWithIndexClient"
-                          value={objValues.relationshipWithIndexClient}
+                          name="relationWithIndexClient"
+                          id="relationWithIndexClient"
+                          value={objValues.relationWithIndexClient}
                           onChange={handleInputChange}
                           style={{
                             border: "1px solid #014D88",

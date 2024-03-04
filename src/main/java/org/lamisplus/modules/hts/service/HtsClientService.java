@@ -421,6 +421,7 @@ public class HtsClientService {
         htsClientDto.setNumWives( htsClient.getNumWives() );
         htsClientDto.setTypeCounseling( htsClient.getTypeCounseling() );
         htsClientDto.setIndexClient( htsClient.getIndexClient() );
+        htsClientDto.setIndexClientCode( htsClient.getIndexClientCode() );
         htsClientDto.setPreviouslyTested( htsClient.getPreviouslyTested() );
         PersonResponseDto personResponseDto = personService.getDtoFromPerson(htsClient.getPerson());
         htsClientDto.setPersonResponseDto(personResponseDto);

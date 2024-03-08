@@ -748,6 +748,25 @@ const Recency = (props) => {
                         </div>
                         <div className="form-group  col-md-4">
                           <FormGroup>
+                            <Label>Recency Viral Load Result Received Date</Label>
+                            <Input
+                                className="form-control"
+                                name="receivedResultDate"
+                                id="receivedResultDate"
+                                type="date"
+                                min={recency.optOutRTRITestDate}
+                                max={moment(new Date()).format("YYYY-MM-DD")}
+                                value={recency.receivedResultDate}
+                                onChange={handleInputChangeRecency}
+                                style={{
+                                  border: "1px solid #014D88",
+                                  borderRadius: "0.2rem",
+                                }}
+                            />
+                          </FormGroup>
+                        </div>
+                        <div className="form-group  col-md-4">
+                          <FormGroup>
                             <Label>
                             Recency Viral Load Result Classification and Result
                               (copies/ml)

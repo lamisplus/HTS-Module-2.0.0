@@ -14,4 +14,6 @@ public interface IndexElicitationRepository extends JpaRepository<IndexElicitati
     Optional<IndexElicitation> findByIdAndArchived(Long id, int archived);
 
     Optional<IndexElicitation> findByIdAndArchivedAndFacilityId(Long id, int archived, Long facilityId);
+
+    Optional<IndexElicitation> findByUuid(String uuid);
 }

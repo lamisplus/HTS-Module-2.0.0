@@ -56,7 +56,7 @@ public class HtsClientDto {
     private  Object stiScreening;
     private Object sexPartnerRiskAssessment;
 
-    //Request & Result Form
+    //Request & Result Form[
     private  Object test1;
     private  Object confirmatoryTest;
     private  Object tieBreakerTest;

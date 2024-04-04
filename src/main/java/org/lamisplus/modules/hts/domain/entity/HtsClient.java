@@ -293,4 +293,8 @@ public class HtsClient extends Audit implements Serializable {
 
     @Column(name = "other_drugs")
     private String otherDrugs;
+
+    private String offeredPns;
+
+    private String acceptedPns;
 }

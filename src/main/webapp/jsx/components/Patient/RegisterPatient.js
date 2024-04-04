@@ -328,54 +328,54 @@ const UserRegistration = (props) => {
                       )}
                     </span>
                   </Menu.Item>
-                  {/* <Menu.Item*/}
-                  {/*  name="inbox"*/}
-                  {/*  active={activeItem === "refferal"}*/}
-                  {/*  onClick={() => handleItemClick("refferal")}*/}
-                  {/*  style={{*/}
-                  {/*    backgroundColor: activeItem === "refferal" ? "#000" : "",*/}
-                  {/*  }}*/}
-                  {/*>*/}
-                  {/*  <span style={{ color: "#fff" }}>*/}
-                  {/*    {" "}*/}
-                  {/*    Client Refferral Form*/}
-                  {/*    {completed.includes("risk") && (*/}
-                  {/*      <Icon name="check" color="green" />*/}
-                  {/*    )}*/}
-                  {/*  </span>*/}
-                  {/*</Menu.Item>*/}
-                  {/*<Menu.Item*/}
-                  {/*    name="inbox"*/}
-                  {/*    active={activeItem === "fit"}*/}
-                  {/*    onClick={() => handleItemClick("fit")}*/}
-                  {/*    style={{*/}
-                  {/*      backgroundColor: activeItem === "fit" ? "#000" : "",*/}
-                  {/*    }}*/}
-                  {/*>*/}
-                  {/*  <span style={{ color: "#fff" }}>*/}
-                  {/*    {" "}*/}
-                  {/*     Family Index Testing form*/}
-                  {/*    {completed.includes("fit") && (*/}
-                  {/*        <Icon name="check" color="green" />*/}
-                  {/*    )}*/}
-                  {/*  </span>*/}
-                  {/*</Menu.Item>*/}
-                  {/*<Menu.Item*/}
-                  {/*    name="inbox"*/}
-                  {/*    active={activeItem === "pns"}*/}
-                  {/*    onClick={() => handleItemClick("pns")}*/}
-                  {/*    style={{*/}
-                  {/*      backgroundColor: activeItem === "pns" ? "#000" : "",*/}
-                  {/*    }}*/}
-                  {/*>*/}
-                  {/*  <span style={{ color: "#fff" }}>*/}
-                  {/*    {" "}*/}
-                  {/*    Partner Notification Services*/}
-                  {/*    {completed.includes("pns") && (*/}
-                  {/*        <Icon name="check" color="green" />*/}
-                  {/*    )}*/}
-                  {/*  </span>*/}
-                  {/*</Menu.Item>*/}
+                   <Menu.Item
+                    name="inbox"
+                    active={activeItem === "refferal"}
+                    onClick={() => handleItemClick("refferal")}
+                    style={{
+                      backgroundColor: activeItem === "refferal" ? "#000" : "",
+                    }}
+                  >
+                    <span style={{ color: "#fff" }}>
+                      {" "}
+                      Client Refferral Form
+                      {completed.includes("risk") && (
+                        <Icon name="check" color="green" />
+                      )}
+                    </span>
+                  </Menu.Item>
+                  <Menu.Item
+                      name="inbox"
+                      active={activeItem === "fit"}
+                      onClick={() => handleItemClick("fit")}
+                      style={{
+                        backgroundColor: activeItem === "fit" ? "#000" : "",
+                      }}
+                  >
+                    <span style={{ color: "#fff" }}>
+                      {" "}
+                       Family Index Testing form
+                      {completed.includes("fit") && (
+                          <Icon name="check" color="green" />
+                      )}
+                    </span>
+                  </Menu.Item>
+                  <Menu.Item
+                      name="inbox"
+                      active={activeItem === "pns"}
+                      onClick={() => handleItemClick("pns")}
+                      style={{
+                        backgroundColor: activeItem === "pns" ? "#000" : "",
+                      }}
+                  >
+                    <span style={{ color: "#fff" }}>
+                      {" "}
+                      Partner Notification Services
+                      {completed.includes("pns") && (
+                          <Icon name="check" color="green" />
+                      )}
+                    </span>
+                  </Menu.Item>
                   {hideOtherMenu == false && (
                     <>
                       <Menu.Item

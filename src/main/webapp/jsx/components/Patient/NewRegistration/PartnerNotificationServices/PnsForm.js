@@ -102,7 +102,8 @@ const PnsForm = (props) => {
     const [elicitedCount, setElicitedCount] = useState(0);
     const [setting, setSetting] = useState([]);
     const [isClientCurrentlyOnHiv, setIsClientCurrentlyOnHiv] = useState(true);
-
+    const [maritalStatus, setMaritalStatus] = useState([]);
+ const [roleProvider, setRoleProvider] = useState([])
 
     let temp = { ...errors };
     const [objValuesIndex, setObjValuesIndex] = useState({
@@ -136,7 +137,7 @@ const PnsForm = (props) => {
         facilityName: "",
         testingSetting: "",
         providerRoleCompletingForm: "",
-        maritalStatusId: "",
+        maritalStatus: "",
         dateIndexClientConfirmedHiv: "",
         hivTreatment: "",
         treatmentDateInitiation: "",
@@ -169,6 +170,8 @@ const PnsForm = (props) => {
         NotificationContact();
         IndexTesting();
         Consent();
+        getMaritalStatus();
+        PROVIDER_ROLE();
         if (props.patientObj) {
             if (props.patientObj.dateVisit && props.patientObj.dateVisit !== "") {
                 setHivTestDate(props.patientObj.dateVisit);
@@ -194,6 +197,32 @@ const PnsForm = (props) => {
             .catch((error) => {
             });
     };
+
+    console.log("objValues", objValues)
+
+    const getMaritalStatus = () => {
+        axios
+            .get(`${baseUrl}application-codesets/v2/MARITAL_STATUS`, {
+                headers: { Authorization: `Bearer ${token}` },
+            })
+            .then((response) => {
+                setMaritalStatus(response.data);
+            })
+            .catch((error) => {
+            });
+    };
+
+    const PROVIDER_ROLE = () => {
+        axios
+            .get(`${baseUrl}application-codesets/v2/PROVIDER_ROLE`, {
+                headers: { Authorization: `Bearer ${token}` },
+            })
+            .then((response) => {
+                setRoleProvider(response.data);
+            })
+            .catch((error) => {
+            });
+    }
 
     function getStateByCountryId(getCountryId) {
         axios
@@ -469,18 +498,18 @@ const PnsForm = (props) => {
                 <CardBody>
                     <h2 style={{ color: "#000" }}>
                         Partner Notification Services
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            className=" float-end  mr-2 mt-2"
-                            onClick={() => handleItemClickPage("list")}
-                        //startIcon={<FaUserPlus size="10"/>}
-                        >
-                            <span style={{ textTransform: "capitalize" }}>
-                                {" "}
-                                Back To Client List
-                            </span>
-                        </Button>
+                        {/*<Button*/}
+                        {/*    variant="contained"*/}
+                        {/*    color="primary"*/}
+                        {/*    className=" float-end  mr-2 mt-2"*/}
+                        {/*    onClick={() => handleItemClickPage("list")}*/}
+                        {/*//startIcon={<FaUserPlus size="10"/>}*/}
+                        {/*>*/}
+                        {/*    <span style={{ textTransform: "capitalize" }}>*/}
+                        {/*        {" "}*/}
+                        {/*        Back To Client List*/}
+                        {/*    </span>*/}
+                        {/*</Button>*/}
                     </h2>
 
                     <br />
@@ -752,7 +781,7 @@ const PnsForm = (props) => {
                                                     // disabled={props.activePage.actionType === "view"}
                                                 >
                                                     <option value={""}></option>
-                                                    {setting.map((value) => (
+                                                    {roleProvider.map((value) => (
                                                         <option key={value.id} value={value.code}>
                                                             {value.display}
                                                         </option>
@@ -926,7 +955,7 @@ const PnsForm = (props) => {
                                         <div className="form-group  col-md-4">
                                             <FormGroup>
                                                 <Label>
-                                                    Marital Status <span style={{color: "red"}}> *</span>
+                                                    Marital Status <span style={{color: "red"}}> </span>
                                                 </Label>
                                                 <select
                                                     className="form-control"
@@ -941,7 +970,7 @@ const PnsForm = (props) => {
                                                     // disabled={props.activePage.actionType === "view"}
                                                 >
                                                     <option value={""}></option>
-                                                    {setting.map((value) => (
+                                                    {maritalStatus.map((value) => (
                                                         <option key={value.id} value={value.code}>
                                                             {value.display}
                                                         </option>
@@ -1037,8 +1066,8 @@ const PnsForm = (props) => {
                                                 </Label>
                                                 <Input
                                                     type="date"
-                                                    name="dateIndexClientConfrimedHiv"
-                                                    id="dateIndexClientConfrimedHiv"
+                                                    name="dateIndexClientConfirmedHiv"
+                                                    id="dateIndexClientConfirmedHiv"
                                                     value={objValues.dateIndexClientConfirmedHiv}
                                                     onChange={handleInputChange}
                                                     min="1929-12-31"
@@ -1083,7 +1112,7 @@ const PnsForm = (props) => {
 
                                             </FormGroup>
                                         </div>
-                                        {isClientCurrentlyOnHiv && (
+                                        {objValues.hivTreatment && objValues.hivTreatment === "Yes" && (
                                             <div className="form-group mb-3 col-md-4">
                                                 <FormGroup>
                                                     <Label for="">
@@ -1092,7 +1121,7 @@ const PnsForm = (props) => {
                                                     </Label>
                                                     <Input
                                                         type="date"
-                                                        name="treatDateInititial"
+                                                        name="treatmentDateInitiation"
                                                         id="treatmentDateInitiation"
                                                         value={objValues.treatmentDateInitiation}
                                                         onChange={handleInputChange}
@@ -1151,6 +1180,7 @@ const PnsForm = (props) => {
                                                         border: "1px solid #014D88",
                                                         borderRadius: "0.25rem",
                                                     }}
+                                                    disable
                                                 />
                                             </FormGroup>
                                         </div>
@@ -1172,7 +1202,7 @@ const PnsForm = (props) => {
                                         </div>
                                         <div className="form-group  col-md-4">
                                             <FormGroup>
-                                                <Label>Notification Method selected*</Label>
+                                                <Label>Notification Method selected </Label>
                                                 <select
                                                     className="form-control"
                                                     name="notificationMethod"
@@ -1208,7 +1238,7 @@ const PnsForm = (props) => {
                                                         border: "1px solid #014D88",
                                                         borderRadius: "0.25rem",
                                                     }}
-                                                    disabled
+                                                    // disabled
                                                 />
                                             </FormGroup>
                                         </div>

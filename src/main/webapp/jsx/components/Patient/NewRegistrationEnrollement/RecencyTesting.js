@@ -767,6 +767,7 @@ const Recency = (props) => {
                                 value={recency.viralLoadConfirmationResult}
                                 onChange={handleInputChangeRecency}
                                 style={{border: "1px solid #014D88", borderRadius: "0.2rem"}}
+                                disabled={props.activePage.actionType === "view"}
                             />
 
                           </FormGroup>

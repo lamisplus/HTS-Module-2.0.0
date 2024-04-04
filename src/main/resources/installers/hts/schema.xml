@@ -255,6 +255,49 @@
         <sqlFile path="installers/hts/facility_short_code.sql" splitStatements="false"/>
     </changeSet>
 
+    <changeSet failOnError="false" author="Dikum" id="hts-26022024">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*)
+                FROM pg_attribute
+                WHERE attrelid = (SELECT oid FROM pg_class WHERE relname = 'hts_client')
+                AND attname = 'source';
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            ALTER TABLE IF EXISTS hts_client ADD COLUMN source character varying;
+        </sql>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Dikum" id="hts-risk-26022024">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*)
+                FROM pg_attribute
+                WHERE attrelid = (SELECT oid FROM pg_class WHERE relname = 'hts_risk_stratification')
+                AND attname = 'source';
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            ALTER TABLE IF EXISTS hts_risk_stratification ADD COLUMN source character varying;
+        </sql>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Dikum" id="hts-index-26022024">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*)
+                FROM pg_attribute
+                WHERE attrelid = (SELECT oid FROM pg_class WHERE relname = 'hts_index_elicitation')
+                AND attname = 'source';
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            ALTER TABLE IF EXISTS hts_index_elicitation ADD COLUMN source character varying;
+        </sql>
+    </changeSet>
+
+
 
     <changeSet failOnError="true" author="Taiwo Gboyegun" id="hts-pns">
         <preConditions onFail="MARK_RAN">

@@ -12,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
+import org.hibernate.annotations.Where;
 import org.lamisplus.modules.base.domain.entities.Audit;
 
 import javax.persistence.*;
@@ -22,7 +23,8 @@ import java.util.UUID;
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = false)
-@Table(name = "personal_notification_service")
+@Table(name = "hts_pns_index_client_partner")
+@Where(clause = "archived = 0")
 @TypeDefs({
         @TypeDef(name = "string-array", typeClass = StringArrayType.class),
         @TypeDef(name = "int-array", typeClass = IntArrayType.class),
@@ -39,11 +41,11 @@ public class PersonalNotificationService extends Audit implements Serializable {
     private Long id;
 
     @Basic
-    @Column(name = "offered_ins")
+    @Column(name = "offered_pns")
     private String offeredPns;
 
     @Basic
-    @Column(name = "accepted_ins")
+    @Column(name = "accepted_pns")
     private String acceptedPns;
 
     @Basic
@@ -58,6 +60,14 @@ public class PersonalNotificationService extends Audit implements Serializable {
     private Long facilityId;
 
     @Basic
+    @Column(name = "phone_number")
+    private String phoneNumber;
+
+    @Basic
+    @Column(name = "alternate_phone_number")
+    private String alternatePhoneNumber;
+
+    @Basic
     @Column(name ="last_name")
     private String lastName;
     @Basic
@@ -66,10 +76,6 @@ public class PersonalNotificationService extends Audit implements Serializable {
     @Basic
     @Column(name ="middle_name")
     private String middleName;
-
-    @Basic
-    @Column(name ="hiv_treatment")
-    private String hivTreatment;
 
     @Basic
     @Column(name = "uuid", updatable = false)
@@ -91,10 +97,6 @@ public class PersonalNotificationService extends Audit implements Serializable {
     @Column(name = "address")
     private String address;
 
-    @Basic
-    @Column(name = "phone_number")
-    private String phoneNumber;
-
     @Type(type = "jsonb")
     @Basic(fetch = FetchType.LAZY)
     @Column(name = "contact_tracing", columnDefinition = "jsonb")
@@ -111,7 +113,7 @@ public class PersonalNotificationService extends Audit implements Serializable {
 
     @Basic
     @Column(name ="known_hiv_positive")
-    private Boolean knownHivPositive;
+    private String knownHivPositive;
 
     @Basic
     @Column(name ="date_partner_tested")
@@ -141,8 +143,8 @@ public class PersonalNotificationService extends Audit implements Serializable {
 
     @Type(type = "jsonb")
     @Basic(fetch = FetchType.LAZY)
-    @Column(name = "extra", columnDefinition = "jsonb")
-    private Object extra;
+    @Column(name = "hts_client_information", columnDefinition = "jsonb")
+    private Object htsClientInformation;
 
     @PrePersist
     public void setFields(){

@@ -22,20 +22,19 @@ public class PersonalNotificationServiceRequestDTO {
     private String lastName;
     private String firstName;
     private String middleName;
-    private String hivTreatment;
     private String notificationMethod;
     private String sex;
     private String address;
     private String phoneNumber;
+    private String alternatePhoneNumber;
     private Object contactTracing;
     private Object intermediatePartnerViolence;
     private String relationshipToIndexClient;
-    private Boolean knownHivPositive;
+    private String knownHivPositive;
     private LocalDate datePartnerTested;
-
     private String hivTestResult;
     private String acceptedHts;
-
+    private Object htsClientInformation;
     private LocalDate dateEnrollmentOnART;
 
 }

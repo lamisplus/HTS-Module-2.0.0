@@ -6,11 +6,9 @@ import org.lamisplus.modules.base.controller.apierror.EntityNotFoundException;
 import org.lamisplus.modules.hts.domain.dto.PersonalNotificationServiceRequestDTO;
 import org.lamisplus.modules.hts.domain.dto.PersonalNotificationServiceResponseDTO;
 import org.lamisplus.modules.hts.domain.entity.HtsClient;
-import org.lamisplus.modules.hts.domain.entity.IndexElicitation;
 import org.lamisplus.modules.hts.domain.entity.PersonalNotificationService;
 import org.lamisplus.modules.hts.repository.HtsClientRepository;
 import org.lamisplus.modules.hts.repository.PersonalNotificationServiceRepository;
-import org.lamisplus.modules.patient.domain.entity.Person;
 import org.lamisplus.modules.patient.service.PersonService;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +21,7 @@ import static org.lamisplus.modules.base.util.Constants.ArchiveStatus.UN_ARCHIVE
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class PNSServiceImplementation {
+public class PNSService {
 
     private final HtsClientRepository htsClientRepository;
     private final PersonalNotificationServiceRepository personalNotificationServiceRepository;
@@ -43,7 +41,7 @@ public class PNSServiceImplementation {
         htsClientRepository.save(htsClient);
         PersonalNotificationService res = this.convertPnsRequestToEntity(req);
         res.setHtsClientUuid(htsClient.getUuid());
-        res.setFacilityId(facilityId);
+//        res.setFacilityId(facilityId);
 
         PersonalNotificationService personalNotificationService = personalNotificationServiceRepository.save(res);
         return convertPnsToResponseDto(htsClient, personalNotificationService);

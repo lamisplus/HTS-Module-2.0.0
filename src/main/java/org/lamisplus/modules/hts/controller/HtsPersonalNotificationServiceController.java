@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.lamisplus.modules.hts.domain.dto.PersonalNotificationServiceRequestDTO;
 import org.lamisplus.modules.hts.domain.dto.PersonalNotificationServiceResponseDTO;
-import org.lamisplus.modules.hts.service.PNSServiceImplementation;
+import org.lamisplus.modules.hts.service.PNSService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,10 +15,10 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/hts-personal-notification-service")
-public class PersonalNotificationServiceController {
+public class HtsPersonalNotificationServiceController {
 
 
-     private final PNSServiceImplementation pnsServiceImplementation;
+     private final PNSService pnsServiceImplementation;
 
     @PostMapping
     public ResponseEntity<PersonalNotificationServiceResponseDTO> save(@Valid @RequestBody PersonalNotificationServiceRequestDTO req) {

@@ -1,0 +1,96 @@
+package org.lamisplus.modules.hts.controller;
+
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.lamisplus.modules.hts.domain.dto.*;
+import org.lamisplus.modules.hts.domain.entity.FamilyIndex;
+import org.lamisplus.modules.hts.domain.entity.FamilyTestingTracker;
+import org.lamisplus.modules.hts.service.FamilyIndexTestingService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.List;
+
+import static org.lamisplus.modules.base.util.Constants.ArchiveStatus.UN_ARCHIVED;
+
+
+@RestController
+@Slf4j
+@RequiredArgsConstructor
+@RequestMapping("/api/v1/hts-family-index-testing")
+public class HtsFamilyIndexTestingController {
+
+   private final FamilyIndexTestingService familyIndexTestingService;
+
+    @PostMapping
+    public ResponseEntity<FamilyIndexTestingResponseDTO> save(@Valid @RequestBody FamilyIndexTestingRequestDTO familyIndexTestingDTO) {
+        return ResponseEntity.ok(this.familyIndexTestingService.save(familyIndexTestingDTO));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<FamilyIndexTestingResponseDTO> getFamilyIndexTestingById(@PathVariable Long id) {
+        return ResponseEntity.ok(this.familyIndexTestingService.getFamilyIndexTestingById(id));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<FamilyIndexTestingResponseDTO> update(@PathVariable Long id, @Valid @RequestBody FamilyIndexTestingRequestDTO familyIndexTestingRequestDTO) {
+        return ResponseEntity.ok(this.familyIndexTestingService.update(id, familyIndexTestingRequestDTO));
+    }
+
+    @GetMapping("/{id}/hts-client")
+    public ResponseEntity<List<FamilyIndexTestingResponseDTO>> getAllFamilyIndexTestingByHtsClientId(@PathVariable Long id) {
+        return ResponseEntity.ok(this.familyIndexTestingService.getAllFamilyIndexTestingByHtsClient(id));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteFamilyIndexTesting(@PathVariable Long id) {
+        return ResponseEntity.ok(this.familyIndexTestingService.deleteFamilyIndexTestingById(id));
+    }
+
+    @GetMapping("/family-index")
+    public ResponseEntity<List<FamilyIndexResponseDTO>> getAllFamilyIndicesByFamilyIndexTestingUuid(@RequestParam String familyIndexTestingUuid) {
+        List<FamilyIndexResponseDTO> familyIndices = familyIndexTestingService.getFamilyIndexByFamilyIndexTestingUuid(familyIndexTestingUuid);
+        return ResponseEntity.ok(familyIndices);
+    }
+
+    @PutMapping("/family-index/{id}")
+    public ResponseEntity<FamilyIndex> updateFamilyIndex(@PathVariable Long id, @Valid @RequestBody FamilyIndexRequestDto familyIndexRequestDto) {
+        return ResponseEntity.ok(this.familyIndexTestingService.updateFamilyIndex(id, familyIndexRequestDto));
+    }
+
+    //  get familyIndex by id
+    @GetMapping("/family-index/{id}")
+    public ResponseEntity<FamilyIndexResponseDTO> getFamilyIndexById(@PathVariable Long id) {
+        return ResponseEntity.ok(this.familyIndexTestingService.getFamilyIndexById(id));
+    }
+
+    @DeleteMapping
+    public ResponseEntity<?> deleteFamilyIndex(@RequestParam Long id) {
+        return ResponseEntity.ok(this.familyIndexTestingService.deleteFamilyIndex(id));
+    }
+
+    @GetMapping("/family-index-tracker/{id}")
+    public ResponseEntity<FamilyTestingTrackerResponseDTO> getFamilyTestingTrackerById(@PathVariable Long id) {
+        return ResponseEntity.ok(this.familyIndexTestingService.getFamilyTestingTrackerById(id));
+    }
+
+    @PutMapping("/family-index-tracker/{id}")
+    public ResponseEntity<FamilyTestingTrackerResponseDTO> updateFamilyTestingTracker(@PathVariable Long id, @Valid @RequestBody FamilyTestingTrackerResponseDTO familyTestingTrackerResponseDTO) {
+        return ResponseEntity.ok(this.familyIndexTestingService.updateFamilyTracker(id, familyTestingTrackerResponseDTO));
+    }
+
+    @DeleteMapping("/family-index-tracker/{id}")
+    public ResponseEntity<?> deleteFamilyTestingTracker(@PathVariable Long id) {
+        return ResponseEntity.ok(this.familyIndexTestingService.deleteFamilyTracker(id));
+    }
+
+    @GetMapping("/family-index-tracker/by-family-index-testing-uuid")
+    public ResponseEntity<List<FamilyTestingTrackerResponseDTO>> getAllFamilyTestingTrackerByFamilyIndexTestingUuid(@RequestParam String familyIndexTestingUuid) {
+        List<FamilyTestingTrackerResponseDTO> familyTestingTrackerResponseDTO = familyIndexTestingService.getFamilyTestingTrackerByFamilyIndexTestingUuid(familyIndexTestingUuid);
+        return ResponseEntity.ok(familyTestingTrackerResponseDTO);
+    }
+
+
+}

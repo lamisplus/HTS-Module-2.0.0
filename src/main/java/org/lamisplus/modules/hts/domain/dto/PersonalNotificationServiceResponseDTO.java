@@ -2,6 +2,7 @@ package org.lamisplus.modules.hts.domain.dto;
 
 
 import lombok.*;
+import org.lamisplus.modules.patient.domain.dto.PersonResponseDto;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -24,19 +25,22 @@ public class PersonalNotificationServiceResponseDTO {
     private String lastName;
     private String firstName;
     private String middleName;
-    private String hivTreatment;
     private String uuid;
     private String htsClientUuid;
     private String notificationMethod;
     private String sex;
     private String address;
     private String phoneNumber;
+    private  String alternatePhoneNumber;
     private Object contactTracing;
     private Object intermediatePartnerViolence;
     private String relationshipToIndexClient;
-    private Boolean knownHivPositive;
+    private String knownHivPositive;
     private LocalDate datePartnerTested;
     private String hivTestResult;
     private String acceptedHts;
     private LocalDate dateEnrollmentOnART;
+    private Object htsClientInformation;
+
+    private PersonResponseDto personResponseDto;
 }

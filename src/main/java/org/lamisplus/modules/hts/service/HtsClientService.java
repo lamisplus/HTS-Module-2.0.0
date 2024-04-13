@@ -245,7 +245,7 @@ public class HtsClientService {
         htsClient.setTypeCounseling( htsClientRequestDto.getTypeCounseling() );
         htsClient.setIndexClient( htsClientRequestDto.getIndexClient() );
         htsClient.setIndexClientCode( htsClientRequestDto.getIndexClientCode());
-        htsClient.setPreviouslyTested( htsClientRequestDto.getPreviouslyTested() );
+        htsClient.setPreviouslyTested( htsClientRequestDto.getPreviouslyTested());
         htsClient.setExtra( htsClientRequestDto.getExtra() );
         htsClient.setPersonUuid( personUuid);
         htsClient.setPregnant(htsClientRequestDto.getPregnant());

@@ -202,7 +202,7 @@ const PostTest = (props) => {
         if (postTest.hivTestResult === "true") {
           handleItemClick("recency-testing", "post-test");
         } else if (postTest.hivTestResult === "false") {
-          history.push("/");
+          // history.push("/");
         }
       })
       .catch((error) => {

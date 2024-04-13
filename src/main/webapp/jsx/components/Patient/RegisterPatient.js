@@ -22,7 +22,6 @@ import RiskStratification from "./NewRegistration/RiskStratification";
 import ClientRefferalForm from "./NewRegistration/RefferalForm";
 import { getAcount } from "../../../utility";
 
-
 import FamilyIndexTestingForm from "./NewRegistration/FamilyIndexTestingForm";
 import PnsForm from "./NewRegistration/PartnerNotificationServices/PnsForm";
 
@@ -44,6 +43,8 @@ const UserRegistration = (props) => {
   const [saving, setSaving] = useState(false);
   const [activeItem, setactiveItem] = useState("risk");
   const [completed, setCompleted] = useState([]);
+  const [basicInfo, setBasicInfo] = useState({});
+  const [organizationInfo, setOrganizationInfo] = useState({});
 
   const [patientObjAge, setPatientObjAge] = useState(0);
   const [hideOtherMenu, setHideOtherMenu] = useState(true);
@@ -328,54 +329,6 @@ const UserRegistration = (props) => {
                       )}
                     </span>
                   </Menu.Item>
-                   <Menu.Item
-                    name="inbox"
-                    active={activeItem === "refferal"}
-                    onClick={() => handleItemClick("refferal")}
-                    style={{
-                      backgroundColor: activeItem === "refferal" ? "#000" : "",
-                    }}
-                  >
-                    <span style={{ color: "#fff" }}>
-                      {" "}
-                      Client Refferral Form
-                      {completed.includes("risk") && (
-                        <Icon name="check" color="green" />
-                      )}
-                    </span>
-                  </Menu.Item>
-                  <Menu.Item
-                      name="inbox"
-                      active={activeItem === "fit"}
-                      onClick={() => handleItemClick("fit")}
-                      style={{
-                        backgroundColor: activeItem === "fit" ? "#000" : "",
-                      }}
-                  >
-                    <span style={{ color: "#fff" }}>
-                      {" "}
-                       Family Index Testing form
-                      {completed.includes("fit") && (
-                          <Icon name="check" color="green" />
-                      )}
-                    </span>
-                  </Menu.Item>
-                  <Menu.Item
-                      name="inbox"
-                      active={activeItem === "pns"}
-                      onClick={() => handleItemClick("pns")}
-                      style={{
-                        backgroundColor: activeItem === "pns" ? "#000" : "",
-                      }}
-                  >
-                    <span style={{ color: "#fff" }}>
-                      {" "}
-                      Partner Notification Services
-                      {completed.includes("pns") && (
-                          <Icon name="check" color="green" />
-                      )}
-                    </span>
-                  </Menu.Item>
                   {hideOtherMenu == false && (
                     <>
                       <Menu.Item
@@ -495,7 +448,55 @@ const UserRegistration = (props) => {
                           )}
                         </span>
                       </Menu.Item>
-
+                      {/* <Menu.Item
+                        name="inbox"
+                        active={activeItem === "refferal"}
+                        onClick={() => handleItemClick("refferal")}
+                        style={{
+                          backgroundColor:
+                            activeItem === "refferal" ? "#000" : "",
+                        }}
+                      >
+                        <span style={{ color: "#fff" }}>
+                          {" "}
+                          Client Refferral Form
+                          {completed.includes("risk") && (
+                            <Icon name="check" color="green" />
+                          )}
+                        </span>
+                      </Menu.Item> */}
+                      <Menu.Item
+                        name="inbox"
+                        active={activeItem === "fit"}
+                        onClick={() => handleItemClick("fit")}
+                        style={{
+                          backgroundColor: activeItem === "fit" ? "#000" : "",
+                        }}
+                      >
+                        <span style={{ color: "#fff" }}>
+                          {" "}
+                          Family Index Testing form
+                          {completed.includes("fit") && (
+                            <Icon name="check" color="green" />
+                          )}
+                        </span>
+                      </Menu.Item>
+                      <Menu.Item
+                        name="inbox"
+                        active={activeItem === "pns"}
+                        onClick={() => handleItemClick("pns")}
+                        style={{
+                          backgroundColor: activeItem === "pns" ? "#000" : "",
+                        }}
+                      >
+                        <span style={{ color: "#fff" }}>
+                          {" "}
+                          Partner Notification Services
+                          {completed.includes("pns") && (
+                            <Icon name="check" color="green" />
+                          )}
+                        </span>
+                      </Menu.Item>
                     </>
                   )}
                 </Menu>
@@ -520,6 +521,7 @@ const UserRegistration = (props) => {
                     setHideOtherMenu={setHideOtherMenu}
                     setExtra={setExtra}
                     extra={extra}
+                    setOrganizationInfo={setOrganizationInfo}
                   />
                 )}
                 {activeItem === "basic" && (
@@ -532,6 +534,7 @@ const UserRegistration = (props) => {
                     setPatientObjAge={setPatientObjAge}
                     setExtra={setExtra}
                     extra={extra}
+                    setBasicInfo={setBasicInfo}
                   />
                 )}
                 {activeItem === "pre-test-counsel" && (
@@ -614,26 +617,28 @@ const UserRegistration = (props) => {
                   />
                 )}
                 {activeItem === "fit" && (
-                    <FamilyIndexTestingForm
-                        handleItemClick={handleItemClick}
-                        setCompleted={setCompleted}
-                        completed={completed}
-                        setPatientObj={setPatientObj}
-                        patientObj={patientObj}
-                        setExtra={setExtra}
-                        extra={extra}
-                    />
+                  <FamilyIndexTestingForm
+                    handleItemClick={handleItemClick}
+                    setCompleted={setCompleted}
+                    completed={completed}
+                    setPatientObj={setPatientObj}
+                    patientObj={patientObj}
+                    setExtra={setExtra}
+                    extra={extra}
+                  />
                 )}
                 {activeItem === "pns" && (
-                    <PnsForm
-                        handleItemClick={handleItemClick}
-                        setCompleted={setCompleted}
-                        completed={completed}
-                        setPatientObj={setPatientObj}
-                        patientObj={patientObj}
-                        setExtra={setExtra}
-                        extra={extra}
-                    />
+                  <PnsForm
+                    handleItemClick={handleItemClick}
+                    setCompleted={setCompleted}
+                    completed={completed}
+                    setPatientObj={setPatientObj}
+                    patientObj={patientObj}
+                    setExtra={setExtra}
+                    extra={extra}
+                    basicInfo={basicInfo}
+                    organizationInfo={organizationInfo}
+                  />
                 )}
               </div>
             </div>

@@ -301,55 +301,53 @@ const BasicInfo = (props) => {
   });
 
   const CreateClientCode = () => {
-      let facilityShortCode = '';
-      axios
-          .get(`${baseUrl}hts/get-facility-code`, {
-            headers: { Authorization: `Bearer ${token}` },
-          })
-          .then((response) => {
-            // console.log('Response Facility Short Code **** ', response.data);
-            setFacilityCode(response.data)
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+    let facilityShortCode = "";
+    axios
+      .get(`${baseUrl}hts/get-facility-code`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        // console.log('Response Facility Short Code **** ', response.data);
+        setFacilityCode(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
 
-      let visitDate = new Date(props.patientObj.dateVisit);
+    let visitDate = new Date(props.patientObj.dateVisit);
 
-      let modality = props.patientObj.modality;
-      let modalityCode = '';
-      if(modality?.includes('STI')) {
-        modalityCode = 'STI';
-      }else if (modality?.includes('EMERGENCY')) {
-        modalityCode = 'EME';
-      }else if (modality?.includes('INDEX')) {
-        modalityCode = 'IND';
-      }else if (modality?.includes('INPATIENT')) {
-        modalityCode = 'INP';
-      }else if (modality?.includes('PMTCT')) {
-        modalityCode = 'PMTCT';
-      }else if (modality?.includes('TB')) {
-        modalityCode = 'TB';
-      }else if (modality?.includes('VCT')) {
-        modalityCode = 'VCT';
-      }
-      else if (modality?.includes('MOBILE')) {
-        modalityCode = 'MOB';
-      }
-      else if (modality?.includes('SNS')) {
-        modalityCode = 'SNS';
-      }
-      else if (modality?.includes('OTHER')) {
-        modalityCode = 'OTH';
-      }
-
-      let month = visitDate.getMonth();
-      let year = visitDate.getFullYear();
-      let codeCreated = 'C' + facilityCode + '/' +modalityCode + '/' +month + '/' + year + '/';
-      setCreatedCode(codeCreated);
-      setObjValues({...objValues, clientCode: createdCode})
-      // console.log('Created Code **** ', createdCode);
+    let modality = props.patientObj.modality;
+    let modalityCode = "";
+    if (modality?.includes("STI")) {
+      modalityCode = "STI";
+    } else if (modality?.includes("EMERGENCY")) {
+      modalityCode = "EME";
+    } else if (modality?.includes("INDEX")) {
+      modalityCode = "IND";
+    } else if (modality?.includes("INPATIENT")) {
+      modalityCode = "INP";
+    } else if (modality?.includes("PMTCT")) {
+      modalityCode = "PMTCT";
+    } else if (modality?.includes("TB")) {
+      modalityCode = "TB";
+    } else if (modality?.includes("VCT")) {
+      modalityCode = "VCT";
+    } else if (modality?.includes("MOBILE")) {
+      modalityCode = "MOB";
+    } else if (modality?.includes("SNS")) {
+      modalityCode = "SNS";
+    } else if (modality?.includes("OTHER")) {
+      modalityCode = "OTH";
     }
+
+    let month = visitDate.getMonth();
+    let year = visitDate.getFullYear();
+    let codeCreated =
+      "C" + facilityCode + "/" + modalityCode + "/" + month + "/" + year + "/";
+    setCreatedCode(codeCreated);
+    setObjValues({ ...objValues, clientCode: createdCode });
+    // console.log('Created Code **** ', createdCode);
+  };
 
   useEffect(() => {
     KP();
@@ -599,13 +597,13 @@ const BasicInfo = (props) => {
   };
   //checkClientCode
   const checkClientCode = (e) => {
-     let code = '';
-        if(e.target.name === "serialNumber"){
-          code = createdCode + e.target.value;
-          setCreatedCode(code);
-          console.log("Code created is &&&& ", createdCode);
-          setObjValues({...objValues, clientCode: code})
-        }
+    let code = "";
+    if (e.target.name === "serialNumber") {
+      code = createdCode + e.target.value;
+      setCreatedCode(code);
+      console.log("Code created is &&&& ", createdCode);
+      setObjValues({ ...objValues, clientCode: code });
+    }
     async function getIndexClientCode() {
       const indexClientCode = objValues.clientCode;
       console.log(indexClientCode);
@@ -692,9 +690,7 @@ const BasicInfo = (props) => {
     temp.typeCounseling = objValues.typeCounseling
       ? ""
       : "This field is required.";
-    temp.testingx = objValues.testingSetting
-      ? ""
-      : "This field is required.";
+    temp.testingx = objValues.testingSetting ? "" : "This field is required.";
     temp.targetGroup = objValues.targetGroup ? "" : "This field is required.";
     temp.referredFrom = objValues.referredFrom ? "" : "This field is required.";
     temp.previouslyTested = objValues.previouslyTested
@@ -809,6 +805,8 @@ const BasicInfo = (props) => {
         .then((response) => {
           setSaving(false);
           props.setPatientObj(response.data);
+          props.setBasicInfo(response.data);
+
           //props.patientObj.personResponseDto=patientForm.personDto
           //props.setPatientObj({...patientObj, })
           //toast.success("HTS Test successful");
@@ -857,17 +855,17 @@ const BasicInfo = (props) => {
                       Serial Number <span style={{ color: "red" }}> *</span>
                     </Label>
                     <Input
-                        type="text"
-                        name="serialNumber"
-                        id="serialNumber"
-                        value={serialNumber}
-                        //value={Math.floor(Math.random() * 1093328)}
-                        onBlur={checkClientCode}
-                        onChange={handleInputChange}
-                        style={{
-                          border: "1px solid #014D88",
-                          borderRadius: "0.25rem",
-                        }}
+                      type="text"
+                      name="serialNumber"
+                      id="serialNumber"
+                      value={serialNumber}
+                      //value={Math.floor(Math.random() * 1093328)}
+                      onBlur={checkClientCode}
+                      onChange={handleInputChange}
+                      style={{
+                        border: "1px solid #014D88",
+                        borderRadius: "0.25rem",
+                      }}
                     />
                   </FormGroup>
                 </div>
@@ -1542,15 +1540,26 @@ const BasicInfo = (props) => {
                         }}
                       >
                         <option value={""}></option>
-                        {pregnancyStatus.map((value) => (
-                            ((props.patientObj.riskStratificationResponseDto.modality === "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" || props.patientObj.riskStratificationResponseDto.modality ==="TEST_SETTING_OTHERS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" || props.patientObj.riskStratificationResponseDto.testingSetting==="TEST_SETTING_CPMTCT" || props.patientObj.riskStratificationResponseDto.modality ==="TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)")  && value.code === "PREGANACY_STATUS_NOT_PREGNANT") ? (
-                                <></>
-                            ) : (
-                                <option key={value.id} value={value.id}>
-                                  {value.display}
-                                </option>
-                            )
-                        ))}
+                        {pregnancyStatus.map((value) =>
+                          (props.patientObj.riskStratificationResponseDto
+                            .modality ===
+                            "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||
+                            props.patientObj.riskStratificationResponseDto
+                              .modality ===
+                              "TEST_SETTING_OTHERS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
+                            props.patientObj.riskStratificationResponseDto
+                              .testingSetting === "TEST_SETTING_CPMTCT" ||
+                            props.patientObj.riskStratificationResponseDto
+                              .modality ===
+                              "TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)") &&
+                          value.code === "PREGANACY_STATUS_NOT_PREGNANT" ? (
+                            <></>
+                          ) : (
+                            <option key={value.id} value={value.id}>
+                              {value.display}
+                            </option>
+                          )
+                        )}
                       </select>
                     </FormGroup>
                   </div>

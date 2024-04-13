@@ -225,6 +225,8 @@ const BasicInfo = (props) => {
       .then((response) => {
         console.log(response.data);
         setTargetGroupValue(response.data);
+
+        props.setOrganizationInfo(response.data);
       })
       .catch((error) => {
         //console.log(error);
@@ -784,27 +786,23 @@ const BasicInfo = (props) => {
                       }}
                     >
                       <option value={""}>Select</option>
-                      {
-                        (objValues.communityEntryPoint==="HTS_ENTRY_POINT_COMMUNITY_CPMTCT" && objValues.entryPoint==="HTS_ENTRY_POINT_COMMUNITY")?
-                            enrollSetting.map((value) => (
-                                (value.code === "TEST_SETTING_CPMTCT") ? (
-                                    <option key={value.id} value={value.code}>
-                                      {value.display}
-                                    </option>
-                                ) : (
-                                    <></>
-
-                                )
-
-                            ))
-                            :
-                            enrollSetting.map((value) => (
-                                <option key={value.id} value={value.code}>
-                                  {value.display}
-                                </option>
-                            ))
-
-                      }
+                      {objValues.communityEntryPoint ===
+                        "HTS_ENTRY_POINT_COMMUNITY_CPMTCT" &&
+                      objValues.entryPoint === "HTS_ENTRY_POINT_COMMUNITY"
+                        ? enrollSetting.map((value) =>
+                            value.code === "TEST_SETTING_CPMTCT" ? (
+                              <option key={value.id} value={value.code}>
+                                {value.display}
+                              </option>
+                            ) : (
+                              <></>
+                            )
+                          )
+                        : enrollSetting.map((value) => (
+                            <option key={value.id} value={value.code}>
+                              {value.display}
+                            </option>
+                          ))}
                       {/* <option value="TEST_SETTING_CT">CT</option>
                                         <option value="TEST_SETTING_TB">TB</option>
                                         <option value="TEST_SETTING_STI">STI</option>

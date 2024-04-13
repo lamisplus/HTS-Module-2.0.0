@@ -88,7 +88,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const PnsForm = (props) => {
+const ViewPNSForm = (props) => {
   const classes = useStyles();
   const [saving, setSaving] = useState(false);
   const [sexs, setSexs] = useState([]);
@@ -229,16 +229,16 @@ const PnsForm = (props) => {
     numberOfPartnerIdentifiedFromClientIndex: "",
   });
 
-  const getPNSInfo = (id) => {
-    axios
-      .get(`${baseUrl}hts-personal-notification-service/${id}/hts-client`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((response) => {
-        setMaritalStatus(response.data);
-      })
-      .catch((error) => {});
-  };
+  //   const getPNSInfo = (id) => {
+  //     axios
+  //       .get(`${baseUrl}hts-personal-notification-service/${id}/hts-client`, {
+  //         headers: { Authorization: `Bearer ${token}` },
+  //       })
+  //       .then((response) => {
+  //         setMaritalStatus(response.data);
+  //       })
+  //       .catch((error) => {});
+  //   };
 
   const TargetGroupSetup = () => {
     axios
@@ -262,43 +262,44 @@ const PnsForm = (props) => {
     Consent();
     getMaritalStatus();
     PROVIDER_ROLE();
-    if (props.patientObj) {
-      if (props.patientObj.dateVisit && props.patientObj.dateVisit !== "") {
-        setHivTestDate(props.patientObj.dateVisit);
-      } else {
-        setHivTestDate("");
-      }
+    viewPnIsnfo();
+    // if (props.patientObj) {
+    //   if (props.patientObj.dateVisit && props.patientObj.dateVisit !== "") {
+    //     setHivTestDate(props.patientObj.dateVisit);
+    //   } else {
+    //     setHivTestDate("");
+    //   }
 
-      setObjValues({
-        ...objValues,
-        firstName: props.patientObj.personResponseDto.firstName,
-        middleName: props?.patientObj?.personResponseDto?.otherName,
-        lastName: props?.patientObj?.personResponseDto?.surname,
-        sex: props?.patientObj?.personResponseDto?.gender.id,
-        dob: props?.patientObj?.personResponseDto?.dateOfBirth,
-        phoneNumber:
-          props?.patientObj?.personResponseDto?.contactPoint?.contactPoint[0]
-            ?.value,
-      });
+    //   setObjValues({
+    //     ...objValues,
+    //     firstName: props.patientObj.personResponseDto.firstName,
+    //     middleName: props?.patientObj?.personResponseDto?.otherName,
+    //     lastName: props?.patientObj?.personResponseDto?.surname,
+    //     sex: props?.patientObj?.personResponseDto?.gender.id,
+    //     dob: props?.patientObj?.personResponseDto?.dateOfBirth,
+    //     phoneNumber:
+    //       props?.patientObj?.personResponseDto?.contactPoint?.contactPoint[0]
+    //         ?.value,
+    //   });
 
-      sethtsClientInformation({
-        ...htsClientInformation,
-        maritalStatus: props?.patientObj?.personResponseDto?.maritalStatus.id,
-        descriptiveResidentialAddress:
-          props?.patientObj?.personResponseDto?.address?.address[0].city,
-      });
+    //   sethtsClientInformation({
+    //     ...htsClientInformation,
+    //     maritalStatus: props?.patientObj?.personResponseDto?.maritalStatus.id,
+    //     descriptiveResidentialAddress:
+    //       props?.patientObj?.personResponseDto?.address?.address[0].city,
+    //   });
 
-      // phoneNumber:
+    // offeredPns: props.patientObj.personResponseDto.firstName
 
-      //
-      //
-      //
-      //
-      //
-      //
-      //
-      // })
-    }
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    // })
+    // }
 
     if (
       props?.basicInfo?.personResponseDto?.address?.address[0]?.stateId ||
@@ -459,13 +460,14 @@ const PnsForm = (props) => {
       });
   };
   //Get view pns info
-  const viewPnsInfo = () => {
+  const viewPnIsnfo = () => {
     axios
-      .get(`${baseUrl}hts-personal-notification-service/{id}`, {
+      .get(`${baseUrl}hts-personal-notification-service/${props.row.row.id}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        setIndexTesting(response.data);
+        setObjValues(response.data);
+        sethtsClientInformation(response.data.htsClientInformation);
       })
       .catch((error) => {
         //console.log(error);
@@ -616,24 +618,29 @@ const PnsForm = (props) => {
     e.preventDefault();
     objValues.htsClientInformation = htsClientInformation;
     objValues.contactTracing = contactTracing;
+    objValues.htsClientId =
+      props && props.patientObj ? props.patientObj?.id : "";
 
     if (validate()) {
       setSaving(true);
       objValues.isDateOfBirthEstimated =
         objValues.isDateOfBirthEstimated == true ? 1 : 0;
       axios
-        .post(`${baseUrl}hts-personal-notification-service`, objValues, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
+        .put(
+          `${baseUrl}hts-personal-notification-service/${props.row.row.id}`,
+          objValues,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        )
         .then((response) => {
           setSaving(false);
           toast.success("Record save successfully", {
             position: toast.POSITION.BOTTOM_CENTER,
           });
 
-          if (props?.addNewForm === false) {
-            handleItemClick("pns-history");
-          }
+          handleItemClick("pns-history");
+
           if (
             objValues.offeredPns !== "No" &&
             objValues.acceptedPns !== "No"
@@ -731,6 +738,7 @@ const PnsForm = (props) => {
                       border: "1px solid #014D88",
                       borderRadius: "0.2rem",
                     }}
+                    disabled={props.row.action === "view" ? true : false}
                   >
                     <option value={""}></option>
                     {consent.map((value) => (
@@ -762,6 +770,7 @@ const PnsForm = (props) => {
                         border: "1px solid #014D88",
                         borderRadius: "0.2rem",
                       }}
+                      disabled={props.row.action === "view" ? true : false}
                     >
                       <option value={""}></option>
                       {consent.map((value) => (
@@ -932,7 +941,7 @@ const PnsForm = (props) => {
                             border: "1px solid #014D88",
                             borderRadius: "0.2rem",
                           }}
-                          // disabled={props.activePage.actionType === "view"}
+                          disabled={props.row.action === "view" ? true : false}
                         >
                           <option value={""}></option>
                           {setting.map((value) => (
@@ -967,6 +976,7 @@ const PnsForm = (props) => {
                             border: "1px solid #014D88",
                             borderRadius: "0.25rem",
                           }}
+                          disabled={props.row.action === "view" ? true : false}
                         />
                       </FormGroup>
                     </div>
@@ -988,7 +998,7 @@ const PnsForm = (props) => {
                             border: "1px solid #014D88",
                             borderRadius: "0.2rem",
                           }}
-                          // disabled={props.activePage.actionType === "view"}
+                          disabled={props.row.action === "view" ? true : false}
                         >
                           <option value={""}></option>
                           {roleProvider.map((value) => (
@@ -1083,6 +1093,7 @@ const PnsForm = (props) => {
                             border: "1px solid #014D88",
                             borderRadius: "0.25rem",
                           }}
+                          disabled={props.row.action === "view" ? true : false}
                         />
                       </FormGroup>
                     </div>
@@ -1276,6 +1287,7 @@ const PnsForm = (props) => {
                       <FormGroup>
                         <Label for="">Alternative Phone Number</Label>
                         <PhoneInput
+                          disabled={props.row.action === "view" ? true : false}
                           containerStyle={{
                             width: "100%",
                             border: "1px solid #014D88",
@@ -1335,7 +1347,7 @@ const PnsForm = (props) => {
                             border: "1px solid #014D88",
                             borderRadius: "0.25rem",
                           }}
-                          // disabled
+                          disabled={props.row.action === "view" ? true : false}
                         />
                         {errors.dateIndexClientConfrimedHiv !== "" ? (
                           <span className={classes.error}>
@@ -1363,6 +1375,7 @@ const PnsForm = (props) => {
                             border: "1px solid #014D88",
                             borderRadius: "0.2rem",
                           }}
+                          disabled={props.row.action === "view" ? true : false}
                         >
                           <option value="">Select</option>
                           <option value="Yes">Yes</option>
@@ -1392,7 +1405,9 @@ const PnsForm = (props) => {
                                 border: "1px solid #014D88",
                                 borderRadius: "0.25rem",
                               }}
-                              //   disabledg
+                              disabled={
+                                props.row.action === "view" ? true : false
+                              }
                             />
                             {/* {errors.treatmentDateI !== "" ? (
                                           <span className={classes.error}>
@@ -1418,6 +1433,7 @@ const PnsForm = (props) => {
                             border: "1px solid #014D88",
                             borderRadius: "0.2rem",
                           }}
+                          disabled={props.row.action === "view" ? true : false}
                         >
                           <option value="">Select</option>
                           <option value="Recent Infection">
@@ -1442,7 +1458,7 @@ const PnsForm = (props) => {
                             border: "1px solid #014D88",
                             borderRadius: "0.25rem",
                           }}
-                          // disabled
+                          disabled={props.row.action === "view" ? true : false}
                         />
                       </FormGroup>
                     </div>
@@ -1459,6 +1475,7 @@ const PnsForm = (props) => {
                             border: "1px solid #014D88",
                             borderRadius: "0.25rem",
                           }}
+                          disabled={props.row.action === "view" ? true : false}
                         />
                       </FormGroup>
                     </div>
@@ -1475,6 +1492,7 @@ const PnsForm = (props) => {
                             border: "1px solid #014D88",
                             borderRadius: "0.2rem",
                           }}
+                          disabled={props.row.action === "view" ? true : false}
                         >
                           <option value={""}></option>
                           {notificationContact.map((value) => (
@@ -1508,7 +1526,7 @@ const PnsForm = (props) => {
                             border: "1px solid #014D88",
                             borderRadius: "0.25rem",
                           }}
-                          // disabled
+                          disabled={props.row.action === "view" ? true : false}
                         />
                       </FormGroup>
                     </div>
@@ -1548,6 +1566,7 @@ const PnsForm = (props) => {
                             border: "1px solid #014D88",
                             borderRadius: "0.25rem",
                           }}
+                          disabled={props.row.action === "view" ? true : false}
                         />
                       </FormGroup>
                     </div>
@@ -1567,6 +1586,7 @@ const PnsForm = (props) => {
                             border: "1px solid #014D88",
                             borderRadius: "0.25rem",
                           }}
+                          disabled={props.row.action === "view" ? true : false}
                         />
                       </FormGroup>
                     </div>
@@ -1583,6 +1603,7 @@ const PnsForm = (props) => {
                             border: "1px solid #014D88",
                             borderRadius: "0.2rem",
                           }}
+                          disabled={props.row.action === "view" ? true : false}
                         >
                           <option value={""}></option>
                           {sexs.map((value) => (
@@ -1610,6 +1631,7 @@ const PnsForm = (props) => {
                             border: "1px solid #014D88",
                             borderRadius: "0.2rem",
                           }}
+                          disabled={props.row.action === "view" ? true : false}
                         />
                       </FormGroup>
                     </div>
@@ -1629,6 +1651,7 @@ const PnsForm = (props) => {
                             border: "1px solid #014D88",
                             borderRadius: "0.25rem",
                           }}
+                          disabled={props.row.action === "view" ? true : false}
                         />
                       </FormGroup>
                     </div>
@@ -1652,6 +1675,8 @@ const PnsForm = (props) => {
                           onChange={(e) => {
                             checkPhoneNumberBasic(e, "partnerPhoneNumber");
                           }}
+                          disabled={props.row.action === "view" ? true : false}
+
                           //onChange={(e)=>{handleInputChangeBasic(e,'phoneNumber')}}
                         />
                         {errors.partnerPhoneNumber !== "" ? (
@@ -1679,6 +1704,7 @@ const PnsForm = (props) => {
                             border: "1px solid #014D88",
                             borderRadius: "0.2rem",
                           }}
+                          disabled={props.row.action === "view" ? true : false}
                         >
                           <option value={""}></option>
                           {indexTesting.map((value) => (
@@ -1709,6 +1735,7 @@ const PnsForm = (props) => {
                             border: "1px solid #014D88",
                             borderRadius: "0.2rem",
                           }}
+                          disabled={props.row.action === "view" ? true : false}
                         >
                           <option value={""}>select</option>
                           <option value="Phone calls">Phone calls</option>
@@ -1730,6 +1757,8 @@ const PnsForm = (props) => {
                             border: "1px solid #014D88",
                             borderRadius: "0.25rem",
                           }}
+                          disabled={props.row.action === "view" ? true : false}
+
                           // disabled
                         />
                       </FormGroup>
@@ -1750,6 +1779,7 @@ const PnsForm = (props) => {
                             border: "1px solid #014D88",
                             borderRadius: "0.2rem",
                           }}
+                          disabled={props.row.action === "view" ? true : false}
                         >
                           <option value={""}></option>
                           {consent.map((value) => (
@@ -1776,6 +1806,7 @@ const PnsForm = (props) => {
                             border: "1px solid #014D88",
                             borderRadius: "0.2rem",
                           }}
+                          disabled={props.row.action === "view" ? true : false}
                         >
                           <option value={""}></option>
                           {consent.map((value) => (
@@ -1803,6 +1834,7 @@ const PnsForm = (props) => {
                             border: "1px solid #014D88",
                             borderRadius: "0.2rem",
                           }}
+                          disabled={props.row.action === "view" ? true : false}
                         >
                           <option value={""}></option>
                           {consent.map((value) => (
@@ -1826,6 +1858,7 @@ const PnsForm = (props) => {
                             border: "1px solid #014D88",
                             borderRadius: "0.2rem",
                           }}
+                          disabled={props.row.action === "view" ? true : false}
                         >
                           <option value="">Select</option>
                           <option value="Yes">Yes</option>
@@ -1848,6 +1881,7 @@ const PnsForm = (props) => {
                             border: "1px solid #014D88",
                             borderRadius: "0.2rem",
                           }}
+                          disabled={props.row.action === "view" ? true : false}
                         >
                           <option value={""}></option>
                           {consent.map((value) => (
@@ -1875,6 +1909,7 @@ const PnsForm = (props) => {
                             border: "1px solid #014D88",
                             borderRadius: "0.2rem",
                           }}
+                          disabled={props.row.action === "view" ? true : false}
                         >
                           <option value={""}></option>
                           <option value="negative">Negative</option>
@@ -1902,6 +1937,9 @@ const PnsForm = (props) => {
                                 border: "1px solid #014D88",
                                 borderRadius: "0.25rem",
                               }}
+                              disabled={
+                                props.row.action === "view" ? true : false
+                              }
                             />
                           </FormGroup>
                         </div>
@@ -1921,6 +1959,8 @@ const PnsForm = (props) => {
                             border: "1px solid #014D88",
                             borderRadius: "0.25rem",
                           }}
+                          disabled={props.row.action === "view" ? true : false}
+
                           // disabled
                         />
                         {errors.referralDate !== "" ? (
@@ -1934,21 +1974,22 @@ const PnsForm = (props) => {
                     </div>
                   </>
                 )}
-
               {saving ? <Spinner /> : ""}
               <br />
-              <div className="row">
-                <div className="form-group mb-3 col-md-6">
-                  <Button
-                    content="Save"
-                    icon="save"
-                    labelPosition="right"
-                    style={{ backgroundColor: "#014d88", color: "#fff" }}
-                    onClick={handleSubmit}
-                    disabled={saving}
-                  />
+              {props.row.action === "update" && (
+                <div className="row">
+                  <div className="form-group mb-3 col-md-6">
+                    <Button
+                      content="Update"
+                      icon="save"
+                      labelPosition="right"
+                      style={{ backgroundColor: "#014d88", color: "#fff" }}
+                      onClick={handleSubmit}
+                      disabled={saving}
+                    />
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </form>
         </CardBody>
@@ -1957,4 +1998,4 @@ const PnsForm = (props) => {
   );
 };
 
-export default PnsForm;
+export default ViewPNSForm;

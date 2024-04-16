@@ -212,11 +212,12 @@ const PostTest = (props) => {
                     setSaving(false);
                     props.setPatientObj(response.data);
                     //toast.success("Risk Assesment successful");
-                    if (postTest.hivTestResult === "true") {
-                        handleItemClick("recency-testing", "post-test");
-                    } else if (postTest.hivTestResult === "false") {
-                        history.push("/");
-                    }
+                    // if (postTest.hivTestResult === "true") {
+                    //     handleItemClick("recency-testing", "post-test");
+                    // } else if (postTest.hivTestResult === "false") {
+                    //     history.push("/");
+                    // }
+                    handleItemClick("recency-testing", "post-test");
                 })
                 .catch((error) => {
                     setSaving(false);
@@ -736,7 +737,7 @@ const PostTest = (props) => {
                                             labelPosition="right"
                                             style={{backgroundColor: "#014d88", color: "#fff"}}
                                             onClick={handleSubmit}
-                                            disabled={saving}
+                                            // disabled={saving}
                                         />
                                     )}
                                     {props.activePage.actionType === "view" && (

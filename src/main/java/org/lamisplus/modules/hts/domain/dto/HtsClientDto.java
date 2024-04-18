@@ -71,22 +71,16 @@ public class HtsClientDto {
     private  Object confirmatoryTest2;
     private  Object tieBreakerTest2;
     private String  hivTestResult2;
-
-
     //Post Test Counseling
     private Object postTestCounselingKnowledgeAssessment;
-
     //index notification services - Elicitation
     private Object indexNotificationServicesElicitation;
-
     private String indexClientCode;
-
     public List<IndexElicitation> indexElicitation;
-
     private RiskStratificationResponseDto riskStratificationResponseDto;
     private String riskStratificationCode;
-
+    private Boolean prepOffered;
+    private Boolean prepAccepted;
     private String prepGiven;
-
     private String otherDrugs;
 }

@@ -317,7 +317,6 @@ const Recency = (props) => {
       setRecency({ ...recency, [e.target.name]: recencyIdNumberValue });
     }
     else if(e.target.name=== "receivedResultDate"){
-      console.log("#############  receivedResultDate",e.target.value);
       setRecency({...recency, [e.target.name]: e.target.value});
     }
     else {
@@ -611,11 +610,11 @@ const Recency = (props) => {
                   {recency.hasViralLoad === "true" && (
                     <>
                       <div className="row">
-                        <h4>Viral Load Classification :</h4>
+                        <h4>Recency Viral Load Classification :</h4>
                         <br/>
                         <div className="form-group  col-md-4">
                           <FormGroup>
-                            <Label>Sample Collected Date</Label>
+                            <Label>Recency Sample Collected Date</Label>
                             <Input
                                 className="form-control"
                                 name="sampleCollectedDate"
@@ -636,7 +635,7 @@ const Recency = (props) => {
                         <div className="form-group  col-md-4">
                           <FormGroup>
                             <Label>
-                              Sample Reference Number{" "}
+                              Recency Sample Reference Number{" "}
                               <span style={{color: "red"}}> *</span>
                             </Label>
                             <Input
@@ -664,7 +663,7 @@ const Recency = (props) => {
                         <div className="form-group  col-md-4">
                           <FormGroup>
                             <Label>
-                              Sample Type{" "}
+                              Recency Sample Type{" "}
                               <span style={{color: "red"}}> *</span>
                             </Label>
                             <select
@@ -694,7 +693,7 @@ const Recency = (props) => {
                         </div>
                         <div className="form-group  col-md-4">
                           <FormGroup>
-                            <Label>Date Sample Sent to PCR Lab</Label>
+                            <Label>Date Recency Sample Sent to PCR Lab</Label>
                             <Input
                                 className="form-control"
                                 name="dateSampleSentToPCRLab"
@@ -721,7 +720,7 @@ const Recency = (props) => {
                         </div>
                         <div className="form-group  col-md-4">
                           <FormGroup>
-                            <Label>Sample Test Date</Label>
+                            <Label>Recency Sample Test Date</Label>
                             <Input
                                 className="form-control"
                                 name="sampleTestDate"
@@ -759,7 +758,7 @@ const Recency = (props) => {
                         </div>
                         <div className="form-group  col-md-4">
                           <FormGroup>
-                            <Label>Viral Load Confirmation Result (copies/ml)</Label>
+                            <Label>Recency Viral Load Confirmation Result (copies/ml)</Label>
                             <Input
                                 className="form-control"
                                 name="viralLoadConfirmationResult"
@@ -768,6 +767,7 @@ const Recency = (props) => {
                                 value={recency.viralLoadConfirmationResult}
                                 onChange={handleInputChangeRecency}
                                 style={{border: "1px solid #014D88", borderRadius: "0.2rem"}}
+                                disabled={props.activePage.actionType === "view"}
                             />
 
                           </FormGroup>
@@ -775,7 +775,7 @@ const Recency = (props) => {
 
                         <div className="form-group  col-md-4">
                           <FormGroup>
-                            <Label>Viral Load Result Received Date</Label>
+                            <Label>Recency Viral Load Result Received Date</Label>
                             <Input
                                 className="form-control"
                                 name="receivedResultDate"
@@ -796,7 +796,7 @@ const Recency = (props) => {
                         <div className="form-group  col-md-4">
                           <FormGroup>
                             <Label>
-                              Viral Load Result Classification and Result
+                              Recency Viral Load Result Classification and Result
                               (copies/ml)
                             </Label>
                             <select

@@ -96,7 +96,7 @@ const useStyles = makeStyles((theme) => ({
 
 const BasicInfo = (props) => {
   const classes = useStyles();
-  console.log("new", props.patientObj);
+  // console.log("new", props.patientObj);
   const history = useHistory();
   const [errors, setErrors] = useState({});
   const [saving, setSaving] = useState(false);
@@ -294,8 +294,8 @@ const BasicInfo = (props) => {
         : "",
     testingSetting: props.patientObj ? props.patientObj.testingSetting : "",
     typeCounseling: props.patientObj ? props.patientObj.typeCounseling : "",
-    relationshipWithIndexClient: props.patientObj
-      ? props.patientObj.relationshipWithIndexClient
+    relationWithIndexClient: props.patientObj
+      ? props.patientObj.relationWithIndexClient
       : "",
     indexClientCode: "",
   });
@@ -795,7 +795,7 @@ const BasicInfo = (props) => {
         breastFeeding: objValues.breastFeeding,
         indexClientCode: objValues.indexClientCode,
         pregnant: objValues.pregnant,
-        relationshipWithIndexClient: objValues.relationshipWithIndexClient,
+        relationWithIndexClient: objValues.relationWithIndexClient,
         riskStratificationCode:
           props.extra && props.extra.code !== "" ? props.extra.code : "",
       };
@@ -1476,9 +1476,9 @@ const BasicInfo = (props) => {
                       </Label>
                       <select
                         className="form-control"
-                        name="relationshipWithIndexClient"
-                        id="relationshipWithIndexClient"
-                        value={objValues.relationshipWithIndexClient}
+                        name="relationWithIndexClient"
+                        id="relationWithIndexClient"
+                        value={objValues.relationWithIndexClient}
                         onChange={handleInputChange}
                         style={{
                           border: "1px solid #014D88",
@@ -1543,9 +1543,13 @@ const BasicInfo = (props) => {
                       >
                         <option value={""}></option>
                         {pregnancyStatus.map((value) => (
-                          <option key={value.id} value={value.id}>
-                            {value.display}
-                          </option>
+                            ((props.patientObj.riskStratificationResponseDto.modality === "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" || props.patientObj.riskStratificationResponseDto.modality ==="TEST_SETTING_OTHERS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" || props.patientObj.riskStratificationResponseDto.testingSetting==="TEST_SETTING_CPMTCT" || props.patientObj.riskStratificationResponseDto.modality ==="TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)")  && value.code === "PREGANACY_STATUS_NOT_PREGNANT") ? (
+                                <></>
+                            ) : (
+                                <option key={value.id} value={value.id}>
+                                  {value.display}
+                                </option>
+                            )
                         ))}
                       </select>
                     </FormGroup>

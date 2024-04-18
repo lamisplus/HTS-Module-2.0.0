@@ -9,6 +9,7 @@ import org.lamisplus.modules.hts.domain.dto.IndexElicitationDto;
 import org.lamisplus.modules.hts.domain.dto.IndexElicitationResponseDto;
 import org.lamisplus.modules.hts.domain.entity.HtsClient;
 import org.lamisplus.modules.hts.domain.entity.IndexElicitation;
+import org.lamisplus.modules.hts.domain.enums.Source;
 import org.lamisplus.modules.hts.repository.HtsClientRepository;
 import org.lamisplus.modules.hts.repository.IndexElicitationRepository;
 import org.lamisplus.modules.patient.service.PersonService;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 import static org.lamisplus.modules.base.util.Constants.ArchiveStatus.ARCHIVED;
 import static org.lamisplus.modules.base.util.Constants.ArchiveStatus.UN_ARCHIVED;
@@ -42,6 +44,15 @@ public class IndexElicitationService {
     }
 
     public IndexElicitationResponseDto save(IndexElicitationDto indexElicitationDto){
+
+        if(indexElicitationDto.getSource().equalsIgnoreCase(Source.Mobile.toString())) {
+            Optional<IndexElicitation> indexElicitationExists = indexElicitationRepository.findByUuid(indexElicitationDto.getUuid());
+            if (indexElicitationExists.isPresent()) {
+                LOG.info("Index Elicitation with ID {} has already been synced", indexElicitationDto.getUuid());
+                return convertToIndexElicitationResponseDto(indexElicitationExists.get().getHtsClient(), indexElicitationExists.get());
+            }
+        }
+
         Long facilityId = currentUserOrganizationService.getCurrentUserOrganization();
         HtsClient htsClient = htsClientRepository.findByIdAndArchivedAndFacilityId(indexElicitationDto.getHtsClientId(), UN_ARCHIVED, facilityId)
                 .orElseThrow(()-> new EntityNotFoundException(HtsClient.class, "htsClientId", "" + indexElicitationDto.getHtsClientId()));

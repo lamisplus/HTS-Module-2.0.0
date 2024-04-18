@@ -2,6 +2,7 @@ package org.lamisplus.modules.hts.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import org.lamisplus.modules.hts.domain.enums.Source;
 import org.lamisplus.modules.patient.domain.dto.PersonDto;
 
 import javax.validation.constraints.NotBlank;
@@ -30,6 +31,7 @@ public class HtsClientRequestDto {
     private final Long typeCounseling;
     @NotNull(message = "indexClient is mandatory")
     private final Boolean indexClient;
+    private final String indexClientCode;
     @NotNull(message = "previouslyTested is mandatory")
     private final Boolean previouslyTested;
     private final Object extra;
@@ -39,8 +41,12 @@ public class HtsClientRequestDto {
     private final Long pregnant;
     private final Boolean breastFeeding;
     private final Long relationWithIndexClient;
-
     private String prepGiven;
+    private boolean prepOffered;
+    private boolean prepAccepted;
     private String otherDrugs;
     private String hivTestResult;
+    private String ConfirmatoryTest2;
+    private String source = Source.Web.toString();
+    private String uuid;
 }

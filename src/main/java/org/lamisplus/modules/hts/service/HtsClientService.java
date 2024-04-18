@@ -12,6 +12,8 @@ import org.lamisplus.modules.hts.domain.dto.*;
 import org.lamisplus.modules.hts.domain.entity.HtsClient;
 import org.lamisplus.modules.hts.domain.entity.HtsPerson;
 import org.lamisplus.modules.hts.domain.entity.IndexElicitation;
+import org.lamisplus.modules.hts.domain.entity.RiskStratification;
+import org.lamisplus.modules.hts.domain.enums.Source;
 import org.lamisplus.modules.hts.repository.HtsClientRepository;
 import org.lamisplus.modules.hts.repository.IndexElicitationRepository;
 import org.lamisplus.modules.hts.util.RandomCodeGenerator;
@@ -52,6 +54,14 @@ public class HtsClientService {
                 throw new IllegalTypeException(HtsClientRequestDto.class, "RiskStratificationCode is ", "already exist for an hts client");
             }
         }
+
+        if(htsClientRequestDto.getSource().equalsIgnoreCase(Source.Mobile.toString())){
+            Optional<HtsClient> htsClientExists = htsClientRepository.findByUuid(htsClientRequestDto.getUuid());
+            if (htsClientExists.isPresent()) {
+                LOG.info("HTS Client with code {} has already been synced", htsClientRequestDto.getClientCode());
+                return htsClientToHtsClientDto(htsClientExists.get());
+        }}
+
         HtsClient htsClient;
         PersonResponseDto personResponseDto;
         Person person;
@@ -234,6 +244,7 @@ public class HtsClientService {
         htsClient.setNumWives( htsClientRequestDto.getNumWives() );
         htsClient.setTypeCounseling( htsClientRequestDto.getTypeCounseling() );
         htsClient.setIndexClient( htsClientRequestDto.getIndexClient() );
+        htsClient.setIndexClientCode( htsClientRequestDto.getIndexClientCode());
         htsClient.setPreviouslyTested( htsClientRequestDto.getPreviouslyTested() );
         htsClient.setExtra( htsClientRequestDto.getExtra() );
         htsClient.setPersonUuid( personUuid);
@@ -245,7 +256,7 @@ public class HtsClientService {
         htsClient.setPrepGiven(htsClientRequestDto.getPrepGiven());
         htsClient.setOtherDrugs(htsClientRequestDto.getOtherDrugs());
         htsClient.setHivTestResult(htsClientRequestDto.getHivTestResult());
-
+        htsClient.setHivTestResult(htsClientRequestDto.getConfirmatoryTest2());
         return htsClient;
     }
 
@@ -265,6 +276,7 @@ public class HtsClientService {
         htsClient.setNumWives( htsClientDto.getNumWives() );
         htsClient.setTypeCounseling( htsClientDto.getTypeCounseling() );
         htsClient.setIndexClient( htsClientDto.getIndexClient() );
+        htsClient.setIndexClientCode( htsClientDto.getIndexClientCode() );
         htsClient.setPreviouslyTested( htsClientDto.getPreviouslyTested() );
         htsClient.setExtra( htsClientDto.getExtra() );
         htsClient.setPersonUuid( personUuid);
@@ -272,11 +284,31 @@ public class HtsClientService {
         htsClient.setBreastFeeding(htsClientDto.getBreastFeeding());
         htsClient.setRiskStratificationCode(htsClientDto.getRiskStratificationCode());
         htsClient.setRelationWithIndexClient(htsClientDto.getRelationWithIndexClient());
-
+        htsClient.setKnowledgeAssessment(htsClientDto.getKnowledgeAssessment());
+        htsClient.setRiskAssessment(htsClientDto.getRiskAssessment());
+        htsClient.setTbScreening(htsClientDto.getTbScreening());
+        htsClient.setStiScreening(htsClientDto.getStiScreening());
+        htsClient.setTest1(htsClientDto.getTest1());
+        htsClient.setConfirmatoryTest(htsClientDto.getConfirmatoryTest());
+        htsClient.setTieBreakerTest(htsClientDto.getTieBreakerTest());
         htsClient.setPrepGiven(htsClientDto.getPrepGiven());
         htsClient.setOtherDrugs(htsClientDto.getOtherDrugs());
         htsClient.setHivTestResult(htsClientDto.getHivTestResult());
-
+        htsClient.setTest2(htsClientDto.getTest2());
+        htsClient.setConfirmatoryTest2(htsClientDto.getConfirmatoryTest2());
+        htsClient.setTieBreakerTest2(htsClientDto.getTieBreakerTest2());
+        htsClient.setHivTestResult2(htsClientDto.getHivTestResult2());
+        htsClient.setSyphilisTesting(htsClientDto.getSyphilisTesting());
+        htsClient.setHepatitisTesting(htsClientDto.getHepatitisTesting());
+        htsClient.setOthers(htsClientDto.getOthers());
+        htsClient.setCd4(htsClientDto.getCd4());
+        htsClient.setRecency(htsClientDto.getRecency());
+        htsClient.setPostTestCounselingKnowledgeAssessment(htsClientDto.getPostTestCounselingKnowledgeAssessment());
+        htsClient.setIndexNotificationServicesElicitation(htsClientDto.getIndexNotificationServicesElicitation());
+        htsClient.setRiskStratification(RiskStratification.toRiskStratification(htsClientDto.getRiskStratificationResponseDto(), personUuid));
+        htsClient.setSexPartnerRiskAssessment(htsClientDto.getSexPartnerRiskAssessment());
+        htsClient.setPrepOffered(htsClientDto.getPrepOffered());
+        htsClient.setPrepAccepted(htsClientDto.getPrepAccepted());
         return htsClient;
     }
 
@@ -398,6 +430,7 @@ public class HtsClientService {
         htsClientDto.setNumWives( htsClient.getNumWives() );
         htsClientDto.setTypeCounseling( htsClient.getTypeCounseling() );
         htsClientDto.setIndexClient( htsClient.getIndexClient() );
+        htsClientDto.setIndexClientCode( htsClient.getIndexClientCode() );
         htsClientDto.setPreviouslyTested( htsClient.getPreviouslyTested() );
         PersonResponseDto personResponseDto = personService.getDtoFromPerson(htsClient.getPerson());
         htsClientDto.setPersonResponseDto(personResponseDto);
@@ -441,6 +474,9 @@ public class HtsClientService {
         htsClientDto.setPrepGiven(htsClient.getPrepGiven());
         htsClientDto.setOtherDrugs(htsClient.getOtherDrugs());
         htsClientDto.setHivTestResult(htsClient.getHivTestResult());
+
+        htsClient.setPrepOffered(htsClient.getPrepOffered());
+        htsClient.setPrepAccepted(htsClient.getPrepAccepted());
 
         return htsClientDto;
     }

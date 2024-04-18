@@ -96,6 +96,8 @@ const useStyles = makeStyles((theme) => ({
 
 const BasicInfo = (props) => {
   console.log("basic", props.patientObj.clientCode);
+  console.log("############# Continues model")
+
   const classes = useStyles();
   const history = useHistory();
   const [errors, setErrors] = useState({});
@@ -165,8 +167,8 @@ const BasicInfo = (props) => {
         : "",
     testingSetting: props.patientObj ? props.patientObj.testingSetting : "",
     typeCounseling: props.patientObj ? props.patientObj.typeCounseling : "",
-    relationshipWithIndexClient: props.patientObj
-      ? props.patientObj.relationshipWithIndexClient
+    relationWithIndexClient: props.patientObj
+      ? props.patientObj.relationWithIndexClient
       : "",
     indexClientCode: "",
   });
@@ -222,6 +224,8 @@ const BasicInfo = (props) => {
   };
 
   useEffect(() => {
+    console.log("############# Continues model")
+
     KP();
     EnrollmentSetting();
     SourceReferral();
@@ -453,7 +457,7 @@ const BasicInfo = (props) => {
       breastFeeding: objValues.breastFeeding,
       pregnant: objValues.pregnant,
       indexClientCode: objValues.indexClientCode,
-      relationshipWithIndexClient: objValues.relationshipWithIndexClient,
+      relationWithIndexClient: objValues.relationWithIndexClient,
       riskStratificationCode:
         props.extra && props.extra.code !== "" ? props.extra.code : "",
     };
@@ -502,7 +506,7 @@ const BasicInfo = (props) => {
     <>
       <Card className={classes.root}>
         <CardBody>
-          <h2 style={{ color: "#000" }}>CLIENT INTAKE FORMs </h2>
+          <h2 style={{ color: "#000" }}>CLIENT INTAKE FORM </h2>
           <br />
           <form>
             <div className="row">
@@ -793,9 +797,9 @@ const BasicInfo = (props) => {
                       <Label>Relationship of the index client</Label>
                       <select
                         className="form-control"
-                        name="relationshipWithIndexClient"
-                        id="relationshipWithIndexClient"
-                        value={objValues.relationshipWithIndexClient}
+                        name="relationWithIndexClient"
+                        id="relationWithIndexClient"
+                        value={objValues.relationWithIndexClient}
                         onChange={handleInputChange}
                         style={{
                           border: "1px solid #014D88",

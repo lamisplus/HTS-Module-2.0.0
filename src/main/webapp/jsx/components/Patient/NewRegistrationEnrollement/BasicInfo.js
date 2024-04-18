@@ -91,6 +91,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const BasicInfo = (props) => {
+  console.log("#############",props.patientObj);
   const classes = useStyles();
   const history = useHistory();
   //console.log("enr", props.activePage.activeObject);
@@ -144,7 +145,7 @@ const BasicInfo = (props) => {
     targetGroup: "",
     testingSetting: "",
     typeCounseling: "",
-    relationshipWithIndexClient:
+    relationWithIndexClient:
       props.activePage?.activeObject?.relationWithIndexClient,
     indexClientCode: "",
   });
@@ -300,6 +301,7 @@ const BasicInfo = (props) => {
     if (props.activePage.actionType === "update") {
       //e.preventDefault();
       const patientForm = {
+        ...props.patientObj,
         clientCode: objValues.clientCode,
         dateVisit: objValues.dateVisit,
         extra: {},
@@ -318,7 +320,7 @@ const BasicInfo = (props) => {
         breastFeeding: objValues.breastFeeding,
         indexClientCode: objValues.indexClientCode,
         pregnant: objValues.pregnant,
-        relationWithIndexClient: objValues.relationshipWithIndexClient,
+        relationWithIndexClient: objValues.relationWithIndexClient,
       };
 
       if (validate()) {
@@ -620,9 +622,9 @@ const BasicInfo = (props) => {
                         <Label>Relationship of the index client</Label>
                         <select
                           className="form-control"
-                          name="relationshipWithIndexClient"
-                          id="relationshipWithIndexClient"
-                          value={objValues.relationshipWithIndexClient}
+                          name="relationWithIndexClient"
+                          id="relationWithIndexClient"
+                          value={objValues.relationWithIndexClient}
                           onChange={handleInputChange}
                           style={{
                             border: "1px solid #014D88",
@@ -679,9 +681,13 @@ const BasicInfo = (props) => {
                       >
                         <option value={""}></option>
                         {pregnancyStatus.map((value) => (
-                          <option key={value.id} value={value.id}>
-                            {value.display}
-                          </option>
+                            ((props.patientObj.riskStratificationResponseDto.modality === "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" || props.patientObj.riskStratificationResponseDto.modality ==="TEST_SETTING_OTHERS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" || props.patientObj.riskStratificationResponseDto.testingSetting==="TEST_SETTING_CPMTCT" || props.patientObj.riskStratificationResponseDto.modality ==="TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)")  && value.code === "PREGANACY_STATUS_NOT_PREGNANT") ? (
+                                <></>
+                            ) : (
+                                <option key={value.id} value={value.id}>
+                                  {value.display}
+                                </option>
+                            )
                         ))}
                       </select>
                     </FormGroup>

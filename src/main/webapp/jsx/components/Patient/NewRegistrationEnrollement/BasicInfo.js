@@ -371,7 +371,7 @@ const BasicInfo = (props) => {
     <>
       <Card className={classes.root}>
         <CardBody>
-          <h2 style={{ color: "#000" }}>CLIENT INTAKE FORM </h2>
+          <h2 style={{ color: "#000" }}>CLIENT INTAKE FORM danmanu</h2>
           <br />
           <form>
             <div className="row">

@@ -1,3 +1,5 @@
+//NEW HTS
+
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { FormGroup, Label, CardBody, Spinner, Input, Form } from "reactstrap";
@@ -484,7 +486,7 @@ const RiskStratification = (props) => {
     <>
       <Card className={classes.root}>
         <CardBody>
-          <h2 style={{ color: "#000" }}>RISK STRATIFICATION</h2>
+          <h2 style={{ color: "#000" }}>RISK STRATIFICATION Danmanu44</h2>
           <br />
           <form>
             <div className="row">

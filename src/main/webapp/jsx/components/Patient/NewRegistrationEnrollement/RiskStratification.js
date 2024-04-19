@@ -501,7 +501,7 @@ const RiskStratification = (props) => {
     <>
       <Card className={classes.root}>
         <CardBody>
-          <h2 style={{ color: "#000" }}>RISK STRATIFICATION hafiz</h2>
+          <h2 style={{ color: "#000" }}>RISK STRATIFICATION</h2>
           <br />
           <form>
             <div className="row">

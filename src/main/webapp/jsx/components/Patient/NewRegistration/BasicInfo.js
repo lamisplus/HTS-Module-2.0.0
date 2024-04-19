@@ -352,7 +352,6 @@ const BasicInfo = (props) => {
     }
 
   useEffect(() => {
-    console.log("lamis_obg",props.patientObj)
     KP();
     EnrollmentSetting();
     SourceReferral();
@@ -842,6 +841,16 @@ const BasicInfo = (props) => {
       });
     }
   };
+
+  const isAncOrPMTCT = () => {
+    return props.patientObj.riskStratificationResponseDto.modality === "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)"
+    || props.patientObj.riskStratificationResponseDto.modality ==="TEST_SETTING_OTHERS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)"
+    || props.patientObj.riskStratificationResponseDto.testingSetting==="TEST_SETTING_CPMTCT"
+    || props.patientObj.riskStratificationResponseDto.modality==="TEST_SETTING_STANDALONE_HTS_PMTCT_(ANC1_ONLY)"
+    || props.patientObj.riskStratificationResponseDto.modality==="TEST_SETTING_OTHERS_POST_ANC1_PREGNANT_L&D"
+    || props.patientObj.riskStratificationResponseDto.modality==="TEST_SETTING_STANDALONE_HTS_POST_ANC1_PREGNANT_L&D"
+    || props.patientObj.riskStratificationResponseDto.modality ==="TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)";
+  }
 
   return (
     <>
@@ -1544,14 +1553,7 @@ const BasicInfo = (props) => {
                       >
                         <option value={""}></option>
                         {pregnancyStatus.map((value) => (
-                            ((props.patientObj.riskStratificationResponseDto.modality === "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)"
-                                || props.patientObj.riskStratificationResponseDto.modality ==="TEST_SETTING_OTHERS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)"
-                                || props.patientObj.riskStratificationResponseDto.testingSetting==="TEST_SETTING_CPMTCT"
-                                || props.patientObj.riskStratificationResponseDto.modality==="TEST_SETTING_STANDALONE_HTS_PMTCT_(ANC1_ONLY)"
-                                || props.patientObj.riskStratificationResponseDto.modality==="TEST_SETTING_OTHERS_POST_ANC1_PREGNANT_L&D"
-
-                                || props.patientObj.riskStratificationResponseDto.modality==="TEST_SETTING_STANDALONE_HTS_POST_ANC1_PREGNANT_L&D"
-                                || props.patientObj.riskStratificationResponseDto.modality ==="TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)")  && value.code === "PREGANACY_STATUS_NOT_PREGNANT") ? (
+                            (isAncOrPMTCT()  && value.code === "PREGANACY_STATUS_NOT_PREGNANT") ? (
                                 <></>
                             ) : (
                                 <option key={value.id} value={value.id}>

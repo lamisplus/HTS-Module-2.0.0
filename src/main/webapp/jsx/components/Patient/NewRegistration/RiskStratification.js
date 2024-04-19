@@ -660,7 +660,7 @@ const BasicInfo = (props) => {
     <>
       <Card className={classes.root}>
         <CardBody>
-          <h2 style={{ color: "#000" }}>RISK STRATIFICATION danmnu 66</h2>
+          <h2 style={{ color: "#000" }}>RISK STRATIFICATION</h2>
           <br />
           <form>
             <div className="row">

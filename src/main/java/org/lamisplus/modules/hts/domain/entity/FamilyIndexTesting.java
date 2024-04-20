@@ -63,12 +63,10 @@ public class FamilyIndexTesting extends Audit implements Serializable {
     private HtsClient htsClient;
 
     @ToString.Exclude
-    @JsonIgnore
     @OneToMany(mappedBy = "familyIndexTesting", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FamilyTestingTracker> familyTestingTrackers = new ArrayList<>();
 
     @ToString.Exclude
-    @JsonIgnore
     @OneToMany(mappedBy = "familyIndexTesting", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FamilyIndex> familyIndices = new ArrayList<>();
 
@@ -157,7 +155,9 @@ public class FamilyIndexTesting extends Audit implements Serializable {
     @Column(name="recency_testing")
     private String recencyTesting;
 
-//    ########## end session ##########
+    @Basic
+    @Column(name="willing_to_have_children_tested_else_where")
+    private String willingToHaveChildrenTestedElseWhere;
 
     @PrePersist
     public void setFields() {

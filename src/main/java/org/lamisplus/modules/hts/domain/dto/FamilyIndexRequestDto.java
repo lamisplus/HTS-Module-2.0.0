@@ -26,6 +26,8 @@ public class FamilyIndexRequestDto {
 
     private LocalDate yearMotherDead;
 
+    private String UAN;
+
 //    @NotBlank(message = "Family index testing UUID is required")
     private String familyIndexTestingUuid;
 

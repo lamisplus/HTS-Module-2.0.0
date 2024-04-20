@@ -39,6 +39,7 @@ public class FamilyIndexTestingRequestDTO {
     private String recencyTesting;
     private List<FamilyIndexRequestDto> familyIndexRequestDto;
     private List<FamilyTestingTrackerRequestDTO> familyTestingTrackerRequestDTO;
+    private String willingToHaveChildrenTestedElseWhere;
 
 
 }

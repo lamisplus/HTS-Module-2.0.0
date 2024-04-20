@@ -24,6 +24,8 @@ import RiskStratification from "./NewRegistrationEnrollement/RiskStratification"
 import PnsForm from "./NewRegistration/PartnerNotificationServices/PnsForm";
 import PNSHistory from "./NewRegistration/PartnerNotificationServices/PNSHistory";
 import ViewPNSForm from "./NewRegistration/PartnerNotificationServices/ViewPnsForm";
+import ViewClientReferral from "./NewRegistrationEnrollement/ClientReferral/Referrall_view_update";
+import ClientReferralHistory from "./NewRegistrationEnrollement/ClientReferral/ClientReferralHistory";
 const useStyles = makeStyles((theme) => ({
   error: {
     color: "#f85032",
@@ -240,6 +242,23 @@ const UserRegistration = (props) => {
                       )}
                     </span>
                   </Menu.Item>
+                  <Menu.Item
+                      name="inbox"
+                      active={activeItem === "refferal-history"}
+                      onClick={() => handleItemClick("refferal-history")}
+                      style={{
+                        backgroundColor:
+                            activeItem === "refferal-history" ? "#000" : "",
+                      }}
+                  >
+                    <span style={{ color: "#fff" }}>
+                      {" "}
+                       Client Referral Service
+                      {completed.includes("refferal") && (
+                          <Icon name="check" color="green" />
+                      )}
+                    </span>
+                  </Menu.Item>
                 </Menu>
               </div>
 
@@ -397,6 +416,37 @@ const UserRegistration = (props) => {
                     addNewForm={false}
                     row={row}
                   />
+                )}
+                {activeItem === "view-referral" && (
+                    <ViewClientReferral
+                        handleItemClick={handleItemClick}
+                        setCompleted={setCompleted}
+                        completed={completed}
+                        setPatientObj={setPatientObj}
+                        patientObj={patientObj}
+                        setExtra={setExtra}
+                        extra={extra}
+                        basicInfo={basicInfo}
+                        organizationInfo={organizationInfo}
+                        addNewForm={false}
+                        row={row}
+                    />
+                )}
+                {activeItem === "refferal-history" && (
+                    <ClientReferralHistory
+                        handleItemClick={handleItemClick}
+                        setCompleted={setCompleted}
+                        completed={completed}
+                        setPatientObj={setPatientObj}
+                        patientObj={patientObj}
+                        setExtra={setExtra}
+                        extra={extra}
+                        basicInfo={basicInfo}
+                        organizationInfo={organizationInfo}
+                        activePage={props.activePage}
+                        setActivePage={props.setActivePage}
+                        setRow={setRow}
+                    />
                 )}
               </div>
             </div>

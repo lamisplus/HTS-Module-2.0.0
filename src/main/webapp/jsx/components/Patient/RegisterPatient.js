@@ -448,7 +448,7 @@ const UserRegistration = (props) => {
                           )}
                         </span>
                       </Menu.Item>
-                      {/* <Menu.Item
+                       <Menu.Item
                         name="inbox"
                         active={activeItem === "refferal"}
                         onClick={() => handleItemClick("refferal")}
@@ -460,11 +460,11 @@ const UserRegistration = (props) => {
                         <span style={{ color: "#fff" }}>
                           {" "}
                           Client Refferral Form
-                          {completed.includes("risk") && (
+                          {completed.includes("referral") && (
                             <Icon name="check" color="green" />
                           )}
                         </span>
-                      </Menu.Item> */}
+                      </Menu.Item>
                       <Menu.Item
                         name="inbox"
                         active={activeItem === "fit"}
@@ -612,6 +612,7 @@ const UserRegistration = (props) => {
                     patientObj={patientObj}
                     setPatientObjAge={setPatientObjAge}
                     setHideOtherMenu={setHideOtherMenu}
+                    patientObjAge={patientObjAge}
                     setExtra={setExtra}
                     extra={extra}
                   />

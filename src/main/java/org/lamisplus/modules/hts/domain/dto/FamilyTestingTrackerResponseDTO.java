@@ -3,6 +3,7 @@ package org.lamisplus.modules.hts.domain.dto;
 
 import lombok.*;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 @Builder(toBuilder = true)
@@ -10,7 +11,7 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class FamilyTestingTrackerResponseDTO {
+public class FamilyTestingTrackerResponseDTO implements Serializable {
 
     private Long id;
     private String uuid;

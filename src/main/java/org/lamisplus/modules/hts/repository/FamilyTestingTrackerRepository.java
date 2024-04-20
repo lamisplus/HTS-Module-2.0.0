@@ -1,5 +1,6 @@
 package org.lamisplus.modules.hts.repository;
 
+import io.vavr.collection.Traversable;
 import org.lamisplus.modules.hts.domain.entity.FamilyTestingTracker;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -15,4 +16,8 @@ public interface FamilyTestingTrackerRepository extends JpaRepository<FamilyTest
             "JOIN hts_family_index_testing c ON c.uuid = fitt.family_index_testing_uuid " +
             "WHERE fitt.family_index_testing_uuid = :uuid AND fitt.archived = :unArchived", nativeQuery = true)
     List<FamilyTestingTracker> findByFamilyIndexTestingUuid(String uuid, int unArchived);
+
+    List<FamilyTestingTracker> findByFamilyIndexTesting(Long id);
+
+    Optional<FamilyTestingTracker>  findByUuid(String uuid);
 }

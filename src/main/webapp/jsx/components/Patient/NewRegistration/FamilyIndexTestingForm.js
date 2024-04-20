@@ -212,8 +212,6 @@ const FamilyIndexTestingForm = (props) => {
             .then((response) => {
                 if (response.data) {
                     setLGAs(response.data);
-                    // const selectedLga = response.data.find(lga => lga.id === id);
-                    // setPayload(prevPayload => ({ ...prevPayload, lgaTransferTo: selectedLga ? selectedLga.name : "" }));
                 }
             })
             .catch((e) => {

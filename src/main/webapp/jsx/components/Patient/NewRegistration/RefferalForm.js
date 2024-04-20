@@ -93,12 +93,12 @@ const useStyles = makeStyles((theme) => ({
 
 const ClientRefferalForm = (props) => {
   const classes = useStyles();
-
+   console.log("props.patientObj",props.patientObj)
   const [content, setContent] = useState({
     showReferringUnit: false,
     showServiceProviderUnit: false,
   });
-
+ const patientObj = props.patientObj;
   const [enrollSetting, setEnrollSetting] = useState([]);
   const [entryPoint, setEntryPoint] = useState([]);
   const [entryPointCommunity, setEntryPointCommunity] = useState([]);
@@ -680,10 +680,11 @@ const ClientRefferalForm = (props) => {
         </div>
       </div>
       <Card className={classes.root}>
-        {content.showReferringUnit && <RefferralUnit />}
+        {content.showReferringUnit && <RefferralUnit patientObj={patientObj}
+        />}
         {content.showServiceProviderUnit && (
           <CardBody>
-            <ServicesProvided />
+            <ServicesProvided patientObj = {patientObj} />
           </CardBody>
         )}
         {/* recieving facility  */}

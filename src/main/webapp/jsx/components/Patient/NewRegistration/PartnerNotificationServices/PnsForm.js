@@ -192,7 +192,7 @@ const PnsForm = (props) => {
       partnerNotification: "",
       viralllyUnsppressed: "",
 
-      numberOfPartnerIdentifiedFromClientIndex: "",
+      // numberOfPartnerIdentifiedFromClientIndex: "",
     },
   });
 
@@ -226,7 +226,7 @@ const PnsForm = (props) => {
     partnerNotification: "",
     viralllyUnsppressed: "",
 
-    numberOfPartnerIdentifiedFromClientIndex: "",
+    // numberOfPartnerIdentifiedFromClientIndex: "",
   });
 
   const getPNSInfo = (id) => {
@@ -639,36 +639,6 @@ const PnsForm = (props) => {
             objValues.acceptedPns !== "No"
             // objValues.elicited !== "No"
           ) {
-            // setElicitedCount(elicitedCount + 1);
-            // setObjValues({
-            //   providerNameCompletingForm: "",
-            //   clientName: "",
-            //   lastName: "",
-            //   dob: "",
-            //   phoneNumber: "",
-            //   altPhoneNumber: "",
-            //   sex: "",
-            //   htsClientId: props && props.patientObj ? props.patientObj.id : "",
-            // physicalHurt: "",
-            // threatenToHurt: "",
-            // descriptiveResidentialAddress: "",
-            // hangOutSpots: "",
-            // relativeToIndexClient: "",
-            // currentlyLiveWithPartner: "",
-            // partnerTestedPositive: "",
-            // sexuallyUncomfortable: "",
-            // notificationMethod: "",
-            // datePartnerCameForTesting: "",
-            // age: "",
-            // isDateOfBirthEstimated: false,
-            // //offeredPns:"",
-            //acceptedPns:"",
-            //elicited: "",
-            // stateId: "",
-            // lga: "",
-            // datePartnerTested: "",
-            //   // partnerCurrentHivStatus: "",
-            // });
           }
           //handleItemClickPage('list')
         })
@@ -1948,6 +1918,7 @@ const PnsForm = (props) => {
                     disabled={saving}
                   />
                 </div>
+
               </div>
             </div>
           </form>

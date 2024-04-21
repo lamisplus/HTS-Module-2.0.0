@@ -113,14 +113,14 @@ const ClientRerralList = (props) => {
                 }
             )
             .then((response) => {
-                console.log(response.data);
+                // console.log(response.data);
                 setIndexClientList(response.data);
             })
             .catch((error) => {});
     }
     const addNewPns = (e) => {
         e.preventDefault();
-        props.handleItemClick("pns");
+        props.handleItemClick("client-referral");
     };
     const LoadViewPage = (row, actionType) => {
         props.handleItemClick("view-referral");
@@ -128,15 +128,13 @@ const ClientRerralList = (props) => {
     };
     const LoadModal = (row) => {
         toggle();
-        console.log(row);
+        // console.log(row);
         setRecordSelected(row);
     };
     const LoadDeletePage = (row) => {
-        // setSaving(true);
-        //props.setActiveContent({...props.activeContent, route:'mental-health-view', id:row.id})
         axios
             .delete(
-                `${baseUrl}hts-personal-notification-service/${recordSelected.id}`,
+                `${baseUrl}hts-client-referral/${recordSelected.id}`,
                 {
                     headers: { Authorization: `Bearer ${token}` },
                 }

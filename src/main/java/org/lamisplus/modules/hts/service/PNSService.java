@@ -41,12 +41,10 @@ public class PNSService {
         htsClientRepository.save(htsClient);
         PersonalNotificationService res = this.convertPnsRequestToEntity(req);
         res.setHtsClientUuid(htsClient.getUuid());
-//        res.setFacilityId(facilityId);
-
+        res.setFacilityId(facilityId);
         PersonalNotificationService personalNotificationService = personalNotificationServiceRepository.save(res);
         return convertPnsToResponseDto(htsClient, personalNotificationService);
     }
-
 
     public PersonalNotificationServiceResponseDTO update(Long id, PersonalNotificationServiceResponseDTO res) {
         PersonalNotificationService personalNotificationService = getPnsById(id);
@@ -171,7 +169,6 @@ public class PNSService {
 
         return pns;
     }
-
     private List<PersonalNotificationServiceResponseDTO>  convertPnsEntityListToResponseDtoList(List<PersonalNotificationService> pnsList) {
         if(pnsList.isEmpty()) {
             return new ArrayList<>();

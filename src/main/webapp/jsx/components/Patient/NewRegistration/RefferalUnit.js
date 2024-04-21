@@ -166,7 +166,7 @@ const RefferralUnit = (props) => {
         serviceNeeded: "",
         comments: "",
         receivingFacilityStateName: "",
-        receivingFacilityLgaName: "",
+        receivingFacilityLgaNam: "",
         htsClientId: props && props.patientObj ? props.patientObj?.id : "",
         htsClientUuid: props && props.patientObj ? props.patientObj?.uuid : ""
     });
@@ -466,7 +466,7 @@ const RefferralUnit = (props) => {
         temp.lastName = payload.lastName ? "" : "This field is required.";
         temp.stateId = payload.stateId ? "" : "This field is required.";
         temp.province = payload.province ? "" : "This field is required.";
-        temp.address = payload.address ? "" : "This field is required.";
+        // temp.address = payload.address ? "" : "This field is required.";
         temp.phoneNumber = payload.phoneNumber ? "" : "This field is required.";
         temp.sexId = payload.sexId ? "" : "This field is required.";
         temp.dob = payload.dob ? "" : "This field is required.";
@@ -475,9 +475,9 @@ const RefferralUnit = (props) => {
         // temp.stateTransferTo = payload.receivingStateFacility? "" : "This field is required.";
         temp.receivingFacilityLgaName = payload.receivingFacilityLgaName ? "" : "This field is required.";
         temp.receivingFacilityStateName = payload.receivingFacilityStateName ? "" : "This field is required.";
-        temp.referredFromFacility = payload.referredFromFacility
-            ? ""
-            : "This field is required.";
+        // temp.referredFromFacility = payload.referredFromFacility
+        //     ? ""
+        //     : "This field is required.";
         temp.nameOfPersonReferringClient = payload.nameOfPersonReferringClient
             ? ""
             : "This field is required.";
@@ -505,7 +505,7 @@ const RefferralUnit = (props) => {
             : "This field is required.";
         temp.serviceNeeded = payload.serviceNeeded ? "" : "This field is required.";
         temp.age = payload.age ? "" : "This field is required.";
-        temp.referredTo = payload.referredTo ? "" : "This field is required.";
+        // temp.referredTo = payload.referredTo ? "" : "This field is required.";
         setErrors({...temp});
         return Object.values(temp).every((x) => x == "");
     };
@@ -543,42 +543,41 @@ const RefferralUnit = (props) => {
     };
  console.log("payload before submit", payload)
     const handleSubmit1 = (e) => {
-        console.log("payload inside submit", payload);
         e.preventDefault();
         // if (validate()) {
-            setSaving(true);
-            axios
-                .post(`${baseUrl}hts-client-referral`, payload, {
-                    headers: { Authorization: `Bearer ${token}` },
-                })
-                .then((response) => {
-                    // setSaving(false);
-                    console.log("response", response);
-                })
-                .catch((error) => {
-                    // setSaving(false);
-                    if (error.response && error.response.data) {
-                        let errorMessage =
-                            error.response.data.apierror &&
-                            error.response.data.apierror.message !== ""
-                                ? error.response.data.apierror.message
-                                : "Something went wrong, please try again";
-                        toast.error(errorMessage, {
-                            position: toast.POSITION.BOTTOM_CENTER,
-                        });
-                    } else {
-                        toast.error("Something went wrong. Please try again...", {
-                            position: toast.POSITION.BOTTOM_CENTER,
-                        });
-                    }
-                }).finally(() => {
+        setSaving(true);
+        axios
+            .post(`${baseUrl}hts-client-referral`, payload, {
+                headers: {Authorization: `Bearer ${token}`},
+            })
+            .then((response) => {
                 setSaving(false);
-            });
-        // } else {
-        //     toast.error("All fields are required", {
-        //         position: toast.POSITION.BOTTOM_CENTER,
-        //     });
-        // }
+                toast.success("Referral form saved successfully", {
+                    position: toast.POSITION.BOTTOM_CENTER,
+                });
+                // history.push("/");
+                handleItemClick("refferal-history")
+            })
+            .catch((error) => {
+                // setSaving(false);
+                if (error.response && error.response.data) {
+                    let errorMessage =
+                        error.response.data.apierror &&
+                        error.response.data.apierror.message !== ""
+                            ? error.response.data.apierror.message
+                            : "Something went wrong, please try again";
+                    toast.error(errorMessage, {
+                        position: toast.POSITION.BOTTOM_CENTER,
+                    });
+                } else {
+                    toast.error("Something went wrong. Please try again...", {
+                        position: toast.POSITION.BOTTOM_CENTER,
+                    });
+                }
+            }).finally(() => {
+            setSaving(false);
+        });
+       // }
     };
 
     return (
@@ -952,44 +951,6 @@ const RefferralUnit = (props) => {
                                         )}
                                     </FormGroup>
                                 </div>
-                                {/* <div className="form-group mb-2 col-md-4">
-                  <FormGroup>
-                    <Label>
-                      Date Of Birth <span style={{ color: "red" }}> *</span>
-                    </Label>
-                    <div className="radio">
-                      <label>
-                        <input
-                          type="radio"
-                          value="Actual"
-                          name="dateOfBirth"
-                          defaultChecked
-                          onChange={(e) => handleDateOfBirthChange(e)}
-                          style={{
-                            border: "1px solid #014D88",
-                            borderRadius: "0.2rem",
-                          }}
-                        />{" "}
-                        Actual
-                      </label>
-                    </div>
-                    <div className="radio">
-                      <label>
-                        <input
-                          type="radio"
-                          value="Estimated"
-                          name="dateOfBirth"
-                          onChange={(e) => handleDateOfBirthChange(e)}
-                          style={{
-                            border: "1px solid #014D88",
-                            borderRadius: "0.2rem",
-                          }}
-                        />{" "}
-                        Estimated
-                      </label>
-                    </div>
-                  </FormGroup>
-                </div> */}
                                 <div className="form-group mb-3 col-md-4">
                                     <FormGroup>
                                         <Label>

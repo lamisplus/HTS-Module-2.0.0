@@ -26,6 +26,7 @@ import PNSHistory from "./NewRegistration/PartnerNotificationServices/PNSHistory
 import ViewPNSForm from "./NewRegistration/PartnerNotificationServices/ViewPnsForm";
 import ViewClientReferral from "./NewRegistrationEnrollement/ClientReferral/Referrall_view_update";
 import ClientReferralHistory from "./NewRegistrationEnrollement/ClientReferral/ClientReferralHistory";
+import RefferralUnit from "./NewRegistration/RefferalUnit";
 const useStyles = makeStyles((theme) => ({
   error: {
     color: "#f85032",
@@ -448,6 +449,21 @@ const UserRegistration = (props) => {
                         setRow={setRow}
                     />
                 )}
+                {activeItem === "client-referral" && (
+                    <RefferralUnit
+                        handleItemClick={handleItemClick}
+                        setCompleted={setCompleted}
+                        completed={completed}
+                        setPatientObj={setPatientObj}
+                        patientObj={patientObj}
+                        setExtra={setExtra}
+                        extra={extra}
+                        basicInfo={basicInfo}
+                        organizationInfo={organizationInfo}
+                        addNewForm={false}
+                    />
+                )}
+
               </div>
             </div>
           </form>

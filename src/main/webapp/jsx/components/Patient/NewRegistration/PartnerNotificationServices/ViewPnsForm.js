@@ -321,7 +321,7 @@ const ViewPNSForm = (props) => {
     loadFamilyIndexSetting();
   }, []);
 
-  console.log(props.basicInfo);
+  // console.log(props.basicInfo);
   const handleHTSClientInputChange = (e) => {
     setErrors({ ...temp, [e.target.name]: "" });
 

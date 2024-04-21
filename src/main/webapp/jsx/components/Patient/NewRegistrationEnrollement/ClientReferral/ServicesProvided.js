@@ -213,7 +213,7 @@ const ServicesProvided = (props) => {
         setGenders(res);
       })
       .catch((e) => {
-        console.log("error", e);
+        // console.log("error", e);
       });
     // ;
   };
@@ -281,7 +281,7 @@ const ServicesProvided = (props) => {
       })
       .then((response) => {
         setSaving(false);
-        console.log(response.data);
+        // console.log(response.data);
         //toast.success("Risk stratification save succesfully!");
       })
       .catch((error) => {
@@ -303,7 +303,7 @@ const ServicesProvided = (props) => {
       });
   };
 
-  console.log("props.formInfo", props.formInfo);
+  // console.log("props.formInfo", props.formInfo);
   /*****  Validation  */
   const validate = () => {
     //HTS FORM VALIDATION
@@ -360,9 +360,9 @@ const ServicesProvided = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(payload);
+    // console.log(payload);
     if (validate()) {
-      console.log(payload);
+      // console.log(payload);
       //   postPayload(payload);
     }
   };
@@ -400,7 +400,7 @@ const ServicesProvided = (props) => {
 
             <div className="form-group mb-3 col-md-4">
               <FormGroup>
-                <Label for="" style={{color: '#014d88', fontWeight: 'bolder'}}>Service Facility Provider State<span
+                <Label for="" style={{color: '#014d88', fontWeight: 'bolder'}}>Service Provider State<span
                     style={{color: "red"}}> *</span> </Label>
                 <Input
                     type="select"
@@ -445,7 +445,7 @@ const ServicesProvided = (props) => {
             <div className="form-group mb-3 col-md-4">
               <FormGroup>
                 <Label for="testGroup">
-                  Service Facility Provider Lga <span style={{color: "red"}}> *</span>
+                  Service Provider LGA <span style={{color: "red"}}> *</span>
                 </Label>
 
                 <Input
@@ -495,7 +495,7 @@ const ServicesProvided = (props) => {
             <div className="form-group mb-3 col-md-4">
               <FormGroup>
                 <Label for="testGroup">
-                  Name of Facility providing the service <span style={{color: "red"}}> *</span>
+                  Service Provider Facility <span style={{color: "red"}}> *</span>
                 </Label>
                 <Input
                     type="select"
@@ -539,38 +539,6 @@ const ServicesProvided = (props) => {
 
             {/*#######################################*/}
 
-            <div className="form-group mb-3 col-md-6">
-              <FormGroup>
-                <Label for="firstName">
-                  Name of Facility providing the service
-                  <span style={{color: "red"}}> *</span>
-                </Label>
-                <Select
-                    //value={selectedOption}
-                    onChange={handleInputChangeObject}
-                    name="nameOfFacilityProvider"
-                    options={allFacilities}
-                    theme={(theme) => ({
-                      ...theme,
-                      borderRadius: "0.25rem",
-                      border: "1px solid #014D88",
-                      colors: {
-                        ...theme.colors,
-                        primary25: "#014D88",
-                        primary: "#014D88",
-                      },
-                    })}
-                    disabled={props.row.action === "view" ? true : false}
-                />
-                {errors.nameOfFacilityProvider !== "" ? (
-                    <span className={classes.error}>
-                    {errors.nameOfFacilityProvider}
-                  </span>
-                ) : (
-                    ""
-                )}
-              </FormGroup>
-            </div>
             <div className="form-group mb-3 col-md-6">
               <FormGroup>
                 <Label for="firstName">

@@ -46,7 +46,7 @@ public class FamilyIndexTestingService {
         HtsClient htsClient = htsClientRepository
                 .findByIdAndArchivedAndFacilityId(requestDTO.getHtsClientId(), UN_ARCHIVED, facilityId)
                 .orElseThrow(() -> new EntityNotFoundException(HtsClient.class, "htsClientId", "" + requestDTO.getHtsClientId()));
-//         check if htsClient id aleady exist exist
+//         check if htsClient already exist
         Optional<FamilyIndexTesting> found = familyIndexTestingRepository.findByHtsClientIdAndArchived(requestDTO.getHtsClientId(), UN_ARCHIVED);
         if (found.isPresent()) {
             throw new IllegalArgumentException("Family Index Testing already exist for this client");
@@ -72,7 +72,7 @@ public class FamilyIndexTestingService {
     }
 
 
-    public FamilyIndexTestingResponseDTO getAllFamilyIndexTestingByHtsClient(Long id) {
+    public FamilyIndexTestingResponseDTO getFamilyIndexTestingByHtsClient(Long id) {
         Optional<FamilyIndexTesting> familyIndexTestingList = familyIndexTestingRepository.findByHtsClientIdAndArchived(id, UN_ARCHIVED);
         if(!familyIndexTestingList.isPresent()) {
             throw new EntityNotFoundException(FamilyIndexTesting.class, "id", id + "");

@@ -35,13 +35,13 @@ public class HtsFamilyIndexTestingController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> update(@PathVariable Long id, @Valid @RequestBody FamilyIndexTestingResponseDTO familyIndexTestingDTO) {
+    public ResponseEntity<String> updateFamilyIndexTesting(@PathVariable Long id, @Valid @RequestBody FamilyIndexTestingResponseDTO familyIndexTestingDTO) {
         return ResponseEntity.ok(this.familyIndexTestingService.updateFamilyIndexTesting(id, familyIndexTestingDTO));
     }
 
     @GetMapping("/{id}/hts-client")
-    public ResponseEntity<FamilyIndexTestingResponseDTO> getAllFamilyIndexTestingByHtsClientId(@PathVariable Long id) {
-        return ResponseEntity.ok(this.familyIndexTestingService.getAllFamilyIndexTestingByHtsClient(id));
+    public ResponseEntity<FamilyIndexTestingResponseDTO> getFamilyIndexTestingByHtsClientId(@PathVariable Long id) {
+        return ResponseEntity.ok(this.familyIndexTestingService.getFamilyIndexTestingByHtsClient(id));
     }
 
     @DeleteMapping("/{id}")

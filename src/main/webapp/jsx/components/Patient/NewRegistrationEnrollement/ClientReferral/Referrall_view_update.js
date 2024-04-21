@@ -18,10 +18,11 @@ import { Button } from "semantic-ui-react";
 import { Modal } from "react-bootstrap";
 import { Label as LabelRibbon, Message } from "semantic-ui-react";
 import PhoneInput from "react-phone-input-2";
-import ServicesProvided from './ServicesProvided'
+import ServicesProvided from '../../NewRegistration/ServicesProvided'
 import RefferalForm from "./RefferalUnit";
 import RefferralUnit from "./RefferalUnit";
 import Cookies from "js-cookie";
+
 const useStyles = makeStyles((theme) => ({
     card: {
         margin: theme.spacing(20),
@@ -95,7 +96,7 @@ const useStyles = makeStyles((theme) => ({
 
 const ViewClientReferral = (props) => {
     const classes = useStyles();
-    console.log("props.patientObj", props.patientObj)
+    // console.log("props.patientObj", props.patientObj)
     const [content, setContent] = useState({
         showReferringUnit: false,
         showServiceProviderUnit: false,
@@ -159,10 +160,7 @@ const ViewClientReferral = (props) => {
                 headers: { Authorization: `Bearer ${token}` },
             })
             .then((response) => {
-                // setObjValues(response.data);
-                console.log(" form information", response.data);
                 setFormInfo(response.data);
-                // setReceivingOrganization(response.data.receivingOrganization);
             })
             .catch((error) => {
                 //console.log(error);
@@ -173,7 +171,6 @@ const ViewClientReferral = (props) => {
     }, []);
 
     const handleContentChange = (e) => {
-        console.log(e.target.value);
         setContentDropDown(e.target.value);
         if (e.target.value === "showReferringUnit") {
             setContent({
@@ -224,6 +221,8 @@ const ViewClientReferral = (props) => {
                     formInfo={formInfo}
                     row={props.row}
                     handleClicked={props.handleClicked}
+                    setCompleted={props.setCompleted}
+                    completed={props.completed}
                 />}
                 {content.showServiceProviderUnit && (
                     <CardBody>
@@ -231,6 +230,9 @@ const ViewClientReferral = (props) => {
                             patientObj = {patientObj}
                             formInfo={formInfo}
                             row={props.row}
+                            handleClicked={props.handleClicked}
+                            etCompleted={props.setCompleted}
+                            completed={props.completed}
                         />
                     </CardBody>
                 )}

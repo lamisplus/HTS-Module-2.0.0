@@ -15,11 +15,11 @@ import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
 import "react-phone-input-2/lib/style.css";
 import { Button } from "semantic-ui-react";
-import { Modal } from "react-bootstrap";
-import { Label as LabelRibbon, Message } from "semantic-ui-react";
+
 import PhoneInput from "react-phone-input-2";
 import { getAllGenders, alphabetOnly } from "../../../../utility";
-import Select from "react-select";
+import {useHistory} from "react-router-dom";
+
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -102,48 +102,158 @@ const ServicesProvided = (props) => {
   const [open, setOpen] = React.useState(false);
   const toggle = () => setOpen(!open);
   const [genders, setGenders] = useState([]);
-  const [allFacilities, setAllFacilities] = useState([]);
+  const [serviceNeeded, setServiceNeeded] = useState("");
 
-  const [payload, setPayload] = useState({
-    nameOfFacilityProvider: "",
-    addressOfFacilityProvider: "",
-    referralDate: "",
-    comments: "",
-    clientFirstName: "",
-    clientLastName: "",
-    clientMiddleName: "",
-    nameOfServiceProvider: "",
-    signature: "",
-    phoneNumber: "",
-    categoryOfService: "",
-  });
+    const [payload, setPayload] = useState({
+        nameOfFacilityProvider: props?.formInfo?.nameOfReceivingFacility,
+        addressOfFacilityProvider: props?.formInfo?.addressOfReceivingFacility || "",
+        visitDate: props?.formInfo?.receivingOrganization?.visitDate || "",
+        comments: props?.formInfo?.comments || "",
+        clientFirstName: props?.formInfo?.receivingOrganization?.clientFirstName,
+        clientLastName: props?.formInfo?.receivingOrganization?.clientLastName,
+        clientMiddleName: props?.formInfo?.receivingOrganization?.clientMiddleName,
+        nameOfServiceProvider: props?.formInfo?.receivingOrganization?.nameOfServiceProvider || "",
+        signature: props?.formInfo?.receivingOrganization?.signature || "",
+        phoneNumber: props?.formInfo?.receivingOrganization?.phoneNumber || "",
+        categoryOfService: props?.formInfo?.receivingOrganization?.categoryOfService
+            || "",
+        receivingFacilityLgaName: props?.formInfo?.receivingFacilityLgaName,
+        receivingFacilityStateName: props?.formInfo?.receivingFacilityStateName
+    });
 
+ const history = useHistory();
+  const [states1, setStates1] = useState([])
+  const [lgas1, setLGAs1] = useState([])
+  const [facilities1, setFacilities1] = useState([])
+  const [selectedState, setSelectedState] = useState({})
+  const [selectedFacility, setSelectedFacility] = useState({});
+  const [selectedLga, setSelectedLga] = useState({});
+
+    const handleItemClick = (page, completedMenu) => {
+        props.handleItemClick(page);
+        if (props.completed.includes(completedMenu)) {
+        } else {
+            props.setCompleted([...props.completed, completedMenu]);
+        }
+    };
+
+  // ##############################################
+
+  const SERVICE_NEEDED = () => {
+    axios.get(`${baseUrl}application-codesets/v2/SERVICE_PROVIDED`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+        .then((response) => {
+          if (response.data) {
+            // console.log("SERVICE_NEEDED", response.data);
+            // Find the object with the matching code
+            const service = response.data.find(item => item.code === props.formInfo.serviceNeeded);
+            if (service) {
+              // setServiceNeeded(service.display);
+              setPayload(prevPayload => ({ ...prevPayload, categoryOfService: service.display }));
+            } else {
+              console.error("Service not found");
+            }
+          }
+        })
+        .catch((e) => {
+          console.error("Fetch Facilities error" + e);
+        });
+  };
+
+  const loadStates1 = () => {
+    axios.get(`${baseUrl}organisation-units/parent-organisation-units/1`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+        .then((response) => {
+          if (response.data) {
+            setStates1(response.data);
+          }
+        })
+        .catch((e) => {
+          // console.log("Fetch states error" + e);
+        });
+  };
+
+
+
+  const loadLGA1 = (id) => {
+    axios.get(`${baseUrl}organisation-units/parent-organisation-units/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+        .then((response) => {
+          if (response.data) {
+            setLGAs1(response.data);
+            // const selectedLga = response.data.find(lga => lga.id === id);
+            // setPayload(prevPayload => ({ ...prevPayload, lgaTransferTo: selectedLga ? selectedLga.name : "" }));
+          }
+
+        })
+        .catch((e) => {
+          // console.log("Fetch LGA error" + e);
+        });
+  };
+
+  const loadFacilities1 = (id) => {
+    axios.get(`${baseUrl}organisation-units/parent-organisation-units/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+        .then((response) => {
+          if (response.data) {
+            setFacilities1(response.data);
+
+          }
+        })
+        .catch((e) => {
+          // console.log("Fetch Facilities error" + e);
+        });
+  };
+
+  const handleInputChangeLocation = (e) => {
+    setErrors({ ...temp, [e.target.name]: "" });
+    if(e.target.name === 'stateTransferTo'){
+      let filteredState = states1.filter((each)=>{
+        return each.name.toLowerCase()  === e.target.value.toLowerCase()
+      })
+      setPayload({ ...payload, receivingFacilityStateName : e.target.value });
+
+      loadLGA1(filteredState[0].id);
+    }
+    if(e.target.name === 'lgaTransferTo'){
+      let filteredState = lgas1.filter((each)=>{
+        return each.name.toLowerCase()  === e.target.value.toLowerCase()
+      })
+      setPayload({ ...payload, [e.target.name]: e.target.value });
+      loadFacilities1(filteredState[0].id);
+
+    }
+
+  };
+  // ################################################
   const getGenders = () => {
     getAllGenders()
       .then((res) => {
         setGenders(res);
       })
       .catch((e) => {
-        console.log("error", e);
+        // console.log("error", e);
       });
     // ;
   };
-  // handle Facility Name to slect drop down
-  const handleInputChangeObject = (e) => {
-    // console.log(e);
-    setPayload({
-      ...payload,
-      nameOfFacilityProvider: e.name,
-      addressOfFacilityProvider: e.parentParentOrganisationUnitName,
-      // lgaTransferTo: e.parentOrganisationUnitName,
-    });
-    setErrors({ ...errors, nameOfRecievingFacility: "" });
-    // setSelectedState(e.parentParentOrganisationUnitName);
-    // setSelectedLga(e.parentOrganisationUnitName);
-  };
+
+
   useEffect(() => {
     getGenders();
-    getAllFacilities();
+    loadStates1()
+    SERVICE_NEEDED()
   }, []);
 
   const checkPhoneNumberBasic = (e, inputName) => {
@@ -152,31 +262,6 @@ const ServicesProvided = (props) => {
     }
     const limit = 10;
     setPayload({ ...payload, phoneNumber: e.slice(0, limit) });
-  };
-
-  // get all facilities
-  const getAllFacilities = () => {
-    axios
-      .get(
-        `${baseUrl}organisation-units/parent-organisation-units/1/organisation-units-level/4/hierarchy`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      )
-      .then((response) => {
-        // console.log(response.data);
-
-        let updatedFaclilties = response.data.map((each, id) => {
-          return {
-            ...each,
-            value: each.id,
-            label: each.name,
-          };
-        });
-
-        setAllFacilities(updatedFaclilties);
-      })
-      .catch((error) => {});
   };
 
   const handleInputChange = (e) => {
@@ -211,36 +296,6 @@ const ServicesProvided = (props) => {
     }
   };
 
-  const postPayload = (payload) => {
-    setSaving(true);
-    // props.setHideOtherMenu(false);
-    axios
-      .post(`${baseUrl}risk-stratification`, payload, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((response) => {
-        setSaving(false);
-        console.log(response.data);
-        //toast.success("Risk stratification save succesfully!");
-      })
-      .catch((error) => {
-        setSaving(false);
-        if (error.response && error.response.data) {
-          let errorMessage =
-            error.response.data.apierror &&
-            error.response.data.apierror.message !== ""
-              ? error.response.data.apierror.message
-              : "Something went wrong, please try again";
-          toast.error(errorMessage, {
-            position: toast.POSITION.BOTTOM_CENTER,
-          });
-        } else {
-          toast.error("Something went wrong. Please try again...", {
-            position: toast.POSITION.BOTTOM_CENTER,
-          });
-        }
-      });
-  };
 
   /*****  Validation  */
   const validate = () => {
@@ -252,7 +307,7 @@ const ServicesProvided = (props) => {
     temp.addressOfFacilityProvider = payload.addressOfFacilityProvider
       ? ""
       : "This field is required.";
-    temp.referralDate = payload.referralDate ? "" : "This field is required.";
+    temp.visitDate = payload.visitDate ? "" : "This field is required.";
     temp.clientFirstName = payload.clientFirstName
       ? ""
       : "This field is required.";
@@ -274,13 +329,29 @@ const ServicesProvided = (props) => {
     return Object.values(temp).every((x) => x == "");
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(payload);
-    if (validate()) {
-      console.log(payload);
-      //   postPayload(payload);
-    }
+
+    const data = {
+      htsClientReferralId: props.row.row.id,
+      receivingOrganizationDTO: payload
+    };
+    // if (validate()) {
+      try {
+        setSaving(true);
+        await axios.put(`${baseUrl}hts-client-referral/${props.row.row.id}`, data, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        setSaving(false);
+        toast.success("Record saved successfully", { position: toast.POSITION.BOTTOM_CENTER });
+        history.push("/");
+        //   handleItemClick("refferal-history");
+      } catch (error) {
+        setSaving(false);
+        const errorMessage = error.response?.data?.apierror?.message || "Something went wrong, please try again";
+        toast.error(errorMessage, { position: toast.POSITION.BOTTOM_CENTER });
+      }
+    // }
   };
 
   return (
@@ -310,73 +381,106 @@ const ServicesProvided = (props) => {
             </i>
           </p>
           <div className="row">
+
+            {/*###############################*/}
             <div className="form-group mb-3 col-md-6">
               <FormGroup>
                 <Label for="firstName">
-                  Name of Facility providing the service
-                  <span style={{ color: "red" }}> *</span>
+                  Facility providing service State
                 </Label>
-                <Select
-                  //value={selectedOption}
-                  onChange={handleInputChangeObject}
-                  name="nameOfFacilityProvider"
-                  options={allFacilities}
-                  theme={(theme) => ({
-                    ...theme,
-                    borderRadius: "0.25rem",
-                    border: "1px solid #014D88",
-                    colors: {
-                      ...theme.colors,
-                      primary25: "#014D88",
-                      primary: "#014D88",
-                    },
-                  })}
+                <Input
+                    className="form-control"
+                    type="text"
+                    name="receivingFacilityStateName"
+                    id="receivingFacilityStateName"
+                    value={payload.receivingFacilityStateName}
+                    onChange={handleInputChange}
+                    style={{
+                      border: "1px solid #014D88",
+                      borderRadius: "0.2rem",
+                    }}
+                    disabled
                 />
-                {/* <Input
-                  className="form-control"
-                  type="text"
-                  name="nameOfFacilityProvider"
-                  id="nameOfFacilityProvider"
-                  value={payload.nameOfFacilityProvider}
-                  onChange={handleInputChange}
-                  style={{
-                    border: "1px solid #014D88",
-                    borderRadius: "0.2rem",
-                  }}
-                /> */}
-                {errors.nameOfFacilityProvider !== "" ? (
-                  <span className={classes.error}>
-                    {errors.nameOfFacilityProvider}
+                {errors.nameOfServiceProvider !== "" ? (
+                    <span className={classes.error}>
+                    {errors.nameOfServiceProvider}
                   </span>
                 ) : (
-                  ""
+                    ""
                 )}
               </FormGroup>
             </div>
+
+            <div className="form-group mb-3 col-md-6">
+              <FormGroup>
+                <Label for="firstName">
+                  Facility providing service LGA
+                </Label>
+                <Input
+                    className="form-control"
+                    type="text"
+                    name="receivingFacilityLgaName"
+                    id="receivingFacilityLgaName"
+                    value={payload.receivingFacilityLgaName}
+                    onChange={handleInputChange}
+                    style={{
+                      border: "1px solid #014D88",
+                      borderRadius: "0.2rem",
+                    }}
+                    disabled
+                />
+              </FormGroup>
+            </div>
+
+            <div className="form-group mb-3 col-md-6">
+              <FormGroup>
+                <Label for="firstName">
+                  Facility providing Service
+                </Label>
+                <Input
+                    className="form-control"
+                    type="text"
+                    name="nameOfFacilityProvider"
+                    id="nameOfFacilityProvider"
+                    value={payload.nameOfFacilityProvider}
+                    onChange={handleInputChange}
+                    style={{
+                      border: "1px solid #014D88",
+                      borderRadius: "0.2rem",
+                    }}
+                    disabled
+                />
+              </FormGroup>
+            </div>
+
+
+            {/*###############################*/}
+
             <div className="form-group mb-3 col-md-6">
               <FormGroup>
                 <Label for="firstName">
                   Address of Facility providing the service{" "}
-                  <span style={{ color: "red" }}> *</span>
+                  <span style={{color: "red"}}> *</span>
                 </Label>
                 <Input
-                  className="form-control"
-                  type="text"
-                  name="addressOfFacilityProvider"
-                  id="addressOfFacilityProvider"
-                  value={payload.addressOfFacilityProvider}
-                  onChange={handleInputChange}
-                  style={{
-                    border: "1px solid #014D88",
-                    borderRadius: "0.2rem",
-                  }}
+                    className="form-control"
+                    type="text"
+                    name="addressOfFacilityProvider"
+                    id="addressOfFacilityProvider"
+                    value={payload.addressOfFacilityProvider}
+                    onChange={handleInputChange}
+                    style={{
+                      border: "1px solid #014D88",
+                      borderRadius: "0.2rem",
+                    }}
+                    disabled={props.row.action === "view" ? true : false}
                 />
                 {errors.addressOfFacilityProvider !== "" ? (
-                  <span className={classes.error}>
+                    <span className={classes.error}>
                     {errors.addressOfFacilityProvider}
                   </span>
                 ) : (
-                  ""
+                    ""
                 )}
               </FormGroup>
             </div>
@@ -384,51 +488,53 @@ const ServicesProvided = (props) => {
             <div className="form-group mb-3 col-md-6">
               <FormGroup>
                 <Label for="">
-                  Date <span style={{ color: "red" }}> *</span>{" "}
+                  Date <span style={{color: "red"}}> *</span>{" "}
                 </Label>
                 <Input
-                  type="date"
-                  name="referralDate"
-                  id="referralDate"
-                  value={payload.referralDate}
-                  onChange={handleInputChange}
-                  min="1929-12-31"
-                  max={moment(new Date()).format("YYYY-MM-DD")}
-                  style={{
-                    border: "1px solid #014D88",
-                    borderRadius: "0.25rem",
-                  }}
+                    type="date"
+                    name="visitDate"
+                    id="visitDate"
+                    value={payload.visitDate}
+                    onChange={handleInputChange}
+                    min={props.formInfo.dateVisit}
+                    max={moment(new Date()).format("YYYY-MM-DD")}
+                    style={{
+                      border: "1px solid #014D88",
+                      borderRadius: "0.25rem",
+                    }}
+                    disabled={props.row.action === "view" ? true : false}
                 />
-                {errors.referralDate !== "" ? (
-                  <span className={classes.error}>{errors.referralDate}</span>
+                {errors.visitDate !== "" ? (
+                    <span className={classes.error}>{errors.visitDate}</span>
                 ) : (
-                  ""
+                    ""
                 )}
               </FormGroup>
             </div>
             <div className="form-group mb-3 col-md-6">
               <FormGroup>
                 <Label for="firstName">
-                  Client First Name <span style={{ color: "red" }}> *</span>
+                  Client First Name <span style={{color: "red"}}> *</span>
                 </Label>
                 <Input
-                  className="form-control"
-                  type="text"
-                  name="clientFirstName"
-                  id="clientFirstName"
-                  value={payload.clientFirstName}
-                  onChange={handleInputChange}
-                  style={{
-                    border: "1px solid #014D88",
-                    borderRadius: "0.2rem",
-                  }}
+                    className="form-control"
+                    type="text"
+                    name="clientFirstName"
+                    id="clientFirstName"
+                    value={payload.clientFirstName}
+                    onChange={handleInputChange}
+                    style={{
+                      border: "1px solid #014D88",
+                      borderRadius: "0.2rem",
+                    }}
+                    disabled
                 />
                 {errors.clientFirstName !== "" ? (
-                  <span className={classes.error}>
+                    <span className={classes.error}>
                     {errors.clientFirstName}
                   </span>
                 ) : (
-                  ""
+                    ""
                 )}
               </FormGroup>
             </div>
@@ -439,16 +545,17 @@ const ServicesProvided = (props) => {
                   {/* <span style={{ color: "red" }}> *</span> */}
                 </Label>
                 <Input
-                  className="form-control"
-                  type="text"
-                  name="clientMiddleName"
-                  id="clientMiddleName"
-                  value={payload.clientMiddleName}
-                  onChange={handleInputChange}
-                  style={{
-                    border: "1px solid #014D88",
-                    borderRadius: "0.2rem",
-                  }}
+                    className="form-control"
+                    type="text"
+                    name="clientMiddleName"
+                    id="clientMiddleName"
+                    value={payload.clientMiddleName}
+                    onChange={handleInputChange}
+                    style={{
+                      border: "1px solid #014D88",
+                      borderRadius: "0.2rem",
+                    }}
+                    disabled
                 />
               </FormGroup>
             </div>
@@ -456,24 +563,25 @@ const ServicesProvided = (props) => {
             <div className="form-group mb-3 col-md-6">
               <FormGroup>
                 <Label for="clientLastName">
-                  Client Last Name <span style={{ color: "red" }}> *</span>
+                  Client Last Name <span style={{color: "red"}}> *</span>
                 </Label>
                 <Input
-                  className="form-control"
-                  type="text"
-                  name="clientLastName"
-                  id="clientLastName"
-                  value={payload.clientLastName}
-                  onChange={handleInputChange}
-                  style={{
-                    border: "1px solid #014D88",
-                    borderRadius: "0.2rem",
-                  }}
+                    className="form-control"
+                    type="text"
+                    name="clientLastName"
+                    id="clientLastName"
+                    value={payload.clientLastName}
+                    onChange={handleInputChange}
+                    style={{
+                      border: "1px solid #014D88",
+                      borderRadius: "0.2rem",
+                    }}
+                    disabled
                 />
                 {errors.clientLastName !== "" ? (
-                  <span className={classes.error}>{errors.clientLastName}</span>
+                    <span className={classes.error}>{errors.clientLastName}</span>
                 ) : (
-                  ""
+                    ""
                 )}
               </FormGroup>
             </div>
@@ -485,19 +593,20 @@ const ServicesProvided = (props) => {
                   {/* <span style={{ color: "red" }}> *</span> */}
                 </Label>
                 <Input
-                  className="form-control"
-                  type="textarea"
-                  rows="4"
-                  cols="7"
-                  name="comments"
-                  id="comments"
-                  value={payload.comments}
-                  onChange={handleInputChange}
-                  style={{
-                    border: "1px solid #014D88",
-                    borderRadius: "0.2rem",
-                    height: "100px",
-                  }}
+                    className="form-control"
+                    type="textarea"
+                    rows="4"
+                    cols="7"
+                    name="comments"
+                    id="comments"
+                    value={payload.comments}
+                    onChange={handleInputChange}
+                    style={{
+                      border: "1px solid #014D88",
+                      borderRadius: "0.2rem",
+                      height: "100px",
+                    }}
+                    disabled={props.row.action === "view" ? true : false}
                 />
                 {/* {errors.firstName !== "" ? (
                   <span className={classes.error}>{errors.firstName}</span>
@@ -510,26 +619,27 @@ const ServicesProvided = (props) => {
               <FormGroup>
                 <Label for="firstName">
                   Name of service provider
-                  <span style={{ color: "red" }}> *</span>
+                  <span style={{color: "red"}}> *</span>
                 </Label>
                 <Input
-                  className="form-control"
-                  type="text"
-                  name="nameOfServiceProvider"
-                  id="nameOfServiceProvider"
-                  value={payload.nameOfServiceProvider}
-                  onChange={handleInputChange}
-                  style={{
-                    border: "1px solid #014D88",
-                    borderRadius: "0.2rem",
-                  }}
+                    className="form-control"
+                    type="text"
+                    name="nameOfServiceProvider"
+                    id="nameOfServiceProvider"
+                    value={payload.nameOfServiceProvider}
+                    onChange={handleInputChange}
+                    style={{
+                      border: "1px solid #014D88",
+                      borderRadius: "0.2rem",
+                    }}
+                    disabled={props.row.action === "view" ? true : false}
                 />
                 {errors.nameOfServiceProvider !== "" ? (
-                  <span className={classes.error}>
+                    <span className={classes.error}>
                     {errors.nameOfServiceProvider}
                   </span>
                 ) : (
-                  ""
+                    ""
                 )}
               </FormGroup>
             </div>
@@ -537,24 +647,25 @@ const ServicesProvided = (props) => {
               <FormGroup>
                 <Label for="firstName">
                   Signature
-                  <span style={{ color: "red" }}> *</span>
+                  <span style={{color: "red"}}> *</span>
                 </Label>
                 <Input
-                  className="form-control"
-                  type="text"
-                  name="signature"
-                  id="signature"
-                  value={payload.signature}
-                  onChange={handleInputChange}
-                  style={{
-                    border: "1px solid #014D88",
-                    borderRadius: "0.2rem",
-                  }}
+                    className="form-control"
+                    type="text"
+                    name="signature"
+                    id="signature"
+                    value={payload.signature}
+                    onChange={handleInputChange}
+                    style={{
+                      border: "1px solid #014D88",
+                      borderRadius: "0.2rem",
+                    }}
+                    disabled={props.row.action === "view" ? true : false}
                 />
                 {errors.signature !== "" ? (
-                  <span className={classes.error}>{errors.signature}</span>
+                    <span className={classes.error}>{errors.signature}</span>
                 ) : (
-                  ""
+                    ""
                 )}
               </FormGroup>
             </div>
@@ -562,31 +673,33 @@ const ServicesProvided = (props) => {
             <div className="form-group  col-md-6">
               <FormGroup>
                 <Label>
-                  Phone Number <span style={{ color: "red" }}> *</span>
+                  Phone Number <span style={{color: "red"}}> *</span>
                 </Label>
                 <PhoneInput
-                  containerStyle={{
-                    width: "100%",
-                    border: "1px solid #014D88",
-                  }}
-                  inputStyle={{ width: "100%", borderRadius: "0px" }}
-                  country={"ng"}
-                  placeholder="(234)7099999999"
-                  maxLength={5}
-                  name="phoneNumber"
-                  id="phoneNumber"
-                  masks={{ ng: "...-...-....", at: "(....) ...-...." }}
-                  value={payload.phoneNumber}
-                  onChange={(e) => {
-                    checkPhoneNumberBasic(e, "phoneNumber");
-                  }}
-                  //onChange={(e)=>{handleInputChangeBasic(e,'phoneNumber')}}
+                    containerStyle={{
+                      width: "100%",
+                      border: "1px solid #014D88",
+                    }}
+                    inputStyle={{width: "100%", borderRadius: "0px"}}
+                    country={"ng"}
+                    placeholder="(234)7099999999"
+                    maxLength={5}
+                    name="phoneNumber"
+                    id="phoneNumber"
+                    masks={{ng: "...-...-....", at: "(....) ...-...."}}
+                    value={payload.phoneNumber}
+                    onChange={(e) => {
+                      checkPhoneNumberBasic(e, "phoneNumber");
+                    }}
+
+                    disabled={props.row.action === "view" ? true : false}
+                    //onChange={(e)=>{handleInputChangeBasic(e,'phoneNumber')}}
                 />
 
                 {errors.phoneNumber !== "" ? (
-                  <span className={classes.error}>{errors.phoneNumber}</span>
+                    <span className={classes.error}>{errors.phoneNumber}</span>
                 ) : (
-                  ""
+                    ""
                 )}
                 {/* {basicInfo.phoneNumber.length >13 ||  basicInfo.phoneNumber.length <13? (
                                                 <span className={classes.error}>{"The maximum and minimum required number is 13 digit"}</span>
@@ -594,58 +707,80 @@ const ServicesProvided = (props) => {
               </FormGroup>
             </div>
 
-            <div className="form-group  col-md-6">
+            {/*<div className="form-group  col-md-6">*/}
+            {/*  <FormGroup>*/}
+            {/*    <Label>*/}
+            {/*      Categories of Services{" "}*/}
+            {/*      <span style={{color: "red"}}> *</span>*/}
+            {/*    </Label>*/}
+            {/*    <select*/}
+            {/*        className="form-control"*/}
+            {/*        name="categoryOfService"*/}
+            {/*        id="categoryOfService"*/}
+            {/*        onChange={handleInputChange}*/}
+            {/*        value={payload.categoryOfService}*/}
+            {/*        style={{*/}
+            {/*          border: "1px solid #014D88",*/}
+            {/*          borderRadius: "0.2rem",*/}
+            {/*        }}*/}
+            {/*    >*/}
+            {/*      <option value={""}>Select</option>*/}
+            {/*      {genders.map((gender, index) => (*/}
+            {/*          <option key={gender?.id} value={gender?.id}>*/}
+            {/*            {gender?.display}*/}
+            {/*          </option>*/}
+            {/*      ))}*/}
+            {/*    </select>*/}
+            {/*    {errors.categoryOfService !== "" ? (*/}
+            {/*        <span className={classes.error}>*/}
+            {/*        {errors.categoryOfService}*/}
+            {/*      </span>*/}
+            {/*    ) : (*/}
+            {/*        ""*/}
+            {/*    )}*/}
+            {/*  </FormGroup>*/}
+            {/*</div>*/}
+
+            <div className="form-group mb-3 col-md-6">
               <FormGroup>
-                <Label>
+                <Label for="firstName">
                   Categories of Services{" "}
-                  <span style={{ color: "red" }}> *</span>
                 </Label>
-                <select
-                  className="form-control"
-                  name="categoryOfService"
-                  id="categoryOfService"
-                  onChange={handleInputChange}
-                  value={payload.categoryOfService}
-                  style={{
-                    border: "1px solid #014D88",
-                    borderRadius: "0.2rem",
-                  }}
-                >
-                  <option value={""}>Select</option>
-                  {genders.map((gender, index) => (
-                    <option key={gender?.id} value={gender?.id}>
-                      {gender?.display}
-                    </option>
-                  ))}
-                </select>
-                {errors.categoryOfService !== "" ? (
-                  <span className={classes.error}>
-                    {errors.categoryOfService}
-                  </span>
-                ) : (
-                  ""
-                )}
+                <Input
+                    className="form-control"
+                    type="text"
+                    name="serviceCategory"
+                    id="serviceCategory"
+                    value={payload.categoryOfService}
+                    onChange={handleInputChange}
+                    style={{
+                      border: "1px solid #014D88",
+                      borderRadius: "0.2rem",
+                    }}
+                    disabled
+                />
               </FormGroup>
             </div>
           </div>
-          <br />
+          <br/>
 
-          <br />
+          <br/>
 
-          <br />
-          <div className="row">
-            <div className="form-group mb-3 col-md-6">
-              <Button
-                content="Save"
-                type="submit"
-                icon="right arrow"
-                labelPosition="right"
-                style={{ backgroundColor: "#014d88", color: "#fff" }}
-                onClick={handleSubmit}
-                disabled={saving}
-              />
-            </div>
-          </div>
+          <br/>
+            {props.row.action === 'update' && (<div className="row">
+                    <div className="form-group mb-3 col-md-6">
+                        <Button
+                            content="Done"
+                            type="submit"
+                            icon="right arrow"
+                            labelPosition="right"
+                            style={{backgroundColor: "#014d88", color: "#fff"}}
+                            onClick={handleSubmit}
+                            disabled={saving}
+                        />
+                    </div>
+                </div>
+            )}
         </div>
       </div>
     </>

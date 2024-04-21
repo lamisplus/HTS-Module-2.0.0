@@ -104,7 +104,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const RefferralUnit = (props) => {
-    console.log("props.patientObj", props.patientObj);
+    // console.log("props.patientObj", props.patientObj);
     const patientObj = props.patientObj;
     const classes = useStyles();
     const [errors, setErrors] = useState({});
@@ -172,7 +172,7 @@ const RefferralUnit = (props) => {
         htsClientUuid: props && props.patientObj ? props.patientObj?.uuid : ""
     });
 
-    console.log("PAYLOAD", payload);
+    // console.log("PAYLOAD", payload);
     const loadGenders = useCallback(async () => {
         getAllGenders()
             .then((response) => {
@@ -249,7 +249,7 @@ const RefferralUnit = (props) => {
                 setCountries(res);
             })
             .catch((e) => {
-                console.log(e);
+                // console.log(e);
             });
 
         // console.log(response);
@@ -312,7 +312,7 @@ const RefferralUnit = (props) => {
         })
             .then((response) => {
                 if (response.data) {
-                    console.log("SERVICE_NEEDED", response.data)
+                    // console.log("SERVICE_NEEDED", response.data)
                     setServiceNeeded(response.data);
                 }
             })
@@ -536,45 +536,27 @@ const RefferralUnit = (props) => {
             });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // if (validate()) {
-            setSaving(true);
-            axios
-                .put(
-                    `${baseUrl}hts-client-referral/update-hts-client-referral/${props.row.row.id}`,
-                    payload,
-                    {
-                        headers: {Authorization: `Bearer ${token}`},
-                    }
-                )
-                .then((response) => {
-                    setSaving(false);
-                    toast.success("Record save successfully", {
-                        position: toast.POSITION.BOTTOM_CENTER,
-                    });
 
-                    handleItemClick("refferal-history");
-                })
-                .catch((error) => {
-                    setSaving(false);
-                    if (error.response && error.response.data) {
-                        let errorMessage =
-                            error.response.data.apierror &&
-                            error.response.data.apierror.message !== ""
-                                ? error.response.data.apierror.message
-                                : "Something went wrong, please try again";
-                        toast.error(errorMessage, {
-                            position: toast.POSITION.BOTTOM_CENTER,
-                        });
-                    } else {
-                        toast.error("Something went wrong. Please try again...", {
-                            position: toast.POSITION.BOTTOM_CENTER,
-                        });
-                    }
-                });
+        // if (validate()) {
+        try {
+            setSaving(true);
+            await axios.put(`${baseUrl}hts-client-referral/update-hts-client-referral/${props.row.row.id}`, payload, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            setSaving(false);
+            toast.success("Record saved successfully", { position: toast.POSITION.BOTTOM_CENTER });
+            // handleItemClick("refferal-history");
+            history.push("/")
+        } catch (error) {
+            setSaving(false);
+            const errorMessage = error.response?.data?.apierror?.message || "Something went wrong, please try again";
+            toast.error(errorMessage, { position: toast.POSITION.BOTTOM_CENTER });
+        }
         // }
     };
+
 
 
     return (
@@ -601,7 +583,7 @@ const RefferralUnit = (props) => {
                             <p style={{color: "black", marginBottom: "20px"}}>
                                 <i>
                                     Note: This form is to be filed by the organization making the
-                                    referal (Referring unit or organization)
+                                    referral (Referring unit or organization)
                                 </i>
                             </p>
                             <div className="row">

@@ -395,6 +395,25 @@ const UserRegistration = (props) => {
                           )}
                         </span>
                       </Menu.Item>
+
+                      <Menu.Item
+                        name="spam"
+                        active={activeItem === "indexing"}
+                        onClick={() => handleItemClick("indexing")}
+                        style={{
+                          backgroundColor:
+                            activeItem === "indexing" ? "#000" : "",
+                        }}
+                        disabled={activeItem !== "indexing" ? true : false}
+                      >
+                        {/* <Label>4</Label> */}
+                        <span style={{ color: "#fff" }}>
+                          Family Index Testing form
+                          {completed.includes("indexing") && (
+                            <Icon name="check" color="green" />
+                          )}
+                        </span>
+                      </Menu.Item>
                     </>
                   )}
                 </Menu>

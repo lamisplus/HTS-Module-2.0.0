@@ -329,6 +329,7 @@ const UserRegistration = (props) => {
                       )}
                     </span>
                   </Menu.Item>
+
                   {hideOtherMenu == false && (
                     <>
                       <Menu.Item
@@ -464,6 +465,7 @@ const UserRegistration = (props) => {
                           )}
                         </span>
                       </Menu.Item>
+
                       <Menu.Item
                         name="inbox"
                         active={activeItem === "pns"}
@@ -612,6 +614,8 @@ const UserRegistration = (props) => {
                     patientObj={patientObj}
                     setExtra={setExtra}
                     extra={extra}
+                    basicInfo={basicInfo}
+                    organizationInfo={organizationInfo}
                   />
                 )}
                 {activeItem === "pns" && (

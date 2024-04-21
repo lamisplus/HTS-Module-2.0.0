@@ -27,6 +27,8 @@ import ViewPNSForm from "./NewRegistration/PartnerNotificationServices/ViewPnsFo
 import ViewClientReferral from "./NewRegistrationEnrollement/ClientReferral/Referrall_view_update";
 import ClientReferralHistory from "./NewRegistrationEnrollement/ClientReferral/ClientReferralHistory";
 import RefferralUnit from "./NewRegistration/RefferalUnit";
+import ViewFamilyIndexTestingForm from "./NewRegistration/PartnerNotificationServices/ViewFamilyIndexForm";
+import FamilyIndexHistory from "./NewRegistration/PartnerNotificationServices/FamilyIndexhIstory";
 const useStyles = makeStyles((theme) => ({
   error: {
     color: "#f85032",
@@ -57,11 +59,18 @@ const UserRegistration = (props) => {
   const [basicInfo, setBasicInfo] = useState({});
   const [organizationInfo, setOrganizationInfo] = useState({});
   const [row, setRow] = useState({});
+  const [action, setAction] = useState('');
 
   const handleItemClick = (activeItem) => {
     setactiveItem(activeItem);
     //setCompleted({...completed, ...completedMenu})
   };
+
+
+    const handleAction = (activeItem) => {
+      setactiveItem(activeItem);
+      //setCompleted({...completed, ...completedMenu})
+    };
 
   const LoadViewPage = (row, actionType) => {
     props.setActivePage({
@@ -243,6 +252,41 @@ const UserRegistration = (props) => {
                       )}
                     </span>
                   </Menu.Item>
+                  {/* <Menu.Item
+                    name="inbox"
+                    active={activeItem === "pns-history"}
+                    onClick={() => handleItemClick("pns-history")}
+                    style={{
+                      backgroundColor:
+                        activeItem === "pns-history" ? "#000" : "",
+                    }}
+                  >
+                    <span style={{ color: "#fff" }}>
+                      {" "}
+                      Partner Notification Services
+                      {completed.includes("pns") && (
+                        <Icon name="check" color="green" />
+                      )}
+                    </span>
+                  </Menu.Item> */}
+                  {/* Family Index Testing form */}
+                  <Menu.Item
+                    name="inbox"
+                    active={activeItem === "fit-history"}
+                    onClick={() => handleItemClick("fit-history")}
+                    style={{
+                      backgroundColor:
+                        activeItem === "fit-history" ? "#000" : "",
+                    }}
+                  >
+                    <span style={{ color: "#fff" }}>
+                      {" "}
+                      Family Index Testing form
+                      {completed.includes("fit-history") && (
+                        <Icon name="check" color="green" />
+                      )}
+                    </span>
+                  </Menu.Item>
                   <Menu.Item
                       name="inbox"
                       active={activeItem === "refferal-history"}
@@ -416,6 +460,40 @@ const UserRegistration = (props) => {
                     organizationInfo={organizationInfo}
                     addNewForm={false}
                     row={row}
+                  />
+                )}
+
+                {activeItem === "view-fit" && (
+                  <ViewFamilyIndexTestingForm
+                    handleItemClick={handleItemClick}
+                    setCompleted={setCompleted}
+                    completed={completed}
+                    setPatientObj={setPatientObj}
+                    patientObj={patientObj}
+                    setExtra={setExtra}
+                    extra={extra}
+                    basicInfo={basicInfo}
+                    action={action}
+                    organizationInfo={organizationInfo}
+                    addNewForm={false}
+                    row={row}
+                  />
+                )}
+
+                {activeItem === "fit-history" && (
+                  <FamilyIndexHistory
+                    handleItemClick={handleItemClick}
+                    setCompleted={setCompleted}
+                    completed={completed}
+                    setPatientObj={setPatientObj}
+                    patientObj={patientObj}
+                    setExtra={setExtra}
+                    extra={extra}
+                    basicInfo={basicInfo}
+                    organizationInfo={organizationInfo}
+                    addNewForm={false}
+                    row={row}
+                    setAction={setAction}
                   />
                 )}
                 {activeItem === "view-referral" && (

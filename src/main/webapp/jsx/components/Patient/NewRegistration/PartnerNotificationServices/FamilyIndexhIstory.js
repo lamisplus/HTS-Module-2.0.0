@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import MaterialTable from "material-table";
 import axios from "axios";
-import { url as baseUrl, token } from "./../../../../../api";
-//import { token as token } from "./../../../api";
+import { url as baseUrl } from "./../../../../../api";
+import { token as token } from "./../../../../../api";
+import { toast } from "react-toastify";
 import { forwardRef } from "react";
 import "semantic-ui-css/semantic.min.css";
 import AddBox from "@material-ui/icons/AddBox";
@@ -23,13 +24,11 @@ import ViewColumn from "@material-ui/icons/ViewColumn";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
 import { makeStyles } from "@material-ui/core/styles";
-//import { useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { FaUserPlus } from "react-icons/fa";
 import "@reach/menu-button/styles.css";
 import { Dropdown, Button, Menu, Icon } from "semantic-ui-react";
-import moment from "moment";
 import { Modal } from "react-bootstrap";
-import { toast } from "react-toastify";
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -98,44 +97,42 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const PNSList = (props) => {
-  const [indexClientList, setIndexClientList] = useState([]);
-  const [recordSelected, setRecordSelected] = useState({});
-
-  const [open, setOpen] = React.useState(false);
+const FamilyIndexHistory = (props) => {
+  let history = useHistory();
+  const [familyIndexList, setFamilyIndexList] = useState([]);
   const toggle = () => setOpen(!open);
+  const [recordSelected, setRecordSelected] = useState({});
+  const [open, setOpen] = React.useState(false);
 
-  //const [patientObj, setpatientObj] = useState([])
-  const patientId =
-    props.patientObj && props.patientObj.id ? props.patientObj.id : null;
-  //const [key, setKey] = useState('home');
-  //console.log(props)
-  useEffect(() => {
-    patients();
-  }, []);
-  ///GET LIST OF Patients
-  async function patients() {
+  const getListoFFamilyIndexInfo = () => {
     axios
       .get(
-        `${baseUrl}hts-personal-notification-service/${props.patientObj.id}/hts-client`,
+        `${baseUrl}hts-family-index-testing/${props.patientObj.id}/hts-client`,
         {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       )
       .then((response) => {
-        console.log(response.data);
-        setIndexClientList(response.data);
+        if (response.data) {
+          setFamilyIndexList(response.data);
+        }
       })
-      .catch((error) => {});
-  }
-  const addNewPns = (e) => {
-    e.preventDefault();
-    props.handleItemClick("pns");
+      .catch((e) => {
+        // console.log("Fetch Facilities error" + e);
+      });
   };
+
+  useEffect(() => {
+    getListoFFamilyIndexInfo();
+  }, [props.patientObj]);
+
   const LoadViewPage = (row, actionType) => {
-    props.handleItemClick("view-pns");
-    props.setRow({ row: row, action: actionType });
+    props.handleItemClick("view-fit");
+    props.setAction(actionType);
   };
+
   const LoadModal = (row) => {
     toggle();
     setRecordSelected(row);
@@ -144,20 +141,15 @@ const PNSList = (props) => {
     // setSaving(true);
     //props.setActiveContent({...props.activeContent, route:'mental-health-view', id:row.id})
     axios
-      .delete(
-        `${baseUrl}hts-personal-notification-service/${recordSelected.id}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      )
+      .delete(`${baseUrl}hts-family-index-testing/${recordSelected.id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
       .then((response) => {
         toast.success("Record Deleted Successfully");
         toggle();
-        patients();
-        // setSaving(false);
+        getListoFFamilyIndexInfo();
       })
       .catch((error) => {
-        // setSaving(false);
         if (error.response && error.response.data) {
           let errorMessage =
             error.response.data.apierror &&
@@ -170,85 +162,72 @@ const PNSList = (props) => {
         }
       });
   };
+
   return (
     <>
       <div>
-        <Button
-          variant="contained"
-          color="primary"
-          className=" float-end  mr-2 mt-2"
-          onClick={(e) => addNewPns(e)}
-          //startIcon={<FaUserPlus size="10"/>}
-        >
-          <span style={{ textTransform: "capitalize" }}>Add New PNS </span>
-        </Button>
-        <br />
-        <br />
-        <br />
-        <br />
         <MaterialTable
           icons={tableIcons}
-          title="List of  client contact"
+          // title=''
           columns={[
-            { title: "Partner Name", field: "date" },
-            { title: "Partner ID", field: "age" },
-            //   { title: "Phone Number", field: "phone" },
-            { title: "Partner Address", field: "address" },
+            // { title: "HTS ID", field: "id" },
+            { title: "Family Index Client", field: "date" },
+            { title: "Date of Birth", field: "pre" },
+            { title: "Recency Test", field: "rencency" },
+            // { title: "Index Notification", field: "indexNotifiation", filtering: false },
+
             { title: "Actions", field: "actions", filtering: false },
           ]}
           isLoading={props.loading}
-          data={indexClientList
-            .filter((b) => b.firstName !== "")
-            .map((row) => ({
-              date: row.htsClientInformation.partnerName,
-              age: row.htsClientInformation.partnerId,
-              // phone: row.phoneNumber,
-              address: row.htsClientInformation.partnerAddress,
-              actions: (
-                <div>
-                  <Menu.Menu position="right">
-                    <Menu.Item>
-                      <Button
-                        style={{ backgroundColor: "rgb(153,46,98)" }}
-                        primary
-                        onClick={(e) => {
-                          e.preventDefault();
-                        }}
-                      >
-                        <Dropdown
-                          item
-                          text="Action"
-                          onClick={(e) => {
-                            e.preventDefault();
-                          }}
+          data={familyIndexList.map((row) => ({
+            // id: row.id,
+            date: row.familyIndexClient,
+            pre: row.dateOfBirth,
+            rencency: row.recencyTesting,
+
+            //indexNotifiation:row.indexNotificationServicesElicitation ? "Filled":"Not Filled ",
+
+            actions: (
+              <div>
+                <Menu.Menu position="right">
+                  <Menu.Item>
+                    {/* <Button
+                    style={{ backgroundColor: "rgb(153,46,98)" }}
+                    primary
+                    onClick={(e) => {
+                      e.preventDefault();
+                    }}
+                  > */}
+                    <Dropdown item text="Action">
+                      <Dropdown.Menu style={{ marginTop: "10px" }}>
+                        <Dropdown.Item
+                          onClick={() => LoadViewPage(row, "view")}
                         >
-                          <Dropdown.Menu style={{ marginTop: "10px" }}>
-                            <Dropdown.Item
-                              onClick={(e) => LoadViewPage(row, "view")}
-                            >
-                              {" "}
-                              <Icon name="eye" />
-                              View
-                            </Dropdown.Item>
-                            <Dropdown.Item
-                              onClick={() => LoadViewPage(row, "update")}
-                            >
-                              <Icon name="edit" />
-                              Edit
-                            </Dropdown.Item>
-                            <Dropdown.Item onClick={() => LoadModal(row)}>
-                              <Icon name="delete" />
-                              Delete
-                            </Dropdown.Item>
-                          </Dropdown.Menu>
-                        </Dropdown>
-                      </Button>
-                    </Menu.Item>
-                  </Menu.Menu>
-                </div>
-              ),
-            }))}
+                          {" "}
+                          <Icon name="eye" />
+                          View
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          onClick={() => LoadViewPage(row, "update")}
+                        >
+                          <Icon name="edit" />
+                          Edit
+                        </Dropdown.Item>
+                        <Dropdown.Item onClick={() => LoadModal(row)}>
+                          <Icon name="delete" />
+                          Delete
+                        </Dropdown.Item>
+                      </Dropdown.Menu>
+                    </Dropdown>
+                    {/* </Button> */}
+                  </Menu.Item>
+                </Menu.Menu>
+              </div>
+            ),
+          }))}
           options={{
+            toolbar: false,
+            search: false,
             headerStyle: {
               //backgroundColor: "#9F9FA5",
               color: "#000",
@@ -259,7 +238,7 @@ const PNSList = (props) => {
             },
             filtering: false,
             exportButton: false,
-            //   searchFieldAlignment: "left",
+            searchFieldAlignment: "left",
             pageSizeOptions: [10, 20, 100],
             pageSize: 10,
             debounceInterval: 400,
@@ -282,7 +261,7 @@ const PNSList = (props) => {
         </Modal.Header>
         <Modal.Body>
           <h4>
-            Are you Sure you want to delete{" "}
+            Are you Sure you want to delete ?
             {/* <b>{row && record.activityName}</b> */}
           </h4>
         </Modal.Body>
@@ -308,4 +287,4 @@ const PNSList = (props) => {
   );
 };
 
-export default PNSList;
+export default FamilyIndexHistory;

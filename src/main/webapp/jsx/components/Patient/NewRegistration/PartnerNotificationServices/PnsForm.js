@@ -631,8 +631,10 @@ const PnsForm = (props) => {
             position: toast.POSITION.BOTTOM_CENTER,
           });
 
+                    
+
           if (props?.addNewForm === false) {
-            handleItemClick("pns-history");
+            handleItemClick("pns-history", 'pns');
           }
           if (
             objValues.offeredPns !== "No" &&

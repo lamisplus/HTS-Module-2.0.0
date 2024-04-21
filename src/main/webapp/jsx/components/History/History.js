@@ -164,7 +164,13 @@ const PatientnHistory = (props) => {
             <div>
               <Menu.Menu position="right">
                 <Menu.Item>
-                  <Button style={{ backgroundColor: "rgb(153,46,98)" }} primary>
+                  <Button
+                    style={{ backgroundColor: "rgb(153,46,98)" }}
+                    primary
+                    onClick={(e) => {
+                      e.preventDefault();
+                    }}
+                  >
                     <Dropdown item text="Action">
                       <Dropdown.Menu style={{ marginTop: "10px" }}>
                         <Dropdown.Item

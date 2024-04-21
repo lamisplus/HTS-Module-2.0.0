@@ -45,14 +45,7 @@ const PNSHistory = (props) => {
               setRow={props.setRow}
             />
           )}
-          {activePage === "add" && (
-            <AddIndexContact
-              activePage={activePage}
-              setActivePage={setActivePage}
-              handleIClickPage={handleIClickPage}
-              patientObj={props.patientObj}
-            />
-          )}
+          
           <br />
           <div className="row">
             <div className="form-group mb-3 col-md-12">

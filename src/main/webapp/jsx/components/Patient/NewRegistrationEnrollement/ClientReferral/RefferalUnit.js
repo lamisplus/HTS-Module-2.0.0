@@ -449,13 +449,13 @@ const RefferralUnit = (props) => {
         setPayload({...payload, age: e.target.value});
     };
 
-    const handleItemClick = (page, completedMenu) => {
-        props.handleItemClick(page);
-        if (props.completed.includes(completedMenu)) {
-        } else {
-            props.setCompleted([...props.completed, completedMenu]);
-        }
-    };
+    // const handleItemClick = (page, completedMenu) => {
+    //     props.handleItemClick(page);
+    //     if (props.completed.includes(completedMenu)) {
+    //     } else {
+    //         props.setCompleted([...props.completed, completedMenu]);
+    //     }
+    // };
     const validate = () => {
         //HTS FORM VALIDATION
         temp.dateVisit = payload.dateVisit ? "" : "This field is required.";
@@ -547,10 +547,11 @@ const RefferralUnit = (props) => {
             });
             setSaving(false);
             toast.success("Record saved successfully", { position: toast.POSITION.BOTTOM_CENTER });
-            // handleItemClick("refferal-history");
-            history.push("/")
+            props.handleItemClick("refferal-history");
+            // history.push("/")
         } catch (error) {
             setSaving(false);
+            console.log("error", error);
             const errorMessage = error.response?.data?.apierror?.message || "Something went wrong, please try again";
             toast.error(errorMessage, { position: toast.POSITION.BOTTOM_CENTER });
         }

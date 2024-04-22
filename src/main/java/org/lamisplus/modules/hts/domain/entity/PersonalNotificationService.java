@@ -139,6 +139,10 @@ public class PersonalNotificationService extends Audit implements Serializable {
     @JoinColumn(name = "hts_client_uuid", referencedColumnName = "uuid", insertable = false, updatable = false)
     private HtsClient htsClient;
 
+    @Basic
+    @Column(name = "partner_id")
+    private String partnerId;
+
     // index client information
 
     @Type(type = "jsonb")

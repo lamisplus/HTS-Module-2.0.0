@@ -13,6 +13,7 @@
                 uuid character varying NOT NULL,
                 dob date,
                 facility_id bigint NOT NULL,
+                partner_id character varying(200),
                 sex character varying,
                 address character varying ,
                 phone_number character varying,

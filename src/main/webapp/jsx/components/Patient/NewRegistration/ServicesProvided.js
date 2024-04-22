@@ -343,8 +343,7 @@ const ServicesProvided = (props) => {
         });
         setSaving(false);
         toast.success("Record saved successfully", { position: toast.POSITION.BOTTOM_CENTER });
-        // history.push("/");
-          handleItemClick("refferal-history");
+          props.handleItemClick("refferal-history");
       } catch (error) {
         setSaving(false);
         const errorMessage = error.response?.data?.apierror?.message || "Something went wrong, please try again";

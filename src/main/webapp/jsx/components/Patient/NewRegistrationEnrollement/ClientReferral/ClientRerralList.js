@@ -93,6 +93,8 @@ const ClientRerralList = (props) => {
     const [recordSelected, setRecordSelected] = useState({});
 
     const [open, setOpen] = React.useState(false);
+    const [serviceMapping, setServiceMapping] = useState({});
+    const [serviceNeeded, setServiceNeeded] = useState([]);
     const toggle = () => setOpen(!open);
 
     //const [patientObj, setpatientObj] = useState([])
@@ -102,8 +104,36 @@ const ClientRerralList = (props) => {
     //console.log(props)
     useEffect(() => {
         patients();
+    },
+        []);
+    //get services needed
+    const SERVICE_NEEDED = () => {
+        axios.get(`${baseUrl}application-codesets/v2/SERVICE_PROVIDED`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+            .then((response) => {
+                if (response.data) {
+                    setServiceNeeded(response.data);
+                    const mapping = {};
+                    response.data.forEach(item => {
+                        mapping[item.code] = item.display;
+                    });
+                    setServiceMapping(mapping);
+                }
+            })
+            .catch((e) => {
+                console.error("Fetch Services error:", e);
+            });
+    };
+
+
+    useEffect(() => {
+        SERVICE_NEEDED();
     }, []);
-    ///GET LIST OF Patients
+
+
     async function patients() {
         axios
             .get(
@@ -169,7 +199,7 @@ const ClientRerralList = (props) => {
                     onClick={(e) => addNewPns(e)}
                     //startIcon={<FaUserPlus size="10"/>}
                 >
-                    <span style={{ textTransform: "capitalize" }}> Fill New Form </span>
+                    <span style={{ textTransform: "capitalize" }}> Refer Client</span>
                 </Button>
                 <br />
                 <br />
@@ -190,7 +220,7 @@ const ClientRerralList = (props) => {
                         .filter((b) => b.firstName !== "")
                         .map((row) => ({
                             date: row.dateVisit,
-                            service: row.serviceNeeded,
+                            service:  serviceMapping[row.serviceNeeded] || row.serviceNeeded,
                             // phone: row.phoneNumber,
                             receiving: row.nameOfReceivingFacility,
                             actions: (

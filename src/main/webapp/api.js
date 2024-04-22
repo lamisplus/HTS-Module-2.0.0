@@ -1,6 +1,7 @@
-// export const token = new URLSearchParams(window.location.search).get("jwt");
-// export const url = "/api/v1/";
+export const token = new URLSearchParams(window.location.search).get("jwt");
+export const url = "/api/v1/";
 
-export const url = "http://localhost:8789/api/v1/";
-export const token =
-"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJndWVzdEBsYW1pc3BsdXMub3JnIiwiYXV0aCI6IlN1cGVyIEFkbWluIiwibmFtZSI6Ikd1ZXN0IEd1ZXN0IiwiZXhwIjoxNzEzNzI1OTI3fQ.R4BXJcL5YHdULoix3CqeuvEx0nMQYeQo9V2HqmpvQbR7ki3Ok5-FjVZ8M7LELGGMvWsvVgCTy5V54mGVW9qMaw";
+// export const url = "http://localhost:8789/api/v1/";
+// export const token =
+// "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJndWVzdEBsYW1pc3BsdXMub3JnIiwiYXV0aCI6IlN1cGVyIEFkbWluIiwibmFtZSI6Ikd1ZXN0IEd1ZXN0IiwiZXhwIjoxNzEzODAwNzYzfQ._EU0dOkCBaDRpCVu7UCLpV1QGfy2-18PDBy8Bw5QIL6ppQEzJXA634JGUQx6Tg7Xpl83D7_ubGxSUy6uJX_uLg" +
+//     "";

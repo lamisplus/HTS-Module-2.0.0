@@ -336,7 +336,7 @@ const ViewFamilyIndexTestingForm = (props) => {
       )
       .then((response) => {
         if (response.data) {
-          setFormId(response.data.id);
+          setFormId(response.data.htsClientId);
 
           console.log("this info", response.data);
           setPayload({
@@ -345,6 +345,7 @@ const ViewFamilyIndexTestingForm = (props) => {
             // uuid: "ce538c49-0795-41a3-a93f-94d3afabadff",
             // htsClientUuid: "0c02d167-50e5-4ddf-925a-3ac95753fd28",
             htsClientId: response.data.htsClientId,
+            htsClientUuid: response.data.htsClientUuid,
             extra: response.data.extra,
             state: response.data.state,
             lga: response.data.lga,

@@ -220,7 +220,7 @@ const ViewClientReferral = (props) => {
                     patientObj={patientObj}
                     formInfo={formInfo}
                     row={props.row}
-                    handleClicked={props.handleClicked}
+                    handleItemClick={props.handleItemClick}
                     setCompleted={props.setCompleted}
                     completed={props.completed}
                 />}
@@ -230,7 +230,7 @@ const ViewClientReferral = (props) => {
                             patientObj = {patientObj}
                             formInfo={formInfo}
                             row={props.row}
-                            handleClicked={props.handleClicked}
+                            handleItemClick={props.handleItemClick}
                             etCompleted={props.setCompleted}
                             completed={props.completed}
                         />

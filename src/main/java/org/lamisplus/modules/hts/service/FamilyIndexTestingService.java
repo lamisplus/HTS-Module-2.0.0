@@ -75,7 +75,8 @@ public class FamilyIndexTestingService {
     public FamilyIndexTestingResponseDTO getFamilyIndexTestingByHtsClient(Long id) {
         Optional<FamilyIndexTesting> familyIndexTestingList = familyIndexTestingRepository.findByHtsClientIdAndArchived(id, UN_ARCHIVED);
         if(!familyIndexTestingList.isPresent()) {
-            throw new EntityNotFoundException(FamilyIndexTesting.class, "id", id + "");
+//            throw new EntityNotFoundException(FamilyIndexTesting.class, "id", id + "");
+            return null;
         }
         return convertFamilyIndexTestingToResponseDTO2(familyIndexTestingList.get());
     }

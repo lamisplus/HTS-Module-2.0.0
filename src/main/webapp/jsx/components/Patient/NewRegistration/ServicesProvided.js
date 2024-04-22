@@ -296,7 +296,6 @@ const ServicesProvided = (props) => {
     }
   };
 
-
   /*****  Validation  */
   const validate = () => {
     //HTS FORM VALIDATION
@@ -344,8 +343,8 @@ const ServicesProvided = (props) => {
         });
         setSaving(false);
         toast.success("Record saved successfully", { position: toast.POSITION.BOTTOM_CENTER });
-        history.push("/");
-        //   handleItemClick("refferal-history");
+        // history.push("/");
+          handleItemClick("refferal-history");
       } catch (error) {
         setSaving(false);
         const errorMessage = error.response?.data?.apierror?.message || "Something went wrong, please try again";
@@ -527,7 +526,7 @@ const ServicesProvided = (props) => {
                       border: "1px solid #014D88",
                       borderRadius: "0.2rem",
                     }}
-                    disabled
+                    disabled={props.row.action === "view" ? true : false}
                 />
                 {errors.clientFirstName !== "" ? (
                     <span className={classes.error}>
@@ -555,7 +554,7 @@ const ServicesProvided = (props) => {
                       border: "1px solid #014D88",
                       borderRadius: "0.2rem",
                     }}
-                    disabled
+                    disabled={props.row.action === "view" ? true : false}
                 />
               </FormGroup>
             </div>
@@ -576,7 +575,7 @@ const ServicesProvided = (props) => {
                       border: "1px solid #014D88",
                       borderRadius: "0.2rem",
                     }}
-                    disabled
+                    disabled={props.row.action === "view" ? true : false}
                 />
                 {errors.clientLastName !== "" ? (
                     <span className={classes.error}>{errors.clientLastName}</span>

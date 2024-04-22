@@ -103,7 +103,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const RefferralUnit = (props) => {
-    console.log("props.patientObj", props.patientObj);
+    // console.log("props.patientObj", props.patientObj);
     const patientObj = props.patientObj;
     const classes = useStyles();
     const [errors, setErrors] = useState({});
@@ -171,7 +171,7 @@ const RefferralUnit = (props) => {
         htsClientUuid: props && props.patientObj ? props.patientObj?.uuid : ""
     });
 
-    console.log("PAYLOAD", payload);
+    // console.log("PAYLOAD", payload);
     const loadGenders = useCallback(async () => {
         getAllGenders()
             .then((response) => {
@@ -248,7 +248,7 @@ const RefferralUnit = (props) => {
                 setCountries(res);
             })
             .catch((e) => {
-                console.log(e);
+                // console.log(e);
             });
 
         // console.log(response);
@@ -311,7 +311,6 @@ const RefferralUnit = (props) => {
         })
             .then((response) => {
                 if (response.data) {
-                    console.log("SERVICE_NEEDED", response.data)
                     setServiceNeeded(response.data);
                 }
             })
@@ -541,7 +540,7 @@ const RefferralUnit = (props) => {
         }
 
     };
- console.log("payload before submit", payload)
+ // console.log("payload before submit", payload)
     const handleSubmit1 = (e) => {
         e.preventDefault();
         // if (validate()) {
@@ -1523,10 +1522,10 @@ const RefferralUnit = (props) => {
                             <div className="row">
                                 <div className="form-group mb-3 col-md-12">
                                     <Button
-                                        content="Save & Continue"
+                                        content="Add Form"
                                         type="submit"
-                                        icon="right arrow"
-                                        labelPosition="right"
+                                        // icon="right arrow"
+                                        // labelPosition="right"
                                         style={{backgroundColor: "#014d88", color: "#fff"}}
                                         onClick={handleSubmit1}
                                         disabled={saving}

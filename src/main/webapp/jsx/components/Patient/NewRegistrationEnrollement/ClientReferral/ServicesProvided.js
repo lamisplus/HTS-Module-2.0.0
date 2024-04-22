@@ -610,7 +610,7 @@ const ServicesProvided = (props) => {
                       border: "1px solid #014D88",
                       borderRadius: "0.2rem",
                     }}
-                    disabled={props.row.action === "view" ? true : false}
+                    // disabled={props.row.action === "view" ? true : false}
                 />
                 {errors.clientFirstName !== "" ? (
                     <span className={classes.error}>

@@ -23,7 +23,7 @@ import { Icon, List, Label as LabelSui } from "semantic-ui-react";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
 import CreateIcon from "@material-ui/icons/Create";
-import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 
 import Select from "react-select";
 // import { getAcount } from "../../../../utility";
@@ -304,8 +304,6 @@ const ViewFamilyIndexTestingForm = (props) => {
       });
   };
 
-  console.log("props", props);
-
   const getFamilyIndexInfo = () => {
     axios
       .get(
@@ -338,7 +336,7 @@ const ViewFamilyIndexTestingForm = (props) => {
       )
       .then((response) => {
         if (response.data) {
-          setFormId(response.data[0].id);
+          setFormId(response.data.id);
 
           console.log("this info", response.data);
           setPayload({
@@ -346,43 +344,44 @@ const ViewFamilyIndexTestingForm = (props) => {
             // id: 6,
             // uuid: "ce538c49-0795-41a3-a93f-94d3afabadff",
             // htsClientUuid: "0c02d167-50e5-4ddf-925a-3ac95753fd28",
-            htsClientId: response.data[0].htsClientId,
-            extra: response.data[0].extra,
-            state: response.data[0].state,
-            lga: response.data[0].lga,
-            facilityName: response.data[0].facilityName,
-            visitDate: response.data[0].visitDate,
-            setting: response.data[0].setting,
-            familyIndexClient: response.data[0].familyIndexClient,
-            sex: response.data[0].sex,
-            indexClientId: response.data[0].indexClientId,
-            name: response.data[0].name,
-            dateOfBirth: response.data[0].dateOfBirth,
-            age: response.data[0].age,
-            maritalStatus: response.data[0].maritalStatus,
-            phoneNumber: response.data[0].phoneNumber,
-            alternatePhoneNumber: response.data[0].alternatePhoneNumber,
+            htsClientId: response.data.htsClientId,
+            extra: response.data.extra,
+            state: response.data.state,
+            lga: response.data.lga,
+            facilityName: response.data.facilityName,
+            visitDate: response.data.visitDate,
+            setting: response.data.setting,
+            familyIndexClient: response.data.familyIndexClient,
+            sex: response.data.sex,
+            indexClientId: response.data.indexClientId,
+            name: response.data.name,
+            dateOfBirth: response.data.dateOfBirth,
+            age: response.data.age,
+            maritalStatus: response.data.maritalStatus,
+            phoneNumber: response.data.phoneNumber,
+            alternatePhoneNumber: response.data.alternatePhoneNumber,
             dateIndexClientConfirmedHivPositiveTestResult:
-              response.data[0].dateIndexClientConfirmedHivPositiveTestResult,
-            virallyUnSuppressed: response.data[0].virallyUnSuppressed,
+              response.data.dateIndexClientConfirmedHivPositiveTestResult,
+            virallyUnSuppressed: response.data.virallyUnSuppressed,
             isClientCurrentlyOnHivTreatment:
-              response.data[0].isClientCurrentlyOnHivTreatment,
+              response.data.isClientCurrentlyOnHivTreatment,
             dateClientEnrolledOnTreatment:
-              response.data[0].dateClientEnrolledOnTreatment,
-            recencyTesting: response.data[0].recencyTesting,
+              response.data.dateClientEnrolledOnTreatment,
+            recencyTesting: response.data.recencyTesting,
             willingToHaveChildrenTestedElseWhere:
-              response.data[0]?.willingToHaveChildrenTestedElseWhere,
+              response.data?.willingToHaveChildrenTestedElseWhere,
           });
 
+          console.log(response.data);
           setArrayFamilyTestingTrackerRequestDTO(
-            response.data[0].familyTestingTrackerResponseDTO
+            response.data.familyTestingTrackerResponseDTO
           );
-          setArrayFamilyIndexRequestDto(response.data[0].familyIndexList);
+          setArrayFamilyIndexRequestDto(response.data.familyIndexList);
           //  FamilyIndexInfo(response.data[0].ID)
         }
       })
       .catch((e) => {
-        // console.log("Fetch Facilities error" + e);
+        console.log("Fetch Facilities error" + e);
       });
   };
 
@@ -530,7 +529,7 @@ const ViewFamilyIndexTestingForm = (props) => {
   const INDEX_VISIT_ATTEMPTS = () => {
     axios
       .get(`${baseUrl}application-codesets/v2/INDEX_VISIT_ATTEMPTS`, {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `secBearer ${token}` },
       })
       .then((response) => {
         setIndexVisitAttempt(response.data);

@@ -116,7 +116,7 @@ const FamilyIndexHistory = (props) => {
       )
       .then((response) => {
         if (response.data) {
-          setFamilyIndexList(response.data);
+          setFamilyIndexList([response.data]);
         }
       })
       .catch((e) => {

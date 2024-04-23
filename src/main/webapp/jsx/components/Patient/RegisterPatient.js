@@ -261,7 +261,6 @@ const UserRegistration = (props) => {
     }
   }, []);
 
-
   return (
     <>
       <ToastContainer autoClose={3000} hideProgressBar />
@@ -440,15 +439,15 @@ const UserRegistration = (props) => {
                             activeItem === "indexing" ? "#000" : "",
                         }}
                         disabled={activeItem !== "indexing" ? true : false}
-                      > */}
-                      {/* <Label>4</Label> */}
-                      {/* <span style={{ color: "#fff" }}>
+                      >
+                   
+                      <span style={{ color: "#fff" }}>
                           Index Notification Services - Elicitation
                           {completed.includes("indexing") && (
                             <Icon name="check" color="green" />
                           )}
                         </span>
-                      </Menu.Item>
+                      </Menu.Item> */}
                       <Menu.Item
                         name="inbox"
                         active={activeItem === "fit"}
@@ -482,7 +481,7 @@ const UserRegistration = (props) => {
                           )}
                         </span>
                       </Menu.Item>
-                      {/*<Menu.Item*/}
+                      {/*<Menu.Item
                       {/*    name="inbox"*/}
                       {/*    active={activeItem === "refferal"}*/}
                       {/*    onClick={() => handleItemClick("refferal")}*/}

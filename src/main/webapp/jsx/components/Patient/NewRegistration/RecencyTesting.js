@@ -16,6 +16,8 @@ import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
 import { token, url as baseUrl } from "../../../../api";
 import { useHistory } from "react-router-dom/cjs/react-router-dom";
+
+import { Modal } from "react-bootstrap";
 const useStyles = makeStyles((theme) => ({
   card: {
     margin: theme.spacing(20),
@@ -85,6 +87,8 @@ const useStyles = makeStyles((theme) => ({
 const Recency = (props) => {
   console.log("recency new", props.patientObj);
   const classes = useStyles();
+  const [open, setOpen] = React.useState(false);
+  const toggle = () => setOpen(!open);
 
   const history = useHistory();
   const patientID =
@@ -189,6 +193,21 @@ const Recency = (props) => {
         : "",
   });
 
+  const handleDone = () => {
+    toggle();
+    history.push("/");
+  };
+  const loadOtherForm = (row) => {
+    // setSaving(true);
+    //props.setActiveContent({...props.activeContent, route:'mental-health-view', id:row.id})
+    toggle();
+  };
+
+  const loadNextForm = (row) => {
+    // setSaving(true);
+    handleItemClick("fit", "recency-testing");
+    toggle();
+  };
   useEffect(() => {
     if (props.patientObj && props.patientObj.recency !== null) {
       console.log(props.patientObj.recency);
@@ -353,9 +372,9 @@ const Recency = (props) => {
         .then((response) => {
           setSaving(false);
           props.setPatientObj(response.data);
+          loadOtherForm();
           //toast.success("Risk Assesment successful");
-          // handleItemClick("indexing", "risk");
-          history.push('/')
+          // history.push('/')
         })
         .catch((error) => {
           setSaving(false);
@@ -857,6 +876,45 @@ const Recency = (props) => {
           </form>
         </CardBody>
       </Card>
+
+      <Modal
+        show={open}
+        toggle={toggle}
+        className="fade"
+        size="md"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+        backdrop="static"
+      >
+        <Modal.Header>
+          <Modal.Title id="contained-modal-title-vcenter">
+            Notification!
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <h4>
+            Would you like to fill other services?
+            {/* <b>{row && record.activityName}</b> */}
+          </h4>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            onClick={() => loadNextForm()}
+            style={{ backgroundColor: "red", color: "#fff" }}
+            // disabled={saving}
+          >
+            Yes
+            {/* {saving === false ? "Yes" : "Deleting..."} */}
+          </Button>
+          <Button
+            onClick={handleDone}
+            style={{ backgroundColor: "#014d88", color: "#fff" }}
+            // disabled={saving}
+          >
+            No
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 };

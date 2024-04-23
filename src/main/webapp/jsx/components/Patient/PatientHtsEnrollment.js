@@ -75,28 +75,6 @@ const UserRegistration = (props) => {
     //setCompleted({...completed, ...completedMenu})
   };
 
-  const getListoFFamilyIndexInfo = () => {
- 
-    axios
-      .get(
-        `${baseUrl}hts-family-index-testing/${props.activePage.activeObject.id}/hts-client`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
-      .then((response) => {
-        if (response.data) {
-          setFamilyIndexList([response.data]);
-        }
-      })
-      .catch((e) => {
-        // console.log("Fetch Facilities error" + e);
-      });
-  };
-
-  
   const LoadViewPage = (row, actionType) => {
     props.setActivePage({
       ...props.activePage,
@@ -106,9 +84,6 @@ const UserRegistration = (props) => {
     });
   };
 
-  useEffect(() => {
-    getListoFFamilyIndexInfo();
-  }, []);
 
   console.log(familyIndexList);
   return (
@@ -302,11 +277,7 @@ const UserRegistration = (props) => {
                   <Menu.Item
                     name="inbox"
                     active={activeItem === "fit-history"}
-                    onClick={() =>
-                      handleItemClick(
-                        familyIndexList.length === 1 ? "fit-history" : "fit"
-                      )
-                    }
+                    onClick={() => handleItemClick("fit-history")}
                     style={{
                       backgroundColor:
                         activeItem === "fit-history" ? "#000" : "",
@@ -321,19 +292,19 @@ const UserRegistration = (props) => {
                     </span>
                   </Menu.Item>
                   <Menu.Item
-                      name="inbox"
-                      active={activeItem === "refferal-history"}
-                      onClick={() => handleItemClick("refferal-history")}
-                      style={{
-                        backgroundColor:
-                            activeItem === "refferal-history" ? "#000" : "",
-                      }}
+                    name="inbox"
+                    active={activeItem === "refferal-history"}
+                    onClick={() => handleItemClick("refferal-history")}
+                    style={{
+                      backgroundColor:
+                        activeItem === "refferal-history" ? "#000" : "",
+                    }}
                   >
                     <span style={{ color: "#fff" }}>
                       {" "}
-                       Client Referral Service
+                      Client Referral Service
                       {completed.includes("refferal") && (
-                          <Icon name="check" color="green" />
+                        <Icon name="check" color="green" />
                       )}
                     </span>
                   </Menu.Item>
@@ -544,59 +515,57 @@ const UserRegistration = (props) => {
                   />
                 )}
                 {activeItem === "view-referral" && (
-                    <ViewClientReferral
-                        handleItemClick={handleItemClick}
-                        setCompleted={setCompleted}
-                        completed={completed}
-                        setPatientObj={setPatientObj}
-                        patientObj={patientObj}
-                        setExtra={setExtra}
-                        extra={extra}
-                        basicInfo={basicInfo}
-                        organizationInfo={organizationInfo}
-                        addNewForm={false}
-                        row={row}
-                    />
+                  <ViewClientReferral
+                    handleItemClick={handleItemClick}
+                    setCompleted={setCompleted}
+                    completed={completed}
+                    setPatientObj={setPatientObj}
+                    patientObj={patientObj}
+                    setExtra={setExtra}
+                    extra={extra}
+                    basicInfo={basicInfo}
+                    organizationInfo={organizationInfo}
+                    addNewForm={false}
+                    row={row}
+                  />
                 )}
                 {activeItem === "refferal-history" && (
-                    <ClientReferralHistory
-                        handleItemClick={handleItemClick}
-                        setCompleted={setCompleted}
-                        completed={completed}
-                        setPatientObj={setPatientObj}
-                        patientObj={patientObj}
-                        setExtra={setExtra}
-                        extra={extra}
-                        basicInfo={basicInfo}
-                        organizationInfo={organizationInfo}
-                        activePage={props.activePage}
-                        setActivePage={props.setActivePage}
-                        setRow={setRow}
-                    />
+                  <ClientReferralHistory
+                    handleItemClick={handleItemClick}
+                    setCompleted={setCompleted}
+                    completed={completed}
+                    setPatientObj={setPatientObj}
+                    patientObj={patientObj}
+                    setExtra={setExtra}
+                    extra={extra}
+                    basicInfo={basicInfo}
+                    organizationInfo={organizationInfo}
+                    activePage={props.activePage}
+                    setActivePage={props.setActivePage}
+                    setRow={setRow}
+                  />
                 )}
                 {activeItem === "client-referral" && (
-                    <RefferralUnit
-                        handleItemClick={handleItemClick}
-                        setCompleted={setCompleted}
-                        completed={completed}
-                        setPatientObj={setPatientObj}
-                        patientObj={patientObj}
-                        setExtra={setExtra}
-                        extra={extra}
-                        basicInfo={basicInfo}
-                        organizationInfo={organizationInfo}
-                        addNewForm={false}
-                    />
+                  <RefferralUnit
+                    handleItemClick={handleItemClick}
+                    setCompleted={setCompleted}
+                    completed={completed}
+                    setPatientObj={setPatientObj}
+                    patientObj={patientObj}
+                    setExtra={setExtra}
+                    extra={extra}
+                    basicInfo={basicInfo}
+                    organizationInfo={organizationInfo}
+                    addNewForm={false}
+                  />
                 )}
-                </div>
-
-
-      </div>      </form>
-       
-     </CardBody> 
+              </div>
+            </div>{" "}
+          </form>
+        </CardBody>
       </Card>
-      </>)}
-
-
+    </>
+  );
+};
 
 export default UserRegistration;

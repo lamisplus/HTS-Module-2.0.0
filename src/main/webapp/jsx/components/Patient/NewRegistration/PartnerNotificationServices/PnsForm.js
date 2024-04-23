@@ -210,7 +210,6 @@ const PnsForm = (props) => {
     artEnrollmentNumber: "",
     facilityOfEnrollment: "",
     numberOfPartnerIdentifiedFromClientIndex: "",
-
     partnerName: "",
     partnerSex: "",
     partnerAge: "",
@@ -1592,9 +1591,9 @@ const PnsForm = (props) => {
                           type="number"
                           name="partnerAge"
                           id="partnerAge"
-                          value={objValues.partnerAge}
+                          value={htsClientInformation.partnerAge}
                           // disabled={ageDisabled}
-                          onChange={handleAgeChange}
+                          onChange={handleHTSClientInputChange}
                           style={{
                             border: "1px solid #014D88",
                             borderRadius: "0.2rem",
@@ -1937,7 +1936,6 @@ const PnsForm = (props) => {
                     disabled={saving}
                   />
                 </div>
-
               </div>
             </div>
           </form>

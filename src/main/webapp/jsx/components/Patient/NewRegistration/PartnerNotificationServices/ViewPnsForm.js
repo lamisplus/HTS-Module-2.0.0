@@ -484,6 +484,7 @@ const ViewPNSForm = (props) => {
       .then((response) => {
         setObjValues(response.data);
         sethtsClientInformation(response.data.htsClientInformation);
+        setContactTracing(response.data.contactTracing);
       })
       .catch((error) => {
         //console.log(error);
@@ -1640,9 +1641,9 @@ const ViewPNSForm = (props) => {
                           type="number"
                           name="partnerAge"
                           id="partnerAge"
-                          value={objValues.partnerAge}
+                          value={htsClientInformation.partnerAge}
                           // disabled={ageDisabled}
-                          onChange={handleAgeChange}
+                          onChange={handleHTSClientInputChange}
                           style={{
                             border: "1px solid #014D88",
                             borderRadius: "0.2rem",

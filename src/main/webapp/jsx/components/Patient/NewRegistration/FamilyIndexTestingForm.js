@@ -243,7 +243,7 @@ const FamilyIndexTestingForm = (props) => {
     indexClientId: props?.patientObj?.clientCode,
     isClientCurrentlyOnHivTreatment: "",
     lga: "",
-    maritalStatus: props?.patientObj?.personResponseDto?.maritalStatus.id,
+    maritalStatus: props?.patientObj?.personResponseDto?.maritalStatus?.id,
     name: props?.patientObj?.personResponseDto?.firstName,
     phoneNumber:
       props?.patientObj?.personResponseDto?.contactPoint?.contactPoint[0]
@@ -253,7 +253,7 @@ const FamilyIndexTestingForm = (props) => {
     visitDate: "",
     recencyTesting: "",
     setting: "",
-    sex: props?.patientObj?.personResponseDto?.gender.id,
+    sex: props?.patientObj?.personResponseDto?.gender?.id,
     state: "",
     virallyUnSuppressed: "",
     willingToHaveChildrenTestedElseWhere: "",

@@ -117,6 +117,9 @@ const FamilyIndexHistory = (props) => {
       .then((response) => {
         if (response.data) {
           setFamilyIndexList([response.data]);
+          props.handleItemClick("fit-history");
+        } else {
+          setFamilyIndexList([]);
         }
       })
       .catch((e) => {
@@ -146,8 +149,9 @@ const FamilyIndexHistory = (props) => {
       })
       .then((response) => {
         toast.success("Record Deleted Successfully");
-        toggle();
         getListoFFamilyIndexInfo();
+
+        toggle();
       })
       .catch((error) => {
         if (error.response && error.response.data) {
@@ -166,6 +170,25 @@ const FamilyIndexHistory = (props) => {
   return (
     <>
       <div>
+        <div className="form-group mb-3 col-md-12">
+          {console.log(familyIndexList)}
+          {familyIndexList.length < 1 && (
+            <Button
+              content="Add New form"
+              icon="left add"
+              labelPosition="left"
+              style={{ backgroundColor: "#992E62", color: "#fff" }}
+              onClick={() => props.handleItemClick("fit")}
+            />
+          )}
+          {/* <Button
+            content="Done"
+            icon="list"
+            labelPosition="left"
+            style={{ backgroundColor: "#014d88", color: "#fff" }}
+            onClick={() => handleDone()}
+          /> */}
+        </div>
         <MaterialTable
           icons={tableIcons}
           // title=''

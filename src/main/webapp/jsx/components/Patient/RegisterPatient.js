@@ -24,6 +24,7 @@ import { getAcount } from "../../../utility";
 
 import FamilyIndexTestingForm from "./NewRegistration/FamilyIndexTestingForm";
 import PnsForm from "./NewRegistration/PartnerNotificationServices/PnsForm";
+import RefferralUnit from "./NewRegistration/ClientReferral/RefferalUnit";
 
 const useStyles = makeStyles((theme) => ({
   error: {
@@ -499,6 +500,23 @@ const UserRegistration = (props) => {
                       {/*    )}*/}
                       {/*  </span>*/}
                       {/*</Menu.Item>*/}
+                      <Menu.Item
+                          name="inbox"
+                          active={activeItem === "new-referral"}
+                          onClick={() => handleItemClick("new-referral")}
+                          style={{
+                            backgroundColor: activeItem === "new-referral" ? "#000" : "",
+                          }}
+                      >
+                        <span style={{ color: "#fff" }}>
+                          {" "}
+                         Client Referral Service
+                          {completed.includes("new-referral") && (
+                              <Icon name="check" color="green" />
+                          )}
+                        </span>
+                      </Menu.Item>
+
                     </>
                   )}
                 </Menu>
@@ -631,7 +649,24 @@ const UserRegistration = (props) => {
                     organizationInfo={organizationInfo}
                   />
                 )}
+
+                {activeItem === "new-referral" && (
+                    <RefferralUnit
+                        handleItemClick={handleItemClick}
+                        setCompleted={setCompleted}
+                        completed={completed}
+                        setPatientObj={setPatientObj}
+                        patientObj={patientObj}
+                        setExtra={setExtra}
+                        extra={extra}
+                        basicInfo={basicInfo}
+                        organizationInfo={organizationInfo}
+                        addNewForm={false}
+                    />
+                )}
               </div>
+
+
             </div>
           </form>
         </CardBody>

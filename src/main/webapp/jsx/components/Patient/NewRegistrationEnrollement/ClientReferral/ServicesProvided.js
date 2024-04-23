@@ -8,18 +8,19 @@ import SaveIcon from "@material-ui/icons/Save";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
-import { token, url as baseUrl } from "../../../../api";
+import { token, url as baseUrl } from "../../../../../api"
 import "react-phone-input-2/lib/style.css";
 import "semantic-ui-css/semantic.min.css";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
 import "react-phone-input-2/lib/style.css";
 import { Button } from "semantic-ui-react";
-
+import { Modal } from "react-bootstrap";
+import { Label as LabelRibbon, Message } from "semantic-ui-react";
 import PhoneInput from "react-phone-input-2";
-import { getAllGenders, alphabetOnly } from "../../../../utility";
-import {useHistory} from "react-router-dom";
-
+// import { getAllGenders, alphabetOnly } from "../../../../utility";
+import { alphabetOnly, getAllGenders } from  "../../../../../utility";
+import Select from "react-select";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -102,42 +103,32 @@ const ServicesProvided = (props) => {
   const [open, setOpen] = React.useState(false);
   const toggle = () => setOpen(!open);
   const [genders, setGenders] = useState([]);
-  const [serviceNeeded, setServiceNeeded] = useState("");
+  const [allFacilities, setAllFacilities] = useState([]);
+  const [serviceCategories ,setServiceCategories] = useState([]);
 
-    const [payload, setPayload] = useState({
-        nameOfFacilityProvider: props?.formInfo?.nameOfReceivingFacility,
-        addressOfFacilityProvider: props?.formInfo?.addressOfReceivingFacility || "",
-        visitDate: props?.formInfo?.receivingOrganization?.visitDate || "",
-        comments: props?.formInfo?.comments || "",
-        clientFirstName: props?.patientObj?.personResponseDto?.firstName,
-        clientLastName: props?.patientObj?.personResponseDto?.surname,
-        clientMiddleName: props?.patientObj?.personResponseDto?.otherName,
-        nameOfServiceProvider: props?.formInfo?.receivingOrganization?.nameOfServiceProvider || "",
-        signature: props?.formInfo?.receivingOrganization?.signature || "",
-        phoneNumber: props?.formInfo?.receivingOrganization?.phoneNumber || "",
-        categoryOfService: props?.formInfo?.receivingOrganization?.categoryOfService
-            || "",
-        receivingFacilityLgaName: props?.formInfo?.receivingFacilityLgaName,
-        receivingFacilityStateName: props?.formInfo?.receivingFacilityStateName
-    });
+  const [payload, setPayload] = useState({
+    nameOfFacilityProvider: props?.formInfo?.receivingOrganization?.nameOfFacilityProvider,
+    addressOfFacilityProvider: props?.formInfo?.receivingOrganization?.addressOfFacilityProvider,
+    referralDate: props?.formInfo?.receivingOrganization?.referralDate,
+    comments: props?.formInfo?.receivingOrganization?.comments,
+    clientFirstName: props?.formInfo?.receivingOrganization?.clientFirstName,
+    clientLastName: props?.formInfo?.receivingOrganization?.clientLastName,
+    clientMiddleName: props?.formInfo?.receivingOrganization?.clientMiddleName,
+    nameOfServiceProvider: props?.formInfo?.receivingOrganization?.nameOfServiceProvider,
+    signature: props?.formInfo?.receivingOrganization?.signature,
+    phoneNumber: props?.formInfo?.receivingOrganization?.phoneNumber,
+    categoryOfService: props?.formInfo?.receivingOrganization?.categoryOfService,
+    receivingFacilityStateName: props?.formInfo?.receivingOrganization?.receivingFacilityStateName,
+    receivingFacilityLgaName: props?.formInfo?.receivingOrganization?.receivingFacilityLgaName,
 
- const history = useHistory();
+  });
+
   const [states1, setStates1] = useState([])
   const [lgas1, setLGAs1] = useState([])
   const [facilities1, setFacilities1] = useState([])
   const [selectedState, setSelectedState] = useState({})
   const [selectedFacility, setSelectedFacility] = useState({});
   const [selectedLga, setSelectedLga] = useState({});
-
-    const handleItemClick = (page, completedMenu) => {
-        props.handleItemClick(page);
-        if (props.completed.includes(completedMenu)) {
-        } else {
-            props.setCompleted([...props.completed, completedMenu]);
-        }
-    };
-
-  // ##############################################
 
   const SERVICE_NEEDED = () => {
     axios.get(`${baseUrl}application-codesets/v2/SERVICE_PROVIDED`, {
@@ -147,22 +138,15 @@ const ServicesProvided = (props) => {
     })
         .then((response) => {
           if (response.data) {
-            // console.log("SERVICE_NEEDED", response.data);
-            // Find the object with the matching code
-            const service = response.data.find(item => item.code === props.formInfo.serviceNeeded);
-            if (service) {
-              // setServiceNeeded(service.display);
-              setPayload(prevPayload => ({ ...prevPayload, categoryOfService: service.display }));
-            } else {
-              console.error("Service not found");
-            }
+            setServiceCategories(response.data);
           }
         })
         .catch((e) => {
-          console.error("Fetch Facilities error" + e);
+          // console.log("Fetch Facilities error" + e);
         });
-  };
 
+  }
+  // ########################################################################
   const loadStates1 = () => {
     axios.get(`${baseUrl}organisation-units/parent-organisation-units/1`, {
       headers: {
@@ -173,12 +157,12 @@ const ServicesProvided = (props) => {
           if (response.data) {
             setStates1(response.data);
           }
+
         })
         .catch((e) => {
           // console.log("Fetch states error" + e);
         });
   };
-
 
 
   const loadLGA1 = (id) => {
@@ -217,27 +201,12 @@ const ServicesProvided = (props) => {
         });
   };
 
-  const handleInputChangeLocation = (e) => {
-    setErrors({ ...temp, [e.target.name]: "" });
-    if(e.target.name === 'stateTransferTo'){
-      let filteredState = states1.filter((each)=>{
-        return each.name.toLowerCase()  === e.target.value.toLowerCase()
-      })
-      setPayload({ ...payload, receivingFacilityStateName : e.target.value });
+  // ###########################################################################
 
-      loadLGA1(filteredState[0].id);
-    }
-    if(e.target.name === 'lgaTransferTo'){
-      let filteredState = lgas1.filter((each)=>{
-        return each.name.toLowerCase()  === e.target.value.toLowerCase()
-      })
-      setPayload({ ...payload, [e.target.name]: e.target.value });
-      loadFacilities1(filteredState[0].id);
-
-    }
-
-  };
-  // ################################################
+  useEffect(() => {
+    loadStates1();
+    SERVICE_NEEDED();
+  }, []);
   const getGenders = () => {
     getAllGenders()
       .then((res) => {
@@ -248,12 +217,19 @@ const ServicesProvided = (props) => {
       });
     // ;
   };
+  // handle Facility Name to slect drop down
+  const handleInputChangeObject = (e) => {
+    // console.log(e);
+    setPayload({
+      ...payload,
+      nameOfFacilityProvider: e.name,
+      addressOfFacilityProvider: e.parentParentOrganisationUnitName,
+    });
+    setErrors({ ...errors, nameOfRecievingFacility: "" });
 
-
+  };
   useEffect(() => {
     getGenders();
-    loadStates1()
-    SERVICE_NEEDED()
   }, []);
 
   const checkPhoneNumberBasic = (e, inputName) => {
@@ -296,6 +272,38 @@ const ServicesProvided = (props) => {
     }
   };
 
+  const postPayload = (payload) => {
+    setSaving(true);
+    // props.setHideOtherMenu(false);
+    axios
+      .post(`${baseUrl}risk-stratification`, payload, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        setSaving(false);
+        // console.log(response.data);
+        //toast.success("Risk stratification save succesfully!");
+      })
+      .catch((error) => {
+        setSaving(false);
+        if (error.response && error.response.data) {
+          let errorMessage =
+            error.response.data.apierror &&
+            error.response.data.apierror.message !== ""
+              ? error.response.data.apierror.message
+              : "Something went wrong, please try again";
+          toast.error(errorMessage, {
+            position: toast.POSITION.BOTTOM_CENTER,
+          });
+        } else {
+          toast.error("Something went wrong. Please try again...", {
+            position: toast.POSITION.BOTTOM_CENTER,
+          });
+        }
+      });
+  };
+
+  // console.log("props.formInfo", props.formInfo);
   /*****  Validation  */
   const validate = () => {
     //HTS FORM VALIDATION
@@ -306,13 +314,13 @@ const ServicesProvided = (props) => {
     temp.addressOfFacilityProvider = payload.addressOfFacilityProvider
       ? ""
       : "This field is required.";
-    temp.visitDate = payload.visitDate ? "" : "This field is required.";
-    // temp.clientFirstName = payload.clientFirstName
-    //   ? ""
-    //   : "This field is required.";
-    // temp.clientLastName = payload.clientLastName
-    //   ? ""
-    //   : "This field is required.";
+    temp.referralDate = payload.referralDate ? "" : "This field is required.";
+    temp.clientFirstName = payload.clientFirstName
+      ? ""
+      : "This field is required.";
+    temp.clientLastName = payload.clientLastName
+      ? ""
+      : "This field is required.";
     temp.nameOfServiceProvider = payload.nameOfServiceProvider
       ? ""
       : "This field is required.";
@@ -323,32 +331,39 @@ const ServicesProvided = (props) => {
     temp.categoryOfService = payload.categoryOfService
       ? ""
       : "This field is required.";
-     console.log("temp", temp);
+    temp.stateTransferTo = payload.receivingFacilityStateName ? "" : "This field is required.";
+    temp.lgaTransferTo = payload.receivingFacilityLgaName ? "" : "This field is required.";
+    temp.facilityTransferTo = payload.receivingFacilityName ? "" : "This field is required.";
     setErrors({ ...temp });
     return Object.values(temp).every((x) => x == "");
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleInputChangeLocation = (e) => {
+    setErrors({ ...temp, [e.target.name]: "" });
+    if(e.target.name === 'stateTransferTo'){
+      let filteredState = states1.filter((each)=>{
+        return each.name.toLowerCase()  === e.target.value.toLowerCase()
+      })
+      setPayload({ ...payload, [e.target.name]: e.target.value });
+      loadLGA1(filteredState[0].id);
+    }
+    if(e.target.name === 'lgaTransferTo'){
+      let filteredState = lgas1.filter((each)=>{
+        return each.name.toLowerCase()  === e.target.value.toLowerCase()
+      })
+      setPayload({ ...payload, [e.target.name]: e.target.value });
+      loadFacilities1(filteredState[0].id);
 
-    const data = {
-      htsClientReferralId: props.row.row.id,
-      receivingOrganizationDTO: payload
-    };
+    }
+
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // console.log(payload);
     if (validate()) {
-      try {
-        setSaving(true);
-        await axios.put(`${baseUrl}hts-client-referral/${props.row.row.id}`, data, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        setSaving(false);
-        toast.success("Record saved successfully", { position: toast.POSITION.BOTTOM_CENTER });
-          props.handleItemClick("refferal-history");
-      } catch (error) {
-        setSaving(false);
-        const errorMessage = error.response?.data?.apierror?.message || "Something went wrong, please try again";
-        toast.error(errorMessage, { position: toast.POSITION.BOTTOM_CENTER });
-      }
+      // console.log(payload);
+      //   postPayload(payload);
     }
   };
 
@@ -356,7 +371,7 @@ const ServicesProvided = (props) => {
     <>
       {" "}
       <div>
-        <h2 style={{ color: "#000" }}>Client Referral Form </h2>
+        <h2 style={{ color: "#000" }}>Client Referral Form - {props.row.action === "update" ? "Update": "View"} </h2>
         <br />
         <div className="row">
           <div
@@ -380,77 +395,149 @@ const ServicesProvided = (props) => {
           </p>
           <div className="row">
 
-            {/*###############################*/}
-            {/*<div className="form-group mb-3 col-md-6">*/}
-            {/*  <FormGroup>*/}
-            {/*    <Label for="firstName">*/}
-            {/*      Facility providing service State*/}
-            {/*    </Label>*/}
-            {/*    <Input*/}
-            {/*        className="form-control"*/}
-            {/*        type="text"*/}
-            {/*        name="receivingFacilityStateName"*/}
-            {/*        id="receivingFacilityStateName"*/}
-            {/*        value={payload.receivingFacilityStateName}*/}
-            {/*        onChange={handleInputChange}*/}
-            {/*        style={{*/}
-            {/*          border: "1px solid #014D88",*/}
-            {/*          borderRadius: "0.2rem",*/}
-            {/*        }}*/}
-            {/*        disabled*/}
-            {/*    />*/}
-            {/*    {errors.nameOfServiceProvider !== "" ? (*/}
-            {/*        <span className={classes.error}>*/}
-            {/*        {errors.nameOfServiceProvider}*/}
-            {/*      </span>*/}
-            {/*    ) : (*/}
-            {/*        ""*/}
-            {/*    )}*/}
-            {/*  </FormGroup>*/}
-            {/*</div>*/}
 
-            {/*<div className="form-group mb-3 col-md-6">*/}
-            {/*  <FormGroup>*/}
-            {/*    <Label for="firstName">*/}
-            {/*      Facility providing service LGA*/}
-            {/*    </Label>*/}
-            {/*    <Input*/}
-            {/*        className="form-control"*/}
-            {/*        type="text"*/}
-            {/*        name="receivingFacilityLgaName"*/}
-            {/*        id="receivingFacilityLgaName"*/}
-            {/*        value={payload.receivingFacilityLgaName}*/}
-            {/*        onChange={handleInputChange}*/}
-            {/*        style={{*/}
-            {/*          border: "1px solid #014D88",*/}
-            {/*          borderRadius: "0.2rem",*/}
-            {/*        }}*/}
-            {/*        disabled*/}
-            {/*    />*/}
-            {/*  </FormGroup>*/}
-            {/*</div>*/}
+            {/*######################################*/}
 
-            <div className="form-group mb-3 col-md-6">
+            <div className="form-group mb-3 col-md-4">
               <FormGroup>
-                <Label for="firstName">
-                  Facility providing Service
-                </Label>
+                <Label for="" style={{color: '#014d88', fontWeight: 'bolder'}}>Service Provider State<span
+                    style={{color: "red"}}> *</span> </Label>
                 <Input
-                    className="form-control"
-                    type="text"
-                    name="nameOfFacilityProvider"
-                    id="nameOfFacilityProvider"
-                    value={payload.nameOfFacilityProvider}
-                    onChange={handleInputChange}
+                    type="select"
+                    name="stateTransferTo"
                     style={{
-                      border: "1px solid #014D88",
-                      borderRadius: "0.2rem",
+                      height: "40px",
+                      border: 'solid 1px #014d88',
+                      borderRadius: '5px',
+                      fontWeight: 'bolder',
+                      appearance: 'auto'
                     }}
-                    disabled
-                />
+                    required
+                    disabled={
+                      props.row.action === "view" ? true : false
+                    }
+                    value={payload?.stateTransferTo}
+                    // onChange={loadLGA1}
+                    onChange={handleInputChangeLocation}
+
+                >
+                  <option>Select State</option>
+                  {states1.map((state) => (
+                      <option key={state.id} value={state.name}>
+                        {state.name}
+                      </option>
+                  ))}
+                </Input>
+                {errors.stateTransferTo !== "" ? (
+                    <span className={classes.error}>
+                        {errors.stateTransferTo}
+                      </span>
+                ) : (
+                    ""
+                )}
+              </FormGroup>
+
+            </div>
+
+
+            {/* LOCAL GOVERNMENT TARNASFER TO  */}
+
+            <div className="form-group mb-3 col-md-4">
+              <FormGroup>
+                <Label for="testGroup">
+                  Service Provider LGA <span style={{color: "red"}}> *</span>
+                </Label>
+
+                <Input
+                    type="select"
+                    name="lgaTransferTo"
+                    style={{
+                      height: "40px",
+                      border: 'solid 1px #014d88',
+                      borderRadius: '5px',
+                      fontWeight: 'bolder',
+                      appearance: 'auto'
+                    }}
+                    required
+                    disabled={
+                      props.row.action === "view" ? true : false
+                    }
+                    value={payload?.lgaTransferTo}
+
+                    onChange={handleInputChangeLocation}
+
+                >
+                  <option>Select Lga</option>
+                  {lgas1.length > 0 && lgas1.map((lga) => (
+                      <option key={lga.id} value={lga.name}>
+                        {lga.name}
+                      </option>
+                  ))}
+                  {lgas1.length < 1 && <option key={3} value={payload?.lgaTransferTo}>
+                    {payload?.lgaTransferTo}
+                  </option>}
+
+
+                </Input>
+                {errors.lgaTransferTo !== "" ? (
+                    <span className={classes.error}>
+                        {errors.lgaTransferTo}
+                      </span>
+                ) : (
+                    ""
+                )}
               </FormGroup>
             </div>
-            {/*###############################*/}
+
+
+            {/* FACILITY TRANSFER TO   */}
+
+            <div className="form-group mb-3 col-md-4">
+              <FormGroup>
+                <Label for="testGroup">
+                  Service Provider Facility <span style={{color: "red"}}> *</span>
+                </Label>
+                <Input
+                    type="select"
+                    name="facilityTransferTo"
+                    style={{
+                      height: "40px",
+                      border: 'solid 1px #014d88',
+                      borderRadius: '5px',
+                      fontWeight: 'bolder',
+                      appearance: 'auto'
+                    }}
+                    required
+                    disabled={
+                      props.row.action === "view" ? true : false
+                    }
+                    value={payload.facilityTransferTo}
+                    // onChange={loadLGA1}
+                    onChange={handleInputChange}
+                >
+                  <option>Select State</option>
+                  {facilities1.length > 0 && facilities1.map((fa) => (
+                      <option key={fa.id} value={fa.name}>
+                        {fa.name}
+                      </option>
+                  ))}
+
+                  {facilities1.length < 1 && <option key={3} value={payload?.facilityTransferTo}>
+                    {payload?.facilityTransferTo}
+                  </option>}
+                </Input>
+                {errors.facilityTransferTo !== "" ? (
+                    <span className={classes.error}>
+                        {errors.facilityTransferTo}
+                      </span>
+                ) : (
+                    ""
+                )}
+
+              </FormGroup>
+            </div>
+
+            {/*#######################################*/}
 
             <div className="form-group mb-3 col-md-6">
               <FormGroup>
@@ -469,8 +556,7 @@ const ServicesProvided = (props) => {
                       border: "1px solid #014D88",
                       borderRadius: "0.2rem",
                     }}
-                    // disabled={props.row.action === "view" ? true : false}
-                    disabled
+                    disabled={props.row.action === "view" ? true : false}
                 />
                 {errors.addressOfFacilityProvider !== "" ? (
                     <span className={classes.error}>
@@ -489,11 +575,11 @@ const ServicesProvided = (props) => {
                 </Label>
                 <Input
                     type="date"
-                    name="visitDate"
-                    id="visitDate"
-                    value={payload.visitDate}
+                    name="referralDate"
+                    id="referralDate"
+                    value={payload.referralDate}
                     onChange={handleInputChange}
-                    min={props.formInfo.dateVisit}
+                    min="1929-12-31"
                     max={moment(new Date()).format("YYYY-MM-DD")}
                     style={{
                       border: "1px solid #014D88",
@@ -501,8 +587,8 @@ const ServicesProvided = (props) => {
                     }}
                     disabled={props.row.action === "view" ? true : false}
                 />
-                {errors.visitDate !== "" ? (
-                    <span className={classes.error}>{errors.visitDate}</span>
+                {errors.referralDate !== "" ? (
+                    <span className={classes.error}>{errors.referralDate}</span>
                 ) : (
                     ""
                 )}
@@ -525,7 +611,6 @@ const ServicesProvided = (props) => {
                       borderRadius: "0.2rem",
                     }}
                     // disabled={props.row.action === "view" ? true : false}
-                    disabled
                 />
                 {errors.clientFirstName !== "" ? (
                     <span className={classes.error}>
@@ -553,8 +638,7 @@ const ServicesProvided = (props) => {
                       border: "1px solid #014D88",
                       borderRadius: "0.2rem",
                     }}
-                    // disabled={props.row.action === "view" ? true : false}
-                    disabled
+                    disabled={props.row.action === "view" ? true : false}
                 />
               </FormGroup>
             </div>
@@ -575,8 +659,7 @@ const ServicesProvided = (props) => {
                       border: "1px solid #014D88",
                       borderRadius: "0.2rem",
                     }}
-                    // disabled={props.row.action === "view" ? true : false}
-                    disabled
+                    disabled={props.row.action === "view" ? true : false}
                 />
                 {errors.clientLastName !== "" ? (
                     <span className={classes.error}>{errors.clientLastName}</span>
@@ -691,9 +774,7 @@ const ServicesProvided = (props) => {
                     onChange={(e) => {
                       checkPhoneNumberBasic(e, "phoneNumber");
                     }}
-
                     disabled={props.row.action === "view" ? true : false}
-                    //onChange={(e)=>{handleInputChangeBasic(e,'phoneNumber')}}
                 />
 
                 {errors.phoneNumber !== "" ? (
@@ -701,64 +782,41 @@ const ServicesProvided = (props) => {
                 ) : (
                     ""
                 )}
-                {/* {basicInfo.phoneNumber.length >13 ||  basicInfo.phoneNumber.length <13? (
-                                                <span className={classes.error}>{"The maximum and minimum required number is 13 digit"}</span>
-                                                ) : "" } */}
               </FormGroup>
             </div>
 
-            {/*<div className="form-group  col-md-6">*/}
-            {/*  <FormGroup>*/}
-            {/*    <Label>*/}
-            {/*      Categories of Services{" "}*/}
-            {/*      <span style={{color: "red"}}> *</span>*/}
-            {/*    </Label>*/}
-            {/*    <select*/}
-            {/*        className="form-control"*/}
-            {/*        name="categoryOfService"*/}
-            {/*        id="categoryOfService"*/}
-            {/*        onChange={handleInputChange}*/}
-            {/*        value={payload.categoryOfService}*/}
-            {/*        style={{*/}
-            {/*          border: "1px solid #014D88",*/}
-            {/*          borderRadius: "0.2rem",*/}
-            {/*        }}*/}
-            {/*    >*/}
-            {/*      <option value={""}>Select</option>*/}
-            {/*      {genders.map((gender, index) => (*/}
-            {/*          <option key={gender?.id} value={gender?.id}>*/}
-            {/*            {gender?.display}*/}
-            {/*          </option>*/}
-            {/*      ))}*/}
-            {/*    </select>*/}
-            {/*    {errors.categoryOfService !== "" ? (*/}
-            {/*        <span className={classes.error}>*/}
-            {/*        {errors.categoryOfService}*/}
-            {/*      </span>*/}
-            {/*    ) : (*/}
-            {/*        ""*/}
-            {/*    )}*/}
-            {/*  </FormGroup>*/}
-            {/*</div>*/}
-
-            <div className="form-group mb-3 col-md-6">
+            <div className="form-group  col-md-6">
               <FormGroup>
-                <Label for="firstName">
+                <Label>
                   Categories of Services{" "}
+                  <span style={{color: "red"}}> *</span>
                 </Label>
-                <Input
+                <select
                     className="form-control"
-                    type="text"
-                    name="serviceCategory"
-                    id="serviceCategory"
-                    value={payload.categoryOfService}
+                    name="categoryOfService"
+                    id="categoryOfService"
                     onChange={handleInputChange}
+                    value={payload.categoryOfService}
                     style={{
                       border: "1px solid #014D88",
                       borderRadius: "0.2rem",
                     }}
-                    disabled
-                />
+                    disabled={props.row.action === "view" ? true : false}
+                >
+                  <option value={""}>Select</option>
+                  {serviceCategories.map((service, index) => (
+                      <option key={service?.id} value={service?.id}>
+                        {service?.display}
+                      </option>
+                  ))}
+                </select>
+                {errors.categoryOfService !== "" ? (
+                    <span className={classes.error}>
+                    {errors.categoryOfService}
+                  </span>
+                ) : (
+                    ""
+                )}
               </FormGroup>
             </div>
           </div>
@@ -767,20 +825,23 @@ const ServicesProvided = (props) => {
           <br/>
 
           <br/>
-            {props.row.action === 'update' && (<div className="row">
-                    <div className="form-group mb-3 col-md-6">
-                        <Button
-                            content="Done"
-                            type="submit"
-                            icon="right arrow"
-                            labelPosition="right"
-                            style={{backgroundColor: "#014d88", color: "#fff"}}
-                            onClick={handleSubmit}
-                            disabled={saving}
-                        />
-                    </div>
+          {/* <hr /> */}
+          {saving ? <Spinner/> : ""}
+          <br/>
+          {props.row.action === 'update' && (<div className="row">
+                <div className="form-group mb-3 col-md-6">
+                  <Button
+                      content="Update"
+                      type="submit"
+                      icon="right arrow"
+                      labelPosition="right"
+                      style={{backgroundColor: "#014d88", color: "#fff"}}
+                      onClick={handleSubmit}
+                      disabled={saving}
+                  />
                 </div>
-            )}
+              </div>
+          )}
         </div>
       </div>
     </>

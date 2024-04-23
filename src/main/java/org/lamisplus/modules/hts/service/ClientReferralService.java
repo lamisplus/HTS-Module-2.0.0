@@ -14,6 +14,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import static org.lamisplus.modules.base.util.Constants.ArchiveStatus.UN_ARCHIVED;
 
 @Service
@@ -59,6 +63,8 @@ public class ClientReferralService {
                 .serviceNeeded(htsClientReferral.getServiceNeeded())
                 .comments(htsClientReferral.getComments())
                 .receivingOrganization(htsClientReferral.getReceivingOrganization())
+                .receivingFacilityStateName(htsClientReferral.getReceivingFacilityStateName())
+                .receivingFacilityLgaName(htsClientReferral.getReceivingFacilityLgaName())
                 .build();
 
         return responseDTO;
@@ -81,6 +87,8 @@ public class ClientReferralService {
         htsClientReferral.setServiceNeeded(requestDTO.getServiceNeeded());
         htsClientReferral.setComments(requestDTO.getComments());
         htsClientReferral.setHtsClientId(requestDTO.getHtsClientId());
+        htsClientReferral.setReceivingFacilityStateName(requestDTO.getReceivingFacilityStateName());
+        htsClientReferral.setReceivingFacilityLgaName(requestDTO.getReceivingFacilityLgaName());
         htsClientReferral.setHtsClient(htsClient);
         return htsClientReferral;
     }
@@ -140,15 +148,28 @@ public class ClientReferralService {
         existingHtsClientReferral.setPhoneNoOfReceivingFacility(requestDTO.getPhoneNoOfReceivingFacility());
         existingHtsClientReferral.setServiceNeeded(requestDTO.getServiceNeeded());
         existingHtsClientReferral.setComments(requestDTO.getComments());
+        existingHtsClientReferral.setReceivingFacilityStateName(requestDTO.getReceivingFacilityStateName());
+        existingHtsClientReferral.setReceivingFacilityLgaName(requestDTO.getReceivingFacilityLgaName());
         existingHtsClientReferral.setHtsClient(htsClient);
         htsClientReferralRepository.save(existingHtsClientReferral);
         return convertToHtsClientReferralToDTO(existingHtsClientReferral);
     }
 
-    public HtsClientReferralDTO getHtsClientReferralByHtsClientId(Long htsClientId) {
-        HtsClientReferral existingHtsClientReferral = htsClientReferralRepository.findByHtsClientId(htsClientId).orElseThrow(() ->
-                new EntityNotFoundException(HtsClientReferral.class, "htsClientId", "" + htsClientId));
-        return convertToHtsClientReferralToDTO(existingHtsClientReferral);
+//    public HtsClientReferralDTO getHtsClientReferralByHtsClientId(Long htsClientId) {
+//        HtsClientReferral existingHtsClientReferral = htsClientReferralRepository.findByHtsClientId(htsClientId).orElseThrow(() ->
+//                new EntityNotFoundException(HtsClientReferral.class, "htsClientId", "" + htsClientId));
+//        return convertToHtsClientReferralToDTO(existingHtsClientReferral);
+//    }
+
+
+    public List<HtsClientReferralDTO> getAllHtsClientReferral(Long htsClientId) {
+        HtsClient htsClient = htsClientRepository.findById(htsClientId).orElseThrow(() ->
+                new EntityNotFoundException(HtsClient.class, "htsClientId", "" + htsClientId));
+        List<HtsClientReferral> htsClientReferrals = htsClientReferralRepository.findHtsClientReferralByHtsClientId(htsClientId, UN_ARCHIVED);
+        if(htsClientReferrals == null || htsClientReferrals.isEmpty()){
+            return Collections.emptyList();
+        }
+        return htsClientReferrals.stream().map(this::convertToHtsClientReferralToDTO).collect(Collectors.toList());
     }
 
 

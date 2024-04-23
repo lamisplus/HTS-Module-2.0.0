@@ -75,6 +75,10 @@ public class FamilyIndex extends Audit implements Serializable  {
     @Column(name = "family_index_testing_uuid")
     private String familyIndexTestingUuid;
 
+    @Basic
+    @Column(name="uan")
+    private String UAN;
+
     @PrePersist
     public void setFields(){
         if(StringUtils.isEmpty(uuid)){

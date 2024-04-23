@@ -25,6 +25,9 @@ import PnsForm from "./NewRegistration/PartnerNotificationServices/PnsForm";
 import PNSHistory from "./NewRegistration/PartnerNotificationServices/PNSHistory";
 import ViewPNSForm from "./NewRegistration/PartnerNotificationServices/ViewPnsForm";
 import ViewFamilyIndexTestingForm from "./NewRegistration/PartnerNotificationServices/ViewFamilyIndexForm";
+import ViewClientReferral from "./NewRegistrationEnrollement/ClientReferral/Referrall_view_update";
+import ClientReferralHistory from "./NewRegistrationEnrollement/ClientReferral/ClientReferralHistory";
+import RefferralUnit from "./NewRegistration/RefferalUnit";
 import FamilyIndexHistory from "./NewRegistration/PartnerNotificationServices/FamilyIndexhIstory";
 import FamilyIndexTestingForm from "./NewRegistration/FamilyIndexTestingForm";
 import axios from "axios";
@@ -317,6 +320,23 @@ const UserRegistration = (props) => {
                       )}
                     </span>
                   </Menu.Item>
+                  <Menu.Item
+                      name="inbox"
+                      active={activeItem === "refferal-history"}
+                      onClick={() => handleItemClick("refferal-history")}
+                      style={{
+                        backgroundColor:
+                            activeItem === "refferal-history" ? "#000" : "",
+                      }}
+                  >
+                    <span style={{ color: "#fff" }}>
+                      {" "}
+                       Client Referral Service
+                      {completed.includes("refferal") && (
+                          <Icon name="check" color="green" />
+                      )}
+                    </span>
+                  </Menu.Item>
                 </Menu>
               </div>
 
@@ -523,13 +543,60 @@ const UserRegistration = (props) => {
                     organizationInfo={organizationInfo}
                   />
                 )}
-              </div>
-            </div>
-          </form>
-        </CardBody>
+                {activeItem === "view-referral" && (
+                    <ViewClientReferral
+                        handleItemClick={handleItemClick}
+                        setCompleted={setCompleted}
+                        completed={completed}
+                        setPatientObj={setPatientObj}
+                        patientObj={patientObj}
+                        setExtra={setExtra}
+                        extra={extra}
+                        basicInfo={basicInfo}
+                        organizationInfo={organizationInfo}
+                        addNewForm={false}
+                        row={row}
+                    />
+                )}
+                {activeItem === "refferal-history" && (
+                    <ClientReferralHistory
+                        handleItemClick={handleItemClick}
+                        setCompleted={setCompleted}
+                        completed={completed}
+                        setPatientObj={setPatientObj}
+                        patientObj={patientObj}
+                        setExtra={setExtra}
+                        extra={extra}
+                        basicInfo={basicInfo}
+                        organizationInfo={organizationInfo}
+                        activePage={props.activePage}
+                        setActivePage={props.setActivePage}
+                        setRow={setRow}
+                    />
+                )}
+                {activeItem === "client-referral" && (
+                    <RefferralUnit
+                        handleItemClick={handleItemClick}
+                        setCompleted={setCompleted}
+                        completed={completed}
+                        setPatientObj={setPatientObj}
+                        patientObj={patientObj}
+                        setExtra={setExtra}
+                        extra={extra}
+                        basicInfo={basicInfo}
+                        organizationInfo={organizationInfo}
+                        addNewForm={false}
+                    />
+                )}
+                </div>
+
+
+      </div>      </form>
+       
+     </CardBody> 
       </Card>
-    </>
-  );
-};
+      </>)}
+
+
 
 export default UserRegistration;

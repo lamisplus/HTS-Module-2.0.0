@@ -66,6 +66,7 @@ public class HtsClientReferral extends Audit implements Serializable {
     @Basic
     @Column(name = "referred_from_facility")
     private String referredFromFacility;
+
     @Basic
     @Column(name = "name_of_person_referring_client")
     private String nameOfPersonReferringClient;
@@ -87,6 +88,15 @@ public class HtsClientReferral extends Audit implements Serializable {
     @Basic
     @Column(name = "name_of_reciving_facility")
     private String nameOfReceivingFacility;
+
+    @Basic
+    @Column(name="receiving_facility_state_name")
+    private String receivingFacilityStateName;
+
+    @Basic
+    @Column(name="receiving_facility_lga_name")
+    private String receivingFacilityLgaName;
+
     @Basic
     @Column(name = "address_of_receiving_facility")
     private String addressOfReceivingFacility;

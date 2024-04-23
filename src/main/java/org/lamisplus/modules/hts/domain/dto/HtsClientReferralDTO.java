@@ -28,5 +28,7 @@ public class HtsClientReferralDTO {
     private String phoneNoOfReceivingFacility;
     private String serviceNeeded;
     private String comments;
+    private String receivingFacilityStateName;
+    private String receivingFacilityLgaName;
     private Object receivingOrganization;
 }

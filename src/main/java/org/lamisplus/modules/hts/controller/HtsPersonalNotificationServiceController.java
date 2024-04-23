@@ -44,4 +44,10 @@ public class HtsPersonalNotificationServiceController {
     public ResponseEntity<?> delete(@PathVariable Long id) {
         return ResponseEntity.ok(this.pnsServiceImplementation.deletePnsIndexClientPartnerById(id));
     }
+    @GetMapping("/get-partner-id")
+    public ResponseEntity<String> generatePartnerId(@RequestParam Long htsClientId, @RequestParam String clientCode) {
+        return ResponseEntity.ok(this.pnsServiceImplementation.generatePartnerId(htsClientId, clientCode));
+    }
+
+
 }

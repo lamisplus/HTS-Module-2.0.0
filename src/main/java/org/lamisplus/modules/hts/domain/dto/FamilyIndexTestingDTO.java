@@ -1,11 +1,9 @@
 package org.lamisplus.modules.hts.domain.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-import org.lamisplus.modules.hts.domain.entity.FamilyIndex;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Builder(toBuilder = true)
@@ -13,12 +11,12 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class FamilyIndexTestingResponseDTO {
+public class FamilyIndexTestingDTO {
 
-    private Long id;
-    private String uuid;
-    private String htsClientUuid;
+    @NotNull(message = "htsClientId is mandatory")
     private Long htsClientId;
+    //    @NotNull(message = "htsClientUuid is mandatory")
+    private String htsClientUuid;
     private Object extra;
     private String state;
     private String lga;
@@ -27,9 +25,9 @@ public class FamilyIndexTestingResponseDTO {
     private String setting;
     private String familyIndexClient;
     private String sex;
+    @NotNull(message = "indexClient id is mandatory")
     private String indexClientId;
     private String name;
-    private String middleName;
     private LocalDate dateOfBirth;
     private String age;
     private String maritalStatus;
@@ -40,7 +38,7 @@ public class FamilyIndexTestingResponseDTO {
     private String isClientCurrentlyOnHivTreatment;
     private String dateClientEnrolledOnTreatment;
     private String recencyTesting;
-    private List<FamilyIndexResponseDTO> familyIndexList = new ArrayList<>();
-    private List<FamilyTestingTrackerResponseDTO> familyTestingTrackerResponseDTO = new ArrayList<>();
+    private List<FamilyIndexResponseDTO> familyIndexRequestDto;
+    private List<FamilyTestingTrackerResponseDTO> familyTestingTrackerRequestDTO;
     private String willingToHaveChildrenTestedElseWhere;
 }

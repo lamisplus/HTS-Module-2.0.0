@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @Slf4j
@@ -40,19 +41,19 @@ public class HtsClientReferralController {
         return ResponseEntity.ok(clientReferralService.deleteHtsClientReferral(id));
     }
 
-    @GetMapping("/hts-client/{id}")
-    public ResponseEntity<HtsClientReferralDTO> getHtsClientReferralByHtsClientId(@PathVariable Long id) {
-        return ResponseEntity.ok(clientReferralService.getHtsClientReferralByHtsClientId(id));
-    }
-
-
+//    @GetMapping("/hts-client/{id}")
+//    public ResponseEntity<HtsClientReferralDTO> getHtsClientReferralByHtsClientId(@PathVariable Long id) {
+//        return ResponseEntity.ok(clientReferralService.getHtsClientReferralByHtsClientId(id));
+//    }
 //    update htsClientReferral
     @PutMapping("/update-hts-client-referral/{id}")
     public ResponseEntity<HtsClientReferralDTO> updateHtsClientReferral(@PathVariable Long id, @Valid @RequestBody HtsClientReferralRequestDTO reqDTO) {
         return ResponseEntity.ok(clientReferralService.updateHtsClientReferral(id, reqDTO));
     }
 
-
-
+    @GetMapping("/all/{id}")
+    public ResponseEntity<List<HtsClientReferralDTO>> getAllHtsClientReferralByHtsClientId(@PathVariable Long id) {
+        return ResponseEntity.ok(clientReferralService.getAllHtsClientReferral(id));
+    }
 
 }

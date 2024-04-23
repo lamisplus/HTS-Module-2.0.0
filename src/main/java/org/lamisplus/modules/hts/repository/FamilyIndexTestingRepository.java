@@ -17,6 +17,6 @@ public interface FamilyIndexTestingRepository  extends JpaRepository<FamilyIndex
     @Query(value = "SELECT * FROM hts_family_index_testing fit " +
             "JOIN hts_client c ON fit.hts_client_uuid = c.uuid " +
             "WHERE c.id = :id AND fit.archived = :archived", nativeQuery = true)
-    List<FamilyIndexTesting> findAllFamilyIndexTestingByHtsClientId(@Param("id") Long id, @Param("archived") int archived);
+    FamilyIndexTesting findAllFamilyIndexTestingByHtsClientId(@Param("id") Long id, @Param("archived") int archived);
 
 }

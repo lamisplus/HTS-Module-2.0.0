@@ -35,13 +35,13 @@ public class HtsFamilyIndexTestingController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<FamilyIndexTestingResponseDTO> update(@PathVariable Long id, @Valid @RequestBody FamilyIndexTestingRequestDTO familyIndexTestingRequestDTO) {
-        return ResponseEntity.ok(this.familyIndexTestingService.update(id, familyIndexTestingRequestDTO));
+    public ResponseEntity<String> updateFamilyIndexTesting(@PathVariable Long id, @Valid @RequestBody FamilyIndexTestingResponseDTO familyIndexTestingDTO) {
+        return ResponseEntity.ok(this.familyIndexTestingService.updateFamilyIndexTesting(id, familyIndexTestingDTO));
     }
 
     @GetMapping("/{id}/hts-client")
-    public ResponseEntity<List<FamilyIndexTestingResponseDTO>> getAllFamilyIndexTestingByHtsClientId(@PathVariable Long id) {
-        return ResponseEntity.ok(this.familyIndexTestingService.getAllFamilyIndexTestingByHtsClient(id));
+    public ResponseEntity<FamilyIndexTestingResponseDTO> getFamilyIndexTestingByHtsClientId(@PathVariable Long id) {
+        return ResponseEntity.ok(this.familyIndexTestingService.getFamilyIndexTestingByHtsClient(id));
     }
 
     @DeleteMapping("/{id}")
@@ -56,7 +56,7 @@ public class HtsFamilyIndexTestingController {
     }
 
     @PutMapping("/family-index/{id}")
-    public ResponseEntity<FamilyIndex> updateFamilyIndex(@PathVariable Long id, @Valid @RequestBody FamilyIndexRequestDto familyIndexRequestDto) {
+    public ResponseEntity<FamilyIndexResponseDTO> updateFamilyIndex(@PathVariable Long id, @Valid @RequestBody FamilyIndexRequestDto familyIndexRequestDto) {
         return ResponseEntity.ok(this.familyIndexTestingService.updateFamilyIndex(id, familyIndexRequestDto));
     }
 
@@ -66,8 +66,8 @@ public class HtsFamilyIndexTestingController {
         return ResponseEntity.ok(this.familyIndexTestingService.getFamilyIndexById(id));
     }
 
-    @DeleteMapping
-    public ResponseEntity<?> deleteFamilyIndex(@RequestParam Long id) {
+    @DeleteMapping("/family-index/{id}")
+    public ResponseEntity<?> deleteFamilyIndex(@PathVariable Long id) {
         return ResponseEntity.ok(this.familyIndexTestingService.deleteFamilyIndex(id));
     }
 

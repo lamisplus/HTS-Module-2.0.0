@@ -16,6 +16,7 @@ public class FamilyIndexResponseDTO {
     private String familyIndexHivStatus;
     private int childNumber;
     private String motherDead;
+    private String UAN;
     private LocalDate yearMotherDead;
     private String familyIndexTestingUuid;
 }

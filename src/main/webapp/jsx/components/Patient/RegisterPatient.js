@@ -45,7 +45,6 @@ const UserRegistration = (props) => {
   const [completed, setCompleted] = useState([]);
   const [basicInfo, setBasicInfo] = useState({});
   const [organizationInfo, setOrganizationInfo] = useState({});
-
   const [patientObjAge, setPatientObjAge] = useState(0);
   const [hideOtherMenu, setHideOtherMenu] = useState(true);
 
@@ -56,7 +55,7 @@ const UserRegistration = (props) => {
   const getFacilityAccount = () => {
     getAcount()
       .then((response) => {
-        console.log(response.data);
+        // console.log(response.data);
       })
       .catch(() => {});
   };
@@ -262,6 +261,7 @@ const UserRegistration = (props) => {
     }
   }, []);
 
+
   return (
     <>
       <ToastContainer autoClose={3000} hideProgressBar />
@@ -448,25 +448,8 @@ const UserRegistration = (props) => {
                             <Icon name="check" color="green" />
                           )}
                         </span>
-                      </Menu.Item> */}
-                      {/* <Menu.Item
-                        name="inbox"
-                        active={activeItem === "refferal"}
-                        onClick={() => handleItemClick("refferal")}
-                        style={{
-                          backgroundColor:
-                            activeItem === "refferal" ? "#000" : "",
-                        }}
-                      >
-                        <span style={{ color: "#fff" }}>
-                          {" "}
-                          Client Refferral Form
-                          {completed.includes("risk") && (
-                            <Icon name="check" color="green" />
-                          )}
-                        </span>
-                      </Menu.Item> */}
-                      {/* <Menu.Item
+                      </Menu.Item>
+                      <Menu.Item
                         name="inbox"
                         active={activeItem === "fit"}
                         onClick={() => handleItemClick("fit")}
@@ -498,7 +481,24 @@ const UserRegistration = (props) => {
                             <Icon name="check" color="green" />
                           )}
                         </span>
-                      </Menu.Item> */}
+                      </Menu.Item>
+                      {/*<Menu.Item*/}
+                      {/*    name="inbox"*/}
+                      {/*    active={activeItem === "refferal"}*/}
+                      {/*    onClick={() => handleItemClick("refferal")}*/}
+                      {/*    style={{*/}
+                      {/*      backgroundColor:*/}
+                      {/*          activeItem === "refferal" ? "#000" : "",*/}
+                      {/*    }}*/}
+                      {/*>*/}
+                      {/*  <span style={{ color: "#fff" }}>*/}
+                      {/*    {" "}*/}
+                      {/*    Client Refferral Form*/}
+                      {/*    {completed.includes("referral") && (*/}
+                      {/*        <Icon name="check" color="green" />*/}
+                      {/*    )}*/}
+                      {/*  </span>*/}
+                      {/*</Menu.Item>*/}
                     </>
                   )}
                 </Menu>
@@ -601,19 +601,6 @@ const UserRegistration = (props) => {
                     completed={completed}
                     setPatientObj={setPatientObj}
                     patientObj={patientObj}
-                    setExtra={setExtra}
-                    extra={extra}
-                  />
-                )}
-                {activeItem === "refferal" && (
-                  <ClientRefferalForm
-                    handleItemClick={handleItemClick}
-                    setCompleted={setCompleted}
-                    completed={completed}
-                    setPatientObj={setPatientObj}
-                    patientObj={patientObj}
-                    setPatientObjAge={setPatientObjAge}
-                    setHideOtherMenu={setHideOtherMenu}
                     setExtra={setExtra}
                     extra={extra}
                   />

@@ -23,6 +23,8 @@ public class HtsClientReferralRequestDTO {
     private String addressOfReceivingFacility;
     private String phoneNoOfReceivingFacility;
     private String isDateOfBirthEstimated;
+    private String receivingFacilityStateName;
+    private String receivingFacilityLgaName;
     private String serviceNeeded;
     private String comments;
 

@@ -40,11 +40,41 @@ public class PNSService {
         htsClient.setAcceptedPns(req.getAcceptedPns());
         htsClientRepository.save(htsClient);
         PersonalNotificationService res = this.convertPnsRequestToEntity(req);
+        // generate new partner id by concatenating the hts client id and the serial number of the pns
         res.setHtsClientUuid(htsClient.getUuid());
-//        res.setFacilityId(facilityId);
-
+        res.setFacilityId(facilityId);
+//        res.setPartnerId(generatePartnerId(req.getHtsClientId(), htsClient.getClientCode()));
         PersonalNotificationService personalNotificationService = personalNotificationServiceRepository.save(res);
         return convertPnsToResponseDto(htsClient, personalNotificationService);
+    }
+
+
+    public String generatePartnerId(Long htsClientId, String clientCode) {
+//        get hts client get the client code and the hts client id check if theri are correct
+        if (htsClientId == null || clientCode == null || clientCode.isEmpty()) {
+            throw new IllegalArgumentException("Invalid HTS client ID or client code");
+        }
+
+        HtsClient htsClient = htsClientRepository
+                .findByIdAndArchivedAndFacilityId(htsClientId, UN_ARCHIVED, currentUserOrganizationService.getCurrentUserOrganization())
+                .orElseThrow(() -> new EntityNotFoundException(HtsClient.class, "htsClientId", "" + htsClientId));
+        // Check if the retrieved HTS client matches the provided ID and client code
+        if (!htsClient.getId().equals(htsClientId) || !htsClient.getClientCode().equals(clientCode)) {
+            throw new IllegalArgumentException("HTS client ID or client code does not match the provided values");
+        }
+        // Get the list of PNS for the HTS client
+        List<PersonalNotificationServiceResponseDTO> pnsList = getAllPnsIndexClientByHtsClient(htsClientId);
+        // If the list is empty, the partner ID should be the first for the HTS client
+        if (pnsList.isEmpty()) {
+            return clientCode + "/001";
+        } else {
+            // Get the last partner ID from the list
+            String lastPartnerId = pnsList.get(pnsList.size() - 1).getPartnerId();
+                // Extract the serial number from the last partner ID and increment it
+                int serialNumber = Integer.parseInt(lastPartnerId.substring(lastPartnerId.lastIndexOf("/") + 1)) + 1;
+                // Create a new partner ID for the new PNS partner
+                return clientCode + "/" + String.format("%03d", serialNumber);
+        }
     }
 
 
@@ -106,6 +136,7 @@ public class PNSService {
         pnsDTO.setOfferedPns(pns.getOfferedPns());
         pnsDTO.setAcceptedPns(pns.getAcceptedPns());
         pnsDTO.setHtsClientInformation(pns.getHtsClientInformation());
+        pnsDTO.setPartnerId(pns.getPartnerId());
 
         return pnsDTO;
     }
@@ -133,6 +164,7 @@ public class PNSService {
         pns.setAcceptedPns(req.getAcceptedPns());
         pns.setIntermediatePartnerViolence(req.getIntermediatePartnerViolence());
         pns.setHtsClientInformation(req.getHtsClientInformation());
+        pns.setPartnerId(req.getPartnerId());
 
         return pns;
     }
@@ -168,10 +200,10 @@ public class PNSService {
         pns.setAcceptedPns(res.getAcceptedPns());
         pns.setIntermediatePartnerViolence(res.getIntermediatePartnerViolence());
         pns.setHtsClientInformation(res.getHtsClientInformation());
+        pns.setPartnerId(res.getPartnerId());
 
         return pns;
     }
-
     private List<PersonalNotificationServiceResponseDTO>  convertPnsEntityListToResponseDtoList(List<PersonalNotificationService> pnsList) {
         if(pnsList.isEmpty()) {
             return new ArrayList<>();

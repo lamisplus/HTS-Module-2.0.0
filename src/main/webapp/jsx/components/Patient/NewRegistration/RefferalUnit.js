@@ -503,80 +503,32 @@ const RefferralUnit = (props) => {
             ? ""
             : "This field is required.";
         temp.serviceNeeded = payload.serviceNeeded ? "" : "This field is required.";
-        temp.age = payload.age ? "" : "This field is required.";
+
+        console.log("temp", temp)
         // temp.referredTo = payload.referredTo ? "" : "This field is required.";
         setErrors({...temp});
         return Object.values(temp).every((x) => x == "");
     };
 
-    const handleSubmit = (e) => {
+ // console.log("payload before submit", payload)
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (validate()) {
+        try {
             setSaving(true);
-            axios
-                .post(
-                    `${baseUrl}hts-client-referral`,
-                    payload,
-                    {headers: {Authorization: `Bearer ${token}`}}
-                )
-                .then((response) => {
-                    setSaving(false);
-                    toast.success("Referral form saved successfully");
-                    history.push("/");
-                })
-                .catch((error) => {
-                    setSaving(false);
-                    if (error.response && error.response.data) {
-                        let errorMessage =
-                            error.response.data.apierror &&
-                            error.response.data.apierror.message !== ""
-                                ? error.response.data.apierror.message
-                                : "Something went wrong, please try again";
-                        toast.error(errorMessage);
-                    } else {
-                        toast.error("Something went wrong. Please try again...");
-                    }
-                });
-        }
-
-    };
- // console.log("payload before submit", payload)
-    const handleSubmit1 = (e) => {
-        e.preventDefault();
-        // if (validate()) {
-        setSaving(true);
-        axios
-            .post(`${baseUrl}hts-client-referral`, payload, {
-                headers: {Authorization: `Bearer ${token}`},
-            })
-            .then((response) => {
-                setSaving(false);
-                toast.success("Referral form saved successfully", {
-                    position: toast.POSITION.BOTTOM_CENTER,
-                });
-                // history.push("/");
-                handleItemClick("refferal-history")
-            })
-            .catch((error) => {
-                // setSaving(false);
-                if (error.response && error.response.data) {
-                    let errorMessage =
-                        error.response.data.apierror &&
-                        error.response.data.apierror.message !== ""
-                            ? error.response.data.apierror.message
-                            : "Something went wrong, please try again";
-                    toast.error(errorMessage, {
-                        position: toast.POSITION.BOTTOM_CENTER,
-                    });
-                } else {
-                    toast.error("Something went wrong. Please try again...", {
-                        position: toast.POSITION.BOTTOM_CENTER,
-                    });
-                }
-            }).finally(() => {
+            await axios.post(`${baseUrl}hts-client-referral`, payload, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
             setSaving(false);
-        });
-       // }
+            toast.success("Record saved successfully", { position: toast.POSITION.BOTTOM_CENTER });
+            props.handleItemClick("refferal-history");
+        } catch (error) {
+            console.log("error", error)
+            setSaving(false);
+            const errorMessage = error.response?.data?.apierror?.message || "Something went wrong, please try again";
+            toast.error(errorMessage, { position: toast.POSITION.BOTTOM_CENTER });
+        }
+        }
     };
 
     return (
@@ -1159,7 +1111,7 @@ const RefferralUnit = (props) => {
                                 <div className="form-group mb-3 col-md-4">
                                     <FormGroup>
                                         <Label for="firstName">
-                                            Phone Number of Refering Facility
+                                            Phone Number of Referring Facility
                                             {/* <span style={{ color: "red" }}> *</span> */}
                                         </Label>
                                         <PhoneInput
@@ -1194,7 +1146,6 @@ const RefferralUnit = (props) => {
                                     <FormGroup>
                                         <Label for="firstName">
                                             Referred to (Department)
-                                            <span style={{color: "red"}}> *</span>
                                         </Label>
                                         <Input
                                             className="form-control"
@@ -1208,11 +1159,6 @@ const RefferralUnit = (props) => {
                                                 borderRadius: "0.2rem",
                                             }}
                                         />
-                                        {errors.referredTo !== "" ? (
-                                            <span className={classes.error}>{errors.referredTo}</span>
-                                        ) : (
-                                            ""
-                                        )}
                                     </FormGroup>
                                 </div>
                                 <div className="form-group mb-3 col-md-4">
@@ -1407,13 +1353,6 @@ const RefferralUnit = (props) => {
                                                 borderRadius: "0.2rem",
                                             }}
                                         />
-                                        {errors.addressOfReceivingFacility !== "" ? (
-                                            <span className={classes.error}>
-                        {errors.addressOfReceivingFacility}
-                      </span>
-                                        ) : (
-                                            ""
-                                        )}
                                     </FormGroup>
                                 </div>
                                 <div className="form-group mb-3 col-md-4">
@@ -1505,11 +1444,6 @@ const RefferralUnit = (props) => {
                                                 height: "100px",
                                             }}
                                         />
-                                        {/* {errors.firstName !== "" ? (
-                      <span className={classes.error}>{errors.firstName}</span>
-                    ) : (
-                      ""
-                    )} */}
                                     </FormGroup>
                                 </div>
                             </div>
@@ -1527,7 +1461,7 @@ const RefferralUnit = (props) => {
                                         // icon="right arrow"
                                         // labelPosition="right"
                                         style={{backgroundColor: "#014d88", color: "#fff"}}
-                                        onClick={handleSubmit1}
+                                        onClick={handleSubmit}
                                         disabled={saving}
                                     />
                                 </div>

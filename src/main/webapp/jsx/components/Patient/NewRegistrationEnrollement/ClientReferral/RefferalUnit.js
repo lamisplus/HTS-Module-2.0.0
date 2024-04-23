@@ -166,8 +166,8 @@ const RefferralUnit = (props) => {
         isDateOfBirthEstimated: false,
         serviceNeeded: props?.formInfo?.serviceNeeded,
         comments: props?.formInfo?.comments,
-        receivingStateFacility: props?.formInfo?.receivingFacilityStateName,
-        receivingLgaFacility: props?.formInfo?.receivingFacilityLgaName,
+        receivingStateFacility:props.formInfo.receivingFacilityStateName,
+        receivingLgaFacility: "",
         htsClientId: props && props.patientObj ? props.patientObj?.id : "",
         htsClientUuid: props && props.patientObj ? props.patientObj?.uuid : ""
     });
@@ -469,7 +469,7 @@ const RefferralUnit = (props) => {
         temp.sexId = payload.sexId ? "" : "This field is required.";
         temp.dob = payload.dob ? "" : "This field is required.";
         // temp.age = payload.age ? "" : "This field is required.";
-        temp.hivStatus = payload.hivStatus ? "" : "This field is required.";
+        // temp.hivStatus = payload.hivStatus ? "" : "This field is required.";
         // temp.stateTransferTo = payload.receivingStateFacility? "" : "This field is required.";
         // temp.lgaTransferTo = payload.receivingLgaFacility ? "" : "This field is required.";
         // temp.stateTransferTo = payload.receivingStateFacility ? "" : "This field is required.";
@@ -1299,11 +1299,11 @@ const RefferralUnit = (props) => {
                                                     }
                                                     loadLGA(e.target.value);
                                                 }}
-
+value={payload.receivingStateFacility}
                                             >
                                                 <option>Select State</option>
                                                 {states.map((state) => (
-                                                    <option key={state.id} value={state.id}>
+                                                    <option key={state?.id} value={state?.name}>
                                                         {state.name}
                                                     </option>
                                                 ))}

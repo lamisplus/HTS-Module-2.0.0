@@ -113,7 +113,7 @@ const PnsForm = (props) => {
       ? props?.basicInfo?.personResponseDto?.address?.address[0]?.stateId
       : props?.patientObj?.personResponseDto?.address?.address[0]?.stateId
   );
-
+  const [partnerId, setPartnerId] = useState("");
   const [lgaInfo, setLgaInfo] = useState(
     props?.basicInfo?.personResponseDto?.address?.address[0].district
       ? props?.basicInfo?.personResponseDto?.address?.address[0].district
@@ -147,6 +147,7 @@ const PnsForm = (props) => {
     phoneNumber:
       props?.basicInfo?.personResponseDto?.contactPoint?.contactPoint[0]?.value,
     alternatePhoneNumber: "",
+    partnerId: "",
     firstName: props?.basicInfo?.personResponseDto?.firstName,
     hivTestResult: "",
     htsClientId: props && props.patientObj ? props.patientObj?.id : "",
@@ -176,7 +177,6 @@ const PnsForm = (props) => {
       artEnrollmentNumber: "",
       facilityOfEnrollment: "",
       numberOfPartnerIdentifiedFromClientIndex: "",
-      partnerId: "",
       partnerName: "",
       partnerSex: "",
       partnerAge: "",
@@ -195,7 +195,7 @@ const PnsForm = (props) => {
       // numberOfPartnerIdentifiedFromClientIndex: "",
     },
   });
-
+  console.log("thusssssss", props.patientObj);
   const [htsClientInformation, sethtsClientInformation] = useState({
     testingSetting: "",
     providerNameCompletingForm: "",
@@ -210,7 +210,6 @@ const PnsForm = (props) => {
     artEnrollmentNumber: "",
     facilityOfEnrollment: "",
     numberOfPartnerIdentifiedFromClientIndex: "",
-    partnerId: "",
     partnerName: "",
     partnerSex: "",
     partnerAge: "",
@@ -239,6 +238,25 @@ const PnsForm = (props) => {
       })
       .catch((error) => {});
   };
+  const getPartnerId = (id) => {
+    axios
+      .get(
+        `${baseUrl}hts-personal-notification-service/get-partner-id?htsClientId=${
+          props.patientObj.id ? props.patientObj.id : props.basicInfo.id
+        }&clientCode=${
+          props?.patientObj?.clientCode
+            ? props?.patientObj?.clientCode
+            : props?.basicInfo?.clientCode
+        }`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
+      .then((response) => {
+        setPartnerId(response.data);
+      })
+      .catch((error) => {});
+  };
 
   const TargetGroupSetup = () => {
     axios
@@ -262,6 +280,7 @@ const PnsForm = (props) => {
     Consent();
     getMaritalStatus();
     PROVIDER_ROLE();
+    getPartnerId();
     if (props.patientObj) {
       if (props.patientObj.dateVisit && props.patientObj.dateVisit !== "") {
         setHivTestDate(props.patientObj.dateVisit);
@@ -320,7 +339,6 @@ const PnsForm = (props) => {
     loadFamilyIndexSetting();
   }, []);
 
-  console.log(props.basicInfo);
   const handleHTSClientInputChange = (e) => {
     setErrors({ ...temp, [e.target.name]: "" });
 
@@ -444,8 +462,7 @@ const PnsForm = (props) => {
         //console.log(error);
       });
   };
-  console.log(props);
-  //Get all recorcd by htsClientId
+  console.log(props); //Get all recorcd by htsClientId
   const getAllRecordByHTSClientId = () => {
     axios
       .get(`${baseUrl}hts-personal-notification-service/{id}/hts-client`, {
@@ -616,7 +633,7 @@ const PnsForm = (props) => {
     e.preventDefault();
     objValues.htsClientInformation = htsClientInformation;
     objValues.contactTracing = contactTracing;
-
+    objValues.partnerId = partnerId;
     if (validate()) {
       setSaving(true);
       objValues.isDateOfBirthEstimated =
@@ -631,10 +648,8 @@ const PnsForm = (props) => {
             position: toast.POSITION.BOTTOM_CENTER,
           });
 
-                    
-
           if (props?.addNewForm === false) {
-            handleItemClick("pns-history", 'pns');
+            handleItemClick("pns-history", "pns");
           }
           if (
             objValues.offeredPns !== "No" &&
@@ -1514,12 +1529,13 @@ const PnsForm = (props) => {
                           type="text"
                           name="partnerId"
                           id="partnerId"
-                          value={htsClientInformation.partnerId}
-                          onChange={handleHTSClientInputChange}
+                          value={partnerId}
+                          onChange={handleInputChange}
                           style={{
                             border: "1px solid #014D88",
                             borderRadius: "0.25rem",
                           }}
+                          disabled
                         />
                       </FormGroup>
                     </div>
@@ -1575,9 +1591,9 @@ const PnsForm = (props) => {
                           type="number"
                           name="partnerAge"
                           id="partnerAge"
-                          value={objValues.partnerAge}
+                          value={htsClientInformation.partnerAge}
                           // disabled={ageDisabled}
-                          onChange={handleAgeChange}
+                          onChange={handleHTSClientInputChange}
                           style={{
                             border: "1px solid #014D88",
                             borderRadius: "0.2rem",
@@ -1920,7 +1936,6 @@ const PnsForm = (props) => {
                     disabled={saving}
                   />
                 </div>
-
               </div>
             </div>
           </form>

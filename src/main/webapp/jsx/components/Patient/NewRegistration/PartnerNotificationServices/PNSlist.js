@@ -201,7 +201,7 @@ const PNSList = (props) => {
             .filter((b) => b.firstName !== "")
             .map((row) => ({
               date: row.htsClientInformation.partnerName,
-              age: row.htsClientInformation.partnerId,
+              age: row.partnerId,
               // phone: row.phoneNumber,
               address: row.htsClientInformation.partnerAddress,
               actions: (

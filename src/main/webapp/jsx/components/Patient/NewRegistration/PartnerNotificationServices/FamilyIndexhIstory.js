@@ -181,7 +181,7 @@ const FamilyIndexHistory = (props) => {
           isLoading={props.loading}
           data={familyIndexList.map((row) => ({
             // id: row.id,
-            date: row.familyIndexClient,
+            date: row.indexClientId,
             pre: row.dateOfBirth,
             rencency: row.recencyTesting,
 

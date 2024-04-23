@@ -26,6 +26,10 @@ import PNSHistory from "./NewRegistration/PartnerNotificationServices/PNSHistory
 import ViewPNSForm from "./NewRegistration/PartnerNotificationServices/ViewPnsForm";
 import ViewFamilyIndexTestingForm from "./NewRegistration/PartnerNotificationServices/ViewFamilyIndexForm";
 import FamilyIndexHistory from "./NewRegistration/PartnerNotificationServices/FamilyIndexhIstory";
+import FamilyIndexTestingForm from "./NewRegistration/FamilyIndexTestingForm";
+import axios from "axios";
+import { token, url as baseUrl } from "../../../api";
+
 const useStyles = makeStyles((theme) => ({
   error: {
     color: "#f85032",
@@ -56,19 +60,40 @@ const UserRegistration = (props) => {
   const [basicInfo, setBasicInfo] = useState({});
   const [organizationInfo, setOrganizationInfo] = useState({});
   const [row, setRow] = useState({});
-  const [action, setAction] = useState('');
-
+  const [action, setAction] = useState("");
+  const [familyIndexList, setFamilyIndexList] = useState([]);
   const handleItemClick = (activeItem) => {
     setactiveItem(activeItem);
     //setCompleted({...completed, ...completedMenu})
   };
 
+  const handleAction = (activeItem) => {
+    setactiveItem(activeItem);
+    //setCompleted({...completed, ...completedMenu})
+  };
 
-    const handleAction = (activeItem) => {
-      setactiveItem(activeItem);
-      //setCompleted({...completed, ...completedMenu})
-    };
+  const getListoFFamilyIndexInfo = () => {
+ 
+    axios
+      .get(
+        `${baseUrl}hts-family-index-testing/${props.activePage.activeObject.id}/hts-client`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((response) => {
+        if (response.data) {
+          setFamilyIndexList([response.data]);
+        }
+      })
+      .catch((e) => {
+        // console.log("Fetch Facilities error" + e);
+      });
+  };
 
+  
   const LoadViewPage = (row, actionType) => {
     props.setActivePage({
       ...props.activePage,
@@ -78,6 +103,11 @@ const UserRegistration = (props) => {
     });
   };
 
+  useEffect(() => {
+    getListoFFamilyIndexInfo();
+  }, []);
+
+  console.log(familyIndexList);
   return (
     <>
       <ToastContainer autoClose={3000} hideProgressBar />
@@ -214,7 +244,7 @@ const UserRegistration = (props) => {
                       )}
                     </span>
                   </Menu.Item>
-
+                  {/* 
                   <Menu.Item
                     name="spam"
                     active={activeItem === "indexing"}
@@ -222,16 +252,15 @@ const UserRegistration = (props) => {
                     style={{
                       backgroundColor: activeItem === "indexing" ? "#000" : "",
                     }}
-                    //disabled={activeItem !== 'indexing' ? true : false}
-                  >
-                    {/* <Label>4</Label> */}
-                    <span style={{ color: "#fff" }}>
+                  > */}
+                  {/* <Label>4</Label> */}
+                  {/* <span style={{ color: "#fff" }}>
                       Index Notification Services - Elicitation
                       {completed.includes("indexing") && (
                         <Icon name="check" color="green" />
                       )}
                     </span>
-                  </Menu.Item>
+                  </Menu.Item> */}
                   <Menu.Item
                     name="inbox"
                     active={activeItem === "pns-history"}
@@ -270,7 +299,11 @@ const UserRegistration = (props) => {
                   <Menu.Item
                     name="inbox"
                     active={activeItem === "fit-history"}
-                    onClick={() => handleItemClick("fit-history")}
+                    onClick={() =>
+                      handleItemClick(
+                        familyIndexList.length === 1 ? "fit-history" : "fit"
+                      )
+                    }
                     style={{
                       backgroundColor:
                         activeItem === "fit-history" ? "#000" : "",
@@ -474,6 +507,20 @@ const UserRegistration = (props) => {
                     addNewForm={false}
                     row={row}
                     setAction={setAction}
+                  />
+                )}
+
+                {activeItem === "fit" && (
+                  <FamilyIndexTestingForm
+                    handleItemClick={handleItemClick}
+                    setCompleted={setCompleted}
+                    completed={completed}
+                    setPatientObj={setPatientObj}
+                    patientObj={patientObj}
+                    setExtra={setExtra}
+                    extra={extra}
+                    basicInfo={basicInfo}
+                    organizationInfo={organizationInfo}
                   />
                 )}
               </div>

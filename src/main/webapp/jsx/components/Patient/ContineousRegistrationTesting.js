@@ -18,6 +18,9 @@ import Others from "./ContinuesHTSEnrollment/Others";
 import PostTest from "./ContinuesHTSEnrollment/PostTest";
 import RecencyTesting from "./ContinuesHTSEnrollment/RecencyTesting";
 import RiskStratification from "./ContinuesHTSEnrollment/RiskStratification";
+import PNSHistory from "./NewRegistration/PartnerNotificationServices/PNSHistory";
+import PnsForm from "./NewRegistration/PartnerNotificationServices/PnsForm";
+import ViewPNSForm from "./NewRegistration/PartnerNotificationServices/ViewPnsForm";
 
 const useStyles = makeStyles((theme) => ({
   error: {
@@ -36,7 +39,11 @@ const UserRegistration = (props) => {
   // const [saving, setSaving] = useState(false);
   const [activeItem, setactiveItem] = useState("risk");
   const [completed, setCompleted] = useState([]);
+  const [basicInfo, setBasicInfo] = useState({});
   const [hideOtherMenu, setHideOtherMenu] = useState(true);
+  const [organizationInfo, setOrganizationInfo] = useState({});
+  const [row, setRow] = useState({});
+
   const [patientObj2, setPatientObj2] = useState({
     breastFeeding: "",
     capturedBy: "",
@@ -240,9 +247,9 @@ const UserRegistration = (props) => {
     // if(locationState && locationState.patientObj){
     //     setPatientObj2(locationState.patientObject)
     // }
-    console.log("Continuous HTS ")
+    console.log("Continuous HTS ");
   }, []);
-  console.log("in",props)
+  console.log("in", props);
 
   return (
     <>
@@ -377,7 +384,7 @@ const UserRegistration = (props) => {
                         </span>
                       </Menu.Item>
 
-                      <Menu.Item
+                      {/* <Menu.Item
                         name="spam"
                         active={activeItem === "indexing"}
                         onClick={() => handleItemClick("indexing")}
@@ -387,16 +394,16 @@ const UserRegistration = (props) => {
                         }}
                         disabled={activeItem !== "indexing" ? true : false}
                       >
-                        {/* <Label>4</Label> */}
+               
                         <span style={{ color: "#fff" }}>
                           Index Notification Services - Elicitation
                           {completed.includes("indexing") && (
                             <Icon name="check" color="green" />
                           )}
                         </span>
-                      </Menu.Item>
+                      </Menu.Item> */}
 
-                      <Menu.Item
+                      {/* <Menu.Item
                         name="spam"
                         active={activeItem === "indexing"}
                         onClick={() => handleItemClick("indexing")}
@@ -406,14 +413,30 @@ const UserRegistration = (props) => {
                         }}
                         disabled={activeItem !== "indexing" ? true : false}
                       >
-                        {/* <Label>4</Label> */}
                         <span style={{ color: "#fff" }}>
                           Family Index Testing form
                           {completed.includes("indexing") && (
                             <Icon name="check" color="green" />
                           )}
                         </span>
-                      </Menu.Item>
+                      </Menu.Item> */}
+                      {/* <Menu.Item
+                        name="inbox"
+                        active={activeItem === "pns-history"}
+                        onClick={() => handleItemClick("pns-history")}
+                        style={{
+                          backgroundColor:
+                            activeItem === "pns-history" ? "#000" : "",
+                        }}
+                      >
+                        <span style={{ color: "#fff" }}>
+                          {" "}
+                          Partner Notification Services
+                          {completed.includes("pns") && (
+                            <Icon name="check" color="green" />
+                          )}
+                        </span>
+                      </Menu.Item> */}
                     </>
                   )}
                 </Menu>
@@ -440,6 +463,7 @@ const UserRegistration = (props) => {
                     patientObject={locationState.patientObject}
                     activePage={props.activePage}
                     setActivePage={props.setActivePage}
+                    setOrganizationInfo={setOrganizationInfo}
                   />
                 )}
                 {activeItem === "basic" && (
@@ -455,6 +479,7 @@ const UserRegistration = (props) => {
                     setExtra={setExtra}
                     extra={extra}
                     patientObject={locationState.patientObject}
+                    setBasicInfo={setBasicInfo}
                   />
                 )}
                 {activeItem === "pre-test-counsel" && (
@@ -522,6 +547,53 @@ const UserRegistration = (props) => {
                     patientObj={patientObj2}
                     clientCode={props.clientCode}
                     patientAge={props.patientAge}
+                  />
+                )}
+                {activeItem === "pns-history" && (
+                  <PNSHistory
+                    handleItemClick={handleItemClick}
+                    setCompleted={setCompleted}
+                    completed={completed}
+                    setPatientObj={setPatientObj2}
+                    patientObj={patientObj2}
+                    setExtra={setExtra}
+                    extra={extra}
+                    basicInfo={basicInfo}
+                    organizationInfo={organizationInfo}
+                    activePage={props.activePage}
+                    setActivePage={props.setActivePage}
+                    setRow={setRow}
+                  />
+                )}
+
+                {activeItem === "pns" && (
+                  <PnsForm
+                    handleItemClick={handleItemClick}
+                    setCompleted={setCompleted}
+                    completed={completed}
+                    setPatientObj={setPatientObj2}
+                    patientObj={patientObj2}
+                    setExtra={setExtra}
+                    extra={extra}
+                    basicInfo={basicInfo}
+                    organizationInfo={organizationInfo}
+                    addNewForm={false}
+                  />
+                )}
+
+                {activeItem === "view-pns" && (
+                  <ViewPNSForm
+                    handleItemClick={handleItemClick}
+                    setCompleted={setCompleted}
+                    completed={completed}
+                    setPatientObj={setPatientObj2}
+                    patientObj={patientObj2}
+                    setExtra={setExtra}
+                    extra={extra}
+                    basicInfo={basicInfo}
+                    organizationInfo={organizationInfo}
+                    addNewForm={false}
+                    row={row}
                   />
                 )}
               </div>

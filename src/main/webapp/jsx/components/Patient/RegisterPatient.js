@@ -431,7 +431,7 @@ const UserRegistration = (props) => {
                         </span>
                       </Menu.Item>
 
-                      <Menu.Item
+                      {/* <Menu.Item
                         name="spam"
                         active={activeItem === "indexing"}
                         onClick={() => handleItemClick("indexing")}
@@ -440,15 +440,15 @@ const UserRegistration = (props) => {
                             activeItem === "indexing" ? "#000" : "",
                         }}
                         disabled={activeItem !== "indexing" ? true : false}
-                      >
-                        {/* <Label>4</Label> */}
-                        <span style={{ color: "#fff" }}>
+                      > */}
+                      {/* <Label>4</Label> */}
+                      {/* <span style={{ color: "#fff" }}>
                           Index Notification Services - Elicitation
                           {completed.includes("indexing") && (
                             <Icon name="check" color="green" />
                           )}
                         </span>
-                      </Menu.Item>
+                      </Menu.Item> */}
                       {/* <Menu.Item
                         name="inbox"
                         active={activeItem === "refferal"}
@@ -466,7 +466,7 @@ const UserRegistration = (props) => {
                           )}
                         </span>
                       </Menu.Item> */}
-                      <Menu.Item
+                      {/* <Menu.Item
                         name="inbox"
                         active={activeItem === "fit"}
                         onClick={() => handleItemClick("fit")}
@@ -498,7 +498,7 @@ const UserRegistration = (props) => {
                             <Icon name="check" color="green" />
                           )}
                         </span>
-                      </Menu.Item>
+                      </Menu.Item> */}
                     </>
                   )}
                 </Menu>

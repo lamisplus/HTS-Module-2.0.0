@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
+import { useHistory } from "react-router-dom";
 import { FormGroup, Label, CardBody, Spinner, Input, Form } from "reactstrap";
 import * as moment from "moment";
 import { makeStyles } from "@material-ui/core/styles";
@@ -109,7 +110,7 @@ const useStyles = makeStyles((theme) => ({
 
 const FamilyIndexTestingForm = (props) => {
   const classes = useStyles();
-
+  let history = useHistory();
   const [errors, setErrors] = useState({});
   const [ageDisabled, setAgeDisabled] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -201,7 +202,7 @@ const FamilyIndexTestingForm = (props) => {
     alternatePhoneNumber: "",
     dateClientEnrolledOnTreatment: "",
     dateIndexClientConfirmedHivPositiveTestResult: "",
-    dateOfBirth: props?.basicInfo?.personResponseDto?.dateOfBirth,
+    dateOfBirth: props?.patientObj?.personResponseDto?.dateOfBirth,
     extra: {},
     facilityName: "",
     familyIndexClient: "",
@@ -209,49 +210,50 @@ const FamilyIndexTestingForm = (props) => {
     familyIndexRequestDto: [
       {
         childNumber: 0,
-        familyIndexHivStatus: "string",
-        familyIndexTestingUuid: "string",
-        familyRelationship: "string",
-        motherDead: "string",
-        yearMotherDead: "string",
+        familyIndexHivStatus: "",
+        familyIndexTestingUuid: "",
+        familyRelationship: "",
+        motherDead: "",
+        yearMotherDead: "",
       },
     ],
     familyTestingTrackerRequestDTO: [
       {
-        attempt: "string",
-        dateEnrolledInOVC: "string",
-        dateEnrolledOnArt: "string",
-        dateTested: "string",
-        dateVisit: "string",
+        attempt: "",
+        dateEnrolledInOVC: "",
+        dateEnrolledOnArt: "",
+        dateTested: "",
+        dateVisit: "",
         facilityId: 0,
         familyIndexTestingId: 0,
-        familyIndexTestingUuid: "string",
-        followUpAppointmentLocation: "string",
-        hiveTestResult: "string",
-        knownHivPositive: "string",
-        ovcId: "string",
+        familyIndexTestingUuid: "",
+        followUpAppointmentLocation: "",
+        hiveTestResult: "",
+        knownHivPositive: "",
+        ovcId: "",
         positionOfChildEnumerated: 0,
-        scheduleVisitDate: "string",
+        scheduleVisitDate: "",
         trackerAge: 0,
-        trackerSex: "string",
+        trackerSex: "",
       },
     ],
 
     htsClientId: props && props.patientObj ? props.patientObj?.id : "",
     htsClientUuid: "",
-    indexClientId: props?.basicInfo?.clientCode,
+    indexClientId: props?.patientObj?.clientCode,
     isClientCurrentlyOnHivTreatment: "",
     lga: "",
-    maritalStatus: props?.basicInfo?.personResponseDto?.maritalStatus.id,
-    name: props?.basicInfo?.personResponseDto?.firstName,
+    maritalStatus: props?.patientObj?.personResponseDto?.maritalStatus.id,
+    name: props?.patientObj?.personResponseDto?.firstName,
     phoneNumber:
-      props?.basicInfo?.personResponseDto?.contactPoint?.contactPoint[0]?.value,
-    middleName: props?.basicInfo?.personResponseDto?.otherName,
-    lastName: props?.basicInfo?.personResponseDto?.surname,
+      props?.patientObj?.personResponseDto?.contactPoint?.contactPoint[0]
+        ?.value,
+    middleName: props?.patientObj?.personResponseDto?.otherName,
+    lastName: props?.patientObj?.personResponseDto?.surname,
     visitDate: "",
     recencyTesting: "",
     setting: "",
-    sex: props?.basicInfo?.personResponseDto?.gender.id,
+    sex: props?.patientObj?.personResponseDto?.gender.id,
     state: "",
     virallyUnSuppressed: "",
     willingToHaveChildrenTestedElseWhere: "",
@@ -264,7 +266,7 @@ const FamilyIndexTestingForm = (props) => {
     // stateId: "",
 
     reasonForIndexClientDateHivConfirmedNotSelected: "",
-    address: props?.basicInfo?.personResponseDto?.address?.address[0].city,
+    address: props?.patientObj?.personResponseDto?.address?.address[0].city,
     recencyTesting: "",
   });
 
@@ -309,7 +311,7 @@ const FamilyIndexTestingForm = (props) => {
         // console.log("Fetch LGA error" + e);
       });
   };
-
+ console.log(props)
   const markUpForm = (next, present) => {
     props.handleItemClick(next);
     if (props.completed.includes(present)) {
@@ -989,6 +991,13 @@ const FamilyIndexTestingForm = (props) => {
         setSaving(false);
 
         toast.success("Family Indexform save succesfully!");
+        // history.push({pathName: "/patient-history",
+        //   state: {
+        //     patientObject: props.basicInfo,
+        //     patientObj: props.basicInfo,
+        //     clientCode: props.basicInfo.clientCode,
+        //   },}
+        // );
 
         markUpForm("pns", "fit");
       })

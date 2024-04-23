@@ -119,6 +119,7 @@ const ViewPNSForm = (props) => {
       ? props?.basicInfo?.personResponseDto?.address?.address[0].district
       : props?.patientObj?.personResponseDto?.address?.address[0].district
   );
+  const [partnerId, setPartnerId] = useState("");
 
   let temp = { ...errors };
   const [objValuesIndex, setObjValuesIndex] = useState({
@@ -160,6 +161,7 @@ const ViewPNSForm = (props) => {
     lastName: props?.basicInfo?.personResponseDto?.surname,
     middleName: props?.basicInfo?.personResponseDto?.otherName,
     notificationMethod: "",
+    partnerId: "",
     relationshipToIndexClient: "",
     sex: props?.basicInfo?.personResponseDto?.gender.id,
     htsClientInformation: {
@@ -176,7 +178,7 @@ const ViewPNSForm = (props) => {
       artEnrollmentNumber: "",
       facilityOfEnrollment: "",
       numberOfPartnerIdentifiedFromClientIndex: "",
-      partnerId: "",
+
       partnerName: "",
       partnerSex: "",
       partnerAge: "",
@@ -210,7 +212,6 @@ const ViewPNSForm = (props) => {
     artEnrollmentNumber: "",
     facilityOfEnrollment: "",
     numberOfPartnerIdentifiedFromClientIndex: "",
-    partnerId: "",
     partnerName: "",
     partnerSex: "",
     partnerAge: "",
@@ -254,7 +255,22 @@ const ViewPNSForm = (props) => {
       });
   };
 
+  const getPartnerId = (id) => {
+    axios
+      .get(
+        `${baseUrl}hts-personal-notification-service/get-partner-id?htsClientId=${props.patientObj?.id}&clientCode=${props?.patientObj?.clientCode}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
+      .then((response) => {
+        setPartnerId(response.data);
+      })
+      .catch((error) => {});
+  };
+
   useEffect(() => {
+    // getPartnerId();
     Sex();
     getStates();
     NotificationContact();
@@ -1560,13 +1576,13 @@ const ViewPNSForm = (props) => {
                           type="text"
                           name="partnerId"
                           id="partnerId"
-                          value={htsClientInformation.partnerId}
-                          onChange={handleHTSClientInputChange}
+                          value={objValues.partnerId}
+                          onChange={handleInputChange}
                           style={{
                             border: "1px solid #014D88",
                             borderRadius: "0.25rem",
                           }}
-                          disabled={props.row.action === "view" ? true : false}
+                          disabled={true}
                         />
                       </FormGroup>
                     </div>

@@ -470,7 +470,8 @@ const RefferralUnit = (props) => {
         // temp.age = payload.age ? "" : "This field is required.";
         temp.hivStatus = payload.hivStatus ? "" : "This field is required.";
         // temp.stateTransferTo = payload.receivingStateFacility? "" : "This field is required.";
-        temp.lgaTransferTo = payload.receivingLgaFacility ? "" : "This field is required.";
+        // temp.lgaTransferTo = payload.receivingLgaFacility ? "" : "This field is required.";
+        // temp.stateTransferTo = payload.receivingStateFacility ? "" : "This field is required.";
         temp.facilityTransferTo = payload.nameOfReceivingFacility ? "" : "This field is required.";
         temp.referredFromFacility = payload.referredFromFacility
             ? ""
@@ -501,7 +502,7 @@ const RefferralUnit = (props) => {
             ? ""
             : "This field is required.";
         temp.serviceNeeded = payload.serviceNeeded ? "" : "This field is required.";
-        temp.age = payload.age ? "" : "This field is required.";
+        // console.log("temp", temp);
         temp.referredTo = payload.referredTo ? "" : "This field is required.";
         setErrors({...temp});
         return Object.values(temp).every((x) => x == "");
@@ -539,7 +540,7 @@ const RefferralUnit = (props) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // if (validate()) {
+        if (validate()) {
         try {
             setSaving(true);
             await axios.put(`${baseUrl}hts-client-referral/update-hts-client-referral/${props.row.row.id}`, payload, {
@@ -555,7 +556,7 @@ const RefferralUnit = (props) => {
             const errorMessage = error.response?.data?.apierror?.message || "Something went wrong, please try again";
             toast.error(errorMessage, { position: toast.POSITION.BOTTOM_CENTER });
         }
-        // }
+        }
     };
 
 
@@ -1350,13 +1351,13 @@ const RefferralUnit = (props) => {
                                                     </option>
                                                 ))}
                                             </Input>
-                                            {errors.lgaId !== "" ? (
-                                                <span className={classes.error}>
-                                                {errors.lgaId}
-                                            </span>
-                                            ) : (
-                                                ""
-                                            )}
+                                            {/*{errors.lgaId !== "" ? (*/}
+                                            {/*    <span className={classes.error}>*/}
+                                            {/*    {errors.lgaId}*/}
+                                            {/*</span>*/}
+                                            {/*) : (*/}
+                                            {/*    ""*/}
+                                            {/*)}*/}
                                         </FormGroup>
                                     </div>
                                 )}

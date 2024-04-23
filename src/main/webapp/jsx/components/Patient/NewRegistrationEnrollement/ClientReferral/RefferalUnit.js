@@ -166,13 +166,14 @@ const RefferralUnit = (props) => {
         isDateOfBirthEstimated: false,
         serviceNeeded: props?.formInfo?.serviceNeeded,
         comments: props?.formInfo?.comments,
-        receivingStateFacility: "",
-        receivingLgaFacility: "",
+        receivingStateFacility: props?.formInfo?.receivingFacilityStateName,
+        receivingLgaFacility: props?.formInfo?.receivingFacilityLgaName,
         htsClientId: props && props.patientObj ? props.patientObj?.id : "",
         htsClientUuid: props && props.patientObj ? props.patientObj?.uuid : ""
     });
 
-    // console.log("PAYLOAD", payload);
+    console.log("PAYLOAD", payload);
+    console.log("props.formInfo", props.formInfo);
     const loadGenders = useCallback(async () => {
         getAllGenders()
             .then((response) => {
@@ -1317,7 +1318,7 @@ const RefferralUnit = (props) => {
                                                     style={{color: "red"}}> *</span></Label>
                                             <Input
                                                 type="select"
-                                                name="lgaId"
+                                                name=" receivingLgaFacility"
                                                 style={{
                                                     height: "40px",
                                                     border: 'solid 1px #014d88',
@@ -1327,6 +1328,7 @@ const RefferralUnit = (props) => {
                                                 }}
                                                 required
                                                 disabled={props.row.action === "view" ? true : false}
+                                                value={payload.receivingLgaFacility}
                                                 onChange={(e) => {
                                                     if (e.target.value !== "") {
                                                         const filterlga = lgasOfTheReceivingFacility.filter(lg => {

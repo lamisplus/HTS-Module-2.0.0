@@ -160,6 +160,7 @@ const ViewClientReferral = (props) => {
                 headers: { Authorization: `Bearer ${token}` },
             })
             .then((response) => {
+                console.log("response form info", response.data);
                 setFormInfo(response.data);
             })
             .catch((error) => {

@@ -170,7 +170,7 @@ const RefferralUnit = (props) => {
         htsClientId: props && props.patientObj ? props.patientObj?.id : "",
         htsClientUuid: props && props.patientObj ? props.patientObj?.uuid : ""
     });
-
+console.log("payload in referalUnit", payload)
     // console.log("PAYLOAD", payload);
     const loadGenders = useCallback(async () => {
         getAllGenders()
@@ -504,7 +504,7 @@ const RefferralUnit = (props) => {
             : "This field is required.";
         temp.serviceNeeded = payload.serviceNeeded ? "" : "This field is required.";
 
-        console.log("temp", temp)
+        // console.log("temp", temp)
         // temp.referredTo = payload.referredTo ? "" : "This field is required.";
         setErrors({...temp});
         return Object.values(temp).every((x) => x == "");

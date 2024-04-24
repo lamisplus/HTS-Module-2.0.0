@@ -1260,6 +1260,7 @@ const BasicInfo = (props) => {
                   )}
                 </FormGroup>
               </div>
+              {console.log('readddd',props.extra)}
               <div className="form-group  col-md-4">
                 <FormGroup>
                   <Label>

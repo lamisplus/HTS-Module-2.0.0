@@ -6,7 +6,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
 import { Link, useHistory, useLocation } from "react-router-dom";
-
+import FamilyIndexTestingForm from "./NewRegistration/FamilyIndexTestingForm";
 import "react-phone-input-2/lib/style.css";
 import { Icon, Menu, Sticky } from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
@@ -404,24 +404,23 @@ const UserRegistration = (props) => {
                         </span>
                       </Menu.Item> */}
 
-                      {/* <Menu.Item
+                      <Menu.Item
                         name="spam"
-                        active={activeItem === "indexing"}
-                        onClick={() => handleItemClick("indexing")}
+                        active={activeItem === "fit"}
+                        onClick={() => handleItemClick("fit")}
                         style={{
-                          backgroundColor:
-                            activeItem === "indexing" ? "#000" : "",
+                          backgroundColor: activeItem === "fit" ? "#000" : "",
                         }}
-                        disabled={activeItem !== "indexing" ? true : false}
+                        disabled={activeItem !== "fit" ? true : false}
                       >
                         <span style={{ color: "#fff" }}>
                           Family Index Testing form
-                          {completed.includes("indexing") && (
+                          {completed.includes("fit") && (
                             <Icon name="check" color="green" />
                           )}
                         </span>
-                      </Menu.Item> */}
-                      {/* <Menu.Item
+                      </Menu.Item>
+                      <Menu.Item
                         name="inbox"
                         active={activeItem === "pns-history"}
                         onClick={() => handleItemClick("pns-history")}
@@ -437,7 +436,7 @@ const UserRegistration = (props) => {
                             <Icon name="check" color="green" />
                           )}
                         </span>
-                      </Menu.Item> */}
+                      </Menu.Item>
 
                       <Menu.Item
                         name="spam"
@@ -447,11 +446,12 @@ const UserRegistration = (props) => {
                           backgroundColor:
                             activeItem === "continuous-referral" ? "#000" : "",
                         }}
-                        disabled={activeItem !== "continuous-referral" ? true : false}
+                        disabled={
+                          activeItem !== "continuous-referral" ? true : false
+                        }
                       >
-
                         <span style={{ color: "#fff" }}>
-                           Client Referral Service
+                          Client Referral Service
                           {completed.includes("continuous-referral") && (
                             <Icon name="check" color="green" />
                           )}
@@ -597,7 +597,7 @@ const UserRegistration = (props) => {
                     extra={extra}
                     basicInfo={basicInfo}
                     organizationInfo={organizationInfo}
-                    addNewForm={false}
+                    // addNewForm={false}
                   />
                 )}
 
@@ -616,19 +616,32 @@ const UserRegistration = (props) => {
                     row={row}
                   />
                 )}
-                {activeItem === "continuous-referral" && (
-                    <ReferralUnit
-                        handleItemClick={handleItemClick}
-                        setCompleted={setCompleted}
-                        completed={completed}
-                        setPatientObj={setPatientObj2}
-                        patientObj={patientObj2}
-                        setExtra={setExtra}
-                        extra={extra}
-                        basicInfo={basicInfo}
-                        organizationInfo={organizationInfo}
-                        addNewForm={false}
-                    />
+                {activeItem === "fit" && (
+                  <FamilyIndexTestingForm
+                    handleItemClick={handleItemClick}
+                    setCompleted={setCompleted}
+                    completed={completed}
+                    setPatientObj={setPatientObj2}
+                    patientObj={patientObj2}
+                    setExtra={setExtra}
+                    extra={extra}
+                    basicInfo={basicInfo}
+                    organizationInfo={organizationInfo}
+                  />
+                )}
+                {activeItem === "new-referral" && (
+                  <ReferralUnit
+                    handleItemClick={handleItemClick}
+                    setCompleted={setCompleted}
+                    completed={completed}
+                    setPatientObj={setPatientObj2}
+                    patientObj={patientObj2}
+                    setExtra={setExtra}
+                    extra={extra}
+                    basicInfo={basicInfo}
+                    organizationInfo={organizationInfo}
+                    addNewForm={false}
+                  />
                 )}
               </div>
             </div>

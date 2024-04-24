@@ -624,6 +624,8 @@ const FamilyIndexTestingForm = (props) => {
     handleItemClick("pns", "fit");
     toggle();
   };
+
+
   const handleSubmitfamilyTestingTrackerRequestDTO = (e) => {
     if (familyTestingTrackerRequestDTO?.dateVisit !== "") {
       let existingArray = arrayFamilyTestingTrackerRequestDTO;
@@ -2490,7 +2492,7 @@ const FamilyIndexTestingForm = (props) => {
         show={open}
         toggle={toggle}
         className="fade"
-        size="sm"
+        size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
       >
@@ -2500,7 +2502,7 @@ const FamilyIndexTestingForm = (props) => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <h4>Would you like to fill Partner Service Form?</h4>
+          <h4>Would you like to fill the Partner Service Form?</h4>
         </Modal.Body>
         <Modal.Footer>
           <Button

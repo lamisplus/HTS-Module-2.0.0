@@ -19,6 +19,8 @@ import "react-widgets/dist/css/react-widgets.css";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import Badge from "@mui/material/Badge";
+import { useHistory } from "react-router-dom";
+import { Modal } from "react-bootstrap";
 
 import { calculate_age } from "../../../utils";
 import PersonIcon from "@mui/icons-material/Person";
@@ -108,6 +110,10 @@ const PnsForm = (props) => {
   const [facilityInfo, setFacilityInfo] = useState(
     props?.organizationInfo.currentOrganisationUnitName
   );
+
+  let history = useHistory();
+  const [open, setOpen] = React.useState(false);
+
   const [stateInfo, setStateInfo] = useState(
     props?.basicInfo?.personResponseDto?.address?.address[0]?.stateId
       ? props?.basicInfo?.personResponseDto?.address?.address[0]?.stateId
@@ -119,6 +125,7 @@ const PnsForm = (props) => {
       ? props?.basicInfo?.personResponseDto?.address?.address[0].district
       : props?.patientObj?.personResponseDto?.address?.address[0].district
   );
+  const toggle = () => setOpen(!open);
 
   let temp = { ...errors };
   const [objValuesIndex, setObjValuesIndex] = useState({
@@ -196,6 +203,12 @@ const PnsForm = (props) => {
     },
   });
   console.log("thusssssss", props.patientObj);
+
+  const loadNextForm = (row) => {
+    // setSaving(true);
+    handleItemClick("new-referral", "pns");
+    toggle();
+  };
   const [htsClientInformation, sethtsClientInformation] = useState({
     testingSetting: "",
     providerNameCompletingForm: "",
@@ -228,6 +241,11 @@ const PnsForm = (props) => {
     // numberOfPartnerIdentifiedFromClientIndex: "",
   });
 
+  const loadOtherForm = (row) => {
+    // setSaving(true);
+    //props.setActiveContent({...props.activeContent, route:'mental-health-view', id:row.id})
+    toggle();
+  };
   const getPNSInfo = (id) => {
     axios
       .get(`${baseUrl}hts-personal-notification-service/${id}/hts-client`, {
@@ -462,6 +480,11 @@ const PnsForm = (props) => {
         //console.log(error);
       });
   };
+
+  const handleDone = () => {
+    toggle();
+    history.push("/");
+  };
   console.log(props); //Get all recorcd by htsClientId
   const getAllRecordByHTSClientId = () => {
     axios
@@ -650,6 +673,8 @@ const PnsForm = (props) => {
 
           if (props?.addNewForm === false) {
             handleItemClick("pns-history", "pns");
+          } else {
+            loadOtherForm();
           }
           if (
             objValues.offeredPns !== "No" &&
@@ -1928,6 +1953,16 @@ const PnsForm = (props) => {
               <div className="row">
                 <div className="form-group mb-3 col-md-6">
                   <Button
+                    content="Done"
+                    // icon="save"
+                    labelPosition="right"
+                    style={{ backgroundColor: "#014d88", color: "#fff" }}
+                    onClick={()=>{
+                      history.push('/')
+                    }}
+                    disabled={saving}
+                  />
+                  <Button
                     content="Save"
                     icon="save"
                     labelPosition="right"
@@ -1941,6 +1976,38 @@ const PnsForm = (props) => {
           </form>
         </CardBody>
       </Card>
+      <Modal
+        show={open}
+        toggle={toggle}
+        className="fade"
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+      >
+        <Modal.Header>
+          <Modal.Title id="contained-modal-title-vcenter">
+            Notification!
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <h4>Would you like to fill the Refferal form ?</h4>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            onClick={() => loadNextForm()}
+            style={{ backgroundColor: "#014d88", color: "#fff" }}
+          >
+            Yes
+          </Button>
+
+          <Button
+            onClick={() => handleDone()}
+            style={{ backgroundColor: "#014d88", color: "#fff" }}
+          >
+            Done
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 };

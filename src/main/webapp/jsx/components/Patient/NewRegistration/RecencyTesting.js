@@ -195,8 +195,9 @@ const Recency = (props) => {
 
   const handleDone = () => {
     toggle();
-    history.push("/");
-  };
+    handleItemClick("pns", "recency-testing");
+
+};
   const loadOtherForm = (row) => {
     // setSaving(true);
     //props.setActiveContent({...props.activeContent, route:'mental-health-view', id:row.id})
@@ -858,6 +859,26 @@ const Recency = (props) => {
                     onClick={() => handleItemClick("post-test", "post-test")}
                   />
                   <Button
+                    content="Done"
+                    icon="right arrowrr"
+                    labelPosition="right"
+                    style={{ backgroundColor: "#014d88", color: "#fff" }}
+                    onClick={()=>{
+                      history.push('/')
+                    }}
+                    disabled={
+                      props.patientObj?.postTestCounselingKnowledgeAssessment
+                        ?.hivTestResult === "true" && recency.optOutRTRI === ""
+                        ? true
+                        : false
+                    }
+                  />
+                </div>
+              </div>
+              <div className="row">
+                <div className="form-group mb-3 col-md-12">
+         
+                  <Button
                     content="Save & Continue"
                     icon="right arrow"
                     labelPosition="right"
@@ -881,7 +902,7 @@ const Recency = (props) => {
         show={open}
         toggle={toggle}
         className="fade"
-        size="md"
+        size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
         backdrop="static"
@@ -893,7 +914,7 @@ const Recency = (props) => {
         </Modal.Header>
         <Modal.Body>
           <h4>
-            Would you like to fill other services?
+            Would you like to fill the Family Index form ?
             {/* <b>{row && record.activityName}</b> */}
           </h4>
         </Modal.Body>
@@ -911,7 +932,7 @@ const Recency = (props) => {
             style={{ backgroundColor: "#014d88", color: "#fff" }}
             // disabled={saving}
           >
-            No
+            Skip
           </Button>
         </Modal.Footer>
       </Modal>

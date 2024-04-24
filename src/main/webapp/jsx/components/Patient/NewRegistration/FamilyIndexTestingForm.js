@@ -293,6 +293,11 @@ const FamilyIndexTestingForm = (props) => {
       });
   };
 
+  const loadOtherForm = (row) => {
+    // setSaving(true);
+    //props.setActiveContent({...props.activeContent, route:'mental-health-view', id:row.id})
+    toggle();
+  };
   const loadLGA = (id) => {
     axios
       .get(`${baseUrl}organisation-units/parent-organisation-units/${id}`, {
@@ -311,8 +316,8 @@ const FamilyIndexTestingForm = (props) => {
         // console.log("Fetch LGA error" + e);
       });
   };
- console.log(props)
-  const markUpForm = (next, present) => {
+  console.log(props);
+  const handleItemClick = (next, present) => {
     props.handleItemClick(next);
     if (props.completed.includes(present)) {
     } else {
@@ -610,7 +615,15 @@ const FamilyIndexTestingForm = (props) => {
     // clearf the error with e.target.name
     setErrors({ ...errors, [e.target.name]: "" });
   };
-
+  const handleDone = () => {
+    toggle();
+    handleItemClick("refferral", "");
+  };
+  const loadNextForm = (row) => {
+    // setSaving(true);
+    handleItemClick("pns", "fit");
+    toggle();
+  };
   const handleSubmitfamilyTestingTrackerRequestDTO = (e) => {
     if (familyTestingTrackerRequestDTO?.dateVisit !== "") {
       let existingArray = arrayFamilyTestingTrackerRequestDTO;
@@ -991,6 +1004,8 @@ const FamilyIndexTestingForm = (props) => {
         setSaving(false);
 
         toast.success("Family Indexform save succesfully!");
+        loadOtherForm();
+
         // history.push({pathName: "/patient-history",
         //   state: {
         //     patientObject: props.basicInfo,
@@ -998,8 +1013,6 @@ const FamilyIndexTestingForm = (props) => {
         //     clientCode: props.basicInfo.clientCode,
         //   },}
         // );
-
-        markUpForm("pns", "fit");
       })
       .catch((error) => {
         setSaving(false);
@@ -2444,6 +2457,17 @@ const FamilyIndexTestingForm = (props) => {
             <div className="row">
               <div className="form-group mb-3 col-md-6">
                 <Button
+                  content="Done"
+                  type="Done"
+                  icon="right arrowe"
+                  labelPosition="right"
+                  style={{ backgroundColor: "#014d88", color: "#fff" }}
+                  onClick={() => {
+                    history.push("/");
+                  }}
+                  disabled={saving}
+                />
+                <Button
                   content="Save"
                   type="submit"
                   icon="right arrow"
@@ -2476,14 +2500,21 @@ const FamilyIndexTestingForm = (props) => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <h4>Are you Sure of the Age entered?</h4>
+          <h4>Would you like to fill Partner Service Form?</h4>
         </Modal.Body>
         <Modal.Footer>
           <Button
-            onClick={toggle}
+            onClick={() => loadNextForm()}
             style={{ backgroundColor: "#014d88", color: "#fff" }}
           >
             Yes
+          </Button>
+
+          <Button
+            onClick={() => handleDone()}
+            style={{ backgroundColor: "#014d88", color: "#fff" }}
+          >
+            Skip
           </Button>
         </Modal.Footer>
       </Modal>

@@ -241,6 +241,26 @@ const ViewPNSForm = (props) => {
   //       .catch((error) => {});
   //   };
 
+  const checkNumberLimit = (e) => {
+    const limit = 11;
+    const acceptedNumber = e.slice(0, limit);
+    return acceptedNumber;
+  };
+
+
+  const handleInputChangePhoneNumber = (e, inputName) => {
+    const limit = 11;
+    const NumberValue = checkNumberLimit(e.target.value.replace(/\D/g, ""));
+    setObjValues({ ...objValues, [inputName]: NumberValue});
+    if(inputName === "phoneNumber"){
+      setObjValues({...objValues, [inputName]: NumberValue});
+    }
+    if(inputName === "alternatePhoneNumber"){
+      setObjValues({...objValues, [inputName]: NumberValue});
+    }
+
+  };
+
   const TargetGroupSetup = () => {
     axios
       .get(`${baseUrl}account`, {
@@ -832,100 +852,100 @@ const ViewPNSForm = (props) => {
             <div className="row">
               {objValues.acceptedPns !== "" &&
                 objValues.acceptedPns !== "No" && (
-                  <>
-                    <div className="form-group  col-md-4">
-                      <FormGroup>
-                        <Label>
-                          State <span style={{ color: "red" }}> *</span>
-                        </Label>
-                        <select
-                          className="form-control"
-                          name="state"
-                          id="state"
-                          onChange={getProvinces}
-                          value={stateInfo}
-                          style={{
-                            border: "1px solid #014D88",
-                            borderRadius: "0.2rem",
-                          }}
-                          disabled
-                        >
-                          <option value={""}></option>
-                          {states.map((value) => (
-                            <option key={value.id} value={value.id}>
-                              {value.name}
-                            </option>
-                          ))}
-                        </select>
-                        {errors.stateId !== "" ? (
-                          <span className={classes.error}>
+                      <>
+                        <div className="form-group  col-md-4">
+                          <FormGroup>
+                            <Label>
+                              State <span style={{color: "red"}}> *</span>
+                            </Label>
+                            <select
+                                className="form-control"
+                                name="state"
+                                id="state"
+                                onChange={getProvinces}
+                                value={stateInfo}
+                                style={{
+                                  border: "1px solid #014D88",
+                                  borderRadius: "0.2rem",
+                                }}
+                                disabled
+                            >
+                              <option value={""}></option>
+                              {states.map((value) => (
+                                  <option key={value.id} value={value.id}>
+                                    {value.name}
+                                  </option>
+                              ))}
+                            </select>
+                            {errors.stateId !== "" ? (
+                                <span className={classes.error}>
                             {errors.stateId}
                           </span>
-                        ) : (
-                          ""
-                        )}
-                      </FormGroup>
-                    </div>
-                    <div className="form-group  col-md-4">
-                      <FormGroup>
-                        <Label>
-                          LGA <span style={{ color: "red" }}> *</span>
-                        </Label>
-                        <select
-                          className="form-control"
-                          name="lga"
-                          id="lga"
-                          value={lgaInfo}
-                          onChange={handleInputChange}
-                          style={{
-                            border: "1px solid #014D88",
-                            borderRadius: "0.2rem",
-                          }}
-                          disabled
-                        >
-                          <option value={""}></option>
-                          {provinces.map((value, index) => (
-                            <option key={index} value={value.id}>
-                              {value.name}
-                            </option>
-                          ))}
-                        </select>
-                        {errors.lga !== "" ? (
-                          <span className={classes.error}>{errors.lga}</span>
-                        ) : (
-                          ""
-                        )}
-                      </FormGroup>
-                    </div>
-                    <div className="form-group mb-3 col-md-4">
-                      <FormGroup>
-                        <Label for="providerNameCompletingForm">
-                          Facility Name
-                          <span style={{ color: "red" }}> *</span>
-                        </Label>
-                        <Input
-                          className="form-control"
-                          type="text"
-                          name="facilityId"
-                          id="facilityId"
-                          value={facilityInfo}
-                          onChange={handleInputChange}
-                          style={{
-                            border: "1px solid #014D88",
-                            borderRadius: "0.2rem",
-                          }}
-                          disabled
-                        />
-                        {errors.facilityId !== "" ? (
-                          <span className={classes.error}>
+                            ) : (
+                                ""
+                            )}
+                          </FormGroup>
+                        </div>
+                        <div className="form-group  col-md-4">
+                          <FormGroup>
+                            <Label>
+                              LGA <span style={{color: "red"}}> *</span>
+                            </Label>
+                            <select
+                                className="form-control"
+                                name="lga"
+                                id="lga"
+                                value={lgaInfo}
+                                onChange={handleInputChange}
+                                style={{
+                                  border: "1px solid #014D88",
+                                  borderRadius: "0.2rem",
+                                }}
+                                disabled
+                            >
+                              <option value={""}></option>
+                              {provinces.map((value, index) => (
+                                  <option key={index} value={value.id}>
+                                    {value.name}
+                                  </option>
+                              ))}
+                            </select>
+                            {errors.lga !== "" ? (
+                                <span className={classes.error}>{errors.lga}</span>
+                            ) : (
+                                ""
+                            )}
+                          </FormGroup>
+                        </div>
+                        <div className="form-group mb-3 col-md-4">
+                          <FormGroup>
+                            <Label for="providerNameCompletingForm">
+                              Facility Name
+                              <span style={{color: "red"}}> *</span>
+                            </Label>
+                            <Input
+                                className="form-control"
+                                type="text"
+                                name="facilityId"
+                                id="facilityId"
+                                value={facilityInfo}
+                                onChange={handleInputChange}
+                                style={{
+                                  border: "1px solid #014D88",
+                                  borderRadius: "0.2rem",
+                                }}
+                                disabled
+                            />
+                            {errors.facilityId !== "" ? (
+                                <span className={classes.error}>
                             {errors.facilityId}
                           </span>
-                        ) : (
-                          ""
-                        )}
-                      </FormGroup>
-                    </div>
-                    {/* <div className="form-group mb-3 col-md-4">
+                            ) : (
+                                ""
+                            )}
+                          </FormGroup>
+                        </div>
+                        {/* <div className="form-group mb-3 col-md-4">
                       <FormGroup>
                         <Label>Date</Label>
                         <input
@@ -943,218 +963,218 @@ const ViewPNSForm = (props) => {
                         />
                       </FormGroup>
                     </div> */}
-                    <div className="form-group  col-md-4">
-                      <FormGroup>
-                        <Label>
-                          Setting <span style={{ color: "red" }}> *</span>
-                        </Label>
-                        <select
-                          className="form-control"
-                          name="testingSetting"
-                          id="testingSetting"
-                          value={htsClientInformation.testingSetting}
-                          onChange={handleHTSClientInputChange}
-                          style={{
-                            border: "1px solid #014D88",
-                            borderRadius: "0.2rem",
-                          }}
-                          disabled={props.row.action === "view" ? true : false}
-                        >
-                          <option value={""}></option>
-                          {setting.map((value) => (
-                            <option key={value.id} value={value.code}>
-                              {value.display}
-                            </option>
-                          ))}
-                        </select>
-                        {errors.testingSetting !== "" ? (
-                          <span className={classes.error}>
+                        <div className="form-group  col-md-4">
+                          <FormGroup>
+                            <Label>
+                              Setting <span style={{color: "red"}}> *</span>
+                            </Label>
+                            <select
+                                className="form-control"
+                                name="testingSetting"
+                                id="testingSetting"
+                                value={htsClientInformation.testingSetting}
+                                onChange={handleHTSClientInputChange}
+                                style={{
+                                  border: "1px solid #014D88",
+                                  borderRadius: "0.2rem",
+                                }}
+                                disabled={props.row.action === "view" ? true : false}
+                            >
+                              <option value={""}></option>
+                              {setting.map((value) => (
+                                  <option key={value.id} value={value.code}>
+                                    {value.display}
+                                  </option>
+                              ))}
+                            </select>
+                            {errors.testingSetting !== "" ? (
+                                <span className={classes.error}>
                             {errors.testingSetting}
                           </span>
-                        ) : (
-                          ""
-                        )}
-                      </FormGroup>
-                    </div>
-                    <div className="form-group mb-3 col-md-4">
-                      <FormGroup>
-                        <Label for="">
-                          Name of provider completing the form
-                        </Label>
-                        <Input
-                          type="text"
-                          name="providerNameCompletingForm"
-                          id="providerNameCompletingForm"
-                          value={
-                            htsClientInformation.providerNameCompletingForm
-                          }
-                          onChange={handleHTSClientInputChange}
-                          style={{
-                            border: "1px solid #014D88",
-                            borderRadius: "0.25rem",
-                          }}
-                          disabled={props.row.action === "view" ? true : false}
-                        />
-                      </FormGroup>
-                    </div>
-                    <div className="form-group  col-md-4">
-                      <FormGroup>
-                        <Label>
-                          Role of the provider completing Form
-                          <span style={{ color: "red" }}> *</span>
-                        </Label>
-                        <select
-                          className="form-control"
-                          name="providerRoleCompletingForm"
-                          id="providerRoleCompletingForm"
-                          value={
-                            htsClientInformation.providerRoleCompletingForm
-                          }
-                          onChange={handleHTSClientInputChange}
-                          style={{
-                            border: "1px solid #014D88",
-                            borderRadius: "0.2rem",
-                          }}
-                          disabled={props.row.action === "view" ? true : false}
-                        >
-                          <option value={""}></option>
-                          {roleProvider.map((value) => (
-                            <option key={value.id} value={value.code}>
-                              {value.display}
-                            </option>
-                          ))}
-                        </select>
-                        {errors.providerRoleCompletingForm !== "" ? (
-                          <span className={classes.error}>
+                            ) : (
+                                ""
+                            )}
+                          </FormGroup>
+                        </div>
+                        <div className="form-group mb-3 col-md-4">
+                          <FormGroup>
+                            <Label for="">
+                              Name of provider completing the form
+                            </Label>
+                            <Input
+                                type="text"
+                                name="providerNameCompletingForm"
+                                id="providerNameCompletingForm"
+                                value={
+                                  htsClientInformation.providerNameCompletingForm
+                                }
+                                onChange={handleHTSClientInputChange}
+                                style={{
+                                  border: "1px solid #014D88",
+                                  borderRadius: "0.25rem",
+                                }}
+                                disabled={props.row.action === "view" ? true : false}
+                            />
+                          </FormGroup>
+                        </div>
+                        <div className="form-group  col-md-4">
+                          <FormGroup>
+                            <Label>
+                              Role of the provider completing Form
+                              <span style={{color: "red"}}> *</span>
+                            </Label>
+                            <select
+                                className="form-control"
+                                name="providerRoleCompletingForm"
+                                id="providerRoleCompletingForm"
+                                value={
+                                  htsClientInformation.providerRoleCompletingForm
+                                }
+                                onChange={handleHTSClientInputChange}
+                                style={{
+                                  border: "1px solid #014D88",
+                                  borderRadius: "0.2rem",
+                                }}
+                                disabled={props.row.action === "view" ? true : false}
+                            >
+                              <option value={""}></option>
+                              {roleProvider.map((value) => (
+                                  <option key={value.id} value={value.code}>
+                                    {value.display}
+                                  </option>
+                              ))}
+                            </select>
+                            {errors.providerRoleCompletingForm !== "" ? (
+                                <span className={classes.error}>
                             {errors.providerRoleCompletingForm}
                           </span>
-                        ) : (
-                          ""
-                        )}
-                      </FormGroup>
-                    </div>
-                    <div
-                      className="form-group  col-md-12 text-center pt-2 mb-4"
-                      style={{
-                        backgroundColor: "#992E62",
-                        width: "125%",
-                        height: "35px",
-                        color: "#fff",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      SECTION 1 : INFORMATION ABOUT THE INDEX CLIENT
-                    </div>
-
-                    <div className="form-group mb-3 col-md-4">
-                      <FormGroup>
-                        <Label for="">Client's Firstname </Label>
-                        <Input
-                          type="text"
-                          name="firstName"
-                          id="firstName"
-                          value={objValues.firstName}
-                          onChange={handleInputChange}
-                          style={{
-                            border: "1px solid #014D88",
-                            borderRadius: "0.25rem",
-                          }}
-                          disabled
-                        />
-                      </FormGroup>
-                    </div>
-                    <div className="form-group mb-3 col-md-4">
-                      <FormGroup>
-                        <Label for="">Client's Middlename </Label>
-                        <Input
-                          type="text"
-                          name="middleName"
-                          id="middleName"
-                          value={objValues.middleName}
-                          onChange={handleInputChange}
-                          style={{
-                            border: "1px solid #014D88",
-                            borderRadius: "0.25rem",
-                          }}
-                          disabled
-                        />
-                      </FormGroup>
-                    </div>
-                    <div className="form-group mb-3 col-md-4">
-                      <FormGroup>
-                        <Label for="">Client's Lastname</Label>
-                        <Input
-                          type="text"
-                          name="lastName"
-                          id="lastName"
-                          value={objValues.lastName}
-                          onChange={handleInputChange}
-                          style={{
-                            border: "1px solid #014D88",
-                            borderRadius: "0.25rem",
-                          }}
-                          disabled
-                        />
-                      </FormGroup>
-                    </div>
-                    <div className="form-group mb-3 col-md-4">
-                      <FormGroup>
-                        <Label for="">Index Client ID </Label>
-                        <Input
-                          type="text"
-                          name="indexClientId"
-                          id="indexClientId"
-                          value={objValues.indexClientId}
-                          onChange={handleInputChange}
-                          style={{
-                            border: "1px solid #014D88",
-                            borderRadius: "0.25rem",
-                          }}
-                          disabled={props.row.action === "view" ? true : false}
-                        />
-                      </FormGroup>
-                    </div>
-                    <div className="form-group  col-md-4">
-                      <FormGroup>
-                        <Label>Sex </Label>
-                        <select
-                          className="form-control"
-                          name="sex"
-                          id="sex"
-                          value={objValues.sex}
-                          onChange={handleInputChange}
-                          style={{
-                            border: "1px solid #014D88",
-                            borderRadius: "0.2rem",
-                          }}
-                          disabled
+                            ) : (
+                                ""
+                            )}
+                          </FormGroup>
+                        </div>
+                        <div
+                            className="form-group  col-md-12 text-center pt-2 mb-4"
+                            style={{
+                              backgroundColor: "#992E62",
+                              width: "125%",
+                              height: "35px",
+                              color: "#fff",
+                              fontWeight: "bold",
+                            }}
                         >
-                          <option value={""}></option>
-                          {sexs.map((value) => (
-                            <option key={value.id} value={value.id}>
-                              {value.display}
-                            </option>
-                          ))}
-                        </select>
-                      </FormGroup>
-                    </div>
-                    {/*<div className="form-group mb-3 col-md-4">*/}
-                    {/*    <FormGroup>*/}
-                    {/*        <Label for="">Last Name</Label>*/}
-                    {/*        <Input*/}
-                    {/*            type="text"*/}
-                    {/*            name="lastName"*/}
-                    {/*            id="lastName"*/}
-                    {/*            value={objValues.lastName}*/}
-                    {/*            onChange={handleInputChange}*/}
-                    {/*            style={{*/}
-                    {/*                border: "1px solid #014D88",*/}
-                    {/*                borderRadius: "0.25rem",*/}
-                    {/*            }}*/}
-                    {/*        />*/}
-                    {/*    </FormGroup>*/}
-                    {/*</div>*/}
-                    {/* <div className="form-group mb-2 col-md-4">
+                          SECTION 1 : INFORMATION ABOUT THE INDEX CLIENT
+                        </div>
+
+                        <div className="form-group mb-3 col-md-4">
+                          <FormGroup>
+                            <Label for="">Client's Firstname </Label>
+                            <Input
+                                type="text"
+                                name="firstName"
+                                id="firstName"
+                                value={objValues.firstName}
+                                onChange={handleInputChange}
+                                style={{
+                                  border: "1px solid #014D88",
+                                  borderRadius: "0.25rem",
+                                }}
+                                disabled
+                            />
+                          </FormGroup>
+                        </div>
+                        <div className="form-group mb-3 col-md-4">
+                          <FormGroup>
+                            <Label for="">Client's Middlename </Label>
+                            <Input
+                                type="text"
+                                name="middleName"
+                                id="middleName"
+                                value={objValues.middleName}
+                                onChange={handleInputChange}
+                                style={{
+                                  border: "1px solid #014D88",
+                                  borderRadius: "0.25rem",
+                                }}
+                                disabled
+                            />
+                          </FormGroup>
+                        </div>
+                        <div className="form-group mb-3 col-md-4">
+                          <FormGroup>
+                            <Label for="">Client's Lastname</Label>
+                            <Input
+                                type="text"
+                                name="lastName"
+                                id="lastName"
+                                value={objValues.lastName}
+                                onChange={handleInputChange}
+                                style={{
+                                  border: "1px solid #014D88",
+                                  borderRadius: "0.25rem",
+                                }}
+                                disabled
+                            />
+                          </FormGroup>
+                        </div>
+                        <div className="form-group mb-3 col-md-4">
+                          <FormGroup>
+                            <Label for="">Index Client ID </Label>
+                            <Input
+                                type="text"
+                                name="indexClientId"
+                                id="indexClientId"
+                                value={objValues.indexClientId}
+                                onChange={handleInputChange}
+                                style={{
+                                  border: "1px solid #014D88",
+                                  borderRadius: "0.25rem",
+                                }}
+                                disabled={props.row.action === "view" ? true : false}
+                            />
+                          </FormGroup>
+                        </div>
+                        <div className="form-group  col-md-4">
+                          <FormGroup>
+                            <Label>Sex </Label>
+                            <select
+                                className="form-control"
+                                name="sex"
+                                id="sex"
+                                value={objValues.sex}
+                                onChange={handleInputChange}
+                                style={{
+                                  border: "1px solid #014D88",
+                                  borderRadius: "0.2rem",
+                                }}
+                                disabled
+                            >
+                              <option value={""}></option>
+                              {sexs.map((value) => (
+                                  <option key={value.id} value={value.id}>
+                                    {value.display}
+                                  </option>
+                              ))}
+                            </select>
+                          </FormGroup>
+                        </div>
+                        {/*<div className="form-group mb-3 col-md-4">*/}
+                        {/*    <FormGroup>*/}
+                        {/*        <Label for="">Last Name</Label>*/}
+                        {/*        <Input*/}
+                        {/*            type="text"*/}
+                        {/*            name="lastName"*/}
+                        {/*            id="lastName"*/}
+                        {/*            value={objValues.lastName}*/}
+                        {/*            onChange={handleInputChange}*/}
+                        {/*            style={{*/}
+                        {/*                border: "1px solid #014D88",*/}
+                        {/*                borderRadius: "0.25rem",*/}
+                        {/*            }}*/}
+                        {/*        />*/}
+                        {/*    </FormGroup>*/}
+                        {/*</div>*/}
+                        {/* <div className="form-group mb-2 col-md-4">
                       <FormGroup>
                         <Label>Date Of Birth</Label>
                         <div className="radio">
@@ -1190,822 +1210,873 @@ const ViewPNSForm = (props) => {
                         </div>
                       </FormGroup>
                     </div> */}
-                    <div className="form-group mb-2 col-md-4">
-                      <FormGroup>
-                        <Label>Date Of Birth</Label>
-                        <input
-                          className="form-control"
-                          type="date"
-                          name="dob"
-                          id="dob"
-                          max={moment(new Date()).format("YYYY-MM-DD")}
-                          value={objValues.dob}
-                          onChange={handleDobChange}
-                          style={{
-                            border: "1px solid #014D88",
-                            borderRadius: "0.2rem",
-                          }}
-                          disabled
-                        />
-                      </FormGroup>
-                    </div>
-                    <div className="form-group mb-2 col-md-4">
-                      <FormGroup>
-                        <Label>Age</Label>
-                        <input
-                          className="form-control"
-                          type="number"
-                          name="age"
-                          id="age"
-                          value={calculate_age(
-                            props?.basicInfo?.personResponseDto?.dateOfBirth
-                              ? props?.basicInfo?.personResponseDto?.dateOfBirth
-                              : props?.patientObj?.personResponseDto
-                                  ?.dateOfBirth
-                          )}
-                          // disabled={ageDisabled}
-                          disabled
-                          onChange={handleAgeChange}
-                          style={{
-                            border: "1px solid #014D88",
-                            borderRadius: "0.2rem",
-                          }}
-                        />
-                      </FormGroup>
-                    </div>
-                    <div className="form-group  col-md-4">
-                      <FormGroup>
-                        <Label>
-                          Marital Status <span style={{ color: "red" }}> </span>
-                        </Label>
-                        <select
-                          className="form-control"
-                          name="maritalStatus"
-                          id="maritalStatus"
-                          value={htsClientInformation.maritalStatus}
-                          onChange={handleHTSClientInputChange}
-                          style={{
-                            border: "1px solid #014D88",
-                            borderRadius: "0.2rem",
-                          }}
-                          disabled
-                          // disabled={props.activePage.actionType === "view"}
-                        >
-                          <option value={""}></option>
-                          {maritalStatus.map((value) => (
-                            <option key={value.id} value={value.id}>
-                              {value.display}
-                            </option>
-                          ))}
-                        </select>
-                        {/* {errors.testingSetting !== "" ? (
+                        <div className="form-group mb-2 col-md-4">
+                          <FormGroup>
+                            <Label>Date Of Birth</Label>
+                            <input
+                                className="form-control"
+                                type="date"
+                                name="dob"
+                                id="dob"
+                                max={moment(new Date()).format("YYYY-MM-DD")}
+                                value={objValues.dob}
+                                onChange={handleDobChange}
+                                style={{
+                                  border: "1px solid #014D88",
+                                  borderRadius: "0.2rem",
+                                }}
+                                disabled
+                            />
+                          </FormGroup>
+                        </div>
+                        <div className="form-group mb-2 col-md-4">
+                          <FormGroup>
+                            <Label>Age</Label>
+                            <input
+                                className="form-control"
+                                type="number"
+                                name="age"
+                                id="age"
+                                value={calculate_age(
+                                    props?.basicInfo?.personResponseDto?.dateOfBirth
+                                        ? props?.basicInfo?.personResponseDto?.dateOfBirth
+                                        : props?.patientObj?.personResponseDto
+                                            ?.dateOfBirth
+                                )}
+                                // disabled={ageDisabled}
+                                disabled
+                                onChange={handleAgeChange}
+                                style={{
+                                  border: "1px solid #014D88",
+                                  borderRadius: "0.2rem",
+                                }}
+                            />
+                          </FormGroup>
+                        </div>
+                        <div className="form-group  col-md-4">
+                          <FormGroup>
+                            <Label>
+                              Marital Status <span style={{color: "red"}}> </span>
+                            </Label>
+                            <select
+                                className="form-control"
+                                name="maritalStatus"
+                                id="maritalStatus"
+                                value={htsClientInformation.maritalStatus}
+                                onChange={handleHTSClientInputChange}
+                                style={{
+                                  border: "1px solid #014D88",
+                                  borderRadius: "0.2rem",
+                                }}
+                                disabled
+                                // disabled={props.activePage.actionType === "view"}
+                            >
+                              <option value={""}></option>
+                              {maritalStatus.map((value) => (
+                                  <option key={value.id} value={value.id}>
+                                    {value.display}
+                                  </option>
+                              ))}
+                            </select>
+                            {/* {errors.testingSetting !== "" ? (
                                             <span className={classes.error}>
                                                 {errors.testingSetting}
                                             </span>
                                         ) : (
                                             ""
                                         )} */}
-                      </FormGroup>
-                    </div>
-                    <div className="form-group mb-3 col-md-4">
-                      <FormGroup>
-                        <Label for="">Phone Number</Label>
+                          </FormGroup>
+                        </div>
+                        {/*<div className="form-group mb-3 col-md-4">*/}
+                        {/*  <FormGroup>*/}
+                        {/*    <Label for="">Phone Number</Label>*/}
 
-                        <PhoneInput
-                          containerStyle={{
-                            width: "100%",
-                            border: "1px solid #014D88",
-                          }}
-                          inputStyle={{ width: "100%", borderRadius: "0px" }}
-                          country={"ng"}
-                          placeholder="(234)7099999999"
-                          minLength={10}
-                          name="phoneNumber"
-                          disabled
-                          id="phoneNumber"
-                          masks={{ ng: "...-...-....", at: "(....) ...-...." }}
-                          value={objValues.phoneNumber}
-                          onChange={(e) => {
-                            checkPhoneNumberBasic(e, "phoneNumber");
-                          }}
-                          //onChange={(e)=>{handleInputChangeBasic(e,'phoneNumber')}}
-                        />
-                        {errors.phoneNumber !== "" ? (
-                          <span className={classes.error}>
-                            {errors.phoneNumber}
-                          </span>
-                        ) : (
-                          ""
-                        )}
-                      </FormGroup>
-                    </div>
+                        {/*    <PhoneInput*/}
+                        {/*        containerStyle={{*/}
+                        {/*          width: "100%",*/}
+                        {/*          border: "1px solid #014D88",*/}
+                        {/*        }}*/}
+                        {/*        inputStyle={{width: "100%", borderRadius: "0px"}}*/}
+                        {/*        country={"ng"}*/}
+                        {/*        placeholder="(234)7099999999"*/}
+                        {/*        minLength={10}*/}
+                        {/*        name="phoneNumber"*/}
+                        {/*        disabled*/}
+                        {/*        id="phoneNumber"*/}
+                        {/*        masks={{ng: "...-...-....", at: "(....) ...-...."}}*/}
+                        {/*        value={objValues.phoneNumber}*/}
+                        {/*        onChange={(e) => {*/}
+                        {/*          checkPhoneNumberBasic(e, "phoneNumber");*/}
+                        {/*        }}*/}
+                        {/*        //onChange={(e)=>{handleInputChangeBasic(e,'phoneNumber')}}*/}
+                        {/*    />*/}
+                        {/*    {errors.phoneNumber !== "" ? (*/}
+                        {/*        <span className={classes.error}>*/}
+                        {/*    {errors.phoneNumber}*/}
+                        {/*  </span>*/}
+                        {/*    ) : (*/}
+                        {/*        ""*/}
+                        {/*    )}*/}
+                        {/*  </FormGroup>*/}
+                        {/*</div>*/}
 
-                    <div className="form-group mb-3 col-md-4">
-                      <FormGroup>
-                        <Label for="">Alternative Phone Number</Label>
-                        <PhoneInput
-                          disabled={props.row.action === "view" ? true : false}
-                          containerStyle={{
-                            width: "100%",
-                            border: "1px solid #014D88",
-                          }}
-                          inputStyle={{ width: "100%", borderRadius: "0px" }}
-                          country={"ng"}
-                          placeholder="(234)7099999999"
-                          minLength={10}
-                          name="alternatePhoneNumber"
-                          id="altPhoneNumber"
-                          masks={{ ng: "...-...-....", at: "(....) ...-...." }}
-                          value={objValues.alternatePhoneNumber}
-                          onChange={(e) => {
-                            checkPhoneNumberBasic(e, "alternatePhoneNumber");
-                          }}
-                          //onChange={(e)=>{handleInputChangeBasic(e,'phoneNumber')}}
-                        />
-                      </FormGroup>
-                    </div>
-                    <div className="form-group mb-3 col-md-4">
-                      <FormGroup>
-                        <Label for=""> Descriptive Residential Address </Label>
-                        <Input
-                          type="text"
-                          name="descriptiveResidentialAddress"
-                          id="descriptiveResidentialAddress"
-                          value={
-                            htsClientInformation.descriptiveResidentialAddress
-                          }
-                          onChange={handleHTSClientInputChange}
-                          style={{
-                            border: "1px solid #014D88",
-                            borderRadius: "0.25rem",
-                          }}
-                          disabled
-                        />
-                      </FormGroup>
-                    </div>
-
-                    <div className="form-group col-md-4">
-                      <FormGroup>
-                        <Label for="">
-                          Date Of Index Client's confirmed HIV-positive test
-                          results <span style={{ color: "red" }}> *</span>{" "}
-                        </Label>
-                        <Input
-                          type="date"
-                          name="dateIndexClientConfirmedHiv"
-                          id="dateIndexClientConfirmedHiv"
-                          value={
-                            htsClientInformation.dateIndexClientConfirmedHiv
-                          }
-                          onChange={handleHTSClientInputChange}
-                          min="1929-12-31"
-                          max={moment(new Date()).format("YYYY-MM-DD")}
-                          style={{
-                            border: "1px solid #014D88",
-                            borderRadius: "0.25rem",
-                          }}
-                          disabled={props.row.action === "view" ? true : false}
-                        />
-                        {errors.dateIndexClientConfrimedHiv !== "" ? (
-                          <span className={classes.error}>
-                            {errors.referralDate}
-                          </span>
-                        ) : (
-                          ""
-                        )}
-                      </FormGroup>
-                    </div>
-                    {/* {indexClientConfirmedHivPositive && ( */}
-
-                    {/* )} */}
-                    {/* if index client is hiv positive, and date is selected */}
-                    <div className="form-group col-md-4 ">
-                      <Label>Is client current on HIV treatment?</Label>
-                      <FormGroup>
-                        <select
-                          className="form-control"
-                          name="isClientCurrentlyOnHiv"
-                          id="isClientCurrentlyOnHiv"
-                          onChange={handleHTSClientInputChange}
-                          value={htsClientInformation.isClientCurrentlyOnHiv}
-                          style={{
-                            border: "1px solid #014D88",
-                            borderRadius: "0.2rem",
-                          }}
-                          disabled={props.row.action === "view" ? true : false}
-                        >
-                          <option value="">Select</option>
-                          <option value="Yes">Yes</option>
-                          <option value="No">No</option>
-                        </select>
-                      </FormGroup>
-                    </div>
-                    {htsClientInformation.isClientCurrentlyOnHiv &&
-                      htsClientInformation.isClientCurrentlyOnHiv === "Yes" && (
-                        <div className="form-group mb-3 col-md-4">
+                        <div className="form-group  col-md-4">
                           <FormGroup>
-                            <Label for="">
-                              Date of Treatment Initiation{" "}
-                              <span style={{ color: "red" }}> *</span>{" "}
+                            <Label>
+                              Phone Number
+                              <span style={{color: "red"}}> *</span>
                             </Label>
                             <Input
-                              type="date"
-                              name="DateOfTreatmentInitiation"
-                              id="DateOfTreatmentInitiation"
-                              value={
-                                htsClientInformation.DateOfTreatmentInitiation
-                              }
-                              onChange={handleHTSClientInputChange}
-                              min="1929-12-31"
-                              max={moment(new Date()).format("YYYY-MM-DD")}
-                              style={{
-                                border: "1px solid #014D88",
-                                borderRadius: "0.25rem",
-                              }}
-                              disabled={
-                                props.row.action === "view" ? true : false
-                              }
+                                type="text"
+                                name="phoneNumber"
+                                id="phoneNumber"
+                                onChange={(e) => {
+                                  handleInputChangePhoneNumber(e, "phoneNumber");
+                                }}
+                                value={objValues.phoneNumber}
+                                style={{
+                                  border: "1px solid #014D88",
+                                  borderRadius: "0.2rem",
+                                }}
+                                disabled
                             />
-                            {/* {errors.treatmentDateI !== "" ? (
+                            {errors.phoneNumber !== "" ? (
+                                <span className={classes.error}>
+                        {errors.phoneNumber}
+                      </span>
+                            ) : (
+                                ""
+                            )}
+                          </FormGroup>
+                        </div>
+                        {/*<div className="form-group mb-3 col-md-4">*/}
+                        {/*  <FormGroup>*/}
+                        {/*    <Label for="">Alternative Phone Number</Label>*/}
+                        {/*    <PhoneInput*/}
+                        {/*        disabled={props.row.action === "view" ? true : false}*/}
+                        {/*        containerStyle={{*/}
+                        {/*          width: "100%",*/}
+                        {/*          border: "1px solid #014D88",*/}
+                        {/*        }}*/}
+                        {/*        inputStyle={{width: "100%", borderRadius: "0px"}}*/}
+                        {/*        country={"ng"}*/}
+                        {/*        placeholder="(234)7099999999"*/}
+                        {/*        minLength={10}*/}
+                        {/*        name="alternatePhoneNumber"*/}
+                        {/*        id="altPhoneNumber"*/}
+                        {/*        masks={{ng: "...-...-....", at: "(....) ...-...."}}*/}
+                        {/*        value={objValues.alternatePhoneNumber}*/}
+                        {/*        onChange={(e) => {*/}
+                        {/*          checkPhoneNumberBasic(e, "alternatePhoneNumber");*/}
+                        {/*        }}*/}
+                        {/*        //onChange={(e)=>{handleInputChangeBasic(e,'phoneNumber')}}*/}
+                        {/*    />*/}
+                        {/*  </FormGroup>*/}
+                        {/*</div>*/}
+                        <div className="form-group  col-md-4">
+                          <FormGroup>
+                            <Label>
+                              Alternative Contact Number
+                              <span style={{color: "red"}}> *</span>
+                            </Label>
+                            <Input
+                                type="text"
+                                name="alternatePhoneNumber"
+                                id="alternatePhoneNumber"
+                                onChange={(e) => {
+                                  handleInputChangePhoneNumber(e, "alternatePhoneNumber");
+                                }}
+                                value={objValues.alternatePhoneNumber}
+                                style={{
+                                  border: "1px solid #014D88",
+                                  borderRadius: "0.2rem",
+                                }}
+
+                            />
+                          </FormGroup>
+                        </div>
+                        <div className="form-group mb-3 col-md-4">
+                          <FormGroup>
+                            <Label for=""> Descriptive Residential Address </Label>
+                            <Input
+                                type="text"
+                                name="descriptiveResidentialAddress"
+                                id="descriptiveResidentialAddress"
+                                value={
+                                  htsClientInformation.descriptiveResidentialAddress
+                                }
+                                onChange={handleHTSClientInputChange}
+                                style={{
+                                  border: "1px solid #014D88",
+                                  borderRadius: "0.25rem",
+                                }}
+                                disabled
+                            />
+                          </FormGroup>
+                        </div>
+
+                        <div className="form-group col-md-4">
+                          <FormGroup>
+                            <Label for="">
+                              Date Of Index Client's confirmed HIV-positive test
+                              results <span style={{color: "red"}}> *</span>{" "}
+                            </Label>
+                            <Input
+                                type="date"
+                                name="dateIndexClientConfirmedHiv"
+                                id="dateIndexClientConfirmedHiv"
+                                value={
+                                  htsClientInformation.dateIndexClientConfirmedHiv
+                                }
+                                onChange={handleHTSClientInputChange}
+                                min="1929-12-31"
+                                max={moment(new Date()).format("YYYY-MM-DD")}
+                                style={{
+                                  border: "1px solid #014D88",
+                                  borderRadius: "0.25rem",
+                                }}
+                                disabled={props.row.action === "view" ? true : false}
+                            />
+                            {errors.dateIndexClientConfrimedHiv !== "" ? (
+                                <span className={classes.error}>
+                            {errors.referralDate}
+                          </span>
+                            ) : (
+                                ""
+                            )}
+                          </FormGroup>
+                        </div>
+                        {/* {indexClientConfirmedHivPositive && ( */}
+
+                        {/* )} */}
+                        {/* if index client is hiv positive, and date is selected */}
+                        <div className="form-group col-md-4 ">
+                          <Label>Is client current on HIV treatment?</Label>
+                          <FormGroup>
+                            <select
+                                className="form-control"
+                                name="isClientCurrentlyOnHiv"
+                                id="isClientCurrentlyOnHiv"
+                                onChange={handleHTSClientInputChange}
+                                value={htsClientInformation.isClientCurrentlyOnHiv}
+                                style={{
+                                  border: "1px solid #014D88",
+                                  borderRadius: "0.2rem",
+                                }}
+                                disabled={props.row.action === "view" ? true : false}
+                            >
+                              <option value="">Select</option>
+                              <option value="Yes">Yes</option>
+                              <option value="No">No</option>
+                            </select>
+                          </FormGroup>
+                        </div>
+                        {htsClientInformation.isClientCurrentlyOnHiv &&
+                            htsClientInformation.isClientCurrentlyOnHiv === "Yes" && (
+                                <div className="form-group mb-3 col-md-4">
+                                  <FormGroup>
+                                    <Label for="">
+                                      Date of Treatment Initiation{" "}
+                                      <span style={{color: "red"}}> *</span>{" "}
+                                    </Label>
+                                    <Input
+                                        type="date"
+                                        name="DateOfTreatmentInitiation"
+                                        id="DateOfTreatmentInitiation"
+                                        value={
+                                          htsClientInformation.DateOfTreatmentInitiation
+                                        }
+                                        onChange={handleHTSClientInputChange}
+                                        min="1929-12-31"
+                                        max={moment(new Date()).format("YYYY-MM-DD")}
+                                        style={{
+                                          border: "1px solid #014D88",
+                                          borderRadius: "0.25rem",
+                                        }}
+                                        disabled={
+                                          props.row.action === "view" ? true : false
+                                        }
+                                    />
+                                    {/* {errors.treatmentDateI !== "" ? (
                                           <span className={classes.error}>
                                             {errors.referralDate}
                                           </span>
                                         ) : (
                                           ""
                                         )} */}
+                                  </FormGroup>
+                                </div>
+                            )}
+
+                        <div className="form-group col-md-4 ">
+                          <Label>Recency Testing</Label>
+                          <FormGroup>
+                            <select
+                                className="form-control"
+                                name="recencyTesting"
+                                id="recencyTesting"
+                                onChange={handleHTSClientInputChange}
+                                value={htsClientInformation.recencyTesting}
+                                style={{
+                                  border: "1px solid #014D88",
+                                  borderRadius: "0.2rem",
+                                }}
+                                disabled={props.row.action === "view" ? true : false}
+                            >
+                              <option value="">Select</option>
+                              <option value="Recent Infection">
+                                Recent Infection
+                              </option>
+                              <option value="Long Infection">Long Infection</option>
+                              <option value="Not Done">Not Done</option>
+                            </select>
                           </FormGroup>
                         </div>
-                      )}
 
-                    <div className="form-group col-md-4 ">
-                      <Label>Recency Testing</Label>
-                      <FormGroup>
-                        <select
-                          className="form-control"
-                          name="recencyTesting"
-                          id="recencyTesting"
-                          onChange={handleHTSClientInputChange}
-                          value={htsClientInformation.recencyTesting}
-                          style={{
-                            border: "1px solid #014D88",
-                            borderRadius: "0.2rem",
-                          }}
-                          disabled={props.row.action === "view" ? true : false}
-                        >
-                          <option value="">Select</option>
-                          <option value="Recent Infection">
-                            Recent Infection
-                          </option>
-                          <option value="Long Infection">Long Infection</option>
-                          <option value="Not Done">Not Done</option>
-                        </select>
-                      </FormGroup>
-                    </div>
-
-                    <div className="form-group mb-3 col-md-4">
-                      <FormGroup>
-                        <Label for=""> ART Enrollment Number </Label>
-                        <Input
-                          type="text"
-                          name="artEnrollmentNumber"
-                          id="artEnrollmentNumber"
-                          value={htsClientInformation.artEnrollmentNumber}
-                          onChange={handleHTSClientInputChange}
-                          style={{
-                            border: "1px solid #014D88",
-                            borderRadius: "0.25rem",
-                          }}
-                          disabled={props.row.action === "view" ? true : false}
-                        />
-                      </FormGroup>
-                    </div>
-                    <div className="form-group mb-3 col-md-4">
-                      <FormGroup>
-                        <Label for=""> Facility Of Enrollment </Label>
-                        <Input
-                          type="text"
-                          name="facilityOfEnrollment"
-                          id="facilityOfEnrollment"
-                          value={htsClientInformation.facilityOfEnrollment}
-                          onChange={handleHTSClientInputChange}
-                          style={{
-                            border: "1px solid #014D88",
-                            borderRadius: "0.25rem",
-                          }}
-                          disabled={props.row.action === "view" ? true : false}
-                        />
-                      </FormGroup>
-                    </div>
-                    <div className="form-group  col-md-4">
-                      <FormGroup>
-                        <Label>Notification Method selected </Label>
-                        <select
-                          className="form-control"
-                          name="notificationMethod"
-                          id="notificationMethod"
-                          value={objValues.notificationMethod}
-                          onChange={handleInputChange}
-                          style={{
-                            border: "1px solid #014D88",
-                            borderRadius: "0.2rem",
-                          }}
-                          disabled={props.row.action === "view" ? true : false}
-                        >
-                          <option value={""}></option>
-                          {notificationContact.map((value) => (
-                            <option key={value.id} value={value.id}>
-                              {value.display}
-                            </option>
-                          ))}
-                        </select>
-                      </FormGroup>
-                    </div>
-
-                    <div className="form-group mb-3 col-md-4">
-                      <FormGroup>
-                        <Label for="">
-                          {" "}
-                          Number of Partner{" "}
-                          <span>
-                            {" "}
-                            (sexual or social) identified/elicited from index{" "}
-                          </span>
-                        </Label>
-                        <Input
-                          type="number"
-                          name="numberOfPartnerIdentifiedFromClientIndex"
-                          id="numberOfPartnerIdentifiedFromClientIndex"
-                          value={
-                            htsClientInformation.numberOfPartnerIdentifiedFromClientIndex
-                          }
-                          onChange={handleHTSClientInputChange}
-                          style={{
-                            border: "1px solid #014D88",
-                            borderRadius: "0.25rem",
-                          }}
-                          disabled={props.row.action === "view" ? true : false}
-                        />
-                      </FormGroup>
-                    </div>
-
-                    <div
-                      className="form-group  col-md-12 text-center pt-2 mb-4"
-                      style={{
-                        backgroundColor: "#992E62",
-                        width: "125%",
-                        height: "35px",
-                        color: "#fff",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      SECTION 2 : LISTING INDEX CLIENT PARTNER
-                    </div>
-                    <p style={{ color: "black", marginBottom: "20px" }}>
-                      <i>
-                        Instruction: Ask index client to list all the client
-                        that have had sex with in the last 12 months. who may be
-                        risk to HIV and or partners who they share needle for
-                        injection of drugs where index client alluded to
-                        injection drugs
-                      </i>
-                    </p>
-
-                    <div className="form-group mb-3 col-md-4">
-                      <FormGroup>
-                        <Label for="">Partner ID </Label>
-                        <Input
-                          type="text"
-                          name="partnerId"
-                          id="partnerId"
-                          value={objValues.partnerId}
-                          onChange={handleInputChange}
-                          style={{
-                            border: "1px solid #014D88",
-                            borderRadius: "0.25rem",
-                          }}
-                          disabled={true}
-                        />
-                      </FormGroup>
-                    </div>
-                    <div className="form-group mb-3 col-md-4">
-                      <FormGroup>
-                        <Label for="">
-                          {" "}
-                          Name of Partner <span> (Enter surname first) </span>
-                        </Label>
-                        <Input
-                          type="text"
-                          name="partnerName"
-                          id="partnerName"
-                          value={htsClientInformation.partnerName}
-                          onChange={handleHTSClientInputChange}
-                          style={{
-                            border: "1px solid #014D88",
-                            borderRadius: "0.25rem",
-                          }}
-                          disabled={props.row.action === "view" ? true : false}
-                        />
-                      </FormGroup>
-                    </div>
-                    <div className="form-group  col-md-4">
-                      <FormGroup>
-                        <Label>Sex </Label>
-                        <select
-                          className="form-control"
-                          name="partnerSex"
-                          id="partnerSex"
-                          value={htsClientInformation.partnerSex}
-                          onChange={handleHTSClientInputChange}
-                          style={{
-                            border: "1px solid #014D88",
-                            borderRadius: "0.2rem",
-                          }}
-                          disabled={props.row.action === "view" ? true : false}
-                        >
-                          <option value={""}></option>
-                          {sexs.map((value) => (
-                            <option key={value.id} value={value.id}>
-                              {value.display}
-                            </option>
-                          ))}
-                        </select>
-                      </FormGroup>
-                    </div>
-                    <div className="form-group mb-3 col-md-4">
-                      <FormGroup>
-                        <Label>
-                          Age <span> (In years) </span>{" "}
-                        </Label>
-                        <input
-                          className="form-control"
-                          type="number"
-                          name="partnerAge"
-                          id="partnerAge"
-                          value={htsClientInformation.partnerAge}
-                          // disabled={ageDisabled}
-                          onChange={handleHTSClientInputChange}
-                          style={{
-                            border: "1px solid #014D88",
-                            borderRadius: "0.2rem",
-                          }}
-                          disabled={props.row.action === "view" ? true : false}
-                        />
-                      </FormGroup>
-                    </div>
-                    <div className="form-group mb-3 col-md-4">
-                      <FormGroup>
-                        <Label for="">
-                          {" "}
-                          Home/Contact Address <span> include landmark </span>
-                        </Label>
-                        <Input
-                          type="text"
-                          name="partnerAddress"
-                          id="partnerAddress"
-                          value={htsClientInformation.partnerAddress}
-                          onChange={handleHTSClientInputChange}
-                          style={{
-                            border: "1px solid #014D88",
-                            borderRadius: "0.25rem",
-                          }}
-                          disabled={props.row.action === "view" ? true : false}
-                        />
-                      </FormGroup>
-                    </div>
-                    <div className="form-group mb-3 col-md-4">
-                      <FormGroup>
-                        <Label for=""> Contact Phone Number</Label>
-
-                        <PhoneInput
-                          containerStyle={{
-                            width: "100%",
-                            border: "1px solid #014D88",
-                          }}
-                          inputStyle={{ width: "100%", borderRadius: "0px" }}
-                          country={"ng"}
-                          placeholder="(234)7099999999"
-                          minLength={10}
-                          name="partnerPhoneNumber"
-                          id="partnerPhoneNumber"
-                          masks={{ ng: "...-...-....", at: "(....) ...-...." }}
-                          value={contactTracing.partnerPhoneNumber}
-                          onChange={(e) => {
-                            checkPhoneNumberBasic(e, "partnerPhoneNumber");
-                          }}
-                          disabled={props.row.action === "view" ? true : false}
-
-                          //onChange={(e)=>{handleInputChangeBasic(e,'phoneNumber')}}
-                        />
-                        {errors.partnerPhoneNumber !== "" ? (
-                          <span className={classes.error}>
-                            {errors.partnerPhoneNumber}
-                          </span>
-                        ) : (
-                          ""
-                        )}
-                      </FormGroup>
-                    </div>
-                    <div className="form-group  col-md-4">
-                      <FormGroup>
-                        <Label>
-                          Relationship to Index Client{" "}
-                          <span style={{ color: "red" }}> *</span>
-                        </Label>
-                        <select
-                          className="form-control"
-                          name="relativeToIndexClient"
-                          id="relativeToIndexClient"
-                          value={htsClientInformation.relativeToIndexClient}
-                          onChange={handleHTSClientInputChange}
-                          style={{
-                            border: "1px solid #014D88",
-                            borderRadius: "0.2rem",
-                          }}
-                          disabled={props.row.action === "view" ? true : false}
-                        >
-                          <option value={""}></option>
-                          {indexTesting.map((value) => (
-                            <option key={value.id} value={value.id}>
-                              {value.display}
-                            </option>
-                          ))}
-                        </select>
-                      </FormGroup>
-                      {errors.relativeToIndexClient !== "" ? (
-                        <span className={classes.error}>
-                          {errors.relativeToIndexClient}
-                        </span>
-                      ) : (
-                        ""
-                      )}
-                    </div>
-                    <div className="form-group  col-md-4">
-                      <FormGroup>
-                        <Label>Contact tracing</Label>
-                        <select
-                          className="form-control"
-                          name="contactTracingType"
-                          id="contactTracingType"
-                          value={htsClientInformation.contactTracingType}
-                          onChange={handleHTSClientInputChange}
-                          style={{
-                            border: "1px solid #014D88",
-                            borderRadius: "0.2rem",
-                          }}
-                          disabled={props.row.action === "view" ? true : false}
-                        >
-                          <option value={""}>select</option>
-                          <option value="Phone calls">Phone calls</option>
-                          <option value="Physical visit">Physical visit</option>
-                        </select>
-                      </FormGroup>
-                    </div>
-
-                    <div className="form-group mb-3 col-md-4">
-                      <FormGroup>
-                        <Label for=""> Number of Attempt</Label>
-                        <Input
-                          type="number"
-                          name="numberOfAttempt"
-                          id="numberOfAttempt"
-                          value={contactTracing.numberOfAttempt}
-                          onChange={handleInputContactChanges}
-                          style={{
-                            border: "1px solid #014D88",
-                            borderRadius: "0.25rem",
-                          }}
-                          disabled={props.row.action === "view" ? true : false}
-
-                          // disabled
-                        />
-                      </FormGroup>
-                    </div>
-                    <div className="form-group  col-md-4">
-                      <FormGroup>
-                        <Label>
-                          Has this partner ever denied you of food, shelter,
-                          freedom of movement,livehood?
-                        </Label>
-                        <select
-                          className="form-control"
-                          name="freedomDenial"
-                          id="freedomDenial"
-                          value={htsClientInformation.freedomDenial}
-                          onChange={handleHTSClientInputChange}
-                          style={{
-                            border: "1px solid #014D88",
-                            borderRadius: "0.2rem",
-                          }}
-                          disabled={props.row.action === "view" ? true : false}
-                        >
-                          <option value={""}></option>
-                          {consent.map((value) => (
-                            <option key={value.id} value={value.id}>
-                              {value.display}
-                            </option>
-                          ))}
-                        </select>
-                      </FormGroup>
-                    </div>
-
-                    <div className="form-group  col-md-4">
-                      <FormGroup>
-                        <Label>
-                          Has this partner ever threatened to hurt you? *
-                        </Label>
-                        <select
-                          className="form-control"
-                          name="threatenToHurt"
-                          id="threatenToHurt"
-                          value={htsClientInformation.threatenToHurt}
-                          onChange={handleHTSClientInputChange}
-                          style={{
-                            border: "1px solid #014D88",
-                            borderRadius: "0.2rem",
-                          }}
-                          disabled={props.row.action === "view" ? true : false}
-                        >
-                          <option value={""}></option>
-                          {consent.map((value) => (
-                            <option key={value.id} value={value.id}>
-                              {value.display}
-                            </option>
-                          ))}
-                        </select>
-                      </FormGroup>
-                    </div>
-
-                    <div className="form-group  col-md-4">
-                      <FormGroup>
-                        <Label>
-                          Has this partner ever threatened to rape and force to
-                          have sex with you ? *
-                        </Label>
-                        <select
-                          className="form-control"
-                          name="sexuallyUncomfortable"
-                          id="sexuallyUncomfortable"
-                          value={htsClientInformation.sexuallyUncomfortable}
-                          onChange={handleHTSClientInputChange}
-                          style={{
-                            border: "1px solid #014D88",
-                            borderRadius: "0.2rem",
-                          }}
-                          disabled={props.row.action === "view" ? true : false}
-                        >
-                          <option value={""}></option>
-                          {consent.map((value) => (
-                            <option key={value.id} value={value.id}>
-                              {value.display}
-                            </option>
-                          ))}
-                        </select>
-                      </FormGroup>
-                    </div>
-                    <div className="form-group col-md-4 ">
-                      <Label>Known HIV Positive ?</Label>
-                      <FormGroup>
-                        <select
-                          className="form-control"
-                          name="knownHivPositive"
-                          id="knownHivPositive"
-                          onChange={handleInputChange}
-                          value={objValues.knownHivPositive}
-                          style={{
-                            border: "1px solid #014D88",
-                            borderRadius: "0.2rem",
-                          }}
-                          disabled={props.row.action === "view" ? true : false}
-                        >
-                          <option value="">Select</option>
-                          <option value="Yes">Yes</option>
-                          <option value="No">No</option>
-                        </select>
-                      </FormGroup>
-                    </div>
-                    <div className="form-group  col-md-4">
-                      <FormGroup>
-                        <Label>
-                          Accepted HTS ? <span style={{ color: "red" }}> </span>
-                        </Label>
-                        <select
-                          className="form-control"
-                          name="acceptedHts"
-                          id="acceptedHts"
-                          value={objValues.acceptedHts}
-                          onChange={handleInputChange}
-                          style={{
-                            border: "1px solid #014D88",
-                            borderRadius: "0.2rem",
-                          }}
-                          disabled={props.row.action === "view" ? true : false}
-                        >
-                          <option value={""}></option>
-                          {consent.map((value) => (
-                            <option key={value.id} value={value.id}>
-                              {value.display}
-                            </option>
-                          ))}
-                        </select>
-                      </FormGroup>
-                    </div>
-
-                    <div className="form-group  col-md-4">
-                      <FormGroup>
-                        <Label>
-                          HIV Test Result{" "}
-                          <span style={{ color: "red" }}> *</span>
-                        </Label>
-                        <select
-                          className="form-control"
-                          name="hivTestResult"
-                          id="hivTestResult "
-                          value={objValues.hivTestResult}
-                          onChange={handleInputChange}
-                          style={{
-                            border: "1px solid #014D88",
-                            borderRadius: "0.2rem",
-                          }}
-                          disabled={props.row.action === "view" ? true : false}
-                        >
-                          <option value={""}></option>
-                          <option value="negative">Negative</option>
-                          <option value="positive">Positive</option>
-                        </select>
-                      </FormGroup>
-                    </div>
-
-                    {objValues.partnerCurrentHivStatus !== "" &&
-                      objValues.partnerCurrentHivStatus === "positive" && (
                         <div className="form-group mb-3 col-md-4">
                           <FormGroup>
-                            <Label for="">
-                              Date Tested?{" "}
-                              <span style={{ color: "red" }}> *</span>
-                            </Label>
+                            <Label for=""> ART Enrollment Number </Label>
                             <Input
-                              type="date"
-                              name="datePartnerTested"
-                              id="datePartnerTested"
-                              value={objValues.datePartnerTested}
-                              onChange={handleInputChange}
-                              max={moment(new Date()).format("YYYY-MM-DD")}
-                              style={{
-                                border: "1px solid #014D88",
-                                borderRadius: "0.25rem",
-                              }}
-                              disabled={
-                                props.row.action === "view" ? true : false
-                              }
+                                type="text"
+                                name="artEnrollmentNumber"
+                                id="artEnrollmentNumber"
+                                value={htsClientInformation.artEnrollmentNumber}
+                                onChange={handleHTSClientInputChange}
+                                style={{
+                                  border: "1px solid #014D88",
+                                  borderRadius: "0.25rem",
+                                }}
+                                disabled={props.row.action === "view" ? true : false}
                             />
                           </FormGroup>
                         </div>
-                      )}
-                    <div className="form-group mb-3 col-md-4">
-                      <FormGroup>
-                        <Label for="">Date Enrolled On ART</Label>
-                        <Input
-                          type="date"
-                          name="dateEnrollmentOnART"
-                          id="dateEnrollmentOnART"
-                          value={objValues.dateEnrollmentOnART}
-                          onChange={handleInputChange}
-                          min="1929-12-31"
-                          max={moment(new Date()).format("YYYY-MM-DD")}
-                          style={{
-                            border: "1px solid #014D88",
-                            borderRadius: "0.25rem",
-                          }}
-                          disabled={props.row.action === "view" ? true : false}
+                        <div className="form-group mb-3 col-md-4">
+                          <FormGroup>
+                            <Label for=""> Facility Of Enrollment </Label>
+                            <Input
+                                type="text"
+                                name="facilityOfEnrollment"
+                                id="facilityOfEnrollment"
+                                value={htsClientInformation.facilityOfEnrollment}
+                                onChange={handleHTSClientInputChange}
+                                style={{
+                                  border: "1px solid #014D88",
+                                  borderRadius: "0.25rem",
+                                }}
+                                disabled={props.row.action === "view" ? true : false}
+                            />
+                          </FormGroup>
+                        </div>
+                        <div className="form-group  col-md-4">
+                          <FormGroup>
+                            <Label>Notification Method selected </Label>
+                            <select
+                                className="form-control"
+                                name="notificationMethod"
+                                id="notificationMethod"
+                                value={objValues.notificationMethod}
+                                onChange={handleInputChange}
+                                style={{
+                                  border: "1px solid #014D88",
+                                  borderRadius: "0.2rem",
+                                }}
+                                disabled={props.row.action === "view" ? true : false}
+                            >
+                              <option value={""}></option>
+                              {notificationContact.map((value) => (
+                                  <option key={value.id} value={value.id}>
+                                    {value.display}
+                                  </option>
+                              ))}
+                            </select>
+                          </FormGroup>
+                        </div>
 
-                          // disabled
-                        />
-                        {errors.referralDate !== "" ? (
-                          <span className={classes.error}>
+                        <div className="form-group mb-3 col-md-4">
+                          <FormGroup>
+                            <Label for="">
+                              {" "}
+                              Number of Partner{" "}
+                              <span>
+                            {" "}
+                                (sexual or social) identified/elicited from index{" "}
+                          </span>
+                            </Label>
+                            <Input
+                                type="number"
+                                name="numberOfPartnerIdentifiedFromClientIndex"
+                                id="numberOfPartnerIdentifiedFromClientIndex"
+                                value={
+                                  htsClientInformation.numberOfPartnerIdentifiedFromClientIndex
+                                }
+                                onChange={handleHTSClientInputChange}
+                                style={{
+                                  border: "1px solid #014D88",
+                                  borderRadius: "0.25rem",
+                                }}
+                                disabled={props.row.action === "view" ? true : false}
+                            />
+                          </FormGroup>
+                        </div>
+
+                        <div
+                            className="form-group  col-md-12 text-center pt-2 mb-4"
+                            style={{
+                              backgroundColor: "#992E62",
+                              width: "125%",
+                              height: "35px",
+                              color: "#fff",
+                              fontWeight: "bold",
+                            }}
+                        >
+                          SECTION 2 : LISTING INDEX CLIENT PARTNER
+                        </div>
+                        <p style={{color: "black", marginBottom: "20px"}}>
+                          <i>
+                            Instruction: Ask index client to list all the client
+                            that have had sex with in the last 12 months. who may be
+                            risk to HIV and or partners who they share needle for
+                            injection of drugs where index client alluded to
+                            injection drugs
+                          </i>
+                        </p>
+
+                        <div className="form-group mb-3 col-md-4">
+                          <FormGroup>
+                            <Label for="">Partner ID </Label>
+                            <Input
+                                type="text"
+                                name="partnerId"
+                                id="partnerId"
+                                value={objValues.partnerId}
+                                onChange={handleInputChange}
+                                style={{
+                                  border: "1px solid #014D88",
+                                  borderRadius: "0.25rem",
+                                }}
+                                disabled={true}
+                            />
+                          </FormGroup>
+                        </div>
+                        <div className="form-group mb-3 col-md-4">
+                          <FormGroup>
+                            <Label for="">
+                              {" "}
+                              Name of Partner <span> (Enter surname first) </span>
+                            </Label>
+                            <Input
+                                type="text"
+                                name="partnerName"
+                                id="partnerName"
+                                value={htsClientInformation.partnerName}
+                                onChange={handleHTSClientInputChange}
+                                style={{
+                                  border: "1px solid #014D88",
+                                  borderRadius: "0.25rem",
+                                }}
+                                disabled={props.row.action === "view" ? true : false}
+                            />
+                          </FormGroup>
+                        </div>
+                        <div className="form-group  col-md-4">
+                          <FormGroup>
+                            <Label>Sex </Label>
+                            <select
+                                className="form-control"
+                                name="partnerSex"
+                                id="partnerSex"
+                                value={htsClientInformation.partnerSex}
+                                onChange={handleHTSClientInputChange}
+                                style={{
+                                  border: "1px solid #014D88",
+                                  borderRadius: "0.2rem",
+                                }}
+                                disabled={props.row.action === "view" ? true : false}
+                            >
+                              <option value={""}></option>
+                              {sexs.map((value) => (
+                                  <option key={value.id} value={value.id}>
+                                    {value.display}
+                                  </option>
+                              ))}
+                            </select>
+                          </FormGroup>
+                        </div>
+                        <div className="form-group mb-3 col-md-4">
+                          <FormGroup>
+                            <Label>
+                              Age <span> (In years) </span>{" "}
+                            </Label>
+                            <input
+                                className="form-control"
+                                type="number"
+                                name="partnerAge"
+                                id="partnerAge"
+                                value={htsClientInformation.partnerAge}
+                                // disabled={ageDisabled}
+                                onChange={handleHTSClientInputChange}
+                                style={{
+                                  border: "1px solid #014D88",
+                                  borderRadius: "0.2rem",
+                                }}
+                                disabled={props.row.action === "view" ? true : false}
+                            />
+                          </FormGroup>
+                        </div>
+                        <div className="form-group mb-3 col-md-4">
+                          <FormGroup>
+                            <Label for="">
+                              {" "}
+                              Home/Contact Address <span> include landmark </span>
+                            </Label>
+                            <Input
+                                type="text"
+                                name="partnerAddress"
+                                id="partnerAddress"
+                                value={htsClientInformation.partnerAddress}
+                                onChange={handleHTSClientInputChange}
+                                style={{
+                                  border: "1px solid #014D88",
+                                  borderRadius: "0.25rem",
+                                }}
+                                disabled={props.row.action === "view" ? true : false}
+                            />
+                          </FormGroup>
+                        </div>
+                        <div className="form-group mb-3 col-md-4">
+                          <FormGroup>
+                            <Label for=""> Contact Phone Number</Label>
+
+                            <PhoneInput
+                                containerStyle={{
+                                  width: "100%",
+                                  border: "1px solid #014D88",
+                                }}
+                                inputStyle={{width: "100%", borderRadius: "0px"}}
+                                country={"ng"}
+                                placeholder="(234)7099999999"
+                                minLength={10}
+                                name="partnerPhoneNumber"
+                                id="partnerPhoneNumber"
+                                masks={{ng: "...-...-....", at: "(....) ...-...."}}
+                                value={contactTracing.partnerPhoneNumber}
+                                onChange={(e) => {
+                                  checkPhoneNumberBasic(e, "partnerPhoneNumber");
+                                }}
+                                disabled={props.row.action === "view" ? true : false}
+
+                                //onChange={(e)=>{handleInputChangeBasic(e,'phoneNumber')}}
+                            />
+                            {errors.partnerPhoneNumber !== "" ? (
+                                <span className={classes.error}>
+                            {errors.partnerPhoneNumber}
+                          </span>
+                            ) : (
+                                ""
+                            )}
+                          </FormGroup>
+                        </div>
+                        <div className="form-group  col-md-4">
+                          <FormGroup>
+                            <Label>
+                              Relationship to Index Client{" "}
+                              <span style={{color: "red"}}> *</span>
+                            </Label>
+                            <select
+                                className="form-control"
+                                name="relativeToIndexClient"
+                                id="relativeToIndexClient"
+                                value={htsClientInformation.relativeToIndexClient}
+                                onChange={handleHTSClientInputChange}
+                                style={{
+                                  border: "1px solid #014D88",
+                                  borderRadius: "0.2rem",
+                                }}
+                                disabled={props.row.action === "view" ? true : false}
+                            >
+                              <option value={""}></option>
+                              {indexTesting.map((value) => (
+                                  <option key={value.id} value={value.id}>
+                                    {value.display}
+                                  </option>
+                              ))}
+                            </select>
+                          </FormGroup>
+                          {errors.relativeToIndexClient !== "" ? (
+                              <span className={classes.error}>
+                          {errors.relativeToIndexClient}
+                        </span>
+                          ) : (
+                              ""
+                          )}
+                        </div>
+                        <div className="form-group  col-md-4">
+                          <FormGroup>
+                            <Label>Contact tracing</Label>
+                            <select
+                                className="form-control"
+                                name="contactTracingType"
+                                id="contactTracingType"
+                                value={htsClientInformation.contactTracingType}
+                                onChange={handleHTSClientInputChange}
+                                style={{
+                                  border: "1px solid #014D88",
+                                  borderRadius: "0.2rem",
+                                }}
+                                disabled={props.row.action === "view" ? true : false}
+                            >
+                              <option value={""}>select</option>
+                              <option value="Phone calls">Phone calls</option>
+                              <option value="Physical visit">Physical visit</option>
+                            </select>
+                          </FormGroup>
+                        </div>
+
+                        <div className="form-group mb-3 col-md-4">
+                          <FormGroup>
+                            <Label for=""> Number of Attempt</Label>
+                            <Input
+                                type="number"
+                                name="numberOfAttempt"
+                                id="numberOfAttempt"
+                                value={contactTracing.numberOfAttempt}
+                                onChange={handleInputContactChanges}
+                                style={{
+                                  border: "1px solid #014D88",
+                                  borderRadius: "0.25rem",
+                                }}
+                                disabled={props.row.action === "view" ? true : false}
+
+                                // disabled
+                            />
+                          </FormGroup>
+                        </div>
+                        <div className="form-group  col-md-4">
+                          <FormGroup>
+                            <Label>
+                              Has this partner ever denied you of food, shelter,
+                              freedom of movement,livehood?
+                            </Label>
+                            <select
+                                className="form-control"
+                                name="freedomDenial"
+                                id="freedomDenial"
+                                value={htsClientInformation.freedomDenial}
+                                onChange={handleHTSClientInputChange}
+                                style={{
+                                  border: "1px solid #014D88",
+                                  borderRadius: "0.2rem",
+                                }}
+                                disabled={props.row.action === "view" ? true : false}
+                            >
+                              <option value={""}></option>
+                              {consent.map((value) => (
+                                  <option key={value.id} value={value.id}>
+                                    {value.display}
+                                  </option>
+                              ))}
+                            </select>
+                          </FormGroup>
+                        </div>
+
+                        <div className="form-group  col-md-4">
+                          <FormGroup>
+                            <Label>
+                              Has this partner ever threatened to hurt you? *
+                            </Label>
+                            <select
+                                className="form-control"
+                                name="threatenToHurt"
+                                id="threatenToHurt"
+                                value={htsClientInformation.threatenToHurt}
+                                onChange={handleHTSClientInputChange}
+                                style={{
+                                  border: "1px solid #014D88",
+                                  borderRadius: "0.2rem",
+                                }}
+                                disabled={props.row.action === "view" ? true : false}
+                            >
+                              <option value={""}></option>
+                              {consent.map((value) => (
+                                  <option key={value.id} value={value.id}>
+                                    {value.display}
+                                  </option>
+                              ))}
+                            </select>
+                          </FormGroup>
+                        </div>
+
+                        <div className="form-group  col-md-4">
+                          <FormGroup>
+                            <Label>
+                              Has this partner ever threatened to rape and force to
+                              have sex with you ? *
+                            </Label>
+                            <select
+                                className="form-control"
+                                name="sexuallyUncomfortable"
+                                id="sexuallyUncomfortable"
+                                value={htsClientInformation.sexuallyUncomfortable}
+                                onChange={handleHTSClientInputChange}
+                                style={{
+                                  border: "1px solid #014D88",
+                                  borderRadius: "0.2rem",
+                                }}
+                                disabled={props.row.action === "view" ? true : false}
+                            >
+                              <option value={""}></option>
+                              {consent.map((value) => (
+                                  <option key={value.id} value={value.id}>
+                                    {value.display}
+                                  </option>
+                              ))}
+                            </select>
+                          </FormGroup>
+                        </div>
+                        <div className="form-group col-md-4 ">
+                          <Label>Known HIV Positive ?</Label>
+                          <FormGroup>
+                            <select
+                                className="form-control"
+                                name="knownHivPositive"
+                                id="knownHivPositive"
+                                onChange={handleInputChange}
+                                value={objValues.knownHivPositive}
+                                style={{
+                                  border: "1px solid #014D88",
+                                  borderRadius: "0.2rem",
+                                }}
+                                disabled={props.row.action === "view" ? true : false}
+                            >
+                              <option value="">Select</option>
+                              <option value="Yes">Yes</option>
+                              <option value="No">No</option>
+                            </select>
+                          </FormGroup>
+                        </div>
+                        <div className="form-group  col-md-4">
+                          <FormGroup>
+                            <Label>
+                              Accepted HTS ? <span style={{color: "red"}}> </span>
+                            </Label>
+                            <select
+                                className="form-control"
+                                name="acceptedHts"
+                                id="acceptedHts"
+                                value={objValues.acceptedHts}
+                                onChange={handleInputChange}
+                                style={{
+                                  border: "1px solid #014D88",
+                                  borderRadius: "0.2rem",
+                                }}
+                                disabled={props.row.action === "view" ? true : false}
+                            >
+                              <option value={""}></option>
+                              {consent.map((value) => (
+                                  <option key={value.id} value={value.id}>
+                                    {value.display}
+                                  </option>
+                              ))}
+                            </select>
+                          </FormGroup>
+                        </div>
+
+                        <div className="form-group  col-md-4">
+                          <FormGroup>
+                            <Label>
+                              HIV Test Result{" "}
+                              <span style={{color: "red"}}> *</span>
+                            </Label>
+                            <select
+                                className="form-control"
+                                name="hivTestResult"
+                                id="hivTestResult "
+                                value={objValues.hivTestResult}
+                                onChange={handleInputChange}
+                                style={{
+                                  border: "1px solid #014D88",
+                                  borderRadius: "0.2rem",
+                                }}
+                                disabled={props.row.action === "view" ? true : false}
+                            >
+                              <option value={""}></option>
+                              <option value="negative">Negative</option>
+                              <option value="positive">Positive</option>
+                            </select>
+                          </FormGroup>
+                        </div>
+
+                        {objValues.partnerCurrentHivStatus !== "" &&
+                            objValues.partnerCurrentHivStatus === "positive" && (
+                                <div className="form-group mb-3 col-md-4">
+                                  <FormGroup>
+                                    <Label for="">
+                                      Date Tested?{" "}
+                                      <span style={{color: "red"}}> *</span>
+                                    </Label>
+                                    <Input
+                                        type="date"
+                                        name="datePartnerTested"
+                                        id="datePartnerTested"
+                                        value={objValues.datePartnerTested}
+                                        onChange={handleInputChange}
+                                        max={moment(new Date()).format("YYYY-MM-DD")}
+                                        style={{
+                                          border: "1px solid #014D88",
+                                          borderRadius: "0.25rem",
+                                        }}
+                                        disabled={
+                                          props.row.action === "view" ? true : false
+                                        }
+                                    />
+                                  </FormGroup>
+                                </div>
+                            )}
+                        <div className="form-group mb-3 col-md-4">
+                          <FormGroup>
+                            <Label for="">Date Enrolled On ART</Label>
+                            <Input
+                                type="date"
+                                name="dateEnrollmentOnART"
+                                id="dateEnrollmentOnART"
+                                value={objValues.dateEnrollmentOnART}
+                                onChange={handleInputChange}
+                                min="1929-12-31"
+                                max={moment(new Date()).format("YYYY-MM-DD")}
+                                style={{
+                                  border: "1px solid #014D88",
+                                  borderRadius: "0.25rem",
+                                }}
+                                disabled={props.row.action === "view" ? true : false}
+
+                                // disabled
+                            />
+                            {errors.referralDate !== "" ? (
+                                <span className={classes.error}>
                             {errors.referralDate}
                           </span>
-                        ) : (
-                          ""
-                        )}
-                      </FormGroup>
-                    </div>
-                  </>
-                )}
-              {saving ? <Spinner /> : ""}
-              <br />
+                            ) : (
+                                ""
+                            )}
+                          </FormGroup>
+                        </div>
+                      </>
+                  )}
+              {saving ? <Spinner/> : ""}
+              <br/>
               {props.row.action === "update" && (
-                <div className="row">
-                  <div className="form-group mb-3 col-md-6">
-                    <Button
-                      content="Update"
-                      icon="save"
-                      labelPosition="right"
-                      style={{ backgroundColor: "#014d88", color: "#fff" }}
-                      onClick={handleSubmit}
-                      disabled={saving}
-                    />
+                  <div className="row">
+                    <div className="form-group mb-3 col-md-6">
+                      <Button
+                          content="Update"
+                          icon="save"
+                          labelPosition="right"
+                          style={{backgroundColor: "#014d88", color: "#fff"}}
+                          onClick={handleSubmit}
+                          disabled={saving}
+                      />
+                    </div>
                   </div>
-                </div>
               )}
             </div>
           </form>

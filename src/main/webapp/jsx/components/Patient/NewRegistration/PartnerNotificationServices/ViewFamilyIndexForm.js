@@ -268,6 +268,8 @@ const ViewFamilyIndexTestingForm = (props) => {
   const [viewFamilyIndexForm, setViewFamilyIndexForm] = useState(false);
   const [viewFamilyTrackerForm, setViewFamilyTrackerForm] = useState(false);
 
+
+
   const loadStates = () => {
     axios
       .get(`${baseUrl}organisation-units/parent-organisation-units/1`, {
@@ -1640,44 +1642,6 @@ const ViewFamilyIndexTestingForm = (props) => {
                                         ) : (
                                             ""
                                         )} */}
-                  </FormGroup>
-                </div>
-                <div className="form-group  col-md-4">
-                  <FormGroup>
-                    <Label>
-                      Phone Number <span style={{color: "red"}}> *</span>
-                    </Label>
-                    <PhoneInput
-                        // disabled={true}
-                        containerStyle={{
-                          width: "100%",
-                          border: "1px solid #014D88",
-                        }}
-                        inputStyle={{width: "100%", borderRadius: "0px"}}
-                        country={"ng"}
-                        placeholder="(234)7099999999"
-                        maxLength={5}
-                        name="phoneNumber"
-                        id="phoneNumber"
-                        masks={{ng: "...-...-....", at: "(....) ...-...."}}
-                        value={payload.phoneNumber}
-                        onChange={(e) => {
-                          checkPhoneNumberBasic(e, "phoneNumber");
-                        }}
-                        disabled
-                        //onChange={(e)=>{handleInputChangeBasic(e,'phoneNumber')}}
-                    />
-
-                    {errors.phoneNumber !== "" ? (
-                        <span className={classes.error}>
-                        {errors.phoneNumber}
-                      </span>
-                    ) : (
-                        ""
-                    )}
-                    {/* {basicInfo.phoneNumber.length >13 ||  basicInfo.phoneNumber.length <13? (
-                                                <span className={classes.error}>{"The maximum and minimum required number is 13 digit"}</span>
-                                                ) : "" } */}
                   </FormGroup>
                 </div>
 

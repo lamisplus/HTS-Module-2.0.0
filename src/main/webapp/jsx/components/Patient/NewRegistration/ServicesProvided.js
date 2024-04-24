@@ -137,6 +137,18 @@ const ServicesProvided = (props) => {
         }
     };
 
+    const checkNumberLimit = (e) => {
+        const limit = 11;
+        const acceptedNumber = e.slice(0, limit);
+        return acceptedNumber;
+    };
+    const handleInputChangePhoneNumber = (e, inputName) => {
+        const limit = 11;
+        const NumberValue = checkNumberLimit(e.target.value.replace(/\D/g, ""));
+        setPayload({ ...payload, [inputName]: NumberValue });
+    };
+
+
   // ##############################################
 
   const SERVICE_NEEDED = () => {
@@ -378,395 +390,350 @@ const ServicesProvided = (props) => {
               the service
             </i>
           </p>
-          <div className="row">
+            <div className="row">
 
-            {/*###############################*/}
-            {/*<div className="form-group mb-3 col-md-6">*/}
-            {/*  <FormGroup>*/}
-            {/*    <Label for="firstName">*/}
-            {/*      Facility providing service State*/}
-            {/*    </Label>*/}
-            {/*    <Input*/}
-            {/*        className="form-control"*/}
-            {/*        type="text"*/}
-            {/*        name="receivingFacilityStateName"*/}
-            {/*        id="receivingFacilityStateName"*/}
-            {/*        value={payload.receivingFacilityStateName}*/}
-            {/*        onChange={handleInputChange}*/}
-            {/*        style={{*/}
-            {/*          border: "1px solid #014D88",*/}
-            {/*          borderRadius: "0.2rem",*/}
-            {/*        }}*/}
-            {/*        disabled*/}
-            {/*    />*/}
-            {/*    {errors.nameOfServiceProvider !== "" ? (*/}
-            {/*        <span className={classes.error}>*/}
-            {/*        {errors.nameOfServiceProvider}*/}
-            {/*      </span>*/}
-            {/*    ) : (*/}
-            {/*        ""*/}
-            {/*    )}*/}
-            {/*  </FormGroup>*/}
-            {/*</div>*/}
+                {/*###############################*/}
+                {/*<div className="form-group mb-3 col-md-6">*/}
+                {/*  <FormGroup>*/}
+                {/*    <Label for="firstName">*/}
+                {/*      Facility providing service State*/}
+                {/*    </Label>*/}
+                {/*    <Input*/}
+                {/*        className="form-control"*/}
+                {/*        type="text"*/}
+                {/*        name="receivingFacilityStateName"*/}
+                {/*        id="receivingFacilityStateName"*/}
+                {/*        value={payload.receivingFacilityStateName}*/}
+                {/*        onChange={handleInputChange}*/}
+                {/*        style={{*/}
+                {/*          border: "1px solid #014D88",*/}
+                {/*          borderRadius: "0.2rem",*/}
+                {/*        }}*/}
+                {/*        disabled*/}
+                {/*    />*/}
+                {/*    {errors.nameOfServiceProvider !== "" ? (*/}
+                {/*        <span className={classes.error}>*/}
+                {/*        {errors.nameOfServiceProvider}*/}
+                {/*      </span>*/}
+                {/*    ) : (*/}
+                {/*        ""*/}
+                {/*    )}*/}
+                {/*  </FormGroup>*/}
+                {/*</div>*/}
 
-            {/*<div className="form-group mb-3 col-md-6">*/}
-            {/*  <FormGroup>*/}
-            {/*    <Label for="firstName">*/}
-            {/*      Facility providing service LGA*/}
-            {/*    </Label>*/}
-            {/*    <Input*/}
-            {/*        className="form-control"*/}
-            {/*        type="text"*/}
-            {/*        name="receivingFacilityLgaName"*/}
-            {/*        id="receivingFacilityLgaName"*/}
-            {/*        value={payload.receivingFacilityLgaName}*/}
-            {/*        onChange={handleInputChange}*/}
-            {/*        style={{*/}
-            {/*          border: "1px solid #014D88",*/}
-            {/*          borderRadius: "0.2rem",*/}
-            {/*        }}*/}
-            {/*        disabled*/}
-            {/*    />*/}
-            {/*  </FormGroup>*/}
-            {/*</div>*/}
+                {/*<div className="form-group mb-3 col-md-6">*/}
+                {/*  <FormGroup>*/}
+                {/*    <Label for="firstName">*/}
+                {/*      Facility providing service LGA*/}
+                {/*    </Label>*/}
+                {/*    <Input*/}
+                {/*        className="form-control"*/}
+                {/*        type="text"*/}
+                {/*        name="receivingFacilityLgaName"*/}
+                {/*        id="receivingFacilityLgaName"*/}
+                {/*        value={payload.receivingFacilityLgaName}*/}
+                {/*        onChange={handleInputChange}*/}
+                {/*        style={{*/}
+                {/*          border: "1px solid #014D88",*/}
+                {/*          borderRadius: "0.2rem",*/}
+                {/*        }}*/}
+                {/*        disabled*/}
+                {/*    />*/}
+                {/*  </FormGroup>*/}
+                {/*</div>*/}
 
-            <div className="form-group mb-3 col-md-6">
-              <FormGroup>
-                <Label for="firstName">
-                  Facility providing Service
-                </Label>
-                <Input
-                    className="form-control"
-                    type="text"
-                    name="nameOfFacilityProvider"
-                    id="nameOfFacilityProvider"
-                    value={payload.nameOfFacilityProvider}
-                    onChange={handleInputChange}
-                    style={{
-                      border: "1px solid #014D88",
-                      borderRadius: "0.2rem",
-                    }}
-                    disabled
-                />
-              </FormGroup>
-            </div>
-            {/*###############################*/}
+                <div className="form-group mb-3 col-md-6">
+                    <FormGroup>
+                        <Label for="firstName">
+                            Facility providing Service
+                        </Label>
+                        <Input
+                            className="form-control"
+                            type="text"
+                            name="nameOfFacilityProvider"
+                            id="nameOfFacilityProvider"
+                            value={payload.nameOfFacilityProvider}
+                            onChange={handleInputChange}
+                            style={{
+                                border: "1px solid #014D88",
+                                borderRadius: "0.2rem",
+                            }}
+                            disabled
+                        />
+                    </FormGroup>
+                </div>
+                {/*###############################*/}
 
-            <div className="form-group mb-3 col-md-6">
-              <FormGroup>
-                <Label for="firstName">
-                  Address of Facility providing the service{" "}
-                  <span style={{color: "red"}}> *</span>
-                </Label>
-                <Input
-                    className="form-control"
-                    type="text"
-                    name="addressOfFacilityProvider"
-                    id="addressOfFacilityProvider"
-                    value={payload.addressOfFacilityProvider}
-                    onChange={handleInputChange}
-                    style={{
-                      border: "1px solid #014D88",
-                      borderRadius: "0.2rem",
-                    }}
-                    // disabled={props.row.action === "view" ? true : false}
-                    disabled
-                />
-                {errors.addressOfFacilityProvider !== "" ? (
-                    <span className={classes.error}>
+                <div className="form-group mb-3 col-md-6">
+                    <FormGroup>
+                        <Label for="firstName">
+                            Address of Facility providing the service{" "}
+                            <span style={{color: "red"}}> *</span>
+                        </Label>
+                        <Input
+                            className="form-control"
+                            type="text"
+                            name="addressOfFacilityProvider"
+                            id="addressOfFacilityProvider"
+                            value={payload.addressOfFacilityProvider}
+                            onChange={handleInputChange}
+                            style={{
+                                border: "1px solid #014D88",
+                                borderRadius: "0.2rem",
+                            }}
+                            // disabled={props.row.action === "view" ? true : false}
+                            disabled
+                        />
+                        {errors.addressOfFacilityProvider !== "" ? (
+                            <span className={classes.error}>
                     {errors.addressOfFacilityProvider}
                   </span>
-                ) : (
-                    ""
-                )}
-              </FormGroup>
-            </div>
+                        ) : (
+                            ""
+                        )}
+                    </FormGroup>
+                </div>
 
-            <div className="form-group mb-3 col-md-6">
-              <FormGroup>
-                <Label for="">
-                  Date <span style={{color: "red"}}> *</span>{" "}
-                </Label>
-                <Input
-                    type="date"
-                    name="visitDate"
-                    id="visitDate"
-                    value={payload.visitDate}
-                    onChange={handleInputChange}
-                    min={props.formInfo.dateVisit}
-                    max={moment(new Date()).format("YYYY-MM-DD")}
-                    style={{
-                      border: "1px solid #014D88",
-                      borderRadius: "0.25rem",
-                    }}
-                    disabled={props.row.action === "view" ? true : false}
-                />
-                {errors.visitDate !== "" ? (
-                    <span className={classes.error}>{errors.visitDate}</span>
-                ) : (
-                    ""
-                )}
-              </FormGroup>
-            </div>
-            <div className="form-group mb-3 col-md-6">
-              <FormGroup>
-                <Label for="firstName">
-                  Client First Name <span style={{color: "red"}}> *</span>
-                </Label>
-                <Input
-                    className="form-control"
-                    type="text"
-                    name="clientFirstName"
-                    id="clientFirstName"
-                    value={payload.clientFirstName}
-                    onChange={handleInputChange}
-                    style={{
-                      border: "1px solid #014D88",
-                      borderRadius: "0.2rem",
-                    }}
-                    // disabled={props.row.action === "view" ? true : false}
-                    disabled
-                />
-                {errors.clientFirstName !== "" ? (
-                    <span className={classes.error}>
+                <div className="form-group mb-3 col-md-6">
+                    <FormGroup>
+                        <Label for="">
+                            Date <span style={{color: "red"}}> *</span>{" "}
+                        </Label>
+                        <Input
+                            type="date"
+                            name="visitDate"
+                            id="visitDate"
+                            value={payload.visitDate}
+                            onChange={handleInputChange}
+                            min={props.formInfo.dateVisit}
+                            max={moment(new Date()).format("YYYY-MM-DD")}
+                            style={{
+                                border: "1px solid #014D88",
+                                borderRadius: "0.25rem",
+                            }}
+                            disabled={props.row.action === "view" ? true : false}
+                        />
+                        {errors.visitDate !== "" ? (
+                            <span className={classes.error}>{errors.visitDate}</span>
+                        ) : (
+                            ""
+                        )}
+                    </FormGroup>
+                </div>
+                <div className="form-group mb-3 col-md-6">
+                    <FormGroup>
+                        <Label for="firstName">
+                            Client First Name <span style={{color: "red"}}> *</span>
+                        </Label>
+                        <Input
+                            className="form-control"
+                            type="text"
+                            name="clientFirstName"
+                            id="clientFirstName"
+                            value={payload.clientFirstName}
+                            onChange={handleInputChange}
+                            style={{
+                                border: "1px solid #014D88",
+                                borderRadius: "0.2rem",
+                            }}
+                            // disabled={props.row.action === "view" ? true : false}
+                            disabled
+                        />
+                        {errors.clientFirstName !== "" ? (
+                            <span className={classes.error}>
                     {errors.clientFirstName}
                   </span>
-                ) : (
-                    ""
-                )}
-              </FormGroup>
-            </div>
-            <div className="form-group mb-3 col-md-6">
-              <FormGroup>
-                <Label for="clientMiddleName">
-                  Client Middle Name
-                  {/* <span style={{ color: "red" }}> *</span> */}
-                </Label>
-                <Input
-                    className="form-control"
-                    type="text"
-                    name="clientMiddleName"
-                    id="clientMiddleName"
-                    value={payload.clientMiddleName}
-                    onChange={handleInputChange}
-                    style={{
-                      border: "1px solid #014D88",
-                      borderRadius: "0.2rem",
-                    }}
-                    // disabled={props.row.action === "view" ? true : false}
-                    disabled
-                />
-              </FormGroup>
-            </div>
+                        ) : (
+                            ""
+                        )}
+                    </FormGroup>
+                </div>
+                <div className="form-group mb-3 col-md-6">
+                    <FormGroup>
+                        <Label for="clientMiddleName">
+                            Client Middle Name
+                            {/* <span style={{ color: "red" }}> *</span> */}
+                        </Label>
+                        <Input
+                            className="form-control"
+                            type="text"
+                            name="clientMiddleName"
+                            id="clientMiddleName"
+                            value={payload.clientMiddleName}
+                            onChange={handleInputChange}
+                            style={{
+                                border: "1px solid #014D88",
+                                borderRadius: "0.2rem",
+                            }}
+                            // disabled={props.row.action === "view" ? true : false}
+                            disabled
+                        />
+                    </FormGroup>
+                </div>
 
-            <div className="form-group mb-3 col-md-6">
-              <FormGroup>
-                <Label for="clientLastName">
-                  Client Last Name <span style={{color: "red"}}> *</span>
-                </Label>
-                <Input
-                    className="form-control"
-                    type="text"
-                    name="clientLastName"
-                    id="clientLastName"
-                    value={payload.clientLastName}
-                    onChange={handleInputChange}
-                    style={{
-                      border: "1px solid #014D88",
-                      borderRadius: "0.2rem",
-                    }}
-                    // disabled={props.row.action === "view" ? true : false}
-                    disabled
-                />
-                {errors.clientLastName !== "" ? (
-                    <span className={classes.error}>{errors.clientLastName}</span>
-                ) : (
-                    ""
-                )}
-              </FormGroup>
-            </div>
+                <div className="form-group mb-3 col-md-6">
+                    <FormGroup>
+                        <Label for="clientLastName">
+                            Client Last Name <span style={{color: "red"}}> *</span>
+                        </Label>
+                        <Input
+                            className="form-control"
+                            type="text"
+                            name="clientLastName"
+                            id="clientLastName"
+                            value={payload.clientLastName}
+                            onChange={handleInputChange}
+                            style={{
+                                border: "1px solid #014D88",
+                                borderRadius: "0.2rem",
+                            }}
+                            // disabled={props.row.action === "view" ? true : false}
+                            disabled
+                        />
+                        {errors.clientLastName !== "" ? (
+                            <span className={classes.error}>{errors.clientLastName}</span>
+                        ) : (
+                            ""
+                        )}
+                    </FormGroup>
+                </div>
 
-            <div className="form-group mb-3 col-md-12">
-              <FormGroup>
-                <Label for="firstName">
-                  Comments
-                  {/* <span style={{ color: "red" }}> *</span> */}
-                </Label>
-                <Input
-                    className="form-control"
-                    type="textarea"
-                    rows="4"
-                    cols="7"
-                    name="comments"
-                    id="comments"
-                    value={payload.comments}
-                    onChange={handleInputChange}
-                    style={{
-                      border: "1px solid #014D88",
-                      borderRadius: "0.2rem",
-                      height: "100px",
-                    }}
-                    disabled={props.row.action === "view" ? true : false}
-                />
-                {/* {errors.firstName !== "" ? (
+                <div className="form-group mb-3 col-md-12">
+                    <FormGroup>
+                        <Label for="firstName">
+                            Comments
+                            {/* <span style={{ color: "red" }}> *</span> */}
+                        </Label>
+                        <Input
+                            className="form-control"
+                            type="textarea"
+                            rows="4"
+                            cols="7"
+                            name="comments"
+                            id="comments"
+                            value={payload.comments}
+                            onChange={handleInputChange}
+                            style={{
+                                border: "1px solid #014D88",
+                                borderRadius: "0.2rem",
+                                height: "100px",
+                            }}
+                            disabled={props.row.action === "view" ? true : false}
+                        />
+                        {/* {errors.firstName !== "" ? (
                   <span className={classes.error}>{errors.firstName}</span>
                 ) : (
                   ""
                 )} */}
-              </FormGroup>
-            </div>
-            <div className="form-group mb-3 col-md-6">
-              <FormGroup>
-                <Label for="firstName">
-                  Name of service provider
-                  <span style={{color: "red"}}> *</span>
-                </Label>
-                <Input
-                    className="form-control"
-                    type="text"
-                    name="nameOfServiceProvider"
-                    id="nameOfServiceProvider"
-                    value={payload.nameOfServiceProvider}
-                    onChange={handleInputChange}
-                    style={{
-                      border: "1px solid #014D88",
-                      borderRadius: "0.2rem",
-                    }}
-                    disabled={props.row.action === "view" ? true : false}
-                />
-                {errors.nameOfServiceProvider !== "" ? (
-                    <span className={classes.error}>
+                    </FormGroup>
+                </div>
+                <div className="form-group mb-3 col-md-6">
+                    <FormGroup>
+                        <Label for="firstName">
+                            Name of service provider
+                            <span style={{color: "red"}}> *</span>
+                        </Label>
+                        <Input
+                            className="form-control"
+                            type="text"
+                            name="nameOfServiceProvider"
+                            id="nameOfServiceProvider"
+                            value={payload.nameOfServiceProvider}
+                            onChange={handleInputChange}
+                            style={{
+                                border: "1px solid #014D88",
+                                borderRadius: "0.2rem",
+                            }}
+                            disabled={props.row.action === "view" ? true : false}
+                        />
+                        {errors.nameOfServiceProvider !== "" ? (
+                            <span className={classes.error}>
                     {errors.nameOfServiceProvider}
                   </span>
-                ) : (
-                    ""
-                )}
-              </FormGroup>
+                        ) : (
+                            ""
+                        )}
+                    </FormGroup>
+                </div>
+                <div className="form-group mb-3 col-md-6">
+                    <FormGroup>
+                        <Label for="firstName">
+                            Signature
+                            <span style={{color: "red"}}> *</span>
+                        </Label>
+                        <Input
+                            className="form-control"
+                            type="text"
+                            name="signature"
+                            id="signature"
+                            value={payload.signature}
+                            onChange={handleInputChange}
+                            style={{
+                                border: "1px solid #014D88",
+                                borderRadius: "0.2rem",
+                            }}
+                            disabled={props.row.action === "view" ? true : false}
+                        />
+                        {errors.signature !== "" ? (
+                            <span className={classes.error}>{errors.signature}</span>
+                        ) : (
+                            ""
+                        )}
+                    </FormGroup>
+                </div>
+                <div className="form-group  col-md-4">
+                    <FormGroup>
+                        <Label>
+                            Phone Number <span style={{color: "red"}}> *</span>
+                        </Label>
+                        <Input
+                            type="text"
+                            name="phoneNumber"
+                            id="phoneNumber"
+                            onChange={(e) => {
+                                handleInputChangePhoneNumber(e, "phoneNumber");
+                            }}
+                            value={payload.phoneNumber}
+                            style={{
+                                border: "1px solid #014D88",
+                                borderRadius: "0.2rem",
+                            }}
+                            disabled={props.row.action === "view" ? true : false}
+                            // required
+                        />
+                        {errors.phoneNumber !== "" ? (
+                            <span className={classes.error}>{errors.phoneNumber}</span>
+                        ) : (
+                            ""
+                        )}
+                    </FormGroup>
+                </div>
+                <div className="form-group mb-3 col-md-6">
+                    <FormGroup>
+                        <Label for="firstName">
+                            Categories of Services{" "}
+                        </Label>
+                        <Input
+                            className="form-control"
+                            type="text"
+                            name="serviceCategory"
+                            id="serviceCategory"
+                            value={payload.categoryOfService}
+                            onChange={handleInputChange}
+                            style={{
+                                border: "1px solid #014D88",
+                                borderRadius: "0.2rem",
+                            }}
+                            disabled
+                        />
+                    </FormGroup>
+                </div>
             </div>
-            <div className="form-group mb-3 col-md-6">
-              <FormGroup>
-                <Label for="firstName">
-                  Signature
-                  <span style={{color: "red"}}> *</span>
-                </Label>
-                <Input
-                    className="form-control"
-                    type="text"
-                    name="signature"
-                    id="signature"
-                    value={payload.signature}
-                    onChange={handleInputChange}
-                    style={{
-                      border: "1px solid #014D88",
-                      borderRadius: "0.2rem",
-                    }}
-                    disabled={props.row.action === "view" ? true : false}
-                />
-                {errors.signature !== "" ? (
-                    <span className={classes.error}>{errors.signature}</span>
-                ) : (
-                    ""
-                )}
-              </FormGroup>
-            </div>
+            <br/>
 
-            <div className="form-group  col-md-6">
-              <FormGroup>
-                <Label>
-                  Phone Number <span style={{color: "red"}}> *</span>
-                </Label>
-                <PhoneInput
-                    containerStyle={{
-                      width: "100%",
-                      border: "1px solid #014D88",
-                    }}
-                    inputStyle={{width: "100%", borderRadius: "0px"}}
-                    country={"ng"}
-                    placeholder="(234)7099999999"
-                    maxLength={5}
-                    name="phoneNumber"
-                    id="phoneNumber"
-                    masks={{ng: "...-...-....", at: "(....) ...-...."}}
-                    value={payload.phoneNumber}
-                    onChange={(e) => {
-                      checkPhoneNumberBasic(e, "phoneNumber");
-                    }}
+            <br/>
 
-                    disabled={props.row.action === "view" ? true : false}
-                    //onChange={(e)=>{handleInputChangeBasic(e,'phoneNumber')}}
-                />
-
-                {errors.phoneNumber !== "" ? (
-                    <span className={classes.error}>{errors.phoneNumber}</span>
-                ) : (
-                    ""
-                )}
-                {/* {basicInfo.phoneNumber.length >13 ||  basicInfo.phoneNumber.length <13? (
-                                                <span className={classes.error}>{"The maximum and minimum required number is 13 digit"}</span>
-                                                ) : "" } */}
-              </FormGroup>
-            </div>
-
-            {/*<div className="form-group  col-md-6">*/}
-            {/*  <FormGroup>*/}
-            {/*    <Label>*/}
-            {/*      Categories of Services{" "}*/}
-            {/*      <span style={{color: "red"}}> *</span>*/}
-            {/*    </Label>*/}
-            {/*    <select*/}
-            {/*        className="form-control"*/}
-            {/*        name="categoryOfService"*/}
-            {/*        id="categoryOfService"*/}
-            {/*        onChange={handleInputChange}*/}
-            {/*        value={payload.categoryOfService}*/}
-            {/*        style={{*/}
-            {/*          border: "1px solid #014D88",*/}
-            {/*          borderRadius: "0.2rem",*/}
-            {/*        }}*/}
-            {/*    >*/}
-            {/*      <option value={""}>Select</option>*/}
-            {/*      {genders.map((gender, index) => (*/}
-            {/*          <option key={gender?.id} value={gender?.id}>*/}
-            {/*            {gender?.display}*/}
-            {/*          </option>*/}
-            {/*      ))}*/}
-            {/*    </select>*/}
-            {/*    {errors.categoryOfService !== "" ? (*/}
-            {/*        <span className={classes.error}>*/}
-            {/*        {errors.categoryOfService}*/}
-            {/*      </span>*/}
-            {/*    ) : (*/}
-            {/*        ""*/}
-            {/*    )}*/}
-            {/*  </FormGroup>*/}
-            {/*</div>*/}
-
-            <div className="form-group mb-3 col-md-6">
-              <FormGroup>
-                <Label for="firstName">
-                  Categories of Services{" "}
-                </Label>
-                <Input
-                    className="form-control"
-                    type="text"
-                    name="serviceCategory"
-                    id="serviceCategory"
-                    value={payload.categoryOfService}
-                    onChange={handleInputChange}
-                    style={{
-                      border: "1px solid #014D88",
-                      borderRadius: "0.2rem",
-                    }}
-                    disabled
-                />
-              </FormGroup>
-            </div>
-          </div>
-          <br/>
-
-          <br/>
-
-          <br/>
+            <br/>
             {props.row.action === 'update' && (<div className="row">
                     <div className="form-group mb-3 col-md-6">
                         <Button

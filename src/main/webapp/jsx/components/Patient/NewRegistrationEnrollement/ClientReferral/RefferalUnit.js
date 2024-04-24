@@ -216,6 +216,7 @@ const RefferralUnit = (props) => {
         }
     };
 
+
     // handle Facility Name to slect drop down
     const handleInputChangeObject = (e) => {
         // console.log(e);
@@ -254,6 +255,17 @@ const RefferralUnit = (props) => {
             });
 
         // console.log(response);
+    };
+
+    const checkNumberLimit = (e) => {
+        const limit = 11;
+        const acceptedNumber = e.slice(0, limit);
+        return acceptedNumber;
+    };
+    const handleInputChangePhoneNumber = (e, inputName) => {
+        const limit = 11;
+        const NumberValue = checkNumberLimit(e.target.value.replace(/\D/g, ""));
+        setPayload({ ...payload, [inputName]: NumberValue });
     };
 
     // ########################################################################
@@ -869,36 +881,26 @@ const RefferralUnit = (props) => {
                                         <Label>
                                             Phone Number <span style={{color: "red"}}> *</span>
                                         </Label>
-                                        <PhoneInput
-                                            disabled={true}
-                                            containerStyle={{
-                                                width: "100%",
-                                                border: "1px solid #014D88",
-                                            }}
-                                            inputStyle={{width: "100%", borderRadius: "0px"}}
-                                            country={"ng"}
-                                            placeholder="(234)7099999999"
-                                            maxLength={5}
+                                        <Input
+                                            type="text"
                                             name="phoneNumber"
                                             id="phoneNumber"
-                                            masks={{ng: "...-...-....", at: "(....) ...-...."}}
-                                            value={payload.phoneNumber}
                                             onChange={(e) => {
-                                                checkPhoneNumberBasic(e, "phoneNumber");
+                                                handleInputChangePhoneNumber(e, "phoneNumber");
                                             }}
-                                            //onChange={(e)=>{handleInputChangeBasic(e,'phoneNumber')}}
+                                            value={payload.phoneNumber}
+                                            style={{
+                                                border: "1px solid #014D88",
+                                                borderRadius: "0.2rem",
+                                            }}
+                                            disabled
+                                            // required
                                         />
-
                                         {errors.phoneNumber !== "" ? (
-                                            <span className={classes.error}>
-                        {errors.phoneNumber}
-                      </span>
+                                            <span className={classes.error}>{errors.phoneNumber}</span>
                                         ) : (
                                             ""
                                         )}
-                                        {/* {basicInfo.phoneNumber.length >13 ||  basicInfo.phoneNumber.length <13? (
-                                                <span className={classes.error}>{"The maximum and minimum required number is 13 digit"}</span>
-                                                ) : "" } */}
                                     </FormGroup>
                                 </div>
                                 <div className="form-group  col-md-4">
@@ -1179,31 +1181,26 @@ const RefferralUnit = (props) => {
                                         )}
                                     </FormGroup>
                                 </div>
-                                <div className="form-group mb-3 col-md-4">
+
+                                <div className="form-group  col-md-4">
                                     <FormGroup>
-                                        <Label for="firstName">
-                                            Phone Number of Refering Facility
-                                            {/* <span style={{ color: "red" }}> *</span> */}
+                                        <Label>
+                                            Phone Number of Referring Facility <span style={{color: "red"}}> *</span>
                                         </Label>
-                                        <PhoneInput
-                                            containerStyle={{
-                                                width: "100%",
-                                                border: "1px solid #014D88",
-                                            }}
-                                            inputStyle={{width: "100%", borderRadius: "0px"}}
-                                            country={"ng"}
-                                            placeholder="(234)7099999999"
-                                            maxLength={5}
+                                        <Input
+                                            type="text"
                                             name="phoneNoOfReferringFacility"
                                             id="phoneNoOfReferringFacility"
-                                            masks={{ng: "...-...-....", at: "(....) ...-...."}}
-                                            value={payload.phoneNoOfReferringFacility}
                                             onChange={(e) => {
-                                                checkPhoneNumberBasic(e, "phoneNoOfReferringFacility");
+                                                handleInputChangePhoneNumber(e, "phoneNoOfReferringFacility");
+                                            }}
+                                            value={payload.phoneNoOfReferringFacility}
+                                            style={{
+                                                border: "1px solid #014D88",
+                                                borderRadius: "0.2rem",
                                             }}
                                             disabled={props.row.action === "view" ? true : false}
                                         />
-
                                         {errors.phoneNoOfReferringFacility !== "" ? (
                                             <span className={classes.error}>
                         {errors.phoneNoOfReferringFacility}
@@ -1299,7 +1296,7 @@ const RefferralUnit = (props) => {
                                                     }
                                                     loadLGA(e.target.value);
                                                 }}
-value={payload.receivingStateFacility}
+                                                value={payload.receivingStateFacility}
                                             >
                                                 <option>Select State</option>
                                                 {states.map((state) => (
@@ -1432,32 +1429,26 @@ value={payload.receivingStateFacility}
                                         )}
                                     </FormGroup>
                                 </div>
-                                <div className="form-group mb-3 col-md-4">
+                                <div className="form-group  col-md-4">
                                     <FormGroup>
-                                        <Label for="firstName">
+                                        <Label>
                                             Phone No of Receiving Facility
                                             <span style={{color: "red"}}> *</span>
                                         </Label>
-                                        <PhoneInput
-                                            containerStyle={{
-                                                width: "100%",
-                                                border: "1px solid #014D88",
-                                            }}
-                                            inputStyle={{width: "100%", borderRadius: "0px"}}
-                                            country={"ng"}
-                                            placeholder="(234)7099999999"
-                                            maxLength={5}
+                                        <Input
+                                            type="text"
                                             name="phoneNoOfReceivingFacility"
                                             id="phoneNoOfReceivingFacility"
-                                            masks={{ng: "...-...-....", at: "(....) ...-...."}}
-                                            value={payload.phoneNoOfReceivingFacility}
                                             onChange={(e) => {
-                                                checkPhoneNumberBasic(e, "phoneNoOfReceivingFacility");
+                                                handleInputChangePhoneNumber(e, "phoneNoOfReceivingFacility");
+                                            }}
+                                            value={payload.phoneNoOfReceivingFacility}
+                                            style={{
+                                                border: "1px solid #014D88",
+                                                borderRadius: "0.2rem",
                                             }}
                                             disabled={props.row.action === "view" ? true : false}
-                                            //onChange={(e)=>{handleInputChangeBasic(e,'phoneNumber')}}
                                         />
-
                                         {errors.phoneNoOfReceivingFacility !== "" ? (
                                             <span className={classes.error}>
                         {errors.phoneNoOfReceivingFacility}

@@ -97,6 +97,9 @@ public class PNSService {
     public List<PersonalNotificationServiceResponseDTO> getAllPnsIndexClientByHtsClient(Long htsClientId) {
         HtsClient htsClient = htsClientRepository.findById(htsClientId).orElseThrow(() -> new EntityNotFoundException(HtsClient.class, "htsClientId", "" + htsClientId));
         List<PersonalNotificationService> indesClientList = personalNotificationServiceRepository.findAllByHtsClient(htsClient);
+        if(indesClientList.isEmpty()) {
+               return new ArrayList<>();
+        }
         return convertPnsEntityListToResponseDtoList(indesClientList);
     }
 

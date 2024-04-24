@@ -8,8 +8,7 @@ import SaveIcon from "@material-ui/icons/Save";
 import {toast} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
-import {token, url as baseUrl} from "../../../../../api"
-
+import  {token, url as baseUrl} from "../../../../../api";
 import "react-phone-input-2/lib/style.css";
 import "semantic-ui-css/semantic.min.css";
 import "react-toastify/dist/ReactToastify.css";
@@ -22,14 +21,9 @@ import PhoneInput from "react-phone-input-2";
 import Select from "react-select";
 // import { getAcount } from "../../../../utility";
 import Cookies from "js-cookie";
-import {
-    getAllStateByCountryId,
-    getAllCountry,
-    getAllProvinces,
-    getAllGenders,
-    alphabetOnly,
-} from "../../../../../utility";
-import {calculate_age} from "../../../utils";
+import { getAllGenders, alphabetOnly, getAllProvinces, getAllCountry, getAllStateByCountryId } from "../../../../../utility";
+// import {calculate_age} from "../../utils";
+import {calculate_age} from "../../.././utils";
 import {useHistory} from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
@@ -136,7 +130,7 @@ const RefferralUnit = (props) => {
     const history = useHistory();
 
     const [payload, setPayload] = useState({
-        dateVisit: props?.formInfo?.dateVisit,
+        dateVisit: "",
         firstName: props?.patientObj?.personResponseDto?.firstName,
         middleName: props?.patientObj?.personResponseDto?.otherName,
         lastName: props?.patientObj?.personResponseDto?.surname,
@@ -153,27 +147,26 @@ const RefferralUnit = (props) => {
         dateOfBirth: props?.patientObj.personResponseDto?.dateOfBirth,
         hivStatus: props?.patientObj?.hivTestResult2 ? props?.patientObj?.hivTestResult2 :
             props?.patientObj?.hivTestResult ? props?.patientObj?.hivTestResult : "",
-        referredFromFacility: props?.formInfo?.referredFromFacility,
-        nameOfPersonReferringClient: props?.formInfo?.nameOfPersonReferringClient,
-        nameOfReferringFacility: props?.formInfo?.nameOfReferringFacility,
-        addressOfReferringFacility: props?.formInfo?.addressOfReferringFacility,
-        phoneNoOfReferringFacility: props?.formInfo?.phoneNoOfReferringFacility,
-        referredTo: props?.formInfo?.referredTo,
-        nameOfContactPerson: props?.formInfo?.nameOfContactPerson,
-        nameOfReceivingFacility: props?.formInfo?.nameOfReceivingFacility,
-        addressOfReceivingFacility: props?.formInfo?.addressOfReceivingFacility,
-        phoneNoOfReceivingFacility: props?.formInfo?.phoneNoOfReceivingFacility,
+        referredFromFacility: "",
+        nameOfPersonReferringClient: "",
+        nameOfReferringFacility:  Cookies.get("facilityName"),
+        addressOfReferringFacility: "",
+        phoneNoOfReferringFacility: "",
+        referredTo: "",
+        nameOfContactPerson: "",
+        nameOfReceivingFacility: "",
+        addressOfReceivingFacility: "",
+        phoneNoOfReceivingFacility: "",
         isDateOfBirthEstimated: false,
-        serviceNeeded: props?.formInfo?.serviceNeeded,
-        comments: props?.formInfo?.comments,
-        receivingStateFacility:props.formInfo.receivingFacilityStateName,
-        receivingLgaFacility: "",
+        serviceNeeded: "",
+        comments: "",
+        receivingFacilityStateName: "",
+        receivingFacilityLgaNam: "",
         htsClientId: props && props.patientObj ? props.patientObj?.id : "",
         htsClientUuid: props && props.patientObj ? props.patientObj?.uuid : ""
     });
-
-    console.log("PAYLOAD", payload);
-    console.log("props.formInfo", props.formInfo);
+    console.log("payload in referalUnit", payload)
+    // console.log("PAYLOAD", payload);
     const loadGenders = useCallback(async () => {
         getAllGenders()
             .then((response) => {
@@ -215,7 +208,6 @@ const RefferralUnit = (props) => {
             setPayload({...payload, phoneNoOfReceivingFacility: e.slice(0, limit)});
         }
     };
-
 
     // handle Facility Name to slect drop down
     const handleInputChangeObject = (e) => {
@@ -325,7 +317,6 @@ const RefferralUnit = (props) => {
         })
             .then((response) => {
                 if (response.data) {
-                    // console.log("SERVICE_NEEDED", response.data)
                     setServiceNeeded(response.data);
                 }
             })
@@ -462,33 +453,36 @@ const RefferralUnit = (props) => {
         setPayload({...payload, age: e.target.value});
     };
 
-    // const handleItemClick = (page, completedMenu) => {
-    //     props.handleItemClick(page);
-    //     if (props.completed.includes(completedMenu)) {
-    //     } else {
-    //         props.setCompleted([...props.completed, completedMenu]);
-    //     }
-    // };
+    //End of Date of Birth and Age handling
+    /*****  Validation  */
+
+    const handleItemClick = (page, completedMenu) => {
+        props.handleItemClick(page);
+        if (props.completed.includes(completedMenu)) {
+        } else {
+            props.setCompleted([...props.completed, completedMenu]);
+        }
+    };
     const validate = () => {
         //HTS FORM VALIDATION
+
         temp.dateVisit = payload.dateVisit ? "" : "This field is required.";
         temp.firstName = payload.firstName ? "" : "This field is required.";
         temp.lastName = payload.lastName ? "" : "This field is required.";
         temp.stateId = payload.stateId ? "" : "This field is required.";
         temp.province = payload.province ? "" : "This field is required.";
-        temp.address = payload.address ? "" : "This field is required.";
+        // temp.address = payload.address ? "" : "This field is required.";
         temp.phoneNumber = payload.phoneNumber ? "" : "This field is required.";
         temp.sexId = payload.sexId ? "" : "This field is required.";
         temp.dob = payload.dob ? "" : "This field is required.";
         // temp.age = payload.age ? "" : "This field is required.";
-        // temp.hivStatus = payload.hivStatus ? "" : "This field is required.";
+        temp.hivStatus = payload.hivStatus ? "" : "This field is required.";
         // temp.stateTransferTo = payload.receivingStateFacility? "" : "This field is required.";
-        // temp.lgaTransferTo = payload.receivingLgaFacility ? "" : "This field is required.";
-        // temp.stateTransferTo = payload.receivingStateFacility ? "" : "This field is required.";
-        temp.facilityTransferTo = payload.nameOfReceivingFacility ? "" : "This field is required.";
-        temp.referredFromFacility = payload.referredFromFacility
-            ? ""
-            : "This field is required.";
+        temp.receivingFacilityLgaName = payload.receivingFacilityLgaName ? "" : "This field is required.";
+        temp.receivingFacilityStateName = payload.receivingFacilityStateName ? "" : "This field is required.";
+        // temp.referredFromFacility = payload.referredFromFacility
+        //     ? ""
+        //     : "This field is required.";
         temp.nameOfPersonReferringClient = payload.nameOfPersonReferringClient
             ? ""
             : "This field is required.";
@@ -515,70 +509,40 @@ const RefferralUnit = (props) => {
             ? ""
             : "This field is required.";
         temp.serviceNeeded = payload.serviceNeeded ? "" : "This field is required.";
-        // console.log("temp", temp);
-        temp.referredTo = payload.referredTo ? "" : "This field is required.";
+
+        // console.log("temp", temp)
+        // temp.referredTo = payload.referredTo ? "" : "This field is required.";
         setErrors({...temp});
         return Object.values(temp).every((x) => x == "");
     };
 
-    const postPayload = (payload) => {
-        axios
-            .post(`${baseUrl}risk-stratification`, payload, {
-                headers: {Authorization: `Bearer ${token}`},
-            })
-            .then((response) => {
-                setSaving(false);
-
-                //toast.success("Risk stratification save succesfully!");
-            })
-            .catch((error) => {
-                setSaving(false);
-                if (error.response && error.response.data) {
-                    let errorMessage =
-                        error.response.data.apierror &&
-                        error.response.data.apierror.message !== ""
-                            ? error.response.data.apierror.message
-                            : "Something went wrong, please try again";
-                    toast.error(errorMessage, {
-                        position: toast.POSITION.BOTTOM_CENTER,
-                    });
-                } else {
-                    toast.error("Something went wrong. Please try again...", {
-                        position: toast.POSITION.BOTTOM_CENTER,
-                    });
-                }
-            });
-    };
-
+    // console.log("payload before submit", payload)
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         if (validate()) {
-        try {
-            setSaving(true);
-            await axios.put(`${baseUrl}hts-client-referral/update-hts-client-referral/${props.row.row.id}`, payload, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-            setSaving(false);
-            toast.success("Record saved successfully", { position: toast.POSITION.BOTTOM_CENTER });
-            props.handleItemClick("refferal-history");
-            // history.push("/")
-        } catch (error) {
-            setSaving(false);
-            console.log("error", error);
-            const errorMessage = error.response?.data?.apierror?.message || "Something went wrong, please try again";
-            toast.error(errorMessage, { position: toast.POSITION.BOTTOM_CENTER });
-        }
+            try {
+                setSaving(true);
+                await axios.post(`${baseUrl}hts-client-referral`, payload, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                setSaving(false);
+                toast.success("Record saved successfully", { position: toast.POSITION.BOTTOM_CENTER });
+                // props.handleItemClick("refferal-history");
+                history.push("/")
+            } catch (error) {
+                console.log("error", error)
+                setSaving(false);
+                const errorMessage = error.response?.data?.apierror?.message || "Something went wrong, please try again";
+                toast.error(errorMessage, { position: toast.POSITION.BOTTOM_CENTER });
+            }
         }
     };
-
-
 
     return (
         <>
             <Card className={classes.root}>
                 <CardBody>
-                    <h2 style={{color: "#000"}}>Client Referral Form - {props.row.action === "update" ? "Update": "View"} </h2>
+                    <h2 style={{color: "#000"}}>Client Referral Form </h2>
                     <br/>
                     <form>
                         <div className="row">
@@ -598,7 +562,7 @@ const RefferralUnit = (props) => {
                             <p style={{color: "black", marginBottom: "20px"}}>
                                 <i>
                                     Note: This form is to be filed by the organization making the
-                                    referral (Referring unit or organization)
+                                    referal (Referring unit or organization)
                                 </i>
                             </p>
                             <div className="row">
@@ -619,7 +583,7 @@ const RefferralUnit = (props) => {
                                                 border: "1px solid #014D88",
                                                 borderRadius: "0.25rem",
                                             }}
-                                            disabled={props.row.action === "view" ? true : false}
+                                            // disabled
                                         />
                                         {errors.dateVisit !== "" ? (
                                             <span className={classes.error}>
@@ -876,6 +840,40 @@ const RefferralUnit = (props) => {
                                     </FormGroup>
                                 </div>
 
+                                {/*          <div className="form-group  col-md-4">*/}
+                                {/*              <FormGroup>*/}
+                                {/*                  <Label>*/}
+                                {/*                      Phone Number <span style={{color: "red"}}> *</span>*/}
+                                {/*                  </Label>*/}
+                                {/*                  <PhoneInput*/}
+                                {/*                      disabled={true}*/}
+                                {/*                      containerStyle={{*/}
+                                {/*                          width: "100%",*/}
+                                {/*                          border: "1px solid #014D88",*/}
+                                {/*                      }}*/}
+                                {/*                      inputStyle={{width: "100%", borderRadius: "0px"}}*/}
+                                {/*                      country={"ng"}*/}
+                                {/*                      placeholder="(234)7099999999"*/}
+                                {/*                      maxLength={5}*/}
+                                {/*                      name="phoneNumber"*/}
+                                {/*                      id="phoneNumber"*/}
+                                {/*                      masks={{ng: "...-...-....", at: "(....) ...-...."}}*/}
+                                {/*                      value={payload.phoneNumber}*/}
+                                {/*                      onChange={(e) => {*/}
+                                {/*                          checkPhoneNumberBasic(e, "phoneNumber");*/}
+                                {/*                      }}*/}
+                                {/*                      //onChange={(e)=>{handleInputChangeBasic(e,'phoneNumber')}}*/}
+                                {/*                  />*/}
+
+                                {/*                  {errors.phoneNumber !== "" ? (*/}
+                                {/*                      <span className={classes.error}>*/}
+                                {/*  {errors.phoneNumber}*/}
+                                {/*</span>*/}
+                                {/*                  ) : (*/}
+                                {/*                      ""*/}
+                                {/*                  )}*/}
+                                {/*              </FormGroup>*/}
+                                {/*          </div>*/}
                                 <div className="form-group  col-md-4">
                                     <FormGroup>
                                         <Label>
@@ -903,6 +901,7 @@ const RefferralUnit = (props) => {
                                         )}
                                     </FormGroup>
                                 </div>
+
                                 <div className="form-group  col-md-4">
                                     <FormGroup>
                                         <Label>
@@ -935,44 +934,6 @@ const RefferralUnit = (props) => {
                                         )}
                                     </FormGroup>
                                 </div>
-                                {/* <div className="form-group mb-2 col-md-4">
-                  <FormGroup>
-                    <Label>
-                      Date Of Birth <span style={{ color: "red" }}> *</span>
-                    </Label>
-                    <div className="radio">
-                      <label>
-                        <input
-                          type="radio"
-                          value="Actual"
-                          name="dateOfBirth"
-                          defaultChecked
-                          onChange={(e) => handleDateOfBirthChange(e)}
-                          style={{
-                            border: "1px solid #014D88",
-                            borderRadius: "0.2rem",
-                          }}
-                        />{" "}
-                        Actual
-                      </label>
-                    </div>
-                    <div className="radio">
-                      <label>
-                        <input
-                          type="radio"
-                          value="Estimated"
-                          name="dateOfBirth"
-                          onChange={(e) => handleDateOfBirthChange(e)}
-                          style={{
-                            border: "1px solid #014D88",
-                            borderRadius: "0.2rem",
-                          }}
-                        />{" "}
-                        Estimated
-                      </label>
-                    </div>
-                  </FormGroup>
-                </div> */}
                                 <div className="form-group mb-3 col-md-4">
                                     <FormGroup>
                                         <Label>
@@ -1085,7 +1046,6 @@ const RefferralUnit = (props) => {
                                                 border: "1px solid #014D88",
                                                 borderRadius: "0.2rem",
                                             }}
-                                            disabled={props.row.action === "view" ? true : false}
                                         />
 
                                         {errors.referredFromFacility !== "" ? (
@@ -1114,7 +1074,6 @@ const RefferralUnit = (props) => {
                                                 border: "1px solid #014D88",
                                                 borderRadius: "0.2rem",
                                             }}
-                                            disabled={props.row.action === "view" ? true : false}
                                         />
                                         {errors.nameOfPersonReferringClient !== "" ? (
                                             <span className={classes.error}>
@@ -1128,8 +1087,8 @@ const RefferralUnit = (props) => {
                                 <div className="form-group mb-3 col-md-4">
                                     <FormGroup>
                                         <Label for="firstName">
-                                            Name of Referring Facility
-                                            <span style={{color: "red"}}> *</span>
+
+                                            <span style={{color: "red"}}> *</span>Name of Referring Facility
                                         </Label>
                                         <Input
                                             className="form-control"
@@ -1170,7 +1129,7 @@ const RefferralUnit = (props) => {
                                                 border: "1px solid #014D88",
                                                 borderRadius: "0.2rem",
                                             }}
-                                            disabled={props.row.action === "view" ? true : false}
+                                            // disabled
                                         />
                                         {errors.addressOfReferringFacility !== "" ? (
                                             <span className={classes.error}>
@@ -1181,7 +1140,40 @@ const RefferralUnit = (props) => {
                                         )}
                                     </FormGroup>
                                 </div>
+                                {/*          <div className="form-group mb-3 col-md-4">*/}
+                                {/*              <FormGroup>*/}
+                                {/*                  <Label for="firstName">*/}
+                                {/*                      Phone Number of Referring Facility*/}
+                                {/*                      /!* <span style={{ color: "red" }}> *</span> *!/*/}
+                                {/*                  </Label>*/}
+                                {/*                  <PhoneInput*/}
+                                {/*                      containerStyle={{*/}
+                                {/*                          width: "100%",*/}
+                                {/*                          border: "1px solid #014D88",*/}
+                                {/*                      }}*/}
+                                {/*                      inputStyle={{width: "100%", borderRadius: "0px"}}*/}
+                                {/*                      country={"ng"}*/}
+                                {/*                      placeholder="(234)7099999999"*/}
+                                {/*                      maxLength={5}*/}
+                                {/*                      name="phoneNoOfReferringFacility"*/}
+                                {/*                      id="phoneNoOfReferringFacility"*/}
+                                {/*                      masks={{ng: "...-...-....", at: "(....) ...-...."}}*/}
+                                {/*                      value={payload.phoneNoOfReferringFacility}*/}
+                                {/*                      onChange={(e) => {*/}
+                                {/*                          checkPhoneNumberBasic(e, "phoneNoOfReferringFacility");*/}
+                                {/*                      }}*/}
+                                {/*                      //onChange={(e)=>{handleInputChangeBasic(e,'phoneNumber')}}*/}
+                                {/*                  />*/}
 
+                                {/*                  {errors.phoneNoOfReferringFacility !== "" ? (*/}
+                                {/*                      <span className={classes.error}>*/}
+                                {/*  {errors.phoneNoOfReferringFacility}*/}
+                                {/*</span>*/}
+                                {/*                  ) : (*/}
+                                {/*                      ""*/}
+                                {/*                  )}*/}
+                                {/*              </FormGroup>*/}
+                                {/*          </div>*/}
                                 <div className="form-group  col-md-4">
                                     <FormGroup>
                                         <Label>
@@ -1199,7 +1191,7 @@ const RefferralUnit = (props) => {
                                                 border: "1px solid #014D88",
                                                 borderRadius: "0.2rem",
                                             }}
-                                            disabled={props.row.action === "view" ? true : false}
+
                                         />
                                         {errors.phoneNoOfReferringFacility !== "" ? (
                                             <span className={classes.error}>
@@ -1214,7 +1206,6 @@ const RefferralUnit = (props) => {
                                     <FormGroup>
                                         <Label for="firstName">
                                             Referred to (Department)
-                                            <span style={{color: "red"}}> *</span>
                                         </Label>
                                         <Input
                                             className="form-control"
@@ -1227,13 +1218,7 @@ const RefferralUnit = (props) => {
                                                 border: "1px solid #014D88",
                                                 borderRadius: "0.2rem",
                                             }}
-                                            disabled={props.row.action === "view" ? true : false}
                                         />
-                                        {errors.referredTo !== "" ? (
-                                            <span className={classes.error}>{errors.referredTo}</span>
-                                        ) : (
-                                            ""
-                                        )}
                                     </FormGroup>
                                 </div>
                                 <div className="form-group mb-3 col-md-4">
@@ -1253,7 +1238,6 @@ const RefferralUnit = (props) => {
                                                 border: "1px solid #014D88",
                                                 borderRadius: "0.2rem",
                                             }}
-                                            disabled={props.row.action === "view" ? true : false}
                                         />
                                         {errors.nameOfContactPerson !== "" ? (
                                             <span className={classes.error}>
@@ -1264,102 +1248,106 @@ const RefferralUnit = (props) => {
                                         )}
                                     </FormGroup>
                                 </div>
-                                {props.row.action === "update" && (<div className="form-group mb-3 col-md-4">
-                                        <FormGroup>
-                                            <Label for="" style={{color: '#014d88', fontWeight: 'bolder'}}>Receiving
-                                                Facility State <span
-                                                    style={{color: "red"}}> *</span> </Label>
-                                            <Input
-                                                type="select"
-                                                name="stateId"
-                                                style={{
-                                                    height: "40px",
-                                                    border: 'solid 1px #014d88',
-                                                    borderRadius: '5px',
-                                                    fontWeight: 'bolder',
-                                                    appearance: 'auto'
-                                                }}
-                                                required
-                                                disabled={props.row.action === "view" ? true : false}
-                                                onChange={(e) => {
-                                                    if (e.target.value !== "") {
-                                                        const filterState = statesOfTheReceivingFacility.filter(st => {
-                                                                return Number(st.id) === Number(e.target.value)
-                                                            }
-                                                        )
-                                                        setSelectedReceivingState(filterState)
+                                <div className="form-group mb-3 col-md-4">
+                                    <FormGroup>
+                                        <Label for="" style={{color: '#014d88', fontWeight: 'bolder'}}>Receiving
+                                            Facility State <span
+                                                style={{color: "red"}}> *</span> </Label>
+                                        <Input
+                                            type="select"
+                                            name="stateId"
+                                            style={{
+                                                height: "40px",
+                                                border: 'solid 1px #014d88',
+                                                borderRadius: '5px',
+                                                fontWeight: 'bolder',
+                                                appearance: 'auto'
+                                            }}
+                                            required
+                                            // onChange={loadLGA1}
+                                            onChange={(e) => {
+                                                if (e.target.value !== "") {
+                                                    const filterState = statesOfTheReceivingFacility.filter(st => {
+                                                            return Number(st.id) === Number(e.target.value)
+                                                        }
+                                                    )
+                                                    setSelectedReceivingState(filterState)
 
-                                                        setPayload(prevPayload => ({
-                                                            ...prevPayload,
-                                                            stateId: filterState[0].id
-                                                        }));
-                                                    }
-                                                    loadLGA(e.target.value);
-                                                }}
-                                                value={payload.receivingStateFacility}
-                                            >
-                                                <option>Select State</option>
-                                                {states.map((state) => (
-                                                    <option key={state?.id} value={state?.name}>
-                                                        {state.name}
-                                                    </option>
-                                                ))}
-                                            </Input>
-                                        </FormGroup>
-                                    </div>
-                                )}
-                                {props.row.action === "update" && (<div className="form-group mb-3 col-md-4">
-                                        <FormGroup>
-                                            <Label for="" style={{color: '#014d88', fontWeight: 'bolder'}}> Receiving
-                                                Facility LGA <span
-                                                    style={{color: "red"}}> *</span></Label>
-                                            <Input
-                                                type="select"
-                                                name=" receivingLgaFacility"
-                                                style={{
-                                                    height: "40px",
-                                                    border: 'solid 1px #014d88',
-                                                    borderRadius: '5px',
-                                                    fontWeight: 'bolder',
-                                                    appearance: 'auto'
-                                                }}
-                                                required
-                                                disabled={props.row.action === "view" ? true : false}
-                                                value={payload.receivingLgaFacility}
-                                                onChange={(e) => {
-                                                    if (e.target.value !== "") {
-                                                        const filterlga = lgasOfTheReceivingFacility.filter(lg => {
-                                                                return Number(lg.id) === Number(e.target.value)
-                                                            }
-                                                        )
-                                                        setSelectedReceivingLga(filterlga)
-                                                        setPayload(prevPayload => ({
-                                                            ...prevPayload,
-                                                            lgaId: filterlga[0].id
-                                                        }));
-                                                    }
-                                                    loadFacilities(e.target.value);
+                                                    setPayload(prevPayload => ({
+                                                        ...prevPayload,
+                                                        receivingFacilityStateName: filterState[0].name
+                                                    }));
+                                                }
+                                                loadLGA(e.target.value);
+                                            }}
 
-                                                }}
+                                        >
+                                            <option>Select State</option>
+                                            {states.map((state) => (
+                                                <option key={state.id} value={state.id}>
+                                                    {state.name}
+                                                </option>
+                                            ))}
+                                        </Input>
+                                        {errors.receivingFacilityStateName !== "" ? (
+                                            <span className={classes.error}>
+                                                {errors.receivingFacilityStateName}
+                                            </span>
+                                        ) : (
+                                            ""
+                                        )}
+                                    </FormGroup>
+                                </div>
+                                <div className="form-group mb-3 col-md-4">
+                                    <FormGroup>
+                                        <Label for="" style={{color: '#014d88', fontWeight: 'bolder'}}> Receiving
+                                            Facility LGA <span
+                                                style={{color: "red"}}> *</span></Label>
+                                        <Input
+                                            type="select"
+                                            name="lgaId"
+                                            style={{
+                                                height: "40px",
+                                                border: 'solid 1px #014d88',
+                                                borderRadius: '5px',
+                                                fontWeight: 'bolder',
+                                                appearance: 'auto'
+                                            }}
+                                            required
+                                            // onChange={loadFacilities1}
+                                            onChange={(e) => {
+                                                if (e.target.value !== "") {
+                                                    const filterlga = lgasOfTheReceivingFacility.filter(lg => {
+                                                            return Number(lg.id) === Number(e.target.value)
+                                                        }
+                                                    )
+                                                    setSelectedReceivingLga(filterlga)
+                                                    setPayload(prevPayload => ({
+                                                        ...prevPayload,
+                                                        receivingFacilityLgaName: filterlga[0].name
+                                                    }));
+                                                }
+                                                loadFacilities(e.target.value);
 
-                                            >
-                                                <option>Select LGA</option>
-                                                {lgasOfTheReceivingFacility.map((lga) => (
-                                                    <option key={lga.id} value={lga.id}>
-                                                        {lga.name}
-                                                    </option>
-                                                ))}
-                                            </Input>
-                                            {/*{errors.lgaId !== "" ? (*/}
-                                            {/*    <span className={classes.error}>*/}
-                                            {/*    {errors.lgaId}*/}
-                                            {/*</span>*/}
-                                            {/*) : (*/}
-                                            {/*    ""*/}
-                                            {/*)}*/}
-                                        </FormGroup>
-                                    </div>
-                                )}
+                                            }}
+
+                                        >
+                                            <option>Select LGA</option>
+                                            {lgasOfTheReceivingFacility.map((lga) => (
+                                                <option key={lga.id} value={lga.id}>
+                                                    {lga.name}
+                                                </option>
+                                            ))}
+                                        </Input>
+                                        {errors.receivingFacilityLgaName !== "" ? (
+                                            <span className={classes.error}>
+                                                {errors.receivingFacilityLgaName}
+                                            </span>
+                                        ) : (
+                                            ""
+                                        )}
+                                    </FormGroup>
+                                </div>
                                 <div className="form-group mb-3 col-md-4">
                                     <FormGroup>
                                         <Label for="" style={{color: '#014d88', fontWeight: 'bolder'}}>Name of Receiving
@@ -1375,22 +1363,28 @@ const RefferralUnit = (props) => {
                                                 fontWeight: 'bolder',
                                                 appearance: 'auto'
                                             }}
-                                            disabled={props.row.action === "view" ? true : false}
                                             required
-                                            value={payload.nameOfReceivingFacility}
-                                            onChange={handleInputChange}
+                                            onChange={(e) => {
+                                                // setPayload(prevPayload => ({ ...prevPayload, facilityTransferTo: e.target.value }));
+                                                if (e.target.value !== "") {
+                                                    const filterFacility = receivingFacilities.filter(fa => {
+                                                            return Number(fa.id) === Number(e.target.value)
+                                                        }
+                                                    )
+                                                    setSelectedReceivingFacility(filterFacility)
+                                                    setPayload(prevPayload => ({
+                                                        ...prevPayload,
+                                                        nameOfReceivingFacility: filterFacility[0].name
+                                                    }));
+                                                }
+                                            }}
                                         >
-                                            <option>Select State</option>
-                                            {receivingFacilities.length > 0 && receivingFacilities.map((fa) => (
-                                                <option key={fa.id} value={fa.name}>
-                                                    {fa.name}
+                                            <option>Select Facility</option>
+                                            {receivingFacilities.map((facility) => (
+                                                <option key={facility.id} value={facility.id}>
+                                                    {facility.name}
                                                 </option>
                                             ))}
-
-                                            {receivingFacilities.length < 1 &&
-                                                <option key={3} value={payload?.nameOfReceivingFacility}>
-                                                    {payload?.nameOfReceivingFacility}
-                                                </option>}
                                         </Input>
                                         {errors.nameOfReceivingFacility !== "" ? (
                                             <span className={classes.error}>
@@ -1418,17 +1412,43 @@ const RefferralUnit = (props) => {
                                                 border: "1px solid #014D88",
                                                 borderRadius: "0.2rem",
                                             }}
-                                            disabled={props.row.action === "view" ? true : false}
                                         />
-                                        {errors.addressOfReceivingFacility !== "" ? (
-                                            <span className={classes.error}>
-                        {errors.addressOfReceivingFacility}
-                      </span>
-                                        ) : (
-                                            ""
-                                        )}
                                     </FormGroup>
                                 </div>
+                                {/*          <div className="form-group mb-3 col-md-4">*/}
+                                {/*              <FormGroup>*/}
+                                {/*                  <Label for="firstName">*/}
+                                {/*                      Phone No of Receiving Facility*/}
+                                {/*                      <span style={{color: "red"}}> *</span>*/}
+                                {/*                  </Label>*/}
+                                {/*                  <PhoneInput*/}
+                                {/*                      containerStyle={{*/}
+                                {/*                          width: "100%",*/}
+                                {/*                          border: "1px solid #014D88",*/}
+                                {/*                      }}*/}
+                                {/*                      inputStyle={{width: "100%", borderRadius: "0px"}}*/}
+                                {/*                      country={"ng"}*/}
+                                {/*                      placeholder="(234)7099999999"*/}
+                                {/*                      maxLength={5}*/}
+                                {/*                      name="phoneNoOfReceivingFacility"*/}
+                                {/*                      id="phoneNoOfReceivingFacility"*/}
+                                {/*                      masks={{ng: "...-...-....", at: "(....) ...-...."}}*/}
+                                {/*                      value={payload.phoneNoOfReceivingFacility}*/}
+                                {/*                      onChange={(e) => {*/}
+                                {/*                          checkPhoneNumberBasic(e, "phoneNoOfReceivingFacility");*/}
+                                {/*                      }}*/}
+                                {/*                      //onChange={(e)=>{handleInputChangeBasic(e,'phoneNumber')}}*/}
+                                {/*                  />*/}
+
+                                {/*                  {errors.phoneNoOfReceivingFacility !== "" ? (*/}
+                                {/*                      <span className={classes.error}>*/}
+                                {/*  {errors.phoneNoOfReceivingFacility}*/}
+                                {/*</span>*/}
+                                {/*                  ) : (*/}
+                                {/*                      ""*/}
+                                {/*                  )}*/}
+                                {/*              </FormGroup>*/}
+                                {/*          </div>*/}
                                 <div className="form-group  col-md-4">
                                     <FormGroup>
                                         <Label>
@@ -1447,7 +1467,7 @@ const RefferralUnit = (props) => {
                                                 border: "1px solid #014D88",
                                                 borderRadius: "0.2rem",
                                             }}
-                                            disabled={props.row.action === "view" ? true : false}
+
                                         />
                                         {errors.phoneNoOfReceivingFacility !== "" ? (
                                             <span className={classes.error}>
@@ -1474,7 +1494,6 @@ const RefferralUnit = (props) => {
                                                 border: "1px solid #014D88",
                                                 borderRadius: "0.2rem",
                                             }}
-                                            disabled={props.row.action === "view" ? true : false}
                                         >
                                             <option value={""}>Select Service</option>
                                             {serviceNeeded.map((value, index) => (
@@ -1513,13 +1532,7 @@ const RefferralUnit = (props) => {
                                                 borderRadius: "0.2rem",
                                                 height: "100px",
                                             }}
-                                            disabled={props.row.action === "view" ? true : false}
                                         />
-                                        {/* {errors.firstName !== "" ? (
-                      <span className={classes.error}>{errors.firstName}</span>
-                    ) : (
-                      ""
-                    )} */}
                                     </FormGroup>
                                 </div>
                             </div>
@@ -1528,25 +1541,28 @@ const RefferralUnit = (props) => {
                             <br/>
 
                             {/* <hr /> */}
-                            {saving ? <Spinner/> : ""}
                             <br/>
-                            {props.row.action === 'update' && (<div className="row">
-                                    <div className="form-group mb-3 col-md-6">
-                                        <Button
-                                            content="Update"
-                                            type="submit"
-                                            icon="right arrow"
-                                            labelPosition="right"
-                                            style={{backgroundColor: "#014d88", color: "#fff"}}
-                                            onClick={handleSubmit}
-                                            disabled={saving}
-                                        />
-                                    </div>
+                            <div className="row">
+                                <div className="form-group mb-3 col-md-12">
+                                    <Button
+                                        content="Add Form"
+                                        type="submit"
+                                        // icon="right arrow"
+                                        // labelPosition="right"
+                                        style={{backgroundColor: "#014d88", color: "#fff"}}
+                                        onClick={handleSubmit}
+                                        disabled={saving}
+                                    />
                                 </div>
-                            )}
+                            </div>
                         </div>
                     </form>
                 </CardBody>
+                {/* <CardBody>
+          <ServicesProvided />
+        </CardBody> */}
+
+                {/* recieving facility  */}
             </Card>
             <Modal
                 show={open}
@@ -1576,5 +1592,8 @@ const RefferralUnit = (props) => {
         </>
     );
 };
+
+
+
 
 export default RefferralUnit;

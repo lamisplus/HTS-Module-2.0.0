@@ -617,7 +617,7 @@ const FamilyIndexTestingForm = (props) => {
   };
   const handleDone = () => {
     toggle();
-    handleItemClick("refferral", "");
+    handleItemClick("new-referral", "");
   };
   const loadNextForm = (row) => {
     // setSaving(true);

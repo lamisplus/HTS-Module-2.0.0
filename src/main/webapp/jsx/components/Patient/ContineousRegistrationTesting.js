@@ -21,6 +21,7 @@ import RiskStratification from "./ContinuesHTSEnrollment/RiskStratification";
 import PNSHistory from "./NewRegistration/PartnerNotificationServices/PNSHistory";
 import PnsForm from "./NewRegistration/PartnerNotificationServices/PnsForm";
 import ViewPNSForm from "./NewRegistration/PartnerNotificationServices/ViewPnsForm";
+import ReferralUnit from "./ContinuesHTSEnrollment/ClientReferral/ReferralUnit";
 
 const useStyles = makeStyles((theme) => ({
   error: {
@@ -437,6 +438,25 @@ const UserRegistration = (props) => {
                           )}
                         </span>
                       </Menu.Item> */}
+
+                      <Menu.Item
+                        name="spam"
+                        active={activeItem === "continuous-referral"}
+                        onClick={() => handleItemClick("continuous-referral")}
+                        style={{
+                          backgroundColor:
+                            activeItem === "continuous-referral" ? "#000" : "",
+                        }}
+                        disabled={activeItem !== "continuous-referral" ? true : false}
+                      >
+
+                        <span style={{ color: "#fff" }}>
+                           Client Referral Service
+                          {completed.includes("continuous-referral") && (
+                            <Icon name="check" color="green" />
+                          )}
+                        </span>
+                      </Menu.Item>
                     </>
                   )}
                 </Menu>
@@ -595,6 +615,20 @@ const UserRegistration = (props) => {
                     addNewForm={false}
                     row={row}
                   />
+                )}
+                {activeItem === "continuous-referral" && (
+                    <ReferralUnit
+                        handleItemClick={handleItemClick}
+                        setCompleted={setCompleted}
+                        completed={completed}
+                        setPatientObj={setPatientObj2}
+                        patientObj={patientObj2}
+                        setExtra={setExtra}
+                        extra={extra}
+                        basicInfo={basicInfo}
+                        organizationInfo={organizationInfo}
+                        addNewForm={false}
+                    />
                 )}
               </div>
             </div>

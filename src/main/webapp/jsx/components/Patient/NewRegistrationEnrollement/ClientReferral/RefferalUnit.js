@@ -1267,103 +1267,103 @@ const RefferralUnit = (props) => {
                                         )}
                                     </FormGroup>
                                 </div>
-                                {props.row.action === "update" && (<div className="form-group mb-3 col-md-4">
-                                        <FormGroup>
-                                            <Label for="" style={{color: '#014d88', fontWeight: 'bolder'}}>Receiving
-                                                Facility State <span
-                                                    style={{color: "red"}}> *</span> </Label>
-                                            <Input
-                                                type="select"
-                                                name="stateId"
-                                                style={{
-                                                    height: "40px",
-                                                    border: 'solid 1px #014d88',
-                                                    borderRadius: '5px',
-                                                    fontWeight: 'bolder',
-                                                    appearance: 'auto'
-                                                }}
-                                                required
-                                                disabled={props.row.action === "view" ? true : false}
-                                                onChange={(e) => {
-                                                    if (e.target.value !== "") {
-                                                        const filterState = statesOfTheReceivingFacility.filter(st => {
-                                                                return Number(st.id) === Number(e.target.value)
-                                                            }
-                                                        )
-                                                        setSelectedReceivingState(filterState)
+                                {/*{props.row.action === "update" && (<div className="form-group mb-3 col-md-4">*/}
+                                {/*        <FormGroup>*/}
+                                {/*            <Label for="" style={{color: '#014d88', fontWeight: 'bolder'}}>Receiving*/}
+                                {/*                Facility State <span*/}
+                                {/*                    style={{color: "red"}}> *</span> </Label>*/}
+                                {/*            <Input*/}
+                                {/*                type="select"*/}
+                                {/*                name="stateId"*/}
+                                {/*                style={{*/}
+                                {/*                    height: "40px",*/}
+                                {/*                    border: 'solid 1px #014d88',*/}
+                                {/*                    borderRadius: '5px',*/}
+                                {/*                    fontWeight: 'bolder',*/}
+                                {/*                    appearance: 'auto'*/}
+                                {/*                }}*/}
+                                {/*                required*/}
+                                {/*                disabled={props.row.action === "view" ? true : false}*/}
+                                {/*                onChange={(e) => {*/}
+                                {/*                    if (e.target.value !== "") {*/}
+                                {/*                        const filterState = statesOfTheReceivingFacility.filter(st => {*/}
+                                {/*                                return Number(st.id) === Number(e.target.value)*/}
+                                {/*                            }*/}
+                                {/*                        )*/}
+                                {/*                        setSelectedReceivingState(filterState)*/}
 
-                                                        setPayload(prevPayload => ({
-                                                            ...prevPayload,
-                                                            stateId: filterState[0].id
-                                                        }));
-                                                    }
-                                                    loadLGA(e.target.value);
-                                                }}
-                                                value={payload.receivingStateFacility}
-                                            >
-                                                {console.log('receivng',payload.receivingStateFacility)}
-                                                <option>Select State</option>
-                                                {states.map((state) => (
-                                                    <option key={state?.id} value={state?.name}>
-                                                        {state.name}
-                                                    </option>
-                                                ))}
-                                            </Input>
-                                        </FormGroup>
-                                    </div>
-                                )}
-                                {props.row.action === "update" && (<div className="form-group mb-3 col-md-4">
-                                        <FormGroup>
-                                            <Label for="" style={{color: '#014d88', fontWeight: 'bolder'}}> Receiving
-                                                Facility LGA <span
-                                                    style={{color: "red"}}> *</span></Label>
-                                            <Input
-                                                type="select"
-                                                name=" receivingLgaFacility"
-                                                style={{
-                                                    height: "40px",
-                                                    border: 'solid 1px #014d88',
-                                                    borderRadius: '5px',
-                                                    fontWeight: 'bolder',
-                                                    appearance: 'auto'
-                                                }}
-                                                required
-                                                disabled={props.row.action === "view" ? true : false}
-                                                value={payload.receivingLgaFacility}
-                                                onChange={(e) => {
-                                                    if (e.target.value !== "") {
-                                                        const filterlga = lgasOfTheReceivingFacility.filter(lg => {
-                                                                return Number(lg.id) === Number(e.target.value)
-                                                            }
-                                                        )
-                                                        setSelectedReceivingLga(filterlga)
-                                                        setPayload(prevPayload => ({
-                                                            ...prevPayload,
-                                                            lgaId: filterlga[0].id
-                                                        }));
-                                                    }
-                                                    loadFacilities(e.target.value);
+                                {/*                        setPayload(prevPayload => ({*/}
+                                {/*                            ...prevPayload,*/}
+                                {/*                            stateId: filterState[0].id*/}
+                                {/*                        }));*/}
+                                {/*                    }*/}
+                                {/*                    loadLGA(e.target.value);*/}
+                                {/*                }}*/}
+                                {/*                value={payload.receivingStateFacility}*/}
+                                {/*            >*/}
+                                {/*                {console.log('receivng',payload.receivingStateFacility)}*/}
+                                {/*                <option>Select State</option>*/}
+                                {/*                {states.map((state) => (*/}
+                                {/*                    <option key={state?.id} value={state?.name}>*/}
+                                {/*                        {state.name}*/}
+                                {/*                    </option>*/}
+                                {/*                ))}*/}
+                                {/*            </Input>*/}
+                                {/*        </FormGroup>*/}
+                                {/*    </div>*/}
+                                {/*)}*/}
+                                {/*{props.row.action === "update" && (<div className="form-group mb-3 col-md-4">*/}
+                                {/*        <FormGroup>*/}
+                                {/*            <Label for="" style={{color: '#014d88', fontWeight: 'bolder'}}> Receiving*/}
+                                {/*                Facility LGA <span*/}
+                                {/*                    style={{color: "red"}}> *</span></Label>*/}
+                                {/*            <Input*/}
+                                {/*                type="select"*/}
+                                {/*                name=" receivingLgaFacility"*/}
+                                {/*                style={{*/}
+                                {/*                    height: "40px",*/}
+                                {/*                    border: 'solid 1px #014d88',*/}
+                                {/*                    borderRadius: '5px',*/}
+                                {/*                    fontWeight: 'bolder',*/}
+                                {/*                    appearance: 'auto'*/}
+                                {/*                }}*/}
+                                {/*                required*/}
+                                {/*                disabled={props.row.action === "view" ? true : false}*/}
+                                {/*                value={payload.receivingLgaFacility}*/}
+                                {/*                onChange={(e) => {*/}
+                                {/*                    if (e.target.value !== "") {*/}
+                                {/*                        const filterlga = lgasOfTheReceivingFacility.filter(lg => {*/}
+                                {/*                                return Number(lg.id) === Number(e.target.value)*/}
+                                {/*                            }*/}
+                                {/*                        )*/}
+                                {/*                        setSelectedReceivingLga(filterlga)*/}
+                                {/*                        setPayload(prevPayload => ({*/}
+                                {/*                            ...prevPayload,*/}
+                                {/*                            lgaId: filterlga[0].id*/}
+                                {/*                        }));*/}
+                                {/*                    }*/}
+                                {/*                    loadFacilities(e.target.value);*/}
 
-                                                }}
+                                {/*                }}*/}
 
-                                            >
-                                                <option>Select LGA</option>
-                                                {lgasOfTheReceivingFacility.map((lga) => (
-                                                    <option key={lga.id} value={lga.id}>
-                                                        {lga.name}
-                                                    </option>
-                                                ))}
-                                            </Input>
-                                            {/*{errors.lgaId !== "" ? (*/}
-                                            {/*    <span className={classes.error}>*/}
-                                            {/*    {errors.lgaId}*/}
-                                            {/*</span>*/}
-                                            {/*) : (*/}
-                                            {/*    ""*/}
-                                            {/*)}*/}
-                                        </FormGroup>
-                                    </div>
-                                )}
+                                {/*            >*/}
+                                {/*                <option>Select LGA</option>*/}
+                                {/*                {lgasOfTheReceivingFacility.map((lga) => (*/}
+                                {/*                    <option key={lga.id} value={lga.id}>*/}
+                                {/*                        {lga.name}*/}
+                                {/*                    </option>*/}
+                                {/*                ))}*/}
+                                {/*            </Input>*/}
+                                {/*            /!*{errors.lgaId !== "" ? (*!/*/}
+                                {/*            /!*    <span className={classes.error}>*!/*/}
+                                {/*            /!*    {errors.lgaId}*!/*/}
+                                {/*            /!*</span>*!/*/}
+                                {/*            /!*) : (*!/*/}
+                                {/*            /!*    ""*!/*/}
+                                {/*            /!*)}*!/*/}
+                                {/*        </FormGroup>*/}
+                                {/*    </div>*/}
+                                {/*)}*/}
                                 <div className="form-group mb-3 col-md-4">
                                     <FormGroup>
                                         <Label for="" style={{color: '#014d88', fontWeight: 'bolder'}}>Name of Receiving
@@ -1379,8 +1379,9 @@ const RefferralUnit = (props) => {
                                                 fontWeight: 'bolder',
                                                 appearance: 'auto'
                                             }}
-                                            disabled={props.row.action === "view" ? true : false}
-                                            required
+                                            // disabled={props.row.action === "view" ? true : false}
+                                            disabled
+                                            // required
                                             value={payload.nameOfReceivingFacility}
                                             onChange={handleInputChange}
                                         >

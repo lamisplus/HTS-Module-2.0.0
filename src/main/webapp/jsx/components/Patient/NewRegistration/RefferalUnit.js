@@ -263,6 +263,15 @@ console.log("payload in referalUnit", payload)
         const limit = 11;
         const NumberValue = checkNumberLimit(e.target.value.replace(/\D/g, ""));
         setPayload({ ...payload, [inputName]: NumberValue });
+        if(inputName === "phoneNumber"){
+            setPayload({ ...payload, [inputName]: NumberValue });
+        }
+        if(inputName === "phoneNoOfReferringFacility"){
+            setPayload({ ...payload, [inputName]: NumberValue });
+        }
+        if(inputName === "phoneNoOfReceivingFacility"){
+            setPayload({ ...payload, [inputName]: NumberValue });
+        }
     };
 
     // ########################################################################

@@ -609,7 +609,17 @@ const PnsForm = (props) => {
   const handleInputChangePhoneNumber = (e, inputName) => {
     const limit = 11;
     const NumberValue = checkNumberLimit(e.target.value.replace(/\D/g, ""));
-    setObjValues({ ...objValues, [inputName]: NumberValue });
+    setObjValues({ ...objValues, [inputName]: NumberValue});
+    if(inputName === "partnerPhoneNumber"){
+        setContactTracing({...contactTracing, [inputName]: NumberValue})
+        }
+    if(inputName === "phoneNumber"){
+        setObjValues({...objValues, [inputName]: NumberValue})
+    }
+    if(inputName === "alternatePhoneNumber"){
+        setObjValues({...objValues, [inputName]: NumberValue})
+    }
+
   };
   const alphabetOnly = (value) => {
     const result = value.replace(/[^a-z]/gi, "");

@@ -239,7 +239,7 @@ const ClientRefferalForm = (props) => {
             show={open}
             toggle={toggle}
             className="fade"
-            size="sm"
+            size="lg"
             aria-labelledby="contained-modal-title-vcenter"
             centered
         >

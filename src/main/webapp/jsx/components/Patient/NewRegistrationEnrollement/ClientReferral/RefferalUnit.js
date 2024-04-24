@@ -338,6 +338,9 @@ const RefferralUnit = (props) => {
     useEffect(() => {
         loadStates();
         SERVICE_NEEDED();
+
+
+        loadLGA()
     }, []);
 
     // ###########################################################################
@@ -1298,6 +1301,7 @@ const RefferralUnit = (props) => {
                                                 }}
                                                 value={payload.receivingStateFacility}
                                             >
+                                                {console.log('receivng',payload.receivingStateFacility)}
                                                 <option>Select State</option>
                                                 {states.map((state) => (
                                                     <option key={state?.id} value={state?.name}>

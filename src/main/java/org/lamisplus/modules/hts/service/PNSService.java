@@ -140,7 +140,8 @@ public class PNSService {
         pnsDTO.setAcceptedPns(pns.getAcceptedPns());
         pnsDTO.setHtsClientInformation(pns.getHtsClientInformation());
         pnsDTO.setPartnerId(pns.getPartnerId());
-
+        pnsDTO.setReasonForDecline(pns.getReasonForDecline());
+        pnsDTO.setOtherReasonForDecline(pns.getOtherReasonForDecline());
         return pnsDTO;
     }
 
@@ -167,8 +168,9 @@ public class PNSService {
         pns.setAcceptedPns(req.getAcceptedPns());
         pns.setIntermediatePartnerViolence(req.getIntermediatePartnerViolence());
         pns.setHtsClientInformation(req.getHtsClientInformation());
+        pns.setReasonForDecline(req.getReasonForDecline());
+        pns.setOtherReasonForDecline(req.getOtherReasonForDecline());
         pns.setPartnerId(req.getPartnerId());
-
         return pns;
     }
 
@@ -204,7 +206,8 @@ public class PNSService {
         pns.setIntermediatePartnerViolence(res.getIntermediatePartnerViolence());
         pns.setHtsClientInformation(res.getHtsClientInformation());
         pns.setPartnerId(res.getPartnerId());
-
+        pns.setReasonForDecline(res.getReasonForDecline());
+        pns.setOtherReasonForDecline(res.getOtherReasonForDecline());
         return pns;
     }
     private List<PersonalNotificationServiceResponseDTO>  convertPnsEntityListToResponseDtoList(List<PersonalNotificationService> pnsList) {

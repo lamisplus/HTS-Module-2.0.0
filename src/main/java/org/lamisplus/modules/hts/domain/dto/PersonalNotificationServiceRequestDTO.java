@@ -3,6 +3,7 @@ package org.lamisplus.modules.hts.domain.dto;
 import java.time.LocalDate;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
+import org.apache.kafka.common.protocol.types.Field;
 
 import javax.validation.constraints.NotNull;
 
@@ -37,5 +38,6 @@ public class PersonalNotificationServiceRequestDTO {
     private Object htsClientInformation;
     private LocalDate dateEnrollmentOnART;
     private String partnerId;
-
+    private String reasonForDecline;
+    private String otherReasonForDecline;
 }

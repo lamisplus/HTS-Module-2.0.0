@@ -4,6 +4,8 @@ package org.lamisplus.modules.hts.domain.dto;
 import lombok.*;
 import org.lamisplus.modules.patient.domain.dto.PersonResponseDto;
 
+import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
@@ -42,6 +44,7 @@ public class PersonalNotificationServiceResponseDTO {
     private LocalDate dateEnrollmentOnART;
     private Object htsClientInformation;
     private String partnerId;
-
+    private String reasonForDecline;
+    private String otherReasonForDecline;
     private PersonResponseDto personResponseDto;
 }

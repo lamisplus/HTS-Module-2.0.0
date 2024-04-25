@@ -13,7 +13,8 @@ import Home from './main/webapp/jsx/components/Home'
 import RegisterPatient from './main/webapp/jsx/components/Patient/RegisterPatient';
 //import RegisterPatientEnrollment from './main/webapp/jsx/components/Patient/RegisterPatientEnrollment';
 import PatientDetail from './main/webapp/jsx/components/Patient/PatientDetail';
-
+// import HIVSTPatientRegistration from './main/webapp/jsx/components/Patient/HIVST/HIVSTPatientRegistration';
+import HIVSTPatientRegistration from './main/webapp/jsx/components/Patient/ContinuesHTSEnrollment/HIVST/HIVSTPatientRegistration';
 
 
 export default function App() {
@@ -30,7 +31,9 @@ export default function App() {
           <Route path="/register-patient">
             <RegisterPatient />
           </Route>
-          
+          <Route path="/register-hivst-patient">
+            <HIVSTPatientRegistration />
+          </Route>
           <Route path="/">
             <Home />
           </Route>

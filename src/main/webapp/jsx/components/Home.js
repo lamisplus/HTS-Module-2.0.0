@@ -7,6 +7,7 @@ import VisualisationHome from "./Visualisation/Index";
 import { FaUserPlus } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import Button from "@material-ui/core/Button";
+import HIVSTPatientRegistration from "./Patient/ContinuesHTSEnrollment/HIVST/HIVSTPatientRegistration";
 
 const divStyle = {
   borderRadius: "2px",
@@ -28,17 +29,30 @@ const Home = () => {
           </li>
         </ol>
       </div>
-      <Link to={"register-patient"}>
-        <Button
-          variant="contained"
-          color="primary"
-          className="mt-2 mr-3 mb-0 float-end"
-          startIcon={<FaUserPlus size="10" />}
-          style={{ backgroundColor: "#014d88" }}
-        >
-          <span style={{ textTransform: "capitalize" }}>New Patient</span>
-        </Button>
-      </Link>
+      {/*<Link to={"register-patient"}>*/}
+      {/*  <Button*/}
+      {/*    variant="contained"*/}
+      {/*    color="primary"*/}
+      {/*    className="mt-2 mr-3 mb-0 float-end"*/}
+      {/*    startIcon={<FaUserPlus size="10" />}*/}
+      {/*    style={{ backgroundColor: "#014d88" }}*/}
+      {/*  >*/}
+      {/*    <span style={{ textTransform: "capitalize" }}>New Patient</span>*/}
+      {/*  </Button>*/}
+      {/*</Link>*/}
+        <Link to={key === "hivst" ? "register-hivst-patient" : "register-patient"}>
+            <Button
+                variant="contained"
+                color="primary"
+                className="mt-2 mr-3 mb-0 float-end"
+                startIcon={<FaUserPlus size="10" />}
+                style={{ backgroundColor: "#014d88" }}
+            >
+          <span style={{ textTransform: "capitalize" }}>
+            {key === "hivst" ? "New HIVST Patient" : "New Patient"}
+          </span>
+            </Button>
+        </Link>
       <br />
       <br /> <br />
       <Row>
@@ -58,6 +72,9 @@ const Home = () => {
                   <Tab eventKey="hts" title="HTS Patients">
                     <HTSList />
                   </Tab>
+                    <Tab eventKey="hivst" title="HIVST Patients">
+                        <HIVSTPatientRegistration />
+                    </Tab>
                 </Tabs>
               </div>
             </Card.Body>

@@ -135,6 +135,8 @@ const ViewPNSForm = (props) => {
   const [objValues, setObjValues] = useState({
     acceptedHts: "",
     offeredPns: "",
+    reasonForDecline: "",
+    otherReasonForDecline: "",
     acceptedPns: "",
     address: "", //
     contactTracing: {
@@ -771,6 +773,73 @@ const ViewPNSForm = (props) => {
                   )}
                 </FormGroup>
               </div>
+              {objValues.offeredPns.toLowerCase() === "no" && (
+                <div className="form-group  col-md-6">
+                  <FormGroup>
+                    <Label>
+                      Reason for decline{" "}
+                      <span style={{ color: "red" }}> *</span>
+                    </Label>
+                    <select
+                      className="form-control"
+                      type="select"
+                      name="reasonForDecline"
+                      id="reasonForDecline "
+                      value={objValues.reasonForDecline}
+                      onChange={handleInputChange}
+                      style={{
+                        border: "1px solid #014D88",
+                        borderRadius: "0.2rem",
+                      }}
+                      disabled={props.row.action === "view" ? true : false}
+                    >
+                      <option value={""}>Select</option>
+
+                      <option key={1} value={"others"}>
+                        Others
+                      </option>
+                    </select>
+                    {errors.reasonForDecline !== "" ? (
+                      <span className={classes.error}>
+                        {errors.reasonForDecline}
+                      </span>
+                    ) : (
+                      ""
+                    )}
+                  </FormGroup>
+                </div>
+              )}
+
+              {objValues.offeredPns.toLowerCase() === "no" && (
+                <div className="form-group  col-md-6">
+                  <FormGroup>
+                    <Label>
+                      Other reason For Decline
+                      <span style={{ color: "red" }}> *</span>
+                    </Label>
+                    <Input
+                      className="form-control"
+                      type="text"
+                      name="otherReasonForDecline"
+                      id="otherReasonForDecline"
+                      value={objValues.otherReasonForDecline}
+                      onChange={handleInputChange}
+                      style={{
+                        border: "1px solid #014D88",
+                        borderRadius: "0.2rem",
+                      }}
+                      disabled={props.row.action === "view" ? true : false}
+                    />
+                    {errors.otherReasonForDecline !== "" ? (
+                      <span className={classes.error}>
+                        {errors.otherReasonForDecline}
+                      </span>
+                    ) : (
+                      ""
+                    )}
+                  </FormGroup>
+                </div>
+              )}
               {objValues.offeredPns !== "" && objValues.offeredPns !== "No" && (
                 <div className="form-group  col-md-6">
                   <FormGroup>

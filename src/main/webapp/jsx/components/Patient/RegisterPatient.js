@@ -329,7 +329,22 @@ const UserRegistration = (props) => {
                       )}
                     </span>
                   </Menu.Item>
-
+                  {/* <Menu.Item
+                    name="inbox"
+                    active={activeItem === "pns"}
+                    onClick={() => handleItemClick("pns")}
+                    style={{
+                      backgroundColor: activeItem === "pns" ? "#000" : "",
+                    }}
+                  >
+                    <span style={{ color: "#fff" }}>
+                      {" "}
+                      Partner Notification Services
+                      {completed.includes("pns") && (
+                        <Icon name="check" color="green" />
+                      )}
+                    </span>
+                  </Menu.Item> */}
                   {hideOtherMenu == false && (
                     <>
                       <Menu.Item
@@ -431,7 +446,7 @@ const UserRegistration = (props) => {
                         </span>
                       </Menu.Item>
 
-                      {/* <Menu.Item
+                      <Menu.Item
                         name="spam"
                         active={activeItem === "indexing"}
                         onClick={() => handleItemClick("indexing")}
@@ -448,7 +463,7 @@ const UserRegistration = (props) => {
                             <Icon name="check" color="green" />
                           )}
                         </span>
-                      </Menu.Item> */}
+                      </Menu.Item>
                       <Menu.Item
                         name="inbox"
                         active={activeItem === "fit"}
@@ -465,8 +480,8 @@ const UserRegistration = (props) => {
                           )}
                         </span>
                       </Menu.Item>
-
-                      <Menu.Item
+                      {/* uncomment this after  */}
+                      {/* <Menu.Item
                         name="inbox"
                         active={activeItem === "pns"}
                         onClick={() => handleItemClick("pns")}
@@ -481,7 +496,7 @@ const UserRegistration = (props) => {
                             <Icon name="check" color="green" />
                           )}
                         </span>
-                      </Menu.Item>
+                      </Menu.Item> */}
                       {/*<Menu.Item
                       {/*    name="inbox"*/}
                       {/*    active={activeItem === "refferal"}*/}
@@ -500,22 +515,22 @@ const UserRegistration = (props) => {
                       {/*  </span>*/}
                       {/*</Menu.Item>*/}
                       <Menu.Item
-                          name="inbox"
-                          active={activeItem === "new-referral"}
-                          onClick={() => handleItemClick("new-referral")}
-                          style={{
-                            backgroundColor: activeItem === "new-referral" ? "#000" : "",
-                          }}
+                        name="inbox"
+                        active={activeItem === "new-referral"}
+                        onClick={() => handleItemClick("new-referral")}
+                        style={{
+                          backgroundColor:
+                            activeItem === "new-referral" ? "#000" : "",
+                        }}
                       >
                         <span style={{ color: "#fff" }}>
                           {" "}
-                         Client Referral Service
+                          Client Referral Service
                           {completed.includes("new-referral") && (
-                              <Icon name="check" color="green" />
+                            <Icon name="check" color="green" />
                           )}
                         </span>
                       </Menu.Item>
-
                     </>
                   )}
                 </Menu>
@@ -650,22 +665,20 @@ const UserRegistration = (props) => {
                 )}
 
                 {activeItem === "new-referral" && (
-                    <RefferralUnit
-                        handleItemClick={handleItemClick}
-                        setCompleted={setCompleted}
-                        completed={completed}
-                        setPatientObj={setPatientObj}
-                        patientObj={patientObj}
-                        setExtra={setExtra}
-                        extra={extra}
-                        basicInfo={basicInfo}
-                        organizationInfo={organizationInfo}
-                        addNewForm={false}
-                    />
+                  <RefferralUnit
+                    handleItemClick={handleItemClick}
+                    setCompleted={setCompleted}
+                    completed={completed}
+                    setPatientObj={setPatientObj}
+                    patientObj={patientObj}
+                    setExtra={setExtra}
+                    extra={extra}
+                    basicInfo={basicInfo}
+                    organizationInfo={organizationInfo}
+                    addNewForm={false}
+                  />
                 )}
               </div>
-
-
             </div>
           </form>
         </CardBody>

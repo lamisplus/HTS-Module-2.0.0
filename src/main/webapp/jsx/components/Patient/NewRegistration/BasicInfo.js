@@ -100,6 +100,7 @@ const BasicInfo = (props) => {
   const history = useHistory();
   const [errors, setErrors] = useState({});
   const [saving, setSaving] = useState(false);
+
   const [hideNumChild, setHideNumChild] = useState(false);
   const [kP, setKP] = useState([]);
   const [enrollSetting, setEnrollSetting] = useState([]);
@@ -122,6 +123,8 @@ const BasicInfo = (props) => {
   const [createdCode, setCreatedCode] = useState("");
   const [facilityCode, setFacilityCode] = useState("");
   const [serialNumber, setSerialNumber] = useState(null);
+  const [showPregancy, setShowPregnancy] = useState(false);
+
   const getPhoneNumber = (identifier) => {
     const identifiers = identifier;
     const phoneNumber = identifiers.contactPoint.find(
@@ -163,6 +166,7 @@ const BasicInfo = (props) => {
     props.patientObj.personResponseDto.dateOfBirth
   );
 
+  console.log(props.extra);
   const [objValues, setObjValues] = useState({
     active: true,
     clientCode:
@@ -373,6 +377,23 @@ const BasicInfo = (props) => {
     if (country && country.stateId !== "") {
       getProvincesId(country.stateId);
     }
+
+    if (
+      props.extra.modality === "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||
+      props.extra.modality === "TEST_SETTING_STANDALONE_HTS_PMTCT_(ANC1_ONLY)"
+    ) {
+      let sexDetetrmined = "Female";
+      setObjValues({ ...objValues, sex: "Female", pregnant: 73 });
+
+      if (
+        sexDetetrmined.toLowerCase() === "female" ||
+        props.extra.modality !==
+          "TEST_SETTING_OTHERS_POST_ANC1_BREASTFEEDING" ||
+        props.extra.modality !== "TEST_SETTING_STANDALONE_HTS_PMTCT_(ANC1_ONLY)"
+      ) {
+        setShowPregnancy(true);
+      }
+    }
   }, [objValues.age, props.patientObj, props.extra.age, facilityCode]);
   //Get list of KP
   const KP = () => {
@@ -564,9 +585,10 @@ const BasicInfo = (props) => {
       const name = alphabetOnly(e.target.value);
       setObjValues({ ...objValues, [e.target.name]: name });
     }
-    // if((e.target.name !=='maritalStatusId' && e.target.value!=='5' )){//logic for marital status
-    //     setHideNumChild(true)
-    // }else{
+    if (e.target.name === "sex" && e.target.value.toLowerCase() === "female") {
+      setShowPregnancy(true);
+    }
+    // else{
     //     setHideNumChild(false)
     // }
 
@@ -811,7 +833,32 @@ const BasicInfo = (props) => {
           //props.setPatientObj({...patientObj, })
           //toast.success("HTS Test successful");
           if (objValues.age > 14) {
-            handleItemClick("pre-test-counsel", "basic");
+            if (
+              props.extra.modality ===
+                "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||
+              props.extra.modality === "TEST_SETTING_STI_STI" ||
+              props.extra.modality === "TEST_SETTING_TB_TB" ||
+              props.extra.modality ===
+                "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||
+              props.extra.modality === "TEST_SETTING_CT_PMTCT" ||
+              props.extra.modality ===
+                "TEST_SETTING_OTHERS_POST_ANC1_BREASTFEEDING" ||
+              props.extra.modality ===
+                "TEST_SETTING_OTHERS_POST_ANC1_PREGNANT_L&D" ||
+              props.extra.modality ===
+                "TEST_SETTING_STANDALONE_HTS_PMTCT_(ANC1_ONLY)" ||
+              props.extra.modality ===
+                "TEST_SETTING_STANDALONE_HTS_POST_ANC1_BREASTFEEDING" ||
+              props.extra.modality ===
+                "TEST_SETTING_STANDALONE_HTS_POST_ANC1_PREGNANT_L&D" ||
+              props.extra.modality ===
+                "TEST_SETTING_STANDALONE_HTS_PMTCT_(ANC1_ONLY)" ||
+              props.extra.modality === "TEST_SETTING_STANDALONE_HTS_STI"
+            ) {
+              handleItemClick("hiv-test", "basic");
+            } else {
+              handleItemClick("pre-test-counsel", "basic");
+            }
           } else {
             handleItemClick("hiv-test", "basic");
           }
@@ -1260,7 +1307,7 @@ const BasicInfo = (props) => {
                   )}
                 </FormGroup>
               </div>
-              {console.log('readddd',props.extra)}
+              {console.log("readddd", props.extra)}
               <div className="form-group  col-md-4">
                 <FormGroup>
                   <Label>
@@ -1276,6 +1323,12 @@ const BasicInfo = (props) => {
                       border: "1px solid #014D88",
                       borderRadius: "0.2rem",
                     }}
+                    disabled={
+                      props.extra.modality ===
+                      "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)"
+                        ? true
+                        : false
+                    }
                   >
                     <option value={""}></option>
                     {sexs.map((value) => (
@@ -1521,10 +1574,15 @@ const BasicInfo = (props) => {
                   </div>
                 </>
               )}
+              {console.log(
+                objValues.sex.toLowerCase() === "female" ||
+                  props.extra.modality !==
+                    "TEST_SETTING_OTHERS_POST_ANC1_BREASTFEEDING" ||
+                  props.extra.modality !==
+                    "TEST_SETTING_STANDALONE_HTS_POST_ANC1_BREASTFEEDING"
+              )}
 
-              {(objValues.sex === "Female" ||
-                objValues.sex === "female" ||
-                objValues.sex === "FEMALE") && (
+              {showPregancy && (
                 <>
                   <div className="form-group  col-md-4">
                     <FormGroup>
@@ -1539,6 +1597,14 @@ const BasicInfo = (props) => {
                           border: "1px solid #014D88",
                           borderRadius: "0.2rem",
                         }}
+                        disabled={
+                          props.extra.modality ===
+                            "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||
+                          props.extra.modality ===
+                            "TEST_SETTING_STANDALONE_HTS_POST_ANC1_BREASTFEEDING"
+                            ? true
+                            : false
+                        }
                       >
                         <option value={""}></option>
                         {pregnancyStatus.map((value) =>

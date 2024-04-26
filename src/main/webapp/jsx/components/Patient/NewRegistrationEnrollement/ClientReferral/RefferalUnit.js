@@ -59,6 +59,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     "& > *": {
       margin: theme.spacing(1),
+    
     },
     "& .card-title": {
       color: "#fff",

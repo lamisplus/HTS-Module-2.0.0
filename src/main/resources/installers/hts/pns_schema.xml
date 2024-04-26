@@ -35,6 +35,8 @@
                 index_client_id character varying,
                 accepted_pns character varying,
                 offered_pns character varying,
+                reason_for_decline character varying,
+                other_reason_for_decline character varying,
                 accepted_hts character varying,
                 date_created timestamp without time zone NOT NULL,
                 created_by character varying NOT NULL,

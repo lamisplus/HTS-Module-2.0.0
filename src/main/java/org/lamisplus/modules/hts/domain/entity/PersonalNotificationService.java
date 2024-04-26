@@ -143,6 +143,13 @@ public class PersonalNotificationService extends Audit implements Serializable {
     @Column(name = "partner_id")
     private String partnerId;
 
+    @Basic
+    @Column(name ="reason_for_decline")
+    private String reasonForDecline;
+
+    @Basic
+    @Column(name="other_reason_for_decline")
+    private String otherReasonForDecline;
     // index client information
 
     @Type(type = "jsonb")

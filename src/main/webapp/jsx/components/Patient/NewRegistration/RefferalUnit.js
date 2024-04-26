@@ -264,16 +264,25 @@ const RefferralUnit = (props) => {
     // console.log(response);
   };
 
-  const checkNumberLimit = (e) => {
-    const limit = 11;
-    const acceptedNumber = e.slice(0, limit);
-    return acceptedNumber;
-  };
-  const handleInputChangePhoneNumber = (e, inputName) => {
-    const limit = 11;
-    const NumberValue = checkNumberLimit(e.target.value.replace(/\D/g, ""));
-    setPayload({ ...payload, [inputName]: NumberValue });
-  };
+    const checkNumberLimit = (e) => {
+        const limit = 11;
+        const acceptedNumber = e.slice(0, limit);
+        return acceptedNumber;
+    };
+    const handleInputChangePhoneNumber = (e, inputName) => {
+        const limit = 11;
+        const NumberValue = checkNumberLimit(e.target.value.replace(/\D/g, ""));
+        setPayload({ ...payload, [inputName]: NumberValue });
+        if(inputName === "phoneNumber"){
+            setPayload({ ...payload, [inputName]: NumberValue });
+        }
+        if(inputName === "phoneNoOfReferringFacility"){
+            setPayload({ ...payload, [inputName]: NumberValue });
+        }
+        if(inputName === "phoneNoOfReceivingFacility"){
+            setPayload({ ...payload, [inputName]: NumberValue });
+        }
+    };
 
   // ########################################################################
   const loadStates = () => {

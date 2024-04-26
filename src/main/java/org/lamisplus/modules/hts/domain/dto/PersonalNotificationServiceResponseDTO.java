@@ -19,6 +19,8 @@ public class PersonalNotificationServiceResponseDTO {
     private Long id;
     private String offeredPns;
     private String acceptedPns;
+    private String reasonForDecline;
+    private String otherReasonForDecline;
     private LocalDate dob;
     private String indexClientId;
     private Long facilityId;

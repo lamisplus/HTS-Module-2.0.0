@@ -193,18 +193,20 @@ const Recency = (props) => {
 
   useEffect(() => {
     if (props.patientObj && props.patientObj.recency !== null) {
-      console.log(props.patientObj.recency);
+      // console.log(props.patientObj.recency);
       setRecency(props.patientObj.recency);
+    }
+    if(props.patientObj) {
       if (
-        props.patientObj.confirmatoryTest &&
-        props.patientObj.confirmatoryTest.date !== ""
-      ) {
-        setHivTestDate(props.patientObj.confirmatoryTest.date);
-      } else if (
-        props.patientObj.confirmatoryTest2 &&
-        props.patientObj.confirmatoryTest2.date2 !== ""
+          props.patientObj.confirmatoryTest2 &&
+          props.patientObj.confirmatoryTest2.date2 !== ""
       ) {
         setHivTestDate(props.patientObj.confirmatoryTest2.date2);
+      } else if (
+          props.patientObj.confirmatoryTest &&
+          props.patientObj.confirmatoryTest.date !== ""
+      ) {
+        setHivTestDate(props.patientObj.confirmatoryTest.date);
       } else {
         setHivTestDate("");
       }

@@ -15,6 +15,8 @@ public class PersonalNotificationServiceRequestDTO {
     @NotNull(message = "htsClientId is mandatory")
     private Long htsClientId;
     private String offeredPns;
+    private String reasonForDecline;
+    private String otherReasonForDecline;
     private String acceptedPns;
     private LocalDate dob;
     private String indexClientId;

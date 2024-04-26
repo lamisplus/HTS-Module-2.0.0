@@ -723,6 +723,17 @@ const BasicInfo = (props) => {
     }
   };
 
+  const checkNumberLimit = (e) => {
+    const limit = 11;
+    const acceptedNumber = e.slice(0, limit);
+    return acceptedNumber;
+  };
+  const handleInputChangePhoneNumber = (e, inputName) => {
+    const limit = 11;
+    const NumberValue = checkNumberLimit(e.target.value.replace(/\D/g, ""));
+    setObjValues({ ...objValues, [inputName]: NumberValue});
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validate()) {
@@ -852,52 +863,52 @@ const BasicInfo = (props) => {
                 <div className="form-group mb-3 col-md-4">
                   <FormGroup>
                     <Label for="">
-                      Serial Number <span style={{ color: "red" }}> *</span>
+                      Serial Number <span style={{color: "red"}}> *</span>
                     </Label>
                     <Input
-                      type="text"
-                      name="serialNumber"
-                      id="serialNumber"
-                      value={serialNumber}
-                      //value={Math.floor(Math.random() * 1093328)}
-                      onBlur={checkClientCode}
-                      onChange={handleInputChange}
-                      style={{
-                        border: "1px solid #014D88",
-                        borderRadius: "0.25rem",
-                      }}
+                        type="text"
+                        name="serialNumber"
+                        id="serialNumber"
+                        value={serialNumber}
+                        //value={Math.floor(Math.random() * 1093328)}
+                        onBlur={checkClientCode}
+                        onChange={handleInputChange}
+                        style={{
+                          border: "1px solid #014D88",
+                          borderRadius: "0.25rem",
+                        }}
                     />
                   </FormGroup>
                 </div>
                 <div className="form-group mb-3 col-md-4">
                   <FormGroup>
                     <Label for="">
-                      Client Code <span style={{ color: "red" }}> *</span>
+                      Client Code <span style={{color: "red"}}> *</span>
                     </Label>
                     <Input
-                      type="text"
-                      name="clientCode"
-                      id="clientCode"
-                      value={objValues.clientCode}
-                      disabled={true}
-                      //value={Math.floor(Math.random() * 1093328)}
-                      onBlur={checkClientCode}
-                      onChange={handleInputChange}
-                      style={{
-                        border: "1px solid #014D88",
-                        borderRadius: "0.25rem",
-                      }}
+                        type="text"
+                        name="clientCode"
+                        id="clientCode"
+                        value={objValues.clientCode}
+                        disabled={true}
+                        //value={Math.floor(Math.random() * 1093328)}
+                        onBlur={checkClientCode}
+                        onChange={handleInputChange}
+                        style={{
+                          border: "1px solid #014D88",
+                          borderRadius: "0.25rem",
+                        }}
                     />
                     {errors.clientCode !== "" ? (
-                      <span className={classes.error}>{errors.clientCode}</span>
+                        <span className={classes.error}>{errors.clientCode}</span>
                     ) : (
-                      ""
+                        ""
                     )}
                   </FormGroup>
                   {clientCodeCheck !== "" ? (
-                    <span className={classes.error}>{clientCodeCheck}</span>
+                      <span className={classes.error}>{clientCodeCheck}</span>
                   ) : (
-                    ""
+                      ""
                   )}
                 </div>
                 {/* <div className="form-group mb-3 col-md-4">
@@ -922,110 +933,110 @@ const BasicInfo = (props) => {
               <div className="form-group  col-md-4">
                 <FormGroup>
                   <Label>
-                    Referred From <span style={{ color: "red" }}> *</span>
+                    Referred From <span style={{color: "red"}}> *</span>
                   </Label>
                   <select
-                    className="form-control"
-                    name="referredFrom"
-                    id="referredFrom"
-                    value={objValues.referredFrom}
-                    onChange={handleInputChange}
-                    style={{
-                      border: "1px solid #014D88",
-                      borderRadius: "0.2rem",
-                    }}
+                      className="form-control"
+                      name="referredFrom"
+                      id="referredFrom"
+                      value={objValues.referredFrom}
+                      onChange={handleInputChange}
+                      style={{
+                        border: "1px solid #014D88",
+                        borderRadius: "0.2rem",
+                      }}
                   >
                     <option value={""}></option>
                     {sourceReferral.map((value) => (
-                      <option key={value.id} value={value.id}>
-                        {value.display}
-                      </option>
+                        <option key={value.id} value={value.id}>
+                          {value.display}
+                        </option>
                     ))}
                   </select>
                   {errors.referredFrom !== "" ? (
-                    <span className={classes.error}>{errors.referredFrom}</span>
+                      <span className={classes.error}>{errors.referredFrom}</span>
                   ) : (
-                    ""
+                      ""
                   )}
                 </FormGroup>
               </div>
               <div className="form-group  col-md-4">
                 <FormGroup>
                   <Label>
-                    Setting <span style={{ color: "red" }}> *</span>
+                    Setting <span style={{color: "red"}}> *</span>
                   </Label>
                   <select
-                    className="form-control"
-                    name="testingSetting"
-                    id="testingSetting"
-                    value={objValues.testingSetting}
-                    onChange={handleInputChange}
-                    style={{
-                      border: "1px solid #014D88",
-                      borderRadius: "0.2rem",
-                    }}
+                      className="form-control"
+                      name="testingSetting"
+                      id="testingSetting"
+                      value={objValues.testingSetting}
+                      onChange={handleInputChange}
+                      style={{
+                        border: "1px solid #014D88",
+                        borderRadius: "0.2rem",
+                      }}
                   >
                     <option value={""}>Select</option>
                     {enrollSetting.map((value) => (
-                      <option key={value.id} value={value.code}>
-                        {value.display}
-                      </option>
+                        <option key={value.id} value={value.code}>
+                          {value.display}
+                        </option>
                     ))}
                   </select>
                   {errors.testingSetting !== "" ? (
-                    <span className={classes.error}>
+                      <span className={classes.error}>
                       {errors.testingSetting}
                     </span>
                   ) : (
-                    ""
+                      ""
                   )}
                 </FormGroup>
               </div>
               <div className="form-group mb-3 col-md-4">
                 <FormGroup>
                   <Label for="">
-                    Visit Date <span style={{ color: "red" }}> *</span>{" "}
+                    Visit Date <span style={{color: "red"}}> *</span>{" "}
                   </Label>
                   <Input
-                    type="date"
-                    name="dateVisit"
-                    id="dateVisit"
-                    value={objValues.dateVisit}
-                    onChange={handleInputChange}
-                    min="1929-12-31"
-                    max={moment(new Date()).format("YYYY-MM-DD")}
-                    style={{
-                      border: "1px solid #014D88",
-                      borderRadius: "0.25rem",
-                    }}
+                      type="date"
+                      name="dateVisit"
+                      id="dateVisit"
+                      value={objValues.dateVisit}
+                      onChange={handleInputChange}
+                      min="1929-12-31"
+                      max={moment(new Date()).format("YYYY-MM-DD")}
+                      style={{
+                        border: "1px solid #014D88",
+                        borderRadius: "0.25rem",
+                      }}
                   />
                   {errors.dateVisit !== "" ? (
-                    <span className={classes.error}>{errors.dateVisit}</span>
+                      <span className={classes.error}>{errors.dateVisit}</span>
                   ) : (
-                    ""
+                      ""
                   )}
                 </FormGroup>
               </div>
               <div className="form-group mb-3 col-md-4">
                 <FormGroup>
                   <Label for="">
-                    First Name <span style={{ color: "red" }}> *</span>
+                    First Name <span style={{color: "red"}}> *</span>
                   </Label>
                   <Input
-                    type="text"
-                    name="firstName"
-                    id="firstName"
-                    value={objValues.firstName}
-                    onChange={handleInputChange}
-                    style={{
-                      border: "1px solid #014D88",
-                      borderRadius: "0.25rem",
-                    }}
+                      type="text"
+                      name="firstName"
+                      id="firstName"
+                      value={objValues.firstName}
+                      onChange={handleInputChange}
+                      style={{
+                        border: "1px solid #014D88",
+                        borderRadius: "0.25rem",
+                      }}
                   />
                   {errors.firstName !== "" ? (
-                    <span className={classes.error}>{errors.firstName}</span>
+                      <span className={classes.error}>{errors.firstName}</span>
                   ) : (
-                    ""
+                      ""
                   )}
                 </FormGroup>
               </div>
@@ -1033,43 +1044,43 @@ const BasicInfo = (props) => {
                 <FormGroup>
                   <Label for="">Middle Name</Label>
                   <Input
-                    type="text"
-                    name="otherName"
-                    id="otherName"
-                    value={objValues.otherName}
-                    onChange={handleInputChange}
-                    style={{
-                      border: "1px solid #014D88",
-                      borderRadius: "0.25rem",
-                    }}
+                      type="text"
+                      name="otherName"
+                      id="otherName"
+                      value={objValues.otherName}
+                      onChange={handleInputChange}
+                      style={{
+                        border: "1px solid #014D88",
+                        borderRadius: "0.25rem",
+                      }}
                   />
                   {errors.otherName !== "" ? (
-                    <span className={classes.error}>{errors.otherName}</span>
+                      <span className={classes.error}>{errors.otherName}</span>
                   ) : (
-                    ""
+                      ""
                   )}
                 </FormGroup>
               </div>
               <div className="form-group mb-3 col-md-4">
                 <FormGroup>
                   <Label for="">
-                    Last Name <span style={{ color: "red" }}> *</span>
+                    Last Name <span style={{color: "red"}}> *</span>
                   </Label>
                   <Input
-                    type="text"
-                    name="surname"
-                    id="surname"
-                    value={objValues.surname}
-                    onChange={handleInputChange}
-                    style={{
-                      border: "1px solid #014D88",
-                      borderRadius: "0.25rem",
-                    }}
+                      type="text"
+                      name="surname"
+                      id="surname"
+                      value={objValues.surname}
+                      onChange={handleInputChange}
+                      style={{
+                        border: "1px solid #014D88",
+                        borderRadius: "0.25rem",
+                      }}
                   />
                   {errors.surname !== "" ? (
-                    <span className={classes.error}>{errors.surname}</span>
+                      <span className={classes.error}>{errors.surname}</span>
                   ) : (
-                    ""
+                      ""
                   )}
                 </FormGroup>
               </div>
@@ -1079,15 +1090,15 @@ const BasicInfo = (props) => {
                   <div className="radio">
                     <label>
                       <input
-                        type="radio"
-                        value="Actual"
-                        name="dateOfBirth"
-                        defaultChecked
-                        onChange={(e) => handleDateOfBirthChange(e)}
-                        style={{
-                          border: "1px solid #014D88",
-                          borderRadius: "0.2rem",
-                        }}
+                          type="radio"
+                          value="Actual"
+                          name="dateOfBirth"
+                          defaultChecked
+                          onChange={(e) => handleDateOfBirthChange(e)}
+                          style={{
+                            border: "1px solid #014D88",
+                            borderRadius: "0.2rem",
+                          }}
                       />{" "}
                       Actual
                     </label>
@@ -1095,14 +1106,14 @@ const BasicInfo = (props) => {
                   <div className="radio">
                     <label>
                       <input
-                        type="radio"
-                        value="Estimated"
-                        name="dateOfBirth"
-                        onChange={(e) => handleDateOfBirthChange(e)}
-                        style={{
-                          border: "1px solid #014D88",
-                          borderRadius: "0.2rem",
-                        }}
+                          type="radio"
+                          value="Estimated"
+                          name="dateOfBirth"
+                          onChange={(e) => handleDateOfBirthChange(e)}
+                          style={{
+                            border: "1px solid #014D88",
+                            borderRadius: "0.2rem",
+                          }}
                       />{" "}
                       Estimated
                     </label>
@@ -1113,18 +1124,18 @@ const BasicInfo = (props) => {
                 <FormGroup>
                   <Label>Date</Label>
                   <input
-                    className="form-control"
-                    type="date"
-                    name="dob"
-                    id="dob"
-                    min={objValues.dateVisit}
-                    max={moment(new Date()).format("YYYY-MM-DD")}
-                    value={objValues.dob}
-                    onChange={handleDobChange}
-                    style={{
-                      border: "1px solid #014D88",
-                      borderRadius: "0.2rem",
-                    }}
+                      className="form-control"
+                      type="date"
+                      name="dob"
+                      id="dob"
+                      min={objValues.dateVisit}
+                      max={moment(new Date()).format("YYYY-MM-DD")}
+                      value={objValues.dob}
+                      onChange={handleDobChange}
+                      style={{
+                        border: "1px solid #014D88",
+                        borderRadius: "0.2rem",
+                      }}
                   />
                 </FormGroup>
               </div>
@@ -1132,162 +1143,191 @@ const BasicInfo = (props) => {
                 <FormGroup>
                   <Label>Age</Label>
                   <input
-                    className="form-control"
-                    type="number"
-                    name="age"
-                    id="age"
-                    value={objValues.age}
-                    disabled={ageDisabled}
-                    onChange={handleAgeChange}
-                    style={{
-                      border: "1px solid #014D88",
-                      borderRadius: "0.2rem",
-                    }}
+                      className="form-control"
+                      type="number"
+                      name="age"
+                      id="age"
+                      value={objValues.age}
+                      disabled={ageDisabled}
+                      onChange={handleAgeChange}
+                      style={{
+                        border: "1px solid #014D88",
+                        borderRadius: "0.2rem",
+                      }}
                   />
                 </FormGroup>
               </div>
-              <div className="form-group mb-3 col-md-4">
-                <FormGroup>
-                  <Label for="">
-                    Phone Number <span style={{ color: "red" }}> *</span>
-                  </Label>
+              {/*<div className="form-group mb-3 col-md-4">*/}
+              {/*  <FormGroup>*/}
+              {/*    <Label for="">*/}
+              {/*      Phone Number <span style={{ color: "red" }}> *</span>*/}
+              {/*    </Label>*/}
 
-                  <PhoneInput
-                    containerStyle={{
-                      width: "100%",
-                      border: "1px solid #014D88",
-                    }}
-                    inputStyle={{ width: "100%", borderRadius: "0px" }}
-                    country={"ng"}
-                    placeholder="(234)7099999999"
-                    minLength={10}
-                    name="phoneNumber"
-                    id="phoneNumber"
-                    masks={{ ng: "...-...-....", at: "(....) ...-...." }}
-                    value={objValues.phoneNumber}
-                    onChange={(e) => {
-                      checkPhoneNumberBasic(e, "phoneNumber");
-                    }}
-                    //onChange={(e)=>{handleInputChangeBasic(e,'phoneNumber')}}
+              {/*    <PhoneInput*/}
+              {/*      containerStyle={{*/}
+              {/*        width: "100%",*/}
+              {/*        border: "1px solid #014D88",*/}
+              {/*      }}*/}
+              {/*      inputStyle={{ width: "100%", borderRadius: "0px" }}*/}
+              {/*      country={"ng"}*/}
+              {/*      placeholder="(234)7099999999"*/}
+              {/*      minLength={10}*/}
+              {/*      name="phoneNumber"*/}
+              {/*      id="phoneNumber"*/}
+              {/*      masks={{ ng: "...-...-....", at: "(....) ...-...." }}*/}
+              {/*      value={objValues.phoneNumber}*/}
+              {/*      onChange={(e) => {*/}
+              {/*        checkPhoneNumberBasic(e, "phoneNumber");*/}
+              {/*      }}*/}
+              {/*      //onChange={(e)=>{handleInputChangeBasic(e,'phoneNumber')}}*/}
+              {/*    />*/}
+              {/*    {errors.phoneNumber !== "" ? (*/}
+              {/*      <span className={classes.error}>{errors.phoneNumber}</span>*/}
+              {/*    ) : (*/}
+              {/*      ""*/}
+              {/*    )}*/}
+              {/*  </FormGroup>*/}
+              {/*</div>*/}
+              <div className="form-group  col-md-4">
+                <FormGroup>
+                  <Label>
+                    Phone Number
+                    <span style={{color: "red"}}> *</span>
+                  </Label>
+                  <Input
+                      type="text"
+                      name="phoneNumber"
+                      id="phoneNumber"
+                      onChange={(e) => {
+                        handleInputChangePhoneNumber(e, "phoneNumber");
+                      }}
+                      value={objValues.phoneNumber}
+                      style={{
+                        border: "1px solid #014D88",
+                        borderRadius: "0.2rem",
+                      }}
+                      // disabled
                   />
                   {errors.phoneNumber !== "" ? (
-                    <span className={classes.error}>{errors.phoneNumber}</span>
+                      <span className={classes.error}>
+                        {errors.phoneNumber}
+                      </span>
                   ) : (
-                    ""
+                      ""
                   )}
                 </FormGroup>
               </div>
               <div className="form-group  col-md-4">
                 <FormGroup>
                   <Label>
-                    State <span style={{ color: "red" }}> *</span>
+                    State <span style={{color: "red"}}> *</span>
                   </Label>
                   <select
-                    className="form-control"
-                    name="state"
-                    id="state"
-                    onChange={getProvinces}
-                    value={objValues.stateId}
-                    style={{
-                      border: "1px solid #014D88",
-                      borderRadius: "0.2rem",
-                    }}
+                      className="form-control"
+                      name="state"
+                      id="state"
+                      onChange={getProvinces}
+                      value={objValues.stateId}
+                      style={{
+                        border: "1px solid #014D88",
+                        borderRadius: "0.2rem",
+                      }}
                   >
                     <option value={""}></option>
                     {states.map((value) => (
-                      <option key={value.id} value={value.id}>
-                        {value.name}
-                      </option>
+                        <option key={value.id} value={value.id}>
+                          {value.name}
+                        </option>
                     ))}
                   </select>
                   {errors.stateId !== "" ? (
-                    <span className={classes.error}>{errors.stateId}</span>
+                      <span className={classes.error}>{errors.stateId}</span>
                   ) : (
-                    ""
+                      ""
                   )}
                 </FormGroup>
               </div>
               <div className="form-group  col-md-4">
                 <FormGroup>
                   <Label>
-                    LGA <span style={{ color: "red" }}> *</span>
+                    LGA <span style={{color: "red"}}> *</span>
                   </Label>
                   <select
-                    className="form-control"
-                    name="lga"
-                    id="lga"
-                    value={objValues.lga}
-                    onChange={handleInputChange}
-                    style={{
-                      border: "1px solid #014D88",
-                      borderRadius: "0.2rem",
-                    }}
+                      className="form-control"
+                      name="lga"
+                      id="lga"
+                      value={objValues.lga}
+                      onChange={handleInputChange}
+                      style={{
+                        border: "1px solid #014D88",
+                        borderRadius: "0.2rem",
+                      }}
                   >
                     <option value={""}></option>
                     {provinces.map((value, index) => (
-                      <option key={index} value={value.id}>
-                        {value.name}
-                      </option>
+                        <option key={index} value={value.id}>
+                          {value.name}
+                        </option>
                     ))}
                   </select>
                   {errors.lga !== "" ? (
-                    <span className={classes.error}>{errors.lga}</span>
+                      <span className={classes.error}>{errors.lga}</span>
                   ) : (
-                    ""
+                      ""
                   )}
                 </FormGroup>
               </div>
               <div className="form-group  col-md-4">
                 <FormGroup>
                   <Label>
-                    Address <span style={{ color: "red" }}> *</span>
+                    Address <span style={{color: "red"}}> *</span>
                   </Label>
                   <Input
-                    type="textarea"
-                    name="address"
-                    id="address"
-                    value={objValues.address}
-                    onChange={handleInputChange}
-                    style={{
-                      border: "1px solid #014D88",
-                      borderRadius: "0.25rem",
-                    }}
+                      type="textarea"
+                      name="address"
+                      id="address"
+                      value={objValues.address}
+                      onChange={handleInputChange}
+                      style={{
+                        border: "1px solid #014D88",
+                        borderRadius: "0.25rem",
+                      }}
                   />
                   {errors.address !== "" ? (
-                    <span className={classes.error}>{errors.address}</span>
+                      <span className={classes.error}>{errors.address}</span>
                   ) : (
-                    ""
+                      ""
                   )}
                 </FormGroup>
               </div>
-              {console.log('readddd',props.extra)}
+              {console.log('readddd', props.extra)}
               <div className="form-group  col-md-4">
                 <FormGroup>
                   <Label>
-                    Sex <span style={{ color: "red" }}> *</span>
+                    Sex <span style={{color: "red"}}> *</span>
                   </Label>
                   <select
-                    className="form-control"
-                    name="sex"
-                    id="sex"
-                    value={objValues.sex}
-                    onChange={handleInputChange}
-                    style={{
-                      border: "1px solid #014D88",
-                      borderRadius: "0.2rem",
-                    }}
+                      className="form-control"
+                      name="sex"
+                      id="sex"
+                      value={objValues.sex}
+                      onChange={handleInputChange}
+                      style={{
+                        border: "1px solid #014D88",
+                        borderRadius: "0.2rem",
+                      }}
                   >
                     <option value={""}></option>
                     {sexs.map((value) => (
-                      <option key={value.id} value={value.display}>
-                        {value.display}
-                      </option>
+                        <option key={value.id} value={value.display}>
+                          {value.display}
+                        </option>
                     ))}
                   </select>
                   {errors.sex !== "" ? (
-                    <span className={classes.error}>{errors.sex}</span>
+                      <span className={classes.error}>{errors.sex}</span>
                   ) : (
-                    ""
+                      ""
                   )}
                 </FormGroup>
               </div>
@@ -1315,88 +1355,88 @@ const BasicInfo = (props) => {
                         </div>
                              )} */}
               {objValues.age > 9 && (
-                <div className="form-group  col-md-4">
-                  <FormGroup>
-                    <Label>Marital Status</Label>
-                    <select
-                      className="form-control"
-                      name="maritalStatusId"
-                      id="maritalStatusId"
-                      value={objValues.maritalStatusId}
-                      onChange={handleInputChange}
-                      style={{
-                        border: "1px solid #014D88",
-                        borderRadius: "0.2rem",
-                      }}
-                    >
-                      <option value={""}></option>
-                      {maritalStatus.map((value) => (
-                        <option key={value.id} value={value.id}>
-                          {value.display}
-                        </option>
-                      ))}
-                    </select>
-                  </FormGroup>
-                </div>
-              )}
-              {objValues.age > 9 &&
-                objValues.sex === "Male" &&
-                objValues.maritalStatusId !== 5 && (
                   <div className="form-group  col-md-4">
                     <FormGroup>
-                      <Label>Number of wives/co-wives</Label>
+                      <Label>Marital Status</Label>
+                      <select
+                          className="form-control"
+                          name="maritalStatusId"
+                          id="maritalStatusId"
+                          value={objValues.maritalStatusId}
+                          onChange={handleInputChange}
+                          style={{
+                            border: "1px solid #014D88",
+                            borderRadius: "0.2rem",
+                          }}
+                      >
+                        <option value={""}></option>
+                        {maritalStatus.map((value) => (
+                            <option key={value.id} value={value.id}>
+                              {value.display}
+                            </option>
+                        ))}
+                      </select>
+                    </FormGroup>
+                  </div>
+              )}
+              {objValues.age > 9 &&
+                  objValues.sex === "Male" &&
+                  objValues.maritalStatusId !== 5 && (
+                      <div className="form-group  col-md-4">
+                        <FormGroup>
+                          <Label>Number of wives/co-wives</Label>
+                          <Input
+                              type="number"
+                              name="numWives"
+                              min={0}
+                              id="numWives"
+                              value={objValues.numWives}
+                              onChange={handleInputChange}
+                              style={{
+                                border: "1px solid #014D88",
+                                borderRadius: "0.25rem",
+                              }}
+                          />
+                        </FormGroup>
+                      </div>
+                  )}
+              {/* && objValues.maritalStatusId==='6' */}
+              {objValues.age > 9 && (
+                  <div className="form-group  col-md-4">
+                    <FormGroup>
+                      <Label>Number of Children {"<5"} years</Label>
                       <Input
-                        type="number"
-                        name="numWives"
-                        min={0}
-                        id="numWives"
-                        value={objValues.numWives}
-                        onChange={handleInputChange}
-                        style={{
-                          border: "1px solid #014D88",
-                          borderRadius: "0.25rem",
-                        }}
+                          type="number"
+                          name="numChildren"
+                          id="numChildren"
+                          min={0}
+                          value={objValues.numChildren}
+                          onChange={handleInputChange}
+                          style={{
+                            border: "1px solid #014D88",
+                            borderRadius: "0.25rem",
+                          }}
                       />
                     </FormGroup>
                   </div>
-                )}
-              {/* && objValues.maritalStatusId==='6' */}
-              {objValues.age > 9 && (
-                <div className="form-group  col-md-4">
-                  <FormGroup>
-                    <Label>Number of Children {"<5"} years</Label>
-                    <Input
-                      type="number"
-                      name="numChildren"
-                      id="numChildren"
-                      min={0}
-                      value={objValues.numChildren}
-                      onChange={handleInputChange}
-                      style={{
-                        border: "1px solid #014D88",
-                        borderRadius: "0.25rem",
-                      }}
-                    />
-                  </FormGroup>
-                </div>
               )}
               {/* objValues.maritalStatusId==='6' && */}
               <div className="form-group  col-md-4">
                 <FormGroup>
                   <Label>
-                    Target Group <span style={{ color: "red" }}> *</span>
+                    Target Group <span style={{color: "red"}}> *</span>
                   </Label>
                   <select
-                    className="form-control"
-                    name="targetGroup"
-                    id="targetGroup"
-                    onChange={handleInputChange}
-                    value={objValues.targetGroup}
-                    style={{
-                      border: "1px solid #014D88",
-                      borderRadius: "0.2rem",
-                    }}
-                    //disabled
+                      className="form-control"
+                      name="targetGroup"
+                      id="targetGroup"
+                      onChange={handleInputChange}
+                      value={objValues.targetGroup}
+                      style={{
+                        border: "1px solid #014D88",
+                        borderRadius: "0.2rem",
+                      }}
+                      //disabled
                   >
                     <option value={""}></option>
                     {/*kP.map((value) => (
@@ -1405,166 +1445,166 @@ const BasicInfo = (props) => {
                                            </option>
                                        ))*/}
                     {(objValues.sex === "Female" ||
-                      objValues.sex === "female") && (
-                      <>
-                        {" "}
-                        {kP
-                          .filter((x) => x.display !== "MSM")
-                          .map((value) => (
-                            <option key={value.id} value={value.code}>
-                              {value.display}
-                            </option>
-                          ))}
-                      </>
+                        objValues.sex === "female") && (
+                        <>
+                          {" "}
+                          {kP
+                              .filter((x) => x.display !== "MSM")
+                              .map((value) => (
+                                  <option key={value.id} value={value.code}>
+                                    {value.display}
+                                  </option>
+                              ))}
+                        </>
                     )}
 
                     {(objValues.sex === "Male" || objValues.sex === "male") && (
-                      <>
-                        {" "}
-                        {kP
-                          .filter((x) => x.display !== "FSW")
-                          .map((value) => (
-                            <option key={value.id} value={value.code}>
-                              {value.display}
-                            </option>
-                          ))}{" "}
-                      </>
+                        <>
+                          {" "}
+                          {kP
+                              .filter((x) => x.display !== "FSW")
+                              .map((value) => (
+                                  <option key={value.id} value={value.code}>
+                                    {value.display}
+                                  </option>
+                              ))}{" "}
+                        </>
                     )}
                   </select>
                   {errors.targetGroup !== "" ? (
-                    <span className={classes.error}>{errors.targetGroup}</span>
+                      <span className={classes.error}>{errors.targetGroup}</span>
                   ) : (
-                    ""
+                      ""
                   )}
                 </FormGroup>
               </div>
               <div className="form-group  col-md-4">
                 <FormGroup>
                   <Label>
-                    Index Testing <span style={{ color: "red" }}> *</span>
+                    Index Testing <span style={{color: "red"}}> *</span>
                   </Label>
                   <select
-                    className="form-control"
-                    name="indexClient"
-                    id="indexClient"
-                    value={objValues.indexClient}
-                    onChange={handleInputChange}
-                    style={{
-                      border: "1px solid #014D88",
-                      borderRadius: "0.2rem",
-                    }}
+                      className="form-control"
+                      name="indexClient"
+                      id="indexClient"
+                      value={objValues.indexClient}
+                      onChange={handleInputChange}
+                      style={{
+                        border: "1px solid #014D88",
+                        borderRadius: "0.2rem",
+                      }}
                   >
                     <option value={""}>Select</option>
                     <option value="true">YES</option>
                     <option value="false">NO</option>
                   </select>
                   {errors.indexClient !== "" ? (
-                    <span className={classes.error}>{errors.indexClient}</span>
+                      <span className={classes.error}>{errors.indexClient}</span>
                   ) : (
-                    ""
+                      ""
                   )}
                 </FormGroup>
               </div>
               {objValues.indexClient === "true" && (
-                <>
-                  <div className="form-group  col-md-4">
-                    <FormGroup>
-                      <Label>
-                        Relationship of the index client{" "}
-                        <span style={{ color: "red" }}> *</span>
-                      </Label>
-                      <select
-                        className="form-control"
-                        name="relationWithIndexClient"
-                        id="relationWithIndexClient"
-                        value={objValues.relationWithIndexClient}
-                        onChange={handleInputChange}
-                        style={{
-                          border: "1px solid #014D88",
-                          borderRadius: "0.2rem",
-                        }}
-                      >
-                        <option value={""}></option>
-                        {indexTesting.map((value) => (
-                          <option key={value.id} value={value.id}>
-                            {value.display}
-                          </option>
-                        ))}
-                      </select>
-                    </FormGroup>
-                  </div>
-                  <div className="form-group  col-md-4">
-                    <FormGroup>
-                      <Label>Index Client Code/ID</Label>
-                      <Input
-                        type="text"
-                        name="indexClientCode"
-                        id="indexClientCode"
-                        value={objValues.indexClientCode}
-                        onChange={handleInputChange}
-                        style={{
-                          border: "1px solid #014D88",
-                          borderRadius: "0.25rem",
-                        }}
-                      />
-                    </FormGroup>
-                    {clientCodeetail2 !== "" ? (
-                      <span className={classes.error}>{clientCodeetail2}</span>
-                    ) : (
-                      ""
-                    )}
-                    {clientCodeetail !== "" ? (
-                      <span className={classes.success}>{clientCodeetail}</span>
-                    ) : (
-                      ""
-                    )}
-                  </div>
-                </>
+                  <>
+                    <div className="form-group  col-md-4">
+                      <FormGroup>
+                        <Label>
+                          Relationship of the index client{" "}
+                          <span style={{color: "red"}}> *</span>
+                        </Label>
+                        <select
+                            className="form-control"
+                            name="relationWithIndexClient"
+                            id="relationWithIndexClient"
+                            value={objValues.relationWithIndexClient}
+                            onChange={handleInputChange}
+                            style={{
+                              border: "1px solid #014D88",
+                              borderRadius: "0.2rem",
+                            }}
+                        >
+                          <option value={""}></option>
+                          {indexTesting.map((value) => (
+                              <option key={value.id} value={value.id}>
+                                {value.display}
+                              </option>
+                          ))}
+                        </select>
+                      </FormGroup>
+                    </div>
+                    <div className="form-group  col-md-4">
+                      <FormGroup>
+                        <Label>Index Client Code/ID</Label>
+                        <Input
+                            type="text"
+                            name="indexClientCode"
+                            id="indexClientCode"
+                            value={objValues.indexClientCode}
+                            onChange={handleInputChange}
+                            style={{
+                              border: "1px solid #014D88",
+                              borderRadius: "0.25rem",
+                            }}
+                        />
+                      </FormGroup>
+                      {clientCodeetail2 !== "" ? (
+                          <span className={classes.error}>{clientCodeetail2}</span>
+                      ) : (
+                          ""
+                      )}
+                      {clientCodeetail !== "" ? (
+                          <span className={classes.success}>{clientCodeetail}</span>
+                      ) : (
+                          ""
+                      )}
+                    </div>
+                  </>
               )}
 
               {(objValues.sex === "Female" ||
-                objValues.sex === "female" ||
-                objValues.sex === "FEMALE") && (
-                <>
-                  <div className="form-group  col-md-4">
-                    <FormGroup>
-                      <Label>Pregnant Status</Label>
-                      <select
-                        className="form-control"
-                        name="pregnant"
-                        id="pregnant"
-                        value={objValues.pregnant}
-                        onChange={handleInputChange}
-                        style={{
-                          border: "1px solid #014D88",
-                          borderRadius: "0.2rem",
-                        }}
-                      >
-                        <option value={""}></option>
-                        {pregnancyStatus.map((value) =>
-                          (props.patientObj.riskStratificationResponseDto
-                            .modality ===
-                            "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||
-                            props.patientObj.riskStratificationResponseDto
-                              .modality ===
-                              "TEST_SETTING_OTHERS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
-                            props.patientObj.riskStratificationResponseDto
-                              .testingSetting === "TEST_SETTING_CPMTCT" ||
-                            props.patientObj.riskStratificationResponseDto
-                              .modality ===
-                              "TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)") &&
-                          value.code === "PREGANACY_STATUS_NOT_PREGNANT" ? (
-                            <></>
-                          ) : (
-                            <option key={value.id} value={value.id}>
-                              {value.display}
-                            </option>
-                          )
-                        )}
-                      </select>
-                    </FormGroup>
-                  </div>
-                  {/*objValues.pregnant === "" &&
+                  objValues.sex === "female" ||
+                  objValues.sex === "FEMALE") && (
+                  <>
+                    <div className="form-group  col-md-4">
+                      <FormGroup>
+                        <Label>Pregnant Status</Label>
+                        <select
+                            className="form-control"
+                            name="pregnant"
+                            id="pregnant"
+                            value={objValues.pregnant}
+                            onChange={handleInputChange}
+                            style={{
+                              border: "1px solid #014D88",
+                              borderRadius: "0.2rem",
+                            }}
+                        >
+                          <option value={""}></option>
+                          {pregnancyStatus.map((value) =>
+                              (props.patientObj.riskStratificationResponseDto
+                                      .modality ===
+                                  "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||
+                                  props.patientObj.riskStratificationResponseDto
+                                      .modality ===
+                                  "TEST_SETTING_OTHERS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
+                                  props.patientObj.riskStratificationResponseDto
+                                      .testingSetting === "TEST_SETTING_CPMTCT" ||
+                                  props.patientObj.riskStratificationResponseDto
+                                      .modality ===
+                                  "TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)") &&
+                              value.code === "PREGANACY_STATUS_NOT_PREGNANT" ? (
+                                  <></>
+                              ) : (
+                                  <option key={value.id} value={value.id}>
+                                    {value.display}
+                                  </option>
+                              )
+                          )}
+                        </select>
+                      </FormGroup>
+                    </div>
+                    {/*objValues.pregnant === "" &&
                       (objValues.pregnant !== 73 ||
                         objValues.pregnant !== "73") && (
                         <div className="form-group  col-md-4">
@@ -1588,35 +1628,35 @@ const BasicInfo = (props) => {
                           </FormGroup>
                         </div>
                             )*/}
-                </>
+                  </>
               )}
 
               <div className="form-group  col-md-4">
                 <FormGroup>
                   <Label>
-                    First time visit <span style={{ color: "red" }}>*</span>
+                    First time visit <span style={{color: "red"}}>*</span>
                   </Label>
                   <select
-                    className="form-control"
-                    name="firstTimeVisit"
-                    id="firstTimeVisit"
-                    value={objValues.firstTimeVisit}
-                    onChange={handleInputChange}
-                    style={{
-                      border: "1px solid #014D88",
-                      borderRadius: "0.2rem",
-                    }}
+                      className="form-control"
+                      name="firstTimeVisit"
+                      id="firstTimeVisit"
+                      value={objValues.firstTimeVisit}
+                      onChange={handleInputChange}
+                      style={{
+                        border: "1px solid #014D88",
+                        borderRadius: "0.2rem",
+                      }}
                   >
                     <option value={""}>Select</option>
                     <option value="true">YES</option>
                     <option value="false">NO</option>
                   </select>
                   {errors.firstTimeVisit !== "" ? (
-                    <span className={classes.error}>
+                      <span className={classes.error}>
                       {errors.firstTimeVisit}
                     </span>
                   ) : (
-                    ""
+                      ""
                   )}
                 </FormGroup>
               </div>
@@ -1624,83 +1664,83 @@ const BasicInfo = (props) => {
                 <FormGroup>
                   <Label>
                     Previously tested within the last 3 months{" "}
-                    <span style={{ color: "red" }}>*</span>
+                    <span style={{color: "red"}}>*</span>
                   </Label>
                   <select
-                    className="form-control"
-                    name="previouslyTested"
-                    id="previouslyTested"
-                    value={objValues.previouslyTested}
-                    onChange={handleInputChange}
-                    style={{
-                      border: "1px solid #014D88",
-                      borderRadius: "0.2rem",
-                    }}
+                      className="form-control"
+                      name="previouslyTested"
+                      id="previouslyTested"
+                      value={objValues.previouslyTested}
+                      onChange={handleInputChange}
+                      style={{
+                        border: "1px solid #014D88",
+                        borderRadius: "0.2rem",
+                      }}
                   >
                     <option value={""}>Select</option>
                     <option value="true">YES</option>
                     <option value="false">NO</option>
                   </select>
                   {errors.previouslyTested !== "" ? (
-                    <span className={classes.error}>
+                      <span className={classes.error}>
                       {errors.previouslyTested}
                     </span>
                   ) : (
-                    ""
+                      ""
                   )}
                 </FormGroup>
               </div>
               <div className="form-group  col-md-4">
                 <FormGroup>
                   <Label>
-                    Type of Counseling <span style={{ color: "red" }}>*</span>
+                    Type of Counseling <span style={{color: "red"}}>*</span>
                   </Label>
                   <select
-                    className="form-control"
-                    name="typeCounseling"
-                    id="typeCounseling"
-                    value={objValues.typeCounseling}
-                    onChange={handleInputChange}
-                    style={{
-                      border: "1px solid #014D88",
-                      borderRadius: "0.2rem",
-                    }}
+                      className="form-control"
+                      name="typeCounseling"
+                      id="typeCounseling"
+                      value={objValues.typeCounseling}
+                      onChange={handleInputChange}
+                      style={{
+                        border: "1px solid #014D88",
+                        borderRadius: "0.2rem",
+                      }}
                   >
                     <option value={""}>Select</option>
                     {counselingType.map((value) => (
-                      <option key={value.id} value={value.id}>
-                        {value.display}
-                      </option>
+                        <option key={value.id} value={value.id}>
+                          {value.display}
+                        </option>
                     ))}
                   </select>
                   {errors.typeCounseling !== "" ? (
-                    <span className={classes.error}>
+                      <span className={classes.error}>
                       {errors.typeCounseling}
                     </span>
                   ) : (
-                    ""
+                      ""
                   )}
                 </FormGroup>
               </div>
 
-              <br />
+              <br/>
               <div className="row">
                 <div className="form-group mb-3 col-md-12">
                   <Button
-                    content="Back"
-                    icon="left arrow"
-                    labelPosition="left"
-                    style={{ backgroundColor: "#992E62", color: "#fff" }}
-                    onClick={() => handleItemClick("risk", "risk")}
+                      content="Back"
+                      icon="left arrow"
+                      labelPosition="left"
+                      style={{backgroundColor: "#992E62", color: "#fff"}}
+                      onClick={() => handleItemClick("risk", "risk")}
                   />
                   <Button
-                    content="Save & Continue"
-                    type="submit"
-                    icon="right arrow"
-                    labelPosition="right"
-                    style={{ backgroundColor: "#014d88", color: "#fff" }}
-                    onClick={handleSubmit}
-                    disabled={saving}
+                      content="Save & Continue"
+                      type="submit"
+                      icon="right arrow"
+                      labelPosition="right"
+                      style={{backgroundColor: "#014d88", color: "#fff"}}
+                      onClick={handleSubmit}
+                      disabled={saving}
                   />
                 </div>
               </div>
@@ -1709,12 +1749,12 @@ const BasicInfo = (props) => {
         </CardBody>
       </Card>
       <Modal
-        show={open}
-        toggle={toggle}
-        className="fade"
-        size="sm"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
+          show={open}
+          toggle={toggle}
+          className="fade"
+          size="sm"
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
       >
         <Modal.Header>
           <Modal.Title id="contained-modal-title-vcenter">
@@ -1726,8 +1766,8 @@ const BasicInfo = (props) => {
         </Modal.Body>
         <Modal.Footer>
           <Button
-            onClick={toggle}
-            style={{ backgroundColor: "#014d88", color: "#fff" }}
+              onClick={toggle}
+              style={{backgroundColor: "#014d88", color: "#fff"}}
           >
             Yes
           </Button>

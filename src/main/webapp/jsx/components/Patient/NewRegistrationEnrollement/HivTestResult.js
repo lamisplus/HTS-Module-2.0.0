@@ -457,6 +457,16 @@ const HivTestResult = (props) => {
         ) {
             result = "Negative";
         }
+        else if(
+            initialTest1.result === "Yes" &&
+            confirmatoryTest.result === "Yes" &&
+            initialTest12.result2 === "Yes" &&
+            confirmatoryTest2.result2 === "No" &&
+            tieBreakerTest2.result2 === "No"
+
+        ){
+            result = "Negative";
+        }
 
         setFinalResult(result);
     }, [
@@ -553,13 +563,14 @@ const HivTestResult = (props) => {
     }, [confirmatoryTest2.result2]);
 
     // log all the  tests
-    // console.log("initialTest1", initialTest1);
-    // console.log("confirmatoryTest", confirmatoryTest);
-    // console.log("tieBreakerTest", tieBreakerTest);
-    // console.log("initialTest12", initialTest12);
-    // console.log("confirmatoryTest2", confirmatoryTest2);
-    // console.log("tieBreakerTest2", tieBreakerTest2);
-    // console.log("finalResult", finalResult);
+    console.log("initialTest1", initialTest1);
+    console.log("confirmatoryTest", confirmatoryTest);
+    console.log("tieBreakerTest", tieBreakerTest);
+    console.log("initialTest12", initialTest12);
+    console.log("confirmatoryTest2", confirmatoryTest2);
+    console.log("tieBreakerTest2", tieBreakerTest2);
+    console.log("finalResult", finalResult);
+
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log(errors);

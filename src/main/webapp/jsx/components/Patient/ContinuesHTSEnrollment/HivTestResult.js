@@ -424,6 +424,16 @@ const HivTestResult = (props) => {
         confirmatoryTest2.result2 === "Yes"
     ) {
       result = "Positive";
+    }
+    else if(
+        initialTest1.result === "Yes" &&
+        confirmatoryTest.result === "Yes" &&
+        initialTest12.result2 === "Yes" &&
+        confirmatoryTest2.result2 === "No" &&
+        tieBreakerTest2.result2 === "No"
+
+    ){
+       result = "Negative";
     } else if (
         initialTest1.result === "Yes" &&
         confirmatoryTest.result === "No" &&

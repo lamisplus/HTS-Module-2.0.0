@@ -194,9 +194,9 @@ const Recency = (props) => {
       if (recency.optOutRTRI === "true") {
         setRecency({
           optOutRTRI:
-            props.patientObj && props.patientObj.recency !== null
-              ? props.patientObj.recency.optOutRTRI
-              : "",
+              props.patientObj && props.patientObj.recency !== null
+                  ? props.patientObj.recency.optOutRTRI
+                  : "",
           optOutRTRITestName: "",
           optOutRTRITestDate: "",
           rencencyId: "",
@@ -217,19 +217,21 @@ const Recency = (props) => {
           viralLoadConfirmationResult: "",
         });
       }
-      if (
-        props.patientObj.confirmatoryTest &&
-        props.patientObj.confirmatoryTest.date !== ""
-      ) {
-        setHivTestDate(props.patientObj.confirmatoryTest.date);
-      } else if (
-        props.patientObj.confirmatoryTest2 &&
-        props.patientObj.confirmatoryTest2.date2 !== ""
-      ) {
-        setHivTestDate(props.patientObj.confirmatoryTest2.date2);
-      } else {
-        setHivTestDate("");
-      }
+    }
+      if(props.patientObj){
+        if (
+            props.patientObj.confirmatoryTest2 &&
+            props.patientObj.confirmatoryTest2.date2 !== ""
+        ) {
+          setHivTestDate(props.patientObj.confirmatoryTest2.date2);
+        } else if (
+            props.patientObj.confirmatoryTest &&
+            props.patientObj.confirmatoryTest.date !== ""
+        ) {
+          setHivTestDate(props.patientObj.confirmatoryTest.date);
+        } else {
+          setHivTestDate("");
+        }
     }
     if (
       recency.longTermLine === "true" &&

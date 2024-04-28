@@ -8,6 +8,7 @@ import History from "./History";
 import ContineousRegistrationTesting from "./../Patient/ContineousRegistrationTesting";
 //import CheckedInPatients from './Patient/CheckedInPatients'
 import * as moment from "moment";
+import ExistenceClientHIVSTRegistration from "../Patient/HIVST/ExistenceClientHIVSTRegistration";
 
 const divStyle = {
   borderRadius: "2px",
@@ -112,6 +113,16 @@ const Home = (props) => {
                         />
                       </Tab>
                     )}
+                  <Tab eventKey="new-hivst" title="NEW HIVST">
+                            <ExistenceClientHIVSTRegistration
+                                patientObj={props.patientObj}
+                                activePage={props.activePage}
+                                setActivePage={props.setActivePage}
+                                clientCode={props.clientCode}
+                                patientAge={props.patientAge}
+                                patients={patients}
+                            />
+                  </Tab>
                 </Tabs>
               </div>
             </Card.Body>

@@ -7,7 +7,7 @@ import VisualisationHome from "./Visualisation/Index";
 import { FaUserPlus } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import Button from "@material-ui/core/Button";
-import HIVSTPatientRegistration from "./Patient/ContinuesHTSEnrollment/HIVST/HIVSTPatientRegistration";
+import HIVSTPatientRegistration from "./Patient/HIVST/HIVSTPatientRegistration";
 
 const divStyle = {
   borderRadius: "2px",

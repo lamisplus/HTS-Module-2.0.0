@@ -14,7 +14,7 @@ import RegisterPatient from './main/webapp/jsx/components/Patient/RegisterPatien
 //import RegisterPatientEnrollment from './main/webapp/jsx/components/Patient/RegisterPatientEnrollment';
 import PatientDetail from './main/webapp/jsx/components/Patient/PatientDetail';
 // import HIVSTPatientRegistration from './main/webapp/jsx/components/Patient/HIVST/HIVSTPatientRegistration';
-import HIVSTPatientRegistration from './main/webapp/jsx/components/Patient/ContinuesHTSEnrollment/HIVST/HIVSTPatientRegistration';
+import HIVSTPatientRegistration from './main/webapp/jsx/components/Patient/HIVST/HIVSTPatientRegistration';
 
 
 export default function App() {

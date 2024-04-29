@@ -785,7 +785,10 @@ const BasicInfo = (props) => {
                         borderRadius: "0.2rem",
                       }}
                     >
-                      <option value={""}>Select</option>
+                      <option value={""} key={0}>
+                        {" "}
+                        Select
+                      </option>
                       {objValues.communityEntryPoint ===
                         "HTS_ENTRY_POINT_COMMUNITY_CPMTCT" &&
                       objValues.entryPoint === "HTS_ENTRY_POINT_COMMUNITY"

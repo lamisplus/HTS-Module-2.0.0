@@ -329,22 +329,7 @@ const UserRegistration = (props) => {
                       )}
                     </span>
                   </Menu.Item>
-                  {/* <Menu.Item
-                    name="inbox"
-                    active={activeItem === "pns"}
-                    onClick={() => handleItemClick("pns")}
-                    style={{
-                      backgroundColor: activeItem === "pns" ? "#000" : "",
-                    }}
-                  >
-                    <span style={{ color: "#fff" }}>
-                      {" "}
-                      Partner Notification Services
-                      {completed.includes("pns") && (
-                        <Icon name="check" color="green" />
-                      )}
-                    </span>
-                  </Menu.Item> */}
+
                   {hideOtherMenu == false && (
                     <>
                       <Menu.Item
@@ -364,7 +349,7 @@ const UserRegistration = (props) => {
                           )}
                         </span>
                       </Menu.Item>
-
+                      {console.log("register-age ", props)}
                       {props.patientAge >= 15 && (
                         <Menu.Item
                           name="spam"
@@ -445,7 +430,7 @@ const UserRegistration = (props) => {
                           )}
                         </span>
                       </Menu.Item>
-
+                      {/* 
                       <Menu.Item
                         name="spam"
                         active={activeItem === "indexing"}
@@ -463,7 +448,7 @@ const UserRegistration = (props) => {
                             <Icon name="check" color="green" />
                           )}
                         </span>
-                      </Menu.Item>
+                      </Menu.Item> */}
                       <Menu.Item
                         name="inbox"
                         active={activeItem === "fit"}
@@ -471,9 +456,9 @@ const UserRegistration = (props) => {
                         style={{
                           backgroundColor: activeItem === "fit" ? "#000" : "",
                         }}
+                        disabled={completed.includes("fit") ? true : false}
                       >
                         <span style={{ color: "#fff" }}>
-                          {" "}
                           Family Index Testing form
                           {completed.includes("fit") && (
                             <Icon name="check" color="green" />
@@ -481,7 +466,7 @@ const UserRegistration = (props) => {
                         </span>
                       </Menu.Item>
                       {/* uncomment this after  */}
-                      {/* <Menu.Item
+                      <Menu.Item
                         name="inbox"
                         active={activeItem === "pns"}
                         onClick={() => handleItemClick("pns")}
@@ -496,7 +481,7 @@ const UserRegistration = (props) => {
                             <Icon name="check" color="green" />
                           )}
                         </span>
-                      </Menu.Item> */}
+                      </Menu.Item>
                       {/*<Menu.Item
                       {/*    name="inbox"*/}
                       {/*    active={activeItem === "refferal"}*/}
@@ -648,6 +633,7 @@ const UserRegistration = (props) => {
                     extra={extra}
                     basicInfo={basicInfo}
                     organizationInfo={organizationInfo}
+                    history={false}
                   />
                 )}
                 {activeItem === "pns" && (

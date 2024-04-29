@@ -196,8 +196,7 @@ const Recency = (props) => {
   const handleDone = () => {
     toggle();
     handleItemClick("pns", "recency-testing");
-
-};
+  };
   const loadOtherForm = (row) => {
     // setSaving(true);
     //props.setActiveContent({...props.activeContent, route:'mental-health-view', id:row.id})
@@ -214,15 +213,15 @@ const Recency = (props) => {
       console.log(props.patientObj.recency);
       setRecency(props.patientObj.recency);
     }
-    if(props.patientObj) {
+    if (props.patientObj) {
       if (
-          props.patientObj.confirmatoryTest2 &&
-          props.patientObj.confirmatoryTest2.date2 !== ""
+        props.patientObj.confirmatoryTest2 &&
+        props.patientObj.confirmatoryTest2.date2 !== ""
       ) {
         setHivTestDate(props.patientObj.confirmatoryTest2.date2);
       } else if (
-          props.patientObj.confirmatoryTest &&
-          props.patientObj.confirmatoryTest.date !== ""
+        props.patientObj.confirmatoryTest &&
+        props.patientObj.confirmatoryTest.date !== ""
       ) {
         setHivTestDate(props.patientObj.confirmatoryTest.date);
       } else {
@@ -852,47 +851,58 @@ const Recency = (props) => {
               {saving ? <Spinner /> : ""}
               <br />
               <div className="row">
-                <div className="form-group mb-3 col-md-12">
-                  <Button
-                    content="Back"
-                    icon="left arrow"
-                    labelPosition="left"
-                    style={{ backgroundColor: "#992E62", color: "#fff" }}
-                    onClick={() => handleItemClick("post-test", "post-test")}
-                  />
-                  <Button
-                    content="Done"
-                    icon="right arrowrr"
-                    labelPosition="right"
-                    style={{ backgroundColor: "#014d88", color: "#fff" }}
-                    onClick={()=>{
-                      history.push('/')
-                    }}
-                    disabled={
-                      props.patientObj?.postTestCounselingKnowledgeAssessment
-                        ?.hivTestResult === "true" && recency.optOutRTRI === ""
-                        ? true
-                        : false
-                    }
-                  />
-                </div>
-              </div>
-              <div className="row">
-                <div className="form-group mb-3 col-md-12">
-         
-                  <Button
-                    content="Save & Continue"
-                    icon="right arrow"
-                    labelPosition="right"
-                    style={{ backgroundColor: "#014d88", color: "#fff" }}
-                    onClick={handleSubmit}
-                    disabled={
-                      props.patientObj?.postTestCounselingKnowledgeAssessment
-                        ?.hivTestResult === "true" && recency.optOutRTRI === ""
-                        ? true
-                        : false
-                    }
-                  />
+                <div
+                  className="form-group mb-3 "
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    width: '100%'
+                  }}
+                >
+                  <div className="">
+                    <Button
+                      content="Back"
+                      icon="left arrow"
+                      labelPosition="left"
+                      style={{ backgroundColor: "#992E62", color: "#fff" }}
+                      onClick={() => handleItemClick("post-test", "post-test")}
+                    />
+                    <Button
+                      content="Done"
+                      icon="right arrowrr"
+                      labelPosition="right"
+                      style={{ backgroundColor: "#014d88", color: "#fff" }}
+                      onClick={() => {
+                        history.push("/");
+                      }}
+                      disabled={
+                        props.patientObj?.postTestCounselingKnowledgeAssessment
+                          ?.hivTestResult === "true" &&
+                        recency.optOutRTRI === ""
+                          ? true
+                          : false
+                      }
+                    />
+                  </div>
+
+                  <div>
+                    {" "}
+                    <Button
+                      content="Save & Continue"
+                      icon="right arrow"
+                      labelPosition="right"
+                      style={{ backgroundColor: "#014d88", color: "#fff" }}
+                      onClick={handleSubmit}
+                      disabled={
+                        props.patientObj?.postTestCounselingKnowledgeAssessment
+                          ?.hivTestResult === "true" &&
+                        recency.optOutRTRI === ""
+                          ? true
+                          : false
+                      }
+                    />
+                  </div>
                 </div>
               </div>
             </div>

@@ -2,11 +2,14 @@ import React, {useEffect, useState} from "react";
 import {FormGroup, Label} from "reactstrap";
 import axios from "axios";
 import {token, url as baseUrl} from "../../../../api";
+import * as moment from "moment/moment";
+import {calculate_age} from "../../utils";
+import {Icon, Label as LabelSui} from "semantic-ui-react";
 
 const UserInformationCard = (props) => {
-
-    let temp = {...errors};
     const [errors, setErrors] = useState({});
+    let temp = {...errors};
+    const [ageDisabled, setAgeDisabled] = useState(true);
     const [maritalStatus, setMaritalStatus] = useState([]);
     const [selectedOption, setSelectedOption] = useState("");
     const [showOtherInput, setShowOtherInput] = useState(false);
@@ -19,7 +22,7 @@ const UserInformationCard = (props) => {
             age: "",
             sex: "",
             maritalStatus: "",
-            typeOfHivSelfTest: ""
+            typeOfHivst: ""
         }
     );
 
@@ -53,11 +56,22 @@ const UserInformationCard = (props) => {
 
     useEffect(() => {
         Sex();
-   MARITALSTATUS
+        MARITALSTATUS();
     }, []);
 
 
     console.log("payload", payload)
+
+    const handleDobChange = (e) => {
+        let newPayload = { ...payload, [e.target.name]: e.target.value };
+        if (e.target.value && new Date(e.target.value) <= new Date()) {
+            const age_now = calculate_age(e.target.value);
+            newPayload = { ...newPayload, age: age_now };
+        } else {
+            newPayload = { ...newPayload, age: "" };
+        }
+        setPayload(newPayload);
+    };
 
     // validate input fields
     const validate = () => {
@@ -181,54 +195,50 @@ const UserInformationCard = (props) => {
                     {/*)}*/}
                 </FormGroup>
             </div>
-            <div className="form-group col-md-4">
+            <div className="form-group mb-3 col-md-4">
                 <FormGroup>
                     <Label>
-                        Date of Birth
-                        <span style={{color: "red"}}> *</span>
+                        Date Of Birth<span style={{color: "red"}}> *</span>
                     </Label>
                     <input
-                        type="date"
                         className="form-control"
+                        type="date"
                         name="dateOfBirth"
                         id="dateOfBirth"
+                        min="1929-12-31"
+                        max={moment(new Date()).format("YYYY-MM-DD")}
                         value={payload.dateOfBirth}
-                        onChange={handleInputChange}
+                        onChange={handleDobChange}
                         style={{
                             border: "1px solid #014D88",
                             borderRadius: "0.2rem",
                         }}
+                        // disabled
                     />
-                    {/*{errors.indexClient !== "" ? (*/}
-                    {/*    <span className={classes.error}>{errors.indexClient}</span>*/}
+                    {/*{errors.dob !== "" ? (*/}
+                    {/*    <span className={classes.error}>{errors.dob}</span>*/}
                     {/*) : (*/}
                     {/*    ""*/}
                     {/*)}*/}
                 </FormGroup>
             </div>
-            <div className="form-group col-md-4">
+            <div className="form-group mb-3 col-md-4">
                 <FormGroup>
                     <Label>
-                        Age
-                        <span style={{color: "red"}}> *</span>
+                        Age {" "}
                     </Label>
                     <input
-                        type="text"
                         className="form-control"
+                        type="number"
                         name="age"
                         id="age"
-                        value={payload.age}
-                        onChange={handleInputChange}
+                        disabled
                         style={{
                             border: "1px solid #014D88",
                             borderRadius: "0.2rem",
                         }}
+                        value={calculate_age(payload?.dateOfBirth)}
                     />
-                    {/*{errors.indexClient !== "" ? (*/}
-                    {/*    <span className={classes.error}>{errors.indexClient}</span>*/}
-                    {/*) : (*/}
-                    {/*    ""*/}
-                    {/*)}*/}
                 </FormGroup>
             </div>
             <div className="form-group  col-md-4">
@@ -278,7 +288,7 @@ const UserInformationCard = (props) => {
                         >
                             <option value={""}></option>
                             {maritalStatus.map((value) => (
-                                <option key={value.id} value={value.id}>
+                                <option key={value.id} value={value.name}>
                                     {value.display}
                                 </option>
                             ))}
@@ -286,6 +296,41 @@ const UserInformationCard = (props) => {
                     </FormGroup>
                 </div>
             )}
+            <div className="form-group  col-md-4">
+                <FormGroup>
+                    <Label> Type of HIV Self-Test </Label>
+                    <select
+                        className="form-control"
+                        name="typeOfHivst"
+                        id="typeOfHivst"
+                        value={payload.typeOfHivst}
+                        onChange={handleInputChange}
+                        style={{
+                            border: "1px solid #014D88",
+                            borderRadius: "0.2rem",
+                        }}
+                    >
+                        <option value={""}></option>
+                        <option value="Assisted">
+                            Assisted
+                        </option>
+                        <option value="Unassisted">
+                            Unassisted
+                        </option>
+                    </select>
+                </FormGroup>
+            </div>
+            {/*<div className="form-group mb-3 col-md-6">*/}
+            {/*    <LabelSui*/}
+            {/*        as="a"*/}
+            {/*        color="black"*/}
+            {/*        // onClick={handleSubmitfamilyIndexRequestDto}*/}
+            {/*        size="small"*/}
+            {/*        style={{marginTop: 35}}*/}
+            {/*    >*/}
+            {/*        <Icon name="plus"/> Add*/}
+            {/*    </LabelSui>*/}
+            {/*</div>*/}
         </div>
     )
 }

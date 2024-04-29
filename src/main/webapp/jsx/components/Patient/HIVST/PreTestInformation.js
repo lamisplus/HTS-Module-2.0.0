@@ -17,15 +17,17 @@ import {Link, useHistory, useLocation} from "react-router-dom";
 // import {TiArrowBack} from 'react-icons/ti'
 import {token, url as baseUrl} from "../../../../api";
 import "react-phone-input-2/lib/style.css";
-import {Button} from "semantic-ui-react";
+import {Button, Icon, Label as LabelSui, List} from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
-import {Modal} from "react-bootstrap";
+import {Modal, Table} from "react-bootstrap";
 import axios from "axios";
 import UserInformationCard from "./UserInformationCard";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@material-ui/icons/Delete";
 
 const useStyles = makeStyles((theme) => ({
     card: {
@@ -129,11 +131,12 @@ const PreTestInformation = (props) => {
         otherKitUserCategory: "",
         userInformation: kitUserInformation,
         isUserInformationAvailable: "",
+        otherTestKitUserDetails: []
 
     });
 
-    // users
-    const userInformation = {
+
+    const [userInformation, setUserInformation] = useState([{
         userCategory: "",
         otherCategory: "",
         userClientCode: "",
@@ -142,7 +145,19 @@ const PreTestInformation = (props) => {
         sex: "",
         maritalStatus: "",
         typeOfHivSelfTest: "",
-    }
+    }]);
+
+    // users
+    // const userInformation = {
+    //     userCategory: "",
+    //     otherCategory: "",
+    //     userClientCode: "",
+    //     dateOfBirth: "",
+    //     age: "",
+    //     sex: "",
+    //     maritalStatus: "",
+    //     typeOfHivSelfTest: "",
+    // }
 
     console.log("Selected Options", selectedUsers);
     const options = [
@@ -165,12 +180,29 @@ const PreTestInformation = (props) => {
         });
     }
     // handle userInformation object change
-    const handleUserInformationChange = (e) => {
+    const handleUserInformationChange = (e, index) => {
         const {name, value} = e.target;
-        userInformation[name] = value;
-        setObjValues({...objValues, userInformation: userInformation});
+        const newUserInformation = [...userInformation];
+        newUserInformation[index][name] = value;
+        setUserInformation(newUserInformation);
     }
 
+    // Step 2: Create a function to handle adding a new userInformation object to the array
+    const addUserInformation = () => {
+        setUserInformation([
+            ...userInformation,
+            {
+                userCategory: "",
+                otherCategory: "",
+                userClientCode: "",
+                dateOfBirth: "",
+                age: "",
+                sex: "",
+                maritalStatus: "",
+                typeOfHivSelfTest: "",
+            }
+        ]);
+    };
 
     const handleKitSelectUserChange = selectedUsers => {
         setSelectedUsers(selectedUsers);
@@ -224,7 +256,6 @@ const PreTestInformation = (props) => {
                 }
             );
         }
-
         getIndexClientCode();
     };
 
@@ -673,15 +704,70 @@ const PreTestInformation = (props) => {
                                             TestKit User Information
                                         </div>
                                     </div>
-                                    <div className="row">
+                                    // Step 4: Map over the userInformation array to render multiple UserInformationCard components
+                                    {userInformation.map((userInfo, index) => (
                                         <UserInformationCard
-                                            userInformation={userInformation}
-                                            handleInputChange={handleInputChange}
+                                            key={index}
+                                            userInformation={userInfo}
+                                            handleInputChange={(e) => handleUserInformationChange(e, index)}
                                             objValues={objValues}
                                             setObjValues={setObjValues}
                                             options={options}
                                         />
+                                    ))}
+                                    <div className="form-group mb-3 col-md-6">
+                                        <LabelSui
+                                            as="a"
+                                            color="black"
+                                            onClick={addUserInformation}
+                                            size="small"
+                                            style={{marginTop: 35}}
+                                        >
+                                            <Icon name="plus"/> Add
+                                        </LabelSui>
                                     </div>
+                                    {objValues?.otherTestKitUserDetails.length > 0 &&
+                                        <List className="mb-5">
+                                            <Table striped responsive>
+                                                <thead>
+                                                <tr>
+                                                    <th>Client Code</th>
+                                                    <th> Sex </th>
+                                                    <th>User Category</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                {objValues?.otherTestKitUserDetails.map((each, index) => {
+                                                    return (
+                                                        <tr key={index}>
+                                                            <td>
+                                                                {each.userClientCode} // Replace with the actual property name
+                                                            </td>
+                                                            <td>
+                                                                {each.sex} // Replace with the actual property name
+                                                            </td>
+                                                            <td>
+                                                                {each.userCategory} // Replace with the actual property name
+                                                            </td>
+                                                            <td>
+                                                                {" "}
+                                                                <IconButton
+                                                                    aria-label="delete"
+                                                                    size="small"
+                                                                    color="error"
+                                                                    // onClick={() => removeFamilyIndexRow(index)}
+                                                                >
+                                                                    <DeleteIcon fontSize="inherit" />
+                                                                </IconButton>
+                                                            </td>
+                                                        </tr>
+                                                    );
+                                                })}
+                                                </tbody>
+                                            </Table>
+                                        </List>
+                                    }
                                 </>
                             }
                         </div>

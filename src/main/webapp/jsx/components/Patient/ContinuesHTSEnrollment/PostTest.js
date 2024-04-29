@@ -272,6 +272,7 @@ const PostTest = (props) => {
                       border: "1px solid #014D88",
                       borderRadius: "0.2rem",
                     }}
+                    disabled={true}
                   >
                     <option value={""}></option>
                     <option value="true">Positive</option>

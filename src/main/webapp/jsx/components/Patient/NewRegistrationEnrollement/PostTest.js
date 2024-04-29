@@ -266,7 +266,9 @@ const PostTest = (props) => {
                                             border: "1px solid #014D88",
                                             borderRadius: "0.2rem",
                                         }}
-                                        disabled={props.activePage.actionType === "view"}
+                                        // disabled={props.activePage.actionType === "view"}
+                                    disabled={true}
+
                                     >
                                         <option value={""}></option>
                                         <option value="true">Positive</option>

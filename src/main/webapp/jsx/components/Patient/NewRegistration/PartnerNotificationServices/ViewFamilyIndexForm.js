@@ -1714,7 +1714,7 @@ const ViewFamilyIndexTestingForm = (props) => {
                   <FormGroup>
                     <Label>
                       Alternative Contact Number
-                      <span style={{color: "red"}}> *</span>
+                      {/* <span style={{color: "red"}}> *</span> */}
                     </Label>
                     <Input
                         type="text"

@@ -627,6 +627,7 @@ const UserRegistration = (props) => {
                     extra={extra}
                     basicInfo={basicInfo}
                     organizationInfo={organizationInfo}
+                    history={true}
                   />
                 )}
                 {activeItem === "new-referral" && (

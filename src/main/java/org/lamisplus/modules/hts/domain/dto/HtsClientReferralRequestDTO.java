@@ -25,7 +25,7 @@ public class HtsClientReferralRequestDTO {
     private String isDateOfBirthEstimated;
     private String receivingFacilityStateName;
     private String receivingFacilityLgaName;
-    private String serviceNeeded;
+    private Object serviceNeeded;
     private String comments;
 
 }

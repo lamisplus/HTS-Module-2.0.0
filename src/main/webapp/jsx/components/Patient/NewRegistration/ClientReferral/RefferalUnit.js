@@ -317,6 +317,7 @@ const RefferralUnit = (props) => {
         })
             .then((response) => {
                 if (response.data) {
+                    console.log("service needed", response.data);
                     setServiceNeeded(response.data);
                 }
             })
@@ -1478,40 +1479,41 @@ const RefferralUnit = (props) => {
                                         )}
                                     </FormGroup>
                                 </div>
-                                <div className="form-group mb-3 col-md-4">
-                                    <FormGroup>
-                                        <Label for="firstName">
-                                            Services needed
-                                            <span style={{color: "red"}}> *</span>
-                                        </Label>
-                                        <select
-                                            className="form-control"
-                                            name="serviceNeeded"
-                                            id="serviceNeeded"
-                                            onChange={handleInputChange}
-                                            value={payload.serviceNeeded}
-                                            style={{
-                                                border: "1px solid #014D88",
-                                                borderRadius: "0.2rem",
-                                            }}
-                                        >
-                                            <option value={""}>Select Service</option>
-                                            {serviceNeeded.map((value, index) => (
-                                                <option key={value.id} value={value.code}>
-                                                    {value.display}
-                                                </option>
-                                            ))}
-                                        </select>
+                      {/*          <div className="form-group mb-3 col-md-4">*/}
+                      {/*              <FormGroup>*/}
+                      {/*                  <Label for="firstName">*/}
+                      {/*                      Services needed*/}
+                      {/*                      <span style={{color: "red"}}> *</span>*/}
+                      {/*                  </Label>*/}
+                      {/*                  <select*/}
+                      {/*                      className="form-control"*/}
+                      {/*                      name="serviceNeeded"*/}
+                      {/*                      id="serviceNeeded"*/}
+                      {/*                      onChange={handleInputChange}*/}
+                      {/*                      value={payload.serviceNeeded}*/}
+                      {/*                      style={{*/}
+                      {/*                          border: "1px solid #014D88",*/}
+                      {/*                          borderRadius: "0.2rem",*/}
+                      {/*                      }}*/}
+                      {/*                  >*/}
+                      {/*                      <option value={""}>Select Service</option>*/}
+                      {/*                      {serviceNeeded.map((value, index) => (*/}
+                      {/*                          <option key={value.id} value={value.code}>*/}
+                      {/*                              {value.display}*/}
+                      {/*                          </option>*/}
+                      {/*                      ))}*/}
+                      {/*                  </select>*/}
 
-                                        {errors.serviceNeeded !== "" ? (
-                                            <span className={classes.error}>
-                        {errors.serviceNeeded}
-                      </span>
-                                        ) : (
-                                            ""
-                                        )}
-                                    </FormGroup>
-                                </div>
+                      {/*                  {errors.serviceNeeded !== "" ? (*/}
+                      {/*                      <span className={classes.error}>*/}
+                      {/*  {errors.serviceNeeded}*/}
+                      {/*</span>*/}
+                      {/*                  ) : (*/}
+                      {/*                      ""*/}
+                      {/*                  )}*/}
+                      {/*              </FormGroup>*/}
+                      {/*          </div>*/}
+
                                 <div className="form-group mb-3 col-md-12">
                                     <FormGroup>
                                         <Label for="firstName">

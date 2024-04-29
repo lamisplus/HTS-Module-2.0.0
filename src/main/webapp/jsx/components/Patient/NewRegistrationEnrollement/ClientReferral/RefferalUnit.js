@@ -33,41 +33,11 @@ import {calculate_age} from "../../../utils";
 import {useHistory} from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
-<<<<<<< HEAD
-  card: {
-    margin: theme.spacing(20),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  form: {
-    width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(3),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-  cardBottom: {
-    marginBottom: 20,
-  },
-  Select: {
-    height: 45,
-    width: 300,
-  },
-  button: {
-    margin: theme.spacing(1),
-  },
-  root: {
-    "& > *": {
-      margin: theme.spacing(1),
-    
-=======
     card: {
         margin: theme.spacing(20),
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
->>>>>>> 373d0b30306a9c16ac3ca61f0a47fff99899effd
     },
     form: {
         width: "100%", // Fix IE 11 issue.

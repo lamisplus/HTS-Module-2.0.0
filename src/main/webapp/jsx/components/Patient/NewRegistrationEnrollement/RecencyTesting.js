@@ -354,7 +354,7 @@ const Recency = (props) => {
     objValues.recency = recency;
     objValues.personId = patientID;
     //console.log(recency)
-    if (validate()) {
+    if (validate() ) {
       setSaving(true);
       axios
         .put(`${baseUrl}hts/${clientId}/recency`, objValues, {
@@ -701,7 +701,8 @@ const Recency = (props) => {
                                 name="dateSampleSentToPCRLab"
                                 id="dateSampleSentToPCRLab"
                                 type="date"
-                                min={recency.optOutRTRITestDate}
+                                // min={recency.optOutRTRITestDate}
+                                min={recency.sampleCollectedDate}
                                 value={recency.dateSampleSentToPCRLab}
                                 max={moment(new Date()).format("YYYY-MM-DD")}
                                 onChange={handleInputChangeRecency}
@@ -728,7 +729,8 @@ const Recency = (props) => {
                                 name="sampleTestDate"
                                 id="sampleTestDate"
                                 type="date"
-                                min={recency.optOutRTRITestDate}
+                                // min={recency.optOutRTRITestDate}
+                                min={recency.dateSampleSentToPCRLab}
                                 max={moment(new Date()).format("YYYY-MM-DD")}
                                 value={recency.sampleTestDate}
                                 onChange={handleInputChangeRecency}
@@ -783,7 +785,8 @@ const Recency = (props) => {
                                 name="receivedResultDate"
                                 id="receivedResultDate"
                                 type="date"
-                                min={recency.optOutRTRITestDate}
+                                // min={recency.optOutRTRITestDate}
+                                min={recency.sampleTestDate}
                                 max={moment(new Date()).format("YYYY-MM-DD")}
                                 value={recency.receivedResultDate}
                                 onChange={handleInputChangeRecency}

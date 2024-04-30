@@ -22,6 +22,9 @@ import PNSHistory from "./NewRegistration/PartnerNotificationServices/PNSHistory
 import PnsForm from "./NewRegistration/PartnerNotificationServices/PnsForm";
 import ViewPNSForm from "./NewRegistration/PartnerNotificationServices/ViewPnsForm";
 import ReferralUnit from "./ContinuesHTSEnrollment/ClientReferral/ReferralUnit";
+import RefferralUnit from "./NewRegistration/RefferalUnit";
+import ClientReferralHistory from "./NewRegistrationEnrollement/ClientReferral/ClientReferralHistory";
+import ViewClientReferral from "./NewRegistrationEnrollement/ClientReferral/Referrall_view_update";
 
 const useStyles = makeStyles((theme) => ({
   error: {
@@ -438,24 +441,42 @@ const UserRegistration = (props) => {
                         </span>
                       </Menu.Item>
 
+                      {/*<Menu.Item*/}
+                      {/*  name="spam"*/}
+                      {/*  active={activeItem === "continuous-referral"}*/}
+                      {/*  onClick={() => handleItemClick("continuous-referral")}*/}
+                      {/*  style={{*/}
+                      {/*    backgroundColor:*/}
+                      {/*      activeItem === "continuous-referral" ? "#000" : "",*/}
+                      {/*  }}*/}
+                      {/*  disabled={*/}
+                      {/*    activeItem !== "continuous-referral" ? true : false*/}
+                      {/*  }*/}
+                      {/*>*/}
+                      {/*  <span style={{ color: "#fff" }}>*/}
+                      {/*    Client Referral Service*/}
+                      {/*    {completed.includes("continuous-referral") && (*/}
+                      {/*      <Icon name="check" color="green" />*/}
+                      {/*    )}*/}
+                      {/*  </span>*/}
+                      {/*</Menu.Item>*/}
+
                       <Menu.Item
-                        name="spam"
-                        active={activeItem === "continuous-referral"}
-                        onClick={() => handleItemClick("continuous-referral")}
-                        style={{
-                          backgroundColor:
-                            activeItem === "continuous-referral" ? "#000" : "",
-                        }}
-                        disabled={
-                          activeItem !== "continuous-referral" ? true : false
-                        }
+                          name="inbox"
+                          active={activeItem === "refferal-history"}
+                          onClick={() => handleItemClick("refferal-history")}
+                          style={{
+                            backgroundColor:
+                                activeItem === "refferal-history" ? "#000" : "",
+                          }}
                       >
-                        <span style={{ color: "#fff" }}>
-                          Client Referral Service
-                          {completed.includes("continuous-referral") && (
-                            <Icon name="check" color="green" />
-                          )}
-                        </span>
+                    <span style={{ color: "#fff" }}>
+                      {" "}
+                      Client Referral Service
+                      {completed.includes("refferal") && (
+                          <Icon name="check" color="green" />
+                      )}
+                    </span>
                       </Menu.Item>
                     </>
                   )}
@@ -630,19 +651,64 @@ const UserRegistration = (props) => {
                     history={true}
                   />
                 )}
-                {activeItem === "new-referral" && (
-                  <ReferralUnit
-                    handleItemClick={handleItemClick}
-                    setCompleted={setCompleted}
-                    completed={completed}
-                    setPatientObj={setPatientObj2}
-                    patientObj={patientObj2}
-                    setExtra={setExtra}
-                    extra={extra}
-                    basicInfo={basicInfo}
-                    organizationInfo={organizationInfo}
-                    addNewForm={false}
-                  />
+                {/*{activeItem === "new-referral" && (*/}
+                {/*  <ReferralUnit*/}
+                {/*    handleItemClick={handleItemClick}*/}
+                {/*    setCompleted={setCompleted}*/}
+                {/*    completed={completed}*/}
+                {/*    setPatientObj={setPatientObj2}*/}
+                {/*    patientObj={patientObj2}*/}
+                {/*    setExtra={setExtra}*/}
+                {/*    extra={extra}*/}
+                {/*    basicInfo={basicInfo}*/}
+                {/*    organizationInfo={organizationInfo}*/}
+                {/*    addNewForm={false}*/}
+                {/*  />*/}
+                {/*)}*/}
+                {activeItem === "client-referral" && (
+                    <RefferralUnit
+                        handleItemClick={handleItemClick}
+                        setCompleted={setCompleted}
+                        completed={completed}
+                        setPatientObj={setPatientObj2}
+                        patientObj={patientObj2}
+                        setExtra={setExtra}
+                        extra={extra}
+                        basicInfo={basicInfo}
+                        organizationInfo={organizationInfo}
+                        addNewForm={false}
+                    />
+                )}
+                {activeItem === "refferal-history" && (
+                    <ClientReferralHistory
+                        handleItemClick={handleItemClick}
+                        setCompleted={setCompleted}
+                        completed={completed}
+                        setPatientObj={setPatientObj2}
+                        patientObj={patientObj2}
+                        setExtra={setExtra}
+                        extra={extra}
+                        basicInfo={basicInfo}
+                        organizationInfo={organizationInfo}
+                        activePage={props.activePage}
+                        setActivePage={props.setActivePage}
+                        setRow={setRow}
+                    />
+                )}
+                {activeItem === "view-referral" && (
+                    <ViewClientReferral
+                        handleItemClick={handleItemClick}
+                        setCompleted={setCompleted}
+                        completed={completed}
+                        setPatientObj={setPatientObj2}
+                        patientObj={patientObj2}
+                        setExtra={setExtra}
+                        extra={extra}
+                        basicInfo={basicInfo}
+                        organizationInfo={organizationInfo}
+                        addNewForm={false}
+                        row={row}
+                    />
                 )}
               </div>
             </div>

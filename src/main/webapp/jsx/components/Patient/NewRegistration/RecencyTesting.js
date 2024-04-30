@@ -727,7 +727,8 @@ const Recency = (props) => {
                               name="sampleTestDate"
                               id="sampleTestDate"
                               type="date"
-                              min={recency.optOutRTRITestDate}
+                              // min={recency.optOutRTRITestDate}
+                              min={recency.dateSampleSentToPCRLab}
                               max={moment(new Date()).format("YYYY-MM-DD")}
                               value={recency.sampleTestDate}
                               onChange={handleInputChangeRecency}
@@ -784,7 +785,9 @@ const Recency = (props) => {
                               name="receivedResultDate"
                               id="receivedResultDate"
                               type="date"
-                              min={recency.optOutRTRITestDate}
+                              // min={recency.optOutRTRITestDate}
+                              min={recency.sampleTestDate}
+                              value={recency?.receivedResultDate}
                               max={moment(new Date()).format("YYYY-MM-DD")}
                               value={recency.receivedResultDate}
                               onChange={handleInputChangeRecency}

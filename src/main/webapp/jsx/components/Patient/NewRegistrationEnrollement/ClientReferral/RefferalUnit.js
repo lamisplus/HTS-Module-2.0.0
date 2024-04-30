@@ -10,6 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
 import { token, url as baseUrl } from "../../../../../api";
 
+
 import "react-phone-input-2/lib/style.css";
 import "semantic-ui-css/semantic.min.css";
 import "react-toastify/dist/ReactToastify.css";
@@ -22,6 +23,7 @@ import PhoneInput from "react-phone-input-2";
 import Select from "react-select";
 // import { getAcount } from "../../../../utility";
 import Cookies from "js-cookie";
+import "react-dual-listbox/lib/react-dual-listbox.css";
 import {
   getAllStateByCountryId,
   getAllCountry,
@@ -29,8 +31,9 @@ import {
   getAllGenders,
   alphabetOnly,
 } from "../../../../../utility";
-import { calculate_age } from "../../../utils";
-import { useHistory } from "react-router-dom";
+import {calculate_age} from "../../../utils";
+import {useHistory} from "react-router-dom";
+import DualListBox from "react-dual-listbox";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -123,78 +126,69 @@ const RefferralUnit = (props) => {
   const [hivStatus, setHivStatus] = useState([]);
   const [serviceNeeded, setServiceNeeded] = useState([]);
 
-  const [facilityName, setFacilityName] = useState(Cookies.get("facilityName"));
-  const [allFacilities, setAllFacilities] = useState([]);
-  // console.log(Cookies.get("facilityName"));
-  const [statesOfTheReceivingFacility, setStateOfTheReceivingFacility] =
-    useState([]);
-  const [lgasOfTheReceivingFacility, setLgasOfTheReceivingFacility] = useState(
-    []
-  );
-  const [receivingFacilities, setReceivingFacilities] = useState([]);
-  const [receivingFacility, setReceivingFacility] = useState([]);
-  const [selectedReceivingState, setSelectedReceivingState] = useState({});
-  const [selectedReceivingFacility, setSelectedReceivingFacility] = useState(
-    {}
-  );
-  const [selectedReceivingLga, setSelectedReceivingLga] = useState({});
-  const history = useHistory();
+    const [facilityName, setFacilityName] = useState(Cookies.get("facilityName"));
+    const [allFacilities, setAllFacilities] = useState([]);
+    // console.log(Cookies.get("facilityName"));
+    const [statesOfTheReceivingFacility, setStateOfTheReceivingFacility] = useState([]);
+    const [lgasOfTheReceivingFacility, setLgasOfTheReceivingFacility] = useState([]);
+    const [receivingFacilities, setReceivingFacilities] = useState([]);
+    const [receivingFacility, setReceivingFacility] = useState([]);
+    const [selectedReceivingState, setSelectedReceivingState] = useState({})
+    const [selectedReceivingFacility, setSelectedReceivingFacility] = useState({});
+    const [selectedReceivingLga, setSelectedReceivingLga] = useState({});
+    const [selectedServiceNeeded, setSelectServiceNeeded] = useState([]);
+    const history = useHistory();
 
-  const [payload, setPayload] = useState({
-    dateVisit: props?.formInfo?.dateVisit,
-    firstName: props?.patientObj?.personResponseDto?.firstName,
-    middleName: props?.patientObj?.personResponseDto?.otherName,
-    lastName: props?.patientObj?.personResponseDto?.surname,
-    hospitalNumber:
-      props.patientObj?.personResponseDto?.identifier?.identifier[0]?.value,
-    countryId: "1",
-    stateId: props?.patientObj?.personResponseDto?.address?.address[0]?.stateId,
-    province:
-      props?.patientObj?.personResponseDto?.address?.address[0]?.district,
-    address: props?.patientObj?.personResponseDto?.address?.address[0]?.city,
-    landmark: "",
-    phoneNumber:
-      props?.patientObj?.personResponseDto?.contactPoint?.contactPoint[0]
-        ?.value,
-    sexId: props?.patientObj?.personResponseDto?.gender?.id,
-    dob: props?.patientObj.personResponseDto?.dateOfBirth,
-    age: "",
-    dateOfBirth: props?.patientObj.personResponseDto?.dateOfBirth,
-    hivStatus: props?.patientObj?.hivTestResult2
-      ? props?.patientObj?.hivTestResult2
-      : props?.patientObj?.hivTestResult
-      ? props?.patientObj?.hivTestResult
-      : "",
-    referredFromFacility: props?.formInfo?.referredFromFacility,
-    nameOfPersonReferringClient: props?.formInfo?.nameOfPersonReferringClient,
-    nameOfReferringFacility: props?.formInfo?.nameOfReferringFacility,
-    addressOfReferringFacility: props?.formInfo?.addressOfReferringFacility,
-    phoneNoOfReferringFacility: props?.formInfo?.phoneNoOfReferringFacility,
-    referredTo: props?.formInfo?.referredTo,
-    nameOfContactPerson: props?.formInfo?.nameOfContactPerson,
-    nameOfReceivingFacility: props?.formInfo?.nameOfReceivingFacility,
-    addressOfReceivingFacility: props?.formInfo?.addressOfReceivingFacility,
-    phoneNoOfReceivingFacility: props?.formInfo?.phoneNoOfReceivingFacility,
-    isDateOfBirthEstimated: false,
-    serviceNeeded: props?.formInfo?.serviceNeeded,
-    comments: props?.formInfo?.comments,
-    receivingFacilityStateName: props.formInfo.receivingFacilityStateName,
-    receivingFacilityLgaName: props.formInfo.receivingFacilityLgaName,
-    htsClientId: props && props.patientObj ? props.patientObj?.id : "",
-    htsClientUuid: props && props.patientObj ? props.patientObj?.uuid : "",
-  });
+    const [payload, setPayload] = useState({
+        dateVisit: props?.formInfo?.dateVisit,
+        firstName: props?.patientObj?.personResponseDto?.firstName,
+        middleName: props?.patientObj?.personResponseDto?.otherName,
+        lastName: props?.patientObj?.personResponseDto?.surname,
+        hospitalNumber: props.patientObj?.personResponseDto?.identifier?.identifier[0]?.value,
+        countryId: "1",
+        stateId: props?.patientObj?.personResponseDto?.address?.address[0]?.stateId,
+        province: Number(props?.patientObj?.personResponseDto?.address?.address[0]?.district),
+        address: props?.patientObj?.personResponseDto?.address?.address[0]?.city,
+        landmark: "",
+        phoneNumber: props?.patientObj?.personResponseDto?.contactPoint?.contactPoint[0]?.value,
+        sexId: props?.patientObj?.personResponseDto?.gender?.id,
+        dob: props?.patientObj.personResponseDto?.dateOfBirth,
+        age: "",
+        dateOfBirth: props?.patientObj.personResponseDto?.dateOfBirth,
+        hivStatus: props?.patientObj?.hivTestResult2 ? props?.patientObj?.hivTestResult2 :
+            props?.patientObj?.hivTestResult ? props?.patientObj?.hivTestResult : "",
+        referredFromFacility: props?.formInfo?.referredFromFacility,
+        nameOfPersonReferringClient: props?.formInfo?.nameOfPersonReferringClient,
+        nameOfReferringFacility: props?.formInfo?.nameOfReferringFacility,
+        addressOfReferringFacility: props?.formInfo?.addressOfReferringFacility,
+        phoneNoOfReferringFacility: props?.formInfo?.phoneNoOfReferringFacility,
+        referredTo: props?.formInfo?.referredTo,
+        nameOfContactPerson: props?.formInfo?.nameOfContactPerson,
+        nameOfReceivingFacility: props?.formInfo?.nameOfReceivingFacility,
+        addressOfReceivingFacility: props?.formInfo?.addressOfReceivingFacility,
+        phoneNoOfReceivingFacility: props?.formInfo?.phoneNoOfReceivingFacility,
+        isDateOfBirthEstimated: false,
+        serviceNeeded: props?.formInfo?.serviceNeeded || {},
+        // serviceNeeded: {},
+        comments: props?.formInfo?.comments,
+  //     receivingFacilityStateName: props.formInfo.receivingFacilityStateName,
+    // receivingFacilityLgaName: props.formInfo.receivingFacilityLgaName,
 
-  console.log("PAYLOAD", payload);
-  console.log("props.formInfo", props.formInfo);
-  const loadGenders = useCallback(async () => {
-    getAllGenders()
-      .then((response) => {
-        setGenders(response);
-      })
-      .catch(() => {});
-  }, []);
+        htsClientId: props && props.patientObj ? props.patientObj?.id : "",
+        htsClientUuid: props && props.patientObj ? props.patientObj?.uuid : ""
+    });
 
-  const getProvinceWithWithId = (id) => {
+    // console.log("PAYLOAD", payload);
+    // console.log("props.formInfo", props.formInfo);
+    const loadGenders = useCallback(async () => {
+        getAllGenders()
+            .then((response) => {
+                setGenders(response);
+            })
+            .catch(() => {
+            });
+    }, []);
+ const getProvinceWithWithId = (id) => {
     getAllProvinces(id)
       .then((res) => {
         setProvinces(res);
@@ -211,13 +205,13 @@ const RefferralUnit = (props) => {
     console.log(selectedState);
     // getAllProvinces(id)
     //   .then((res) => {
-    //             console.log("thisssssssssssssssssssssssssssss", id);
-
+    //   
     //     console.log("thisssssssssssssssssssssssssssss", res);
     //     setLgasOfTheReceivingFacility(res.data);
     //   })
     //   .catch((e) => {});
   };
+
 
   useEffect(() => {
     loadGenders();
@@ -392,23 +386,23 @@ const RefferralUnit = (props) => {
       });
   };
 
-  const SERVICE_NEEDED = () => {
-    axios
-      .get(`${baseUrl}application-codesets/v2/SERVICE_PROVIDED`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => {
-        if (response.data) {
-          // console.log("SERVICE_NEEDED", response.data)
-          setServiceNeeded(response.data);
-        }
-      })
-      .catch((e) => {
-        // console.log("Fetch Facilities error" + e);
-      });
-  };
+  // const SERVICE_NEEDED = () => {
+  //   axios
+  //     .get(`${baseUrl}application-codesets/v2/SERVICE_PROVIDED`, {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     })
+  //     .then((response) => {
+  //       if (response.data) {
+  //         // console.log("SERVICE_NEEDED", response.data)
+  //         setServiceNeeded(response.data);
+  //       }
+  //     })
+  //     .catch((e) => {
+  //       // console.log("Fetch Facilities error" + e);
+  //     });
+  // };
 
   useEffect(() => {
     loadStates();
@@ -473,6 +467,7 @@ const RefferralUnit = (props) => {
     }
   };
 
+
   //Date of Birth and Age handle
   const handleDobChange = (e) => {
     if (e.target.value) {
@@ -488,6 +483,7 @@ const RefferralUnit = (props) => {
       // }
       payload.age = age_now;
 
+
       //setpayload({...payload, age: age_now});
     } else {
       setPayload({ ...payload, age: "" });
@@ -502,11 +498,8 @@ const RefferralUnit = (props) => {
     } else {
       // props.setHideOtherMenu(true);
     }
+  }
 
-    if (payload.age !== "" && payload.age >= 85) {
-      toggle();
-    }
-  };
   const handleDateOfBirthChange = (e) => {
     if (e.target.value == "Actual") {
       payload.isDateOfBirthEstimated = false;
@@ -546,6 +539,64 @@ const RefferralUnit = (props) => {
   //         props.setCompleted([...props.completed, completedMenu]);
   //     }
   // };
+
+
+     const SERVICE_NEEDED = () => {
+        axios
+            .get(`${baseUrl}application-codesets/v2/SERVICE_PROVIDED`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+            .then((response) => {
+                if (response.data) {
+                    // create array of objects from the response
+                    const serviceNeeded = response.data.map((service) => {
+                        return {
+                            value: service.display,
+                            label: service.display
+                        }
+                    });
+                    setServiceNeeded(serviceNeeded);
+                }
+            })
+            .catch((e) => {
+                // handle error
+            });
+    };
+
+       useEffect(() => {
+        // Convert the serviceNeeded object into an array of its values
+        const serviceNeededArray = Object.values(props?.formInfo?.serviceNeeded);
+        // Set the serviceNeededArray to selectedServiceNeeded state
+        setSelectServiceNeeded(serviceNeededArray);
+                // Fetch the saved serviceNeeded from the backend
+        axios.get(`${baseUrl}hts-client-referral/${props.row.row.id}`, {
+            headers: { Authorization: `Bearer ${token}` },
+        })
+            .then((response) => {
+                // Convert the serviceNeeded object into an array of its values
+                const serviceNeededArray = Object.values(response.data.serviceNeeded);
+
+                // Set the serviceNeededArray to selectedServiceNeeded state
+                setSelectServiceNeeded(serviceNeededArray);
+                // console.log("serviceNeededArray", serviceNeededArray);
+            })
+            .catch((error) => {
+                // Handle error...
+            });
+
+    }, []);
+
+
+     // const handleItemClick = (page, completedMenu) => {
+    //     props.handleItemClick(page);
+    //     if (props.completed.includes(completedMenu)) {
+    //     } else {
+    //         props.setCompleted([...props.completed, completedMenu]);
+    //     }
+    // };
+  
   const validate = () => {
     //HTS FORM VALIDATION
     temp.dateVisit = payload.dateVisit ? "" : "This field is required.";
@@ -963,199 +1014,160 @@ const RefferralUnit = (props) => {
                   </FormGroup>
                 </div>
 
-                <div className="form-group  col-md-4">
-                  <FormGroup>
-                    <Label>
-                      Phone Number <span style={{ color: "red" }}> *</span>
-                    </Label>
-                    <Input
-                      type="text"
-                      name="phoneNumber"
-                      id="phoneNumber"
-                      onChange={(e) => {
-                        handleInputChangePhoneNumber(e, "phoneNumber");
-                      }}
-                      value={payload.phoneNumber}
-                      style={{
-                        border: "1px solid #014D88",
-                        borderRadius: "0.2rem",
-                      }}
-                      disabled
-                      // required
-                    />
-                    {errors.phoneNumber !== "" ? (
-                      <span className={classes.error}>
-                        {errors.phoneNumber}
-                      </span>
-                    ) : (
-                      ""
-                    )}
-                  </FormGroup>
-                </div>
-                <div className="form-group  col-md-4">
-                  <FormGroup>
-                    <Label>
-                      Sex <span style={{ color: "red" }}> *</span>
-                    </Label>
-                    <select
-                      className="form-control"
-                      name="sexId"
-                      id="sexId"
-                      onChange={handleInputChange}
-                      value={payload.sexId}
-                      style={{
-                        border: "1px solid #014D88",
-                        borderRadius: "0.2rem",
-                      }}
-                      disabled
-                    >
-                      <option value={""}>Select</option>
-                      {genders &&
-                        genders.map((gender, index) => (
-                          <option key={gender.id} value={gender.id}>
-                            {gender.display}
-                          </option>
-                        ))}
-                    </select>
-                    {errors.sexId !== "" ? (
-                      <span className={classes.error}>{errors.sexId}</span>
-                    ) : (
-                      ""
-                    )}
-                  </FormGroup>
-                </div>
-                {/* <div className="form-group mb-2 col-md-4">
-                  <FormGroup>
-                    <Label>
-                      Date Of Birth <span style={{ color: "red" }}> *</span>
-                    </Label>
-                    <div className="radio">
-                      <label>
-                        <input
-                          type="radio"
-                          value="Actual"
-                          name="dateOfBirth"
-                          defaultChecked
-                          onChange={(e) => handleDateOfBirthChange(e)}
-                          style={{
-                            border: "1px solid #014D88",
-                            borderRadius: "0.2rem",
-                          }}
-                        />{" "}
-                        Actual
-                      </label>
-                    </div>
-                    <div className="radio">
-                      <label>
-                        <input
-                          type="radio"
-                          value="Estimated"
-                          name="dateOfBirth"
-                          onChange={(e) => handleDateOfBirthChange(e)}
-                          style={{
-                            border: "1px solid #014D88",
-                            borderRadius: "0.2rem",
-                          }}
-                        />{" "}
-                        Estimated
-                      </label>
-                    </div>
-                  </FormGroup>
-                </div> */}
-                <div className="form-group mb-3 col-md-4">
-                  <FormGroup>
-                    <Label>
-                      Date Of Birth<span style={{ color: "red" }}> *</span>
-                    </Label>
-                    <input
-                      className="form-control"
-                      type="date"
-                      name="dob"
-                      id="dob"
-                      min="1929-12-31"
-                      max={moment(new Date()).format("YYYY-MM-DD")}
-                      value={payload.dob}
-                      onChange={handleDobChange}
-                      style={{
-                        border: "1px solid #014D88",
-                        borderRadius: "0.2rem",
-                      }}
-                      disabled
-                    />
-                    {errors.dob !== "" ? (
-                      <span className={classes.error}>{errors.dob}</span>
-                    ) : (
-                      ""
-                    )}
-                  </FormGroup>
-                </div>
-                <div className="form-group mb-3 col-md-4">
-                  <FormGroup>
-                    <Label>
-                      Age <span style={{ color: "red" }}> *</span>
-                    </Label>
-                    <input
-                      className="form-control"
-                      type="number"
-                      name="age"
-                      id="age"
-                      disabled={ageDisabled}
-                      onChange={payload.age}
-                      style={{
-                        border: "1px solid #014D88",
-                        borderRadius: "0.2rem",
-                      }}
-                      value={calculate_age(
-                        props?.patientObj.personResponseDto?.dateOfBirth
-                          ? props?.patientObj?.personResponseDto?.dateOfBirth
-                          : props?.patientObj?.personResponseDto?.dateOfBirth
-                      )}
-                    />
-                  </FormGroup>
-                </div>
-                <div className="form-group  col-md-4">
-                  <FormGroup>
-                    <Label>
-                      HIV Status<span style={{ color: "red" }}> *</span>
-                    </Label>
-                    <input
-                      className="form-control"
-                      type="text"
-                      name="hivStatus"
-                      id="hivStatus"
-                      value={payload.hivStatus}
-                      disabled={ageDisabled}
-                      onChange={handleAgeChange}
-                      style={{
-                        border: "1px solid #014D88",
-                        borderRadius: "0.2rem",
-                      }}
-                    />
-                    {/*<select*/}
-                    {/*  className="form-control"*/}
-                    {/*  name="hivStatus"*/}
-                    {/*  id="hivStatus"*/}
-                    {/*  onChange={handleInputChange}*/}
-                    {/*  value={payload.hivStatus}*/}
-                    {/*  style={{*/}
-                    {/*    border: "1px solid #014D88",*/}
-                    {/*    borderRadius: "0.2rem",*/}
-                    {/*  }}*/}
-                    {/*>*/}
-                    {/*<option value={""}>Select</option>*/}
-                    {/*{hivStatus.map((gender, index) => (*/}
-                    {/*  <option key={gender.id} value={gender.id}>*/}
-                    {/*    {gender.display}*/}
-                    {/*  </option>*/}
-                    {/*))}*/}
-                    {/*</select>*/}
-                    {errors.hivStatus !== "" ? (
-                      <span className={classes.error}>{errors.hivStatus}</span>
-                    ) : (
-                      ""
-                    )}
-                  </FormGroup>
-                </div>
+                                <div className="form-group  col-md-4">
+                                    <FormGroup>
+                                        <Label>
+                                            Phone Number <span style={{color: "red"}}> *</span>
+                                        </Label>
+                                        <Input
+                                            type="text"
+                                            name="phoneNumber"
+                                            id="phoneNumber"
+                                            onChange={(e) => {
+                                                handleInputChangePhoneNumber(e, "phoneNumber");
+                                            }}
+                                            value={payload.phoneNumber}
+                                            style={{
+                                                border: "1px solid #014D88",
+                                                borderRadius: "0.2rem",
+                                            }}
+                                            disabled
+                                            // required
+                                        />
+                                        {errors.phoneNumber !== "" ? (
+                                            <span className={classes.error}>{errors.phoneNumber}</span>
+                                        ) : (
+                                            ""
+                                        )}
+                                    </FormGroup>
+                                </div>
+                                <div className="form-group  col-md-4">
+                                    <FormGroup>
+                                        <Label>
+                                            Sex
+                                        </Label>
+                                        <select
+                                            className="form-control"
+                                            name="sexId"
+                                            id="sexId"
+                                            onChange={handleInputChange}
+                                            value={payload.sexId}
+                                            style={{
+                                                border: "1px solid #014D88",
+                                                borderRadius: "0.2rem",
+                                            }}
+                                            disabled
+                                        >
+                                            <option value={""}>Select</option>
+                                            {genders &&
+                                                genders.map((gender, index) => (
+                                                    <option key={gender.id} value={gender.id}>
+                                                        {gender.display}
+                                                    </option>
+                                                ))}
+                                        </select>
+                                        {/*{errors.sexId !== "" ? (*/}
+                                        {/*    <span className={classes.error}>{errors.sexId}</span>*/}
+                                        {/*) : (*/}
+                                        {/*    ""*/}
+                                        {/*)}*/}
+                                    </FormGroup>
+                                </div>
+                                <div className="form-group mb-3 col-md-4">
+                                    <FormGroup>
+                                        <Label>
+                                            Date Of Birth<span style={{color: "red"}}> *</span>
+                                        </Label>
+                                        <input
+                                            className="form-control"
+                                            type="date"
+                                            name="dob"
+                                            id="dob"
+                                            min="1929-12-31"
+                                            max={moment(new Date()).format("YYYY-MM-DD")}
+                                            value={payload.dob}
+                                            onChange={handleDobChange}
+                                            style={{
+                                                border: "1px solid #014D88",
+                                                borderRadius: "0.2rem",
+                                            }}
+                                            disabled
+                                        />
+                                        {errors.dob !== "" ? (
+                                            <span className={classes.error}>{errors.dob}</span>
+                                        ) : (
+                                            ""
+                                        )}
+                                    </FormGroup>
+                                </div>
+                                <div className="form-group mb-3 col-md-4">
+                                    <FormGroup>
+                                        <Label>
+                                            Age <span style={{color: "red"}}> *</span>
+                                        </Label>
+                                        <input
+                                            className="form-control"
+                                            type="number"
+                                            name="age"
+                                            id="age"
+                                            disabled={ageDisabled}
+                                            onChange={payload.age}
+                                            style={{
+                                                border: "1px solid #014D88",
+                                                borderRadius: "0.2rem",
+                                            }}
+                                            value={calculate_age(
+                                                props?.patientObj.personResponseDto?.dateOfBirth
+                                                    ? props?.patientObj?.personResponseDto?.dateOfBirth
+                                                    : props?.patientObj?.personResponseDto
+                                                        ?.dateOfBirth
+                                            )}
+                                        />
+                                    </FormGroup>
+                                </div>
+                                <div className="form-group  col-md-4">
+                                    <FormGroup>
+                                        <Label>
+                                            HIV Status<span style={{color: "red"}}> *</span>
+                                        </Label>
+                                        <input
+                                            className="form-control"
+                                            type="text"
+                                            name="hivStatus"
+                                            id="hivStatus"
+                                            value={payload.hivStatus}
+                                            disabled={ageDisabled}
+                                            onChange={handleAgeChange}
+                                            style={{
+                                                border: "1px solid #014D88",
+                                                borderRadius: "0.2rem",
+                                            }}
+                                        />
+                                        {/*<select*/}
+                                        {/*  className="form-control"*/}
+                                        {/*  name="hivStatus"*/}
+                                        {/*  id="hivStatus"*/}
+                                        {/*  onChange={handleInputChange}*/}
+                                        {/*  value={payload.hivStatus}*/}
+                                        {/*  style={{*/}
+                                        {/*    border: "1px solid #014D88",*/}
+                                        {/*    borderRadius: "0.2rem",*/}
+                                        {/*  }}*/}
+                                        {/*>*/}
+                                        {/*<option value={""}>Select</option>*/}
+                                        {/*{hivStatus.map((gender, index) => (*/}
+                                        {/*  <option key={gender.id} value={gender.id}>*/}
+                                        {/*    {gender.display}*/}
+                                        {/*  </option>*/}
+                                        {/*))}*/}
+                                        {/*</select>*/}
+                                        {errors.hivStatus !== "" ? (
+                                            <span className={classes.error}>{errors.hivStatus}</span>
+                                        ) : (
+                                            ""
+                                        )}
+                                    </FormGroup>
+                                </div>
 
                 <div className="form-group mb-3 col-md-4">
                   <FormGroup>
@@ -1582,69 +1594,96 @@ const RefferralUnit = (props) => {
                       <span className={classes.error}>
                         {errors.phoneNoOfReceivingFacility}
                       </span>
-                    ) : (
-                      ""
-                    )}
-                  </FormGroup>
-                </div>
-                <div className="form-group mb-3 col-md-4">
-                  <FormGroup>
-                    <Label for="firstName">
-                      Services needed
-                      <span style={{ color: "red" }}> *</span>
-                    </Label>
-                    <select
-                      className="form-control"
-                      name="serviceNeeded"
-                      id="serviceNeeded"
-                      onChange={handleInputChange}
-                      value={payload.serviceNeeded}
-                      style={{
-                        border: "1px solid #014D88",
-                        borderRadius: "0.2rem",
-                      }}
-                      disabled={props.row.action === "view" ? true : false}
-                    >
-                      <option value={""}>Select Service</option>
-                      {serviceNeeded.map((value, index) => (
-                        <option key={value.id} value={value.code}>
-                          {value.display}
-                        </option>
-                      ))}
-                    </select>
+                                        ) : (
+                                            ""
+                                        )}
+                                    </FormGroup>
+                                </div>
+                                {/*          <div className="form-group mb-3 col-md-4">*/}
+                                {/*              <FormGroup>*/}
+                                {/*                  <Label for="firstName">*/}
+                                {/*                      Services needed*/}
+                                {/*                      <span style={{color: "red"}}> *</span>*/}
+                                {/*                  </Label>*/}
+                                {/*                  <select*/}
+                                {/*                      className="form-control"*/}
+                                {/*                      name="serviceNeeded"*/}
+                                {/*                      id="serviceNeeded"*/}
+                                {/*                      onChange={handleInputChange}*/}
+                                {/*                      value={payload.serviceNeeded}*/}
+                                {/*                      style={{*/}
+                                {/*                          border: "1px solid #014D88",*/}
+                                {/*                          borderRadius: "0.2rem",*/}
+                                {/*                      }}*/}
+                                {/*                      disabled={props.row.action === "view" ? true : false}*/}
+                                {/*                  >*/}
+                                {/*                      <option value={""}>Select Service</option>*/}
+                                {/*                      {serviceNeeded.map((value, index) => (*/}
+                                {/*                          <option key={value.id} value={value.code}>*/}
+                                {/*                              {value.display}*/}
+                                {/*                          </option>*/}
+                                {/*                      ))}*/}
+                                {/*                  </select>*/}
 
-                    {errors.serviceNeeded !== "" ? (
-                      <span className={classes.error}>
-                        {errors.serviceNeeded}
-                      </span>
-                    ) : (
-                      ""
-                    )}
-                  </FormGroup>
-                </div>
-                <div className="form-group mb-3 col-md-12">
-                  <FormGroup>
-                    <Label for="firstName">
-                      Comments
-                      {/* <span style={{ color: "red" }}> *</span> */}
-                    </Label>
-                    <Input
-                      className="form-control"
-                      type="textarea"
-                      rows="4"
-                      cols="7"
-                      name="comments"
-                      id="comments"
-                      value={payload.comments}
-                      onChange={handleInputChange}
-                      style={{
-                        border: "1px solid #014D88",
-                        borderRadius: "0.2rem",
-                        height: "100px",
-                      }}
-                      disabled={props.row.action === "view" ? true : false}
-                    />
-                    {/* {errors.firstName !== "" ? (
+                                {/*                  {errors.serviceNeeded !== "" ? (*/}
+                                {/*                      <span className={classes.error}>*/}
+                                {/*  {errors.serviceNeeded}*/}
+                                {/*</span>*/}
+                                {/*                  ) : (*/}
+                                {/*                      ""*/}
+                                {/*                  )}*/}
+                                {/*              </FormGroup>*/}
+                                {/*          </div>*/}
+                                {/*          <div className="form-group mb-3 col-md-4">*/}
+
+                                <div className="form-group  mt-3 col-md-12">
+                                    <FormGroup>
+                                        <Label for="dualListBox">
+                                           Services Needed <span style={{color: "red"}}> *</span>
+                                        </Label>
+                                        <DualListBox
+                                            id="dualListBox"
+                                            options={serviceNeeded}
+                                            selected={selectedServiceNeeded}
+                                            onChange={(value) => {
+                                                // Update selectedServiceNeeded state
+                                                setSelectServiceNeeded(value);
+                                                // Convert selectedServiceNeeded array into an object
+                                                const serviceNeededObject = value.reduce((obj, item, index) => {
+                                                    obj[index] = item;
+                                                    return obj;
+                                                }, {});
+                                                // Update serviceNeeded in payload
+                                                setPayload({...payload, serviceNeeded: serviceNeededObject});
+                                            }}
+                                            disabled={props.row.action === "view" ? true : false}
+                                        />
+                                    </FormGroup>
+                                </div>
+                                {/*</div>*/}
+                                <div className="form-group mb-3 mt-2 col-md-12">
+                                    <FormGroup>
+                                        <Label for="firstName">
+                                            Comments
+                                            {/* <span style={{ color: "red" }}> *</span> */}
+                                        </Label>
+                                        <Input
+                                            className="form-control"
+                                            type="textarea"
+                                            rows="4"
+                                            cols="7"
+                                            name="comments"
+                                            id="comments"
+                                            value={payload.comments}
+                                            onChange={handleInputChange}
+                                            style={{
+                                                border: "1px solid #014D88",
+                                                borderRadius: "0.2rem",
+                                                height: "100px",
+                                            }}
+                                            disabled={props.row.action === "view" ? true : false}
+                                        />
+                                        {/* {errors.firstName !== "" ? (
                       <span className={classes.error}>{errors.firstName}</span>
                     ) : (
                       ""

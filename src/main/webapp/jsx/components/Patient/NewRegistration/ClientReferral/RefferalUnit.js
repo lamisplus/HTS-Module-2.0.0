@@ -194,11 +194,154 @@ const RefferralUnit = (props) => {
       .catch(() => {});
   }, []);
 
-  useEffect(() => {
-    loadGenders();
-    getCountry();
-    getStateByCountryId();
-    console.log(props);
+    useEffect(() => {
+        loadGenders();
+        getCountry();
+        getStateByCountryId();
+    }, []);
+
+    //Get list of State
+    const getStateByCountryId = () => {
+        getAllStateByCountryId()
+            .then((res) => {
+                setStates(res);
+            })
+            .catch(() => {
+            });
+    };
+    // const checkPhoneNumberBasic = (e, inputName) => {
+    //     if (e) {
+    //         setErrors({...errors, phoneNumber: ""});
+    //     }
+    //     const limit = 10;
+
+    //     if (inputName === "phoneNumber") {
+    //         setPayload({...payload, phoneNumber: e.slice(0, limit)});
+    //     } else if (inputName === "phoneNoOfReferringFacility") {
+    //         setPayload({
+    //             ...payload,
+    //             phoneNoOfReferringFacility: e.slice(0, limit),
+    //         });
+    //     } else if (inputName === "phoneNoOfReceivingFacility") {
+    //         setPayload({...payload, phoneNoOfReceivingFacility: e.slice(0, limit)});
+    //     }
+    // };
+
+    // handle Facility Name to slect drop down
+    // const handleInputChangeObject = (e) => {
+    //     // console.log(e);
+    //     setPayload({
+    //         ...payload,
+    //         nameOfReceivingFacility: e.name,
+    //         addressOfReceivingFacility: e.parentParentOrganisationUnitName,
+    //         // lgaTransferTo: e.parentOrganisationUnitName,
+    //     });
+    //     setErrors({...errors, nameOfReceivingFacility: ""});
+    //     // setSelectedState(e.parentParentOrganisationUnitName);
+    //     // setSelectedLga(e.parentOrganisationUnitName);
+    // };
+
+    //fetch province
+    // const getProvinces = (e) => {
+    //     const stateId = e.target.value;
+    //     if (e.target.value) {
+    //         setErrors({...errors, stateId: ""});
+    //     }
+    //     setPayload({...payload, stateId: e.target.value});
+    //     getAllProvinces(stateId)
+    //         .then((res) => {
+    //             setProvinces(res);
+    //         })
+    //         .catch((e) => {
+    //         });
+    // };
+    const getCountry = () => {
+        getAllCountry()
+            .then((res) => {
+                setCountries(res);
+            })
+            .catch((e) => {
+                // console.log(e);
+            });
+
+        // console.log(response);
+    };
+
+    const checkNumberLimit = (e) => {
+        const limit = 11;
+        const acceptedNumber = e.slice(0, limit);
+        return acceptedNumber;
+    };
+    const handleInputChangePhoneNumber = (e, inputName) => {
+        const limit = 11;
+        const NumberValue = checkNumberLimit(e.target.value.replace(/\D/g, ""));
+        setPayload({ ...payload, [inputName]: NumberValue });
+    };
+
+    // ########################################################################
+    const loadStates = () => {
+        axios.get(`${baseUrl}organisation-units/parent-organisation-units/1`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+            .then((response) => {
+                if (response.data) {
+                    setStateOfTheReceivingFacility(response.data);
+                }
+            })
+            .catch((e) => {
+                // console.log("Fetch states error" + e);
+            });
+    };
+
+    const loadLGA = (id) => {
+        axios.get(`${baseUrl}organisation-units/parent-organisation-units/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+            .then((response) => {
+                if (response.data) {
+                    setLgasOfTheReceivingFacility(response.data);
+                }
+            })
+            .catch((e) => {
+                // console.log("Fetch LGA error" + e);
+            });
+    };
+
+    const loadFacilities = (id) => {
+        axios.get(`${baseUrl}organisation-units/parent-organisation-units/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+            .then((response) => {
+                if (response.data) {
+                    setReceivingFacilities(response.data);
+                }
+            })
+            .catch((e) => {
+                // console.log("Fetch Facilities error" + e);
+            });
+    };
+
+    const SERVICE_NEEDED = () => {
+        axios.get(`${baseUrl}application-codesets/v2/SERVICE_PROVIDED`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+            .then((response) => {
+                if (response.data) {
+                    console.log("service needed", response.data);
+                    setServiceNeeded(response.data);
+                }
+            })
+            .catch((e) => {
+                // console.log("Fetch Facilities error" + e);
+            });
 
     if (props?.patientObj?.personResponseDto?.address?.address[0]?.stateId) {
       getProvinceWithWithId(
@@ -207,16 +350,9 @@ const RefferralUnit = (props) => {
     }
 
     //         }
-  }, []);
+  }
 
-  //Get list of State
-  const getStateByCountryId = () => {
-    getAllStateByCountryId()
-      .then((res) => {
-        setStates(res);
-      })
-      .catch(() => {});
-  };
+
   const checkPhoneNumberBasic = (e, inputName) => {
     if (e) {
       setErrors({ ...errors, phoneNumber: "" });
@@ -270,97 +406,28 @@ const RefferralUnit = (props) => {
       })
       .catch((e) => {});
   };
-  const getCountry = () => {
-    getAllCountry()
-      .then((res) => {
-        setCountries(res);
-      })
-      .catch((e) => {
-        // console.log(e);
-      });
 
-    // console.log(response);
-  };
 
-  const checkNumberLimit = (e) => {
-    const limit = 11;
-    const acceptedNumber = e.slice(0, limit);
-    return acceptedNumber;
-  };
-  const handleInputChangePhoneNumber = (e, inputName) => {
-    const limit = 11;
-    const NumberValue = checkNumberLimit(e.target.value.replace(/\D/g, ""));
-    setPayload({ ...payload, [inputName]: NumberValue });
-  };
+  
 
-  // ########################################################################
-  const loadStates = () => {
-    axios
-      .get(`${baseUrl}organisation-units/parent-organisation-units/1`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => {
-        if (response.data) {
-          setStateOfTheReceivingFacility(response.data);
-        }
-      })
-      .catch((e) => {
-        // console.log("Fetch states error" + e);
-      });
-  };
 
-  const loadLGA = (id) => {
-    axios
-      .get(`${baseUrl}organisation-units/parent-organisation-units/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => {
-        if (response.data) {
-          setLgasOfTheReceivingFacility(response.data);
-        }
-      })
-      .catch((e) => {
-        // console.log("Fetch LGA error" + e);
-      });
-  };
-
-  const loadFacilities = (id) => {
-    axios
-      .get(`${baseUrl}organisation-units/parent-organisation-units/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => {
-        if (response.data) {
-          setReceivingFacilities(response.data);
-        }
-      })
-      .catch((e) => {
-        // console.log("Fetch Facilities error" + e);
-      });
-  };
-
-  const SERVICE_NEEDED = () => {
-    axios
-      .get(`${baseUrl}application-codesets/v2/SERVICE_PROVIDED`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => {
-        if (response.data) {
-          setServiceNeeded(response.data);
-        }
-      })
-      .catch((e) => {
-        // console.log("Fetch Facilities error" + e);
-      });
-  };
+ 
+  // const SERVICE_NEEDED = () => {
+  //   axios
+  //     .get(`${baseUrl}application-codesets/v2/SERVICE_PROVIDED`, {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     })
+  //     .then((response) => {
+  //       if (response.data) {
+  //         setServiceNeeded(response.data);
+  //       }
+  //     })
+  //     .catch((e) => {
+  //       // console.log("Fetch Facilities error" + e);
+  //     });
+  // };
 
   useEffect(() => {
     loadStates();
@@ -1531,70 +1598,71 @@ const RefferralUnit = (props) => {
                       <span className={classes.error}>
                         {errors.phoneNoOfReceivingFacility}
                       </span>
-                    ) : (
-                      ""
-                    )}
-                  </FormGroup>
-                </div>
-                <div className="form-group mb-3 col-md-4">
-                  <FormGroup>
-                    <Label for="firstName">
-                      Services needed
-                      <span style={{ color: "red" }}> *</span>
-                    </Label>
-                    <select
-                      className="form-control"
-                      name="serviceNeeded"
-                      id="serviceNeeded"
-                      onChange={handleInputChange}
-                      value={payload.serviceNeeded}
-                      style={{
-                        border: "1px solid #014D88",
-                        borderRadius: "0.2rem",
-                      }}
-                    >
-                      <option value={""}>Select Service</option>
-                      {serviceNeeded.map((value, index) => (
-                        <option key={value.id} value={value.code}>
-                          {value.display}
-                        </option>
-                      ))}
-                    </select>
+                                        ) : (
+                                            ""
+                                        )}
+                                    </FormGroup>
+                                </div>
+                      {/*          <div className="form-group mb-3 col-md-4">*/}
+                      {/*              <FormGroup>*/}
+                      {/*                  <Label for="firstName">*/}
+                      {/*                      Services needed*/}
+                      {/*                      <span style={{color: "red"}}> *</span>*/}
+                      {/*                  </Label>*/}
+                      {/*                  <select*/}
+                      {/*                      className="form-control"*/}
+                      {/*                      name="serviceNeeded"*/}
+                      {/*                      id="serviceNeeded"*/}
+                      {/*                      onChange={handleInputChange}*/}
+                      {/*                      value={payload.serviceNeeded}*/}
+                      {/*                      style={{*/}
+                      {/*                          border: "1px solid #014D88",*/}
+                      {/*                          borderRadius: "0.2rem",*/}
+                      {/*                      }}*/}
+                      {/*                  >*/}
+                      {/*                      <option value={""}>Select Service</option>*/}
+                      {/*                      {serviceNeeded.map((value, index) => (*/}
+                      {/*                          <option key={value.id} value={value.code}>*/}
+                      {/*                              {value.display}*/}
+                      {/*                          </option>*/}
+                      {/*                      ))}*/}
+                      {/*                  </select>*/}
 
-                    {errors.serviceNeeded !== "" ? (
-                      <span className={classes.error}>
-                        {errors.serviceNeeded}
-                      </span>
-                    ) : (
-                      ""
-                    )}
-                  </FormGroup>
-                </div>
-                <div className="form-group mb-3 col-md-12">
-                  <FormGroup>
-                    <Label for="firstName">
-                      Comments
-                      {/* <span style={{ color: "red" }}> *</span> */}
-                    </Label>
-                    <Input
-                      className="form-control"
-                      type="textarea"
-                      rows="4"
-                      cols="7"
-                      name="comments"
-                      id="comments"
-                      value={payload.comments}
-                      onChange={handleInputChange}
-                      style={{
-                        border: "1px solid #014D88",
-                        borderRadius: "0.2rem",
-                        height: "100px",
-                      }}
-                    />
-                  </FormGroup>
-                </div>
-              </div>
-              <br />
+                      {/*                  {errors.serviceNeeded !== "" ? (*/}
+                      {/*                      <span className={classes.error}>*/}
+                      {/*  {errors.serviceNeeded}*/}
+                      {/*</span>*/}
+                      {/*                  ) : (*/}
+                      {/*                      ""*/}
+                      {/*                  )}*/}
+                      {/*              </FormGroup>*/}
+                      {/*          </div>*/}
+
+                                <div className="form-group mb-3 col-md-12">
+                                    <FormGroup>
+                                        <Label for="firstName">
+                                            Comments
+                                            {/* <span style={{ color: "red" }}> *</span> */}
+                                        </Label>
+                                        <Input
+                                            className="form-control"
+                                            type="textarea"
+                                            rows="4"
+                                            cols="7"
+                                            name="comments"
+                                            id="comments"
+                                            value={payload.comments}
+                                            onChange={handleInputChange}
+                                            style={{
+                                                border: "1px solid #014D88",
+                                                borderRadius: "0.2rem",
+                                                height: "100px",
+                                            }}
+                                        />
+                                    </FormGroup>
+                                </div>
+                            </div>
+                            <br/>
 
               <br />
 

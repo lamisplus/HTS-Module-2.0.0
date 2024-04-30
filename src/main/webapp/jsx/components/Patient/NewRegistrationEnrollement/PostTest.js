@@ -192,49 +192,94 @@ const PostTest = (props) => {
     }
   }, [props.patientObj]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (props.activePage.actionType === "view") {
-      //e.preventDefault();
-      handleItemClick("recency-testing", "post-test");
-    }
-    if (props.activePage.actionType === "update") {
-      setSaving(true);
-      //e.preventDefault();
-      objValues.htsClientId = clientId;
-      objValues.postTestCounselingKnowledgeAssessment = postTest;
-      objValues.personId = patientID;
-      axios
-        .put(`${baseUrl}hts/${clientId}/post-test-counseling`, objValues, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((response) => {
-          setSaving(false);
-          props.setPatientObj(response.data);
-          //toast.success("Risk Assesment successful");
-          // if (postTest.hivTestResult === "true") {
-          //     handleItemClick("recency-testing", "post-test");
-          // } else if (postTest.hivTestResult === "false") {
-          //     history.push("/");
-          // }
-          handleItemClick("recency-testing", "post-test");
-        })
-        .catch((error) => {
-          setSaving(false);
-          if (error.response && error.response.data) {
-            let errorMessage =
-              error.response.data.apierror &&
-              error.response.data.apierror.message !== ""
-                ? error.response.data.apierror.message
-                : "Something went wrong, please try again";
-            toast.error(errorMessage);
-          } else {
-            toast.error("Something went wrong. Please try again...");
-          }
-        });
-    }
-  };
+    const handleSubmit = (e) => {
+      e.preventDefault();
+      if (props.activePage.actionType === "view") {
+        //e.preventDefault();
+        handleItemClick("recency-testing", "post-test");
+      }
+      if (props.activePage.actionType === "update") {
+        setSaving(true);
+        //e.preventDefault();
+        objValues.htsClientId = clientId;
+        objValues.postTestCounselingKnowledgeAssessment = postTest;
+        objValues.personId = patientID;
+        axios
+          .put(`${baseUrl}hts/${clientId}/post-test-counseling`, objValues, {
+            headers: { Authorization: `Bearer ${token}` },
+          })
+          .then((response) => {
+            setSaving(false);
+            props.setPatientObj(response.data);
+            toast.success("Risk Assesment successful");
+            if (postTest.hivTestResult === "true") {
+              handleItemClick("recency-testing", "post-test");
+            } else if (postTest.hivTestResult === "false") {
+              // history.push("/");
+              handleItemClick("fit", "post-test");
+            }
+            // handleItemClick("recency-testing", "post-test");
+          })
+          .catch((error) => {
+            setSaving(false);
+            if (error.response && error.response.data) {
+              let errorMessage =
+                error.response.data.apierror &&
+                error.response.data.apierror.message !== ""
+                  ? error.response.data.apierror.message
+                  : "Something went wrong, please try again";
+              toast.error(errorMessage);
+            } else {
+              toast.error("Something went wrong. Please try again...");
+            }
+          });
+      }
+    };
 
+
+  //     const handleSubmit = (e) => {
+    //     e.preventDefault();
+    //     if (props.activePage.actionType === "view") {
+    //         //e.preventDefault();
+    //         handleItemClick("recency-testing", "post-test");
+    //     }
+    //     if (props.activePage.actionType === "update") {
+    //         setSaving(true);
+    //         //e.preventDefault();
+    //         objValues.htsClientId = clientId;
+    //         objValues.postTestCounselingKnowledgeAssessment = postTest;
+    //         objValues.personId = patientID;
+    //         axios
+    //             .put(`${baseUrl}hts/${clientId}/post-test-counseling`, objValues, {
+    //                 headers: {Authorization: `Bearer ${token}`},
+    //             })
+    //             .then((response) => {
+    //                 setSaving(false);
+    //                 props.setPatientObj(response.data);
+    //                 toast.success("Risk Assesment successful");
+    //                 if (postTest.hivTestResult === "true") {
+    //                     handleItemClick("recency-testing", "post-test");
+    //                 } else if (postTest.hivTestResult === "false") {
+    //                     // history.push("/");
+    //                     handleItemClick("fit", "post-test");
+    //                 }
+    //                 // handleItemClick("recency-testing", "post-test");
+    //             })
+    //             .catch((error) => {
+    //                 setSaving(false);
+    //                 if (error.response && error.response.data) {
+    //                     let errorMessage =
+    //                         error.response.data.apierror &&
+    //                         error.response.data.apierror.message !== ""
+    //                             ? error.response.data.apierror.message
+    //                             : "Something went wrong, please try again";
+    //                     toast.error(errorMessage);
+    //                 } else {
+    //                     toast.error("Something went wrong. Please try again...");
+    //                 }
+    //             });
+    //     }
+    // };
   return (
     <>
       <Card className={classes.root}>

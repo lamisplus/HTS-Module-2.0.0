@@ -352,7 +352,7 @@ const Recency = (props) => {
     objValues.recency = recency;
     objValues.personId = patientID;
     //console.log(recency)
-    if (validate()) {
+    if (validate() ) {
       setSaving(true);
       axios
         .put(`${baseUrl}hts/${clientId}/recency`, objValues, {
@@ -695,19 +695,20 @@ const Recency = (props) => {
                           <FormGroup>
                             <Label>Date Recency Sample Sent to PCR Lab</Label>
                             <Input
-                              className="form-control"
-                              name="dateSampleSentToPCRLab"
-                              id="dateSampleSentToPCRLab"
-                              type="date"
-                              min={recency.optOutRTRITestDate}
-                              value={recency.dateSampleSentToPCRLab}
-                              max={moment(new Date()).format("YYYY-MM-DD")}
-                              onChange={handleInputChangeRecency}
-                              style={{
-                                border: "1px solid #014D88",
-                                borderRadius: "0.2rem",
-                              }}
-                              readOnly={props.activePage.actionType === "view"}
+                                className="form-control"
+                                name="dateSampleSentToPCRLab"
+                                id="dateSampleSentToPCRLab"
+                                type="date"
+                                // min={recency.optOutRTRITestDate}
+                                min={recency.sampleCollectedDate}
+                                value={recency.dateSampleSentToPCRLab}
+                                max={moment(new Date()).format("YYYY-MM-DD")}
+                                onChange={handleInputChangeRecency}
+                                style={{
+                                  border: "1px solid #014D88",
+                                  borderRadius: "0.2rem",
+                                }}
+                                readOnly={props.activePage.actionType === "view"}
                             />
                             {errors.dateSampleSentToPCRLab !== "" ? (
                               <span className={classes.error}>
@@ -722,19 +723,20 @@ const Recency = (props) => {
                           <FormGroup>
                             <Label>Recency Sample Test Date</Label>
                             <Input
-                              className="form-control"
-                              name="sampleTestDate"
-                              id="sampleTestDate"
-                              type="date"
-                              min={recency.optOutRTRITestDate}
-                              max={moment(new Date()).format("YYYY-MM-DD")}
-                              value={recency.sampleTestDate}
-                              onChange={handleInputChangeRecency}
-                              style={{
-                                border: "1px solid #014D88",
-                                borderRadius: "0.2rem",
-                              }}
-                              readOnly={props.activePage.actionType === "view"}
+                                className="form-control"
+                                name="sampleTestDate"
+                                id="sampleTestDate"
+                                type="date"
+                                // min={recency.optOutRTRITestDate}
+                                min={recency.dateSampleSentToPCRLab}
+                                max={moment(new Date()).format("YYYY-MM-DD")}
+                                value={recency.sampleTestDate}
+                                onChange={handleInputChangeRecency}
+                                style={{
+                                  border: "1px solid #014D88",
+                                  borderRadius: "0.2rem",
+                                }}
+                                readOnly={props.activePage.actionType === "view"}
                             />
                           </FormGroup>
                         </div>
@@ -783,19 +785,20 @@ const Recency = (props) => {
                               Recency Viral Load Result Received Date
                             </Label>
                             <Input
-                              className="form-control"
-                              name="receivedResultDate"
-                              id="receivedResultDate"
-                              type="date"
-                              min={recency.optOutRTRITestDate}
-                              max={moment(new Date()).format("YYYY-MM-DD")}
-                              value={recency.receivedResultDate}
-                              onChange={handleInputChangeRecency}
-                              style={{
-                                border: "1px solid #014D88",
-                                borderRadius: "0.2rem",
-                              }}
-                              readOnly={props.activePage.actionType === "view"}
+                                className="form-control"
+                                name="receivedResultDate"
+                                id="receivedResultDate"
+                                type="date"
+                                // min={recency.optOutRTRITestDate}
+                                min={recency.sampleTestDate}
+                                max={moment(new Date()).format("YYYY-MM-DD")}
+                                value={recency.receivedResultDate}
+                                onChange={handleInputChangeRecency}
+                                style={{
+                                  border: "1px solid #014D88",
+                                  borderRadius: "0.2rem",
+                                }}
+                                readOnly={props.activePage.actionType === "view"}
                             />
                           </FormGroup>
                         </div>

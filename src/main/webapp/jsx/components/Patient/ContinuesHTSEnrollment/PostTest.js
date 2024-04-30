@@ -212,13 +212,14 @@ const PostTest = (props) => {
       .then((response) => {
         setSaving(false);
         props.setPatientObj(response.data);
-        //toast.success("Risk Assesment successful");
-        // if (postTest.hivTestResult === "true") {
-        //   handleItemClick("recency-testing", "post-test");
-        // } else if (postTest.hivTestResult === "false") {
-        //   history.push("/");
-        // }
-        handleItemClick("recency-testing", "post-test");
+        toast.success("Risk Assesment successful");
+        if (postTest.hivTestResult === "true") {
+          handleItemClick("recency-testing", "post-test");
+        } else if (postTest.hivTestResult === "false") {
+          // history.push("/");
+          handleItemClick("fit", "post-test");
+        }
+        // handleItemClick("recency-testing", "post-test");
       })
       .catch((error) => {
         setSaving(false);

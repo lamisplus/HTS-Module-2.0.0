@@ -2524,7 +2524,7 @@ const ViewFamilyIndexTestingForm = (props) => {
                             </FormGroup>
                           </div>
                         )}
-                      <div className="form-group mb-3 col-md-4">
+                    {payload.age < 20 && <div className="form-group mb-3 col-md-4">
                         <FormGroup>
                           <Label for="">Date Enrolled In Ovc</Label>
                           <Input
@@ -2551,7 +2551,7 @@ const ViewFamilyIndexTestingForm = (props) => {
                             ""
                           )}
                         </FormGroup>
-                      </div>
+                      </div>}
                       <div className="form-group mb-3 col-md-4">
                         <FormGroup>
                           <Label for="">Date Enrolled On ART</Label>

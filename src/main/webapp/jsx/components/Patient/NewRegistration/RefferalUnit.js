@@ -197,6 +197,11 @@ const RefferralUnit = (props) => {
     loadGenders();
     getCountry();
     getStateByCountryId();
+    if (props?.patientObj?.personResponseDto?.address?.address[0]?.stateId) {
+      getProvinceWithWithId(
+        props?.patientObj?.personResponseDto?.address?.address[0]?.stateId
+      );
+    }
   }, []);
 
   //Get list of State
@@ -252,6 +257,14 @@ const RefferralUnit = (props) => {
       })
       .catch((e) => {});
   };
+
+  const getProvinceWithWithId = (id) => {
+    getAllProvinces(id)
+      .then((res) => {
+        setProvinces(res);
+      })
+      .catch((e) => {});
+  };
   const getCountry = () => {
     getAllCountry()
       .then((res) => {
@@ -264,25 +277,25 @@ const RefferralUnit = (props) => {
     // console.log(response);
   };
 
-    const checkNumberLimit = (e) => {
-        const limit = 11;
-        const acceptedNumber = e.slice(0, limit);
-        return acceptedNumber;
-    };
-    const handleInputChangePhoneNumber = (e, inputName) => {
-        const limit = 11;
-        const NumberValue = checkNumberLimit(e.target.value.replace(/\D/g, ""));
-        setPayload({ ...payload, [inputName]: NumberValue });
-        if(inputName === "phoneNumber"){
-            setPayload({ ...payload, [inputName]: NumberValue });
-        }
-        if(inputName === "phoneNoOfReferringFacility"){
-            setPayload({ ...payload, [inputName]: NumberValue });
-        }
-        if(inputName === "phoneNoOfReceivingFacility"){
-            setPayload({ ...payload, [inputName]: NumberValue });
-        }
-    };
+  const checkNumberLimit = (e) => {
+    const limit = 11;
+    const acceptedNumber = e.slice(0, limit);
+    return acceptedNumber;
+  };
+  const handleInputChangePhoneNumber = (e, inputName) => {
+    const limit = 11;
+    const NumberValue = checkNumberLimit(e.target.value.replace(/\D/g, ""));
+    setPayload({ ...payload, [inputName]: NumberValue });
+    if (inputName === "phoneNumber") {
+      setPayload({ ...payload, [inputName]: NumberValue });
+    }
+    if (inputName === "phoneNoOfReferringFacility") {
+      setPayload({ ...payload, [inputName]: NumberValue });
+    }
+    if (inputName === "phoneNoOfReceivingFacility") {
+      setPayload({ ...payload, [inputName]: NumberValue });
+    }
+  };
 
   // ########################################################################
   const loadStates = () => {
@@ -1592,8 +1605,8 @@ const RefferralUnit = (props) => {
 
               {/* <hr /> */}
               <br />
-              <div className="row">
-                <div className="form-group mb-3 col-md-12">
+              <div className="" style={{ display: "flex" }}>
+                <div className="">
                   <Button
                     content="Done"
                     type="submit"
@@ -1607,7 +1620,7 @@ const RefferralUnit = (props) => {
                   />
                 </div>
 
-                <div className="form-group mb-3 col-md-12">
+                <div className="">
                   <Button
                     content="Add Form"
                     type="submit"

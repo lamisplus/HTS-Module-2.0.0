@@ -574,15 +574,6 @@ const PnsForm = (props) => {
     } else {
       setObjValues({ ...objValues, [e.target.name]: e.target.value });
     }
-
-    if (e.target.name === "offeredPns" && e.target.value !== "") {
-      setObjValues({
-        ...objValues,
-        [e.target.name]: e.target.value,
-        reasonForDecline: "",
-        otherReasonForDecline: "",
-      });
-    }
     // if((e.target.name !=='maritalStatusId' && e.target.value!=='5' )){//logic for marital status
     //     setHideNumChild(true)
     // }else{
@@ -834,36 +825,35 @@ const PnsForm = (props) => {
 
               {/* otherReasonForDecline */}
 
-              {objValues.reasonForDecline.toLowerCase() === "others" &&
-                objValues.offeredPns.toLowerCase() === "no" && (
-                  <div className="form-group  col-md-6">
-                    <FormGroup>
-                      <Label>
-                        Other reason For Decline{" "}
-                        <span style={{ color: "red" }}> *</span>
-                      </Label>
-                      <Input
-                        className="form-control"
-                        type="text"
-                        name="otherReasonForDecline"
-                        id="otherReasonForDecline"
-                        value={objValues.otherReasonForDecline}
-                        onChange={handleInputChange}
-                        style={{
-                          border: "1px solid #014D88",
-                          borderRadius: "0.2rem",
-                        }}
-                      />
-                      {errors.otherReasonForDecline !== "" ? (
-                        <span className={classes.error}>
-                          {errors.otherReasonForDecline}
-                        </span>
-                      ) : (
-                        ""
-                      )}
-                    </FormGroup>
-                  </div>
-                )}
+              {objValues.reasonForDecline.toLowerCase() === "others" && (
+                <div className="form-group  col-md-6">
+                  <FormGroup>
+                    <Label>
+                      Other reason For Decline{" "}
+                      <span style={{ color: "red" }}> *</span>
+                    </Label>
+                    <Input
+                      className="form-control"
+                      type="text"
+                      name="otherReasonForDecline"
+                      id="otherReasonForDecline"
+                      value={objValues.otherReasonForDecline}
+                      onChange={handleInputChange}
+                      style={{
+                        border: "1px solid #014D88",
+                        borderRadius: "0.2rem",
+                      }}
+                    />
+                    {errors.otherReasonForDecline !== "" ? (
+                      <span className={classes.error}>
+                        {errors.otherReasonForDecline}
+                      </span>
+                    ) : (
+                      ""
+                    )}
+                  </FormGroup>
+                </div>
+              )}
 
               {objValues.offeredPns !== "" && objValues.offeredPns !== "No" && (
                 <div className="form-group  col-md-6">

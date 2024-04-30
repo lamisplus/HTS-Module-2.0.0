@@ -352,42 +352,29 @@ const FamilyIndexTesting = (props) => {
     <>
       <Card className={classes.root}>
         <CardBody>
+
           <h2>FAMILY INDEX TESTING</h2>
-          <form>
+          <form >
             <div className="row">
-              <div
-                className="form-group  col-md-12 text-center pt-2 mb-4"
-                style={{
-                  backgroundColor: "rgb(0,181,173)",
-                  width: "125%",
-                  height: "35px",
-                  color: "#fff",
-                  fontWeight: "bold",
-                }}
-              >
-                SECTION A
-              </div>
+
+              <div className="form-group  col-md-12 text-center pt-2 mb-4" style={{ backgroundColor: 'rgb(0,181,173)', width: '125%', height: '35px', color: '#fff', fontWeight: 'bold' }} >SECTION A</div>
 
               <div className="form-group  col-md-4">
                 <FormGroup>
-                  <Label>
-                    state <span style={{ color: "red" }}> *</span>
-                  </Label>
+                  <Label>state <span style={{ color: "red" }}> *</span></Label>
                   <select
                     className="form-control"
                     name="state"
                     // id="previousTestedHIVNegative"
                     // value={knowledgeAssessment.previousTestedHIVNegative}
                     // onChange={handleInputChangeKnowledgeAssessment}
-                    style={{
-                      border: "1px solid #014D88",
-                      borderRadius: "0.2rem",
-                    }}
-                    // disabled={props.activePage.actionType === "view"}
+                    style={{ border: "1px solid #014D88", borderRadius: "0.2rem" }}
+                  // disabled={props.activePage.actionType === "view"}
                   >
                     <option value={""}></option>
                     <option value="true">Yes</option>
                     <option value="false">No</option>
+
                   </select>
                   {/* {errors.previousTestedHIVNegative !=="" ? (
                                     <span className={classes.error}>{errors.previousTestedHIVNegative}</span>
@@ -404,17 +391,15 @@ const FamilyIndexTesting = (props) => {
                     // id="timeLastHIVNegativeTestResult"
                     // value={knowledgeAssessment.timeLastHIVNegativeTestResult}
                     // onChange={handleInputChangeKnowledgeAssessment}
-                    style={{
-                      border: "1px solid #014D88",
-                      borderRadius: "0.2rem",
-                    }}
-                    // disabled={props.activePage.actionType === "view"}
+                    style={{ border: "1px solid #014D88", borderRadius: "0.2rem" }}
+                  // disabled={props.activePage.actionType === "view"}
                   >
                     <option value={""}></option>
                     <option value="<1"> {"< 1"} month</option>
                     <option value="1-3 Months">1-3 Months</option>
                     <option value="4-6 Months">4-6 Months</option>
                     <option value=">6 Months"> {">6"} Months</option>
+
                   </select>
                   {/* {errors.timeLastHIVNegativeTestResult !=="" ? (
                                     <span className={classes.error}>{errors.timeLastHIVNegativeTestResult}</span>
@@ -436,7 +421,7 @@ const FamilyIndexTesting = (props) => {
                       border: "1px solid #014D88",
                       borderRadius: "0.25rem",
                     }}
-                    // readOnly={props.activePage.actionType === "view"}
+                  // readOnly={props.activePage.actionType === "view"}
                   />
                   {/* {errors.clientCode !== "" ? (
                     <span className={classes.error}>{errors.clientCode}</span>
@@ -462,7 +447,7 @@ const FamilyIndexTesting = (props) => {
                       border: "1px solid #014D88",
                       borderRadius: "0.25rem",
                     }}
-                    // readOnly={props.activePage.actionType === "view"}
+                  // readOnly={props.activePage.actionType === "view"}
                   />
                   {/* {errors.dateVisit !== "" ? (
                     <span className={classes.error}>{errors.dateVisit}</span>
@@ -480,74 +465,66 @@ const FamilyIndexTesting = (props) => {
                     // id="clientInformHivTransRoutes"
                     // value={knowledgeAssessment.clientInformHivTransRoutes}
                     onChange={handleInputChange}
-                    style={{
-                      border: "1px solid #014D88",
-                      borderRadius: "0.2rem",
-                    }}
-                    // disabled={props.activePage.actionType === "view"}
+                    style={{ border: "1px solid #014D88", borderRadius: "0.2rem" }}
+                  // disabled={props.activePage.actionType === "view"}
                   >
-                    {setting.map((value, index) => (
+                    {setting.map((value, index) =>
                       <option key={value.id} value={value.code}>
                         {value.display}
                       </option>
-                    ))}
+                    )}
                   </select>
                   {/* {errors.clientInformHivTransRoutes !=="" ? (
                                     <span className={classes.error}>{errors.clientInformHivTransRoutes}</span>
                                     ) : "" } */}
                 </FormGroup>
               </div>
-
-              <div className="form-group  col-md-4">
-                <FormGroup>
-                  <Label>family index client </Label>
-                  <select
-                    className="form-control"
-                    name="familyIndexClient"
-                    // id="clientInformHivTransRoutes"
-                    // value={knowledgeAssessment.clientInformHivTransRoutes}
-                    onChange={handleInputChange}
-                    style={{
-                      border: "1px solid #014D88",
-                      borderRadius: "0.2rem",
-                    }}
-                    // disabled={props.activePage.actionType === "view"}
-                  >
-                    {familyIndexClient.map((item, index) => (
-                      <option key={index} value={"item"}>
-                        {item}
-                      </option>
-                    ))}
-                  </select>
-                  {/* {errors.clientInformHivTransRoutes !=="" ? (
+        
+            <div className="form-group  col-md-4">
+              <FormGroup>
+                <Label>family index client </Label>
+                <select
+                  className="form-control"
+                  name="familyIndexClient"
+                  // id="clientInformHivTransRoutes"
+                  // value={knowledgeAssessment.clientInformHivTransRoutes}
+                  onChange={handleInputChange}
+                  style={{ border: "1px solid #014D88", borderRadius: "0.2rem" }}
+                // disabled={props.activePage.actionType === "view"}
+                >
+                  {familyIndexClient.map((item, index) =>
+                    <option key={index} value={"item"}>{item}</option>
+                  )}
+                </select>
+                {/* {errors.clientInformHivTransRoutes !=="" ? (
                                     <span className={classes.error}>{errors.clientInformHivTransRoutes}</span>
                                     ) : "" } */}
-                </FormGroup>
-              </div>
+              </FormGroup>
+            </div>
 
-              <div className="form-group col-md-4">
-                <FormGroup>
-                  <Label for="">
-                    name <span style={{ color: "red" }}> *</span>
-                  </Label>
-                  <Input
-                    type="text"
-                    name="name"
-                    // id="clientCode"
-                    // value={objValues.clientCode}
-                    onChange={handleInputChange}
-                    style={{
-                      border: "1px solid #014D88",
-                      borderRadius: "0.25rem",
-                    }}
-                    // readOnly={props.activePage.actionType === "view"}
-                  />
-                  {/* {errors.clientCode !== "" ? (
+            <div className="form-group col-md-4">
+              <FormGroup>
+                <Label for="">
+                  name <span style={{ color: "red" }}> *</span>
+                </Label>
+                <Input
+                  type="text"
+                  name="name"
+                  // id="clientCode"
+                  // value={objValues.clientCode}
+                  onChange={handleInputChange}
+                  style={{
+                    border: "1px solid #014D88",
+                    borderRadius: "0.25rem",
+                  }}
+                // readOnly={props.activePage.actionType === "view"}
+                />
+                {/* {errors.clientCode !== "" ? (
                     <span className={classes.error}>{errors.clientCode}</span>
                   ) : (
                     ""
                   )} */}
-                </FormGroup>
+              </FormGroup>
               </div>
               <div className="form-group col-md-4">
                 <FormGroup>
@@ -564,7 +541,7 @@ const FamilyIndexTesting = (props) => {
                       border: "1px solid #014D88",
                       borderRadius: "0.25rem",
                     }}
-                    // readOnly={props.activePage.actionType === "view"}
+                  // readOnly={props.activePage.actionType === "view"}
                   />
                   {/* {errors.clientCode !== "" ? (
                     <span className={classes.error}>{errors.clientCode}</span>
@@ -573,10 +550,12 @@ const FamilyIndexTesting = (props) => {
                   )} */}
                 </FormGroup>
               </div>
-
+              
               <div className="form-group  col-md-4">
                 <FormGroup>
-                  <Label for="">Mobile number</Label>
+                <Label for="">
+                    Mobile number
+                  </Label>
                   <Input
                     type="text"
                     name="mobileNumber"
@@ -587,7 +566,7 @@ const FamilyIndexTesting = (props) => {
                       border: "1px solid #014D88",
                       borderRadius: "0.25rem",
                     }}
-                    // readOnly={props.activePage.actionType === "view"}
+                  // readOnly={props.activePage.actionType === "view"}
                   />
                   {/* {errors.clientCode !== "" ? (
                     <span className={classes.error}>{errors.clientCode}</span>
@@ -598,7 +577,9 @@ const FamilyIndexTesting = (props) => {
               </div>
               <div className="form-group  col-md-4">
                 <FormGroup>
-                  <Label for="">Alternative contact number</Label>
+                <Label for="">
+                    Alternative contact number
+                  </Label>
                   <Input
                     type="text"
                     name="alternativeContactNumber"
@@ -609,7 +590,7 @@ const FamilyIndexTesting = (props) => {
                       border: "1px solid #014D88",
                       borderRadius: "0.25rem",
                     }}
-                    // readOnly={props.activePage.actionType === "view"}
+                  // readOnly={props.activePage.actionType === "view"}
                   />
                   {/* {errors.clientCode !== "" ? (
                     <span className={classes.error}>{errors.clientCode}</span>
@@ -620,7 +601,9 @@ const FamilyIndexTesting = (props) => {
               </div>
               <div className="form-group  col-md-4">
                 <FormGroup>
-                  <Label for="">descriptive residential address</Label>
+                <Label for="">
+                   descriptive residential address
+                  </Label>
                   <Input
                     type="text"
                     name="descriptiveResidentialAddress"
@@ -631,7 +614,7 @@ const FamilyIndexTesting = (props) => {
                       border: "1px solid #014D88",
                       borderRadius: "0.25rem",
                     }}
-                    // readOnly={props.activePage.actionType === "view"}
+                  // readOnly={props.activePage.actionType === "view"}
                   />
                   {/* {errors.clientCode !== "" ? (
                     <span className={classes.error}>{errors.clientCode}</span>
@@ -657,7 +640,7 @@ const FamilyIndexTesting = (props) => {
                       border: "1px solid #014D88",
                       borderRadius: "0.25rem",
                     }}
-                    // readOnly={props.activePage.actionType === "view"}
+                  // readOnly={props.activePage.actionType === "view"}
                   />
                   {/* {errors.dateVisit !== "" ? (
                     <span className={classes.error}>{errors.dateVisit}</span>
@@ -680,10 +663,7 @@ const FamilyIndexTesting = (props) => {
                         onChange={() => handleCheckboxChange(option)}
                         className="form-check-input"
                       />
-                      <label
-                        htmlFor={`maritalStatus-${index}`}
-                        className="form-check-label"
-                      >
+                      <label htmlFor={`maritalStatus-${index}`} className="form-check-label">
                         {option}
                       </label>
                     </div>
@@ -691,10 +671,8 @@ const FamilyIndexTesting = (props) => {
                 </FormGroup>
               </div>
               <div className="form-group col-md-4">
-                <FormGroup>
-                  <Label>
-                    recency testing(for newly tested positive only) :{" "}
-                  </Label>
+              <FormGroup>
+                  <Label>recency testing(for newly tested positive only) : </Label>
                   <select
                     className="form-control"
                     name="recencyTestingForNewTested"
@@ -708,9 +686,7 @@ const FamilyIndexTesting = (props) => {
                     // disabled={props.activePage.actionType === "view"}
                   >
                     <option value={""}></option>
-                    <option value="Result not yet confirmed">
-                      Result not yet confirmed
-                    </option>
+                    <option value="Result not yet confirmed">Result not yet confirmed</option>
                     <option value="NA">NA</option>
                   </select>
                   {/* {errors.previouslyTested !== "" ? (
@@ -724,7 +700,7 @@ const FamilyIndexTesting = (props) => {
               </div>
               <div className="form-group  col-md-4">
                 <FormGroup>
-                  <Label>is client currently on HIV treatment: </Label>
+                <Label>is client currently on HIV treatment: </Label>
                   <select
                     className="form-control"
                     name="isClientCurrentlyOnHiv"
@@ -752,7 +728,9 @@ const FamilyIndexTesting = (props) => {
               </div>
               <div className="form-group col-md-4">
                 <FormGroup>
-                  <Label for="">date of treatemnt initiation</Label>
+                  <Label for="">
+                    date of treatemnt initiation
+                  </Label>
                   <Input
                     type="date"
                     name="treatmentInitiationDate"
@@ -765,7 +743,7 @@ const FamilyIndexTesting = (props) => {
                       border: "1px solid #014D88",
                       borderRadius: "0.25rem",
                     }}
-                    // readOnly={props.activePage.actionType === "view"}
+                  // readOnly={props.activePage.actionType === "view"}
                   />
                   {/* {errors.dateVisit !== "" ? (
                     <span className={classes.error}>{errors.dateVisit}</span>
@@ -776,7 +754,7 @@ const FamilyIndexTesting = (props) => {
               </div>
               <div className="form-group  col-md-4">
                 <FormGroup>
-                  <Label>virally unsuppressed </Label>
+                <Label>virally unsuppressed </Label>
                   <select
                     className="form-control"
                     name="virallyUnsuppressed"
@@ -804,89 +782,68 @@ const FamilyIndexTesting = (props) => {
               </div>
               <hr />
               <br />
-              <div
-                className="form-group  col-md-12 text-center pt-2 mb-4"
-                style={{
-                  backgroundColor: "#000",
-                  width: "125%",
-                  height: "35px",
-                  color: "#fff",
-                  fontWeight: "bold",
-                }}
-              >
-                SECTION B
-              </div>
+              <div className="form-group  col-md-12 text-center pt-2 mb-4" style={{ backgroundColor: '#000', width: '125%', height: '35px', color: '#fff', fontWeight: 'bold' }} >SECTION B</div>
               {/* FAMILY TREE CARDS  */}
-              {[1, 1, 1, 1, 1].map((item, index) => (
-                <div className="form-group col-md-4">
-                  <Card>
-                    <CardBody>
-                      <FormGroup>
-                        <Label for="motherAge">Mother Age</Label>
-                        <Input
-                          type="text"
-                          name="motherAge"
-                          // value={motherAge}
-                          // onChange={(e) => setMotherAge(e.target.value)}
-                        />
-                      </FormGroup>
-                      <FormGroup>
-                        <Label for="uau">UAU</Label>
-                        <Input
-                          type="text"
-                          name="uau"
-                          // value={uau}
-                          // onChange={(e) => setUau(e.target.value)}
-                        />
-                      </FormGroup>
-                      <FormGroup>
-                        <Label for="name">Name</Label>
-                        <Input
-                          type="text"
-                          name="name"
-                          // value={name}
-                          // onChange={(e) => setName(e.target.value)}
-                        />
-                      </FormGroup>
-                      <FormGroup>
-                        <Label for="dateOfHTS">Date of HTS</Label>
-                        <Input
-                          type="date"
-                          name="dateOfHTS"
-                          // value={dateOfHTS}
-                          // onChange={(e) => setDateOfHTS(e.target.value)}
-                        />
-                      </FormGroup>
-                      <FormGroup>
-                        <Label for="motherDeadYear">Mother Dead/Year</Label>
-                        <Input
-                          type="text"
-                          name="motherDeadYear"
-                          // value={motherDeadYear}
-                          // onChange={(e) => setMotherDeadYear(e.target.value)}
-                        />
-                      </FormGroup>
-                    </CardBody>
-                  </Card>
-                </div>
-              ))}
+             { [1,1,1,1,1].map((item, index ) => <div className="form-group col-md-4">
+                
+             <Card>
+      <CardBody>
+        <FormGroup>
+          <Label for="motherAge">Mother Age</Label>
+          <Input
+            type="text"
+            name="motherAge"
+            // value={motherAge}
+            // onChange={(e) => setMotherAge(e.target.value)}
+          />
+        </FormGroup>
+        <FormGroup>
+          <Label for="uau">UAU</Label>
+          <Input
+            type="text"
+            name="uau"
+            // value={uau}
+            // onChange={(e) => setUau(e.target.value)}
+          />
+        </FormGroup>
+        <FormGroup>
+          <Label for="name">Name</Label>
+          <Input
+            type="text"
+            name="name"
+            // value={name}
+            // onChange={(e) => setName(e.target.value)}
+          />
+        </FormGroup>
+        <FormGroup>
+          <Label for="dateOfHTS">Date of HTS</Label>
+          <Input
+            type="date"
+            name="dateOfHTS"
+            // value={dateOfHTS}
+            // onChange={(e) => setDateOfHTS(e.target.value)}
+          />
+        </FormGroup>
+        <FormGroup>
+          <Label for="motherDeadYear">Mother Dead/Year</Label>
+          <Input
+            type="text"
+            name="motherDeadYear"
+            // value={motherDeadYear}
+            // onChange={(e) => setMotherDeadYear(e.target.value)}
+          />
+        </FormGroup>
+      </CardBody>
+             </Card>
+              </div>)}
               <hr />
               <br />
-              <div
-                className="form-group  col-md-12 text-center pt-2 mb-4"
-                style={{
-                  backgroundColor: "#000",
-                  width: "125%",
-                  height: "35px",
-                  color: "#fff",
-                  fontWeight: "bold",
-                }}
-              >
-                SECTION C
-              </div>
+              <div className="form-group  col-md-12 text-center pt-2 mb-4" style={{ backgroundColor: '#000', width: '125%', height: '35px', color: '#fff', fontWeight: 'bold' }} >SECTION C</div>
               <div className="form-group  col-md-4">
                 <FormGroup>
-                  <Label for="">position of child enumerated</Label>
+                <Label for="">
+                   position of child enumerated
+                  </Label>
                   <Input
                     type="number"
                     name="childPosition"
@@ -897,7 +854,7 @@ const FamilyIndexTesting = (props) => {
                       border: "1px solid #014D88",
                       borderRadius: "0.25rem",
                     }}
-                    // readOnly={props.activePage.actionType === "view"}
+                  // readOnly={props.activePage.actionType === "view"}
                   />
                   {/* {errors.clientCode !== "" ? (
                     <span className={classes.error}>{errors.clientCode}</span>
@@ -908,7 +865,9 @@ const FamilyIndexTesting = (props) => {
               </div>
               <div className="form-group  col-md-4">
                 <FormGroup>
-                  <Label for="">sex</Label>
+                <Label for="">
+                  sex
+                  </Label>
                   <Input
                     type="text"
                     name="sex"
@@ -919,7 +878,7 @@ const FamilyIndexTesting = (props) => {
                       border: "1px solid #014D88",
                       borderRadius: "0.25rem",
                     }}
-                    // readOnly={props.activePage.actionType === "view"}
+                  // readOnly={props.activePage.actionType === "view"}
                   />
                   {/* {errors.clientCode !== "" ? (
                     <span className={classes.error}>{errors.clientCode}</span>
@@ -930,7 +889,9 @@ const FamilyIndexTesting = (props) => {
               </div>
               <div className="form-group  col-md-4">
                 <FormGroup>
-                  <Label for="">follow up appointment location</Label>
+                <Label for="">
+                   follow up appointment location
+                  </Label>
                   <select
                     className="form-control"
                     name="followUpaApointmentLocation"
@@ -953,7 +914,9 @@ const FamilyIndexTesting = (props) => {
               </div>
               <div className="form-group col-md-4">
                 <FormGroup>
-                  <Label for="">schedule visit date</Label>
+                  <Label for="">
+                    schedule visit date
+                  </Label>
                   <Input
                     type="date"
                     name="scheduleVisitDate"
@@ -966,7 +929,7 @@ const FamilyIndexTesting = (props) => {
                       border: "1px solid #014D88",
                       borderRadius: "0.25rem",
                     }}
-                    // readOnly={props.activePage.actionType === "view"}
+                  // readOnly={props.activePage.actionType === "view"}
                   />
                   {/* {errors.dateVisit !== "" ? (
                     <span className={classes.error}>{errors.dateVisit}</span>
@@ -977,7 +940,9 @@ const FamilyIndexTesting = (props) => {
               </div>
               <div className="form-group col-md-4">
                 <FormGroup>
-                  <Label for="">date visited</Label>
+                  <Label for="">
+                    date visited
+                  </Label>
                   <Input
                     type="date"
                     name="dateVisited"
@@ -990,7 +955,7 @@ const FamilyIndexTesting = (props) => {
                       border: "1px solid #014D88",
                       borderRadius: "0.25rem",
                     }}
-                    // readOnly={props.activePage.actionType === "view"}
+                  // readOnly={props.activePage.actionType === "view"}
                   />
                   {/* {errors.dateVisit !== "" ? (
                     <span className={classes.error}>{errors.dateVisit}</span>
@@ -1001,7 +966,7 @@ const FamilyIndexTesting = (props) => {
               </div>
               <div className="form-group  col-md-4">
                 <FormGroup>
-                  <Label>known HIV positive </Label>
+                <Label>known HIV positive </Label>
                   <select
                     className="form-control"
                     name="knownHivPositive"
@@ -1029,7 +994,9 @@ const FamilyIndexTesting = (props) => {
               </div>
               <div className="form-group col-md-4">
                 <FormGroup>
-                  <Label for="">date tested</Label>
+                  <Label for="">
+                    date tested
+                  </Label>
                   <Input
                     type="date"
                     name="dateTested"
@@ -1042,7 +1009,7 @@ const FamilyIndexTesting = (props) => {
                       border: "1px solid #014D88",
                       borderRadius: "0.25rem",
                     }}
-                    // readOnly={props.activePage.actionType === "view"}
+                  // readOnly={props.activePage.actionType === "view"}
                   />
                   {/* {errors.dateVisit !== "" ? (
                     <span className={classes.error}>{errors.dateVisit}</span>
@@ -1053,7 +1020,7 @@ const FamilyIndexTesting = (props) => {
               </div>
               <div className="form-group  col-md-4">
                 <FormGroup>
-                  <Label>HIV test result </Label>
+                <Label>HIV test result </Label>
                   <select
                     className="form-control"
                     name="hivTestResult"
@@ -1079,35 +1046,37 @@ const FamilyIndexTesting = (props) => {
                   )} */}
                 </FormGroup>
               </div>
-              {payload.age < 20 && (
-                <div className="form-group col-md-4">
-                  <FormGroup>
-                    <Label for="">Date enrolled in OVC</Label>
-                    <Input
-                      type="date"
-                      name="ovcEnrolledDate"
-                      // id="dateVisit"
-                      // value={objValues.dateVisit}
-                      onChange={handleInputChange}
-                      // min={objValues.dateOfRegistration}
-                      max={moment(new Date()).format("YYYY-MM-DD")}
-                      style={{
-                        border: "1px solid #014D88",
-                        borderRadius: "0.25rem",
-                      }}
-                      // readOnly={props.activePage.actionType === "view"}
-                    />
-                    {/* {errors.dateVisit !== "" ? (
+              <div className="form-group col-md-4">
+                <FormGroup>
+                  <Label for="">
+                    Date enrolled in OVC
+                  </Label>
+                  <Input
+                    type="date"
+                    name="ovcEnrolledDate"
+                    // id="dateVisit"
+                    // value={objValues.dateVisit}
+                    onChange={handleInputChange}
+                    // min={objValues.dateOfRegistration}
+                    max={moment(new Date()).format("YYYY-MM-DD")}
+                    style={{
+                      border: "1px solid #014D88",
+                      borderRadius: "0.25rem",
+                    }}
+                  // readOnly={props.activePage.actionType === "view"}
+                  />
+                  {/* {errors.dateVisit !== "" ? (
                     <span className={classes.error}>{errors.dateVisit}</span>
                   ) : (
                     ""
                   )} */}
-                  </FormGroup>
-                </div>
-              )}
+                </FormGroup>
+              </div>
               <div className="form-group col-md-4">
                 <FormGroup>
-                  <Label for="">Date enrolled\ on ART</Label>
+                  <Label for="">
+                    Date enrolled\ on ART
+                  </Label>
                   <Input
                     type="date"
                     name="artEnrolledDate"
@@ -1120,7 +1089,7 @@ const FamilyIndexTesting = (props) => {
                       border: "1px solid #014D88",
                       borderRadius: "0.25rem",
                     }}
-                    // readOnly={props.activePage.actionType === "view"}
+                  // readOnly={props.activePage.actionType === "view"}
                   />
                   {/* {errors.dateVisit !== "" ? (
                     <span className={classes.error}>{errors.dateVisit}</span>
@@ -1135,21 +1104,8 @@ const FamilyIndexTesting = (props) => {
               <br />
               <div className="row">
                 <div className="form-group mb-3 col-md-12">
-                  <Button
-                    content="Back"
-                    icon="left arrow"
-                    labelPosition="left"
-                    style={{ backgroundColor: "#992E62", color: "#fff" }}
-                    onClick={() => handleItemClick("basic", "basic")}
-                  />
-                  <Button
-                    content="Save & Continue"
-                    icon="right arrow"
-                    labelPosition="right"
-                    style={{ backgroundColor: "#014d88", color: "#fff" }}
-                    onClick={handleSubmit}
-                    disabled={saving}
-                  />
+                  <Button content='Back' icon='left arrow' labelPosition='left' style={{ backgroundColor: "#992E62", color: '#fff' }} onClick={() => handleItemClick('basic', 'basic')} />
+                  <Button content='Save & Continue' icon='right arrow' labelPosition='right' style={{ backgroundColor: "#014d88", color: '#fff' }} onClick={handleSubmit} disabled={saving} />
                 </div>
               </div>
             </div>

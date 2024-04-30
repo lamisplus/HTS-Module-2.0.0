@@ -440,19 +440,19 @@ const UserRegistration = (props) => {
 
                       <Menu.Item
                         name="spam"
-                        active={activeItem === "new-referral"}
-                        onClick={() => handleItemClick("new-referral")}
+                        active={activeItem === "continuous-referral"}
+                        onClick={() => handleItemClick("continuous-referral")}
                         style={{
                           backgroundColor:
-                            activeItem === "new-referral" ? "#000" : "",
+                            activeItem === "continuous-referral" ? "#000" : "",
                         }}
-                        // disabled={
-                        //   activeItem !== "new-referral" ? true : false
-                        // }
+                        disabled={
+                          activeItem !== "continuous-referral" ? true : false
+                        }
                       >
                         <span style={{ color: "#fff" }}>
                           Client Referral Service
-                          {completed.includes("new-referral") && (
+                          {completed.includes("continuous-referral") && (
                             <Icon name="check" color="green" />
                           )}
                         </span>

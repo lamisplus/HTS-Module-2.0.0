@@ -137,7 +137,7 @@ const RefferralUnit = (props) => {
         hospitalNumber: props.patientObj?.personResponseDto?.identifier?.identifier[0]?.value,
         countryId: "1",
         stateId: props?.patientObj?.personResponseDto?.address?.address[0]?.stateId,
-        province: Number(props?.patientObj?.personResponseDto?.address?.address[0]?.district),
+        province: props?.patientObj?.personResponseDto?.address?.address[0]?.district,
         address: props?.patientObj?.personResponseDto?.address?.address[0]?.city,
         landmark: "",
         phoneNumber: props?.patientObj?.personResponseDto?.contactPoint?.contactPoint[0]?.value,
@@ -165,7 +165,8 @@ const RefferralUnit = (props) => {
         htsClientId: props && props.patientObj ? props.patientObj?.id : "",
         htsClientUuid: props && props.patientObj ? props.patientObj?.uuid : ""
     });
-    console.log("payload in referalUnit", payload)
+
+
     // console.log("PAYLOAD", payload);
     const loadGenders = useCallback(async () => {
         getAllGenders()
@@ -180,6 +181,12 @@ const RefferralUnit = (props) => {
         loadGenders();
         getCountry();
         getStateByCountryId();
+
+        if (
+          props?.patientObj?.personResponseDto?.address?.address[0]?.stateId
+        ) {
+          getProvincesWithId(props?.patientObj?.personResponseDto?.address?.address[0]?.stateId)
+        }
     }, []);
 
     //Get list of State
@@ -222,7 +229,16 @@ const RefferralUnit = (props) => {
         // setSelectedState(e.parentParentOrganisationUnitName);
         // setSelectedLga(e.parentOrganisationUnitName);
     };
+    const getProvincesWithId = (id) => {
+     
+      getAllProvinces(id)
+        .then((res) => {
+          setProvinces(res);
+        })
+        .catch((e) => {});
+    };
 
+    
     //fetch province
     const getProvinces = (e) => {
         const stateId = e.target.value;

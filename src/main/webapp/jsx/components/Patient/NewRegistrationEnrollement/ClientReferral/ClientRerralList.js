@@ -212,17 +212,21 @@ const ClientRerralList = (props) => {
             .filter((b) => b.firstName !== "")
             .map((row) => ({
               date: row.dateVisit,
-              service: serviceMapping[row.serviceNeeded] || row.serviceNeeded,
+              // service: serviceMapping[row.serviceNeeded] || row.serviceNeeded,
+                service: Object.values(row.serviceNeeded).join(', '),
               // phone: row.phoneNumber,
               receiving: row.nameOfReceivingFacility,
               actions: (
                 <div>
                   <Menu.Menu position="right">
                     <Menu.Item>
-                      {/* <Button
-                                                style={{ backgroundColor: "rgb(153,46,98)" }}
-                                                primary
-                                            > */}
+                      <Button
+                          style={{ backgroundColor: "rgb(153,46,98)" }}
+                          primary
+                          onClick={(e) => {
+                            e.preventDefault();
+                          }}
+                      >
                       <Dropdown
                         item
                         text="Action"
@@ -250,7 +254,7 @@ const ClientRerralList = (props) => {
                           </Dropdown.Item>
                         </Dropdown.Menu>
                       </Dropdown>
-                      {/* </Button> */}
+                       </Button>
                     </Menu.Item>
                   </Menu.Menu>
                 </div>

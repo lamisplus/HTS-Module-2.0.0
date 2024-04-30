@@ -185,7 +185,7 @@ const RefferralUnit = (props) => {
     htsClientId: props && props.patientObj ? props.patientObj?.id : "",
     htsClientUuid: props && props.patientObj ? props.patientObj?.uuid : "",
   });
-  console.log("payload in referalUnit", payload);
+  // console.log("payload in referalUnit", payload);
   // console.log("PAYLOAD", payload);
   const loadGenders = useCallback(async () => {
     getAllGenders()
@@ -368,7 +368,7 @@ const RefferralUnit = (props) => {
     SERVICE_NEEDED();
   }, []);
 
-  console.log("selectedServiceNeeded", selectedServiceNeeded);
+  // console.log("selectedServiceNeeded", selectedServiceNeeded);
   // ###########################################################################
   //Get list of HIV STATUS ENROLLMENT
 
@@ -468,6 +468,7 @@ const RefferralUnit = (props) => {
       setAgeDisabled(false);
     }
   };
+
   const handleAgeChange = (e) => {
     if (!ageDisabled && e.target.value) {
       if (e.target.value !== "" && e.target.value >= 85) {
@@ -511,7 +512,7 @@ const RefferralUnit = (props) => {
     temp.province = payload.province ? "" : "This field is required.";
     // temp.address = payload.address ? "" : "This field is required.";
     temp.phoneNumber = payload.phoneNumber ? "" : "This field is required.";
-    temp.sexId = payload.sexId ? "" : "This field is required.";
+    // temp.sexId = payload.sexId ? "" : "This field is required.";
     temp.dob = payload.dob ? "" : "This field is required.";
     // temp.age = payload.age ? "" : "This field is required.";
     temp.hivStatus = payload.hivStatus ? "" : "This field is required.";
@@ -564,28 +565,19 @@ const RefferralUnit = (props) => {
     e.preventDefault();
     if (validate()) {
       try {
-
-        // / Create an object from selectedServiceNeeded
-        const serviceNeededObject = selectedServiceNeeded.reduce((obj, item) => {
-          obj[item.value] = item.label;
-          return obj;
-        }, {});
-        // Update payload.serviceNeeded with the new object
-        setPayload({ ...payload, serviceNeeded: serviceNeededObject });
-        console.log("payload in submit", payload);
         setSaving(true);
-        // await axios.post(`${baseUrl}hts-client-referral`, payload, {
-        //   headers: { Authorization: `Bearer ${token}` },
-        // });
+        await axios.post(`${baseUrl}hts-client-referral`, payload, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         setSaving(false);
         toast.success("Record saved successfully", {
           position: toast.POSITION.BOTTOM_CENTER,
         });
 
-        history.push("/");
-        // props.handleItemClick("refferal-history");
+        // history.push("/");
+        props.handleItemClick("refferal-history");
       } catch (error) {
-        console.log("error", error);
+        // console.log("error", error);
         setSaving(false);
         const errorMessage =
           error.response?.data?.apierror?.message ||
@@ -594,6 +586,7 @@ const RefferralUnit = (props) => {
       }
     }
   };
+
 
   return (
     <>
@@ -962,7 +955,7 @@ const RefferralUnit = (props) => {
                 <div className="form-group  col-md-4">
                   <FormGroup>
                     <Label>
-                      Sex <span style={{color: "red"}}> *</span>
+                      Sex
                     </Label>
                     <select
                         className="form-control"
@@ -984,11 +977,6 @@ const RefferralUnit = (props) => {
                               </option>
                           ))}
                     </select>
-                    {errors.sexId !== "" ? (
-                        <span className={classes.error}>{errors.sexId}</span>
-                    ) : (
-                        ""
-                    )}
                   </FormGroup>
                 </div>
                 <div className="form-group mb-3 col-md-4">
@@ -1604,28 +1592,24 @@ const RefferralUnit = (props) => {
                 {/*    /!*)}*!/*/}
                 {/*  </FormGroup>*/}
                 {/*</div>*/}
+             <div  className="form-group mb-3 col-md-12">
+                <DualListBox
+                    options={serviceNeeded}
+                    selected={selectedServiceNeeded}
+                    onChange={(value) => {
+                      // Update selectedServiceNeeded state
+                      setSelectServiceNeeded(value);
+                      // Convert selectedServiceNeeded array into an object
+                      const serviceNeededObject = value.reduce((obj, item, index) => {
+                        obj[index] = item;
+                        return obj;
+                      }, {});
+                      // Update serviceNeeded in payload
+                      setPayload({ ...payload, serviceNeeded: serviceNeededObject });
+                    }}
 
-                <div className="form-group mb-3 col-md-12">
-                  <FormGroup>
-                    <Label>
-                      Services needed
-                      <span style={{color: "red"}}> *</span>
-                    </Label>
-                    <DualListBox
-                        options={serviceNeeded}
-                        selected={selectedServiceNeeded}
-                        onChange={(value) => setSelectServiceNeeded(value)}
-                    />
-                    {errors.serviceNeeded !== "" ? (
-                        <span className={classes.error}>
-                        {errors.serviceNeeded}
-                      </span>
-                    ) : (
-                        ""
-                    )}
-                  </FormGroup>
+                 />
                 </div>
-
 
                 <div className="form-group mb-3 col-md-12">
                   <FormGroup>
@@ -1658,19 +1642,19 @@ const RefferralUnit = (props) => {
               {/* <hr /> */}
               <br/>
               <div className="row">
-                <div className="form-group mb-3 col-md-12">
-                  <Button
-                      content="Done"
-                      type="submit"
-                      // icon="right arrow"
-                      // labelPosition="right"
-                      style={{backgroundColor: "#014d88", color: "#fff"}}
-                      onClick={() => {
-                        history.push("/");
-                      }}
-                      disabled={saving}
-                  />
-                </div>
+                {/*<div className="form-group mb-3 col-md-12">*/}
+                {/*  <Button*/}
+                {/*      content="Done"*/}
+                {/*      type="submit"*/}
+                {/*      // icon="right arrow"*/}
+                {/*      // labelPosition="right"*/}
+                {/*      style={{backgroundColor: "#014d88", color: "#fff"}}*/}
+                {/*      onClick={() => {*/}
+                {/*        history.push("/");*/}
+                {/*      }}*/}
+                {/*      disabled={saving}*/}
+                {/*  />*/}
+                {/*</div>*/}
 
                 <div className="form-group mb-3 col-md-12">
                   <Button

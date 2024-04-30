@@ -19,6 +19,7 @@ import { Button } from "semantic-ui-react";
 import PhoneInput from "react-phone-input-2";
 import { getAllGenders, alphabetOnly } from "../../../../utility";
 import {useHistory} from "react-router-dom";
+import DualListBox from "react-dual-listbox";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -102,7 +103,8 @@ const ServicesProvided = (props) => {
   const [open, setOpen] = React.useState(false);
   const toggle = () => setOpen(!open);
   const [genders, setGenders] = useState([]);
-  const [serviceNeeded, setServiceNeeded] = useState("");
+    const [serviceNeeded, setServiceNeeded] = useState([]);
+    const [selectedServiceNeeded, setSelectServiceNeeded] = useState([]);
 
     const [payload, setPayload] = useState({
         nameOfFacilityProvider: props?.formInfo?.nameOfReceivingFacility,
@@ -116,7 +118,7 @@ const ServicesProvided = (props) => {
         signature: props?.formInfo?.receivingOrganization?.signature || "",
         phoneNumber: props?.formInfo?.receivingOrganization?.phoneNumber || "",
         categoryOfService: props?.formInfo?.receivingOrganization?.categoryOfService
-            || "",
+            || {},
         receivingFacilityLgaName: props?.formInfo?.receivingFacilityLgaName,
         receivingFacilityStateName: props?.formInfo?.receivingFacilityStateName
     });
@@ -151,29 +153,48 @@ const ServicesProvided = (props) => {
 
   // ##############################################
 
-  const SERVICE_NEEDED = () => {
-    axios.get(`${baseUrl}application-codesets/v2/SERVICE_PROVIDED`, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
-        .then((response) => {
-          if (response.data) {
-            // console.log("SERVICE_NEEDED", response.data);
-            // Find the object with the matching code
-            const service = response.data.find(item => item.code === props.formInfo.serviceNeeded);
-            if (service) {
-              // setServiceNeeded(service.display);
-              setPayload(prevPayload => ({ ...prevPayload, categoryOfService: service.display }));
-            } else {
-              console.error("Service not found");
-            }
-          }
+    const SERVICE_NEEDED = () => {
+        axios
+            .get(`${baseUrl}application-codesets/v2/SERVICE_PROVIDED`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+            .then((response) => {
+                if (response.data) {
+                    // create array of objects from the response
+                    const serviceNeeded = response.data.map((service) => {
+                        return {
+                            value: service.display,
+                            label: service.display
+                        }
+                    });
+                    setServiceNeeded(serviceNeeded);
+                    // console.log("serviceNeeded", serviceNeeded)
+                }
+            })
+            .catch((e) => {
+                // handle error
+            });
+    };
+
+    useEffect(() => {
+        // Fetch the saved serviceNeeded from the backend
+        axios.get(`${baseUrl}hts-client-referral/${props.row.row.id}`, {
+            headers: { Authorization: `Bearer ${token}` },
         })
-        .catch((e) => {
-          console.error("Fetch Facilities error" + e);
-        });
-  };
+            .then((response) => {
+                // Convert the serviceNeeded object into an array of its values
+                const serviceNeededArray = Object.values(response.data.serviceNeeded);
+
+                // Set the serviceNeededArray to selectedServiceNeeded state
+                setSelectServiceNeeded(serviceNeededArray);
+            })
+            .catch((error) => {
+                // Handle error...
+            });
+    }, []);
+
 
   const loadStates1 = () => {
     axios.get(`${baseUrl}organisation-units/parent-organisation-units/1`, {
@@ -705,24 +726,48 @@ const ServicesProvided = (props) => {
                 )}
               </FormGroup>
             </div>
-            <div className="form-group mb-3 col-md-6">
-              <FormGroup>
-                <Label for="firstName">Categories of Services </Label>
-                <Input
-                  className="form-control"
-                  type="text"
-                  name="serviceCategory"
-                  id="serviceCategory"
-                  value={payload.categoryOfService}
-                  onChange={handleInputChange}
-                  style={{
-                    border: "1px solid #014D88",
-                    borderRadius: "0.2rem",
+            {/*<div className="form-group mb-3 col-md-6">*/}
+            {/*  <FormGroup>*/}
+            {/*    <Label for="firstName">Categories of Services </Label>*/}
+            {/*    <Input*/}
+            {/*      className="form-control"*/}
+            {/*      type="text"*/}
+            {/*      name="serviceCategory"*/}
+            {/*      id="serviceCategory"*/}
+            {/*      value={payload.categoryOfService}*/}
+            {/*      onChange={handleInputChange}*/}
+            {/*      style={{*/}
+            {/*        border: "1px solid #014D88",*/}
+            {/*        borderRadius: "0.2rem",*/}
+            {/*      }}*/}
+            {/*      disabled*/}
+            {/*    />*/}
+            {/*  </FormGroup>*/}
+            {/*</div>*/}
+              <div className="form-group mb-3 col-md-12">
+                  <FormGroup>
+                      <Label for="dualListBox">
+                          Categories of Services
+                      </Label>
+              <DualListBox
+                  options={serviceNeeded}
+                  selected={selectedServiceNeeded}
+                  onChange={(value) => {
+                      // Update selectedServiceNeeded state
+                      setSelectServiceNeeded(value);
+                      // Convert selectedServiceNeeded array into an object
+                      const serviceNeededObject = value.reduce((obj, item, index) => {
+                          obj[index] = item;
+                          return obj;
+                      }, {});
+                      // Update serviceNeeded in payload
+                      setPayload({ ...payload, categoryOfService: serviceNeededObject });
                   }}
+                  // disabled={props.row.action === "view" ? true : false}
                   disabled
-                />
-              </FormGroup>
-            </div>
+              />
+                  </FormGroup>
+              </div>
           </div>
           <br />
 
@@ -731,25 +776,25 @@ const ServicesProvided = (props) => {
           <br />
           {props.row.action === "update" && (
             <div className="row">
-              <div className="form-group mb-3 col-md-12">
+              {/*<div className="form-group mb-3 col-md-12">*/}
+              {/*  <Button*/}
+              {/*    content="Done"*/}
+              {/*    type="submit"*/}
+              {/*    // icon="right arrow"*/}
+              {/*    // labelPosition="right"*/}
+              {/*    style={{ backgroundColor: "#014d88", color: "#fff" }}*/}
+              {/*    onClick={() => {*/}
+              {/*      history.push("/");*/}
+              {/*    }}*/}
+              {/*    disabled={saving}*/}
+              {/*  />*/}
+              {/*</div>*/}
+              <div className="form-group mb-3 mt-5 col-md-6">
                 <Button
                   content="Done"
                   type="submit"
                   // icon="right arrow"
                   // labelPosition="right"
-                  style={{ backgroundColor: "#014d88", color: "#fff" }}
-                  onClick={() => {
-                    history.push("/");
-                  }}
-                  disabled={saving}
-                />
-              </div>
-              <div className="form-group mb-3 col-md-6">
-                <Button
-                  content="Done"
-                  type="submit"
-                  icon="right arrow"
-                  labelPosition="right"
                   style={{ backgroundColor: "#014d88", color: "#fff" }}
                   onClick={handleSubmit}
                   disabled={saving}

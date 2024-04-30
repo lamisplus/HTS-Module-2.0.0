@@ -10,6 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
 import {token, url as baseUrl} from "../../../../../api"
 
+
 import "react-phone-input-2/lib/style.css";
 import "semantic-ui-css/semantic.min.css";
 import "react-toastify/dist/ReactToastify.css";
@@ -22,6 +23,7 @@ import PhoneInput from "react-phone-input-2";
 import Select from "react-select";
 // import { getAcount } from "../../../../utility";
 import Cookies from "js-cookie";
+import "react-dual-listbox/lib/react-dual-listbox.css";
 import {
     getAllStateByCountryId,
     getAllCountry,
@@ -31,6 +33,7 @@ import {
 } from "../../../../../utility";
 import {calculate_age} from "../../../utils";
 import {useHistory} from "react-router-dom";
+import DualListBox from "react-dual-listbox";
 
 const useStyles = makeStyles((theme) => ({
     card: {
@@ -133,6 +136,7 @@ const RefferralUnit = (props) => {
     const [selectedReceivingState, setSelectedReceivingState] = useState({})
     const [selectedReceivingFacility, setSelectedReceivingFacility] = useState({});
     const [selectedReceivingLga, setSelectedReceivingLga] = useState({});
+    const [selectedServiceNeeded, setSelectServiceNeeded] = useState([]);
     const history = useHistory();
 
     const [payload, setPayload] = useState({
@@ -164,7 +168,8 @@ const RefferralUnit = (props) => {
         addressOfReceivingFacility: props?.formInfo?.addressOfReceivingFacility,
         phoneNoOfReceivingFacility: props?.formInfo?.phoneNoOfReceivingFacility,
         isDateOfBirthEstimated: false,
-        serviceNeeded: props?.formInfo?.serviceNeeded,
+        serviceNeeded: props?.formInfo?.serviceNeeded || {},
+        // serviceNeeded: {},
         comments: props?.formInfo?.comments,
         receivingStateFacility:props.formInfo.receivingFacilityStateName,
         receivingLgaFacility: "",
@@ -172,8 +177,8 @@ const RefferralUnit = (props) => {
         htsClientUuid: props && props.patientObj ? props.patientObj?.uuid : ""
     });
 
-    console.log("PAYLOAD", payload);
-    console.log("props.formInfo", props.formInfo);
+    // console.log("PAYLOAD", payload);
+    // console.log("props.formInfo", props.formInfo);
     const loadGenders = useCallback(async () => {
         getAllGenders()
             .then((response) => {
@@ -317,23 +322,75 @@ const RefferralUnit = (props) => {
             });
     };
 
+    // const SERVICE_NEEDED = () => {
+    //     axios.get(`${baseUrl}application-codesets/v2/SERVICE_PROVIDED`, {
+    //         headers: {
+    //             Authorization: `Bearer ${token}`
+    //         }
+    //     })
+    //         .then((response) => {
+    //             if (response.data) {
+    //                 // console.log("SERVICE_NEEDED", response.data)
+    //                 setServiceNeeded(response.data);
+    //             }
+    //         })
+    //         .catch((e) => {
+    //             // console.log("Fetch Facilities error" + e);
+    //         });
+    //
+    // }
+
+
     const SERVICE_NEEDED = () => {
-        axios.get(`${baseUrl}application-codesets/v2/SERVICE_PROVIDED`, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
+        axios
+            .get(`${baseUrl}application-codesets/v2/SERVICE_PROVIDED`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            })
             .then((response) => {
                 if (response.data) {
-                    // console.log("SERVICE_NEEDED", response.data)
-                    setServiceNeeded(response.data);
+                    // create array of objects from the response
+                    const serviceNeeded = response.data.map((service) => {
+                        return {
+                            value: service.display,
+                            label: service.display
+                        }
+                    });
+                    setServiceNeeded(serviceNeeded);
                 }
             })
             .catch((e) => {
-                // console.log("Fetch Facilities error" + e);
+                // handle error
             });
+    };
 
-    }
+    useEffect(() => {
+        // Convert the serviceNeeded object into an array of its values
+        const serviceNeededArray = Object.values(props?.formInfo?.serviceNeeded);
+        // Set the serviceNeededArray to selectedServiceNeeded state
+        setSelectServiceNeeded(serviceNeededArray);
+    }, []);
+
+
+    useEffect(() => {
+        // Fetch the saved serviceNeeded from the backend
+        axios.get(`${baseUrl}hts-client-referral/${props.row.row.id}`, {
+            headers: { Authorization: `Bearer ${token}` },
+        })
+            .then((response) => {
+                // Convert the serviceNeeded object into an array of its values
+                const serviceNeededArray = Object.values(response.data.serviceNeeded);
+
+                // Set the serviceNeededArray to selectedServiceNeeded state
+                setSelectServiceNeeded(serviceNeededArray);
+                // console.log("serviceNeededArray", serviceNeededArray);
+            })
+            .catch((error) => {
+                // Handle error...
+            });
+    }, []);
+
 
     useEffect(() => {
         loadStates();
@@ -481,7 +538,7 @@ const RefferralUnit = (props) => {
         temp.province = payload.province ? "" : "This field is required.";
         temp.address = payload.address ? "" : "This field is required.";
         temp.phoneNumber = payload.phoneNumber ? "" : "This field is required.";
-        temp.sexId = payload.sexId ? "" : "This field is required.";
+        // temp.sexId = payload.sexId ? "" : "This field is required.";
         temp.dob = payload.dob ? "" : "This field is required.";
         // temp.age = payload.age ? "" : "This field is required.";
         // temp.hivStatus = payload.hivStatus ? "" : "This field is required.";
@@ -909,7 +966,7 @@ const RefferralUnit = (props) => {
                                 <div className="form-group  col-md-4">
                                     <FormGroup>
                                         <Label>
-                                            Sex <span style={{color: "red"}}> *</span>
+                                            Sex
                                         </Label>
                                         <select
                                             className="form-control"
@@ -931,51 +988,13 @@ const RefferralUnit = (props) => {
                                                     </option>
                                                 ))}
                                         </select>
-                                        {errors.sexId !== "" ? (
-                                            <span className={classes.error}>{errors.sexId}</span>
-                                        ) : (
-                                            ""
-                                        )}
+                                        {/*{errors.sexId !== "" ? (*/}
+                                        {/*    <span className={classes.error}>{errors.sexId}</span>*/}
+                                        {/*) : (*/}
+                                        {/*    ""*/}
+                                        {/*)}*/}
                                     </FormGroup>
                                 </div>
-                                {/* <div className="form-group mb-2 col-md-4">
-                  <FormGroup>
-                    <Label>
-                      Date Of Birth <span style={{ color: "red" }}> *</span>
-                    </Label>
-                    <div className="radio">
-                      <label>
-                        <input
-                          type="radio"
-                          value="Actual"
-                          name="dateOfBirth"
-                          defaultChecked
-                          onChange={(e) => handleDateOfBirthChange(e)}
-                          style={{
-                            border: "1px solid #014D88",
-                            borderRadius: "0.2rem",
-                          }}
-                        />{" "}
-                        Actual
-                      </label>
-                    </div>
-                    <div className="radio">
-                      <label>
-                        <input
-                          type="radio"
-                          value="Estimated"
-                          name="dateOfBirth"
-                          onChange={(e) => handleDateOfBirthChange(e)}
-                          style={{
-                            border: "1px solid #014D88",
-                            borderRadius: "0.2rem",
-                          }}
-                        />{" "}
-                        Estimated
-                      </label>
-                    </div>
-                  </FormGroup>
-                </div> */}
                                 <div className="form-group mb-3 col-md-4">
                                     <FormGroup>
                                         <Label>
@@ -1463,42 +1482,69 @@ const RefferralUnit = (props) => {
                                         )}
                                     </FormGroup>
                                 </div>
-                                <div className="form-group mb-3 col-md-4">
+                                {/*          <div className="form-group mb-3 col-md-4">*/}
+                                {/*              <FormGroup>*/}
+                                {/*                  <Label for="firstName">*/}
+                                {/*                      Services needed*/}
+                                {/*                      <span style={{color: "red"}}> *</span>*/}
+                                {/*                  </Label>*/}
+                                {/*                  <select*/}
+                                {/*                      className="form-control"*/}
+                                {/*                      name="serviceNeeded"*/}
+                                {/*                      id="serviceNeeded"*/}
+                                {/*                      onChange={handleInputChange}*/}
+                                {/*                      value={payload.serviceNeeded}*/}
+                                {/*                      style={{*/}
+                                {/*                          border: "1px solid #014D88",*/}
+                                {/*                          borderRadius: "0.2rem",*/}
+                                {/*                      }}*/}
+                                {/*                      disabled={props.row.action === "view" ? true : false}*/}
+                                {/*                  >*/}
+                                {/*                      <option value={""}>Select Service</option>*/}
+                                {/*                      {serviceNeeded.map((value, index) => (*/}
+                                {/*                          <option key={value.id} value={value.code}>*/}
+                                {/*                              {value.display}*/}
+                                {/*                          </option>*/}
+                                {/*                      ))}*/}
+                                {/*                  </select>*/}
+
+                                {/*                  {errors.serviceNeeded !== "" ? (*/}
+                                {/*                      <span className={classes.error}>*/}
+                                {/*  {errors.serviceNeeded}*/}
+                                {/*</span>*/}
+                                {/*                  ) : (*/}
+                                {/*                      ""*/}
+                                {/*                  )}*/}
+                                {/*              </FormGroup>*/}
+                                {/*          </div>*/}
+                                {/*          <div className="form-group mb-3 col-md-4">*/}
+
+                                <div className="form-group  mt-3 col-md-12">
                                     <FormGroup>
-                                        <Label for="firstName">
-                                            Services needed
-                                            <span style={{color: "red"}}> *</span>
+                                        <Label for="dualListBox">
+                                           Services Needed <span style={{color: "red"}}> *</span>
                                         </Label>
-                                        <select
-                                            className="form-control"
-                                            name="serviceNeeded"
-                                            id="serviceNeeded"
-                                            onChange={handleInputChange}
-                                            value={payload.serviceNeeded}
-                                            style={{
-                                                border: "1px solid #014D88",
-                                                borderRadius: "0.2rem",
+                                        <DualListBox
+                                            id="dualListBox"
+                                            options={serviceNeeded}
+                                            selected={selectedServiceNeeded}
+                                            onChange={(value) => {
+                                                // Update selectedServiceNeeded state
+                                                setSelectServiceNeeded(value);
+                                                // Convert selectedServiceNeeded array into an object
+                                                const serviceNeededObject = value.reduce((obj, item, index) => {
+                                                    obj[index] = item;
+                                                    return obj;
+                                                }, {});
+                                                // Update serviceNeeded in payload
+                                                setPayload({...payload, serviceNeeded: serviceNeededObject});
                                             }}
                                             disabled={props.row.action === "view" ? true : false}
-                                        >
-                                            <option value={""}>Select Service</option>
-                                            {serviceNeeded.map((value, index) => (
-                                                <option key={value.id} value={value.code}>
-                                                    {value.display}
-                                                </option>
-                                            ))}
-                                        </select>
-
-                                        {errors.serviceNeeded !== "" ? (
-                                            <span className={classes.error}>
-                        {errors.serviceNeeded}
-                      </span>
-                                        ) : (
-                                            ""
-                                        )}
+                                        />
                                     </FormGroup>
                                 </div>
-                                <div className="form-group mb-3 col-md-12">
+                                {/*</div>*/}
+                                <div className="form-group mb-3 mt-2 col-md-12">
                                     <FormGroup>
                                         <Label for="firstName">
                                             Comments

@@ -1714,7 +1714,7 @@ const ViewFamilyIndexTestingForm = (props) => {
                   <FormGroup>
                     <Label>
                       Alternative Contact Number
-                      <span style={{color: "red"}}> *</span>
+                      {/* <span style={{color: "red"}}> *</span> */}
                     </Label>
                     <Input
                         type="text"
@@ -2081,7 +2081,7 @@ const ViewFamilyIndexTestingForm = (props) => {
                         ) && (
                           <div className="form-group col-md-4">
                             <FormGroup>
-                              <Label for="uan">UAN</Label>
+                              <Label for="uan">Unique Art No (UAN)</Label>
                               <input
                                 className="form-control"
                                 id="uan"

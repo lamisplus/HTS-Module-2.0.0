@@ -218,7 +218,7 @@
                 name_of_reciving_facility VARCHAR(255),
                 address_of_receiving_facility VARCHAR(255),
                 phone_no_of_receiving_facility VARCHAR(255),
-                service_needed VARCHAR(255),
+                service_needed JSONB,
                 comments VARCHAR(255),
                 receiving_organization JSONB,
                 archived integer NOT NULL,
@@ -235,10 +235,5 @@
             )
         </sql>
     </changeSet>
-
-
-
-
-
 
 </databaseChangeLog>

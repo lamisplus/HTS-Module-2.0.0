@@ -140,6 +140,8 @@ const PnsForm = (props) => {
 
   const [objValues, setObjValues] = useState({
     acceptedHts: "",
+    reasonForDecline: "",
+    otherReasonForDecline: "",
     offeredPns: "",
     acceptedPns: "",
     address: "", //
@@ -150,7 +152,7 @@ const PnsForm = (props) => {
     dateEnrollmentOnART: "",
     datePartnerTested: "",
     dob: props?.basicInfo?.personResponseDto?.dateOfBirth,
-    facilityId: props?.organizationInfo.currentOrganisationUnitId,
+    facilityId: props?.organizationInfo?.currentOrganisationUnitId,
     phoneNumber:
       props?.basicInfo?.personResponseDto?.contactPoint?.contactPoint[0]?.value,
     alternatePhoneNumber: "",
@@ -169,14 +171,14 @@ const PnsForm = (props) => {
     middleName: props?.basicInfo?.personResponseDto?.otherName,
     notificationMethod: "",
     relationshipToIndexClient: "",
-    sex: props?.basicInfo?.personResponseDto?.gender.id,
+    sex: props?.basicInfo?.personResponseDto?.gender?.id,
     htsClientInformation: {
       testingSetting: "",
       providerNameCompletingForm: "",
       providerRoleCompletingForm: "",
-      maritalStatus: props?.basicInfo?.personResponseDto?.maritalStatus.id,
+      maritalStatus: props?.basicInfo?.personResponseDto?.maritalStatus?.id,
       descriptiveResidentialAddress:
-        props?.basicInfo?.personResponseDto?.address?.address[0].city,
+        props?.basicInfo?.personResponseDto?.address?.address[0]?.city,
       dateIndexClientConfirmedHiv: "",
       isClientCurrentlyOnHiv: "",
       DateOfTreatmentInitiation: "",
@@ -206,16 +208,16 @@ const PnsForm = (props) => {
 
   const loadNextForm = (row) => {
     // setSaving(true);
-    handleItemClick("new-referral", "pns");
+    handleItemClick("client-referral", "pns");
     toggle();
   };
   const [htsClientInformation, sethtsClientInformation] = useState({
     testingSetting: "",
     providerNameCompletingForm: "",
     providerRoleCompletingForm: "",
-    maritalStatus: props?.basicInfo?.personResponseDto?.maritalStatus.id,
+    maritalStatus: props?.basicInfo?.personResponseDto?.maritalStatus?.id,
     descriptiveResidentialAddress:
-      props?.basicInfo?.personResponseDto?.address?.address[0].city,
+      props?.basicInfo?.personResponseDto?.address?.address[0]?.city,
     dateIndexClientConfirmedHiv: "",
     isClientCurrentlyOnHiv: "",
     DateOfTreatmentInitiation: "",
@@ -554,6 +556,7 @@ const PnsForm = (props) => {
   };
   const handleInputChange = (e) => {
     setErrors({ ...temp, [e.target.name]: "" });
+
     if (
       e.target.name === "providerNameCompletingForm" &&
       e.target.value !== ""
@@ -568,14 +571,17 @@ const PnsForm = (props) => {
     if (e.target.name === "clientName" && e.target.value !== "") {
       const name = alphabetOnly(e.target.value);
       setObjValues({ ...objValues, [e.target.name]: name });
+    } else {
+      setObjValues({ ...objValues, [e.target.name]: e.target.value });
     }
     // if((e.target.name !=='maritalStatusId' && e.target.value!=='5' )){//logic for marital status
     //     setHideNumChild(true)
     // }else{
     //     setHideNumChild(false)
     // }
-    setObjValues({ ...objValues, [e.target.name]: e.target.value });
   };
+
+  console.log(objValues);
   //Date of Birth and Age handle
   const handleDobChange = (e) => {
     if (e.target.value) {
@@ -632,37 +638,36 @@ const PnsForm = (props) => {
   const handleInputChangePhoneNumber = (e, inputName) => {
     const limit = 11;
     const NumberValue = checkNumberLimit(e.target.value.replace(/\D/g, ""));
-    setObjValues({ ...objValues, [inputName]: NumberValue});
-    if(inputName === "partnerPhoneNumber"){
-        setContactTracing({...contactTracing, [inputName]: NumberValue})
-        }
-    if(inputName === "phoneNumber"){
-        setObjValues({...objValues, [inputName]: NumberValue})
+    setObjValues({ ...objValues, [inputName]: NumberValue });
+    if (inputName === "partnerPhoneNumber") {
+      setContactTracing({ ...contactTracing, [inputName]: NumberValue });
     }
-    if(inputName === "alternatePhoneNumber"){
-        setObjValues({...objValues, [inputName]: NumberValue})
+    if (inputName === "phoneNumber") {
+      setObjValues({ ...objValues, [inputName]: NumberValue });
     }
-
+    if (inputName === "alternatePhoneNumber") {
+      setObjValues({ ...objValues, [inputName]: NumberValue });
+    }
   };
   const alphabetOnly = (value) => {
     const result = value.replace(/[^a-z]/gi, "");
     return result;
   };
   const validate = () => {
-    //HTS FORM VALIDATION
-    // temp.stateId = objValues.stateId ? "" : "This field is required.";
+    // HTS FORM VALIDATION
+    temp.offeredPns = objValues.offeredPns ? "" : "This field is required.";
     // temp.lga = objValues.lga ? "" : "This field is required.";
     // temp.facilityId = objValues.facilityId ? "" : "This field is required.";
-    temp.testingSetting = htsClientInformation.testingSetting
-      ? ""
-      : "This field is required.";
-    temp.providerRoleCompletingForm =
-      htsClientInformation.providerRoleCompletingForm
-        ? ""
-        : "This field is required.";
-    temp.relativeToIndexClient = htsClientInformation.relativeToIndexClient
-      ? ""
-      : "This field is required.";
+    // temp.testingSetting = htsClientInformation.testingSetting
+    //   ? ""
+    //   : "This field is required.";
+    // temp.providerRoleCompletingForm =
+    //   htsClientInformation.providerRoleCompletingForm
+    //     ? ""
+    //     : "This field is required.";
+    // temp.relativeToIndexClient = htsClientInformation.relativeToIndexClient
+    //   ? ""
+    //   : "This field is required.";
     setErrors({ ...temp });
     return Object.values(temp).every((x) => x == "");
   };
@@ -678,6 +683,7 @@ const PnsForm = (props) => {
     objValues.htsClientInformation = htsClientInformation;
     objValues.contactTracing = contactTracing;
     objValues.partnerId = partnerId;
+    // if (validate()) {
     if (validate()) {
       setSaving(true);
       objValues.isDateOfBirthEstimated =
@@ -779,6 +785,76 @@ const PnsForm = (props) => {
                   )}
                 </FormGroup>
               </div>
+
+              {/* */}
+              {objValues.offeredPns.toLowerCase() === "no" && (
+                <div className="form-group  col-md-6">
+                  <FormGroup>
+                    <Label>
+                      Reason for decline{" "}
+                      <span style={{ color: "red" }}> *</span>
+                    </Label>
+                    <select
+                      className="form-control"
+                      type="select"
+                      name="reasonForDecline"
+                      id="reasonForDecline "
+                      value={objValues.reasonForDecline}
+                      onChange={handleInputChange}
+                      style={{
+                        border: "1px solid #014D88",
+                        borderRadius: "0.2rem",
+                      }}
+                    >
+                      <option value={""}>Select</option>
+
+                      <option key={1} value={"others"}>
+                        Others
+                      </option>
+                    </select>
+                    {errors.reasonForDecline !== "" ? (
+                      <span className={classes.error}>
+                        {errors.reasonForDecline}
+                      </span>
+                    ) : (
+                      ""
+                    )}
+                  </FormGroup>
+                </div>
+              )}
+
+              {/* otherReasonForDecline */}
+
+              {objValues.reasonForDecline.toLowerCase() === "others" && (
+                <div className="form-group  col-md-6">
+                  <FormGroup>
+                    <Label>
+                      Other reason For Decline{" "}
+                      <span style={{ color: "red" }}> *</span>
+                    </Label>
+                    <Input
+                      className="form-control"
+                      type="text"
+                      name="otherReasonForDecline"
+                      id="otherReasonForDecline"
+                      value={objValues.otherReasonForDecline}
+                      onChange={handleInputChange}
+                      style={{
+                        border: "1px solid #014D88",
+                        borderRadius: "0.2rem",
+                      }}
+                    />
+                    {errors.otherReasonForDecline !== "" ? (
+                      <span className={classes.error}>
+                        {errors.otherReasonForDecline}
+                      </span>
+                    ) : (
+                      ""
+                    )}
+                  </FormGroup>
+                </div>
+              )}
+
               {objValues.offeredPns !== "" && objValues.offeredPns !== "No" && (
                 <div className="form-group  col-md-6">
                   <FormGroup>
@@ -1355,7 +1431,7 @@ const PnsForm = (props) => {
                       <FormGroup>
                         <Label>
                           Alternative Phone Number
-                          <span style={{ color: "red" }}> *</span>
+                          {/* <span style={{ color: "red" }}> *</span> */}
                         </Label>
                         <Input
                           type="text"
@@ -2054,7 +2130,7 @@ const PnsForm = (props) => {
                 <div className="form-group mb-3 col-md-6">
                   <Button
                     content="Done"
-                    icon="saveee"
+                    // icon="saveee"
                     labelPosition="right"
                     style={{ backgroundColor: "#014d88", color: "#fff" }}
                     onClick={() => {

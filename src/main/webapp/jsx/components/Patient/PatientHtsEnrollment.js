@@ -84,7 +84,6 @@ const UserRegistration = (props) => {
     });
   };
 
-
   console.log(familyIndexList);
   return (
     <>
@@ -239,23 +238,7 @@ const UserRegistration = (props) => {
                       )}
                     </span>
                   </Menu.Item> */}
-                  <Menu.Item
-                    name="inbox"
-                    active={activeItem === "pns-history"}
-                    onClick={() => handleItemClick("pns-history")}
-                    style={{
-                      backgroundColor:
-                        activeItem === "pns-history" ? "#000" : "",
-                    }}
-                  >
-                    <span style={{ color: "#fff" }}>
-                      {" "}
-                      Partner Notification Services
-                      {completed.includes("pns") && (
-                        <Icon name="check" color="green" />
-                      )}
-                    </span>
-                  </Menu.Item>
+
                   {/* <Menu.Item
                     name="inbox"
                     active={activeItem === "pns-history"}
@@ -286,7 +269,25 @@ const UserRegistration = (props) => {
                     <span style={{ color: "#fff" }}>
                       {" "}
                       Family Index Testing form
-                      {completed.includes("fit-history") && (
+                      {completed.includes("fit") && (
+                        <Icon name="check" color="green" />
+                      )}
+                    </span>
+                  </Menu.Item>
+
+                  <Menu.Item
+                    name="inbox"
+                    active={activeItem === "pns-history"}
+                    onClick={() => handleItemClick("pns-history")}
+                    style={{
+                      backgroundColor:
+                        activeItem === "pns-history" ? "#000" : "",
+                    }}
+                  >
+                    <span style={{ color: "#fff" }}>
+                      {" "}
+                      Partner Notification Services
+                      {completed.includes("pns") && (
                         <Icon name="check" color="green" />
                       )}
                     </span>
@@ -448,6 +449,7 @@ const UserRegistration = (props) => {
                     basicInfo={basicInfo}
                     organizationInfo={organizationInfo}
                     addNewForm={false}
+                    history={true}
                   />
                 )}
 
@@ -512,6 +514,7 @@ const UserRegistration = (props) => {
                     extra={extra}
                     basicInfo={basicInfo}
                     organizationInfo={organizationInfo}
+                    history={true}
                   />
                 )}
                 {activeItem === "view-referral" && (

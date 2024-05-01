@@ -25,6 +25,7 @@ import { getAllGenders, alphabetOnly, getAllProvinces, getAllCountry, getAllStat
 // import {calculate_age} from "../../utils";
 import {calculate_age} from "../../.././utils";
 import {useHistory} from "react-router-dom";
+import DualListBox from "react-dual-listbox";
 
 const useStyles = makeStyles((theme) => ({
     card: {
@@ -127,6 +128,7 @@ const RefferralUnit = (props) => {
     const [selectedReceivingState, setSelectedReceivingState] = useState({})
     const [selectedReceivingFacility, setSelectedReceivingFacility] = useState({});
     const [selectedReceivingLga, setSelectedReceivingLga] = useState({});
+    const [selectedServiceNeeded, setSelectServiceNeeded] = useState([]);
     const history = useHistory();
 
     const [payload, setPayload] = useState({
@@ -137,7 +139,7 @@ const RefferralUnit = (props) => {
         hospitalNumber: props.patientObj?.personResponseDto?.identifier?.identifier[0]?.value,
         countryId: "1",
         stateId: props?.patientObj?.personResponseDto?.address?.address[0]?.stateId,
-        province: Number(props?.patientObj?.personResponseDto?.address?.address[0]?.district),
+        province: props?.patientObj?.personResponseDto?.address?.address[0]?.district,
         address: props?.patientObj?.personResponseDto?.address?.address[0]?.city,
         landmark: "",
         phoneNumber: props?.patientObj?.personResponseDto?.contactPoint?.contactPoint[0]?.value,
@@ -165,7 +167,7 @@ const RefferralUnit = (props) => {
         htsClientId: props && props.patientObj ? props.patientObj?.id : "",
         htsClientUuid: props && props.patientObj ? props.patientObj?.uuid : ""
     });
-    console.log("payload in referalUnit", payload)
+    // console.log("payload in referalUnit", payload)
     // console.log("PAYLOAD", payload);
     const loadGenders = useCallback(async () => {
         getAllGenders()
@@ -180,6 +182,12 @@ const RefferralUnit = (props) => {
         loadGenders();
         getCountry();
         getStateByCountryId();
+
+        if (
+          props?.patientObj?.personResponseDto?.address?.address[0]?.stateId
+        ) {
+          getProvincesWithId(props?.patientObj?.personResponseDto?.address?.address[0]?.stateId)
+        }
     }, []);
 
     //Get list of State
@@ -221,6 +229,14 @@ const RefferralUnit = (props) => {
         setErrors({...errors, nameOfReceivingFacility: ""});
         // setSelectedState(e.parentParentOrganisationUnitName);
         // setSelectedLga(e.parentOrganisationUnitName);
+    };
+    const getProvincesWithId = (id) => {
+
+      getAllProvinces(id)
+        .then((res) => {
+          setProvinces(res);
+        })
+        .catch((e) => {});
     };
 
     //fetch province
@@ -310,21 +326,29 @@ const RefferralUnit = (props) => {
     };
 
     const SERVICE_NEEDED = () => {
-        axios.get(`${baseUrl}application-codesets/v2/SERVICE_PROVIDED`, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
+        axios
+            .get(`${baseUrl}application-codesets/v2/SERVICE_PROVIDED`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            })
             .then((response) => {
                 if (response.data) {
-                    setServiceNeeded(response.data);
+                    // create array of objects from the response
+                    const serviceNeeded = response.data.map((service) => {
+                        return {
+                            value: service.display,
+                            label: service.display
+                        }
+                    });
+                    setServiceNeeded(serviceNeeded);
+                    // console.log("serviceNeeded", serviceNeeded)
                 }
             })
             .catch((e) => {
-                // console.log("Fetch Facilities error" + e);
+                // handle error
             });
-
-    }
+    };
 
     useEffect(() => {
         loadStates();
@@ -527,8 +551,8 @@ const RefferralUnit = (props) => {
                 });
                 setSaving(false);
                 toast.success("Record saved successfully", { position: toast.POSITION.BOTTOM_CENTER });
-                // props.handleItemClick("refferal-history");
-                history.push("/")
+                props.handleItemClick("refferal-history");
+                // history.push("/")
             } catch (error) {
                 console.log("error", error)
                 setSaving(false);
@@ -1478,40 +1502,60 @@ const RefferralUnit = (props) => {
                                         )}
                                     </FormGroup>
                                 </div>
-                                <div className="form-group mb-3 col-md-4">
-                                    <FormGroup>
-                                        <Label for="firstName">
-                                            Services needed
-                                            <span style={{color: "red"}}> *</span>
-                                        </Label>
-                                        <select
-                                            className="form-control"
-                                            name="serviceNeeded"
-                                            id="serviceNeeded"
-                                            onChange={handleInputChange}
-                                            value={payload.serviceNeeded}
-                                            style={{
-                                                border: "1px solid #014D88",
-                                                borderRadius: "0.2rem",
-                                            }}
-                                        >
-                                            <option value={""}>Select Service</option>
-                                            {serviceNeeded.map((value, index) => (
-                                                <option key={value.id} value={value.code}>
-                                                    {value.display}
-                                                </option>
-                                            ))}
-                                        </select>
+                                {/*          <div className="form-group mb-3 col-md-4">*/}
+                                {/*              <FormGroup>*/}
+                                {/*                  <Label for="firstName">*/}
+                                {/*                      Services needed*/}
+                                {/*                      <span style={{color: "red"}}> *</span>*/}
+                                {/*                  </Label>*/}
+                                {/*                  <select*/}
+                                {/*                      className="form-control"*/}
+                                {/*                      name="serviceNeeded"*/}
+                                {/*                      id="serviceNeeded"*/}
+                                {/*                      onChange={handleInputChange}*/}
+                                {/*                      value={payload.serviceNeeded}*/}
+                                {/*                      style={{*/}
+                                {/*                          border: "1px solid #014D88",*/}
+                                {/*                          borderRadius: "0.2rem",*/}
+                                {/*                      }}*/}
+                                {/*                  >*/}
+                                {/*                      <option value={""}>Select Service</option>*/}
+                                {/*                      {serviceNeeded.map((value, index) => (*/}
+                                {/*                          <option key={value.id} value={value.code}>*/}
+                                {/*                              {value.display}*/}
+                                {/*                          </option>*/}
+                                {/*                      ))}*/}
+                                {/*                  </select>*/}
 
-                                        {errors.serviceNeeded !== "" ? (
-                                            <span className={classes.error}>
-                        {errors.serviceNeeded}
-                      </span>
-                                        ) : (
-                                            ""
-                                        )}
-                                    </FormGroup>
+                                {/*                  {errors.serviceNeeded !== "" ? (*/}
+                                {/*                      <span className={classes.error}>*/}
+                                {/*  {errors.serviceNeeded}*/}
+                                {/*</span>*/}
+                                {/*                  ) : (*/}
+                                {/*                      ""*/}
+                                {/*                  )}*/}
+                                {/*              </FormGroup>*/}
+                                {/*          </div>*/}
+
+                                <div className="form-group mb-3 col-md-12">
+                                    <DualListBox
+                                        options={serviceNeeded}
+                                        selected={selectedServiceNeeded}
+                                        onChange={(value) => {
+                                            // Update selectedServiceNeeded state
+                                            setSelectServiceNeeded(value);
+                                            // Convert selectedServiceNeeded array into an object
+                                            const serviceNeededObject = value.reduce((obj, item, index) => {
+                                                obj[index] = item;
+                                                return obj;
+                                            }, {});
+                                            // Update serviceNeeded in payload
+                                            setPayload({...payload, serviceNeeded: serviceNeededObject});
+                                        }}
+
+                                    />
                                 </div>
+
                                 <div className="form-group mb-3 col-md-12">
                                     <FormGroup>
                                         <Label for="firstName">

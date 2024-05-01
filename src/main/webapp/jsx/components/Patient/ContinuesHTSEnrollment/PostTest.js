@@ -212,13 +212,14 @@ const PostTest = (props) => {
       .then((response) => {
         setSaving(false);
         props.setPatientObj(response.data);
-        //toast.success("Risk Assesment successful");
-        // if (postTest.hivTestResult === "true") {
-        //   handleItemClick("recency-testing", "post-test");
-        // } else if (postTest.hivTestResult === "false") {
-        //   history.push("/");
-        // }
-        handleItemClick("recency-testing", "post-test");
+        toast.success("Risk Assesment successful");
+        if (postTest.hivTestResult === "true") {
+          handleItemClick("recency-testing", "post-test");
+        } else if (postTest.hivTestResult === "false") {
+          // history.push("/");
+          handleItemClick("fit", "post-test");
+        }
+        // handleItemClick("recency-testing", "post-test");
       })
       .catch((error) => {
         setSaving(false);
@@ -271,6 +272,7 @@ const PostTest = (props) => {
                       border: "1px solid #014D88",
                       borderRadius: "0.2rem",
                     }}
+                    disabled={true}
                   >
                     <option value={""}></option>
                     <option value="true">Positive</option>

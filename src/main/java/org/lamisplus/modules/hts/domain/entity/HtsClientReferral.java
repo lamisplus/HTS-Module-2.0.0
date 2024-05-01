@@ -104,9 +104,11 @@ public class HtsClientReferral extends Audit implements Serializable {
     @Column(name = "phone_no_of_receiving_facility")
     private String phoneNoOfReceivingFacility;
 
-    @Basic
-    @Column(name = "service_needed")
-    private String serviceNeeded;
+    @Type(type = "jsonb")
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "service_needed", columnDefinition = "jsonb")
+    private Object serviceNeeded;
+
     @Basic
     @Column(name = "comments")
     private String comments;

@@ -208,7 +208,7 @@ const PnsForm = (props) => {
 
   const loadNextForm = (row) => {
     // setSaving(true);
-    handleItemClick("new-referral", "pns");
+    handleItemClick("client-referral", "pns");
     toggle();
   };
   const [htsClientInformation, sethtsClientInformation] = useState({
@@ -2130,7 +2130,7 @@ const PnsForm = (props) => {
                 <div className="form-group mb-3 col-md-6">
                   <Button
                     content="Done"
-                    icon="saveee"
+                    // icon="saveee"
                     labelPosition="right"
                     style={{ backgroundColor: "#014d88", color: "#fff" }}
                     onClick={() => {

@@ -4,7 +4,10 @@ import axios from "axios";
 import {token, url as baseUrl} from "../../../../api";
 import * as moment from "moment/moment";
 import {calculate_age} from "../../utils";
-import {Icon, Label as LabelSui} from "semantic-ui-react";
+import {Icon, Label as LabelSui, List} from "semantic-ui-react";
+import {Table} from "react-bootstrap";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@material-ui/icons/Delete";
 
 const UserInformationCard = (props) => {
     const [errors, setErrors] = useState({});
@@ -15,16 +18,18 @@ const UserInformationCard = (props) => {
     const [showOtherInput, setShowOtherInput] = useState(false);
     const [sexs, setSexs] = useState([]);
     const [payload, setPayload] = useState({
-            kitUserCategory: "",
+            id: "",
             otherCategory: "",
             userClientCode: "",
             dateOfBirth: "",
             age: "",
             sex: "",
-            maritalStatus: "",
-            typeOfHivst: ""
+            maritalStatusId: "",
+            typeOfHivst: "",
+            userCategory: ""
         }
     );
+
 
     const Sex = () => {
         axios
@@ -40,7 +45,7 @@ const UserInformationCard = (props) => {
             });
     };
 
-    const MARITALSTATUS= () => {
+    const MARITALSTATUS = () => {
         axios
             .get(`${baseUrl}application-codesets/v2/MARITAL_STATUS`, {
                 headers: {Authorization: `Bearer ${token}`},
@@ -61,24 +66,25 @@ const UserInformationCard = (props) => {
 
 
     console.log("payload", payload)
+    console.log("props.objValues  in userInformationcARD", props.objValues)
 
-    const handleDobChange = (e) => {
-        let newPayload = { ...payload, [e.target.name]: e.target.value };
+    const handleDobChange1 = (e) => {
+        let newPayload = {...payload, [e.target.name]: e.target.value};
         if (e.target.value && new Date(e.target.value) <= new Date()) {
             const age_now = calculate_age(e.target.value);
-            newPayload = { ...newPayload, age: age_now };
+            newPayload = {...newPayload, age: age_now};
         } else {
-            newPayload = { ...newPayload, age: "" };
+            newPayload = {...newPayload, age: ""};
         }
         setPayload(newPayload);
     };
 
     // validate input fields
-    const validate = () => {
-        temp.kitUserCategory = payload.kitUserCategory
+    const validate1 = () => {
+        temp.userCategory = payload.userCategory
             ? ""
             : "This field is required.";
-        if (payload?.kitUserCategory && payload.kitUserCategory === "others") {
+        if (payload?.userCategory && payload.userCategory === "others") {
             temp.otherCategory = payload.otherCategory
                 ? ""
                 : "This field is required.";
@@ -92,15 +98,14 @@ const UserInformationCard = (props) => {
 
     };
 
-
-    const handleInputChange = (e) => {
+    const handleInputChange1 = (e) => {
         const {name, value} = e.target;
         setPayload(prevPayload => {
             let newPayload = {
                 ...prevPayload,
                 [name]: value,
             };
-            if (name === "kitUserCategory" && value != "others") {
+            if (name === "userCategory" && value != "others") {
                 newPayload = {
                     ...newPayload,
                     otherCategory: "",
@@ -110,20 +115,74 @@ const UserInformationCard = (props) => {
         });
     }
 
+    const validateUserTestKitInformation = () => {
+        let temp = {};
+        temp.userCategory = payload.userCategory ? "" : "This field is required.";
+        temp.userClientCode = payload.userClientCode ? "" : "This field is required.";
+        temp.dateOfBirth = payload.dateOfBirth ? "" : "This field is required.";
+        temp.age = payload.age ? "" : "This field is required";
+
+        setErrors({...temp});
+        return Object.values(temp).every((x) => x === "");
+    }
+
+    const addTestKitUserInformation = () => {
+        if (validateUserTestKitInformation()) {
+            let data = {
+                userCategory: payload.userCategory,
+                otherCategory: payload.otherCategory,
+                userClientCode: payload.userClientCode,
+                dateOfBirth: payload.dateOfBirth,
+                age: payload.age,
+                typeOfHivst: payload.typeOfHivst,
+                maritalStatus: payload.maritalStatus
+            }
+
+            // Add the new data to the kitUserInformation array
+            props.setKitUserInformation([...props.kitUserInformation, data]);
+
+            // Set the userInformation in the objValues of PreTestInformation.js
+            // props.setTestKitUserInformation(props.kitUserInformation);
+
+            setPayload({
+                id: "",
+                otherCategory: "",
+                userClientCode: "",
+                dateOfBirth: "",
+                age: "",
+                sex: "",
+                maritalStatusId: "",
+                typeOfHivst: "",
+                userCategory: ""
+            });
+            // handleDobChange({target: {name: "dateOfBirth", value: ""}})
+        }
+    }
+
+    const removeKitUserInformation = (index) => {
+        // Create a new array that excludes the item at the given index
+        const newKitUserInformation = props.kitUserInformation.filter((_, i) => i !== index);
+
+        // Update the kitUserInformation array
+        props.setKitUserInformation(newKitUserInformation);
+    }
+
+
+    console.log("kitUserInformation", props.kitUserInformation)
     return (
         <div className="row">
             <div className="form-group  col-md-4">
                 <FormGroup>
                     <Label>
-                        user Type Primary
+                        user Category
                         <span style={{color: "red"}}> *</span>
                     </Label>
                     <select
                         className="form-control"
-                        name="kitUserCategory"
-                        id="kitUserCategory"
-                        value={payload.kitUserCategory}
-                        onChange={handleInputChange}
+                        name="userCategory"
+                        id="userCategory"
+                        value={payload.userCategory}
+                        onChange={handleInputChange1}
                         style={{
                             border: "1px solid #014D88",
                             borderRadius: "0.2rem",
@@ -143,7 +202,7 @@ const UserInformationCard = (props) => {
                     {/*)}*/}
                 </FormGroup>
             </div>
-            {payload.kitUserCategory === "others" ? (
+            {payload.userCategory === "others" ? (
                 <div className="form-group col-md-4">
                     <FormGroup>
                         <Label>
@@ -156,7 +215,7 @@ const UserInformationCard = (props) => {
                             name="otherCategory"
                             id="otherCategory"
                             value={payload.otherCategory}
-                            onChange={handleInputChange}
+                            onChange={handleInputChange1}
                             style={{
                                 border: "1px solid #014D88",
                                 borderRadius: "0.2rem",
@@ -182,7 +241,7 @@ const UserInformationCard = (props) => {
                         name="userClientCode"
                         id="userClientCode"
                         value={payload.userClientCode}
-                        onChange={handleInputChange}
+                        onChange={handleInputChange1}
                         style={{
                             border: "1px solid #014D88",
                             borderRadius: "0.2rem",
@@ -208,7 +267,7 @@ const UserInformationCard = (props) => {
                         min="1929-12-31"
                         max={moment(new Date()).format("YYYY-MM-DD")}
                         value={payload.dateOfBirth}
-                        onChange={handleDobChange}
+                        onChange={handleDobChange1}
                         style={{
                             border: "1px solid #014D88",
                             borderRadius: "0.2rem",
@@ -251,7 +310,7 @@ const UserInformationCard = (props) => {
                         name="sex"
                         id="sex"
                         value={payload.sex}
-                        onChange={handleInputChange}
+                        onChange={handleInputChange1}
                         style={{
                             border: "1px solid #014D88",
                             borderRadius: "0.2rem",
@@ -280,7 +339,7 @@ const UserInformationCard = (props) => {
                             name="maritalStatusId"
                             id="maritalStatusId"
                             value={payload.maritalStatusId}
-                            onChange={handleInputChange}
+                            onChange={handleInputChange1}
                             style={{
                                 border: "1px solid #014D88",
                                 borderRadius: "0.2rem",
@@ -288,7 +347,7 @@ const UserInformationCard = (props) => {
                         >
                             <option value={""}></option>
                             {maritalStatus.map((value) => (
-                                <option key={value.id} value={value.name}>
+                                <option key={value.id} value={value.id}>
                                     {value.display}
                                 </option>
                             ))}
@@ -304,7 +363,7 @@ const UserInformationCard = (props) => {
                         name="typeOfHivst"
                         id="typeOfHivst"
                         value={payload.typeOfHivst}
-                        onChange={handleInputChange}
+                        onChange={handleInputChange1}
                         style={{
                             border: "1px solid #014D88",
                             borderRadius: "0.2rem",
@@ -331,6 +390,53 @@ const UserInformationCard = (props) => {
             {/*        <Icon name="plus"/> Add*/}
             {/*    </LabelSui>*/}
             {/*</div>*/}
+
+
+            <div className="form-group mb-3 col-md-6">
+                <LabelSui
+                    as="a"
+                    color="black"
+                    onClick={addTestKitUserInformation}
+                    size="small"
+                    style={{marginTop: 35}}
+                >
+                    <Icon name="plus"/> Add
+                </LabelSui>
+            </div>
+            {props.kitUserInformation && props.kitUserInformation.length > 0 ? (
+                <List className="mb-5">
+                    <Table striped responsive>
+                        <thead style={{backgroundColor: "#014D88", color: "white", fontSize: "10px"}}>
+                        <tr>
+                            <th>Client Code</th>
+                            <th>HIV Self Test Type</th>
+                            <th>User Category</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        { props.kitUserInformation.map((item, index) => (
+                        <tr key={index}>
+                            <td>{item.userClientCode}</td>
+                            <td>{item.typeOfHivst}</td>
+                            <td>{item.userCategory}</td>
+                            <td>
+                                <IconButton
+                                    aria-label="delete"
+                                    size="small"
+                                    color="error"
+                                    onClick={() => removeKitUserInformation(index)}
+                                >
+                                    <DeleteIcon fontSize="inherit"/>
+                                </IconButton>
+                            </td>
+                        </tr>
+                          ))}
+                        </tbody>
+                    </Table>
+                </List>
+            ) : ""
+            }
         </div>
     )
 }

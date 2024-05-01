@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {CardBody, FormGroup, Input, Label} from "reactstrap";
 import * as moment from "moment/moment";
 import {Card, CardContent} from "@material-ui/core";
@@ -28,6 +28,7 @@ import axios from "axios";
 import UserInformationCard from "./UserInformationCard";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
+import DualListBox from "react-dual-listbox";
 
 const useStyles = makeStyles((theme) => ({
     card: {
@@ -112,6 +113,9 @@ const PreTestInformation = (props) => {
     const [otherText, setOtherText] = useState('');
     const [isUserInformationAvailable, setIsUserInformationAvailable] = useState(false);
     const [kitUserInformation, setKitUserInformation] = useState([] );
+    const [selectedServiceNeeded, setSelectServiceNeeded] = useState([]);
+    const [serviceNeeded, setServiceNeeded] = useState([]);
+    const [showFreeTextField, setShowFreeTextField] = useState(false);
     const [objValues, setObjValues] = useState({
         dateVisit: "",
         dateOfRegistration: "",
@@ -129,7 +133,7 @@ const PreTestInformation = (props) => {
         expiryDate: "",
         kitUser: null,
         otherKitUserCategory: "",
-        userInformation: kitUserInformation,
+        userInformation: null,
         isUserInformationAvailable: "",
         otherTestKitUserDetails: []
 
@@ -146,6 +150,15 @@ const PreTestInformation = (props) => {
         maritalStatus: "",
         typeOfHivSelfTest: "",
     }]);
+
+    const setTestKitUserInformation = (userInformation) => {
+        setObjValues(prevObjValues => {
+            return {
+                ...prevObjValues,
+                userInformation: userInformation
+            };
+        });
+    };
 
     // users
     // const userInformation = {
@@ -180,12 +193,12 @@ const PreTestInformation = (props) => {
         });
     }
     // handle userInformation object change
-    const handleUserInformationChange = (e, index) => {
-        const {name, value} = e.target;
-        const newUserInformation = [...userInformation];
-        newUserInformation[index][name] = value;
-        setUserInformation(newUserInformation);
-    }
+    // const handleUserInformationChange = (e, index) => {
+    //     const {name, value} = e.target;
+    //     const newUserInformation = [...userInformation];
+    //     newUserInformation[index][name] = value;
+    //     setUserInformation(newUserInformation);
+    // }
 
     // Step 2: Create a function to handle adding a new userInformation object to the array
     const addUserInformation = () => {
@@ -204,6 +217,67 @@ const PreTestInformation = (props) => {
         ]);
     };
 
+    const SERVICE_NEEDED = () => {
+        axios
+            .get(`${baseUrl}application-codesets/v2/SERVICE_PROVIDED`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+            .then((response) => {
+                if (response.data) {
+                    // create array of objects from the response
+                    const serviceNeeded = response.data.map((service) => {
+                        return {
+                            value: service.display,
+                            label: service.display
+                        }
+                    });
+                    setServiceNeeded(serviceNeeded);
+                    // console.log("serviceNeeded", serviceNeeded)
+                }
+            })
+            .catch((e) => {
+                // handle error
+            });
+    };
+
+    console.log("selectedUsers", selectedUsers);
+    console.log("showUserInfo", showUserInfo);
+    useEffect(() => {
+        SERVICE_NEEDED();
+    }, []);
+
+    // const handleKitSelectUserChange = selectedUsers => {
+    //     setSelectedUsers(selectedUsers);
+    //     let newValues = {...objValues, kitUser: selectedUsers};
+    //     if (!selectedUsers || selectedUsers.length === 0) {
+    //         setShowUserInfo(false);
+    //         newValues = {...newValues, isUserInformationAvailable: ""};
+    //     }
+    //     // if myself is part of selected options, then user information should be available
+    //     else if (selectedUsers && selectedUsers.length > 1 && selectedUsers.some(option => option.value === 'myself')) {
+    //         setShowUserInfo(true);
+    //     }
+    //     // if myself is the only selected option, then user information should not be available
+    //     else if (selectedUsers && selectedUsers.length === 1 && selectedUsers[0].value === 'myself') {
+    //         setShowUserInfo(false);
+    //         newValues = {...newValues, isUserInformationAvailable: ""};
+    //     }
+    //     if(!showUserInfo){
+    //         userInformation.userCategory = "";
+    //         userInformation.otherCategory = "";
+    //         userInformation.userClientCode = "";
+    //         userInformation.dateOfBirth = "";
+    //         userInformation.age = "";
+    //         userInformation.sex = "";
+    //         userInformation.maritalStatus = "";
+    //         userInformation.userClientCode = "";
+    //         userInformation.typeOfHivSelfTest = "";
+    //     }
+    //     setObjValues(newValues);
+    // };
+
     const handleKitSelectUserChange = selectedUsers => {
         setSelectedUsers(selectedUsers);
         let newValues = {...objValues, kitUser: selectedUsers};
@@ -211,14 +285,14 @@ const PreTestInformation = (props) => {
             setShowUserInfo(false);
             newValues = {...newValues, isUserInformationAvailable: ""};
         }
-        // if myself is part of selected options, then user information should be available
-        else if (selectedUsers && selectedUsers.length > 1 && selectedUsers.some(option => option.value === 'myself')) {
-            setShowUserInfo(true);
-        }
-        // if myself is the only selected option, then user information should not be available
-        else if (selectedUsers && selectedUsers.length === 1 && selectedUsers[0].value === 'myself') {
+        // if 'myself' is the only selected option, then user information should not be available
+        else if (selectedUsers.length === 1 && selectedUsers[0] === 'myself') {
             setShowUserInfo(false);
             newValues = {...newValues, isUserInformationAvailable: ""};
+        }
+        // if any other option is selected apart from 'myself' or 'myself' and any other option is selected, then user information should be available
+        else {
+            setShowUserInfo(true);
         }
         if(!showUserInfo){
             userInformation.userCategory = "";
@@ -233,6 +307,7 @@ const PreTestInformation = (props) => {
         }
         setObjValues(newValues);
     };
+
     console.log("Object Values", objValues);
     const checkClientCode = (e) => {
         let code = "";
@@ -613,29 +688,42 @@ const PreTestInformation = (props) => {
                                     {/*)}*/}
                                 </FormGroup>
                             </div>
-                            <div className="form-group mb-7 col-md-4">
+                            <div className="form-group mb-3 col-md-12">
                                 <FormGroup>
-                                    <Label for="kitUser">
+                                    <Label for="dualListBox">
                                         Who do you want to use the kit for?
                                     </Label>
-                                    <Select
-                                        isMulti
-                                        name="whoDoYouWantToUseTheKitFor"
+                                    <DualListBox
                                         options={options}
-                                        className="basic-multi-select"
-                                        classNamePrefix="select"
+                                        selected={selectedUsers}
                                         onChange={handleKitSelectUserChange}
-                                        styles={{
-                                            control: (provided) => ({
-                                                ...provided,
-                                                border: "1px solid #014D88",
-                                                borderRadius: "0.25rem",
-                                            }),
-                                        }}
                                     />
                                 </FormGroup>
                             </div>
-                            {selectedUsers && selectedUsers.length === 1 && selectedUsers[0].value === 'others' &&
+
+                            {/*<div className="form-group mb-7 col-md-4">*/}
+                            {/*    <FormGroup>*/}
+                            {/*        <Label for="kitUser">*/}
+                            {/*            Who do you want to use the kit for?*/}
+                            {/*        </Label>*/}
+                            {/*        <Select*/}
+                            {/*            isMulti*/}
+                            {/*            name="whoDoYouWantToUseTheKitFor"*/}
+                            {/*            options={options}*/}
+                            {/*            className="basic-multi-select"*/}
+                            {/*            classNamePrefix="select"*/}
+                            {/*            onChange={handleKitSelectUserChange}*/}
+                            {/*            styles={{*/}
+                            {/*                control: (provided) => ({*/}
+                            {/*                    ...provided,*/}
+                            {/*                    border: "1px solid #014D88",*/}
+                            {/*                    borderRadius: "0.25rem",*/}
+                            {/*                }),*/}
+                            {/*            }}*/}
+                            {/*        />*/}
+                            {/*    </FormGroup>*/}
+                            {/*</div>*/}
+                            {selectedUsers && selectedUsers.length === 1 && selectedUsers[0] === 'others' &&
                                 <div className="form-group mb-3 col-md-4">
                                     <FormGroup>
                                         <Label for="kitUser">
@@ -704,70 +792,16 @@ const PreTestInformation = (props) => {
                                             TestKit User Information
                                         </div>
                                     </div>
-                                    // Step 4: Map over the userInformation array to render multiple UserInformationCard components
-                                    {userInformation.map((userInfo, index) => (
                                         <UserInformationCard
-                                            key={index}
-                                            userInformation={userInfo}
-                                            handleInputChange={(e) => handleUserInformationChange(e, index)}
+                                            // userInformation={userInfo}
                                             objValues={objValues}
                                             setObjValues={setObjValues}
                                             options={options}
+                                            kitUserInformation={kitUserInformation}
+                                            setKitUserInformation ={setKitUserInformation}
+                                            isUserInformationAvailable={isUserInformationAvailable}
+
                                         />
-                                    ))}
-                                    <div className="form-group mb-3 col-md-6">
-                                        <LabelSui
-                                            as="a"
-                                            color="black"
-                                            onClick={addUserInformation}
-                                            size="small"
-                                            style={{marginTop: 35}}
-                                        >
-                                            <Icon name="plus"/> Add
-                                        </LabelSui>
-                                    </div>
-                                    {objValues?.otherTestKitUserDetails.length > 0 &&
-                                        <List className="mb-5">
-                                            <Table striped responsive>
-                                                <thead>
-                                                <tr>
-                                                    <th>Client Code</th>
-                                                    <th> Sex </th>
-                                                    <th>User Category</th>
-                                                    <th>Action</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                {objValues?.otherTestKitUserDetails.map((each, index) => {
-                                                    return (
-                                                        <tr key={index}>
-                                                            <td>
-                                                                {each.userClientCode} // Replace with the actual property name
-                                                            </td>
-                                                            <td>
-                                                                {each.sex} // Replace with the actual property name
-                                                            </td>
-                                                            <td>
-                                                                {each.userCategory} // Replace with the actual property name
-                                                            </td>
-                                                            <td>
-                                                                {" "}
-                                                                <IconButton
-                                                                    aria-label="delete"
-                                                                    size="small"
-                                                                    color="error"
-                                                                    // onClick={() => removeFamilyIndexRow(index)}
-                                                                >
-                                                                    <DeleteIcon fontSize="inherit" />
-                                                                </IconButton>
-                                                            </td>
-                                                        </tr>
-                                                    );
-                                                })}
-                                                </tbody>
-                                            </Table>
-                                        </List>
-                                    }
                                 </>
                             }
                         </div>

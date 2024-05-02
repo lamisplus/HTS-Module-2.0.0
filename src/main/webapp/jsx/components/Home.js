@@ -7,7 +7,7 @@ import VisualisationHome from "./Visualisation/Index";
 import { FaUserPlus } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import Button from "@material-ui/core/Button";
-import HIVSTPatientRegistration from "./Patient/HIVST/HIVSTPatientRegistration";
+import HIVSTPatient from "./Patient/HIVST/HIVSTPatient";
 
 const divStyle = {
   borderRadius: "2px",
@@ -73,7 +73,7 @@ const Home = () => {
                     <HTSList />
                   </Tab>
                     <Tab eventKey="hivst" title="HIVST Patients">
-                        <HIVSTPatientRegistration />
+                        <HIVSTPatient />
                     </Tab>
                 </Tabs>
               </div>

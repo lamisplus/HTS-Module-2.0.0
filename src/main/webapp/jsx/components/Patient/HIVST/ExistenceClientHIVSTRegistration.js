@@ -10,7 +10,8 @@ import { Link, useHistory, useLocation } from "react-router-dom";
 import "react-phone-input-2/lib/style.css";
 import { Icon, Menu, Sticky } from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
-import PreTestInformation from "./PreTestInformation";
+import HIVSTPatientRegistration from "./HIVSTPatientRegistration";
+import HIVSTPostTestAssessment from "./HIVSTPostTestAssessment";
 // import RiskStratification from "../ContinuesHTSEnrollment/RiskStratification";
 // import BasicInfo from "../ContinuesHTSEnrollment/BasicInfo";
 // import PreTest from "../ContinuesHTSEnrollment/PreTest";
@@ -27,7 +28,7 @@ import PreTestInformation from "./PreTestInformation";
 const ExistenceClientHIVSTRegistration = () => {
     const location = useLocation();
     const locationState = location.state;
-    const [activeItem, setactiveItem] = useState("pretest");
+    const [activeItem, setactiveItem] = useState("reg");
     const [completed, setCompleted] = useState([]);
     const [hideOtherMenu, setHideOtherMenu] = useState(true);
     // const [saving, setSaving] = useState(false);
@@ -56,142 +57,34 @@ const ExistenceClientHIVSTRegistration = () => {
                             >
                                 <Menu.Item
                                     name="inbox"
-                                    active={activeItem === "prestest"}
-                                    onClick={() => handleItemClick("pretest")}
+                                    active={activeItem === "reg"}
+                                    onClick={() => handleItemClick("reg")}
                                     style={{
-                                        backgroundColor: activeItem === "pretest" ? "#000" : "",
+                                        backgroundColor: activeItem === "reg" ? "#000" : "",
                                     }}
                                 >
                                     <span style={{ color: "#fff" }}>
                                         {" "}
-                                        Pre Test Information
-                                        {completed.includes("pretest") && (<Icon name="check" color="green" />)}
+                                        Patient Registration
+                                        {completed.includes("reg") && (<Icon name="check" color="green" />)}
                                     </span>
                                 </Menu.Item>
                                 {/*{hideOtherMenu === false && (<>*/}
                                 <Menu.Item
                                     name="inbox"
-                                    active={activeItem === "basic"}
-                                    onClick={() => handleItemClick("basic")}
+                                    active={activeItem === "post"}
+                                    onClick={() => handleItemClick("post")}
                                     style={{
-                                        backgroundColor: activeItem === "basic" ? "#000" : "",
+                                        backgroundColor: activeItem === "post" ? "#000" : "",
                                     }}
-                                    disabled={activeItem !== "basic" ? true : false}
+                                    // disabled={activeItem !== "post" ? true : false}
                                 >
                                     <span style={{ color: "#fff" }}>
                                         {" "}
-                                        Basic Information
-                                        {completed.includes("basic") && (<Icon name="check" color="green" />)}
+                                        HIV Prevention Service Access
+                                        {completed.includes("post") && (<Icon name="check" color="green" />)}
                                     </span>
                                 </Menu.Item>
-                                <Menu.Item
-                                    name="spam"
-                                    active={activeItem === "pre-test-counsel"}
-                                    onClick={() => handleItemClick("pre-test-counsel")}
-                                    style={{
-                                        backgroundColor: activeItem === "pre-test-counsel" ? "#000" : "",
-                                    }}
-                                    disabled={activeItem !== "pre-test-counsel" ? true : false}
-                                >
-                                    {/* <Label>2</Label> */}
-                                    <span style={{ color: "#fff" }}>
-                                        Pre Test Counseling
-                                        {completed.includes("pre-test-counsel") && (
-                                            <Icon name="check" color="green" />)}
-                                    </span>
-                                </Menu.Item>
-                                <Menu.Item
-                                    name="inbox"
-                                    active={activeItem === "hiv-test"}
-                                    onClick={() => handleItemClick("hiv-test")}
-                                    style={{
-                                        backgroundColor: activeItem === "hiv-test" ? "#000" : "",
-                                    }}
-                                //disabled={activeItem !== 'hiv-test' ? true : false}
-                                >
-                                    <span style={{ color: "#fff" }}>
-                                        Request {"&"} Result Form
-                                        {completed.includes("hiv-test") && (<Icon name="check" color="green" />)}
-                                    </span>
-
-                                    {/* <Label color='teal'>3</Label> */}
-                                </Menu.Item>
-                                <Menu.Item
-                                    name="spam"
-                                    active={activeItem === "post-test"}
-                                    onClick={() => handleItemClick("post-test")}
-                                    style={{
-                                        backgroundColor: activeItem === "post-test" ? "#000" : "",
-                                    }}
-                                    disabled={activeItem !== "post-test" ? true : false}
-                                >
-                                    {/* <Label>4</Label> */}
-                                    <span style={{ color: "#fff" }}>
-                                        Post Test Counseling
-                                        {completed.includes("post-test") && (<Icon name="check" color="green" />)}
-                                    </span>
-                                </Menu.Item>
-
-                                <Menu.Item
-                                    name="spam"
-                                    active={activeItem === "recency-testing"}
-                                    onClick={() => handleItemClick("recency-testing")}
-                                    style={{
-                                        backgroundColor: activeItem === "recency-testing" ? "#000" : "",
-                                    }}
-                                    disabled={activeItem !== "recency-testing" ? true : false}
-                                >
-                                    {/* <Label>4</Label> */}
-                                    <span style={{ color: "#fff" }}>
-                                        HIV Recency Testing
-                                        {completed.includes("recency-testing") && (
-                                            <Icon name="check" color="green" />)}
-                                    </span>
-                                </Menu.Item>
-                                <Menu.Item
-                                    name="spam"
-                                    active={activeItem === "fit"}
-                                    onClick={() => handleItemClick("fit")}
-                                    style={{
-                                        backgroundColor: activeItem === "fit" ? "#000" : "",
-                                    }}
-                                    disabled={activeItem !== "fit" ? true : false}
-                                >
-                                    <span style={{ color: "#fff" }}>
-                                        Family Index Testing form
-                                        {completed.includes("fit") && (<Icon name="check" color="green" />)}
-                                    </span>
-                                </Menu.Item>
-                                <Menu.Item
-                                    name="inbox"
-                                    active={activeItem === "pns-history"}
-                                    onClick={() => handleItemClick("pns-history")}
-                                    style={{
-                                        backgroundColor: activeItem === "pns-history" ? "#000" : "",
-                                    }}
-                                >
-                                    <span style={{ color: "#fff" }}>
-                                        {" "}
-                                        Partner Notification Services
-                                        {completed.includes("pns") && (<Icon name="check" color="green" />)}
-                                    </span>
-                                </Menu.Item>
-
-                                <Menu.Item
-                                    name="spam"
-                                    active={activeItem === "continuous-referral"}
-                                    onClick={() => handleItemClick("continuous-referral")}
-                                    style={{
-                                        backgroundColor: activeItem === "continuous-referral" ? "#000" : "",
-                                    }}
-                                    disabled={activeItem !== "continuous-referral" ? true : false}
-                                >
-                                    <span style={{ color: "#fff" }}>
-                                        Client Referral Service
-                                        {completed.includes("continuous-referral") && (<Icon name="check" color="green" />)}
-                                    </span>
-                                </Menu.Item>
-                                {/*</>)}*/}
                             </Menu>
                         </div>
                         <div
@@ -200,7 +93,7 @@ const ExistenceClientHIVSTRegistration = () => {
                                 backgroundColor: "#fff", margingLeft: "-50px", paddingLeft: "-20px",
                             }}
                         >
-                            {activeItem === "pretest" && ( <PreTestInformation
+                            {activeItem === "reg" && ( <HIVSTPatientRegistration
                                 handleItemClick={handleItemClick}
                                 setCompleted={setCompleted}
                                 completed={completed}
@@ -214,20 +107,20 @@ const ExistenceClientHIVSTRegistration = () => {
                             // activePage={props.activePage}
                             // setActivePage={props.setActivePage}
                             />)}
-                            {/*{activeItem === "basic" && (<BasicInfo*/}
-                            {/*    handleItemClick={handleItemClick}*/}
-                            {/*    setCompleted={setCompleted}*/}
-                            {/*    completed={completed}*/}
-                            {/*    setPatientObj={setPatientObj2}*/}
-                            {/*    patientObj={patientObj2}*/}
-                            {/*    clientCode={props.clientCode}*/}
-                            {/*    patientAge={props.patientAge}*/}
-                            {/*    sex={props.patientObj.gender}*/}
-                            {/*    setExtra={setExtra}*/}
-                            {/*    extra={extra}*/}
-                            {/*    patientObject={locationState.patientObject}*/}
-                            {/*    setBasicInfo={setBasicInfo}*/}
-                            {/*/>)}*/}
+                            {activeItem === "post" && (<HIVSTPostTestAssessment
+                                handleItemClick={handleItemClick}
+                                setCompleted={setCompleted}
+                                completed={completed}
+                                setPatientObj={setPatientObj2}
+                                patientObj={patientObj2}
+                                // clientCode={props.clientCode}
+                                // patientAge={props.patientAge}
+                                // sex={props.patientObj.gender}
+                                // setExtra={setExtra}
+                                // extra={extra}
+                                patientObject={locationState.patientObject}
+                                // setBasicInfo={setBasicInfo}
+                            />)}
                             {/*{activeItem === "pre-test-counsel" && (<PreTest*/}
                             {/*    handleItemClick={handleItemClick}*/}
                             {/*    setCompleted={setCompleted}*/}

@@ -162,7 +162,6 @@ const UserInformationCard = (props) => {
     const removeKitUserInformation = (index) => {
         // Create a new array that excludes the item at the given index
         const newKitUserInformation = props.kitUserInformation.filter((_, i) => i !== index);
-
         // Update the kitUserInformation array
         props.setKitUserInformation(newKitUserInformation);
     }

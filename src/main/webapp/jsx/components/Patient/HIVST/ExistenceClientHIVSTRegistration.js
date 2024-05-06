@@ -46,7 +46,7 @@ const ExistenceClientHIVSTRegistration = () => {
             <CardBody>
                 <form>
                     <div className="row">
-                        <h3>HIV SELT TESTING</h3>
+                        <h3> HIV SELF TEST </h3>
                         <br />
                         <br />
                         <div className="col-md-3 col-sm-3 col-lg-3">

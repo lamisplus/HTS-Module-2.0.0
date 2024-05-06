@@ -2414,32 +2414,36 @@ const FamilyIndexTestingForm = (props) => {
                       </FormGroup>
                     </div>
                   )}
-                <div className="form-group mb-3 col-md-4">
-                  <FormGroup>
-                    <Label for="">Date Enrolled In Ovc</Label>
-                    <Input
-                      type="date"
-                      name="dateEnrolledInOVC"
-                      id="dateEnrolledInOVC"
-                      value={familyTestingTrackerRequestDTO?.dateEnrolledInOVC}
-                      onChange={handlefamilyTestingTrackerRequestDTO}
-                      min="1929-12-31"
-                      max={moment(new Date()).format("YYYY-MM-DD")}
-                      style={{
-                        border: "1px solid #014D88",
-                        borderRadius: "0.25rem",
-                      }}
-                      // disabled
-                    />
-                    {errors.referralDate !== "" ? (
-                      <span className={classes.error}>
-                        {errors.referralDate}
-                      </span>
-                    ) : (
-                      ""
-                    )}
-                  </FormGroup>
-                </div>
+                {true && (
+                  <div className="form-group mb-3 col-md-4">
+                    <FormGroup>
+                      <Label for="">Date Enrolled In Ovc</Label>
+                      <Input
+                        type="date"
+                        name="dateEnrolledInOVC"
+                        id="dateEnrolledInOVC"
+                        value={
+                          familyTestingTrackerRequestDTO?.dateEnrolledInOVC
+                        }
+                        onChange={handlefamilyTestingTrackerRequestDTO}
+                        min="1929-12-31"
+                        max={moment(new Date()).format("YYYY-MM-DD")}
+                        style={{
+                          border: "1px solid #014D88",
+                          borderRadius: "0.25rem",
+                        }}
+                        // disabled
+                      />
+                      {errors.referralDate !== "" ? (
+                        <span className={classes.error}>
+                          {errors.referralDate}
+                        </span>
+                      ) : (
+                        ""
+                      )}
+                    </FormGroup>
+                  </div>
+                )}
                 <div className="form-group mb-3 col-md-4">
                   <FormGroup>
                     <Label for="">Date Enrolled On ART</Label>

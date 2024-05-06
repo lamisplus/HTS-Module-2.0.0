@@ -292,9 +292,9 @@ const HIVSTPatientRegistration = (props) => {
             newObjectValues.expiryDate = "";
         }
         // Check if the name is "hasConductedHIVST" and objValues.hasConductedHIVST is "No"
-        if (name === "hasConductedHIVST" && objValues.hasConductedHIVST === "No") {
-            newObjectValues.postTestAssessment = {
-                ...newObjectValues.postTestAssessment,
+        if (name === "hasConductedHIVST" && value === "No") {
+            userInformation.postTestAssessment = {
+                ...userInformation.postTestAssessment,
                 everUsedHivstKitForSelfOrOthers: "",
                 otherHivstKitUserCategory: "",
                 otherHivstKitUserCategoryText: "",
@@ -349,6 +349,24 @@ const HIVSTPatientRegistration = (props) => {
     const handleUserInformationInputChange = (e, section) => {
         let newUserInformation = {...userInformation};
         newUserInformation[section][e.target.name] = e.target.value;
+
+        if (e.target.name === "hasConductedHIVST" && e.target.value === "No") {
+            newUserInformation.postTestAssessment = {
+                ...newUserInformation.postTestAssessment,
+                everUsedHivstKitForSelfOrOthers: "",
+                otherHivstKitUserCategory: "",
+                otherHivstKitUserCategoryText: "",
+                resultOfHivstTest: "",
+                accessConfirmatoryHts: "",
+                referPreventionServices: "",
+                referralInformation: {
+                    referredForConfirmatoryHts: "",
+                    dateReferredForConfirmatoryHts: "",
+                    referredForPreventionServices: "",
+                    dateReferredForPreventionServices: ""
+                }
+            };
+        }
         setUserInformation(newUserInformation);
     };
 
@@ -1593,7 +1611,7 @@ const HIVSTPatientRegistration = (props) => {
                                                                     className="form-control"
                                                                     name="referredForConfirmatoryHts"
                                                                     id="referredForConfirmatoryHts"
-                                                                    value={userInformation.postTestAssessment.referralInformation.dateReferredForConfirmatoryHts}
+                                                                    value={userInformation.postTestAssessment.referralInformation.referredForConfirmatoryHts}
                                                                     onChange={(e) => handleUserInformationInputChange(e, "postTestAssessment")}
                                                                     style={{
                                                                         border: "1px solid #014D88",

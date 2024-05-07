@@ -856,13 +856,44 @@ const BasicInfo = (props) => {
                           border: "1px solid #014D88",
                           borderRadius: "0.2rem",
                         }}
+                        disabled={
+                          props.extra.modality ===
+                            "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||
+                          props.extra.modality ===
+                            "TEST_SETTING_STANDALONE_HTS_POST_ANC1_BREASTFEEDING" ||
+                          props.extra.modality ===
+                            "TEST_SETTING_OTHERS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
+                          props.extra.modality === "TEST_SETTING_CPMTCT" ||
+                          props.extra.modality ===
+                            "TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)"
+                            ? true
+                            : false
+                        }
                       >
                         <option value={""}></option>
-                        {pregnancyStatus.map((value) => (
-                          <option key={value.id} value={value.id}>
-                            {value.display}
-                          </option>
-                        ))}
+                        {pregnancyStatus.map((value) =>
+                          (props.patientObj.riskStratificationResponseDto
+                            .modality ===
+                            "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||
+                            props.patientObj.riskStratificationResponseDto
+                              .modality ===
+                              "TEST_SETTING_OTHERS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
+                            props.patientObj.riskStratificationResponseDto
+                              .testingSetting === "TEST_SETTING_CPMTCT" ||
+                            props.patientObj.riskStratificationResponseDto
+                              .modality ===
+                              "TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
+                            props.patientObj.riskStratificationResponseDto
+                              .modality ===
+                              "TEST_SETTING_STANDALONE_HTS_POST_ANC1_BREASTFEEDING") &&
+                          value.code === "PREGANACY_STATUS_NOT_PREGNANT" ? (
+                            <></>
+                          ) : (
+                            <option key={value.id} value={value.id}>
+                              {value.display}
+                            </option>
+                          )
+                        )}
                       </select>
                     </FormGroup>
                   </div>

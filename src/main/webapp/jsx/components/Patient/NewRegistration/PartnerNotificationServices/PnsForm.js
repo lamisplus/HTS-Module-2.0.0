@@ -212,7 +212,7 @@ const PnsForm = (props) => {
     toggle();
   };
   const [htsClientInformation, sethtsClientInformation] = useState({
-    testingSetting: "",
+    testingSetting: props.patientObj.testingSetting,
     providerNameCompletingForm: "",
     providerRoleCompletingForm: "",
     maritalStatus: props?.basicInfo?.personResponseDto?.maritalStatus?.id,
@@ -362,10 +362,23 @@ const PnsForm = (props) => {
   const handleHTSClientInputChange = (e) => {
     setErrors({ ...temp, [e.target.name]: "" });
 
+if (
+  e.target.name === "partnerAge" ||
+  e.target.name === "numberOfAttempt" ||
+  e.target.name === "numberOfPartnerIdentifiedFromClientIndex"
+) {
+  if (e.target.value > -1) {
     sethtsClientInformation({
       ...htsClientInformation,
       [e.target.name]: e.target.value,
     });
+  }
+} else {
+  sethtsClientInformation({
+    ...htsClientInformation,
+    [e.target.name]: e.target.value,
+  });
+}
   };
 
   const loadFamilyIndexSetting = () => {
@@ -552,7 +565,18 @@ const PnsForm = (props) => {
 
   const handleInputContactChanges = (e) => {
     setErrors({ ...temp, [e.target.name]: "" });
-    setContactTracing({ ...contactTracing, [e.target.name]: e.target.value });
+
+    if (e.target.name === "numberOfAttempt") {
+      if(e.target.value > -1){
+              setContactTracing({
+                ...contactTracing,
+                [e.target.name]: e.target.value,
+              });
+
+      }
+    } else {
+      setContactTracing({ ...contactTracing, [e.target.name]: e.target.value });
+    }
   };
   const handleInputChange = (e) => {
     setErrors({ ...temp, [e.target.name]: "" });
@@ -571,6 +595,13 @@ const PnsForm = (props) => {
     if (e.target.name === "clientName" && e.target.value !== "") {
       const name = alphabetOnly(e.target.value);
       setObjValues({ ...objValues, [e.target.name]: name });
+    } else if (e.target.name === "offeredPns") {
+      setObjValues({
+        ...objValues,
+        reasonForDecline: "",
+        [e.target.name]: e.target.value,
+        otherReasonForDecline: "",
+      });
     } else {
       setObjValues({ ...objValues, [e.target.name]: e.target.value });
     }
@@ -785,8 +816,35 @@ const PnsForm = (props) => {
                   )}
                 </FormGroup>
               </div>
-
               {/* */}
+              {objValues.offeredPns !== "" && objValues.offeredPns !== "No" && (
+                <div className="form-group  col-md-6">
+                  <FormGroup>
+                    <Label>
+                      Accepted PNS ? <span style={{ color: "red" }}> </span>
+                    </Label>
+                    <select
+                      className="form-control"
+                      name="acceptedPns"
+                      id="acceptedPns"
+                      value={objValues.acceptedPns}
+                      onChange={handleInputChange}
+                      style={{
+                        border: "1px solid #014D88",
+                        borderRadius: "0.2rem",
+                      }}
+                    >
+                      <option value={""}></option>
+                      {consent.map((value) => (
+                        <option key={value.id} value={value.display}>
+                          {value.display}
+                        </option>
+                      ))}
+                    </select>
+                  </FormGroup>
+                </div>
+              )}
+              {/* otherReasonForDecline */}
               {objValues.offeredPns.toLowerCase() === "no" && (
                 <div className="form-group  col-md-6">
                   <FormGroup>
@@ -821,67 +879,37 @@ const PnsForm = (props) => {
                     )}
                   </FormGroup>
                 </div>
-              )}
-
-              {/* otherReasonForDecline */}
-
-              {objValues.reasonForDecline.toLowerCase() === "others" && (
-                <div className="form-group  col-md-6">
-                  <FormGroup>
-                    <Label>
-                      Other reason For Decline{" "}
-                      <span style={{ color: "red" }}> *</span>
-                    </Label>
-                    <Input
-                      className="form-control"
-                      type="text"
-                      name="otherReasonForDecline"
-                      id="otherReasonForDecline"
-                      value={objValues.otherReasonForDecline}
-                      onChange={handleInputChange}
-                      style={{
-                        border: "1px solid #014D88",
-                        borderRadius: "0.2rem",
-                      }}
-                    />
-                    {errors.otherReasonForDecline !== "" ? (
-                      <span className={classes.error}>
-                        {errors.otherReasonForDecline}
-                      </span>
-                    ) : (
-                      ""
-                    )}
-                  </FormGroup>
-                </div>
-              )}
-
-              {objValues.offeredPns !== "" && objValues.offeredPns !== "No" && (
-                <div className="form-group  col-md-6">
-                  <FormGroup>
-                    <Label>
-                      Accepted PNS ? <span style={{ color: "red" }}> </span>
-                    </Label>
-                    <select
-                      className="form-control"
-                      name="acceptedPns"
-                      id="acceptedPns"
-                      value={objValues.acceptedPns}
-                      onChange={handleInputChange}
-                      style={{
-                        border: "1px solid #014D88",
-                        borderRadius: "0.2rem",
-                      }}
-                    >
-                      <option value={""}></option>
-                      {consent.map((value) => (
-                        <option key={value.id} value={value.display}>
-                          {value.display}
-                        </option>
-                      ))}
-                    </select>
-                  </FormGroup>
-                </div>
-              )}
+              )}{" "}
+              {objValues.reasonForDecline.toLowerCase() === "others" &&
+                objValues.offeredPns.toLowerCase() === "no" && (
+                  <div className="form-group  col-md-6">
+                    <FormGroup>
+                      <Label>
+                        Other reason For Decline{" "}
+                        <span style={{ color: "red" }}> *</span>
+                      </Label>
+                      <Input
+                        className="form-control"
+                        type="text"
+                        name="otherReasonForDecline"
+                        id="otherReasonForDecline"
+                        value={objValues.otherReasonForDecline}
+                        onChange={handleInputChange}
+                        style={{
+                          border: "1px solid #014D88",
+                          borderRadius: "0.2rem",
+                        }}
+                      />
+                      {errors.otherReasonForDecline !== "" ? (
+                        <span className={classes.error}>
+                          {errors.otherReasonForDecline}
+                        </span>
+                      ) : (
+                        ""
+                      )}
+                    </FormGroup>
+                  </div>
+                )}
               {/*{objValues.acceptedPns !== "" &&*/}
               {/*    objValues.acceptedPns !== "No" && (*/}
               {/*        <div className="form-group  col-md-4">*/}
@@ -914,7 +942,7 @@ const PnsForm = (props) => {
 
             <div className="row">
               {objValues.acceptedPns !== "" &&
-                objValues.acceptedPns !== "No" && (
+                objValues.acceptedPns === "Yes" && (
                   <>
                     <div className="form-group  col-md-4">
                       <FormGroup>
@@ -1041,7 +1069,7 @@ const PnsForm = (props) => {
                             border: "1px solid #014D88",
                             borderRadius: "0.2rem",
                           }}
-                          // disabled={props.activePage.actionType === "view"}
+                          disabled={true}
                         >
                           <option value={""}></option>
                           {setting.map((value) => (

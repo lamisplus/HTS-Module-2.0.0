@@ -252,7 +252,8 @@ const FamilyIndexTestingForm = (props) => {
     lastName: props?.patientObj?.personResponseDto?.surname,
     visitDate: "",
     recencyTesting: "",
-    setting: "",
+    setting: props.patientObj.testingSetting,
+
     sex: props?.patientObj?.personResponseDto?.gender?.id,
     state: "",
     virallyUnSuppressed: "",
@@ -602,15 +603,37 @@ const FamilyIndexTestingForm = (props) => {
 
   // handlefamilyIndexRequestDto
   const handlefamilyTestingTrackerRequestDTO = (e) => {
-    setErrorFamilyIndexDTOTracker({
+   setErrorFamilyIndexDTOTracker({
       ...errorFamilyIndexTracker,
       [e.target.name]: "",
     });
     setaAddIndexTracker2(false);
-    setFamilyTestingTrackerRequestDTO({
-      ...familyTestingTrackerRequestDTO,
-      [e.target.name]: e.target.value,
-    });
+
+
+    if (e.target.name === 'positionOfChildEnumerated') {
+
+      if (e.target.value > -1  ) {
+            setFamilyTestingTrackerRequestDTO({
+              ...familyTestingTrackerRequestDTO,
+              [e.target.name]: e.target.value,
+            });
+      }
+    } else if (e.target.name === "trackerAge") {
+
+            if (e.target.value > -1) {
+              setFamilyTestingTrackerRequestDTO({
+                ...familyTestingTrackerRequestDTO,
+                [e.target.name]: e.target.value,
+              });
+            }
+    } else {
+      setFamilyTestingTrackerRequestDTO({
+        ...familyTestingTrackerRequestDTO,
+        [e.target.name]: e.target.value,
+      });
+    }
+ 
+    
 
     // clearf the error with e.target.name
     setErrors({ ...errors, [e.target.name]: "" });
@@ -1007,8 +1030,7 @@ const FamilyIndexTestingForm = (props) => {
         toast.success("Family Indexform save succesfully!");
 
         if (props.history) {
-              handleItemClick("pns-history", "fit");
-
+          handleItemClick("pns-history", "fit");
         } else {
           loadOtherForm();
         }
@@ -1289,7 +1311,7 @@ const FamilyIndexTestingForm = (props) => {
                         border: "1px solid #014D88",
                         borderRadius: "0.2rem",
                       }}
-                      // disabled={props.activePage.actionType === "view"}
+                      disabled={true}
                     >
                       <option value={""}></option>
                       {setting.map((value) => (
@@ -2414,7 +2436,7 @@ const FamilyIndexTestingForm = (props) => {
                       </FormGroup>
                     </div>
                   )}
-                {true && (
+                {payload.age < 21 && (
                   <div className="form-group mb-3 col-md-4">
                     <FormGroup>
                       <Label for="">Date Enrolled In Ovc</Label>

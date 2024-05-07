@@ -253,7 +253,7 @@ const UserRegistration = (props) => {
     // }
     console.log("Continuous HTS ");
   }, []);
-  console.log("in", props);
+  console.log("in", patientObj2);
 
   return (
     <>
@@ -367,27 +367,29 @@ const UserRegistration = (props) => {
                         </span>
                       </Menu.Item>
 
-                      <Menu.Item
-                        name="spam"
-                        active={activeItem === "recency-testing"}
-                        onClick={() => handleItemClick("recency-testing")}
-                        style={{
-                          backgroundColor:
-                            activeItem === "recency-testing" ? "#000" : "",
-                        }}
-                        disabled={
-                          activeItem !== "recency-testing" ? true : false
-                        }
-                      >
-                        {/* <Label>4</Label> */}
-                        <span style={{ color: "#fff" }}>
-                          HIV Recency Testing
-                          {completed.includes("recency-testing") && (
-                            <Icon name="check" color="green" />
-                          )}
-                        </span>
-                      </Menu.Item>
-
+                      {patientObj2?.hivTestResult &&
+                        patientObj2?.hivTestResult === "Positive" && (
+                          <Menu.Item
+                            name="spam"
+                            active={activeItem === "recency-testing"}
+                            onClick={() => handleItemClick("recency-testing")}
+                            style={{
+                              backgroundColor:
+                                activeItem === "recency-testing" ? "#000" : "",
+                            }}
+                            disabled={
+                              activeItem !== "recency-testing" ? true : false
+                            }
+                          >
+                            {/* <Label>4</Label> */}
+                            <span style={{ color: "#fff" }}>
+                              HIV Recency Testing
+                              {completed.includes("recency-testing") && (
+                                <Icon name="check" color="green" />
+                              )}
+                            </span>
+                          </Menu.Item>
+                        )}
                       {/* <Menu.Item
                         name="spam"
                         active={activeItem === "indexing"}
@@ -406,41 +408,46 @@ const UserRegistration = (props) => {
                           )}
                         </span>
                       </Menu.Item> */}
-
-                      <Menu.Item
-                        name="spam"
-                        active={activeItem === "fit"}
-                        onClick={() => handleItemClick("fit")}
-                        style={{
-                          backgroundColor: activeItem === "fit" ? "#000" : "",
-                        }}
-                        disabled={activeItem !== "fit" ? true : false}
-                      >
-                        <span style={{ color: "#fff" }}>
-                          Family Index Testing form
-                          {completed.includes("fit") && (
-                            <Icon name="check" color="green" />
-                          )}
-                        </span>
-                      </Menu.Item>
-                      <Menu.Item
-                        name="inbox"
-                        active={activeItem === "pns-history"}
-                        onClick={() => handleItemClick("pns-history")}
-                        style={{
-                          backgroundColor:
-                            activeItem === "pns-history" ? "#000" : "",
-                        }}
-                      >
-                        <span style={{ color: "#fff" }}>
-                          {" "}
-                          Partner Notification Services
-                          {completed.includes("pns") && (
-                            <Icon name="check" color="green" />
-                          )}
-                        </span>
-                      </Menu.Item>
-
+                      {patientObj2?.hivTestResult &&
+                        patientObj2?.hivTestResult === "Positive" && (
+                          <Menu.Item
+                            name="spam"
+                            active={activeItem === "fit"}
+                            onClick={() => handleItemClick("fit")}
+                            style={{
+                              backgroundColor:
+                                activeItem === "fit" ? "#000" : "",
+                            }}
+                            disabled={activeItem !== "fit" ? true : false}
+                          >
+                            <span style={{ color: "#fff" }}>
+                              Family Index Testing form
+                              {completed.includes("fit") && (
+                                <Icon name="check" color="green" />
+                              )}
+                            </span>
+                          </Menu.Item>
+                        )}
+                      {patientObj2?.hivTestResult &&
+                        patientObj2?.hivTestResult === "Positive" && (
+                          <Menu.Item
+                            name="inbox"
+                            active={activeItem === "pns-history"}
+                            onClick={() => handleItemClick("pns-history")}
+                            style={{
+                              backgroundColor:
+                                activeItem === "pns-history" ? "#000" : "",
+                            }}
+                          >
+                            <span style={{ color: "#fff" }}>
+                              {" "}
+                              Partner Notification Services
+                              {completed.includes("pns") && (
+                                <Icon name="check" color="green" />
+                              )}
+                            </span>
+                          </Menu.Item>
+                        )}
                       {/*<Menu.Item*/}
                       {/*  name="spam"*/}
                       {/*  active={activeItem === "continuous-referral"}*/}
@@ -460,23 +467,22 @@ const UserRegistration = (props) => {
                       {/*    )}*/}
                       {/*  </span>*/}
                       {/*</Menu.Item>*/}
-
                       <Menu.Item
-                          name="inbox"
-                          active={activeItem === "refferal-history"}
-                          onClick={() => handleItemClick("refferal-history")}
-                          style={{
-                            backgroundColor:
-                                activeItem === "refferal-history" ? "#000" : "",
-                          }}
+                        name="inbox"
+                        active={activeItem === "refferal-history"}
+                        onClick={() => handleItemClick("refferal-history")}
+                        style={{
+                          backgroundColor:
+                            activeItem === "refferal-history" ? "#000" : "",
+                        }}
                       >
-                    <span style={{ color: "#fff" }}>
-                      {" "}
-                      Client Referral Service
-                      {completed.includes("refferal") && (
-                          <Icon name="check" color="green" />
-                      )}
-                    </span>
+                        <span style={{ color: "#fff" }}>
+                          {" "}
+                          Client Referral Service
+                          {completed.includes("refferal") && (
+                            <Icon name="check" color="green" />
+                          )}
+                        </span>
                       </Menu.Item>
                     </>
                   )}
@@ -666,49 +672,49 @@ const UserRegistration = (props) => {
                 {/*  />*/}
                 {/*)}*/}
                 {activeItem === "client-referral" && (
-                    <RefferralUnit
-                        handleItemClick={handleItemClick}
-                        setCompleted={setCompleted}
-                        completed={completed}
-                        setPatientObj={setPatientObj2}
-                        patientObj={patientObj2}
-                        setExtra={setExtra}
-                        extra={extra}
-                        basicInfo={basicInfo}
-                        organizationInfo={organizationInfo}
-                        addNewForm={false}
-                    />
+                  <RefferralUnit
+                    handleItemClick={handleItemClick}
+                    setCompleted={setCompleted}
+                    completed={completed}
+                    setPatientObj={setPatientObj2}
+                    patientObj={patientObj2}
+                    setExtra={setExtra}
+                    extra={extra}
+                    basicInfo={basicInfo}
+                    organizationInfo={organizationInfo}
+                    addNewForm={false}
+                  />
                 )}
                 {activeItem === "refferal-history" && (
-                    <ClientReferralHistory
-                        handleItemClick={handleItemClick}
-                        setCompleted={setCompleted}
-                        completed={completed}
-                        setPatientObj={setPatientObj2}
-                        patientObj={patientObj2}
-                        setExtra={setExtra}
-                        extra={extra}
-                        basicInfo={basicInfo}
-                        organizationInfo={organizationInfo}
-                        activePage={props.activePage}
-                        setActivePage={props.setActivePage}
-                        setRow={setRow}
-                    />
+                  <ClientReferralHistory
+                    handleItemClick={handleItemClick}
+                    setCompleted={setCompleted}
+                    completed={completed}
+                    setPatientObj={setPatientObj2}
+                    patientObj={patientObj2}
+                    setExtra={setExtra}
+                    extra={extra}
+                    basicInfo={basicInfo}
+                    organizationInfo={organizationInfo}
+                    activePage={props.activePage}
+                    setActivePage={props.setActivePage}
+                    setRow={setRow}
+                  />
                 )}
                 {activeItem === "view-referral" && (
-                    <ViewClientReferral
-                        handleItemClick={handleItemClick}
-                        setCompleted={setCompleted}
-                        completed={completed}
-                        setPatientObj={setPatientObj2}
-                        patientObj={patientObj2}
-                        setExtra={setExtra}
-                        extra={extra}
-                        basicInfo={basicInfo}
-                        organizationInfo={organizationInfo}
-                        addNewForm={false}
-                        row={row}
-                    />
+                  <ViewClientReferral
+                    handleItemClick={handleItemClick}
+                    setCompleted={setCompleted}
+                    completed={completed}
+                    setPatientObj={setPatientObj2}
+                    patientObj={patientObj2}
+                    setExtra={setExtra}
+                    extra={extra}
+                    basicInfo={basicInfo}
+                    organizationInfo={organizationInfo}
+                    addNewForm={false}
+                    row={row}
+                  />
                 )}
               </div>
             </div>

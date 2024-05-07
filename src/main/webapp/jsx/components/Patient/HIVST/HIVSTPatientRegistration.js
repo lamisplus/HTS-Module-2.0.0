@@ -103,7 +103,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const HIVSTPatientRegistration = (props) => {
-    console.log(props.patientObj)
+    // console.log(props.patientObj)
     const [saving, setSaving] = useState(false)
     const classes = useStyles();
     const history = useHistory();
@@ -178,7 +178,7 @@ const HIVSTPatientRegistration = (props) => {
 
 
 
-    console.log("Selected Options", selectedUsers);
+    // console.log("Selected Options", selectedUsers);
     const options = [
         {value: 'myself', label: 'For myself'},
         {value: 'spouse', label: 'Spouse'},
@@ -217,7 +217,7 @@ const HIVSTPatientRegistration = (props) => {
             });
     };
 
-    console.log("selectedUsers", selectedUsers);
+    // console.log("selectedUsers", selectedUsers);
     console.log("showUserInfo", showUserInfo);
     useEffect(() => {
         SERVICE_NEEDED();
@@ -263,27 +263,27 @@ const HIVSTPatientRegistration = (props) => {
             newObjectValues.hivTestResult = "";
         }
         // any chnage in the userTyp and the type is not primary user clear hasConductedHIVST set to No, clear postTestAssessment
-        if (name === "userType" && value !== "Primary User" && value !== "") {
-            newObjectValues.isUserInformationAvailable = "";
-            newObjectValues.hasConductedHIVST = "";
-            newObjectValues.postTestAssessment = {
-                everUsedHivstKit: "",
-                everUsedHivstKitForSelfOrOthers: "",
-                otherHivstKitUserCategory: "",
-                otherHivstKitUserCategoryText: "",
-                resultOfHivstTest: "",
-                accessConfirmatoryHts: "",
-                referPreventionServices: "",
-                referralInformation: {
-                    referredForConfirmatoryHts: "",
-                    dateReferredForConfirmatoryHts: "",
-                    referredForPreventionServices: "",
-                    dateReferredForPreventionServices: ""
-                }
-            };
-           setSelectedUsers(["myself"]);
-           newObjectValues.kitUser = selectedUsers
-        }
+        // if (name === "userType" && value !== "Primary User" && value !== "") {
+        //     newObjectValues.isUserInformationAvailable = "";
+        //     newObjectValues.hasConductedHIVST = "";
+        //     newObjectValues.postTestAssessment = {
+        //         everUsedHivstKit: "",
+        //         everUsedHivstKitForSelfOrOthers: "",
+        //         otherHivstKitUserCategory: "",
+        //         otherHivstKitUserCategoryText: "",
+        //         resultOfHivstTest: "",
+        //         accessConfirmatoryHts: "",
+        //         referPreventionServices: "",
+        //         referralInformation: {
+        //             referredForConfirmatoryHts: "",
+        //             dateReferredForConfirmatoryHts: "",
+        //             referredForPreventionServices: "",
+        //             dateReferredForPreventionServices: ""
+        //         }
+        //     };
+        //    setSelectedUsers(["myself"]);
+        //    newObjectValues.kitUser = selectedUsers
+        // }
         // Check if the name is "typeOfHIVSelfReceived"
         if (name === "typeOfHIVSelfReceived") {
             newObjectValues.nameOfIndividualHIVTestKitReceived = "";
@@ -346,11 +346,100 @@ const HIVSTPatientRegistration = (props) => {
         setObjValues(newObjectValues);
     }
 
-    const handleUserInformationInputChange = (e, section) => {
-        let newUserInformation = {...userInformation};
-        newUserInformation[section][e.target.name] = e.target.value;
+    // const handleUserInformationInputChange = (e, section) => {
+    //     let newUserInformation = {...userInformation};
+    //     newUserInformation[section][e.target.name] = e.target.value;
+    //
+    //     if (e.target.name === "hasConductedHIVST" && e.target.value === "No") {
+    //         newUserInformation.postTestAssessment = {
+    //             ...newUserInformation.postTestAssessment,
+    //             everUsedHivstKitForSelfOrOthers: "",
+    //             otherHivstKitUserCategory: "",
+    //             otherHivstKitUserCategoryText: "",
+    //             resultOfHivstTest: "",
+    //             accessConfirmatoryHts: "",
+    //             referPreventionServices: "",
+    //             referralInformation: {
+    //                 referredForConfirmatoryHts: "",
+    //                 dateReferredForConfirmatoryHts: "",
+    //                 referredForPreventionServices: "",
+    //                 dateReferredForPreventionServices: ""
+    //             }
+    //         };
+    //     }
+    //     setUserInformation(newUserInformation);
+    // };
 
-        if (e.target.name === "hasConductedHIVST" && e.target.value === "No") {
+    const handleUserInformationInputChange = (e, section) => {
+        const { name, value } = e.target;
+        let newUserInformation = {...userInformation};
+
+        if (section === 'postTestAssessment' && name in newUserInformation[section].referralInformation) {
+            newUserInformation[section].referralInformation[name] = value;
+        } else {
+            newUserInformation[section][name] = value;
+        }
+
+        // if everUsedHivstKitForSelfOrOthers  clear otherHivstKitUserCategory
+        if (name === "everUsedHivstKitForSelfOrOthers") {
+            newUserInformation.postTestAssessment = {
+                ...newUserInformation.postTestAssessment,
+                otherHivstKitUserCategory: "",
+                otherHivstKitUserCategoryText: ""
+            };
+        }
+
+        // if  resultOfHivstTestchnages clear all the feilds below
+        if (name === "resultOfHivstTest") {
+            newUserInformation.postTestAssessment = {
+                ...newUserInformation.postTestAssessment,
+                accessConfirmatoryHts: "",
+                referPreventionServices: "",
+                referralInformation: {
+                    referredForConfirmatoryHts: "",
+                    dateReferredForConfirmatoryHts: "",
+                    referredForPreventionServices: "",
+                    dateReferredForPreventionServices: ""
+                }
+            };
+
+        }
+        // if  accessConfirmatoryHtschnages clear all the feilds below
+        if(name === "accessConfirmatoryHts") {
+            newUserInformation.postTestAssessment = {
+                ...newUserInformation.postTestAssessment,
+                referPreventionServices: "",
+                referralInformation: {
+                    referredForConfirmatoryHts: "",
+                    dateReferredForConfirmatoryHts: "",
+                    referredForPreventionServices: "",
+                    dateReferredForPreventionServices: ""
+                }
+            };
+
+        }
+         // if  referPreventionServiceschnages clear all the feilds below
+            if(name === "referPreventionServices") {
+                newUserInformation.postTestAssessment = {
+                    ...newUserInformation.postTestAssessment,
+                    referralInformation: {
+                        referredForConfirmatoryHts: "",
+                        dateReferredForConfirmatoryHts: "",
+                        referredForPreventionServices: "",
+                        dateReferredForPreventionServices: ""
+                    }
+                };
+            }
+
+        // any change in referredForPreventionServices clear dateReferredForPreventionServices
+        if (name === "referredForPreventionServices") {
+            newUserInformation.postTestAssessment.referralInformation = {
+                ...newUserInformation.postTestAssessment.referralInformation,
+                dateReferredForPreventionServices: ""
+            };
+        }
+
+        if (name === "hasConductedHIVST" && value === "No") {
             newUserInformation.postTestAssessment = {
                 ...newUserInformation.postTestAssessment,
                 everUsedHivstKitForSelfOrOthers: "",
@@ -363,26 +452,13 @@ const HIVSTPatientRegistration = (props) => {
                     referredForConfirmatoryHts: "",
                     dateReferredForConfirmatoryHts: "",
                     referredForPreventionServices: "",
-                    dateReferredForPreventionServices: ""
                 }
             };
         }
         setUserInformation(newUserInformation);
     };
 
-    // const handleUserInformationInputChange = (e, section) => {
-    //     const { name, value } = e.target;
-    //     setUserInformation(prevState => ({
-    //         ...prevState,
-    //         [section]: {
-    //             ...prevState[section],
-    //             referralInformation: {
-    //                 ...prevState[section].referralInformation,
-    //                 [name]: value
-    //             }
-    //         }
-    //     }));
-    // };
+
     const addUserInformation = () => {
         const newUserInformation = {
             userDetails: {
@@ -472,7 +548,7 @@ const HIVSTPatientRegistration = (props) => {
         setObjValues({...objValues, userInformation: updatedUserInformationList});
     };
 
-    console.log("Obj", objValues)
+    // console.log("Obj", objValues)
 
     const handleKitSelectUserChange = selectedUsers => {
         if (objValues.userType === "Secondary User") {
@@ -510,13 +586,13 @@ const HIVSTPatientRegistration = (props) => {
         if (e.target.name === "serialNumber") {
             code = createdCode + e.target.value;
             setCreatedCode(code);
-            console.log("Code created is &&&& ", createdCode);
+            // console.log("Code created is &&&& ", createdCode);
             setObjValues({...objValues, clientCode: code});
         }
 
         async function getIndexClientCode() {
             const indexClientCode = objValues.clientCode;
-            console.log(indexClientCode);
+            // console.log(indexClientCode);
             const response = await axios.get(
                 `${baseUrl}hts/client/${indexClientCode}`,
                 {
@@ -595,7 +671,16 @@ const HIVSTPatientRegistration = (props) => {
         e.preventDefault()
         console.log("objValues", objValues)
     }
+    console.log("selectedUsers", selectedUsers)
+    console.log("objValues", objValues)
     console.log("userInformation", userInformation)
+    console.log( console.log("date referred for confrmatory hts testing", userInformation.postTestAssessment.referralInformation.referredForConfirmatoryHts))
+
+    useEffect(() => {
+        if (userInformation && userInformation.postTestAssessment && userInformation.postTestAssessment.referralInformation && userInformation.postTestAssessment.referralInformation.referredForConfirmatoryHts) {
+            console.log("date referred for confrmatory hts testing", userInformation.postTestAssessment.referralInformation.referredForConfirmatoryHts);
+        }
+    }, [userInformation]);
 
     return (
         <>
@@ -1402,7 +1487,8 @@ const HIVSTPatientRegistration = (props) => {
                                                     backgroundColor: "rgba(15, 102, 3, 0.8)",
                                                     width: "125%",
                                                     height: "35px",
-                                                    color: "rgba(15, 102, 3, 0.8)",
+                                                    // color: "rgba(15, 102, 3, 0.8)",
+                                                    color:"fff",
                                                     fontWeight: "bold",
                                                 }}
                                             >
@@ -1493,8 +1579,8 @@ const HIVSTPatientRegistration = (props) => {
                                                         <input
                                                             type="text"
                                                             className="form-control"
-                                                            name=" otherHivstKitUserCategoryText"
-                                                            id=" otherHivstKitUserCategoryText"
+                                                            name="otherHivstKitUserCategoryText"
+                                                            id="otherHivstKitUserCategoryText"
                                                             value={userInformation.postTestAssessment.otherHivstKitUserCategoryText}
                                                             onChange={(e) => handleUserInformationInputChange(e, "postTestAssessment")}
                                                             style={{

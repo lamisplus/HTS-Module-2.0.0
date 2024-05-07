@@ -98,7 +98,6 @@ const PostTest = (props) => {
     postTestCounselingKnowledgeAssessment: {},
     personId: patientID,
   });
-
   const [postTest, setPostTest] = useState({
     hivTestResult: "",
     hivTestBefore:
@@ -203,7 +202,7 @@ const PostTest = (props) => {
           handleItemClick("recency-testing", "post-test");
         } else if (postTest.hivTestResult === "false") {
           // history.push("/");
-          handleItemClick("fit", "post-test")
+          handleItemClick("client-referral", "post-test");
         }
         // handleItemClick("recency-testing", "post-test");
       })

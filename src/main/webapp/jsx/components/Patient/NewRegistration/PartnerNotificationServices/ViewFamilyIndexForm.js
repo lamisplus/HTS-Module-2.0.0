@@ -241,7 +241,8 @@ const ViewFamilyIndexTestingForm = (props) => {
     lastName: props?.basicInfo?.personResponseDto?.surname,
     visitDate: "",
     recencyTesting: "",
-    setting: "",
+    setting: props.patientObj.testingSetting,
+
     sex: props?.basicInfo?.personResponseDto?.gender.id,
     state: "",
     virallyUnSuppressed: "",
@@ -267,8 +268,6 @@ const ViewFamilyIndexTestingForm = (props) => {
   const [selectedLga, setSelectedLga] = useState({});
   const [viewFamilyIndexForm, setViewFamilyIndexForm] = useState(false);
   const [viewFamilyTrackerForm, setViewFamilyTrackerForm] = useState(false);
-
-
 
   const loadStates = () => {
     axios
@@ -671,10 +670,28 @@ const ViewFamilyIndexTestingForm = (props) => {
       [e.target.name]: "",
     });
     setaAddIndexTracker2(false);
-    setFamilyTestingTrackerRequestDTO({
+    if (e.target.name === 'positionOfChildEnumerated') {
+
+      if (e.target.value > -1  ) {
+            setFamilyTestingTrackerRequestDTO({
+              ...familyTestingTrackerRequestDTO,
+              [e.target.name]: e.target.value,
+            });
+      }
+    } else if (e.target.name === "trackerAge") {
+
+            if (e.target.value > -1) {
+              setFamilyTestingTrackerRequestDTO({
+                ...familyTestingTrackerRequestDTO,
+                [e.target.name]: e.target.value,
+              });
+            }
+    } else{
+      setFamilyTestingTrackerRequestDTO({
       ...familyTestingTrackerRequestDTO,
       [e.target.name]: e.target.value,
     });
+}
 
     // clearf the error with e.target.name
     setErrors({ ...errors, [e.target.name]: "" });
@@ -761,14 +778,13 @@ const ViewFamilyIndexTestingForm = (props) => {
   const handleInputChangePhoneNumber = (e, inputName) => {
     const limit = 11;
     const NumberValue = checkNumberLimit(e.target.value.replace(/\D/g, ""));
-    setPayload({ ...payload, [inputName]: NumberValue});
-    if(inputName === "phoneNumber"){
-      setPayload({...payload, [inputName]: NumberValue});
+    setPayload({ ...payload, [inputName]: NumberValue });
+    if (inputName === "phoneNumber") {
+      setPayload({ ...payload, [inputName]: NumberValue });
     }
-    if(inputName === "alternatePhoneNumber"){
-      setPayload({...payload, [inputName]: NumberValue});
+    if (inputName === "alternatePhoneNumber") {
+      setPayload({ ...payload, [inputName]: NumberValue });
     }
-
   };
 
   const handleFamilyRelationshipChange = (e) => {
@@ -952,7 +968,7 @@ const ViewFamilyIndexTestingForm = (props) => {
     } else if (e.target.name === "dateIndexConfirmedHiv") {
       if (e.target.value !== "") {
         const name = e.target.name;
-        setPayload({ ...payload, [e.target.name]: name })
+        setPayload({ ...payload, [e.target.name]: name });
         setIndexClientConfirmedHivPositive(false); // Hide extra fields when date is selected
       } else {
         setIndexClientConfirmedHivPositive(true); // Show extra fields if date is not selected
@@ -1173,141 +1189,141 @@ const ViewFamilyIndexTestingForm = (props) => {
                 <div className="form-group mb-3 col-md-4">
                   <FormGroup>
                     <Label
-                        for=""
-                        style={{color: "#014d88", fontWeight: "bolder"}}
+                      for=""
+                      style={{ color: "#014d88", fontWeight: "bolder" }}
                     >
-                      State <span style={{color: "red"}}> *</span>{" "}
+                      State <span style={{ color: "red" }}> *</span>{" "}
                     </Label>
                     <Input
-                        type="select"
-                        name="stateId"
-                        style={{
-                          height: "40px",
-                          border: "solid 1px #014d88",
-                          borderRadius: "5px",
-                          fontWeight: "bolder",
-                          appearance: "auto",
-                        }}
-                        value={stateInfo}
-                        required
-                        // onChange={loadLGA1}
-                        onChange={(e) => {
-                          if (e.target.value !== "") {
-                            const filterState = states.filter((st) => {
-                              return Number(st.id) === Number(e.target.value);
-                            });
-                            setSelectedState(filterState);
+                      type="select"
+                      name="stateId"
+                      style={{
+                        height: "40px",
+                        border: "solid 1px #014d88",
+                        borderRadius: "5px",
+                        fontWeight: "bolder",
+                        appearance: "auto",
+                      }}
+                      value={stateInfo}
+                      required
+                      // onChange={loadLGA1}
+                      onChange={(e) => {
+                        if (e.target.value !== "") {
+                          const filterState = states.filter((st) => {
+                            return Number(st.id) === Number(e.target.value);
+                          });
+                          setSelectedState(filterState);
 
-                            setPayload((prevPayload) => ({
-                              ...prevPayload,
-                              stateId: filterState[0].id,
-                            }));
-                          }
-                          loadLGA(e.target.value);
-                        }}
-                        disabled
+                          setPayload((prevPayload) => ({
+                            ...prevPayload,
+                            stateId: filterState[0].id,
+                          }));
+                        }
+                        loadLGA(e.target.value);
+                      }}
+                      disabled
                     >
                       <option>Select State</option>
                       {states.map((state) => (
-                          <option key={state.id} value={state.id}>
-                            {state.name}
-                          </option>
+                        <option key={state.id} value={state.id}>
+                          {state.name}
+                        </option>
                       ))}
                     </Input>
                     {errors.stateTransferTo !== "" ? (
-                        <span className={classes.error}>
+                      <span className={classes.error}>
                         {errors.stateTransferTo}
                       </span>
                     ) : (
-                        ""
+                      ""
                     )}
                   </FormGroup>
                 </div>
                 <div className="form-group mb-3 col-md-4">
                   <FormGroup>
                     <Label
-                        for=""
-                        style={{color: "#014d88", fontWeight: "bolder"}}
+                      for=""
+                      style={{ color: "#014d88", fontWeight: "bolder" }}
                     >
-                      LGA <span style={{color: "red"}}> *</span>
+                      LGA <span style={{ color: "red" }}> *</span>
                     </Label>
                     <Input
-                        type="select"
-                        name="lgaId"
-                        style={{
-                          height: "40px",
-                          border: "solid 1px #014d88",
-                          borderRadius: "5px",
-                          fontWeight: "bolder",
-                          appearance: "auto",
-                        }}
-                        required
-                        value={lgaInfo}
-                        // onChange={loadFacilities1}
-                        onChange={(e) => {
-                          if (e.target.value !== "") {
-                            const filterlga = lgas.filter((lg) => {
-                              return Number(lg.id) === Number(e.target.value);
-                            });
-                            setSelectedLga(filterlga);
-                            setPayload((prevPayload) => ({
-                              ...prevPayload,
-                              lgaId: filterlga[0].id,
-                            }));
-                          }
-                          loadFacilities(e.target.value);
-                        }}
-                        disabled
+                      type="select"
+                      name="lgaId"
+                      style={{
+                        height: "40px",
+                        border: "solid 1px #014d88",
+                        borderRadius: "5px",
+                        fontWeight: "bolder",
+                        appearance: "auto",
+                      }}
+                      required
+                      value={lgaInfo}
+                      // onChange={loadFacilities1}
+                      onChange={(e) => {
+                        if (e.target.value !== "") {
+                          const filterlga = lgas.filter((lg) => {
+                            return Number(lg.id) === Number(e.target.value);
+                          });
+                          setSelectedLga(filterlga);
+                          setPayload((prevPayload) => ({
+                            ...prevPayload,
+                            lgaId: filterlga[0].id,
+                          }));
+                        }
+                        loadFacilities(e.target.value);
+                      }}
+                      disabled
                     >
                       <option>Select LGA</option>
                       {lgas.map((lga) => (
-                          <option key={lga.id} value={lga.id}>
-                            {lga.name}
-                          </option>
+                        <option key={lga.id} value={lga.id}>
+                          {lga.name}
+                        </option>
                       ))}
                     </Input>
                     {errors.lgaId !== "" ? (
-                        <span className={classes.error}>{errors.lgaId}</span>
+                      <span className={classes.error}>{errors.lgaId}</span>
                     ) : (
-                        ""
+                      ""
                     )}
                   </FormGroup>
                 </div>
                 <div className="form-group mb-3 col-md-4">
                   <FormGroup>
                     <Label
-                        for=""
-                        style={{color: "#014d88", fontWeight: "bolder"}}
+                      for=""
+                      style={{ color: "#014d88", fontWeight: "bolder" }}
                     >
                       Facility Name
-                      <span style={{color: "red"}}> *</span>{" "}
+                      <span style={{ color: "red" }}> *</span>{" "}
                     </Label>
                     <Input
-                        type="text"
-                        name="facilityName"
-                        style={{
-                          height: "40px",
-                          border: "solid 1px #014d88",
-                          borderRadius: "5px",
-                          fontWeight: "bolder",
-                          appearance: "auto",
-                        }}
-                        value={facilityInfo.currentOrganisationUnitName}
-                        required
-                        onChange={(e) => {
-                          // setPayload(prevPayload => ({ ...prevPayload, facilityTransferTo: e.target.value }));
-                          if (e.target.value !== "") {
-                            const filterFacility = facilities.filter((fa) => {
-                              return Number(fa.id) === Number(e.target.value);
-                            });
-                            setSelectedFacility(filterFacility);
-                            setPayload((prevPayload) => ({
-                              ...prevPayload,
-                              facilityName: filterFacility[0].name,
-                            }));
-                          }
-                        }}
-                        disabled
+                      type="text"
+                      name="facilityName"
+                      style={{
+                        height: "40px",
+                        border: "solid 1px #014d88",
+                        borderRadius: "5px",
+                        fontWeight: "bolder",
+                        appearance: "auto",
+                      }}
+                      value={facilityInfo.currentOrganisationUnitName}
+                      required
+                      onChange={(e) => {
+                        // setPayload(prevPayload => ({ ...prevPayload, facilityTransferTo: e.target.value }));
+                        if (e.target.value !== "") {
+                          const filterFacility = facilities.filter((fa) => {
+                            return Number(fa.id) === Number(e.target.value);
+                          });
+                          setSelectedFacility(filterFacility);
+                          setPayload((prevPayload) => ({
+                            ...prevPayload,
+                            facilityName: filterFacility[0].name,
+                          }));
+                        }
+                      }}
+                      disabled
                     >
                       {/* <option>Select Facility</option>
                                             {facilities.map((facility) => (
@@ -1317,11 +1333,11 @@ const ViewFamilyIndexTestingForm = (props) => {
                                             ))} */}
                     </Input>
                     {errors.facilityTransferTo !== "" ? (
-                        <span className={classes.error}>
+                      <span className={classes.error}>
                         {errors.facilityTransferTo}
                       </span>
                     ) : (
-                        ""
+                      ""
                     )}
                   </FormGroup>
                 </div>
@@ -1329,26 +1345,26 @@ const ViewFamilyIndexTestingForm = (props) => {
                 <div className="form-group mb-3 col-md-4">
                   <FormGroup>
                     <Label for="">
-                      Date <span style={{color: "red"}}> *</span>{" "}
+                      Date <span style={{ color: "red" }}> *</span>{" "}
                     </Label>
                     <Input
-                        type="date"
-                        name="visitDate"
-                        id="visitDate"
-                        value={payload.visitDate}
-                        onChange={handleInputChange}
-                        min="1929-12-31"
-                        max={moment(new Date()).format("YYYY-MM-DD")}
-                        style={{
-                          border: "1px solid #014D88",
-                          borderRadius: "0.25rem",
-                        }}
-                        disabled={props.action === "view" ? true : false}
+                      type="date"
+                      name="visitDate"
+                      id="visitDate"
+                      value={payload.visitDate}
+                      onChange={handleInputChange}
+                      min="1929-12-31"
+                      max={moment(new Date()).format("YYYY-MM-DD")}
+                      style={{
+                        border: "1px solid #014D88",
+                        borderRadius: "0.25rem",
+                      }}
+                      disabled={props.action === "view" ? true : false}
                     />
                     {errors.visitDate !== "" ? (
-                        <span className={classes.error}>{errors.visitDate}</span>
+                      <span className={classes.error}>{errors.visitDate}</span>
                     ) : (
-                        ""
+                      ""
                     )}
                   </FormGroup>
                 </div>
@@ -1356,31 +1372,31 @@ const ViewFamilyIndexTestingForm = (props) => {
                 <div className="form-group  col-md-4">
                   <FormGroup>
                     <Label>
-                      Setting <span style={{color: "red"}}> *</span>
+                      Setting <span style={{ color: "red" }}> *</span>
                     </Label>
                     <select
-                        className="form-control"
-                        name="setting"
-                        id="setting"
-                        value={payload.setting}
-                        onChange={handleInputChange}
-                        style={{
-                          border: "1px solid #014D88",
-                          borderRadius: "0.2rem",
-                        }}
-                        disabled={props.action === "view" ? true : false}
+                      className="form-control"
+                      name="setting"
+                      id="setting"
+                      value={payload.setting}
+                      onChange={handleInputChange}
+                      style={{
+                        border: "1px solid #014D88",
+                        borderRadius: "0.2rem",
+                      }}
+                      disabled={true}
                     >
                       <option value={""}></option>
                       {setting.map((value) => (
-                          <option key={value.id} value={value.code}>
-                            {value.display}
-                          </option>
+                        <option key={value.id} value={value.code}>
+                          {value.display}
+                        </option>
                       ))}
                     </select>
                     {errors.setting !== "" ? (
-                        <span className={classes.error}>{errors.setting}</span>
+                      <span className={classes.error}>{errors.setting}</span>
                     ) : (
-                        ""
+                      ""
                     )}
                   </FormGroup>
                 </div>
@@ -1389,82 +1405,82 @@ const ViewFamilyIndexTestingForm = (props) => {
                   <FormGroup>
                     <Label>
                       Family Index client{" "}
-                      <span style={{color: "red"}}> *</span>
+                      <span style={{ color: "red" }}> *</span>
                     </Label>
                     <select
-                        className="form-control"
-                        name="familyIndexClient"
-                        id="familIndxClient"
-                        onChange={handleInputChange}
-                        value={payload.familyIndexClient}
-                        style={{
-                          border: "1px solid #014D88",
-                          borderRadius: "0.2rem",
-                        }}
-                        disabled={props.action === "view" ? true : false}
+                      className="form-control"
+                      name="familyIndexClient"
+                      id="familIndxClient"
+                      onChange={handleInputChange}
+                      value={payload.familyIndexClient}
+                      style={{
+                        border: "1px solid #014D88",
+                        borderRadius: "0.2rem",
+                      }}
+                      disabled={props.action === "view" ? true : false}
                     >
                       <option value={""}>Select</option>
                       {familyIndex &&
-                          familyIndex.map((x, index) => (
-                              <option key={x.id} value={x.id}>
-                                {x.display}
-                              </option>
-                          ))}
+                        familyIndex.map((x, index) => (
+                          <option key={x.id} value={x.id}>
+                            {x.display}
+                          </option>
+                        ))}
                     </select>
                     {errors.familyIndexClient !== "" ? (
-                        <span className={classes.error}>{errors.sex}</span>
+                      <span className={classes.error}>{errors.sex}</span>
                     ) : (
-                        ""
+                      ""
                     )}
                   </FormGroup>
                 </div>
                 <div className="form-group mb-3 col-md-4">
                   <FormGroup>
                     <Label for="firstName">
-                      First Name <span style={{color: "red"}}> *</span>
+                      First Name <span style={{ color: "red" }}> *</span>
                     </Label>
                     <Input
-                        className="form-control"
-                        type="text"
-                        name="name"
-                        id="name"
-                        value={props.patientObj.personResponseDto.firstName}
-                        onChange={handleInputChange}
-                        style={{
-                          border: "1px solid #014D88",
-                          borderRadius: "0.2rem",
-                        }}
-                        disabled
+                      className="form-control"
+                      type="text"
+                      name="name"
+                      id="name"
+                      value={props.patientObj.personResponseDto.firstName}
+                      onChange={handleInputChange}
+                      style={{
+                        border: "1px solid #014D88",
+                        borderRadius: "0.2rem",
+                      }}
+                      disabled
                     />
                     {errors.name !== "" ? (
-                        <span className={classes.error}>{errors.name}</span>
+                      <span className={classes.error}>{errors.name}</span>
                     ) : (
-                        ""
+                      ""
                     )}
                   </FormGroup>
                 </div>
                 <div className="form-group mb-3 col-md-4">
                   <FormGroup>
                     <Label for="lastName">
-                      Middle Name <span style={{color: "red"}}> *</span>
+                      Middle Name <span style={{ color: "red" }}> *</span>
                     </Label>
                     <Input
-                        className="form-control"
-                        type="text"
-                        name="name"
-                        id="name"
-                        value={props.patientObj.personResponseDto.otherName}
-                        onChange={handleInputChange}
-                        style={{
-                          border: "1px solid #014D88",
-                          borderRadius: "0.2rem",
-                        }}
-                        disabled
+                      className="form-control"
+                      type="text"
+                      name="name"
+                      id="name"
+                      value={props.patientObj.personResponseDto.otherName}
+                      onChange={handleInputChange}
+                      style={{
+                        border: "1px solid #014D88",
+                        borderRadius: "0.2rem",
+                      }}
+                      disabled
                     />
                     {errors.name !== "" ? (
-                        <span className={classes.error}>{errors.name}</span>
+                      <span className={classes.error}>{errors.name}</span>
                     ) : (
-                        ""
+                      ""
                     )}
                   </FormGroup>
                 </div>
@@ -1472,25 +1488,25 @@ const ViewFamilyIndexTestingForm = (props) => {
                 <div className="form-group mb-3 col-md-4">
                   <FormGroup>
                     <Label for="lastName">
-                      Last Name <span style={{color: "red"}}> *</span>
+                      Last Name <span style={{ color: "red" }}> *</span>
                     </Label>
                     <Input
-                        className="form-control"
-                        type="text"
-                        name="name"
-                        id="name"
-                        value={props.patientObj.personResponseDto.surname}
-                        onChange={handleInputChange}
-                        style={{
-                          border: "1px solid #014D88",
-                          borderRadius: "0.2rem",
-                        }}
-                        disabled
+                      className="form-control"
+                      type="text"
+                      name="name"
+                      id="name"
+                      value={props.patientObj.personResponseDto.surname}
+                      onChange={handleInputChange}
+                      style={{
+                        border: "1px solid #014D88",
+                        borderRadius: "0.2rem",
+                      }}
+                      disabled
                     />
                     {errors.name !== "" ? (
-                        <span className={classes.error}>{errors.name}</span>
+                      <span className={classes.error}>{errors.name}</span>
                     ) : (
-                        ""
+                      ""
                     )}
                   </FormGroup>
                 </div>
@@ -1498,59 +1514,59 @@ const ViewFamilyIndexTestingForm = (props) => {
                   <FormGroup>
                     <Label for="firstName">
                       Index Client ID
-                      <span style={{color: "red"}}> *</span>
+                      <span style={{ color: "red" }}> *</span>
                     </Label>
                     <Input
-                        className="form-control"
-                        type="text"
-                        name="indexClientId"
-                        id="indexClientId"
-                        value={payload.indexClientId}
-                        onChange={handleInputChange}
-                        style={{
-                          border: "1px solid #014D88",
-                          borderRadius: "0.2rem",
-                        }}
-                        disabled
+                      className="form-control"
+                      type="text"
+                      name="indexClientId"
+                      id="indexClientId"
+                      value={payload.indexClientId}
+                      onChange={handleInputChange}
+                      style={{
+                        border: "1px solid #014D88",
+                        borderRadius: "0.2rem",
+                      }}
+                      disabled
                     />
                     {errors.indexClientId !== "" ? (
-                        <span className={classes.error}>
+                      <span className={classes.error}>
                         {errors.indexClientId}
                       </span>
                     ) : (
-                        ""
+                      ""
                     )}
                   </FormGroup>
                 </div>
                 <div className="form-group  col-md-4">
                   <FormGroup>
                     <Label>
-                      Sex <span style={{color: "red"}}> *</span>
+                      Sex <span style={{ color: "red" }}> *</span>
                     </Label>
                     <select
-                        className="form-control"
-                        name="sex"
-                        id="sex"
-                        onChange={handleInputChange}
-                        value={payload.sex}
-                        style={{
-                          border: "1px solid #014D88",
-                          borderRadius: "0.2rem",
-                        }}
-                        disabled
+                      className="form-control"
+                      name="sex"
+                      id="sex"
+                      onChange={handleInputChange}
+                      value={payload.sex}
+                      style={{
+                        border: "1px solid #014D88",
+                        borderRadius: "0.2rem",
+                      }}
+                      disabled
                     >
                       <option value={""}>Select</option>
                       {genders &&
-                          genders.map((gender, index) => (
-                              <option key={gender.id} value={gender.id}>
-                                {gender.display}
-                              </option>
-                          ))}
+                        genders.map((gender, index) => (
+                          <option key={gender.id} value={gender.id}>
+                            {gender.display}
+                          </option>
+                        ))}
                     </select>
                     {errors.sex !== "" ? (
-                        <span className={classes.error}>{errors.sex}</span>
+                      <span className={classes.error}>{errors.sex}</span>
                     ) : (
-                        ""
+                      ""
                     )}
                   </FormGroup>
                 </div>
@@ -1558,54 +1574,54 @@ const ViewFamilyIndexTestingForm = (props) => {
                 <div className="form-group mb-3 col-md-4">
                   <FormGroup>
                     <Label>
-                      Date Of Birth<span style={{color: "red"}}> *</span>
+                      Date Of Birth<span style={{ color: "red" }}> *</span>
                     </Label>
                     <input
-                        className="form-control"
-                        type="date"
-                        name="dateOfBirth"
-                        id="dateOfBirth"
-                        min="1929-12-31"
-                        max={moment(new Date()).format("YYYY-MM-DD")}
-                        value={payload.dateOfBirth}
-                        onChange={handleDobChange}
-                        style={{
-                          border: "1px solid #014D88",
-                          borderRadius: "0.2rem",
-                        }}
-                        disabled
+                      className="form-control"
+                      type="date"
+                      name="dateOfBirth"
+                      id="dateOfBirth"
+                      min="1929-12-31"
+                      max={moment(new Date()).format("YYYY-MM-DD")}
+                      value={payload.dateOfBirth}
+                      onChange={handleDobChange}
+                      style={{
+                        border: "1px solid #014D88",
+                        borderRadius: "0.2rem",
+                      }}
+                      disabled
                     />
                     {errors.dateOfBirth !== "" ? (
-                        <span className={classes.error}>
+                      <span className={classes.error}>
                         {errors.dateOfBirth}
                       </span>
                     ) : (
-                        ""
+                      ""
                     )}
                   </FormGroup>
                 </div>
                 <div className="form-group mb-3 col-md-4">
                   <FormGroup>
                     <Label>
-                      Age <span style={{color: "red"}}> *</span>
+                      Age <span style={{ color: "red" }}> *</span>
                     </Label>
                     <input
-                        className="form-control"
-                        type="number"
-                        name="age"
-                        id="age"
-                        value={payload.age}
-                        disabled={ageDisabled}
-                        onChange={handleAgeChange}
-                        style={{
-                          border: "1px solid #014D88",
-                          borderRadius: "0.2rem",
-                        }}
+                      className="form-control"
+                      type="number"
+                      name="age"
+                      id="age"
+                      value={payload.age}
+                      disabled={ageDisabled}
+                      onChange={handleAgeChange}
+                      style={{
+                        border: "1px solid #014D88",
+                        borderRadius: "0.2rem",
+                      }}
                     />
                     {errors.age !== "" ? (
-                        <span className={classes.error}>{errors.age}</span>
+                      <span className={classes.error}>{errors.age}</span>
                     ) : (
-                        ""
+                      ""
                     )}
                   </FormGroup>
                 </div>
@@ -1613,26 +1629,26 @@ const ViewFamilyIndexTestingForm = (props) => {
                 <div className="form-group  col-md-4">
                   <FormGroup>
                     <Label>
-                      Marital Status <span style={{color: "red"}}> </span>
+                      Marital Status <span style={{ color: "red" }}> </span>
                     </Label>
                     <select
-                        className="form-control"
-                        name="maritalStatus"
-                        id="maritalStatus"
-                        value={payload.maritalStatus}
-                        onChange={handleInputChange}
-                        style={{
-                          border: "1px solid #014D88",
-                          borderRadius: "0.2rem",
-                        }}
-                        disabled
-                        // disabled={props.activePage.actionType === "view"}
+                      className="form-control"
+                      name="maritalStatus"
+                      id="maritalStatus"
+                      value={payload.maritalStatus}
+                      onChange={handleInputChange}
+                      style={{
+                        border: "1px solid #014D88",
+                        borderRadius: "0.2rem",
+                      }}
+                      disabled
+                      // disabled={props.activePage.actionType === "view"}
                     >
                       <option value={""}></option>
                       {maritalStatus.map((value) => (
-                          <option key={value.id} value={value.id}>
-                            {value.display}
-                          </option>
+                        <option key={value.id} value={value.id}>
+                          {value.display}
+                        </option>
                       ))}
                     </select>
                     {/* {errors.setting !== "" ? (
@@ -1645,34 +1661,32 @@ const ViewFamilyIndexTestingForm = (props) => {
                   </FormGroup>
                 </div>
 
-
                 <div className="form-group  col-md-4">
                   <FormGroup>
                     <Label>
                       Phone Number
-                      <span style={{color: "red"}}> *</span>
+                      <span style={{ color: "red" }}> *</span>
                     </Label>
                     <Input
-                        type="text"
-                        name="phoneNumber"
-                        id="phoneNumber"
-                        onChange={(e) => {
-                          handleInputChangePhoneNumber(e, "phoneNumber");
-                        }}
-                        value={payload.phoneNumber}
-                        style={{
-                          border: "1px solid #014D88",
-                          borderRadius: "0.2rem",
-                        }}
-                        disabled
-
+                      type="text"
+                      name="phoneNumber"
+                      id="phoneNumber"
+                      onChange={(e) => {
+                        handleInputChangePhoneNumber(e, "phoneNumber");
+                      }}
+                      value={payload.phoneNumber}
+                      style={{
+                        border: "1px solid #014D88",
+                        borderRadius: "0.2rem",
+                      }}
+                      disabled
                     />
                     {errors.phoneNumber !== "" ? (
-                        <span className={classes.error}>
+                      <span className={classes.error}>
                         {errors.phoneNumber}
                       </span>
                     ) : (
-                        ""
+                      ""
                     )}
                   </FormGroup>
                 </div>
@@ -1717,18 +1731,17 @@ const ViewFamilyIndexTestingForm = (props) => {
                       {/* <span style={{color: "red"}}> *</span> */}
                     </Label>
                     <Input
-                        type="text"
-                        name="alternatePhoneNumber"
-                        id="alternatePhoneNumber"
-                        onChange={(e) => {
-                          handleInputChangePhoneNumber(e, "alternatePhoneNumber");
-                        }}
-                        value={payload.alternatePhoneNumber}
-                        style={{
-                          border: "1px solid #014D88",
-                          borderRadius: "0.2rem",
-                        }}
-
+                      type="text"
+                      name="alternatePhoneNumber"
+                      id="alternatePhoneNumber"
+                      onChange={(e) => {
+                        handleInputChangePhoneNumber(e, "alternatePhoneNumber");
+                      }}
+                      value={payload.alternatePhoneNumber}
+                      style={{
+                        border: "1px solid #014D88",
+                        borderRadius: "0.2rem",
+                      }}
                     />
                   </FormGroup>
                 </div>
@@ -1737,28 +1750,28 @@ const ViewFamilyIndexTestingForm = (props) => {
                   <FormGroup>
                     <Label>
                       Descriptiven Residential Address{" "}
-                      <span style={{color: "red"}}> *</span>
+                      <span style={{ color: "red" }}> *</span>
                     </Label>
                     <input
-                        className="form-control"
-                        type="text"
-                        name="address"
-                        id="address"
-                        value={
-                          props.patientObj.personResponseDto.address.address[0]
-                              .city
-                        }
-                        disabled
-                        onChange={handleInputChange}
-                        style={{
-                          border: "1px solid #014D88",
-                          borderRadius: "0.2rem",
-                        }}
+                      className="form-control"
+                      type="text"
+                      name="address"
+                      id="address"
+                      value={
+                        props.patientObj.personResponseDto.address.address[0]
+                          .city
+                      }
+                      disabled
+                      onChange={handleInputChange}
+                      style={{
+                        border: "1px solid #014D88",
+                        borderRadius: "0.2rem",
+                      }}
                     />
                     {errors.address !== "" ? (
-                        <span className={classes.error}>{errors.address}</span>
+                      <span className={classes.error}>{errors.address}</span>
                     ) : (
-                        ""
+                      ""
                     )}
                   </FormGroup>
                 </div>
@@ -1767,73 +1780,73 @@ const ViewFamilyIndexTestingForm = (props) => {
                   <FormGroup>
                     <Label for="">
                       Date Of Index Client's confrimed HIV-positive test results{" "}
-                      <span style={{color: "red"}}> *</span>{" "}
+                      <span style={{ color: "red" }}> *</span>{" "}
                     </Label>
                     <Input
-                        type="date"
-                        name="dateIndexClientConfirmedHivPositiveTestResult"
-                        id="dateIndexClientConfirmedHivPositiveTestResult"
-                        value={
-                          payload.dateIndexClientConfirmedHivPositiveTestResult
-                        }
-                        onChange={handleInputChange}
-                        min="1929-12-31"
-                        max={moment(new Date()).format("YYYY-MM-DD")}
-                        style={{
-                          border: "1px solid #014D88",
-                          borderRadius: "0.25rem",
-                        }}
-                        disabled={props.action === "view" ? true : false}
+                      type="date"
+                      name="dateIndexClientConfirmedHivPositiveTestResult"
+                      id="dateIndexClientConfirmedHivPositiveTestResult"
+                      value={
+                        payload.dateIndexClientConfirmedHivPositiveTestResult
+                      }
+                      onChange={handleInputChange}
+                      min="1929-12-31"
+                      max={moment(new Date()).format("YYYY-MM-DD")}
+                      style={{
+                        border: "1px solid #014D88",
+                        borderRadius: "0.25rem",
+                      }}
+                      disabled={props.action === "view" ? true : false}
                     />
                     {errors.dateIndexClientConfirmedHivPositiveTestResult !==
                     "" ? (
-                        <span className={classes.error}>
+                      <span className={classes.error}>
                         {errors.referralDate}
                       </span>
                     ) : (
-                        ""
+                      ""
                     )}
                   </FormGroup>
                 </div>
                 {indexClientConfirmedHivPositive && (
-                    <div className="form-group col-md-4">
-                      <Label>
-                        {" "}
-                        Reason for not selecting Index client Hiv confirmed test
-                        result Date ?{" "}
-                      </Label>
-                      <FormGroup>
-                        <select
-                            className="form-control"
-                            name="reasonForIndexClientDateHivConfirmedNotSelected"
-                            id="reasonForIndexClientDateHivConfirmedNotSelected"
-                            onChange={handleInputChange}
-                            value={
-                              payload.reasonForIndexClientDateHivConfirmedNotSelected
-                            }
-                            style={{
-                              border: "1px solid #014D88",
-                              borderRadius: "0.2rem",
-                            }}
-                        >
-                          <option value="">Select</option>
-                          <option value="Result not confirmed yet">
-                            Result not confirmed yet
-                          </option>
-                          <option value="NA">NA</option>
-                        </select>
-                        {errors.reasonForIndexClientDateHivConfirmedNotSelected !==
-                        "" ? (
-                            <span className={classes.error}>
+                  <div className="form-group col-md-4">
+                    <Label>
+                      {" "}
+                      Reason for not selecting Index client Hiv confirmed test
+                      result Date ?{" "}
+                    </Label>
+                    <FormGroup>
+                      <select
+                        className="form-control"
+                        name="reasonForIndexClientDateHivConfirmedNotSelected"
+                        id="reasonForIndexClientDateHivConfirmedNotSelected"
+                        onChange={handleInputChange}
+                        value={
+                          payload.reasonForIndexClientDateHivConfirmedNotSelected
+                        }
+                        style={{
+                          border: "1px solid #014D88",
+                          borderRadius: "0.2rem",
+                        }}
+                      >
+                        <option value="">Select</option>
+                        <option value="Result not confirmed yet">
+                          Result not confirmed yet
+                        </option>
+                        <option value="NA">NA</option>
+                      </select>
+                      {errors.reasonForIndexClientDateHivConfirmedNotSelected !==
+                      "" ? (
+                        <span className={classes.error}>
                           {
                             errors.reasonForIndexClientDateHivConfirmedNotSelected
                           }
                         </span>
-                        ) : (
-                            ""
-                        )}
-                      </FormGroup>
-                    </div>
+                      ) : (
+                        ""
+                      )}
+                    </FormGroup>
+                  </div>
                 )}
                 {/* )} */}
                 {/* if index client is hiv positive, and date is selected */}
@@ -1841,16 +1854,16 @@ const ViewFamilyIndexTestingForm = (props) => {
                   <Label>Is client current on HIV treatment ?</Label>
                   <FormGroup>
                     <select
-                        className="form-control"
-                        name="isClientCurrentlyOnHivTreatment"
-                        id="isClientCurrentlyOnHivTreatment"
-                        onChange={handleInputChange}
-                        value={payload.isClientCurrentlyOnHivTreatment}
-                        style={{
-                          border: "1px solid #014D88",
-                          borderRadius: "0.2rem",
-                        }}
-                        disabled={props.action === "view" ? true : false}
+                      className="form-control"
+                      name="isClientCurrentlyOnHivTreatment"
+                      id="isClientCurrentlyOnHivTreatment"
+                      onChange={handleInputChange}
+                      value={payload.isClientCurrentlyOnHivTreatment}
+                      style={{
+                        border: "1px solid #014D88",
+                        borderRadius: "0.2rem",
+                      }}
+                      disabled={props.action === "view" ? true : false}
                     >
                       <option value="">Select</option>
                       <option value="Yes">Yes</option>
@@ -1860,37 +1873,37 @@ const ViewFamilyIndexTestingForm = (props) => {
                 </div>
 
                 {payload.isClientCurrentlyOnHivTreatment &&
-                    payload.isClientCurrentlyOnHivTreatment === "Yes" && (
-                        <div className="form-group mb-3 col-md-4">
-                          <FormGroup>
-                            <Label for="">
-                              Date of Treatment Initiation{" "}
-                              <span style={{color: "red"}}> *</span>{" "}
-                            </Label>
-                            <Input
-                                type="date"
-                                name="dateClientEnrolledOnTreatment"
-                                id="dateClientEnrolledOnTreatment"
-                                value={payload.dateClientEnrolledOnTreatment}
-                                onChange={handleInputChange}
-                                min="1929-12-31"
-                                max={moment(new Date()).format("YYYY-MM-DD")}
-                                style={{
-                                  border: "1px solid #014D88",
-                                  borderRadius: "0.25rem",
-                                }}
-                                disabled={props.action === "view" ? true : false}
-                            />
-                            {errors.treatmentDate !== "" ? (
-                                <span className={classes.error}>
+                  payload.isClientCurrentlyOnHivTreatment === "Yes" && (
+                    <div className="form-group mb-3 col-md-4">
+                      <FormGroup>
+                        <Label for="">
+                          Date of Treatment Initiation{" "}
+                          <span style={{ color: "red" }}> *</span>{" "}
+                        </Label>
+                        <Input
+                          type="date"
+                          name="dateClientEnrolledOnTreatment"
+                          id="dateClientEnrolledOnTreatment"
+                          value={payload.dateClientEnrolledOnTreatment}
+                          onChange={handleInputChange}
+                          min="1929-12-31"
+                          max={moment(new Date()).format("YYYY-MM-DD")}
+                          style={{
+                            border: "1px solid #014D88",
+                            borderRadius: "0.25rem",
+                          }}
+                          disabled={props.action === "view" ? true : false}
+                        />
+                        {errors.treatmentDate !== "" ? (
+                          <span className={classes.error}>
                             {errors.referralDate}
                           </span>
-                            ) : (
-                                ""
-                            )}
-                          </FormGroup>
-                        </div>
-                    )}
+                        ) : (
+                          ""
+                        )}
+                      </FormGroup>
+                    </div>
+                  )}
                 <div className="form-group col-md-4 ">
                   <Label>
                     {" "}
@@ -1899,16 +1912,16 @@ const ViewFamilyIndexTestingForm = (props) => {
                   </Label>
                   <FormGroup>
                     <select
-                        className="form-control"
-                        name="recencyTesting"
-                        id="reccencyTesting"
-                        onChange={handleInputChange}
-                        value={payload.recencyTesting}
-                        style={{
-                          border: "1px solid #014D88",
-                          borderRadius: "0.2rem",
-                        }}
-                        disabled={props.action === "view" ? true : false}
+                      className="form-control"
+                      name="recencyTesting"
+                      id="reccencyTesting"
+                      onChange={handleInputChange}
+                      value={payload.recencyTesting}
+                      style={{
+                        border: "1px solid #014D88",
+                        borderRadius: "0.2rem",
+                      }}
+                      disabled={props.action === "view" ? true : false}
                     >
                       <option value="">Select</option>
                       <option value="Recent Infection">Recent Infection</option>
@@ -1924,16 +1937,16 @@ const ViewFamilyIndexTestingForm = (props) => {
                   <Label>virally unsuppressed</Label>
                   <FormGroup>
                     <select
-                        className="form-control"
-                        name="virallyUnsuppressed"
-                        id="virallyUnsuppressed"
-                        onChange={handleInputChange}
-                        value={payload.virallyUnSuppressed}
-                        style={{
-                          border: "1px solid #014D88",
-                          borderRadius: "0.2rem",
-                        }}
-                        disabled={props.action === "view" ? true : false}
+                      className="form-control"
+                      name="virallyUnsuppressed"
+                      id="virallyUnsuppressed"
+                      onChange={handleInputChange}
+                      value={payload.virallyUnSuppressed}
+                      style={{
+                        border: "1px solid #014D88",
+                        borderRadius: "0.2rem",
+                      }}
+                      disabled={props.action === "view" ? true : false}
                     >
                       <option value="">Select</option>
                       <option value="Yes">Yes</option>
@@ -1948,12 +1961,12 @@ const ViewFamilyIndexTestingForm = (props) => {
                       a health care worker?
                     </Label>
                     <select
-                        className="form-control"
-                        id="willingToHaveChildrenTestedElseWhere"
-                        name="willingToHaveChildrenTestedElseWhere"
-                        onChange={handleInputChange}
-                        value={payload.willingToHaveChildrenTestedElseWhere}
-                        disabled={props.action === "view" ? true : false}
+                      className="form-control"
+                      id="willingToHaveChildrenTestedElseWhere"
+                      name="willingToHaveChildrenTestedElseWhere"
+                      onChange={handleInputChange}
+                      value={payload.willingToHaveChildrenTestedElseWhere}
+                      disabled={props.action === "view" ? true : false}
                     >
                       <option value="">Select</option>
                       <option value="Yes">Yes</option>
@@ -1963,34 +1976,34 @@ const ViewFamilyIndexTestingForm = (props) => {
                 </div>
               </div>
 
-              <br/>
+              <br />
             </div>
             {arrayFamilyIndexRequestDto.length > 0 && (
-                <>
-                  <div className="row">
-                    <div
-                        className="form-group col-md-12 text-center pt-2 mb-4"
-                        style={{
-                          backgroundColor: "#992E62",
-                          width: "125%",
-                          height: "35px",
-                          color: "#fff",
-                          fontWeight: "bold",
-                        }}
-                    >
-                      SECTION B: FAMILY INDEX
-                    </div>
+              <>
+                <div className="row">
+                  <div
+                    className="form-group col-md-12 text-center pt-2 mb-4"
+                    style={{
+                      backgroundColor: "#992E62",
+                      width: "125%",
+                      height: "35px",
+                      color: "#fff",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    SECTION B: FAMILY INDEX
                   </div>
-                  <div className="row">
-                    {viewFamilyIndexForm && (
-                        <>
-                          <div className="form-group col-md-4">
-                            <FormGroup>
-                              <Label for="familyRelationship">
-                                Family Relationship
-                              </Label>
-                              <select
-                                  className="form-control"
+                </div>
+                <div className="row">
+                  {viewFamilyIndexForm && (
+                    <>
+                      <div className="form-group col-md-4">
+                        <FormGroup>
+                          <Label for="familyRelationship">
+                            Family Relationship
+                          </Label>
+                          <select
+                            className="form-control"
                             id="familyRelationship"
                             name="familyRelationship"
                             onChange={handlefamilyIndexRequestDto}
@@ -2524,34 +2537,36 @@ const ViewFamilyIndexTestingForm = (props) => {
                             </FormGroup>
                           </div>
                         )}
-                      <div className="form-group mb-3 col-md-4">
-                        <FormGroup>
-                          <Label for="">Date Enrolled In Ovc</Label>
-                          <Input
-                            type="date"
-                            name="dateEnrolledInOVC"
-                            id="dateEnrolledInOVC"
-                            value={
-                              familyTestingTrackerRequestDTO?.dateEnrolledInOVC
-                            }
-                            onChange={handlefamilyTestingTrackerRequestDTO}
-                            min="1929-12-31"
-                            max={moment(new Date()).format("YYYY-MM-DD")}
-                            style={{
-                              border: "1px solid #014D88",
-                              borderRadius: "0.25rem",
-                            }}
-                            disabled={props.action === "view" ? true : false}
-                          />
-                          {errors.referralDate !== "" ? (
-                            <span className={classes.error}>
-                              {errors.referralDate}
-                            </span>
-                          ) : (
-                            ""
-                          )}
-                        </FormGroup>
-                      </div>
+                      {payload.age < 21 && (
+                        <div className="form-group mb-3 col-md-4">
+                          <FormGroup>
+                            <Label for="">Date Enrolled In Ovc</Label>
+                            <Input
+                              type="date"
+                              name="dateEnrolledInOVC"
+                              id="dateEnrolledInOVC"
+                              value={
+                                familyTestingTrackerRequestDTO?.dateEnrolledInOVC
+                              }
+                              onChange={handlefamilyTestingTrackerRequestDTO}
+                              min="1929-12-31"
+                              max={moment(new Date()).format("YYYY-MM-DD")}
+                              style={{
+                                border: "1px solid #014D88",
+                                borderRadius: "0.25rem",
+                              }}
+                              disabled={props.action === "view" ? true : false}
+                            />
+                            {errors.referralDate !== "" ? (
+                              <span className={classes.error}>
+                                {errors.referralDate}
+                              </span>
+                            ) : (
+                              ""
+                            )}
+                          </FormGroup>
+                        </div>
+                      )}
                       <div className="form-group mb-3 col-md-4">
                         <FormGroup>
                           <Label for="">Date Enrolled On ART</Label>

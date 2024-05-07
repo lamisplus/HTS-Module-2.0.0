@@ -1772,7 +1772,7 @@ const HivTestResult = (props) => {
               <br />
               <div className="row">
                 <div className="form-group mb-3 col-md-12">
-                  {patientAge <= 15 ? (
+                  {/* {patientAge <= 15 ? (
                     <>
                       <Button
                         content="Back"
@@ -1797,7 +1797,7 @@ const HivTestResult = (props) => {
                         }
                       />
                     </>
-                  )}
+                  )} */}
 
                   <Button
                     content="Save & Continue"

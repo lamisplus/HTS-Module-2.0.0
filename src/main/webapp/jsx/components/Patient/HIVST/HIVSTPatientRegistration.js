@@ -28,6 +28,7 @@ import axios from "axios";
 import UserInformationCard from "./UserInformationCard";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
+import EditIcon from "@material-ui/icons/Edit";
 import DualListBox from "react-dual-listbox";
 import {calculate_age} from "../../utils";
 
@@ -177,7 +178,6 @@ const HIVSTPatientRegistration = (props) => {
     );
 
 
-
     // console.log("Selected Options", selectedUsers);
     const options = [
         {value: 'myself', label: 'For myself'},
@@ -292,7 +292,7 @@ const HIVSTPatientRegistration = (props) => {
             newObjectValues.expiryDate = "";
         }
         // Check if the name is "hasConductedHIVST" and objValues.hasConductedHIVST is "No"
-        if (name === "hasConductedHIVST" && value === "No") {
+        if (name === "hasConductedHIVST") {
             userInformation.postTestAssessment = {
                 ...userInformation.postTestAssessment,
                 everUsedHivstKitForSelfOrOthers: "",
@@ -309,69 +309,13 @@ const HIVSTPatientRegistration = (props) => {
                 }
             };
         }
-        // any change in everUsedHivstKitForSelfOrOthers clear referralPrveventionServices,and  referralInformation
-        if (name === "accessConfirmatoryHts") {
-            newObjectValues.postTestAssessment = {
-                ...newObjectValues.postTestAssessment,
-                referPreventionServices: "",
-                referralInformation: {
-                    referredForConfirmatoryHts: "",
-                    dateReferredForConfirmatoryHts: "",
-                    referredForPreventionServices: "",
-                    dateReferredForPreventionServices: ""
-                }
-            };
-        }
-
-        // any change in referredForConfirmatoryHts clear other field in this object
-        if (name === "referPreventionServices") {
-            newObjectValues.postTestAssessment.referralInformation = {
-                ...newObjectValues.postTestAssessment.referralInformation,
-                dateReferredForConfirmatoryHts: "",
-                referredForPreventionServices: "",
-                dateReferredForPreventionServices: "",
-                referredForConfirmatoryHts: ""
-            };
-        }
-
-        // any change in referredForPreventionServices clear dateReferredForPreventionServices
-        if (name === "referredForPreventionServices") {
-            newObjectValues.postTestAssessment.referralInformation = {
-                ...newObjectValues.postTestAssessment.referralInformation,
-                dateReferredForPreventionServices: ""
-            };
-        }
-
 
         setObjValues(newObjectValues);
     }
 
-    // const handleUserInformationInputChange = (e, section) => {
-    //     let newUserInformation = {...userInformation};
-    //     newUserInformation[section][e.target.name] = e.target.value;
-    //
-    //     if (e.target.name === "hasConductedHIVST" && e.target.value === "No") {
-    //         newUserInformation.postTestAssessment = {
-    //             ...newUserInformation.postTestAssessment,
-    //             everUsedHivstKitForSelfOrOthers: "",
-    //             otherHivstKitUserCategory: "",
-    //             otherHivstKitUserCategoryText: "",
-    //             resultOfHivstTest: "",
-    //             accessConfirmatoryHts: "",
-    //             referPreventionServices: "",
-    //             referralInformation: {
-    //                 referredForConfirmatoryHts: "",
-    //                 dateReferredForConfirmatoryHts: "",
-    //                 referredForPreventionServices: "",
-    //                 dateReferredForPreventionServices: ""
-    //             }
-    //         };
-    //     }
-    //     setUserInformation(newUserInformation);
-    // };
 
     const handleUserInformationInputChange = (e, section) => {
-        const { name, value } = e.target;
+        const {name, value} = e.target;
         let newUserInformation = {...userInformation};
 
         if (section === 'postTestAssessment' && name in newUserInformation[section].referralInformation) {
@@ -405,7 +349,7 @@ const HIVSTPatientRegistration = (props) => {
 
         }
         // if  accessConfirmatoryHtschnages clear all the feilds below
-        if(name === "accessConfirmatoryHts") {
+        if (name === "accessConfirmatoryHts") {
             newUserInformation.postTestAssessment = {
                 ...newUserInformation.postTestAssessment,
                 referPreventionServices: "",
@@ -418,18 +362,18 @@ const HIVSTPatientRegistration = (props) => {
             };
 
         }
-         // if  referPreventionServiceschnages clear all the feilds below
-            if(name === "referPreventionServices") {
-                newUserInformation.postTestAssessment = {
-                    ...newUserInformation.postTestAssessment,
-                    referralInformation: {
-                        referredForConfirmatoryHts: "",
-                        dateReferredForConfirmatoryHts: "",
-                        referredForPreventionServices: "",
-                        dateReferredForPreventionServices: ""
-                    }
-                };
-            }
+        // if  referPreventionServiceschnages clear all the feilds below
+        if (name === "referPreventionServices") {
+            newUserInformation.postTestAssessment = {
+                ...newUserInformation.postTestAssessment,
+                referralInformation: {
+                    referredForConfirmatoryHts: "",
+                    dateReferredForConfirmatoryHts: "",
+                    referredForPreventionServices: "",
+                    dateReferredForPreventionServices: ""
+                }
+            };
+        }
 
         // any change in referredForPreventionServices clear dateReferredForPreventionServices
         if (name === "referredForPreventionServices") {
@@ -455,97 +399,110 @@ const HIVSTPatientRegistration = (props) => {
                 }
             };
         }
-        setUserInformation(newUserInformation);
-    };
-
-
-    const addUserInformation = () => {
-        const newUserInformation = {
-            userDetails: {
-                id: "",
-                otherCategory: userInformation.length > 0 && userInformation[0].userDetails ? userInformation[0].userDetails.otherCategory : "",
-                userClientCode: userInformation.length > 0 && userInformation[0].userDetails ? userInformation[0].userDetails.userClientCode : "",
-                dateOfBirth: userInformation.length > 0 && userInformation[0].userDetails ? userInformation[0].userDetails.dateOfBirth : "",
-                age: userInformation.length > 0 && userInformation[0].userDetails ? userInformation[0].userDetails.age : "",
-                sex: userInformation.length > 0 && userInformation[0].userDetails ? userInformation[0].userDetails.sex : "",
-                maritalStatusId: userInformation.length > 0 && userInformation[0].userDetails ? userInformation[0].userDetails.maritalStatusId : "",
-                typeOfHivst: userInformation.length > 0 && userInformation[0].userDetails ? userInformation[0].userDetails.typeOfHivst : "",
-                userCategory: userInformation.length > 0 && userInformation[0].userDetails ? userInformation[0].userDetails.userCategory : ""
-            },
-            postTestAssessment: {
-                everUsedHivstKit: userInformation.length > 0 ? userInformation[0].postTestAssessment.everUsedHivstKit : "",
-                everUsedHivstKitForSelfOrOthers: userInformation.length > 0 ? userInformation[0].postTestAssessment.everUsedHivstKitForSelfOrOthers : "",
-                otherHivstKitUserCategory: userInformation.length > 0 ? userInformation[0].postTestAssessment.otherHivstKitUserCategory : "",
-                otherHivstKitUserCategoryText: userInformation.length > 0 ? userInformation[0].postTestAssessment.otherHivstKitUserCategoryText : "",
-                resultOfHivstTest: userInformation.length > 0 ? userInformation[0].postTestAssessment.resultOfHivstTest : "",
-                accessConfirmatoryHts: userInformation.length > 0 ? userInformation[0].postTestAssessment.accessConfirmatoryHts : "",
-                referPreventionServices: userInformation.length > 0 ? userInformation[0].postTestAssessment.referPreventionServices : "",
-                referralInformation: {
-                    referredForConfirmatoryHts: userInformation.length > 0 ? userInformation[0].postTestAssessment.referralInformation.referredForConfirmatoryHts : "",
-                    dateReferredForConfirmatoryHts: userInformation.length > 0 ? userInformation[0].postTestAssessment.referralInformation.dateReferredForConfirmatoryHts : "",
-                    referredForPreventionServices: userInformation.length > 0 ? userInformation[0].postTestAssessment.referralInformation.referredForPreventionServices : "",
-                    dateReferredForPreventionServices: userInformation.length > 0 ? userInformation[0].postTestAssessment.referralInformation.dateReferredForPreventionServices : null
-                }
-            }
-        };
-        // Add the new object to the userInformationList
-        setUserInformationList([...userInformationList, newUserInformation]);
-
-        // Set the userInformation field in objValues to the updated list
-        setObjValues({...objValues, userInformation: [...userInformationList, newUserInformation]});
-
-        // Reset the userInformation state to its initial state
-        setUserInformation([{
-            userDetails: {
-                id: "",
+        // if userCategory changes clear all other fields in userDetails
+        if (name === "userCategory") {
+            newUserInformation.userDetails = {
+                ...newUserInformation.userDetails,
                 otherCategory: "",
                 userClientCode: "",
                 dateOfBirth: "",
                 age: "",
-                sex: "",
-                maritalStatusId: "",
-                typeOfHivst: "",
-                userCategory: ""
-            },
-            postTestAssessment: {
-                everUsedHivstKit: "",
-                everUsedHivstKitForSelfOrOthers: "",
-                otherHivstKitUserCategory: "",
-                otherHivstKitUserCategoryText: "",
-                resultOfHivstTest: "",
-                accessConfirmatoryHts: "",
-                referPreventionServices: "",
-                referralInformation: {
-                    referredForConfirmatoryHts: "",
-                    dateReferredForConfirmatoryHts: "",
-                    referredForPreventionServices: "",
-                    dateReferredForPreventionServices: null
+            }
+        }
+        setUserInformation(newUserInformation);
+    };
+
+
+// Function to add a userInformation object to the list
+
+    const addUserInformation = () => {
+        if(userInformationList.length <= objValues.numberOfHivstKitsReceived) {
+            let newUserInformation = {
+                userDetails: {
+                    id: "",
+                    otherCategory: userInformation.userDetails.otherCategory,
+                    userClientCode: userInformation.userDetails.userClientCode,
+                    dateOfBirth: userInformation.userDetails.dateOfBirth,
+                    age: userInformation.userDetails.age,
+                    sex: userInformation.userDetails.sex,
+                    maritalStatusId: userInformation.userDetails.maritalStatusId,
+                    typeOfHivst: userInformation.userDetails.typeOfHivst,
+                    userCategory: userInformation.userDetails.userCategory
+                },
+                postTestAssessment: {
+                    everUsedHivstKit: userInformation.postTestAssessment.everUsedHivstKit,
+                    everUsedHivstKitForSelfOrOthers: userInformation.postTestAssessment.everUsedHivstKitForSelfOrOthers,
+                    otherHivstKitUserCategory: userInformation.postTestAssessment.otherHivstKitUserCategory,
+                    otherHivstKitUserCategoryText: userInformation.postTestAssessment.otherHivstKitUserCategoryText,
+                    resultOfHivstTest: userInformation.postTestAssessment.resultOfHivstTest,
+                    accessConfirmatoryHts: userInformation.postTestAssessment.accessConfirmatoryHts,
+                    referPreventionServices: userInformation.postTestAssessment.referPreventionServices,
+                    referralInformation: {
+                        referredForConfirmatoryHts: userInformation.postTestAssessment.referralInformation.referredForConfirmatoryHts,
+                        dateReferredForConfirmatoryHts: userInformation.postTestAssessment.referralInformation.dateReferredForConfirmatoryHts,
+                        referredForPreventionServices: userInformation.postTestAssessment.referralInformation.referredForPreventionServices,
+                        dateReferredForPreventionServices: userInformation.postTestAssessment.referralInformation.dateReferredForPreventionServices
+                    }
                 }
             }
-        }]);
-    };
-    // Function to remove a userInformation object from the list based on index
+            setUserInformationList([...userInformationList, newUserInformation]);
+            setObjValues({...objValues, userInformation: [...userInformationList, newUserInformation]});
+
+            // clear UserInformation after adding to the list and also set the hasConductedHIVST to No
+
+            setUserInformation({
+                userDetails: {
+                    id: "",
+                    otherCategory: "",
+                    userClientCode: "",
+                    dateOfBirth: "",
+                    age: "",
+                    sex: "",
+                    maritalStatusId: "",
+                    typeOfHivst: "",
+                    userCategory: ""
+                },
+                postTestAssessment: {
+                    everUsedHivstKit: "",
+                    everUsedHivstKitForSelfOrOthers: "",
+                    otherHivstKitUserCategory: "",
+                    otherHivstKitUserCategoryText: "",
+                    resultOfHivstTest: "",
+                    accessConfirmatoryHts: "",
+                    referPreventionServices: "",
+                    referralInformation: {
+                        referredForConfirmatoryHts: "",
+                        dateReferredForConfirmatoryHts: "",
+                        referredForPreventionServices: "",
+                        dateReferredForPreventionServices: ""
+                    }
+                }
+            });
+            setObjValues({...objValues, hasConductedHIVST: "No"});
+        } else {
+            console.log("Cannot add more user information as it exceeds the number of HIVST kits received.");
+        }
+    }
+// Function to remove a userInformation object from the list based on index
     const removeUserInformation = (index) => {
-        // Remove the object at the specified index
         const updatedUserInformationList = userInformationList.filter((_, i) => i !== index);
-
-        // Update the userInformationList state
         setUserInformationList(updatedUserInformationList);
-
-        // Set the userInformation field in objValues to the updated list
         setObjValues({...objValues, userInformation: updatedUserInformationList});
     };
 
 // Function to update a userInformation object in the list based on index
     const updateUserInformation = (index, updatedUserInformation) => {
-        // Update the object at the specified index
         const updatedUserInformationList = userInformationList.map((userInformation, i) =>
             i === index ? updatedUserInformation : userInformation
         );
-        // Update the userInformationList state
         setUserInformationList(updatedUserInformationList);
-        // Set the userInformation field in objValues to the updated list
         setObjValues({...objValues, userInformation: updatedUserInformationList});
+    };
+
+// Function to clear the userInformation list
+    const clearUserInformationList = () => {
+        setUserInformationList([]);
+        setObjValues({...objValues, userInformation: []});
     };
 
     // console.log("Obj", objValues)
@@ -608,18 +565,6 @@ const HIVSTPatientRegistration = (props) => {
     };
 
 
-    // const validateUserTestKitInformation = () => {
-    //     let temp = {};
-    //     temp.userCategory = userInformation.userDetails.userCategory ? "" : "This field is required.";
-    //     temp.userClientCode = userInformation.userDetails.userClientCode ? "" : "This field is required.";
-    //     temp.dateOfBirth = userDetails.dateOfBirth ? "" : "This field is required.";
-    //     temp.age = userInformation.userDetails.age ? "" : "This field is required";
-    //
-    //     setErrors({...temp});
-    //     return Object.values(temp).every((x) => x === "");
-    //
-    // }
-
     const Sex = () => {
         axios
             .get(`${baseUrl}application-codesets/v2/SEX`, {
@@ -654,33 +599,42 @@ const HIVSTPatientRegistration = (props) => {
     }, []);
 
 
-    // const handleDobChange1 = (e) => {
-    //     let newUserInformation = [...userInformation];
-    //     let newPayload = {...newUserInformation[newUserInformation.length - 1].userDetails, [e.target.name]: e.target.value};
-    //     if (e.target.value && new Date(e.target.value) <= new Date()) {
-    //         const age_now = calculate_age(e.target.value);
-    //         newPayload = {...newPayload, age: age_now};
-    //     } else {
-    //         newPayload = {...newPayload, age: ""};
-    //     }
-    //     newUserInformation[newUserInformation.length - 1].userDetails = newPayload;
-    //     setUserInformation(newUserInformation);
-    // };
+    const setAge = () => {
+        const age = calculate_age(userInformation.userDetails?.dateOfBirth);
+        setUserInformation(prevState => ({
+            ...prevState,
+            userDetails: {
+                ...prevState.userDetails,
+                age: age
+            }
+        }));
+        return age;
+    }
+
+    const handleDateOfBirthChange = (e) => {
+        let newUserInformation = {...userInformation};
+        newUserInformation.userDetails[e.target.name] = e.target.value;
+        if (e.target.value && new Date(e.target.value) <= new Date()) {
+            const age_now = calculate_age(e.target.value);
+            newUserInformation.userDetails.age = age_now;
+        } else {
+            newUserInformation.userDetails.age = "";
+        }
+        setUserInformation(newUserInformation);
+    }
+
 
     const handleSubmit = (e) => {
         e.preventDefault()
+        const userInfoList = userInformationList;
+        objValues.userInformation = userInformationList;
         console.log("objValues", objValues)
     }
     console.log("selectedUsers", selectedUsers)
     console.log("objValues", objValues)
     console.log("userInformation", userInformation)
-    console.log( console.log("date referred for confrmatory hts testing", userInformation.postTestAssessment.referralInformation.referredForConfirmatoryHts))
+    console.log("userInformationList", userInformationList)
 
-    useEffect(() => {
-        if (userInformation && userInformation.postTestAssessment && userInformation.postTestAssessment.referralInformation && userInformation.postTestAssessment.referralInformation.referredForConfirmatoryHts) {
-            console.log("date referred for confrmatory hts testing", userInformation.postTestAssessment.referralInformation.referredForConfirmatoryHts);
-        }
-    }, [userInformation]);
 
     return (
         <>
@@ -1094,7 +1048,7 @@ const HIVSTPatientRegistration = (props) => {
                                     </FormGroup>
                                 </div>
                             }
-                            {showUserInfo && objValues.userType === "Primary User" &&
+                            {showUserInfo &&
                                 <div className="form-group  col-md-4">
                                     <FormGroup>
                                         <Label style={style}>
@@ -1127,7 +1081,7 @@ const HIVSTPatientRegistration = (props) => {
                                     </FormGroup>
                                 </div>
                             }
-                            { objValues?.isUserInformationAvailable === "Yes" &&
+                            {objValues?.isUserInformationAvailable === "Yes" &&
                                 <>
                                     <div className="row center">
                                         <div
@@ -1253,10 +1207,9 @@ const HIVSTPatientRegistration = (props) => {
                                                     id="dateOfBirth"
                                                     min="1929-12-31"
                                                     max={moment(new Date()).format("YYYY-MM-DD")}
-                                                    // value={userDetails.dateOfBirth}
-                                                    // onChange={handleDobChange1}
                                                     value={userInformation.userDetails.dateOfBirth}
-                                                    onChange={(e) => handleUserInformationInputChange(e, "userDetails")}
+                                                    onChange={handleDateOfBirthChange}
+                                                    // onChange={(e) => handleUserInformationInputChange(e, "userDetails")}
                                                     style={{
                                                         border: "1px solid #014D88",
                                                         borderRadius: "0.2rem",
@@ -1285,7 +1238,7 @@ const HIVSTPatientRegistration = (props) => {
                                                         border: "1px solid #014D88",
                                                         borderRadius: "0.2rem",
                                                     }}
-                                                    value={calculate_age(userInformation.userDetails?.dateOfBirth)}
+                                                    value={userInformation.userDetails.age}
                                                     onChange={(e) => handleUserInformationInputChange(e, "userDetails")}
                                                 />
                                             </FormGroup>
@@ -1381,44 +1334,6 @@ const HIVSTPatientRegistration = (props) => {
                                         {/*        <Icon name="plus"/> Add*/}
                                         {/*    </LabelSui>*/}
                                         {/*</div>*/}
-                                        {kitUserInformation && kitUserInformation.length > 0 ? (
-                                            <List className="mb-5">
-                                                <Table striped responsive>
-                                                    <thead style={{
-                                                        backgroundColor: "#014D88",
-                                                        color: "white",
-                                                        fontSize: "10px"
-                                                    }}>
-                                                    <tr>
-                                                        <th>Client Code</th>
-                                                        <th>HIV Self Test Type</th>
-                                                        <th>User Category</th>
-                                                        <th>Action</th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    {kitUserInformation.map((item, index) => (
-                                                        <tr key={index}>
-                                                            <td>{item.userClientCode}</td>
-                                                            <td>{item.typeOfHivst}</td>
-                                                            <td>{item.userCategory}</td>
-                                                            <td>
-                                                                <IconButton
-                                                                    aria-label="delete"
-                                                                    size="small"
-                                                                    color="error"
-                                                                    // onClick={() => removeKitUserInformation(index)}
-                                                                >
-                                                                    <DeleteIcon fontSize="inherit"/>
-                                                                </IconButton>
-                                                            </td>
-                                                        </tr>
-                                                    ))}
-                                                    </tbody>
-                                                </Table>
-                                            </List>
-                                        ) : ""
-                                        }
                                     </div>
 
 
@@ -1448,34 +1363,52 @@ const HIVSTPatientRegistration = (props) => {
                             {/*        </FormGroup>*/}
                             {/*    </div>*/}
                             {/*</div>*/}
-                            <div style={{display: 'flex', justifyContent: 'center'}}>
-                                <hr style={{width: '100%'}}/>
-                            </div>
-                            <div className="row mb-7">
-                                <div className="form-group  col-md-4">
-                                    <FormGroup>
-                                        <Label style={style}>
-                                            Have you conducted the HIVST ?
-                                            <span style={{color: "red"}}> *</span>
-                                        </Label>
-                                        <select
-                                            className="form-control"
-                                            name="hasConductedHIVST"
-                                            id="hasConductedHIVST"
-                                            value={objValues.hasConductedHIVST}
-                                            onChange={handleInputChange}
-                                            style={{
-                                                border: "1px solid #014D88",
-                                                borderRadius: "0.2rem",
-                                            }}
-                                        >
-                                            <option value={""}></option>
-                                            <option value="Yes">YES</option>
-                                            <option value="No">NO</option>
-                                        </select>
-                                    </FormGroup>
+                            {objValues?.isUserInformationAvailable === "No" &&
+                                <div className="row mb-7">
+                                    <div className="form-group mb-3 col-md-6">
+                                        <Button
+                                            content="Save wihout user Info"
+                                            icon="save"
+                                            labelPosition="right"
+                                            style={{backgroundColor: "#014d88", color: "#fff"}}
+                                            onClick={handleSubmit}
+                                            disabled={saving}
+                                        />
+                                    </div>
                                 </div>
-                            </div>
+                            }
+
+                            {objValues && objValues.isUserInformationAvailable === "Yes" &&
+                                <div style={{display: 'flex', justifyContent: 'center'}}>
+                                    <hr style={{width: '100%'}}/>
+                                </div>
+                            }
+                            {objValues && objValues.isUserInformationAvailable === "Yes" &&
+                                <div className="row mb-7">
+                                    <div className="form-group  col-md-4">
+                                        <FormGroup>
+                                            <Label style={style}>
+                                                Have you conducted the HIVST ?
+                                                <span style={{color: "red"}}> *</span>
+                                            </Label>
+                                            <select
+                                                className="form-control"
+                                                name="hasConductedHIVST"
+                                                id="hasConductedHIVST"
+                                                value={objValues.hasConductedHIVST}
+                                                onChange={handleInputChange}
+                                                style={{
+                                                    border: "1px solid #014D88",
+                                                    borderRadius: "0.2rem",
+                                                }}
+                                            >
+                                                <option value={""}></option>
+                                                <option value="Yes">YES</option>
+                                                <option value="No">NO</option>
+                                            </select>
+                                        </FormGroup>
+                                    </div>
+                                </div>}
                             <div className="row mb-7">
                                 {objValues.hasConductedHIVST === "Yes" ? (
                                     // Display the following questions if the checkbox is checked
@@ -1484,14 +1417,14 @@ const HIVSTPatientRegistration = (props) => {
                                             <div
                                                 className="form-group col-md-12 ml-3 text-center pt-2 mb-4"
                                                 style={{
-                                                    backgroundColor: "rgba(15, 102, 3, 0.8)",
+                                                    backgroundColor: "green",
                                                     width: "125%",
                                                     height: "35px",
-                                                    // color: "rgba(15, 102, 3, 0.8)",
-                                                    color:"fff",
+                                                    color: "#fff",
                                                     fontWeight: "bold",
                                                 }}
                                             >
+
                                                 Section B : HIVST Post Test Assessment
                                             </div>
                                             <div className="form-group  col-md-4">
@@ -1616,7 +1549,7 @@ const HIVSTPatientRegistration = (props) => {
                                                     </select>
                                                 </FormGroup>
                                             </div>
-                                            { userInformation?.postTestAssessment?.resultOfHivstTest === "Reactive" &&
+                                            {userInformation?.postTestAssessment?.resultOfHivstTest === "Reactive" &&
                                                 <div className="form-group  col-md-4">
                                                     <FormGroup>
                                                         <Label style={style}>
@@ -1678,7 +1611,7 @@ const HIVSTPatientRegistration = (props) => {
                                                         <div
                                                             className="form-group col-md-12 ml-3 text-center pt-2 mb-4"
                                                             style={{
-                                                                backgroundColor: "#992E62",
+                                                                backgroundColor: "rgba(25, 96, 176, 0.8)",
                                                                 width: "125%",
                                                                 height: "35px",
                                                                 color: "#fff",
@@ -1687,7 +1620,7 @@ const HIVSTPatientRegistration = (props) => {
                                                         >
                                                             Section C : Referral Information
                                                         </div>
-                                                        <div className="form-group  col-md-4">
+                                                        {userInformation.postTestAssessment.accessConfirmatoryHts === "Yes" && <div className="form-group  col-md-4">
                                                             <FormGroup>
                                                                 <Label style={style}>
                                                                     Referred for Confirmatory HTS Testing
@@ -1709,7 +1642,7 @@ const HIVSTPatientRegistration = (props) => {
                                                                     <option value="No">NO</option>
                                                                 </select>
                                                             </FormGroup>
-                                                        </div>
+                                                        </div>}
                                                         {userInformation.postTestAssessment.referralInformation && userInformation.postTestAssessment.referralInformation.referredForConfirmatoryHts === "Yes" &&
                                                             <div className="form-group mb-3 col-md-4">
                                                                 <FormGroup>
@@ -1733,7 +1666,7 @@ const HIVSTPatientRegistration = (props) => {
                                                                     />
                                                                 </FormGroup>
                                                             </div>}
-                                                        {userInformation.postTestAssessment.referralInformation && userInformation?.postTestAssessment?.referralInformation?.referredForConfirmatoryHts === "No" &&
+                                                        {userInformation.postTestAssessment.referralInformation && userInformation?.postTestAssessment?.referPreventionServices === "Yes" &&
                                                             <div className="form-group  col-md-4">
                                                                 <FormGroup>
                                                                     <Label style={style}>
@@ -1758,13 +1691,12 @@ const HIVSTPatientRegistration = (props) => {
                                                                     </select>
                                                                 </FormGroup>
                                                             </div>
-                                                         }
+                                                        }
                                                         {userInformation.postTestAssessment.referralInformation && userInformation.postTestAssessment.referralInformation.referredForPreventionServices === "Yes" &&
                                                             <div className="form-group mb-3 col-md-4">
                                                                 <FormGroup>
                                                                     <Label for="">
-                                                                        Date referred for confirmatory HTS testing
-                                                                        field <span style={{color: "red"}}> *</span>
+                                                                        Date referred for prevention services <span style={{color: "red"}}> *</span>
                                                                     </Label>
                                                                     <Input
                                                                         type="date"
@@ -1786,18 +1718,18 @@ const HIVSTPatientRegistration = (props) => {
                                                                     {/*)}*/}
                                                                 </FormGroup>
                                                             </div>
-                                                    }
+                                                        }
 
                                                     </div>) : ""}
                                     </>
-                                ) : (
+                                  ) : (
                                     // Display the save form button if the checkbox is not checked
                                     <div className="row">
                                         {// if selected user  is myself only show save button and save secondary user information
                                             selectedUsers && selectedUsers.length === 1 && selectedUsers[0] === "myself" &&
                                             <div className="form-group mb-3 col-md-6">
                                                 <Button
-                                                    content="save secondary user infor"
+                                                    content="save myself information"
                                                     icon="save"
                                                     labelPosition="right"
                                                     style={{backgroundColor: "#014d88", color: "#fff"}}
@@ -1806,22 +1738,83 @@ const HIVSTPatientRegistration = (props) => {
                                                 />
                                             </div>
                                         }
-                                        {objValues?.isUserInformationAvailable === "Yes" &&
-                                            <div className="form-group mb-3 col-md-6">
-                                                <Button
-                                                    content="save"
-                                                    icon="save"
-                                                    labelPosition="right"
-                                                    style={{backgroundColor: "#014d88", color: "#fff"}}
-                                                    onClick={handleSubmit}
-                                                    disabled={saving}
-                                                />
-                                            </div>
-                                        }
+
                                     </div>
                                 )}
                             </div>
-
+                            {objValues?.isUserInformationAvailable === "Yes" && <div className="row">
+                                <div className="form-group mb-3 col-md-6">
+                                    <LabelSui
+                                        as="a"
+                                        color="black"
+                                        onClick={addUserInformation}
+                                        size="small"
+                                        style={{marginTop: 35}}
+                                    >
+                                        <Icon name="plus"/> Add
+                                    </LabelSui>
+                                </div>
+                            </div>
+                            }
+                            {/*added kit user */}
+                            {objValues?.isUserInformationAvailable === "Yes" && userInformationList.length > 0 ? (
+                                <div class="row">
+                                    <List className="mb-5">
+                                        <Table striped responsive>
+                                            <thead style={{
+                                                backgroundColor: "#014D88",
+                                                color: "white",
+                                                fontSize: "10px"
+                                            }}>
+                                            <tr>
+                                                <th>Client Code</th>
+                                                <th>HIV Self Test Type</th>
+                                                {/*<th>Ever used HIVST Kit</th>*/}
+                                                <th>User Category</th>
+                                                <th>Action</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {userInformationList.map((item, index) => (
+                                                <tr key={index}>
+                                                    <td>{item.userDetails.userClientCode}</td>
+                                                    <td>{item.userDetails.typeOfHivst}</td>
+                                                    {/*<th>{item.postTestAssessment.everUsedHivstKit}</th>*/}
+                                                    <td>{item.userDetails.userCategory}</td>
+                                                    <td>
+                                                        <IconButton
+                                                            aria-label="delete"
+                                                            size="small"
+                                                            color="error"
+                                                            onClick={() => removeUserInformation(index)}
+                                                        >
+                                                            <DeleteIcon fontSize="inherit"/>
+                                                        </IconButton>
+                                                        <IconButton>
+                                                            <EditIcon fontSize="inherit"/>
+                                                        </IconButton>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                            </tbody>
+                                        </Table>
+                                    </List>
+                                </div>
+                                ) : " "}
+                            {objValues?.isUserInformationAvailable === "Yes" &&
+                                <div className="row">
+                                    <div className="form-group mb-3 col-md-6">
+                                        <Button
+                                            content="save"
+                                            icon="save"
+                                            labelPosition="right"
+                                            style={{backgroundColor: "#014d88", color: "#fff"}}
+                                            onClick={handleSubmit}
+                                            disabled={saving}
+                                        />
+                                    </div>
+                                </div>
+                            }
 
                         </div>
 

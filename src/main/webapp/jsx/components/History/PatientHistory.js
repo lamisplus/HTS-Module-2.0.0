@@ -16,6 +16,7 @@ const divStyle = {
 };
 
 const Home = (props) => {
+  console.log(props.patientObj);
   const [patientList, setPatientList] = useState([]);
   const [loading, setLoading] = useState(true);
   const patientId =
@@ -113,6 +114,19 @@ const Home = (props) => {
                         />
                       </Tab>
                     )}
+                  <Tab eventKey="hivst-history" title="HIVST HISTORY">
+                    <History
+                        patientObj={props.patientObj}
+                        setPatientObj={props.setPatientObj}
+                        activePage={props.activePage}
+                        setActivePage={props.setActivePage}
+                        clientCode={props.clientCode}
+                        patientAge={props.patientAge}
+                        patients={patients}
+                        patientList={patientList}
+                        loading={loading}
+                    />
+                  </Tab>
                   <Tab eventKey="new-hivst" title="NEW HIVST">
                             <ExistenceClientHIVSTRegistration
                                 patientObj={props.patientObj}

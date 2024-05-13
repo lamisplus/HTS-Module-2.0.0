@@ -25,7 +25,8 @@ import HIVSTPostTestAssessment from "./HIVSTPostTestAssessment";
 // import ViewPNSForm from "../NewRegistration/PartnerNotificationServices/ViewPnsForm";
 // import ReferralUnit from "../ContinuesHTSEnrollment/ClientReferral/ReferralUnit";
 
-const ExistenceClientHIVSTRegistration = () => {
+const ExistenceClientHIVSTRegistration = (props) => {
+    console.log("ExistenceClientHIVSTRegistration", props.patientObj)
     const location = useLocation();
     const locationState = location.state;
     const [activeItem, setactiveItem] = useState("reg");
@@ -39,6 +40,7 @@ const ExistenceClientHIVSTRegistration = () => {
         //setCompleted({...completed, ...completedMenu})
     };
 
+    console.log("ExistenceClientHIVSTRegistration", locationState.patientObject)
     return (<>
         <ToastContainer autoClose={3000} hideProgressBar />
 
@@ -121,125 +123,6 @@ const ExistenceClientHIVSTRegistration = () => {
                                 patientObject={locationState.patientObject}
                                 // setBasicInfo={setBasicInfo}
                             />)}
-                            {/*{activeItem === "pre-test-counsel" && (<PreTest*/}
-                            {/*    handleItemClick={handleItemClick}*/}
-                            {/*    setCompleted={setCompleted}*/}
-                            {/*    completed={completed}*/}
-                            {/*    setPatientObj={setPatientObj2}*/}
-                            {/*    patientObj={patientObj2}*/}
-                            {/*    clientCode={props.clientCode}*/}
-                            {/*    patientAge={props.patientAge}*/}
-                            {/*/>)}*/}
-                            {/*{activeItem === "hiv-test" && (<HivTestResult*/}
-                            {/*    handleItemClick={handleItemClick}*/}
-                            {/*    setCompleted={setCompleted}*/}
-                            {/*    completed={completed}*/}
-                            {/*    setPatientObj={setPatientObj2}*/}
-                            {/*    patientObj={patientObj2}*/}
-                            {/*    clientCode={props.clientCode}*/}
-                            {/*    patientAge={props.patientAge}*/}
-                            {/*/>)}*/}
-                            {/*{activeItem === "post-test" && (<PostTest*/}
-                            {/*    handleItemClick={handleItemClick}*/}
-                            {/*    setCompleted={setCompleted}*/}
-                            {/*    completed={completed}*/}
-                            {/*    setPatientObj={setPatientObj2}*/}
-                            {/*    patientObj={patientObj2}*/}
-                            {/*    clientCode={props.clientCode}*/}
-                            {/*    patientAge={props.patientAge}*/}
-                            {/*    patientsHistory={props.patients}*/}
-                            {/*/>)}*/}
-                            {/*{activeItem === "indexing" && (<IndexingContactTracing*/}
-                            {/*    handleItemClick={handleItemClick}*/}
-                            {/*    setCompleted={setCompleted}*/}
-                            {/*    completed={completed}*/}
-                            {/*    setPatientObj={setPatientObj2}*/}
-                            {/*    patientObj={patientObj2}*/}
-                            {/*    clientCode={props.clientCode}*/}
-                            {/*    patientAge={props.patientAge}*/}
-                            {/*/>)}*/}
-                            {/*{activeItem === "recency-testing" && (<RecencyTesting*/}
-                            {/*    handleItemClick={handleItemClick}*/}
-                            {/*    setCompleted={setCompleted}*/}
-                            {/*    completed={completed}*/}
-                            {/*    setPatientObj={setPatientObj2}*/}
-                            {/*    patientObj={patientObj2}*/}
-                            {/*    clientCode={props.clientCode}*/}
-                            {/*    patientAge={props.patientAge}*/}
-                            {/*/>)}*/}
-                            {/*{activeItem === "others" && (<Others*/}
-                            {/*    handleItemClick={handleItemClick}*/}
-                            {/*    setCompleted={setCompleted}*/}
-                            {/*    completed={completed}*/}
-                            {/*    setPatientObj={setPatientObj2}*/}
-                            {/*    patientObj={patientObj2}*/}
-                            {/*    clientCode={props.clientCode}*/}
-                            {/*    patientAge={props.patientAge}*/}
-                            {/*/>)}*/}
-                            {/*{activeItem === "pns-history" && (<PNSHistory*/}
-                            {/*    handleItemClick={handleItemClick}*/}
-                            {/*    setCompleted={setCompleted}*/}
-                            {/*    completed={completed}*/}
-                            {/*    setPatientObj={setPatientObj2}*/}
-                            {/*    patientObj={patientObj2}*/}
-                            {/*    setExtra={setExtra}*/}
-                            {/*    extra={extra}*/}
-                            {/*    basicInfo={basicInfo}*/}
-                            {/*    organizationInfo={organizationInfo}*/}
-                            {/*    activePage={props.activePage}*/}
-                            {/*    setActivePage={props.setActivePage}*/}
-                            {/*    setRow={setRow}*/}
-                            {/*/>)}*/}
-
-                            {/*{activeItem === "pns" && (<PnsForm*/}
-                            {/*    handleItemClick={handleItemClick}*/}
-                            {/*    setCompleted={setCompleted}*/}
-                            {/*    completed={completed}*/}
-                            {/*    setPatientObj={setPatientObj2}*/}
-                            {/*    patientObj={patientObj2}*/}
-                            {/*    setExtra={setExtra}*/}
-                            {/*    extra={extra}*/}
-                            {/*    basicInfo={basicInfo}*/}
-                            {/*    organizationInfo={organizationInfo}*/}
-                            {/*// addNewForm={false}*/}
-                            {/*/>)}*/}
-
-                            {/*{activeItem === "view-pns" && (<ViewPNSForm*/}
-                            {/*    handleItemClick={handleItemClick}*/}
-                            {/*    setCompleted={setCompleted}*/}
-                            {/*    completed={completed}*/}
-                            {/*    setPatientObj={setPatientObj2}*/}
-                            {/*    patientObj={patientObj2}*/}
-                            {/*    setExtra={setExtra}*/}
-                            {/*    extra={extra}*/}
-                            {/*    basicInfo={basicInfo}*/}
-                            {/*    organizationInfo={organizationInfo}*/}
-                            {/*    addNewForm={false}*/}
-                            {/*    row={row}*/}
-                            {/*/>)}*/}
-                            {/*{activeItem === "fit" && (<FamilyIndexTestingForm*/}
-                            {/*    handleItemClick={handleItemClick}*/}
-                            {/*    setCompleted={setCompleted}*/}
-                            {/*    completed={completed}*/}
-                            {/*    setPatientObj={setPatientObj2}*/}
-                            {/*    patientObj={patientObj2}*/}
-                            {/*    setExtra={setExtra}*/}
-                            {/*    extra={extra}*/}
-                            {/*    basicInfo={basicInfo}*/}
-                            {/*    organizationInfo={organizationInfo}*/}
-                            {/*/>)}*/}
-                            {/*{activeItem === "new-referral" && (<ReferralUnit*/}
-                            {/*    handleItemClick={handleItemClick}*/}
-                            {/*    setCompleted={setCompleted}*/}
-                            {/*    completed={completed}*/}
-                            {/*    setPatientObj={setPatientObj2}*/}
-                            {/*    patientObj={patientObj2}*/}
-                            {/*    setExtra={setExtra}*/}
-                            {/*    extra={extra}*/}
-                            {/*    basicInfo={basicInfo}*/}
-                            {/*    organizationInfo={organizationInfo}*/}
-                            {/*    addNewForm={false}*/}
-                            {/*/>)}*/}
                         </div>
                     </div>
                 </form>

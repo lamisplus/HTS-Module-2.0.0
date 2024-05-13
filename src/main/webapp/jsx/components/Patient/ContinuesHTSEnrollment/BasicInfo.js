@@ -95,6 +95,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const BasicInfo = (props) => {
+  console.log("patient object", props.patientObj);
   console.log("basic", props.patientObj.clientCode);
   console.log("############# Continues model")
 

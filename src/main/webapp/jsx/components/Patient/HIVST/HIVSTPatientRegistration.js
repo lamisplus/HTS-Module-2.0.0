@@ -118,33 +118,30 @@ const HIVSTPatientRegistration = (props) => {
     const [otherText, setOtherText] = useState('');
     const [otherTestKitUserInfoAvailable, setIsUserInformationAvailable] = useState(false);
     const [kitUserInformation, setKitUserInformation] = useState([]);
-    const [selectedServiceNeeded, setSelectServiceNeeded] = useState([]);
     const [serviceNeeded, setServiceNeeded] = useState([]);
-    const [showFreeTextField, setShowFreeTextField] = useState(false);
     const [hasConductedHIVST, setHasConductedHIVST] = useState(false);
     const [maritalStatus, setMaritalStatus] = useState([]);
     const [sexs, setSexs] = useState([]);
     const [userInformationList, setUserInformationList] = useState([])
-
+    const [userInformationErrors, setUserInformationErrors] = useState({});
 
     const [objValues, setObjValues] = useState({
         patientId: patient?.personId ? patient.personId : "",
-        patientObject: {
-            surname: patient?.surname ? patient.surname : "",
-            firstName: patient?.firstName ? patient.firstName : "",
-            otherName: patient?.otherName ? patient.otherName : "",
-            dateOfBirth: patient?.dateOfBirth ? patient.dateOfBirth : "",
-            maritalStatusId: "1",
-            genderId: patient.gender ? patient.gender : "",
-            sexId: patient.personResponseDto && patient.personResponseDto.sex !== null
-                ? patient.personResponseDto.sex
-                : "",
-            address: "",
-            dateOfRegistration: "",
-            hospitalNumber: patient?.hospitalNumber ? patient?.hospitalNumber : "",
-        },
+        // patientObject: {
+        //     surname: patient?.surname ? patient.surname : "",
+        //     firstName: patient?.firstName ? patient.firstName : "",
+        //     otherName: patient?.otherName ? patient.otherName : "",
+        //     dateOfBirth: patient?.dateOfBirth ? patient.dateOfBirth : "",
+        //     maritalStatusId: "1",
+        //     genderId: patient.gender ? patient.gender : "",
+        //     sexId: patient.personResponseDto && patient.personResponseDto.sex !== null
+        //         ? patient.personResponseDto.sex
+        //         : "",
+        //     address: "",
+        //     dateOfRegistration: "",
+        //     hospitalNumber: patient?.hospitalNumber ? patient?.hospitalNumber : "",
+        // },
         dateOfVisit: "",
-        dateOfRegistration: "",
         serviceDeliveryPoint: "",
         userType: "",
         serialNumber: "",
@@ -158,7 +155,6 @@ const HIVSTPatientRegistration = (props) => {
         lotNumber: "",
         expiryDate: "",
         testKitUsers: null,
-        otherKitUserCategory: "",
         userInformation: [],
         otherTestKitUserInfoAvailable: "",
         hasConductedHIVST: "",
@@ -201,8 +197,8 @@ const HIVSTPatientRegistration = (props) => {
         {value: 'myself', label: 'For myself'},
         {value: 'spouse', label: 'Spouse'},
         {value: 'children', label: 'Children'},
-        {value: 'sexualPartner', label: 'Sexual Partner'},
-        {value: 'socialNetwork', label: 'Social network'},
+        {value: 'sexual partner', label: 'Sexual Partner'},
+        {value: 'social network', label: 'Social Network'},
         {value: 'others', label: 'Others (Please specify)'},
     ];
 
@@ -249,74 +245,54 @@ const HIVSTPatientRegistration = (props) => {
         temp.serialNumber = objValues.serialNumber ? "" : "This field is required.";
         temp.previouslyTestedWithin12Months = objValues.previouslyTestedWithin12Months ? "" : "This field is required.";
         temp.consentForFollowUpCalls = objValues.consentForFollowUpCalls ? "" : "This field is required.";
-        // previouslyTestedWithin12Months is not empty or not equal to "No" then resultOfPreviouslyTestedWithin12Months is required
         if (objValues.previouslyTestedWithin12Months !== "" && objValues.previouslyTestedWithin12Months !== "No") {
             temp.resultOfPreviouslyTestedWithin12Months = objValues.resultOfPreviouslyTestedWithin12Months ? "" : "This field is required.";
         }
+        temp.nameOfTestKit = objValues.nameOfTestKit ? "" : "This field is required.";
         temp.typeOfHivstKitReceived = objValues.typeOfHivstKitReceived ? "" : "This field is required.";
         temp.numberOfHivstKitsReceived = objValues.numberOfHivstKitsReceived ? "" : "This field is required.";
         temp.expiryDate = objValues.expiryDate ? "" : "This field is required.";
-// temp.testKitUsers = objValues.testKitUsers ? "" : "This field is required.";
-//         temp.otherTestKitUserInfoAvailable = objValues.otherTestKitUserInfoAvailable ? "" : "This field is required.";
-//         temp.hasConductedHIVST = objValues.hasConductedHIVST ? "" : "This field is required.";
-        // console.log("temp", temp);
+        temp.lotNumber = objValues.lotNumber ? "" : "This field is required.";
+        if(selectedUsers.length === 0) {
+            temp.selectedUsers =   objValues.testKitUsers ? "" : "Please select at least one user"
+        }
+        // validate user information
+        // if (objValues.otherTestKitUserInfoAvailable === "Yes") {
+        //     temp.userCategory = userInformation.userDetails.userCategory ? "" : "This field is required.";
+        //     // temp.otherCategory = userInformation.userDetails.userCategory === "Others" ? userInformation.userDetails.otherCategory ? "" : "This field is required." : "";
+        //     temp.userClientCode = userInformation.userDetails.userClientCode ? "" : "This field is required.";
+        //     temp.dateOfBirth = userInformation.userDetails.dateOfBirth ? "" : "This field is required.";
+        //     temp.age = userInformation.userDetails.age ? "" : "This field is required";
+        //     temp.clientCode = userInformation.userDetails.userClientCode ? "" : "This field is required.";
+        //     temp.dateOfBirth = userInformation.userDetails.dateOfBirth ? "" : "This field is required.";
+        //     if(userInformation.userDetails.age > 9 && userInformation.userDetails.age !== "") {
+        //         temp.maritalStatus = userInformation.userDetails.maritalStatusId ? "" : "This field is required.";
+        //     }
+        //     temp.sex = userInformation.userDetails.sex ? "" : "This field is required.";
+        // }
+         console.log("temp", temp);
         setErrors({ ...temp });
         return Object.values(temp).every((x) => x == "");
     }
 
-    function createClientCode(serviceDeliveryPoint, visitDate, serialNumber) {
-        // Mapping for service delivery point abbreviations
-        const serviceDeliveryPointMap = {
-            "Health Facility": "HF",
-            "Community Pharmacy": "CP",
-            "PPMV": "PPMV",
-            "Mobile Distribution": "MD",
-            "WorkPlace": "WP",
-            "Others": "OT",
-            "Home based": "HB",
-            "Door to Door": "DD"
-        };
-        // Extract the abbreviation for the selected service delivery point
-        const serviceDeliveryPointAbbreviation = serviceDeliveryPointMap[serviceDeliveryPoint];
-
-        // Extract the year and month from the visit date
-        const visitYear = new Date(visitDate).getFullYear();
-        const visitMonth = String(new Date(visitDate).getMonth() + 1).padStart(2, '0'); // pad with leading zero if needed
-
-        // Format the serial number to always have three digits
-        const formattedSerialNumber = String(serialNumber).padStart(3, '0'); // pad with leading zeros if needed
-
-        // Form the client code
-        const clientCode = `${serviceDeliveryPointAbbreviation}/${visitYear}/${visitMonth}/${formattedSerialNumber}`;
-
-        return clientCode;
+    // validate userInformation
+    const validateUserInformation = () => {
+        // if (objValues.otherTestKitUserInfoAvailable === "Yes") {
+            let temp = {};
+            temp.userCategory = userInformation.userDetails.userCategory ? "" : "This field is required.";
+            // temp.otherCategory = userInformation.userDetails.userCategory === "Others" ? userInformation.userDetails.otherCategory ? "" : "This field is required." : "";
+            temp.userClientCode = userInformation.userDetails.userClientCode ? "" : "This field is required.";
+            temp.dateOfBirth = userInformation.userDetails.dateOfBirth ? "" : "This field is required.";
+            temp.typeOfHivst = userInformation.userDetails.typeOfHivst ? "" : "This field is required.";
+            // Check if the selected user category is in the selectedUsers array
+            if (!selectedUsers.includes(userInformation.userDetails.userCategory) && userInformation.userDetails.userCategory !== "" ) {
+                temp.userCategory = "The selected user category does not match the selected kit users.";
+            }
+            // the number of kit is empty
+            setUserInformationErrors({...temp});
+            return Object.values(temp).every((x) => x == "");
+        // }
     }
-
-
-    const handlePostTestAssessmentChange = (e) => {
-        const {name, value} = e.target;
-        let newPostAssessment = {...objValues.postTestAssessment, [name]: value};
-        let newObjectValues = {...objValues, [name]: value};
-        // any change in everUsedHivstKit clear other fields in this object
-        if (name === "everUsedHivstKit" && value === "No") {
-            newPostAssessment = {
-                ...newPostAssessment,
-                everUsedHivstKitForSelfOrOthers: "",
-                otherHivstKitUserCategory: "",
-                otherHivstKitUserCategoryText: "",
-                resultOfHivstTest: "",
-                accessConfirmatoryHts: "",
-                referPreventionServices: ""
-            };
-        }
-        // any change in accessConfirmatoryHts clear referPreventionServices,  referralInformation
-
-        setObjValues({
-            ...objValues,
-            postTestAssessment: newPostAssessment
-        });
-    }
-
     const handleInputChange = (e) => {
         const {name, value} = e.target;
         let newObjectValues = {...objValues};
@@ -328,41 +304,12 @@ const HIVSTPatientRegistration = (props) => {
             newObjectValues.postTestAssessment.referralInformation[name] = value;
         }
 
-        // Check if the name is "serviceDeliveryPoint", "visitDate", or "serialNumber"
-        if (["serviceDeliveryPoint", "dateOfVisit", "serialNumber"].includes(name)) {
-            // Generate the client code
-            const clientCode = createClientCode(newObjectValues.serviceDeliveryPoint, newObjectValues.visitDate, newObjectValues.serialNumber);
-            newObjectValues.clientCode = clientCode;
-        }
         // Check if the name is "previouslyTestedWithin12Months"
         if (name === "previouslyTestedWithin12Months") {
             newObjectValues.resultOfPreviouslyTestedWithin12Months = "";
         }
-        // any chnage in the userTyp and the type is not primary user clear hasConductedHIVST set to No, clear postTestAssessment
-        // if (name === "userType" && value !== "Primary User" && value !== "") {
-        //     newObjectValues.otherTestKitUserInfoAvailable = "";
-        //     newObjectValues.hasConductedHIVST = "";
-        //     newObjectValues.postTestAssessment = {
-        //         everUsedHivstKit: "",
-        //         everUsedHivstKitForSelfOrOthers: "",
-        //         otherHivstKitUserCategory: "",
-        //         otherHivstKitUserCategoryText: "",
-        //         resultOfHivstTest: "",
-        //         accessConfirmatoryHts: "",
-        //         referPreventionServices: "",
-        //         referralInformation: {
-        //             referredForConfirmatoryHts: "",
-        //             dateReferredForConfirmatoryHts: "",
-        //             referredForPreventionServices: "",
-        //             dateReferredForPreventionServices: ""
-        //         }
-        //     };
-        //    setSelectedUsers(["myself"]);
-        //    newObjectValues.testKitUsers = selectedUsers
-        // }
-        // Check if the name is "typeOfHivstKitReceived"
         if (name === "typeOfHivstKitReceived") {
-            newObjectValues.nameOfIndividualHIVTestKitReceived = "";
+            newObjectValues.numberOfHivstKitsReceived = "";
             newObjectValues.nameOfTestKit = "";
             newObjectValues.lotNumber = "";
             newObjectValues.expiryDate = "";
@@ -384,6 +331,12 @@ const HIVSTPatientRegistration = (props) => {
                     dateReferredForPreventionServices: ""
                 }
             };
+        }
+// Validate the field and remove the error message if the field is filled
+        if (value) {
+            let tempErrors = {...errors};
+            tempErrors[name] = "";
+            setErrors(tempErrors);
         }
 
         setObjValues(newObjectValues);
@@ -485,6 +438,13 @@ const HIVSTPatientRegistration = (props) => {
                 age: "",
             }
         }
+        // validate and remove error message if the field is filled
+        if (value) {
+            let tempErrors = {...errors};
+            tempErrors[name] = "";
+            setErrors(tempErrors);
+        }
+
         setUserInformation(newUserInformation);
     };
 
@@ -492,72 +452,77 @@ const HIVSTPatientRegistration = (props) => {
 // Function to add a userInformation object to the list
 
     const addUserInformation = () => {
-        if(userInformationList.length <= objValues.numberOfHivstKitsReceived) {
-            let newUserInformation = {
-                userDetails: {
-                    id: "",
-                    otherCategory: userInformation.userDetails.otherCategory,
-                    userClientCode: userInformation.userDetails.userClientCode,
-                    dateOfBirth: userInformation.userDetails.dateOfBirth,
-                    age: userInformation.userDetails.age,
-                    sex: userInformation.userDetails.sex,
-                    maritalStatusId: userInformation.userDetails.maritalStatusId,
-                    typeOfHivst: userInformation.userDetails.typeOfHivst,
-                    userCategory: userInformation.userDetails.userCategory
-                },
-                postTestAssessment: {
-                    everUsedHivstKit: userInformation.postTestAssessment.everUsedHivstKit,
-                    everUsedHivstKitForSelfOrOthers: userInformation.postTestAssessment.everUsedHivstKitForSelfOrOthers,
-                    otherHivstKitUserCategory: userInformation.postTestAssessment.otherHivstKitUserCategory,
-                    otherHivstKitUserCategoryText: userInformation.postTestAssessment.otherHivstKitUserCategoryText,
-                    resultOfHivstTest: userInformation.postTestAssessment.resultOfHivstTest,
-                    accessConfirmatoryHts: userInformation.postTestAssessment.accessConfirmatoryHts,
-                    referPreventionServices: userInformation.postTestAssessment.referPreventionServices,
-                    referralInformation: {
-                        referredForConfirmatoryHts: userInformation.postTestAssessment.referralInformation.referredForConfirmatoryHts,
-                        dateReferredForConfirmatoryHts: userInformation.postTestAssessment.referralInformation.dateReferredForConfirmatoryHts,
-                        referredForPreventionServices: userInformation.postTestAssessment.referralInformation.referredForPreventionServices,
-                        dateReferredForPreventionServices: userInformation.postTestAssessment.referralInformation.dateReferredForPreventionServices
+        if(validateUserInformation()) {
+            if(userInformationList.length <= objValues.numberOfHivstKitsReceived) {
+                let newUserInformation = {
+                    userDetails: {
+                        id: "",
+                        otherCategory: userInformation.userDetails.otherCategory,
+                        userClientCode: userInformation.userDetails.userClientCode,
+                        dateOfBirth: userInformation.userDetails.dateOfBirth,
+                        age: userInformation.userDetails.age,
+                        sex: userInformation.userDetails.sex,
+                        maritalStatusId: userInformation.userDetails.maritalStatusId,
+                        typeOfHivst: userInformation.userDetails.typeOfHivst,
+                        userCategory: userInformation.userDetails.userCategory
+                    },
+                    postTestAssessment: {
+                        everUsedHivstKit: userInformation.postTestAssessment.everUsedHivstKit,
+                        everUsedHivstKitForSelfOrOthers: userInformation.postTestAssessment.everUsedHivstKitForSelfOrOthers,
+                        otherHivstKitUserCategory: userInformation.postTestAssessment.otherHivstKitUserCategory,
+                        otherHivstKitUserCategoryText: userInformation.postTestAssessment.otherHivstKitUserCategoryText,
+                        resultOfHivstTest: userInformation.postTestAssessment.resultOfHivstTest,
+                        accessConfirmatoryHts: userInformation.postTestAssessment.accessConfirmatoryHts,
+                        referPreventionServices: userInformation.postTestAssessment.referPreventionServices,
+                        referralInformation: {
+                            referredForConfirmatoryHts: userInformation.postTestAssessment.referralInformation.referredForConfirmatoryHts,
+                            dateReferredForConfirmatoryHts: userInformation.postTestAssessment.referralInformation.dateReferredForConfirmatoryHts,
+                            referredForPreventionServices: userInformation.postTestAssessment.referralInformation.referredForPreventionServices,
+                            dateReferredForPreventionServices: userInformation.postTestAssessment.referralInformation.dateReferredForPreventionServices
+                        }
                     }
                 }
+                setUserInformationList([...userInformationList, newUserInformation]);
+                setObjValues({...objValues, userInformation: [...userInformationList, newUserInformation]});
+
+                // clear UserInformation after adding to the list and also set the hasConductedHIVST to No
+                setUserInformation({
+                    userDetails: {
+                        id: "",
+                        otherCategory: "",
+                        userClientCode: "",
+                        dateOfBirth: "",
+                        age: "",
+                        sex: "",
+                        maritalStatusId: "",
+                        typeOfHivst: "",
+                        userCategory: ""
+                    },
+                    postTestAssessment: {
+                        everUsedHivstKit: "",
+                        everUsedHivstKitForSelfOrOthers: "",
+                        otherHivstKitUserCategory: "",
+                        otherHivstKitUserCategoryText: "",
+                        resultOfHivstTest: "",
+                        accessConfirmatoryHts: "",
+                        referPreventionServices: "",
+                        referralInformation: {
+                            referredForConfirmatoryHts: "",
+                            dateReferredForConfirmatoryHts: "",
+                            referredForPreventionServices: "",
+                            dateReferredForPreventionServices: ""
+                        }
+                    }
+                });
+                setObjValues({...objValues, hasConductedHIVST: "No"});
+            } else {
+                console.log("Cannot add more user information as it exceeds the number of HIVST kits received.");
             }
-            setUserInformationList([...userInformationList, newUserInformation]);
-            setObjValues({...objValues, userInformation: [...userInformationList, newUserInformation]});
 
-            // clear UserInformation after adding to the list and also set the hasConductedHIVST to No
-
-            setUserInformation({
-                userDetails: {
-                    id: "",
-                    otherCategory: "",
-                    userClientCode: "",
-                    dateOfBirth: "",
-                    age: "",
-                    sex: "",
-                    maritalStatusId: "",
-                    typeOfHivst: "",
-                    userCategory: ""
-                },
-                postTestAssessment: {
-                    everUsedHivstKit: "",
-                    everUsedHivstKitForSelfOrOthers: "",
-                    otherHivstKitUserCategory: "",
-                    otherHivstKitUserCategoryText: "",
-                    resultOfHivstTest: "",
-                    accessConfirmatoryHts: "",
-                    referPreventionServices: "",
-                    referralInformation: {
-                        referredForConfirmatoryHts: "",
-                        dateReferredForConfirmatoryHts: "",
-                        referredForPreventionServices: "",
-                        dateReferredForPreventionServices: ""
-                    }
-                }
-            });
-            setObjValues({...objValues, hasConductedHIVST: "No"});
-        } else {
-            console.log("Cannot add more user information as it exceeds the number of HIVST kits received.");
+        } else{
+            toast.error("Please fill all the required fields");
         }
+
     }
 // Function to remove a userInformation object from the list based on index
     const removeUserInformation = (index) => {
@@ -584,11 +549,12 @@ const HIVSTPatientRegistration = (props) => {
     // console.log("Obj", objValues)
 
     const handleKitSelectUserChange = selectedUsers => {
-        if (objValues.userType === "Secondary User") {
-            setSelectedUsers(["myself"]);
-            let newValues = {...objValues, testKitUsers: selectedUsers};
-            setObjValues(newValues);
-        } else {
+        // if (objValues.userType === "Secondary User") {
+        //     setSelectedUsers(["myself"]);
+        //     let newValues = {...objValues, testKitUsers: selectedUsers};
+        //     setObjValues(newValues);
+        // } else
+        // {
             setSelectedUsers(selectedUsers);
             let newValues = {...objValues, testKitUsers: selectedUsers};
             if (!selectedUsers || selectedUsers.length === 0) {
@@ -611,8 +577,10 @@ const HIVSTPatientRegistration = (props) => {
                 userInformation.userClientCode = "";
                 userInformation.typeOfHivSelfTest = "";
             }
+            // always clear the userInformationList when the user selects a new user
+            // setUserInformationList([]);
             setObjValues(newValues);
-        }
+        // }
     };
     const checkClientCode = (e) => {
         let code = "";
@@ -702,9 +670,34 @@ const HIVSTPatientRegistration = (props) => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        const userInfoList = userInformationList;
-        objValues.userInformation = userInformationList;
-        console.log("objValues", objValues)
+        if (validateObjValues()) {
+
+            const userInfoList = userInformationList;
+            objValues.userInformation = userInformationList;
+            toast.success("HIVST Registration Successful");
+            console.log("objValues", objValues)
+            // setSaving(true)
+            // axios
+            //     .post(`${baseUrl}hts/register`, objValues, {
+            //         headers: {
+            //             Authorization: `Bearer ${token}`,
+            //             "Content-Type": "application/json",
+            //         },
+            //     })
+            //     .then((response) => {
+            //         if (response.status === 200) {
+            //             setSaving(false)
+            //             toast.success("HIVST Registration Successful");
+            //             history.push("/patient/hivst");
+            //         }
+            //     })
+            //     .catch((error) => {
+            //         setSaving(false)
+            //         toast.error("An error occurred. Please try again.");
+            //     });
+
+        }
+
     }
     console.log("selectedUsers", selectedUsers)
     console.log("objValues", objValues)
@@ -731,7 +724,7 @@ const HIVSTPatientRegistration = (props) => {
                                         id="dateOfVisit"
                                         value={objValues.dateOfVisit}
                                         onChange={handleInputChange}
-                                        min={objValues.dateOfRegistration}
+                                        min="1929-12-31"
                                         max={moment(new Date()).format("YYYY-MM-DD")}
                                         style={{
                                             border: "1px solid #014D88",
@@ -747,7 +740,7 @@ const HIVSTPatientRegistration = (props) => {
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label style={style}>
+                                    <Label >
                                         Service Delivery Point
                                         <span style={{color: "red"}}> *</span>
                                     </Label>
@@ -772,17 +765,17 @@ const HIVSTPatientRegistration = (props) => {
                                         <option value="Home based">Home based</option>
                                         <option value="Door to Door">Door to Door</option>
                                     </select>
-                                    {/*{errors.indexClient !== "" ? (*/}
-                                    {/*    <span className={classes.error}>{errors.indexClient}</span>*/}
-                                    {/*) : (*/}
-                                    {/*    ""*/}
-                                    {/*)}*/}
+                                    {errors.serviceDeliveryPoint !== "" ? (
+                                        <span className={classes.error}>{errors.serviceDeliveryPoint}</span>
+                                    ) : (
+                                        ""
+                                    )}
                                 </FormGroup>
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>
-                                        user Type Primary
+                                        User Type Primary
                                         <span style={{color: "red"}}> *</span>
                                     </Label>
                                     <select
@@ -801,8 +794,8 @@ const HIVSTPatientRegistration = (props) => {
                                         <option value="Secondary User">secondary user
                                         </option>
                                     </select>
-                                    {errors.indexClient !== "" ? (
-                                        <span className={classes.error}>{errors.indexClient}</span>
+                                    {errors.userType !== "" ? (
+                                        <span className={classes.error}>{errors.userType}</span>
                                     ) : (
                                         ""
                                     )}
@@ -826,6 +819,11 @@ const HIVSTPatientRegistration = (props) => {
                                             borderRadius: "0.25rem",
                                         }}
                                     />
+                                    {errors.serialNumber !== "" ? (
+                                        <span className={classes.error}>{errors.serialNumber}</span>
+                                    ) : (
+                                        ""
+                                    )}
                                 </FormGroup>
                             </div>
                             <div className="form-group mb-3 col-md-4">
@@ -845,16 +843,16 @@ const HIVSTPatientRegistration = (props) => {
                                         }}
                                         //readOnly={props.activePage.actionType === "view"}
                                     />
-                                    {/*{errors.clientCode !== "" ? (*/}
-                                    {/*    <span className={classes.error}>{errors.clientCode}</span>*/}
-                                    {/*) : (*/}
-                                    {/*    ""*/}
-                                    {/*)}*/}
+                                     {errors.clientCode !== "" ? (
+                                         <span className={classes.error}>{errors.clientCode}</span>
+                                        ) : (
+                                         ""
+                                        )}
                                 </FormGroup>
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label style={style}>
+                                    <Label>
                                         Have you previously tested for HIV in the last 12 months?
                                         <span style={{color: "red"}}> *</span>
                                     </Label>
@@ -873,19 +871,17 @@ const HIVSTPatientRegistration = (props) => {
                                         <option value="Yes">YES</option>
                                         <option value="No">NO</option>
                                     </select>
-                                    {/*                {errors.firstTimeVisit !== "" ? (*/}
-                                    {/*                    <span className={classes.error}>*/}
-                                    {/*  {errors.firstTimeVisit}*/}
-                                    {/*</span>*/}
-                                    {/*                ) : (*/}
-                                    {/*                    ""*/}
-                                    {/*                )}*/}
+                                    {errors.previouslyTestedWithin12Months !== "" ? (
+                                        <span className={classes.error}>{errors.previouslyTestedWithin12Months}</span>
+                                    ) : (
+                                        ""
+                                    )}
                                 </FormGroup>
                             </div>
                             {objValues?.previouslyTestedWithin12Months === "Yes" ? (
                                 <div className="form-group  col-md-4">
                                     <FormGroup>
-                                        <Label style={style}>
+                                        <Label >
                                             What was the test result?
                                             <span style={{color: "red"}}> *</span>
                                         </Label>
@@ -905,14 +901,19 @@ const HIVSTPatientRegistration = (props) => {
                                             <option value="Negative">Negative</option>
                                             <option value="Unknown">Unknown</option>
                                         </select>
+                                        {errors.resultOfPreviouslyTestedWithin12Months !== "" ? (
+                                            <span className={classes.error}>{errors.resultOfPreviouslyTestedWithin12Months}</span>
+                                        ) : (
+                                            ""
+                                        )}
                                     </FormGroup>
                                 </div>
                             ) : ""}
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label style={style}>
+                                    <Label >
                                         Do you consent to be followed-up via phone calls?
-                                        <span style={{color: "red"}}> *</span>
+                                        {/*<span style={{color: "red"}}> *</span>*/}
                                     </Label>
                                     <select
                                         className="form-control"
@@ -929,18 +930,11 @@ const HIVSTPatientRegistration = (props) => {
                                         <option value="Yes">YES</option>
                                         <option value="No">NO</option>
                                     </select>
-                                    {/*                {errors.firstTimeVisit !== "" ? (*/}
-                                    {/*                    <span className={classes.error}>*/}
-                                    {/*  {errors.firstTimeVisit}*/}
-                                    {/*</span>*/}
-                                    {/*                ) : (*/}
-                                    {/*                    ""*/}
-                                    {/*                )}*/}
                                 </FormGroup>
                             </div>
                             <div className="form-group  col-md-4">
                                 <FormGroup>
-                                    <Label style={style}>
+                                    <Label >
                                         What type of HIVST kit did you receive/purchase today?
                                         <span style={{color: "red"}}> *</span>
                                     </Label>
@@ -959,13 +953,11 @@ const HIVSTPatientRegistration = (props) => {
                                         <option value="Oral fluid">Oral fluid</option>
                                         <option value="Blood">Blood</option>
                                     </select>
-                                    {/*                {errors.firstTimeVisit !== "" ? (*/}
-                                    {/*                    <span className={classes.error}>*/}
-                                    {/*  {errors.firstTimeVisit}*/}
-                                    {/*</span>*/}
-                                    {/*                ) : (*/}
-                                    {/*                    ""*/}
-                                    {/*                )}*/}
+                                    {errors.typeOfHivstKitReceived !== "" ? (
+                                        <span className={classes.error}>{errors.typeOfHivstKitReceived}</span>
+                                    ) : (
+                                        ""
+                                    )}
                                 </FormGroup>
                             </div>
                             <div className="form-group mb-3 col-md-4">
@@ -979,6 +971,7 @@ const HIVSTPatientRegistration = (props) => {
                                         name="numberOfHivstKitsReceived"
                                         id="numberOfHivstKitsReceived"
                                         value={objValues.numberOfHivstKitsReceived}
+                                        min="1"
                                         onChange={handleInputChange}
                                         style={{
                                             border: "1px solid #014D88",
@@ -1005,13 +998,13 @@ const HIVSTPatientRegistration = (props) => {
                                             borderRadius: "0.2rem",
                                         }}
                                     />
-                                    {/*{errors.facilityId !== "" ? (*/}
-                                    {/*    <span className={classes.error}>*/}
-                                    {/*        {errors.facilityId}*/}
-                                    {/*    </span>*/}
-                                    {/*) : (*/}
-                                    {/*    ""*/}
-                                    {/*)}*/}
+                                    {errors.nameOfTestKit !== "" ? (
+                                        <span className={classes.error}>
+                                            {errors.nameOfTestKit}
+                                        </span>
+                                    ) : (
+                                        ""
+                                    )}
                                 </FormGroup>
                             </div>
                             <div className="form-group mb-3 col-md-4">
@@ -1032,13 +1025,14 @@ const HIVSTPatientRegistration = (props) => {
                                             borderRadius: "0.2rem",
                                         }}
                                     />
-                                    {/*{errors.facilityId !== "" ? (*/}
-                                    {/*    <span className={classes.error}>*/}
-                                    {/*        {errors.facilityId}*/}
-                                    {/*    </span>*/}
-                                    {/*) : (*/}
-                                    {/*    ""*/}
-                                    {/*)}*/}
+                                    {errors.lotNumber !== "" ? (
+                                        <span className={classes.error}>
+                                            {errors.lotNumber}
+                                        </span>
+                                    ) : (
+                                        ""
+                                    )}
+
                                 </FormGroup>
                             </div>
                             <div className="form-group mb-3 col-md-4">
@@ -1059,11 +1053,11 @@ const HIVSTPatientRegistration = (props) => {
                                             borderRadius: "0.25rem",
                                         }}
                                     />
-                                    {/*{errors.dateOfVisit !== "" ? (*/}
-                                    {/*    <span className={classes.error}>{errors.dateOfVisit}</span>*/}
-                                    {/*) : (*/}
-                                    {/*    ""*/}
-                                    {/*)}*/}
+                                    {errors.expiryDate !== "" ? (
+                                        <span className={classes.error}>{errors.expiryDate}</span>
+                                    ) : (
+                                        ""
+                                    )}
                                 </FormGroup>
                             </div>
                             <div className="form-group mb-3 col-md-12">
@@ -1075,8 +1069,15 @@ const HIVSTPatientRegistration = (props) => {
                                         options={options}
                                         selected={selectedUsers}
                                         onChange={handleKitSelectUserChange}
-                                        disabled={objValues.userType === "Secondary User" ? true : false}
+                                        // disabled={objValues.userType === "Secondary User" ? true : false}
                                     />
+                                    {errors.testKitUsers !== "" ? (
+                                        <span className={classes.error}>
+                                            {errors.testKitUsers}
+                                        </span>
+                                    ) : (
+                                        ""
+                                    )}
                                 </FormGroup>
                             </div>
 
@@ -1127,7 +1128,7 @@ const HIVSTPatientRegistration = (props) => {
                             {showUserInfo &&
                                 <div className="form-group  col-md-4">
                                     <FormGroup>
-                                        <Label style={style}>
+                                        <Label >
                                             Is user information available?
                                             <span style={{color: "red"}}> *</span>
                                         </Label>
@@ -1141,7 +1142,7 @@ const HIVSTPatientRegistration = (props) => {
                                                 border: "1px solid #014D88",
                                                 borderRadius: "0.2rem",
                                             }}
-                                            disabled={objValues.userType === "Secondary User" ? true : false}
+                                            // disabled={objValues.userType === "Secondary User" ? true : false}
                                         >
                                             <option value={""}></option>
                                             <option value="Yes">YES</option>
@@ -1157,7 +1158,8 @@ const HIVSTPatientRegistration = (props) => {
                                     </FormGroup>
                                 </div>
                             }
-                            {objValues?.otherTestKitUserInfoAvailable === "Yes" &&
+                            {/*{objValues?.otherTestKitUserInfoAvailable === "Yes" &&*/}
+                            {selectedUsers.length === 0 ? ("") : (
                                 <>
                                     <div className="row center">
                                         <div
@@ -1173,18 +1175,6 @@ const HIVSTPatientRegistration = (props) => {
                                             Intended Kit User Information
                                         </div>
                                     </div>
-                                    {/*<UserInformationCard*/}
-                                    {/*    // userInformation={userInfo}*/}
-                                    {/*    objValues={objValues}*/}
-                                    {/*    setObjValues={setObjValues}*/}
-                                    {/*    options={options}*/}
-                                    {/*    kitUserInformation={kitUserInformation}*/}
-                                    {/*    setKitUserInformation={setKitUserInformation}*/}
-                                    {/*    otherTestKitUserInfoAvailable={otherTestKitUserInfoAvailable}*/}
-
-                                    {/*/>*/}
-
-
                                     <div className="row">
                                         <div className="form-group  col-md-4">
                                             <FormGroup>
@@ -1204,17 +1194,21 @@ const HIVSTPatientRegistration = (props) => {
                                                     }}
                                                 >
                                                     <option value={""}></option>
-                                                    {options.map(option => (
-                                                        <option key={option.value} value={option.value}>
-                                                            {option.label}
-                                                        </option>
+                                                    {/*{options.map(option => (*/}
+                                                    {/*    <option key={option.value} value={option.value}>*/}
+                                                    {/*        {option.label}*/}
+                                                    {/*    </option>*/}
+                                                    {/*))}*/}
+                                                    { selectedUsers.map((user, index) => (
+                                                        <option key={index} value={user}>{user}</option>
                                                     ))}
+                                                    ))
                                                 </select>
-                                                {/*{errors.indexClient !== "" ? (*/}
-                                                {/*    <span className={classes.error}>{errors.indexClient}</span>*/}
-                                                {/*) : (*/}
-                                                {/*    ""*/}
-                                                {/*)}*/}
+                                                {userInformationErrors.userCategory !== "" ? (
+                                                    <span className={classes.error}>{userInformationErrors.userCategory}</span>
+                                                ) : (
+                                                    ""
+                                                )}
                                             </FormGroup>
                                         </div>
                                         {userInformation.userDetails.userCategory === "others" ? (
@@ -1222,7 +1216,7 @@ const HIVSTPatientRegistration = (props) => {
                                                 <FormGroup>
                                                     <Label>
                                                         Specify Other Category
-                                                        <span style={{color: "red"}}> *</span>
+                                                        {/*<span style={{color: "red"}}> *</span>*/}
                                                     </Label>
                                                     <input
                                                         type="text"
@@ -1237,11 +1231,6 @@ const HIVSTPatientRegistration = (props) => {
                                                             borderRadius: "0.2rem",
                                                         }}
                                                     />
-                                                    {/*{errors.indexClient !== "" ? (*/}
-                                                    {/*    <span className={classes.error}>{errors.indexClient}</span>*/}
-                                                    {/*) : (*/}
-                                                    {/*    ""*/}
-                                                    {/*)}*/}
                                                 </FormGroup>
                                             </div>
                                         ) : ""}
@@ -1264,11 +1253,11 @@ const HIVSTPatientRegistration = (props) => {
                                                         borderRadius: "0.2rem",
                                                     }}
                                                 />
-                                                {/*{errors.indexClient !== "" ? (*/}
-                                                {/*    <span className={classes.error}>{errors.indexClient}</span>*/}
-                                                {/*) : (*/}
-                                                {/*    ""*/}
-                                                {/*)}*/}
+                                                {userInformationErrors.userClientCode !== "" ? (
+                                                    <span className={classes.error}>{userInformationErrors.userClientCode}</span>
+                                                ) : (
+                                                    ""
+                                                )}
                                             </FormGroup>
                                         </div>
                                         <div className="form-group mb-3 col-md-4">
@@ -1292,11 +1281,11 @@ const HIVSTPatientRegistration = (props) => {
                                                     }}
                                                     // disabled
                                                 />
-                                                {/*{errors.dob !== "" ? (*/}
-                                                {/*    <span className={classes.error}>{errors.dob}</span>*/}
-                                                {/*) : (*/}
-                                                {/*    ""*/}
-                                                {/*)}*/}
+                                                {userInformationErrors.dateOfBirth !== "" ? (
+                                                    <span className={classes.error}>{userInformationErrors.dateOfBirth}</span>
+                                                ) : (
+                                                    ""
+                                                )}
                                             </FormGroup>
                                         </div>
                                         <div className="form-group mb-3 col-md-4">
@@ -1322,7 +1311,8 @@ const HIVSTPatientRegistration = (props) => {
                                         <div className="form-group  col-md-4">
                                             <FormGroup>
                                                 <Label>
-                                                    Sex <span style={{color: "red"}}> *</span>
+                                                    Sex
+                                                    {/*<span style={{color: "red"}}> *</span> */}
                                                 </Label>
                                                 <select
                                                     className="form-control"
@@ -1342,11 +1332,6 @@ const HIVSTPatientRegistration = (props) => {
                                                         </option>
                                                     ))}
                                                 </select>
-                                                {/*{errors.sex !== "" ? (*/}
-                                                {/*    <span className={classes.error}>{errors.sex}</span>*/}
-                                                {/*) : (*/}
-                                                {/*    ""*/}
-                                                {/*)}*/}
                                             </FormGroup>
                                         </div>
                                         {userInformation.userDetails.age > 9 && (
@@ -1397,6 +1382,12 @@ const HIVSTPatientRegistration = (props) => {
                                                         Unassisted
                                                     </option>
                                                 </select>
+                                                {
+                                                    userInformationErrors.typeOfHivst !== "" ? (
+                                                        <span className={classes.error}>{userInformationErrors.typeOfHivst}</span>
+                                                    ) : ("")
+
+                                                }
                                             </FormGroup>
                                         </div>
                                         {/*<div className="form-group mb-3 col-md-6">*/}
@@ -1414,7 +1405,7 @@ const HIVSTPatientRegistration = (props) => {
 
 
                                 </>
-                            }
+                            )}
 
                             {/*Checkbox to select if the User has conducted the HIVST – if checked, display the*/}
                             {/*following questions, else the user should be able to save the form.*/}
@@ -1459,13 +1450,13 @@ const HIVSTPatientRegistration = (props) => {
                                     <hr style={{width: '100%'}}/>
                                 </div>
                             }
-                            {objValues && objValues.otherTestKitUserInfoAvailable === "Yes" &&
+                            {objValues && selectedUsers.length > 0  &&
                                 <div className="row mb-7">
                                     <div className="form-group  col-md-4">
                                         <FormGroup>
-                                            <Label style={style}>
+                                            <Label >
                                                 Have you conducted the HIVST ?
-                                                <span style={{color: "red"}}> *</span>
+                                                {/*<span style={{color: "red"}}> *</span>*/}
                                             </Label>
                                             <select
                                                 className="form-control"
@@ -1484,7 +1475,8 @@ const HIVSTPatientRegistration = (props) => {
                                             </select>
                                         </FormGroup>
                                     </div>
-                                </div>}
+                                </div>
+                            }
                             <div className="row mb-7">
                                 {objValues.hasConductedHIVST === "Yes" ? (
                                     // Display the following questions if the checkbox is checked
@@ -1505,21 +1497,21 @@ const HIVSTPatientRegistration = (props) => {
                                             </div>
                                             <div className="form-group  col-md-4">
                                                 <FormGroup>
-                                                    <Label style={style}>
-                                                        Have you ever used HIVST kit Yes?
-                                                        <span style={{color: "red"}}> *</span>
+                                                    <Label >
+                                                        Have you ever used HIVST kit?
+                                                        {/*<span style={{color: "red"}}> *</span>*/}
                                                     </Label>
                                                     <select
                                                         className="form-control"
                                                         name="everUsedHivstKit"
                                                         id="everUsedHivstKitl"
-                                                        value={objValues.hasConductedHIVST ? "Yes" : "No"}
-                                                        // onChange={handleInputChange}
+                                                        // value={objValues.hasConductedHIVST ? "Yes" : "No"}
+                                                        value={userInformation?.postTestAssessment?.everUsedHivstKit}
+                                                        onChange={(e) => handleUserInformationInputChange(e, "postTestAssessment")}
                                                         style={{
                                                             border: "1px solid #014D88",
                                                             borderRadius: "0.2rem",
                                                         }}
-                                                        disabled
                                                     >
                                                         <option value={""}></option>
                                                         <option value="Yes">YES</option>
@@ -1529,9 +1521,9 @@ const HIVSTPatientRegistration = (props) => {
                                             </div>
                                             <div className="form-group  col-md-4">
                                                 <FormGroup>
-                                                    <Label style={style}>
+                                                    <Label >
                                                         Did you use the HIVST kit for yourself or someone else?
-                                                        <span style={{color: "red"}}> *</span>
+                                                        {/*<span style={{color: "red"}}> *</span>*/}
                                                     </Label>
                                                     <select
                                                         className="form-control"
@@ -1553,9 +1545,9 @@ const HIVSTPatientRegistration = (props) => {
                                             {userInformation.postTestAssessment.everUsedHivstKitForSelfOrOthers === "Someone else" &&
                                                 <div className="form-group  col-md-4">
                                                     <FormGroup>
-                                                        <Label style={style}>
+                                                        <Label >
                                                             Who did you give it to?
-                                                            <span style={{color: "red"}}> *</span>
+                                                            {/*<span style={{color: "red"}}> *</span>*/}
                                                         </Label>
                                                         <select
                                                             className="form-control"
@@ -1583,7 +1575,7 @@ const HIVSTPatientRegistration = (props) => {
                                                     <FormGroup>
                                                         <Label>
                                                             Please Specify Other Category
-                                                            <span style={{color: "red"}}> *</span>
+                                                            {/*<span style={{color: "red"}}> *</span>*/}
                                                         </Label>
                                                         <input
                                                             type="text"
@@ -1603,9 +1595,9 @@ const HIVSTPatientRegistration = (props) => {
 
                                             <div className="form-group  col-md-4">
                                                 <FormGroup>
-                                                    <Label style={style}>
+                                                    <Label >
                                                         What was the result of the HIVST?
-                                                        <span style={{color: "red"}}> *</span>
+                                                        {/*<span style={{color: "red"}}> *</span>*/}
                                                     </Label>
                                                     <select
                                                         className="form-control"
@@ -1628,10 +1620,10 @@ const HIVSTPatientRegistration = (props) => {
                                             {userInformation?.postTestAssessment?.resultOfHivstTest === "Reactive" &&
                                                 <div className="form-group  col-md-4">
                                                     <FormGroup>
-                                                        <Label style={style}>
+                                                        <Label >
                                                             Would you like to access HIV testing to confirm my HIVST
                                                             result?
-                                                            <span style={{color: "red"}}> *</span>
+                                                            {/*<span style={{color: "red"}}> *</span>*/}
                                                         </Label>
                                                         <select
                                                             className="form-control"
@@ -1654,9 +1646,9 @@ const HIVSTPatientRegistration = (props) => {
                                             {userInformation?.postTestAssessment?.resultOfHivstTest === "Non-Reactive" &&
                                                 <div className="form-group  col-md-4">
                                                     <FormGroup>
-                                                        <Label style={style}>
+                                                        <Label >
                                                             Would you like to be referred for prevention services
-                                                            <span style={{color: "red"}}> *</span>
+                                                            {/*<span style={{color: "red"}}> *</span>*/}
                                                         </Label>
                                                         <select
                                                             className="form-control"
@@ -1698,9 +1690,9 @@ const HIVSTPatientRegistration = (props) => {
                                                         </div>
                                                         {userInformation.postTestAssessment.accessConfirmatoryHts === "Yes" && <div className="form-group  col-md-4">
                                                             <FormGroup>
-                                                                <Label style={style}>
+                                                                <Label >
                                                                     Referred for Confirmatory HTS Testing
-                                                                    <span style={{color: "red"}}> *</span>
+                                                                    {/*<span style={{color: "red"}}> *</span>*/}
                                                                 </Label>
                                                                 <select
                                                                     className="form-control"
@@ -1724,7 +1716,8 @@ const HIVSTPatientRegistration = (props) => {
                                                                 <FormGroup>
                                                                     <Label for="">
                                                                         Date referred for confirmatory HTS testing
-                                                                        field <span style={{color: "red"}}> *</span>
+                                                                        field
+                                                                        {/*<span style={{color: "red"}}> *</span>*/}
                                                                     </Label>
                                                                     <Input
                                                                         type="date"
@@ -1745,9 +1738,9 @@ const HIVSTPatientRegistration = (props) => {
                                                         {userInformation.postTestAssessment.referralInformation && userInformation?.postTestAssessment?.referPreventionServices === "Yes" &&
                                                             <div className="form-group  col-md-4">
                                                                 <FormGroup>
-                                                                    <Label style={style}>
+                                                                    <Label >
                                                                         Referred for Prevention Services
-                                                                        <span style={{color: "red"}}> *</span>
+                                                                        {/*<span style={{color: "red"}}> *</span>*/}
                                                                     </Label>
                                                                     <select
                                                                         className="form-control"
@@ -1772,7 +1765,8 @@ const HIVSTPatientRegistration = (props) => {
                                                             <div className="form-group mb-3 col-md-4">
                                                                 <FormGroup>
                                                                     <Label for="">
-                                                                        Date referred for prevention services <span style={{color: "red"}}> *</span>
+                                                                        Date referred for prevention services
+                                                                        {/*<span style={{color: "red"}}> *</span>*/}
                                                                     </Label>
                                                                     <Input
                                                                         type="date"
@@ -1798,27 +1792,27 @@ const HIVSTPatientRegistration = (props) => {
 
                                                     </div>) : ""}
                                     </>
-                                  ) : (
+                                  ) : ( ""
                                     // Display the save form button if the checkbox is not checked
-                                    <div className="row">
-                                        {// if selected user  is myself only show save button and save secondary user information
-                                            selectedUsers && selectedUsers.length === 1 && selectedUsers[0] === "myself" &&
-                                            <div className="form-group mb-3 col-md-6">
-                                                <Button
-                                                    content="save myself information"
-                                                    icon="save"
-                                                    labelPosition="right"
-                                                    style={{backgroundColor: "#014d88", color: "#fff"}}
-                                                    onClick={handleSubmit}
-                                                    disabled={saving}
-                                                />
-                                            </div>
-                                        }
-
-                                    </div>
+                                    // <div className="row">
+                                    //     {// if selected user  is myself only show save button and save secondary user information
+                                    //         selectedUsers && selectedUsers.length === 1 && selectedUsers[0] === "myself" &&
+                                    //         <div className="form-group mb-3 col-md-6">
+                                    //             <Button
+                                    //                 content="save myself information"
+                                    //                 icon="save"
+                                    //                 labelPosition="right"
+                                    //                 style={{backgroundColor: "#014d88", color: "#fff"}}
+                                    //                 onClick={handleSubmit}
+                                    //                 disabled={saving}
+                                    //             />
+                                    //         </div>
+                                    //     }
+                                    //
+                                    // </div>
                                 )}
                             </div>
-                            {objValues?.otherTestKitUserInfoAvailable === "Yes" && <div className="row">
+                            {selectedUsers.length > 0 && <div className="row">
                                 <div className="form-group mb-3 col-md-6">
                                     <LabelSui
                                         as="a"
@@ -1833,7 +1827,7 @@ const HIVSTPatientRegistration = (props) => {
                             </div>
                             }
                             {/*added kit user */}
-                            {objValues?.otherTestKitUserInfoAvailable === "Yes" && userInformationList.length > 0 ? (
+                            {userInformationList.length > 0 ? (
                                 <div class="row">
                                     <List className="mb-5">
                                         <Table striped responsive>
@@ -1877,7 +1871,7 @@ const HIVSTPatientRegistration = (props) => {
                                     </List>
                                 </div>
                                 ) : " "}
-                            {objValues?.otherTestKitUserInfoAvailable === "Yes" &&
+                            {selectedUsers.length > 0 &&
                                 <div className="row">
                                     <div className="form-group mb-3 col-md-6">
                                         <Button

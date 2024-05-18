@@ -38,7 +38,7 @@ public class FamilyIndexTestingRequestDTO {
     private String dateClientEnrolledOnTreatment;
     private String recencyTesting;
     private List<FamilyIndexRequestDto> familyIndexRequestDto;
-    private List<FamilyTestingTrackerRequestDTO> familyTestingTrackerRequestDTO;
+//    private List<FamilyTestingTrackerRequestDTO> familyTestingTrackerRequestDTO;
     private String willingToHaveChildrenTestedElseWhere;
 
 

@@ -86,9 +86,9 @@ public class HtsFamilyIndexTestingController {
         return ResponseEntity.ok(this.familyIndexTestingService.deleteFamilyTracker(id));
     }
 
-    @GetMapping("/family-index-tracker/by-family-index-testing-uuid")
-    public ResponseEntity<List<FamilyTestingTrackerResponseDTO>> getAllFamilyTestingTrackerByFamilyIndexTestingUuid(@RequestParam String familyIndexTestingUuid) {
-        List<FamilyTestingTrackerResponseDTO> familyTestingTrackerResponseDTO = familyIndexTestingService.getFamilyTestingTrackerByFamilyIndexTestingUuid(familyIndexTestingUuid);
+    @GetMapping("/family-index-tracker/by-family-index-uuid")
+    public ResponseEntity<List<FamilyTestingTrackerResponseDTO>> getAllFamilyTestingTrackerByFamilyIndexUuid(@RequestParam String familyIndexUuid) {
+        List<FamilyTestingTrackerResponseDTO> familyTestingTrackerResponseDTO = familyIndexTestingService.getFamilyTestingTrackerByFamilyIndexUuid(familyIndexUuid);
         return ResponseEntity.ok(familyTestingTrackerResponseDTO);
     }
 

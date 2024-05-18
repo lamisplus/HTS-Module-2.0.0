@@ -1,5 +1,6 @@
 package org.lamisplus.modules.hts.domain.dto;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -19,11 +20,13 @@ public class FamilyTestingTrackerRequestDTO {
     private String knownHivPositive;
     private String hiveTestResult;
     private LocalDate dateTested;
-    private String attempt;
+//    private String attempt;
     private LocalDate dateEnrolledOnArt;
     private LocalDate dateEnrolledInOVC;
     private String ovcId;
     private Long facilityId;
-    private Long familyIndexTestingId;
-    private String familyIndexTestingUuid;
+//    private Long familyIndexTestingId;
+//    private String familyIndexTestingUuid;
+    private JsonNode attempts;
+
 }

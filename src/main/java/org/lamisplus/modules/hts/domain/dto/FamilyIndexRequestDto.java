@@ -40,8 +40,6 @@ public class FamilyIndexRequestDto {
     private LocalDate yearChildDead;
     private String liveWithParent;
     private Boolean isDateOfBirthEstimated;
-//    @NotBlank(message = "Family index testing UUID is required")
-//    private String familyIndexTestingUuid;
     private FamilyTestingTrackerRequestDTO familyTestingTrackerRequestDTO;
 
 }

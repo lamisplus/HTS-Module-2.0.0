@@ -20,13 +20,10 @@ public class FamilyTestingTrackerRequestDTO {
     private String knownHivPositive;
     private String hiveTestResult;
     private LocalDate dateTested;
-//    private String attempt;
     private LocalDate dateEnrolledOnArt;
     private LocalDate dateEnrolledInOVC;
     private String ovcId;
     private Long facilityId;
-//    private Long familyIndexTestingId;
-//    private String familyIndexTestingUuid;
     private JsonNode attempts;
 
 }

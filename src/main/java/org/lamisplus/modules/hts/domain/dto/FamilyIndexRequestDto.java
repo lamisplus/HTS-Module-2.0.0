@@ -42,6 +42,6 @@ public class FamilyIndexRequestDto {
     private Boolean isDateOfBirthEstimated;
 //    @NotBlank(message = "Family index testing UUID is required")
 //    private String familyIndexTestingUuid;
-    private List<FamilyTestingTrackerRequestDTO> familyTestingTrackerRequestDTO;
+    private FamilyTestingTrackerRequestDTO familyTestingTrackerRequestDTO;
 
 }

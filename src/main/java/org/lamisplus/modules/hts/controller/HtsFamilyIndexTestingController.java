@@ -34,10 +34,10 @@ public class HtsFamilyIndexTestingController {
         return ResponseEntity.ok(this.familyIndexTestingService.getFamilyIndexTestingById(id));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<String> updateFamilyIndexTesting(@PathVariable Long id, @Valid @RequestBody FamilyIndexTestingResponseDTO familyIndexTestingDTO) {
-        return ResponseEntity.ok(this.familyIndexTestingService.updateFamilyIndexTesting(id, familyIndexTestingDTO));
-    }
+//    @PutMapping("/{id}")
+//    public ResponseEntity<String> updateFamilyIndexTesting(@PathVariable Long id, @Valid @RequestBody FamilyIndexTestingResponseDTO familyIndexTestingDTO) {
+//        return ResponseEntity.ok(this.familyIndexTestingService.updateFamilyIndexTesting(id, familyIndexTestingDTO));
+//    }
 
     @GetMapping("/{id}/hts-client")
     public ResponseEntity<FamilyIndexTestingResponseDTO> getFamilyIndexTestingByHtsClientId(@PathVariable Long id) {
@@ -55,10 +55,10 @@ public class HtsFamilyIndexTestingController {
         return ResponseEntity.ok(familyIndices);
     }
 
-    @PutMapping("/family-index/{id}")
-    public ResponseEntity<FamilyIndexResponseDTO> updateFamilyIndex(@PathVariable Long id, @Valid @RequestBody FamilyIndexRequestDto familyIndexRequestDto) {
-        return ResponseEntity.ok(this.familyIndexTestingService.updateFamilyIndex(id, familyIndexRequestDto));
-    }
+//    @PutMapping("/family-index/{id}")
+//    public ResponseEntity<FamilyIndexResponseDTO> updateFamilyIndex(@PathVariable Long id, @Valid @RequestBody FamilyIndexRequestDto familyIndexRequestDto) {
+//        return ResponseEntity.ok(this.familyIndexTestingService.updateFamilyIndex(id, familyIndexRequestDto));
+//    }
 
     //  get familyIndex by id
     @GetMapping("/family-index/{id}")
@@ -90,6 +90,12 @@ public class HtsFamilyIndexTestingController {
     public ResponseEntity<List<FamilyTestingTrackerResponseDTO>> getAllFamilyTestingTrackerByFamilyIndexUuid(@RequestParam String familyIndexUuid) {
         List<FamilyTestingTrackerResponseDTO> familyTestingTrackerResponseDTO = familyIndexTestingService.getFamilyTestingTrackerByFamilyIndexUuid(familyIndexUuid);
         return ResponseEntity.ok(familyTestingTrackerResponseDTO);
+    }
+
+
+    @PutMapping("/family-indexr/{id}")
+    public ResponseEntity<FamilyIndexResponseDTO> updateFamilyIndex(@PathVariable Long id, @Valid @RequestBody FamilyIndexResponseDTO req) {
+        return ResponseEntity.ok(this.familyIndexTestingService.updateFamilyIndex(id, req));
     }
 
 

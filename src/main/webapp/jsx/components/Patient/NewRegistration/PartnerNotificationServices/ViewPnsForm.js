@@ -364,7 +364,7 @@ const ViewPNSForm = (props) => {
     if (
       e.target.name === "partnerAge" ||
       e.target.name === "numberOfAttempt" ||
-      e.target.name === 'numberOfPartnerIdentifiedFromClientIndex'
+      e.target.name === "numberOfPartnerIdentifiedFromClientIndex"
     ) {
       if (e.target.value > -1) {
         sethtsClientInformation({
@@ -564,14 +564,14 @@ const ViewPNSForm = (props) => {
     setErrors({ ...temp, [e.target.name]: "" });
     if (e.target.name === "numberOfAttempt") {
       if (e.target.value > -1) {
-         setContactTracing({
-           ...contactTracing,
-           [e.target.name]: e.target.value,
-         });
-
+        setContactTracing({
+          ...contactTracing,
+          [e.target.name]: e.target.value,
+        });
       }
-    }else{    setContactTracing({ ...contactTracing, [e.target.name]: e.target.value });
-}
+    } else {
+      setContactTracing({ ...contactTracing, [e.target.name]: e.target.value });
+    }
   };
   const handleInputChange = (e) => {
     setErrors({ ...temp, [e.target.name]: "" });
@@ -589,14 +589,15 @@ const ViewPNSForm = (props) => {
     if (e.target.name === "clientName" && e.target.value !== "") {
       const name = alphabetOnly(e.target.value);
       setObjValues({ ...objValues, [e.target.name]: name });
-    }  
-    
+    }
+
     if (e.target.name === "offeredPns") {
       setObjValues({
         ...objValues,
         reasonForDecline: "",
         [e.target.name]: e.target.value,
         otherReasonForDecline: "",
+        acceptedPns: "",
       });
     }
     // if((e.target.name !=='maritalStatusId' && e.target.value!=='5' )){//logic for marital status
@@ -951,8 +952,10 @@ const ViewPNSForm = (props) => {
             </div>
 
             <div className="row">
-              {objValues.acceptedPns !== "" &&
-                objValues.acceptedPns !== "No" && (
+              {objValues.offeredPns !== "" &&
+                objValues.offeredPns === "Yes" &&
+                objValues.acceptedPns !== "" &&
+                objValues.acceptedPns === "Yes" && (
                   <>
                     <div className="form-group  col-md-4">
                       <FormGroup>

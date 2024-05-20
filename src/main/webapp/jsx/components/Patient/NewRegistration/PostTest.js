@@ -170,8 +170,13 @@ const PostTest = (props) => {
     }
   }, [props.patientObj, postTest.hivTestResult]);
   const handleInputChangePostTest = (e) => {
-    //setErrors({...temp, [e.target.name]:""})
-    setPostTest({ ...postTest, [e.target.name]: e.target.value });
+ if (e.target.name === "lubricantProvidedToClientCount") {
+   if (e.target.value >= 0) {
+     setPostTest({ ...postTest, [e.target.name]: e.target.value });
+   }
+ } else {
+   setPostTest({ ...postTest, [e.target.name]: e.target.value });
+ }
   };
   const handleItemClick = (page, completedMenu) => {
     props.handleItemClick(page);

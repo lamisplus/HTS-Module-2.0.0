@@ -408,7 +408,7 @@ const UserRegistration = (props) => {
                           )}
                         </span>
                       </Menu.Item> */}
-                      {patientObj2?.hivTestResult &&
+                      {/* {patientObj2?.hivTestResult &&
                         patientObj2?.hivTestResult === "Positive" && (
                           <Menu.Item
                             name="spam"
@@ -418,7 +418,7 @@ const UserRegistration = (props) => {
                               backgroundColor:
                                 activeItem === "fit" ? "#000" : "",
                             }}
-                            // disabled={activeItem !== "fit" ? true : false}
+                           
                           >
                             <span style={{ color: "#fff" }}>
                               Family Index Testing form
@@ -427,7 +427,7 @@ const UserRegistration = (props) => {
                               )}
                             </span>
                           </Menu.Item>
-                        )}
+                        )} */}
                       {patientObj2?.hivTestResult &&
                         patientObj2?.hivTestResult === "Positive" && (
                           <Menu.Item

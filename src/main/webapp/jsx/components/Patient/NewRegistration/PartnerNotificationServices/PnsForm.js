@@ -362,23 +362,23 @@ const PnsForm = (props) => {
   const handleHTSClientInputChange = (e) => {
     setErrors({ ...temp, [e.target.name]: "" });
 
-if (
-  e.target.name === "partnerAge" ||
-  e.target.name === "numberOfAttempt" ||
-  e.target.name === "numberOfPartnerIdentifiedFromClientIndex"
-) {
-  if (e.target.value > -1) {
-    sethtsClientInformation({
-      ...htsClientInformation,
-      [e.target.name]: e.target.value,
-    });
-  }
-} else {
-  sethtsClientInformation({
-    ...htsClientInformation,
-    [e.target.name]: e.target.value,
-  });
-}
+    if (
+      e.target.name === "partnerAge" ||
+      e.target.name === "numberOfAttempt" ||
+      e.target.name === "numberOfPartnerIdentifiedFromClientIndex"
+    ) {
+      if (e.target.value > -1) {
+        sethtsClientInformation({
+          ...htsClientInformation,
+          [e.target.name]: e.target.value,
+        });
+      }
+    } else {
+      sethtsClientInformation({
+        ...htsClientInformation,
+        [e.target.name]: e.target.value,
+      });
+    }
   };
 
   const loadFamilyIndexSetting = () => {
@@ -567,12 +567,11 @@ if (
     setErrors({ ...temp, [e.target.name]: "" });
 
     if (e.target.name === "numberOfAttempt") {
-      if(e.target.value > -1){
-              setContactTracing({
-                ...contactTracing,
-                [e.target.name]: e.target.value,
-              });
-
+      if (e.target.value > -1) {
+        setContactTracing({
+          ...contactTracing,
+          [e.target.name]: e.target.value,
+        });
       }
     } else {
       setContactTracing({ ...contactTracing, [e.target.name]: e.target.value });
@@ -601,6 +600,7 @@ if (
         reasonForDecline: "",
         [e.target.name]: e.target.value,
         otherReasonForDecline: "",
+        acceptedPns: "",
       });
     } else {
       setObjValues({ ...objValues, [e.target.name]: e.target.value });
@@ -941,7 +941,9 @@ if (
             </div>
 
             <div className="row">
-              {objValues.acceptedPns !== "" &&
+              {objValues.offeredPns !== "" &&
+                objValues.offeredPns === "Yes" &&
+                objValues.acceptedPns !== "" &&
                 objValues.acceptedPns === "Yes" && (
                   <>
                     <div className="form-group  col-md-4">

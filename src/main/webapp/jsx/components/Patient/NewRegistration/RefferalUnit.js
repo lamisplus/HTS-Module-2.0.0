@@ -594,7 +594,9 @@ const RefferralUnit = (props) => {
         });
 
         // history.push("/");
-        props.handleItemClick("refferal-history");
+
+        handleItemClick("refferal-history", "refferal");
+        // props.handleItemClick();
       } catch (error) {
         // console.log("error", error);
         setSaving(false);

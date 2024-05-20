@@ -201,7 +201,8 @@ const FamilyIndexTestingForm = (props) => {
     ),
     alternatePhoneNumber: "",
     dateClientEnrolledOnTreatment: "",
-    dateIndexClientConfirmedHivPositiveTestResult: "",
+    dateIndexClientConfirmedHivPositiveTestResult:
+      props?.patientObj?.confirmatoryTest2?.date2,
     dateOfBirth: props?.patientObj?.personResponseDto?.dateOfBirth,
     extra: {},
     facilityName: "",
@@ -603,37 +604,32 @@ const FamilyIndexTestingForm = (props) => {
 
   // handlefamilyIndexRequestDto
   const handlefamilyTestingTrackerRequestDTO = (e) => {
-   setErrorFamilyIndexDTOTracker({
+    setErrorFamilyIndexDTOTracker({
       ...errorFamilyIndexTracker,
       [e.target.name]: "",
     });
     setaAddIndexTracker2(false);
 
-
-    if (e.target.name === 'positionOfChildEnumerated') {
-
-      if (e.target.value > -1  ) {
-            setFamilyTestingTrackerRequestDTO({
-              ...familyTestingTrackerRequestDTO,
-              [e.target.name]: e.target.value,
-            });
+    if (e.target.name === "positionOfChildEnumerated") {
+      if (e.target.value > -1) {
+        setFamilyTestingTrackerRequestDTO({
+          ...familyTestingTrackerRequestDTO,
+          [e.target.name]: e.target.value,
+        });
       }
     } else if (e.target.name === "trackerAge") {
-
-            if (e.target.value > -1) {
-              setFamilyTestingTrackerRequestDTO({
-                ...familyTestingTrackerRequestDTO,
-                [e.target.name]: e.target.value,
-              });
-            }
+      if (e.target.value > -1) {
+        setFamilyTestingTrackerRequestDTO({
+          ...familyTestingTrackerRequestDTO,
+          [e.target.name]: e.target.value,
+        });
+      }
     } else {
       setFamilyTestingTrackerRequestDTO({
         ...familyTestingTrackerRequestDTO,
         [e.target.name]: e.target.value,
       });
     }
- 
-    
 
     // clearf the error with e.target.name
     setErrors({ ...errors, [e.target.name]: "" });
@@ -1757,7 +1753,7 @@ const FamilyIndexTestingForm = (props) => {
                         border: "1px solid #014D88",
                         borderRadius: "0.25rem",
                       }}
-                      // disabled
+                      disabled
                     />
                     {errors.dateIndexClientConfirmedHivPositiveTestResult !==
                     "" ? (
@@ -1810,6 +1806,36 @@ const FamilyIndexTestingForm = (props) => {
                   </div>
                 )}
                 {/* )} */}
+
+                <div className="form-group col-md-4 ">
+                  <Label>
+                    {" "}
+                    Recency Testing{" "}
+                    <span> (for newly tested HIV-positive only) </span>{" "}
+                  </Label>
+                  <FormGroup>
+                    <select
+                      className="form-control"
+                      name="recencyTesting"
+                      id="reccencyTesting"
+                      onChange={handleInputChange}
+                      value={payload.recencyTesting}
+                      style={{
+                        border: "1px solid #014D88",
+                        borderRadius: "0.2rem",
+                      }}
+                    >
+                      <option value="">Select</option>
+                      <option value="Recent Infection">Recent Infection</option>
+                      <option value="Long Term Infection">
+                        {" "}
+                        Long Term Infection
+                      </option>
+                      <option value="Not Done">Not Done</option>
+                    </select>
+                  </FormGroup>
+                </div>
+
                 {/* if index client is hiv positive, and date is selected */}
                 <div className="form-group col-md-4 ">
                   <Label>Is client current on HIV treatment ?</Label>
@@ -1846,7 +1872,9 @@ const FamilyIndexTestingForm = (props) => {
                           id="dateClientEnrolledOnTreatment"
                           value={payload.dateClientEnrolledOnTreatment}
                           onChange={handleInputChange}
-                          min="1929-12-31"
+                          min={
+                            payload.dateIndexClientConfirmedHivPositiveTestResult
+                          }
                           max={moment(new Date()).format("YYYY-MM-DD")}
                           style={{
                             border: "1px solid #014D88",
@@ -1864,35 +1892,8 @@ const FamilyIndexTestingForm = (props) => {
                       </FormGroup>
                     </div>
                   )}
-                <div className="form-group col-md-4 ">
-                  <Label>
-                    {" "}
-                    Recency Testing{" "}
-                    <span> (for newly tested HIV-positive only) </span>{" "}
-                  </Label>
-                  <FormGroup>
-                    <select
-                      className="form-control"
-                      name="recencyTesting"
-                      id="reccencyTesting"
-                      onChange={handleInputChange}
-                      value={payload.recencyTesting}
-                      style={{
-                        border: "1px solid #014D88",
-                        borderRadius: "0.2rem",
-                      }}
-                    >
-                      <option value="">Select</option>
-                      <option value="Recent Infection">Recent Infection</option>
-                      <option value="Long Term Infection">
-                        {" "}
-                        Long Term Infection
-                      </option>
-                      <option value="Not Done">Not Done</option>
-                    </select>
-                  </FormGroup>
-                </div>
-                <div className="form-group col-md-4 ">
+               {payload.isClientCurrentlyOnHivTreatment &&
+                  payload.isClientCurrentlyOnHivTreatment === "Yes" && <div className="form-group col-md-4 ">
                   <Label>virally unsuppressed</Label>
                   <FormGroup>
                     <select
@@ -1911,7 +1912,7 @@ const FamilyIndexTestingForm = (props) => {
                       <option value="No">No</option>
                     </select>
                   </FormGroup>
-                </div>
+                </div>}
                 <div className="form-group col-md-4">
                   <FormGroup>
                     <Label for="willingToHaveChildrenTestedElseWhere">
@@ -2436,6 +2437,7 @@ const FamilyIndexTestingForm = (props) => {
                       </FormGroup>
                     </div>
                   )}
+                {console.log("patient agee reaching ", payload.age)}
                 {payload.age < 21 && (
                   <div className="form-group mb-3 col-md-4">
                     <FormGroup>

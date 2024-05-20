@@ -28,7 +28,7 @@ const Home = (props) => {
     const monthDifference = moment(
       new Date(moment(new Date()).format("YYYY-MM-DD"))
     ).diff(new Date(visitDate), "months", true);
-    //console.log(monthDifference)
+    console.log(monthDifference)
     return monthDifference;
   };
   useEffect(() => {
@@ -62,6 +62,7 @@ const Home = (props) => {
       })
       .then((response) => {
         //set the last date of visit after the response
+        console.log(response.data.dateVisit);
         setLastVisitCount(
           Math.round(calculateLastVisitDate(response.data.dateVisit))
         );

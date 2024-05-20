@@ -191,7 +191,7 @@ const ViewFamilyIndexTestingForm = (props) => {
     ),
     alternatePhoneNumber: "",
     dateClientEnrolledOnTreatment: "",
-    dateIndexClientConfirmedHivPositiveTestResult: "",
+    dateIndexClientConfirmedHivPositiveTestResult: props?.patientObj?.confirmatoryTest2.date2,
     dateOfBirth: props?.basicInfo?.personResponseDto?.dateOfBirth,
     extra: {},
     facilityName: "",
@@ -1775,7 +1775,7 @@ const ViewFamilyIndexTestingForm = (props) => {
                     )}
                   </FormGroup>
                 </div>
-
+{/*  The Date of Treatmant initiation is validated against the date of HIV test confirmation (confirmatory 2)*/}
                 <div className="form-group col-md-4">
                   <FormGroup>
                     <Label for="">
@@ -1796,7 +1796,7 @@ const ViewFamilyIndexTestingForm = (props) => {
                         border: "1px solid #014D88",
                         borderRadius: "0.25rem",
                       }}
-                      disabled={props.action === "view" ? true : false}
+                      disabled
                     />
                     {errors.dateIndexClientConfirmedHivPositiveTestResult !==
                     "" ? (
@@ -1849,6 +1849,37 @@ const ViewFamilyIndexTestingForm = (props) => {
                   </div>
                 )}
                 {/* )} */}
+        
+                                <div className="form-group col-md-4 ">
+                  <Label>
+                    {" "}
+                    Recency Testing{" "}
+                    <span> (for newly tested HIV-positive only) </span>{" "}
+                  </Label>
+                  <FormGroup>
+                    <select
+                      className="form-control"
+                      name="recencyTesting"
+                      id="reccencyTesting"
+                      onChange={handleInputChange}
+                      value={payload.recencyTesting}
+                      style={{
+                        border: "1px solid #014D88",
+                        borderRadius: "0.2rem",
+                      }}
+                      disabled={props.action === "view" ? true : false}
+                    >
+                      <option value="">Select</option>
+                      <option value="Recent Infection">Recent Infection</option>
+                      <option value="Long Term Infection">
+                        {" "}
+                        Long Term Infection
+                      </option>
+                      <option value="Not Done">Not Done</option>
+                    </select>
+                  </FormGroup>
+                </div>
+
                 {/* if index client is hiv positive, and date is selected */}
                 <div className="form-group col-md-4 ">
                   <Label>Is client current on HIV treatment ?</Label>
@@ -1886,7 +1917,7 @@ const ViewFamilyIndexTestingForm = (props) => {
                           id="dateClientEnrolledOnTreatment"
                           value={payload.dateClientEnrolledOnTreatment}
                           onChange={handleInputChange}
-                          min="1929-12-31"
+                          min={payload.dateIndexClientConfirmedHivPositiveTestResult}
                           max={moment(new Date()).format("YYYY-MM-DD")}
                           style={{
                             border: "1px solid #014D88",
@@ -1904,36 +1935,8 @@ const ViewFamilyIndexTestingForm = (props) => {
                       </FormGroup>
                     </div>
                   )}
-                <div className="form-group col-md-4 ">
-                  <Label>
-                    {" "}
-                    Recency Testing{" "}
-                    <span> (for newly tested HIV-positive only) </span>{" "}
-                  </Label>
-                  <FormGroup>
-                    <select
-                      className="form-control"
-                      name="recencyTesting"
-                      id="reccencyTesting"
-                      onChange={handleInputChange}
-                      value={payload.recencyTesting}
-                      style={{
-                        border: "1px solid #014D88",
-                        borderRadius: "0.2rem",
-                      }}
-                      disabled={props.action === "view" ? true : false}
-                    >
-                      <option value="">Select</option>
-                      <option value="Recent Infection">Recent Infection</option>
-                      <option value="Long Term Infection">
-                        {" "}
-                        Long Term Infection
-                      </option>
-                      <option value="Not Done">Not Done</option>
-                    </select>
-                  </FormGroup>
-                </div>
-                <div className="form-group col-md-4 ">
+  {payload.isClientCurrentlyOnHivTreatment &&
+                  payload.isClientCurrentlyOnHivTreatment === "Yes" &&  <div className="form-group col-md-4 ">
                   <Label>virally unsuppressed</Label>
                   <FormGroup>
                     <select
@@ -1953,7 +1956,8 @@ const ViewFamilyIndexTestingForm = (props) => {
                       <option value="No">No</option>
                     </select>
                   </FormGroup>
-                </div>
+                </div>}
+           {}    
                 <div className="form-group col-md-4">
                   <FormGroup>
                     <Label for="willingToHaveChildrenTestedElseWhere">
@@ -2537,6 +2541,7 @@ const ViewFamilyIndexTestingForm = (props) => {
                             </FormGroup>
                           </div>
                         )}
+                      {console.log("patient agee reaching ",payload.age)}
                       {payload.age < 21 && (
                         <div className="form-group mb-3 col-md-4">
                           <FormGroup>

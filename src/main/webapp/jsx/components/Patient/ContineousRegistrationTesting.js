@@ -418,7 +418,7 @@ const UserRegistration = (props) => {
                               backgroundColor:
                                 activeItem === "fit" ? "#000" : "",
                             }}
-                            disabled={activeItem !== "fit" ? true : false}
+                            // disabled={activeItem !== "fit" ? true : false}
                           >
                             <span style={{ color: "#fff" }}>
                               Family Index Testing form

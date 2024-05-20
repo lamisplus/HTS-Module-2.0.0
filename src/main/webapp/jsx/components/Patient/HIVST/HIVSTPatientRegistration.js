@@ -124,6 +124,9 @@ const HIVSTPatientRegistration = (props) => {
     const [sexs, setSexs] = useState([]);
     const [userInformationList, setUserInformationList] = useState([])
     const [userInformationErrors, setUserInformationErrors] = useState({});
+    const [ageDisabled, setAgeDisabled] = useState(true);
+    const [open, setOpen] = React.useState(false);
+    const toggle = () => setOpen(!open);
 
     const [objValues, setObjValues] = useState({
         patientId: patient?.personId ? patient.personId : "",
@@ -164,6 +167,10 @@ const HIVSTPatientRegistration = (props) => {
         {
             userDetails: {
                 id: "",
+                firstName:"",
+                surname:"",
+                otherName:"",
+                dateOfRegistration:"",
                 otherCategory: "",
                 userClientCode: "",
                 dateOfBirth: "",
@@ -171,7 +178,8 @@ const HIVSTPatientRegistration = (props) => {
                 sex: "",
                 maritalStatusId: "",
                 typeOfHivst: "",
-                userCategory: ""
+                userCategory: "",
+                isDateOfBirthEstimated: ""
             },
             postTestAssessment: {
                 everUsedHivstKit: "",
@@ -279,6 +287,8 @@ const HIVSTPatientRegistration = (props) => {
     const validateUserInformation = () => {
         // if (objValues.otherTestKitUserInfoAvailable === "Yes") {
             let temp = {};
+            temp.firstName = userInformation.userDetails.firstName ?  "" : "This field is required.";
+            temp.surname = userInformation.userDetails.surname ?  "" : "This field is required.";
             temp.userCategory = userInformation.userDetails.userCategory ? "" : "This field is required.";
             // temp.otherCategory = userInformation.userDetails.userCategory === "Others" ? userInformation.userDetails.otherCategory ? "" : "This field is required." : "";
             temp.userClientCode = userInformation.userDetails.userClientCode ? "" : "This field is required.";
@@ -440,9 +450,9 @@ const HIVSTPatientRegistration = (props) => {
         }
         // validate and remove error message if the field is filled
         if (value) {
-            let tempErrors = {...errors};
+            let tempErrors = {...userInformationErrors};
             tempErrors[name] = "";
-            setErrors(tempErrors);
+            setUserInformationErrors(tempErrors);
         }
 
         setUserInformation(newUserInformation);
@@ -457,6 +467,10 @@ const HIVSTPatientRegistration = (props) => {
                 let newUserInformation = {
                     userDetails: {
                         id: "",
+                        firstName:userInformation.userDetails.firstName,
+                        surname:userInformation.userDetails.surname,
+                        otherName:userInformation.userDetails.otherName,
+                        dateOfRegistration:userInformation.userDetails.dateOfRegistration,
                         otherCategory: userInformation.userDetails.otherCategory,
                         userClientCode: userInformation.userDetails.userClientCode,
                         dateOfBirth: userInformation.userDetails.dateOfBirth,
@@ -655,7 +669,7 @@ const HIVSTPatientRegistration = (props) => {
         return age;
     }
 
-    const handleDateOfBirthChange = (e) => {
+    const handleDateOfBirthChange1 = (e) => {
         let newUserInformation = {...userInformation};
         newUserInformation.userDetails[e.target.name] = e.target.value;
         if (e.target.value && new Date(e.target.value) <= new Date()) {
@@ -699,6 +713,59 @@ const HIVSTPatientRegistration = (props) => {
         }
 
     }
+
+    const handleDobChange = (e) => {
+        if (e.target.value) {
+            const today = new Date();
+            const birthDate = new Date(e.target.value);
+            let age_now = today.getFullYear() - birthDate.getFullYear();
+            const m = today.getMonth() - birthDate.getMonth();
+            if (age_now <= 0 && m < 0 && today.getDate() < birthDate.getDate()) {
+                age_now--;
+            }
+            // objValues.age = age_now;
+            userInformation.age = age_now;
+        } else {
+            setUserInformation({ ...userInformation, age: "" });
+            // setObjValues({ ...objValues, age: "" });
+        }
+        // setObjValues({ ...objValues, [e.target.name]: e.target.value });
+        setUserInformation({ ...userInformation, [e.target.name]: e.target.value });
+        setUserInformation({ ...userInformation, dateOfBirth: e.target.value });
+        // setObjValues({ ...objValues, dob: e.target.value });
+        if (userInformation.userDetails.age !== "" && userInformation.userDetails.age >= 85) {
+            toggle();
+        }
+    };
+    const handleDateOfBirthChange = (e) => {
+        if (e.target.value == "Actual") {
+            userInformation.userDetails.isDateOfBirthEstimated = false;
+            setAgeDisabled(true);
+        } else if (e.target.value == "Estimated") {
+            // objValues.isDateOfBirthEstimated = true;
+            userInformation.userDetails.isDateOfBirthEstimated = true;
+            setAgeDisabled(false);
+        }
+    };
+    const handleAgeChange = (e) => {
+        if (!ageDisabled && e.target.value) {
+            if (e.target.value !== "" && e.target.value >= 85) {
+                toggle();
+            }
+            const currentDate = new Date();
+            currentDate.setDate(15);
+            currentDate.setMonth(5);
+            const estDob = moment(currentDate.toISOString());
+            const dobNew = estDob.add(e.target.value * -1, "years");
+            setUserInformation({ ...userInformation, dateOfBirth: moment(dobNew).format("YYYY-MM-DD") });
+            // setObjValues({ ...objValues, dob: moment(dobNew).format("YYYY-MM-DD") });
+            // objValues.dob = moment(dobNew).format("YYYY-MM-DD")
+            userInformation.userDetails.dateOfBirth = moment(dobNew).format("YYYY-MM-DD");
+        }
+        // setObjValues({ ...objValues, age: e.target.value });
+        setUserInformation({ ...userInformation, age: e.target.value });
+    };
+
     console.log("selectedUsers", selectedUsers)
     console.log("objValues", objValues)
     console.log("userInformation", userInformation)
@@ -1176,6 +1243,110 @@ const HIVSTPatientRegistration = (props) => {
                                         </div>
                                     </div>
                                     <div className="row">
+                                        <div className="form-group mb-3 col-md-4">
+                                            <FormGroup>
+                                                <Label for="">
+                                                    Registration Date
+                                                    {/*<span style={{color: "red"}}> *</span>*/}
+                                                </Label>
+                                                <Input
+                                                    type="date"
+                                                    name="dateOfRegistration"
+                                                    id="dateOfRegistration"
+                                                    min="1929-12-31"
+                                                    max={moment(new Date()).format("YYYY-MM-DD")}
+                                                    // value={userInformation.userDetails.firstName}
+                                                    value={objValues.dateOfVisit}
+                                                    // onChange={handleInputChange1}
+                                                    // onChange={(e) => handleUserInformationInputChange(e, "userDetails")}
+                                                    style={{
+                                                        border: "1px solid #014D88",
+                                                        borderRadius: "0.2rem",
+                                                    }}
+                                                    disabled
+                                                />
+                                                {/*{errors.dateOfVisit !== "" ? (*/}
+                                                {/*    <span className={classes.error}>{errors.dateOfVisit}</span>*/}
+                                                {/*) : (*/}
+                                                {/*    ""*/}
+                                                {/*)}*/}
+                                            </FormGroup>
+                                        </div>
+                                        <div className="form-group col-md-4">
+                                            <FormGroup>
+                                                <Label>
+                                                    First Name
+                                                    <span style={{color: "red"}}> *</span>
+                                                </Label>
+                                                <input
+                                                    type="text"
+                                                    className="form-control"
+                                                    name="firstName"
+                                                    id="firstName"
+                                                    value={userInformation.userDetails.firstName}
+                                                    // onChange={handleInputChange1}
+                                                    onChange={(e) => handleUserInformationInputChange(e, "userDetails")}
+                                                    style={{
+                                                        border: "1px solid #014D88",
+                                                        borderRadius: "0.2rem",
+                                                    }}
+                                                />
+                                                {userInformationErrors.firstName !== "" ? (
+                                                    <span
+                                                        className={classes.error}>{userInformationErrors.firstName}</span>
+                                                ) : (
+                                                    ""
+                                                )}
+                                            </FormGroup>
+                                        </div>
+                                        <div className="form-group col-md-4">
+                                            <FormGroup>
+                                                <Label>
+                                                    Surname
+                                                    <span style={{color: "red"}}> *</span>
+                                                </Label>
+                                                <input
+                                                    type="text"
+                                                    className="form-control"
+                                                    name="surname"
+                                                    id="surname"
+                                                    value={userInformation.userDetails.surname}
+                                                    // onChange={handleInputChange1}
+                                                    onChange={(e) => handleUserInformationInputChange(e, "userDetails")}
+                                                    style={{
+                                                        border: "1px solid #014D88",
+                                                        borderRadius: "0.2rem",
+                                                    }}
+                                                />
+                                                {userInformationErrors.surname !== "" ? (
+                                                    <span
+                                                        className={classes.error}>{userInformationErrors.surname}</span>
+                                                ) : (
+                                                    ""
+                                                )}
+                                            </FormGroup>
+                                        </div>
+                                        <div className="form-group col-md-4">
+                                            <FormGroup>
+                                                <Label>
+                                                    Other name
+                                                </Label>
+                                                <input
+                                                    type="text"
+                                                    className="form-control"
+                                                    name="othername"
+                                                    id="othername"
+                                                    value={userInformation.userDetails.otherName}
+                                                    // onChange={handleInputChange1}
+                                                    onChange={(e) => handleUserInformationInputChange(e, "userDetails")}
+                                                    style={{
+                                                        border: "1px solid #014D88",
+                                                        borderRadius: "0.2rem",
+                                                    }}
+                                                />
+                                            </FormGroup>
+                                        </div>
+
                                         <div className="form-group  col-md-4">
                                             <FormGroup>
                                                 <Label>
@@ -1199,13 +1370,14 @@ const HIVSTPatientRegistration = (props) => {
                                                     {/*        {option.label}*/}
                                                     {/*    </option>*/}
                                                     {/*))}*/}
-                                                    { selectedUsers.map((user, index) => (
+                                                    {selectedUsers.map((user, index) => (
                                                         <option key={index} value={user}>{user}</option>
                                                     ))}
                                                     ))
                                                 </select>
                                                 {userInformationErrors.userCategory !== "" ? (
-                                                    <span className={classes.error}>{userInformationErrors.userCategory}</span>
+                                                    <span
+                                                        className={classes.error}>{userInformationErrors.userCategory}</span>
                                                 ) : (
                                                     ""
                                                 )}
@@ -1254,60 +1426,155 @@ const HIVSTPatientRegistration = (props) => {
                                                     }}
                                                 />
                                                 {userInformationErrors.userClientCode !== "" ? (
-                                                    <span className={classes.error}>{userInformationErrors.userClientCode}</span>
+                                                    <span
+                                                        className={classes.error}>{userInformationErrors.userClientCode}</span>
                                                 ) : (
                                                     ""
                                                 )}
                                             </FormGroup>
                                         </div>
-                                        <div className="form-group mb-3 col-md-4">
+                                        {/*<div className="form-group mb-3 col-md-4">*/}
+                                        {/*    <FormGroup>*/}
+                                        {/*        <Label>*/}
+                                        {/*            Date Of Birth<span style={{color: "red"}}> *</span>*/}
+                                        {/*        </Label>*/}
+                                        {/*        <input*/}
+                                        {/*            className="form-control"*/}
+                                        {/*            type="date"*/}
+                                        {/*            name="dateOfBirth"*/}
+                                        {/*            id="dateOfBirth"*/}
+                                        {/*            min="1929-12-31"*/}
+                                        {/*            max={moment(new Date()).format("YYYY-MM-DD")}*/}
+                                        {/*            value={userInformation.userDetails.dateOfBirth}*/}
+                                        {/*            onChange={handleDateOfBirthChange}*/}
+                                        {/*            // onChange={(e) => handleUserInformationInputChange(e, "userDetails")}*/}
+                                        {/*            style={{*/}
+                                        {/*                border: "1px solid #014D88",*/}
+                                        {/*                borderRadius: "0.2rem",*/}
+                                        {/*            }}*/}
+                                        {/*            // disabled*/}
+                                        {/*        />*/}
+                                        {/*        {userInformationErrors.dateOfBirth !== "" ? (*/}
+                                        {/*            <span*/}
+                                        {/*                className={classes.error}>{userInformationErrors.dateOfBirth}</span>*/}
+                                        {/*        ) : (*/}
+                                        {/*            ""*/}
+                                        {/*        )}*/}
+                                        {/*    </FormGroup>*/}
+                                        {/*</div>*/}
+                                        {/*<div className="form-group mb-3 col-md-4">*/}
+                                        {/*    <FormGroup>*/}
+                                        {/*        <Label>*/}
+                                        {/*            Age {" "}*/}
+                                        {/*        </Label>*/}
+                                        {/*        <input*/}
+                                        {/*            className="form-control"*/}
+                                        {/*            type="number"*/}
+                                        {/*            name="age"*/}
+                                        {/*            id="age"*/}
+                                        {/*            disabled*/}
+                                        {/*            style={{*/}
+                                        {/*                border: "1px solid #014D88",*/}
+                                        {/*                borderRadius: "0.2rem",*/}
+                                        {/*            }}*/}
+                                        {/*            value={userInformation.userDetails.age}*/}
+                                        {/*            onChange={(e) => handleUserInformationInputChange(e, "userDetails")}*/}
+                                        {/*        />*/}
+                                        {/*    </FormGroup>*/}
+                                        {/*</div>*/}
+
+                                        <div className="form-group mb-2 col-md-2">
                                             <FormGroup>
                                                 <Label>
-                                                    Date Of Birth<span style={{color: "red"}}> *</span>
+                                                    Date Of Birth <span style={{color: "red"}}> *</span>
+                                                </Label>
+                                                <div className="radio">
+                                                    <label>
+                                                        <input
+                                                            type="radio"
+                                                            value="Actual"
+                                                            name="dateOfBirth"
+                                                            defaultChecked
+                                                            onChange={(e) => handleDateOfBirthChange(e)}
+                                                            style={{
+                                                                border: "1px solid #014D88",
+                                                                borderRadius: "0.2rem",
+                                                            }}
+                                                        />{" "}
+                                                        Actual
+                                                    </label>
+                                                </div>
+                                                <div className="radio">
+                                                    <label>
+                                                        <input
+                                                            type="radio"
+                                                            value="Estimated"
+                                                            name="dateOfBirth"
+                                                            onChange={(e) => handleDateOfBirthChange(e)}
+                                                            style={{
+                                                                border: "1px solid #014D88",
+                                                                borderRadius: "0.2rem",
+                                                            }}
+                                                        />{" "}
+                                                        Estimated
+                                                    </label>
+                                                </div>
+                                            </FormGroup>
+                                        </div>
+                                        <div className="form-group mb-3 col-md-3">
+                                            <FormGroup>
+                                                <Label>
+                                                    Date <span style={{color: "red"}}> *</span>
                                                 </Label>
                                                 <input
                                                     className="form-control"
                                                     type="date"
-                                                    name="dateOfBirth"
-                                                    id="dateOfBirth"
+                                                    name="dob"
+                                                    id="dob"
                                                     min="1929-12-31"
                                                     max={moment(new Date()).format("YYYY-MM-DD")}
+                                                    // value={objValues.dob}=
                                                     value={userInformation.userDetails.dateOfBirth}
-                                                    onChange={handleDateOfBirthChange}
-                                                    // onChange={(e) => handleUserInformationInputChange(e, "userDetails")}
+                                                    onChange={handleDobChange}
                                                     style={{
                                                         border: "1px solid #014D88",
                                                         borderRadius: "0.2rem",
                                                     }}
-                                                    // disabled
                                                 />
-                                                {userInformationErrors.dateOfBirth !== "" ? (
-                                                    <span className={classes.error}>{userInformationErrors.dateOfBirth}</span>
-                                                ) : (
-                                                    ""
-                                                )}
+                                                {/*{errors.dob !== "" ? (*/}
+                                                {/*    <span className={classes.error}>{errors.dob}</span>*/}
+                                                {/*) : (*/}
+                                                {/*    ""*/}
+                                                {/*)}*/}
                                             </FormGroup>
                                         </div>
-                                        <div className="form-group mb-3 col-md-4">
+                                        <div className="form-group mb-3 col-md-3">
                                             <FormGroup>
                                                 <Label>
-                                                    Age {" "}
+                                                    Age <span style={{color: "red"}}> *</span>
                                                 </Label>
                                                 <input
                                                     className="form-control"
                                                     type="number"
                                                     name="age"
                                                     id="age"
-                                                    disabled
+                                                    // value={objValues.age}
+                                                    value={userInformation.userDetails.age}
+                                                    disabled={ageDisabled}
+                                                    onChange={handleAgeChange}
                                                     style={{
                                                         border: "1px solid #014D88",
                                                         borderRadius: "0.2rem",
                                                     }}
-                                                    value={userInformation.userDetails.age}
-                                                    onChange={(e) => handleUserInformationInputChange(e, "userDetails")}
                                                 />
+                                                {/*{errors.age !== "" ? (*/}
+                                                {/*    <span className={classes.error}>{errors.age}</span>*/}
+                                                {/*) : (*/}
+                                                {/*    ""*/}
+                                                {/*)}*/}
                                             </FormGroup>
                                         </div>
+
                                         <div className="form-group  col-md-4">
                                             <FormGroup>
                                                 <Label>
@@ -1384,7 +1651,8 @@ const HIVSTPatientRegistration = (props) => {
                                                 </select>
                                                 {
                                                     userInformationErrors.typeOfHivst !== "" ? (
-                                                        <span className={classes.error}>{userInformationErrors.typeOfHivst}</span>
+                                                        <span
+                                                            className={classes.error}>{userInformationErrors.typeOfHivst}</span>
                                                     ) : ("")
 
                                                 }
@@ -1450,11 +1718,11 @@ const HIVSTPatientRegistration = (props) => {
                                     <hr style={{width: '100%'}}/>
                                 </div>
                             }
-                            {objValues && selectedUsers.length > 0  &&
+                            {objValues && selectedUsers.length > 0 &&
                                 <div className="row mb-7">
                                     <div className="form-group  col-md-4">
                                         <FormGroup>
-                                            <Label >
+                                            <Label>
                                                 Have you conducted the HIVST ?
                                                 {/*<span style={{color: "red"}}> *</span>*/}
                                             </Label>
@@ -1891,6 +2159,32 @@ const HIVSTPatientRegistration = (props) => {
                     </form>
                 </CardBody>
             </Card>
+
+            <Modal
+                show={open}
+                toggle={toggle}
+                className="fade"
+                size="sm"
+                aria-labelledby="contained-modal-title-vcenter"
+                centered
+            >
+                <Modal.Header>
+                    <Modal.Title id="contained-modal-title-vcenter">
+                        Notification!
+                    </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <h4>Are you Sure of the Age entered?</h4>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button
+                        onClick={toggle}
+                        style={{ backgroundColor: "#014d88", color: "#fff" }}
+                    >
+                        Yes
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </>
     )
 }

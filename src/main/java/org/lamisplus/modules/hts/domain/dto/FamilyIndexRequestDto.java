@@ -5,6 +5,7 @@ import lombok.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.List;
 
 @Builder(toBuilder = true)
 @Getter
@@ -16,8 +17,9 @@ public class FamilyIndexRequestDto {
     @NotBlank(message = "Family relationship is required")
     private String familyRelationship;
 
-    @NotBlank(message = "Family index HIV status is required")
-    private String familyIndexHivStatus;
+    @NotBlank(message = "Contact status is required")
+    private String statusOfContact;
+//    private String familyIndexHivStatus;
 
     @NotNull(message = "Child number is required")
     private int childNumber;
@@ -28,7 +30,16 @@ public class FamilyIndexRequestDto {
 
     private String UAN;
 
-//    @NotBlank(message = "Family index testing UUID is required")
-    private String familyIndexTestingUuid;
+    private LocalDate dateOfHts;
+    private LocalDate dateOfBirth;
+    private int age;
+    private String firstName;
+    private String lastName;
+    private String middleName;
+    private String childDead;
+    private LocalDate yearChildDead;
+    private String liveWithParent;
+    private Boolean isDateOfBirthEstimated;
+    private FamilyTestingTrackerRequestDTO familyTestingTrackerRequestDTO;
 
 }

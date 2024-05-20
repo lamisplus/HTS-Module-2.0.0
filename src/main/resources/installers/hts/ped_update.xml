@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet failOnError="true" author="Taiwo Gboyegun" id="updated_ped_in_targetgroup">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="1">
+                SELECT count(column_name)
+                FROM information_schema.columns
+                WHERE table_schema = 'public'
+                  AND table_name = 'base_application_codeset'
+                  AND column_name = 'archived';
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            UPDATE base_application_codeset
+            SET archived = 1
+            WHERE code = 'TARGET_GROUP_PD';
+        </sql>
+    </changeSet>
+</databaseChangeLog>

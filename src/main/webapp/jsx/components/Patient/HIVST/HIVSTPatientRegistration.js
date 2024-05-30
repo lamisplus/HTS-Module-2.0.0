@@ -158,12 +158,12 @@ const HIVSTPatientRegistration = (props) => {
         lotNumber: "",
         expiryDate: "",
         testKitUsers: null,
-        userInformation: [],
+        testKitUserDetails: [],
         otherTestKitUserInfoAvailable: "",
         hasConductedHIVST: "",
     });
 
-    const [userInformation, setUserInformation] = useState(
+    const [testKitUserDetails, setUserInformation] = useState(
         {
             userDetails: {
                 id: "",
@@ -264,38 +264,24 @@ const HIVSTPatientRegistration = (props) => {
         if(selectedUsers.length === 0) {
             temp.selectedUsers =   objValues.testKitUsers ? "" : "Please select at least one user"
         }
-        // validate user information
-        // if (objValues.otherTestKitUserInfoAvailable === "Yes") {
-        //     temp.userCategory = userInformation.userDetails.userCategory ? "" : "This field is required.";
-        //     // temp.otherCategory = userInformation.userDetails.userCategory === "Others" ? userInformation.userDetails.otherCategory ? "" : "This field is required." : "";
-        //     temp.userClientCode = userInformation.userDetails.userClientCode ? "" : "This field is required.";
-        //     temp.dateOfBirth = userInformation.userDetails.dateOfBirth ? "" : "This field is required.";
-        //     temp.age = userInformation.userDetails.age ? "" : "This field is required";
-        //     temp.clientCode = userInformation.userDetails.userClientCode ? "" : "This field is required.";
-        //     temp.dateOfBirth = userInformation.userDetails.dateOfBirth ? "" : "This field is required.";
-        //     if(userInformation.userDetails.age > 9 && userInformation.userDetails.age !== "") {
-        //         temp.maritalStatus = userInformation.userDetails.maritalStatusId ? "" : "This field is required.";
-        //     }
-        //     temp.sex = userInformation.userDetails.sex ? "" : "This field is required.";
-        // }
          console.log("temp", temp);
         setErrors({ ...temp });
         return Object.values(temp).every((x) => x == "");
     }
 
-    // validate userInformation
+    // validate testKitUserDetails
     const validateUserInformation = () => {
         // if (objValues.otherTestKitUserInfoAvailable === "Yes") {
             let temp = {};
-            temp.firstName = userInformation.userDetails.firstName ?  "" : "This field is required.";
-            temp.surname = userInformation.userDetails.surname ?  "" : "This field is required.";
-            temp.userCategory = userInformation.userDetails.userCategory ? "" : "This field is required.";
-            // temp.otherCategory = userInformation.userDetails.userCategory === "Others" ? userInformation.userDetails.otherCategory ? "" : "This field is required." : "";
-            temp.userClientCode = userInformation.userDetails.userClientCode ? "" : "This field is required.";
-            temp.dateOfBirth = userInformation.userDetails.dateOfBirth ? "" : "This field is required.";
-            temp.typeOfHivst = userInformation.userDetails.typeOfHivst ? "" : "This field is required.";
+            temp.firstName = testKitUserDetails.userDetails.firstName ?  "" : "This field is required.";
+            temp.surname = testKitUserDetails.userDetails.surname ?  "" : "This field is required.";
+            temp.userCategory = testKitUserDetails.userDetails.userCategory ? "" : "This field is required.";
+            // temp.otherCategory = testKitUserDetails.userDetails.userCategory === "Others" ? testKitUserDetails.userDetails.otherCategory ? "" : "This field is required." : "";
+            temp.userClientCode = testKitUserDetails.userDetails.userClientCode ? "" : "This field is required.";
+            temp.dateOfBirth = testKitUserDetails.userDetails.dateOfBirth ? "" : "This field is required.";
+            temp.typeOfHivst = testKitUserDetails.userDetails.typeOfHivst ? "" : "This field is required.";
             // Check if the selected user category is in the selectedUsers array
-            if (!selectedUsers.includes(userInformation.userDetails.userCategory) && userInformation.userDetails.userCategory !== "" ) {
+            if (!selectedUsers.includes(testKitUserDetails.userDetails.userCategory) && testKitUserDetails.userDetails.userCategory !== "" ) {
                 temp.userCategory = "The selected user category does not match the selected kit users.";
             }
             // the number of kit is empty
@@ -326,8 +312,8 @@ const HIVSTPatientRegistration = (props) => {
         }
         // Check if the name is "hasConductedHIVST" and objValues.hasConductedHIVST is "No"
         if (name === "hasConductedHIVST") {
-            userInformation.postTestAssessment = {
-                ...userInformation.postTestAssessment,
+            testKitUserDetails.postTestAssessment = {
+                ...testKitUserDetails.postTestAssessment,
                 everUsedHivstKitForSelfOrOthers: "",
                 otherHivstKitUserCategory: "",
                 otherHivstKitUserCategoryText: "",
@@ -355,7 +341,7 @@ const HIVSTPatientRegistration = (props) => {
 
     const handleUserInformationInputChange = (e, section) => {
         const {name, value} = e.target;
-        let newUserInformation = {...userInformation};
+        let newUserInformation = {...testKitUserDetails};
 
         if (section === 'postTestAssessment' && name in newUserInformation[section].referralInformation) {
             newUserInformation[section].referralInformation[name] = value;
@@ -459,7 +445,7 @@ const HIVSTPatientRegistration = (props) => {
     };
 
 
-// Function to add a userInformation object to the list
+// Function to add a testKitUserDetails object to the list
 
     const addUserInformation = () => {
         if(validateUserInformation()) {
@@ -467,39 +453,39 @@ const HIVSTPatientRegistration = (props) => {
                 let newUserInformation = {
                     userDetails: {
                         id: "",
-                        firstName:userInformation.userDetails.firstName,
-                        surname:userInformation.userDetails.surname,
-                        otherName:userInformation.userDetails.otherName,
-                        dateOfRegistration:userInformation.userDetails.dateOfRegistration,
-                        otherCategory: userInformation.userDetails.otherCategory,
-                        userClientCode: userInformation.userDetails.userClientCode,
-                        dateOfBirth: userInformation.userDetails.dateOfBirth,
-                        age: userInformation.userDetails.age,
-                        sex: userInformation.userDetails.sex,
-                        maritalStatusId: userInformation.userDetails.maritalStatusId,
-                        typeOfHivst: userInformation.userDetails.typeOfHivst,
-                        userCategory: userInformation.userDetails.userCategory
+                        firstName:testKitUserDetails.userDetails.firstName,
+                        surname:testKitUserDetails.userDetails.surname,
+                        otherName:testKitUserDetails.userDetails.otherName,
+                        dateOfRegistration:testKitUserDetails.userDetails.dateOfRegistration,
+                        otherCategory: testKitUserDetails.userDetails.otherCategory,
+                        userClientCode: testKitUserDetails.userDetails.userClientCode,
+                        dateOfBirth: testKitUserDetails.userDetails.dateOfBirth,
+                        age: testKitUserDetails.userDetails.age,
+                        sex: testKitUserDetails.userDetails.sex,
+                        maritalStatusId: testKitUserDetails.userDetails.maritalStatusId,
+                        typeOfHivst: testKitUserDetails.userDetails.typeOfHivst,
+                        userCategory: testKitUserDetails.userDetails.userCategory
                     },
                     postTestAssessment: {
-                        everUsedHivstKit: userInformation.postTestAssessment.everUsedHivstKit,
-                        everUsedHivstKitForSelfOrOthers: userInformation.postTestAssessment.everUsedHivstKitForSelfOrOthers,
-                        otherHivstKitUserCategory: userInformation.postTestAssessment.otherHivstKitUserCategory,
-                        otherHivstKitUserCategoryText: userInformation.postTestAssessment.otherHivstKitUserCategoryText,
-                        resultOfHivstTest: userInformation.postTestAssessment.resultOfHivstTest,
-                        accessConfirmatoryHts: userInformation.postTestAssessment.accessConfirmatoryHts,
-                        referPreventionServices: userInformation.postTestAssessment.referPreventionServices,
+                        everUsedHivstKit: testKitUserDetails.postTestAssessment.everUsedHivstKit,
+                        everUsedHivstKitForSelfOrOthers: testKitUserDetails.postTestAssessment.everUsedHivstKitForSelfOrOthers,
+                        otherHivstKitUserCategory: testKitUserDetails.postTestAssessment.otherHivstKitUserCategory,
+                        otherHivstKitUserCategoryText: testKitUserDetails.postTestAssessment.otherHivstKitUserCategoryText,
+                        resultOfHivstTest: testKitUserDetails.postTestAssessment.resultOfHivstTest,
+                        accessConfirmatoryHts: testKitUserDetails.postTestAssessment.accessConfirmatoryHts,
+                        referPreventionServices: testKitUserDetails.postTestAssessment.referPreventionServices,
                         referralInformation: {
-                            referredForConfirmatoryHts: userInformation.postTestAssessment.referralInformation.referredForConfirmatoryHts,
-                            dateReferredForConfirmatoryHts: userInformation.postTestAssessment.referralInformation.dateReferredForConfirmatoryHts,
-                            referredForPreventionServices: userInformation.postTestAssessment.referralInformation.referredForPreventionServices,
-                            dateReferredForPreventionServices: userInformation.postTestAssessment.referralInformation.dateReferredForPreventionServices
+                            referredForConfirmatoryHts: testKitUserDetails.postTestAssessment.referralInformation.referredForConfirmatoryHts,
+                            dateReferredForConfirmatoryHts: testKitUserDetails.postTestAssessment.referralInformation.dateReferredForConfirmatoryHts,
+                            referredForPreventionServices: testKitUserDetails.postTestAssessment.referralInformation.referredForPreventionServices,
+                            dateReferredForPreventionServices: testKitUserDetails.postTestAssessment.referralInformation.dateReferredForPreventionServices
                         }
                     }
                 }
                 setUserInformationList([...userInformationList, newUserInformation]);
-                setObjValues({...objValues, userInformation: [...userInformationList, newUserInformation]});
+                setObjValues({...objValues, testKitUserDetails: [...userInformationList, newUserInformation]});
 
-                // clear UserInformation after adding to the list and also set the hasConductedHIVST to No
+                // clear testKitUserDetails after adding to the list and also set the hasConductedHIVST to No
                 setUserInformation({
                     userDetails: {
                         id: "",
@@ -538,26 +524,26 @@ const HIVSTPatientRegistration = (props) => {
         }
 
     }
-// Function to remove a userInformation object from the list based on index
+// Function to remove a testKitUserDetails object from the list based on index
     const removeUserInformation = (index) => {
         const updatedUserInformationList = userInformationList.filter((_, i) => i !== index);
         setUserInformationList(updatedUserInformationList);
-        setObjValues({...objValues, userInformation: updatedUserInformationList});
+        setObjValues({...objValues, testKitUserDetails: updatedUserInformationList});
     };
 
-// Function to update a userInformation object in the list based on index
+// Function to update a testKitUserDetails object in the list based on index
     const updateUserInformation = (index, updatedUserInformation) => {
-        const updatedUserInformationList = userInformationList.map((userInformation, i) =>
-            i === index ? updatedUserInformation : userInformation
+        const updatedUserInformationList = userInformationList.map((testKitUserDetails, i) =>
+            i === index ? updatedUserInformation : testKitUserDetails
         );
         setUserInformationList(updatedUserInformationList);
-        setObjValues({...objValues, userInformation: updatedUserInformationList});
+        setObjValues({...objValues, testKitUserDetails: updatedUserInformationList});
     };
 
-// Function to clear the userInformation list
+// Function to clear the testKitUserDetails list
     const clearUserInformationList = () => {
         setUserInformationList([]);
-        setObjValues({...objValues, userInformation: []});
+        setObjValues({...objValues, testKitUserDetails: []});
     };
 
     // console.log("Obj", objValues)
@@ -581,15 +567,15 @@ const HIVSTPatientRegistration = (props) => {
                 setShowUserInfo(true);
             }
             if (!showUserInfo) {
-                userInformation.userCategory = "";
-                userInformation.otherCategory = "";
-                userInformation.userClientCode = "";
-                userInformation.dateOfBirth = "";
-                userInformation.age = "";
-                userInformation.sex = "";
-                userInformation.maritalStatus = "";
-                userInformation.userClientCode = "";
-                userInformation.typeOfHivSelfTest = "";
+                testKitUserDetails.userCategory = "";
+                testKitUserDetails.otherCategory = "";
+                testKitUserDetails.userClientCode = "";
+                testKitUserDetails.dateOfBirth = "";
+                testKitUserDetails.age = "";
+                testKitUserDetails.sex = "";
+                testKitUserDetails.maritalStatus = "";
+                testKitUserDetails.userClientCode = "";
+                testKitUserDetails.typeOfHivSelfTest = "";
             }
             // always clear the userInformationList when the user selects a new user
             // setUserInformationList([]);
@@ -658,7 +644,7 @@ const HIVSTPatientRegistration = (props) => {
 
 
     const setAge = () => {
-        const age = calculate_age(userInformation.userDetails?.dateOfBirth);
+        const age = calculate_age(testKitUserDetails.userDetails?.dateOfBirth);
         setUserInformation(prevState => ({
             ...prevState,
             userDetails: {
@@ -670,7 +656,7 @@ const HIVSTPatientRegistration = (props) => {
     }
 
     const handleDateOfBirthChange1 = (e) => {
-        let newUserInformation = {...userInformation};
+        let newUserInformation = {...testKitUserDetails};
         newUserInformation.userDetails[e.target.name] = e.target.value;
         if (e.target.value && new Date(e.target.value) <= new Date()) {
             const age_now = calculate_age(e.target.value);
@@ -687,7 +673,7 @@ const HIVSTPatientRegistration = (props) => {
         if (validateObjValues()) {
 
             const userInfoList = userInformationList;
-            objValues.userInformation = userInformationList;
+            objValues.testKitUserDetails = userInformationList;
             toast.success("HIVST Registration Successful");
             console.log("objValues", objValues)
             // setSaving(true)
@@ -724,26 +710,26 @@ const HIVSTPatientRegistration = (props) => {
                 age_now--;
             }
             // objValues.age = age_now;
-            userInformation.age = age_now;
+            testKitUserDetails.userDetails.age = age_now;
         } else {
-            setUserInformation({ ...userInformation, age: "" });
+            setUserInformation({ ...testKitUserDetails, age: "" });
             // setObjValues({ ...objValues, age: "" });
         }
         // setObjValues({ ...objValues, [e.target.name]: e.target.value });
-        setUserInformation({ ...userInformation, [e.target.name]: e.target.value });
-        setUserInformation({ ...userInformation, dateOfBirth: e.target.value });
+        setUserInformation({ ...testKitUserDetails, [e.target.name]: e.target.value });
+        setUserInformation({ ...testKitUserDetails, dateOfBirth: e.target.value });
         // setObjValues({ ...objValues, dob: e.target.value });
-        if (userInformation.userDetails.age !== "" && userInformation.userDetails.age >= 85) {
+        if (testKitUserDetails.userDetails.age !== "" && testKitUserDetails.userDetails.age >= 85) {
             toggle();
         }
     };
     const handleDateOfBirthChange = (e) => {
         if (e.target.value == "Actual") {
-            userInformation.userDetails.isDateOfBirthEstimated = false;
+            testKitUserDetails.userDetails.isDateOfBirthEstimated = false;
             setAgeDisabled(true);
         } else if (e.target.value == "Estimated") {
             // objValues.isDateOfBirthEstimated = true;
-            userInformation.userDetails.isDateOfBirthEstimated = true;
+            testKitUserDetails.userDetails.isDateOfBirthEstimated = true;
             setAgeDisabled(false);
         }
     };
@@ -757,18 +743,18 @@ const HIVSTPatientRegistration = (props) => {
             currentDate.setMonth(5);
             const estDob = moment(currentDate.toISOString());
             const dobNew = estDob.add(e.target.value * -1, "years");
-            setUserInformation({ ...userInformation, dateOfBirth: moment(dobNew).format("YYYY-MM-DD") });
+            setUserInformation({ ...testKitUserDetails, dateOfBirth: moment(dobNew).format("YYYY-MM-DD") });
             // setObjValues({ ...objValues, dob: moment(dobNew).format("YYYY-MM-DD") });
             // objValues.dob = moment(dobNew).format("YYYY-MM-DD")
-            userInformation.userDetails.dateOfBirth = moment(dobNew).format("YYYY-MM-DD");
+            testKitUserDetails.userDetails.dateOfBirth = moment(dobNew).format("YYYY-MM-DD");
         }
         // setObjValues({ ...objValues, age: e.target.value });
-        setUserInformation({ ...userInformation, age: e.target.value });
+        setUserInformation({ ...testKitUserDetails, age: e.target.value });
     };
 
     console.log("selectedUsers", selectedUsers)
     console.log("objValues", objValues)
-    console.log("userInformation", userInformation)
+    console.log("testKitUserDetails", testKitUserDetails)
     console.log("userInformationList", userInformationList)
 
 
@@ -1281,7 +1267,7 @@ const HIVSTPatientRegistration = (props) => {
                                                     className="form-control"
                                                     name="firstName"
                                                     id="firstName"
-                                                    value={userInformation.userDetails.firstName}
+                                                    value={testKitUserDetails.userDetails.firstName}
                                                     // onChange={handleInputChange1}
                                                     onChange={(e) => handleUserInformationInputChange(e, "userDetails")}
                                                     style={{
@@ -1308,7 +1294,7 @@ const HIVSTPatientRegistration = (props) => {
                                                     className="form-control"
                                                     name="surname"
                                                     id="surname"
-                                                    value={userInformation.userDetails.surname}
+                                                    value={testKitUserDetails.userDetails.surname}
                                                     // onChange={handleInputChange1}
                                                     onChange={(e) => handleUserInformationInputChange(e, "userDetails")}
                                                     style={{
@@ -1334,7 +1320,7 @@ const HIVSTPatientRegistration = (props) => {
                                                     className="form-control"
                                                     name="otherName"
                                                     id="otherName"
-                                                    value={userInformation.userDetails.otherName}
+                                                    value={testKitUserDetails.userDetails.otherName}
                                                     // onChange={handleInputChange1}
                                                     onChange={(e) => handleUserInformationInputChange(e, "userDetails")}
                                                     style={{
@@ -1355,7 +1341,7 @@ const HIVSTPatientRegistration = (props) => {
                                                     className="form-control"
                                                     name="userCategory"
                                                     id="userCategory"
-                                                    value={userInformation.userDetails.userCategory}
+                                                    value={testKitUserDetails.userDetails.userCategory}
                                                     onChange={(e) => handleUserInformationInputChange(e, "userDetails")}
                                                     style={{
                                                         border: "1px solid #014D88",
@@ -1381,7 +1367,7 @@ const HIVSTPatientRegistration = (props) => {
                                                 )}
                                             </FormGroup>
                                         </div>
-                                        {userInformation.userDetails.userCategory === "others" ? (
+                                        {testKitUserDetails.userDetails.userCategory === "others" ? (
                                             <div className="form-group col-md-4">
                                                 <FormGroup>
                                                     <Label>
@@ -1393,7 +1379,7 @@ const HIVSTPatientRegistration = (props) => {
                                                         className="form-control"
                                                         name="otherCategory"
                                                         id="otherCategory"
-                                                        value={userInformation.userDetails.otherCategory}
+                                                        value={testKitUserDetails.userDetails.otherCategory}
                                                         // onChange={handleInputChange1}
                                                         onChange={(e) => handleUserInformationInputChange(e, "userDetails")}
                                                         style={{
@@ -1415,7 +1401,7 @@ const HIVSTPatientRegistration = (props) => {
                                                     className="form-control"
                                                     name="userClientCode"
                                                     id="userClientCode"
-                                                    value={userInformation.userDetails.userClientCode}
+                                                    value={testKitUserDetails.userDetails.userClientCode}
                                                     // onChange={handleInputChange1}
                                                     onChange={(e) => handleUserInformationInputChange(e, "userDetails")}
                                                     style={{
@@ -1443,7 +1429,7 @@ const HIVSTPatientRegistration = (props) => {
                                         {/*            id="dateOfBirth"*/}
                                         {/*            min="1929-12-31"*/}
                                         {/*            max={moment(new Date()).format("YYYY-MM-DD")}*/}
-                                        {/*            value={userInformation.userDetails.dateOfBirth}*/}
+                                        {/*            value={testKitUserDetails.userDetails.dateOfBirth}*/}
                                         {/*            onChange={handleDateOfBirthChange}*/}
                                         {/*            // onChange={(e) => handleUserInformationInputChange(e, "userDetails")}*/}
                                         {/*            style={{*/}
@@ -1475,7 +1461,7 @@ const HIVSTPatientRegistration = (props) => {
                                         {/*                border: "1px solid #014D88",*/}
                                         {/*                borderRadius: "0.2rem",*/}
                                         {/*            }}*/}
-                                        {/*            value={userInformation.userDetails.age}*/}
+                                        {/*            value={testKitUserDetails.userDetails.age}*/}
                                         {/*            onChange={(e) => handleUserInformationInputChange(e, "userDetails")}*/}
                                         {/*        />*/}
                                         {/*    </FormGroup>*/}
@@ -1532,7 +1518,7 @@ const HIVSTPatientRegistration = (props) => {
                                                     min="1929-12-31"
                                                     max={moment(new Date()).format("YYYY-MM-DD")}
                                                     // value={objValues.dob}=
-                                                    value={userInformation.userDetails.dateOfBirth}
+                                                    value={testKitUserDetails.userDetails.dateOfBirth}
                                                     onChange={handleDobChange}
                                                     style={{
                                                         border: "1px solid #014D88",
@@ -1557,7 +1543,7 @@ const HIVSTPatientRegistration = (props) => {
                                                     name="age"
                                                     id="age"
                                                     // value={objValues.age}
-                                                    value={userInformation.userDetails.age}
+                                                    value={testKitUserDetails.userDetails.age}
                                                     disabled={ageDisabled}
                                                     onChange={handleAgeChange}
                                                     style={{
@@ -1583,7 +1569,7 @@ const HIVSTPatientRegistration = (props) => {
                                                     className="form-control"
                                                     name="sex"
                                                     id="sex"
-                                                    value={userInformation.userDetails.sex}
+                                                    value={testKitUserDetails.userDetails.sex}
                                                     onChange={(e) => handleUserInformationInputChange(e, "userDetails")}
                                                     style={{
                                                         border: "1px solid #014D88",
@@ -1599,7 +1585,7 @@ const HIVSTPatientRegistration = (props) => {
                                                 </select>
                                             </FormGroup>
                                         </div>
-                                        {userInformation.userDetails.age > 9 && (
+                                        {testKitUserDetails.userDetails.age > 9 && (
                                             <div className="form-group  col-md-4">
                                                 <FormGroup>
                                                     <Label>Marital Status</Label>
@@ -1607,7 +1593,7 @@ const HIVSTPatientRegistration = (props) => {
                                                         className="form-control"
                                                         name="maritalStatusId"
                                                         id="maritalStatusId"
-                                                        value={userInformation.userDetails.maritalStatusId}
+                                                        value={testKitUserDetails.userDetails.maritalStatusId}
                                                         // onChange={handleInputChange1}
                                                         onChange={(e) => handleUserInformationInputChange(e, "userDetails")}
                                                         style={{
@@ -1632,7 +1618,7 @@ const HIVSTPatientRegistration = (props) => {
                                                     className="form-control"
                                                     name="typeOfHivst"
                                                     id="typeOfHivst"
-                                                    value={userInformation.userDetails.typeOfHivst}
+                                                    value={testKitUserDetails.userDetails.typeOfHivst}
                                                     onChange={(e) => handleUserInformationInputChange(e, "userDetails")}
                                                     style={{
                                                         border: "1px solid #014D88",
@@ -1772,7 +1758,7 @@ const HIVSTPatientRegistration = (props) => {
                                                         name="everUsedHivstKit"
                                                         id="everUsedHivstKitl"
                                                         // value={objValues.hasConductedHIVST ? "Yes" : "No"}
-                                                        value={userInformation?.postTestAssessment?.everUsedHivstKit}
+                                                        value={testKitUserDetails?.postTestAssessment?.everUsedHivstKit}
                                                         onChange={(e) => handleUserInformationInputChange(e, "postTestAssessment")}
                                                         style={{
                                                             border: "1px solid #014D88",
@@ -1795,7 +1781,7 @@ const HIVSTPatientRegistration = (props) => {
                                                         className="form-control"
                                                         name="everUsedHivstKitForSelfOrOthers"
                                                         id="everUsedHivstKitForSelfOrOthers"
-                                                        value={userInformation.postTestAssessment.everUsedHivstKitForSelfOrOthers}
+                                                        value={testKitUserDetails.postTestAssessment.everUsedHivstKitForSelfOrOthers}
                                                         onChange={(e) => handleUserInformationInputChange(e, "postTestAssessment")}
                                                         style={{
                                                             border: "1px solid #014D88",
@@ -1808,7 +1794,7 @@ const HIVSTPatientRegistration = (props) => {
                                                     </select>
                                                 </FormGroup>
                                             </div>
-                                            {userInformation.postTestAssessment.everUsedHivstKitForSelfOrOthers === "Someone else" &&
+                                            {testKitUserDetails.postTestAssessment.everUsedHivstKitForSelfOrOthers === "Someone else" &&
                                                 <div className="form-group  col-md-4">
                                                     <FormGroup>
                                                         <Label >
@@ -1819,7 +1805,7 @@ const HIVSTPatientRegistration = (props) => {
                                                             className="form-control"
                                                             name="otherHivstKitUserCategory"
                                                             id="otherHivstKitUserCategory"
-                                                            value={userInformation.postTestAssessment.otherHivstKitUserCategory}
+                                                            value={testKitUserDetails.postTestAssessment.otherHivstKitUserCategory}
                                                             onChange={(e) => handleUserInformationInputChange(e, "postTestAssessment")}
                                                             style={{
                                                                 border: "1px solid #014D88",
@@ -1836,7 +1822,7 @@ const HIVSTPatientRegistration = (props) => {
                                                     </FormGroup>
                                                 </div>
                                             }
-                                            {userInformation.postTestAssessment?.otherHivstKitUserCategory === "others" ? (
+                                            {testKitUserDetails.postTestAssessment?.otherHivstKitUserCategory === "others" ? (
                                                 <div className="form-group col-md-4">
                                                     <FormGroup>
                                                         <Label>
@@ -1848,7 +1834,7 @@ const HIVSTPatientRegistration = (props) => {
                                                             className="form-control"
                                                             name="otherHivstKitUserCategoryText"
                                                             id="otherHivstKitUserCategoryText"
-                                                            value={userInformation.postTestAssessment.otherHivstKitUserCategoryText}
+                                                            value={testKitUserDetails.postTestAssessment.otherHivstKitUserCategoryText}
                                                             onChange={(e) => handleUserInformationInputChange(e, "postTestAssessment")}
                                                             style={{
                                                                 border: "1px solid #014D88",
@@ -1869,7 +1855,7 @@ const HIVSTPatientRegistration = (props) => {
                                                         className="form-control"
                                                         name="resultOfHivstTest"
                                                         id="resultOfHivstTest"
-                                                        value={userInformation.postTestAssessment.resultOfHivstTest}
+                                                        value={testKitUserDetails.postTestAssessment.resultOfHivstTest}
                                                         onChange={(e) => handleUserInformationInputChange(e, "postTestAssessment")}
                                                         style={{
                                                             border: "1px solid #014D88",
@@ -1883,7 +1869,7 @@ const HIVSTPatientRegistration = (props) => {
                                                     </select>
                                                 </FormGroup>
                                             </div>
-                                            {userInformation?.postTestAssessment?.resultOfHivstTest === "Reactive" &&
+                                            {testKitUserDetails?.postTestAssessment?.resultOfHivstTest === "Reactive" &&
                                                 <div className="form-group  col-md-4">
                                                     <FormGroup>
                                                         <Label >
@@ -1895,7 +1881,7 @@ const HIVSTPatientRegistration = (props) => {
                                                             className="form-control"
                                                             name="accessConfirmatoryHts"
                                                             id="accessConfirmatoryHts"
-                                                            value={userInformation.postTestAssessment.accessConfirmatoryHts}
+                                                            value={testKitUserDetails.postTestAssessment.accessConfirmatoryHts}
                                                             onChange={(e) => handleUserInformationInputChange(e, "postTestAssessment")}
                                                             style={{
                                                                 border: "1px solid #014D88",
@@ -1909,7 +1895,7 @@ const HIVSTPatientRegistration = (props) => {
                                                     </FormGroup>
                                                 </div>
                                             }
-                                            {userInformation?.postTestAssessment?.resultOfHivstTest === "Non-Reactive" &&
+                                            {testKitUserDetails?.postTestAssessment?.resultOfHivstTest === "Non-Reactive" &&
                                                 <div className="form-group  col-md-4">
                                                     <FormGroup>
                                                         <Label >
@@ -1920,7 +1906,7 @@ const HIVSTPatientRegistration = (props) => {
                                                             className="form-control"
                                                             name="referPreventionServices"
                                                             id="referPreventionServices"
-                                                            value={userInformation.postTestAssessment.referPreventionServices}
+                                                            value={testKitUserDetails.postTestAssessment.referPreventionServices}
                                                             onChange={(e) => handleUserInformationInputChange(e, "postTestAssessment")}
                                                             style={{
                                                                 border: "1px solid #014D88",
@@ -1937,9 +1923,9 @@ const HIVSTPatientRegistration = (props) => {
 
                                         </div>
                                         {
-                                            userInformation.postTestAssessment
-                                            && userInformation.postTestAssessment.accessConfirmatoryHts === "Yes"
-                                            || userInformation.postTestAssessment.referPreventionServices === "Yes" ?
+                                            testKitUserDetails.postTestAssessment
+                                            && testKitUserDetails.postTestAssessment.accessConfirmatoryHts === "Yes"
+                                            || testKitUserDetails.postTestAssessment.referPreventionServices === "Yes" ?
                                                 (
                                                     <div className="row center">
                                                         <div
@@ -1954,7 +1940,7 @@ const HIVSTPatientRegistration = (props) => {
                                                         >
                                                             Section C : Referral Information
                                                         </div>
-                                                        {userInformation.postTestAssessment.accessConfirmatoryHts === "Yes" && <div className="form-group  col-md-4">
+                                                        {testKitUserDetails.postTestAssessment.accessConfirmatoryHts === "Yes" && <div className="form-group  col-md-4">
                                                             <FormGroup>
                                                                 <Label >
                                                                     Referred for Confirmatory HTS Testing
@@ -1964,7 +1950,7 @@ const HIVSTPatientRegistration = (props) => {
                                                                     className="form-control"
                                                                     name="referredForConfirmatoryHts"
                                                                     id="referredForConfirmatoryHts"
-                                                                    value={userInformation.postTestAssessment.referralInformation.referredForConfirmatoryHts}
+                                                                    value={testKitUserDetails.postTestAssessment.referralInformation.referredForConfirmatoryHts}
                                                                     onChange={(e) => handleUserInformationInputChange(e, "postTestAssessment")}
                                                                     style={{
                                                                         border: "1px solid #014D88",
@@ -1977,7 +1963,7 @@ const HIVSTPatientRegistration = (props) => {
                                                                 </select>
                                                             </FormGroup>
                                                         </div>}
-                                                        {userInformation.postTestAssessment.referralInformation && userInformation.postTestAssessment.referralInformation.referredForConfirmatoryHts === "Yes" &&
+                                                        {testKitUserDetails.postTestAssessment.referralInformation && testKitUserDetails.postTestAssessment.referralInformation.referredForConfirmatoryHts === "Yes" &&
                                                             <div className="form-group mb-3 col-md-4">
                                                                 <FormGroup>
                                                                     <Label for="">
@@ -1989,7 +1975,7 @@ const HIVSTPatientRegistration = (props) => {
                                                                         type="date"
                                                                         name="dateReferredForConfirmatoryHts"
                                                                         id="dateReferredForConfirmatoryHts"
-                                                                        value={userInformation.postTestAssessment.referralInformation.dateReferredForConfirmatoryHts}
+                                                                        value={testKitUserDetails.postTestAssessment.referralInformation.dateReferredForConfirmatoryHts}
                                                                         onChange={(e) => handleUserInformationInputChange(e, "postTestAssessment")}
 
                                                                         min={objValues.dateOfVisit}
@@ -2001,7 +1987,7 @@ const HIVSTPatientRegistration = (props) => {
                                                                     />
                                                                 </FormGroup>
                                                             </div>}
-                                                        {userInformation.postTestAssessment.referralInformation && userInformation?.postTestAssessment?.referPreventionServices === "Yes" &&
+                                                        {testKitUserDetails.postTestAssessment.referralInformation && testKitUserDetails?.postTestAssessment?.referPreventionServices === "Yes" &&
                                                             <div className="form-group  col-md-4">
                                                                 <FormGroup>
                                                                     <Label >
@@ -2012,7 +1998,7 @@ const HIVSTPatientRegistration = (props) => {
                                                                         className="form-control"
                                                                         name="referredForPreventionServices"
                                                                         id="referredForPreventionServices"
-                                                                        value={userInformation.postTestAssessment.referralInformation.referredForPreventionServices}
+                                                                        value={testKitUserDetails.postTestAssessment.referralInformation.referredForPreventionServices}
                                                                         onChange={(e) => handleUserInformationInputChange(e, "postTestAssessment")}
 
                                                                         style={{
@@ -2027,7 +2013,7 @@ const HIVSTPatientRegistration = (props) => {
                                                                 </FormGroup>
                                                             </div>
                                                         }
-                                                        {userInformation.postTestAssessment.referralInformation && userInformation.postTestAssessment.referralInformation.referredForPreventionServices === "Yes" &&
+                                                        {testKitUserDetails.postTestAssessment.referralInformation && testKitUserDetails.postTestAssessment.referralInformation.referredForPreventionServices === "Yes" &&
                                                             <div className="form-group mb-3 col-md-4">
                                                                 <FormGroup>
                                                                     <Label for="">
@@ -2038,7 +2024,7 @@ const HIVSTPatientRegistration = (props) => {
                                                                         type="date"
                                                                         name="dateReferredForPreventionServices"
                                                                         id="dateReferredForPreventionServices"
-                                                                        value={userInformation.postTestAssessment.referralInformation.dateReferredForPreventionServices}
+                                                                        value={testKitUserDetails.postTestAssessment.referralInformation.dateReferredForPreventionServices}
                                                                         onChange={(e) => handleUserInformationInputChange(e, "postTestAssessment")}
                                                                         min={objValues.dateOfVisit}
                                                                         max={moment(new Date()).format("YYYY-MM-DD")}

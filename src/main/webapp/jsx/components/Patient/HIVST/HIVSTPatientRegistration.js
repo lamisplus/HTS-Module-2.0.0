@@ -1255,10 +1255,8 @@ const HIVSTPatientRegistration = (props) => {
                                                     id="dateOfRegistration"
                                                     min="1929-12-31"
                                                     max={moment(new Date()).format("YYYY-MM-DD")}
-                                                    // value={userInformation.userDetails.firstName}
                                                     value={objValues.dateOfVisit}
-                                                    // onChange={handleInputChange1}
-                                                    // onChange={(e) => handleUserInformationInputChange(e, "userDetails")}
+                                                    onChange={(e) => handleUserInformationInputChange(e, "userDetails")}
                                                     style={{
                                                         border: "1px solid #014D88",
                                                         borderRadius: "0.2rem",
@@ -1334,8 +1332,8 @@ const HIVSTPatientRegistration = (props) => {
                                                 <input
                                                     type="text"
                                                     className="form-control"
-                                                    name="othername"
-                                                    id="othername"
+                                                    name="otherName"
+                                                    id="otherName"
                                                     value={userInformation.userDetails.otherName}
                                                     // onChange={handleInputChange1}
                                                     onChange={(e) => handleUserInformationInputChange(e, "userDetails")}

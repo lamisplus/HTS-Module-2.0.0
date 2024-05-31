@@ -165,14 +165,14 @@ const HIVSTPatientRegistration = (props) => {
 
     const [testKitUserDetails, setUserInformation] = useState(
         {
-            userDetails: {
+            basicUserInfo: {
                 id: "",
                 firstName:"",
                 surname:"",
                 otherName:"",
                 dateOfRegistration:"",
                 otherCategory: "",
-                userClientCode: "",
+                clientCode: "",
                 dateOfBirth: "",
                 age: "",
                 sex: "",
@@ -273,15 +273,15 @@ const HIVSTPatientRegistration = (props) => {
     const validateUserInformation = () => {
         // if (objValues.otherTestKitUserInfoAvailable === "Yes") {
             let temp = {};
-            temp.firstName = testKitUserDetails.userDetails.firstName ?  "" : "This field is required.";
-            temp.surname = testKitUserDetails.userDetails.surname ?  "" : "This field is required.";
-            temp.userCategory = testKitUserDetails.userDetails.userCategory ? "" : "This field is required.";
-            // temp.otherCategory = testKitUserDetails.userDetails.userCategory === "Others" ? testKitUserDetails.userDetails.otherCategory ? "" : "This field is required." : "";
-            temp.userClientCode = testKitUserDetails.userDetails.userClientCode ? "" : "This field is required.";
-            temp.dateOfBirth = testKitUserDetails.userDetails.dateOfBirth ? "" : "This field is required.";
-            temp.typeOfHivst = testKitUserDetails.userDetails.typeOfHivst ? "" : "This field is required.";
+            temp.firstName = testKitUserDetails.basicUserInfo.firstName ?  "" : "This field is required.";
+            temp.surname = testKitUserDetails.basicUserInfo.surname ?  "" : "This field is required.";
+            temp.userCategory = testKitUserDetails.basicUserInfo.userCategory ? "" : "This field is required.";
+            // temp.otherCategory = testKitUserDetails.basicUserInfo.userCategory === "Others" ? testKitUserDetails.basicUserInfo.otherCategory ? "" : "This field is required." : "";
+            temp.clientCode = testKitUserDetails.basicUserInfo.clientCode ? "" : "This field is required.";
+            temp.dateOfBirth = testKitUserDetails.basicUserInfo.dateOfBirth ? "" : "This field is required.";
+            temp.typeOfHivst = testKitUserDetails.basicUserInfo.typeOfHivst ? "" : "This field is required.";
             // Check if the selected user category is in the selectedUsers array
-            if (!selectedUsers.includes(testKitUserDetails.userDetails.userCategory) && testKitUserDetails.userDetails.userCategory !== "" ) {
+            if (!selectedUsers.includes(testKitUserDetails.basicUserInfo.userCategory) && testKitUserDetails.basicUserInfo.userCategory !== "" ) {
                 temp.userCategory = "The selected user category does not match the selected kit users.";
             }
             // the number of kit is empty
@@ -424,12 +424,12 @@ const HIVSTPatientRegistration = (props) => {
                 }
             };
         }
-        // if userCategory changes clear all other fields in userDetails
+        // if userCategory changes clear all other fields in basicUserInfo
         if (name === "userCategory") {
-            newUserInformation.userDetails = {
-                ...newUserInformation.userDetails,
+            newUserInformation.basicUserInfo = {
+                ...newUserInformation.basicUserInfo,
                 otherCategory: "",
-                userClientCode: "",
+                clientCode: "",
                 dateOfBirth: "",
                 age: "",
             }
@@ -451,20 +451,20 @@ const HIVSTPatientRegistration = (props) => {
         if(validateUserInformation()) {
             if(userInformationList.length <= objValues.numberOfHivstKitsReceived) {
                 let newUserInformation = {
-                    userDetails: {
+                    basicUserInfo: {
                         id: "",
-                        firstName:testKitUserDetails.userDetails.firstName,
-                        surname:testKitUserDetails.userDetails.surname,
-                        otherName:testKitUserDetails.userDetails.otherName,
-                        dateOfRegistration:testKitUserDetails.userDetails.dateOfRegistration,
-                        otherCategory: testKitUserDetails.userDetails.otherCategory,
-                        userClientCode: testKitUserDetails.userDetails.userClientCode,
-                        dateOfBirth: testKitUserDetails.userDetails.dateOfBirth,
-                        age: testKitUserDetails.userDetails.age,
-                        sex: testKitUserDetails.userDetails.sex,
-                        maritalStatusId: testKitUserDetails.userDetails.maritalStatusId,
-                        typeOfHivst: testKitUserDetails.userDetails.typeOfHivst,
-                        userCategory: testKitUserDetails.userDetails.userCategory
+                        firstName:testKitUserDetails.basicUserInfo.firstName,
+                        surname:testKitUserDetails.basicUserInfo.surname,
+                        otherName:testKitUserDetails.basicUserInfo.otherName,
+                        dateOfRegistration:testKitUserDetails.basicUserInfo.dateOfRegistration,
+                        otherCategory: testKitUserDetails.basicUserInfo.otherCategory,
+                        clientCode: testKitUserDetails.basicUserInfo.clientCode,
+                        dateOfBirth: testKitUserDetails.basicUserInfo.dateOfBirth,
+                        age: testKitUserDetails.basicUserInfo.age,
+                        sex: testKitUserDetails.basicUserInfo.sex,
+                        maritalStatusId: testKitUserDetails.basicUserInfo.maritalStatusId,
+                        typeOfHivst: testKitUserDetails.basicUserInfo.typeOfHivst,
+                        userCategory: testKitUserDetails.basicUserInfo.userCategory
                     },
                     postTestAssessment: {
                         everUsedHivstKit: testKitUserDetails.postTestAssessment.everUsedHivstKit,
@@ -487,10 +487,10 @@ const HIVSTPatientRegistration = (props) => {
 
                 // clear testKitUserDetails after adding to the list and also set the hasConductedHIVST to No
                 setUserInformation({
-                    userDetails: {
+                    basicUserInfo: {
                         id: "",
                         otherCategory: "",
-                        userClientCode: "",
+                        clientCode: "",
                         dateOfBirth: "",
                         age: "",
                         sex: "",
@@ -569,12 +569,12 @@ const HIVSTPatientRegistration = (props) => {
             if (!showUserInfo) {
                 testKitUserDetails.userCategory = "";
                 testKitUserDetails.otherCategory = "";
-                testKitUserDetails.userClientCode = "";
+                testKitUserDetails.clientCode = "";
                 testKitUserDetails.dateOfBirth = "";
                 testKitUserDetails.age = "";
                 testKitUserDetails.sex = "";
                 testKitUserDetails.maritalStatus = "";
-                testKitUserDetails.userClientCode = "";
+                testKitUserDetails.clientCode = "";
                 testKitUserDetails.typeOfHivSelfTest = "";
             }
             // always clear the userInformationList when the user selects a new user
@@ -644,11 +644,11 @@ const HIVSTPatientRegistration = (props) => {
 
 
     const setAge = () => {
-        const age = calculate_age(testKitUserDetails.userDetails?.dateOfBirth);
+        const age = calculate_age(testKitUserDetails.basicUserInfo?.dateOfBirth);
         setUserInformation(prevState => ({
             ...prevState,
-            userDetails: {
-                ...prevState.userDetails,
+            basicUserInfo: {
+                ...prevState.basicUserInfo,
                 age: age
             }
         }));
@@ -657,12 +657,12 @@ const HIVSTPatientRegistration = (props) => {
 
     const handleDateOfBirthChange1 = (e) => {
         let newUserInformation = {...testKitUserDetails};
-        newUserInformation.userDetails[e.target.name] = e.target.value;
+        newUserInformation.basicUserInfo[e.target.name] = e.target.value;
         if (e.target.value && new Date(e.target.value) <= new Date()) {
             const age_now = calculate_age(e.target.value);
-            newUserInformation.userDetails.age = age_now;
+            newUserInformation.basicUserInfo.age = age_now;
         } else {
-            newUserInformation.userDetails.age = "";
+            newUserInformation.basicUserInfo.age = "";
         }
         setUserInformation(newUserInformation);
     }
@@ -676,6 +676,7 @@ const HIVSTPatientRegistration = (props) => {
             objValues.testKitUserDetails = userInformationList;
             toast.success("HIVST Registration Successful");
             console.log("objValues", objValues)
+
             // setSaving(true)
             // axios
             //     .post(`${baseUrl}hts/register`, objValues, {
@@ -710,7 +711,7 @@ const HIVSTPatientRegistration = (props) => {
                 age_now--;
             }
             // objValues.age = age_now;
-            testKitUserDetails.userDetails.age = age_now;
+            testKitUserDetails.basicUserInfo.age = age_now;
         } else {
             setUserInformation({ ...testKitUserDetails, age: "" });
             // setObjValues({ ...objValues, age: "" });
@@ -719,17 +720,17 @@ const HIVSTPatientRegistration = (props) => {
         setUserInformation({ ...testKitUserDetails, [e.target.name]: e.target.value });
         setUserInformation({ ...testKitUserDetails, dateOfBirth: e.target.value });
         // setObjValues({ ...objValues, dob: e.target.value });
-        if (testKitUserDetails.userDetails.age !== "" && testKitUserDetails.userDetails.age >= 85) {
+        if (testKitUserDetails.basicUserInfo.age !== "" && testKitUserDetails.basicUserInfo.age >= 85) {
             toggle();
         }
     };
     const handleDateOfBirthChange = (e) => {
         if (e.target.value == "Actual") {
-            testKitUserDetails.userDetails.isDateOfBirthEstimated = false;
+            testKitUserDetails.basicUserInfo.isDateOfBirthEstimated = false;
             setAgeDisabled(true);
         } else if (e.target.value == "Estimated") {
             // objValues.isDateOfBirthEstimated = true;
-            testKitUserDetails.userDetails.isDateOfBirthEstimated = true;
+            testKitUserDetails.basicUserInfo.isDateOfBirthEstimated = true;
             setAgeDisabled(false);
         }
     };
@@ -746,7 +747,7 @@ const HIVSTPatientRegistration = (props) => {
             setUserInformation({ ...testKitUserDetails, dateOfBirth: moment(dobNew).format("YYYY-MM-DD") });
             // setObjValues({ ...objValues, dob: moment(dobNew).format("YYYY-MM-DD") });
             // objValues.dob = moment(dobNew).format("YYYY-MM-DD")
-            testKitUserDetails.userDetails.dateOfBirth = moment(dobNew).format("YYYY-MM-DD");
+            testKitUserDetails.basicUserInfo.dateOfBirth = moment(dobNew).format("YYYY-MM-DD");
         }
         // setObjValues({ ...objValues, age: e.target.value });
         setUserInformation({ ...testKitUserDetails, age: e.target.value });
@@ -1242,7 +1243,7 @@ const HIVSTPatientRegistration = (props) => {
                                                     min="1929-12-31"
                                                     max={moment(new Date()).format("YYYY-MM-DD")}
                                                     value={objValues.dateOfVisit}
-                                                    onChange={(e) => handleUserInformationInputChange(e, "userDetails")}
+                                                    onChange={(e) => handleUserInformationInputChange(e, "basicUserInfo")}
                                                     style={{
                                                         border: "1px solid #014D88",
                                                         borderRadius: "0.2rem",
@@ -1267,9 +1268,9 @@ const HIVSTPatientRegistration = (props) => {
                                                     className="form-control"
                                                     name="firstName"
                                                     id="firstName"
-                                                    value={testKitUserDetails.userDetails.firstName}
+                                                    value={testKitUserDetails.basicUserInfo.firstName}
                                                     // onChange={handleInputChange1}
-                                                    onChange={(e) => handleUserInformationInputChange(e, "userDetails")}
+                                                    onChange={(e) => handleUserInformationInputChange(e, "basicUserInfo")}
                                                     style={{
                                                         border: "1px solid #014D88",
                                                         borderRadius: "0.2rem",
@@ -1294,9 +1295,9 @@ const HIVSTPatientRegistration = (props) => {
                                                     className="form-control"
                                                     name="surname"
                                                     id="surname"
-                                                    value={testKitUserDetails.userDetails.surname}
+                                                    value={testKitUserDetails.basicUserInfo.surname}
                                                     // onChange={handleInputChange1}
-                                                    onChange={(e) => handleUserInformationInputChange(e, "userDetails")}
+                                                    onChange={(e) => handleUserInformationInputChange(e, "basicUserInfo")}
                                                     style={{
                                                         border: "1px solid #014D88",
                                                         borderRadius: "0.2rem",
@@ -1320,9 +1321,9 @@ const HIVSTPatientRegistration = (props) => {
                                                     className="form-control"
                                                     name="otherName"
                                                     id="otherName"
-                                                    value={testKitUserDetails.userDetails.otherName}
+                                                    value={testKitUserDetails.basicUserInfo.otherName}
                                                     // onChange={handleInputChange1}
-                                                    onChange={(e) => handleUserInformationInputChange(e, "userDetails")}
+                                                    onChange={(e) => handleUserInformationInputChange(e, "basicUserInfo")}
                                                     style={{
                                                         border: "1px solid #014D88",
                                                         borderRadius: "0.2rem",
@@ -1341,8 +1342,8 @@ const HIVSTPatientRegistration = (props) => {
                                                     className="form-control"
                                                     name="userCategory"
                                                     id="userCategory"
-                                                    value={testKitUserDetails.userDetails.userCategory}
-                                                    onChange={(e) => handleUserInformationInputChange(e, "userDetails")}
+                                                    value={testKitUserDetails.basicUserInfo.userCategory}
+                                                    onChange={(e) => handleUserInformationInputChange(e, "basicUserInfo")}
                                                     style={{
                                                         border: "1px solid #014D88",
                                                         borderRadius: "0.2rem",
@@ -1367,7 +1368,7 @@ const HIVSTPatientRegistration = (props) => {
                                                 )}
                                             </FormGroup>
                                         </div>
-                                        {testKitUserDetails.userDetails.userCategory === "others" ? (
+                                        {testKitUserDetails.basicUserInfo.userCategory === "others" ? (
                                             <div className="form-group col-md-4">
                                                 <FormGroup>
                                                     <Label>
@@ -1379,9 +1380,9 @@ const HIVSTPatientRegistration = (props) => {
                                                         className="form-control"
                                                         name="otherCategory"
                                                         id="otherCategory"
-                                                        value={testKitUserDetails.userDetails.otherCategory}
+                                                        value={testKitUserDetails.basicUserInfo.otherCategory}
                                                         // onChange={handleInputChange1}
-                                                        onChange={(e) => handleUserInformationInputChange(e, "userDetails")}
+                                                        onChange={(e) => handleUserInformationInputChange(e, "basicUserInfo")}
                                                         style={{
                                                             border: "1px solid #014D88",
                                                             borderRadius: "0.2rem",
@@ -1399,19 +1400,19 @@ const HIVSTPatientRegistration = (props) => {
                                                 <input
                                                     type="text"
                                                     className="form-control"
-                                                    name="userClientCode"
-                                                    id="userClientCode"
-                                                    value={testKitUserDetails.userDetails.userClientCode}
+                                                    name="clientCode"
+                                                    id="clientCode"
+                                                    value={testKitUserDetails.basicUserInfo.clientCode}
                                                     // onChange={handleInputChange1}
-                                                    onChange={(e) => handleUserInformationInputChange(e, "userDetails")}
+                                                    onChange={(e) => handleUserInformationInputChange(e, "basicUserInfo")}
                                                     style={{
                                                         border: "1px solid #014D88",
                                                         borderRadius: "0.2rem",
                                                     }}
                                                 />
-                                                {userInformationErrors.userClientCode !== "" ? (
+                                                {userInformationErrors.clientCode !== "" ? (
                                                     <span
-                                                        className={classes.error}>{userInformationErrors.userClientCode}</span>
+                                                        className={classes.error}>{userInformationErrors.clientCode}</span>
                                                 ) : (
                                                     ""
                                                 )}
@@ -1429,9 +1430,9 @@ const HIVSTPatientRegistration = (props) => {
                                         {/*            id="dateOfBirth"*/}
                                         {/*            min="1929-12-31"*/}
                                         {/*            max={moment(new Date()).format("YYYY-MM-DD")}*/}
-                                        {/*            value={testKitUserDetails.userDetails.dateOfBirth}*/}
+                                        {/*            value={testKitUserDetails.basicUserInfo.dateOfBirth}*/}
                                         {/*            onChange={handleDateOfBirthChange}*/}
-                                        {/*            // onChange={(e) => handleUserInformationInputChange(e, "userDetails")}*/}
+                                        {/*            // onChange={(e) => handleUserInformationInputChange(e, "basicUserInfo")}*/}
                                         {/*            style={{*/}
                                         {/*                border: "1px solid #014D88",*/}
                                         {/*                borderRadius: "0.2rem",*/}
@@ -1461,8 +1462,8 @@ const HIVSTPatientRegistration = (props) => {
                                         {/*                border: "1px solid #014D88",*/}
                                         {/*                borderRadius: "0.2rem",*/}
                                         {/*            }}*/}
-                                        {/*            value={testKitUserDetails.userDetails.age}*/}
-                                        {/*            onChange={(e) => handleUserInformationInputChange(e, "userDetails")}*/}
+                                        {/*            value={testKitUserDetails.basicUserInfo.age}*/}
+                                        {/*            onChange={(e) => handleUserInformationInputChange(e, "basicUserInfo")}*/}
                                         {/*        />*/}
                                         {/*    </FormGroup>*/}
                                         {/*</div>*/}
@@ -1518,7 +1519,7 @@ const HIVSTPatientRegistration = (props) => {
                                                     min="1929-12-31"
                                                     max={moment(new Date()).format("YYYY-MM-DD")}
                                                     // value={objValues.dob}=
-                                                    value={testKitUserDetails.userDetails.dateOfBirth}
+                                                    value={testKitUserDetails.basicUserInfo.dateOfBirth}
                                                     onChange={handleDobChange}
                                                     style={{
                                                         border: "1px solid #014D88",
@@ -1543,7 +1544,7 @@ const HIVSTPatientRegistration = (props) => {
                                                     name="age"
                                                     id="age"
                                                     // value={objValues.age}
-                                                    value={testKitUserDetails.userDetails.age}
+                                                    value={testKitUserDetails.basicUserInfo.age}
                                                     disabled={ageDisabled}
                                                     onChange={handleAgeChange}
                                                     style={{
@@ -1569,8 +1570,8 @@ const HIVSTPatientRegistration = (props) => {
                                                     className="form-control"
                                                     name="sex"
                                                     id="sex"
-                                                    value={testKitUserDetails.userDetails.sex}
-                                                    onChange={(e) => handleUserInformationInputChange(e, "userDetails")}
+                                                    value={testKitUserDetails.basicUserInfo.sex}
+                                                    onChange={(e) => handleUserInformationInputChange(e, "basicUserInfo")}
                                                     style={{
                                                         border: "1px solid #014D88",
                                                         borderRadius: "0.2rem",
@@ -1585,7 +1586,7 @@ const HIVSTPatientRegistration = (props) => {
                                                 </select>
                                             </FormGroup>
                                         </div>
-                                        {testKitUserDetails.userDetails.age > 9 && (
+                                        {testKitUserDetails.basicUserInfo.age > 9 && (
                                             <div className="form-group  col-md-4">
                                                 <FormGroup>
                                                     <Label>Marital Status</Label>
@@ -1593,9 +1594,9 @@ const HIVSTPatientRegistration = (props) => {
                                                         className="form-control"
                                                         name="maritalStatusId"
                                                         id="maritalStatusId"
-                                                        value={testKitUserDetails.userDetails.maritalStatusId}
+                                                        value={testKitUserDetails.basicUserInfo.maritalStatusId}
                                                         // onChange={handleInputChange1}
-                                                        onChange={(e) => handleUserInformationInputChange(e, "userDetails")}
+                                                        onChange={(e) => handleUserInformationInputChange(e, "basicUserInfo")}
                                                         style={{
                                                             border: "1px solid #014D88",
                                                             borderRadius: "0.2rem",
@@ -1618,8 +1619,8 @@ const HIVSTPatientRegistration = (props) => {
                                                     className="form-control"
                                                     name="typeOfHivst"
                                                     id="typeOfHivst"
-                                                    value={testKitUserDetails.userDetails.typeOfHivst}
-                                                    onChange={(e) => handleUserInformationInputChange(e, "userDetails")}
+                                                    value={testKitUserDetails.basicUserInfo.typeOfHivst}
+                                                    onChange={(e) => handleUserInformationInputChange(e, "basicUserInfo")}
                                                     style={{
                                                         border: "1px solid #014D88",
                                                         borderRadius: "0.2rem",
@@ -2099,10 +2100,10 @@ const HIVSTPatientRegistration = (props) => {
                                             <tbody>
                                             {userInformationList.map((item, index) => (
                                                 <tr key={index}>
-                                                    <td>{item.userDetails.userClientCode}</td>
-                                                    <td>{item.userDetails.typeOfHivst}</td>
+                                                    <td>{item.basicUserInfo.clientCode}</td>
+                                                    <td>{item.basicUserInfo.typeOfHivst}</td>
                                                     {/*<th>{item.postTestAssessment.everUsedHivstKit}</th>*/}
-                                                    <td>{item.userDetails.userCategory}</td>
+                                                    <td>{item.basicUserInfo.userCategory}</td>
                                                     <td>
                                                         <IconButton
                                                             aria-label="delete"

@@ -1,6 +1,8 @@
 package org.lamisplus.modules.hts.service;
 
 import org.lamisplus.modules.hts.domain.dto.HivstDto;
+import org.lamisplus.modules.hts.domain.entity.HivstPerson;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,4 +18,6 @@ public interface HivstService {
     HivstDto getHivstById(Long id);
 
     List<HivstDto> getAllHivstByPatientId(Long patientId);
+
+    Page<HivstPerson> getAllHivstPerson(String searchValue, int pageNo, int pageSize);
 }

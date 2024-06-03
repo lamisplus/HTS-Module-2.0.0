@@ -10,17 +10,25 @@ import org.lamisplus.modules.hts.domain.dto.HivstBasicUserInfoDto;
 import org.lamisplus.modules.hts.domain.dto.HivstDto;
 import org.lamisplus.modules.hts.domain.dto.HivstTestKitUserInfoDto;
 import org.lamisplus.modules.hts.domain.entity.Hivst;
+import org.lamisplus.modules.hts.domain.entity.HivstPerson;
+import org.lamisplus.modules.hts.domain.entity.HtsPerson;
 import org.lamisplus.modules.hts.repository.HivstRepository;
+import org.lamisplus.modules.hts.service.CurrentUserOrganizationService;
 import org.lamisplus.modules.hts.service.HivstService;
 import org.lamisplus.modules.patient.domain.dto.PersonDto;
 import org.lamisplus.modules.patient.domain.dto.PersonResponseDto;
 import org.lamisplus.modules.patient.service.PersonService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static org.lamisplus.modules.base.util.Constants.ArchiveStatus.UN_ARCHIVED;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +37,7 @@ public class HivstServiceImpl implements HivstService {
     private final HivstRepository hivstRepository;
     private final PersonService personService;
     private final ObjectMapper objectMapper;
+    private final CurrentUserOrganizationService currentUserOrganizationService;
 
     private final String MYSELF = "myself";
     private final int UN_ARCHIVED = 0;
@@ -136,6 +145,22 @@ public class HivstServiceImpl implements HivstService {
                 }
             }).collect(Collectors.toList());
     }
+
+    @Override
+    public Page<HivstPerson> getAllHivstPerson(String searchValue, int pageNo, int pageSize) {
+        Long facilityId = currentUserOrganizationService.getCurrentUserOrganization();
+        //List<HtsPerson> htsPeople = new ArrayList<>();
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        if(!String.valueOf(searchValue).equals("null") && !searchValue.equals("*")){
+            searchValue = searchValue.replaceAll("\\s", "");
+            String queryParam = "%"+searchValue+"%";
+            return hivstRepository
+                    .findAllPersonHivstBySearchParam(UN_ARCHIVED, facilityId, queryParam, pageable);
+        }
+        return hivstRepository
+                .findAllPersonHivst(UN_ARCHIVED, facilityId, pageable);
+    }
+
 
     private Long getOrCreatePatientId(HivstDto hivstDto) {
         if (hivstDto.getPatientId() != null){

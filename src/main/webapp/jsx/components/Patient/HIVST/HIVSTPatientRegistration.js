@@ -677,25 +677,25 @@ const HIVSTPatientRegistration = (props) => {
             toast.success("HIVST Registration Successful");
             console.log("objValues", objValues)
 
-            // setSaving(true)
-            // axios
-            //     .post(`${baseUrl}hts/register`, objValues, {
-            //         headers: {
-            //             Authorization: `Bearer ${token}`,
-            //             "Content-Type": "application/json",
-            //         },
-            //     })
-            //     .then((response) => {
-            //         if (response.status === 200) {
-            //             setSaving(false)
-            //             toast.success("HIVST Registration Successful");
-            //             history.push("/patient/hivst");
-            //         }
-            //     })
-            //     .catch((error) => {
-            //         setSaving(false)
-            //         toast.error("An error occurred. Please try again.");
-            //     });
+            setSaving(true)
+            axios
+                .post(`${baseUrl}hivst`, objValues, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                    },
+                })
+                .then((response) => {
+                    if (response.status === 200) {
+                        setSaving(false)
+                        toast.success("HIVST Registration Successful");
+                        history.push("/patient/hivst");
+                    }
+                })
+                .catch((error) => {
+                    setSaving(false)
+                    toast.error("An error occurred. Please try again.");
+                });
 
         }
 
@@ -1242,13 +1242,13 @@ const HIVSTPatientRegistration = (props) => {
                                                     id="dateOfRegistration"
                                                     min="1929-12-31"
                                                     max={moment(new Date()).format("YYYY-MM-DD")}
-                                                    value={objValues.dateOfVisit}
+                                                    value={testKitUserDetails.basicUserInfo.dateOfRegistration}
                                                     onChange={(e) => handleUserInformationInputChange(e, "basicUserInfo")}
                                                     style={{
                                                         border: "1px solid #014D88",
                                                         borderRadius: "0.2rem",
                                                     }}
-                                                    disabled
+                                                    // disabled
                                                 />
                                                 {/*{errors.dateOfVisit !== "" ? (*/}
                                                 {/*    <span className={classes.error}>{errors.dateOfVisit}</span>*/}

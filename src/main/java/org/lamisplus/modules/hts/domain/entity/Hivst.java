@@ -148,7 +148,7 @@ public class Hivst extends Audit implements Serializable {
                 .patientId(hivstDto.getPatientId())
                 .dateOfVisit(hivstDto.getDateOfVisit())
                 .serviceDeliveryPoint(hivstDto.getServiceDeliveryPoint())
-                .userType(hivstTestKitUserInfoDto.getBasicUserInfo().getUserCategory())
+                .userType(hivstDto.getUserType())
 //                .serialNumber(hivstTestKitUserInfoDto.getSerialNumber())
                 .clientCode(hivstTestKitUserInfoDto.getBasicUserInfo().getClientCode())
                 .previouslyTestedWithin12Months("No")

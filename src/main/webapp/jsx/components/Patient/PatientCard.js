@@ -121,21 +121,21 @@ function PatientCard(props) {
   };
   const getHospitalNumber = (identifier) => {
     const identifiers = identifier;
-    const hospitalNumber = identifiers.identifier.find(
+    const hospitalNumber = identifiers?.identifier?.find(
       (obj) => obj.type == "HospitalNumber"
     );
     return hospitalNumber ? hospitalNumber.value : "";
   };
   const getPhoneNumber = (identifier) => {
     const identifiers = identifier;
-    const phoneNumber = identifiers.contactPoint.find(
+    const phoneNumber = identifiers?.contactPoint?.find(
       (obj) => obj.type == "phone"
     );
     return phoneNumber ? phoneNumber.value : "";
   };
   const getAddress = (identifier) => {
     const identifiers = identifier;
-    const address = identifiers.address.find((obj) => obj.city);
+    const address = identifiers?.address?.find((obj) => obj.city);
     const houseAddress =
       address && address.line[0] !== null ? address.line[0] : "";
     const landMark =

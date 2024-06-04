@@ -103,7 +103,7 @@ const HIVSTPatient = () => {
                     new Promise((resolve, reject) =>
                         axios
                             .get(
-                                `${baseUrl}hts/only/persons?pageSize=${query.pageSize}&pageNo=${query.page}&searchValue=${query.search}`,
+                                `${baseUrl}hivst/persons?pageSize=${query.pageSize}&pageNo=${query.page}&searchValue=${query.search}`,
                                 { headers: { Authorization: `Bearer ${token}` } }
                             )
                             .then((response) => response)
@@ -125,12 +125,12 @@ const HIVSTPatient = () => {
                                                 age: row.age,
                                                 count: (
                                                     <Label color="blue" size="mini">
-                                                        {row.htsCount}
+                                                        {row.hivstCount}
                                                     </Label>
                                                 ),
                                                 actions: (
                                                     <div>
-                                                        {row.htsCount >= 0 && (
+                                                        {row.hivstCount >= 0 && (
                                                             <>
                                                                 <Link
                                                                     to={{

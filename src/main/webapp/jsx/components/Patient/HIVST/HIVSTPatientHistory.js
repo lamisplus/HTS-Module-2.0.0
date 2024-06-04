@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import MaterialTable from "material-table";
 import axios from "axios";
-import { url as baseUrl } from "./../../../api";
-import { token as token } from "./../../../api";
+import { token, url as baseUrl } from "../../../../api";
 import { toast } from "react-toastify";
 import { forwardRef } from "react";
 import "semantic-ui-css/semantic.min.css";
@@ -96,7 +95,7 @@ const useStyles = makeStyles((theme) => ({
         fontSize: "11px",
     },
 }));
-const HIVSTPatientHistory = () => {
+const HIVSTPatientHistory = (props) => {
     let history = useHistory();
     useEffect(() => {
         //patients()
@@ -133,7 +132,7 @@ const HIVSTPatientHistory = () => {
         <div>
             <MaterialTable
                 icons={tableIcons}
-                title="HTS HISTORY "
+                title="HIVST HISTORY "
                 columns={[
                     // { title: "HTS ID", field: "id" },
                     { title: "Date", field: "date" },
@@ -220,3 +219,4 @@ const HIVSTPatientHistory = () => {
 
 
 }
+export  default HIVSTPatientHistory;

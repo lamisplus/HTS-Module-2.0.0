@@ -164,6 +164,10 @@ const FamilyIndexTestingForm = (props) => {
   const [arrayFamilyIndexRequestDto, setArrayFamilyIndexRequestDto] = useState(
     []
   );
+    const [
+    arrayFamilyTestingTrackerRequestDTO,
+    setArrayFamilyTestingTrackerRequestDTO,
+  ] = useState([]);
   const [errorFamilyIndexDTO, setErrorFamilyIndexDTO] = useState({});
   const [errorFamilyIndexTracker, setErrorFamilyIndexDTOTracker] = useState({});
 
@@ -189,10 +193,7 @@ const FamilyIndexTestingForm = (props) => {
       trackerAge: "",
       trackerSex: "",
     });
-  const [
-    arrayFamilyTestingTrackerRequestDTO,
-    setArrayFamilyTestingTrackerRequestDTO,
-  ] = useState([]);
+
   const [payload, setPayload] = useState({
     age: calculate_age(
       props?.basicInfo?.personResponseDto?.dateOfBirth
@@ -201,23 +202,20 @@ const FamilyIndexTestingForm = (props) => {
     ),
     alternatePhoneNumber: "",
     dateClientEnrolledOnTreatment: "",
-    dateIndexClientConfirmedHivPositiveTestResult: "",
+    dateIndexClientConfirmedHivPositiveTestResult:
+      props?.patientObj?.confirmatoryTest2?.date2,
     dateOfBirth: props?.patientObj?.personResponseDto?.dateOfBirth,
     extra: {},
     facilityName: "",
     familyIndexClient: "",
-
-    familyIndexRequestDto: [
+    familyIndexRequestDto: 
       {
         childNumber: 0,
-        familyIndexHivStatus: "",
-        familyIndexTestingUuid: "",
         familyRelationship: "",
         motherDead: "",
         yearMotherDead: "",
-      },
-    ],
-    familyTestingTrackerRequestDTO: [
+
+ familyTestingTrackerRequestDTO: 
       {
         attempt: "",
         dateEnrolledInOVC: "",
@@ -225,8 +223,6 @@ const FamilyIndexTestingForm = (props) => {
         dateTested: "",
         dateVisit: "",
         facilityId: 0,
-        familyIndexTestingId: 0,
-        familyIndexTestingUuid: "",
         followUpAppointmentLocation: "",
         hiveTestResult: "",
         knownHivPositive: "",
@@ -235,8 +231,21 @@ const FamilyIndexTestingForm = (props) => {
         scheduleVisitDate: "",
         trackerAge: 0,
         trackerSex: "",
+
+        // not there 
+            familyIndexTestingId: 0,
+            familyIndexTestingUuid: "",
       },
-    ],
+    
+
+
+// not there 
+        familyIndexHivStatus: "",
+        familyIndexTestingUuid: "",
+    
+      },
+    
+   
 
     htsClientId: props && props.patientObj ? props.patientObj?.id : "",
     htsClientUuid: "",
@@ -248,23 +257,19 @@ const FamilyIndexTestingForm = (props) => {
     phoneNumber:
       props?.patientObj?.personResponseDto?.contactPoint?.contactPoint[0]
         ?.value,
+    recencyTesting: "",
+   setting: props.patientObj.testingSetting,
+        // chnage position
     middleName: props?.patientObj?.personResponseDto?.otherName,
     lastName: props?.patientObj?.personResponseDto?.surname,
     visitDate: "",
-    recencyTesting: "",
-    setting: props.patientObj.testingSetting,
+   
+    
 
     sex: props?.patientObj?.personResponseDto?.gender?.id,
     state: "",
     virallyUnSuppressed: "",
     willingToHaveChildrenTestedElseWhere: "",
-
-    //
-    //
-    // referralDate: "",
-    // hospitalNumber: "",
-    // countryId: "1",
-    // stateId: "",
 
     reasonForIndexClientDateHivConfirmedNotSelected: "",
     address: props?.patientObj?.personResponseDto?.address?.address[0].city,
@@ -582,58 +587,53 @@ const FamilyIndexTestingForm = (props) => {
     // clearf the error with e.target.name
     setErrors({ ...errors, [e.target.name]: "" });
   };
-  const handleSubmitfamilyIndexRequestDto = (e) => {
-    if (validateAddFamilyINdexDTO()) {
-      let existingArray = arrayFamilyIndexRequestDto;
+  // const handleSubmitfamilyIndexRequestDto = (e) => {
+  //   if (validateAddFamilyINdexDTO()) {
+  //     let existingArray = arrayFamilyIndexRequestDto;
 
-      existingArray.push(familyIndexRequestDto);
-      setFamilyIndexRequestDto({
-        childNumber: "",
-        familyIndexHivStatus: "",
-        familyIndexTestingUuid: "",
-        familyRelationship: "",
-        motherDead: "",
-        yearMotherDead: "",
-        uan: "",
-      });
+  //     existingArray.push(familyIndexRequestDto);
+  //     setFamilyIndexRequestDto({
+  //       childNumber: "",
+  //       familyIndexHivStatus: "",
+  //       familyIndexTestingUuid: "",
+  //       familyRelationship: "",
+  //       motherDead: "",
+  //       yearMotherDead: "",
+  //       uan: "",
+  //     });
 
-      setArrayFamilyIndexRequestDto(existingArray);
-    }
-  };
+  //     setArrayFamilyIndexRequestDto(existingArray);
+  //   }
+  // };
 
   // handlefamilyIndexRequestDto
   const handlefamilyTestingTrackerRequestDTO = (e) => {
-   setErrorFamilyIndexDTOTracker({
+    setErrorFamilyIndexDTOTracker({
       ...errorFamilyIndexTracker,
       [e.target.name]: "",
     });
     setaAddIndexTracker2(false);
 
-
-    if (e.target.name === 'positionOfChildEnumerated') {
-
-      if (e.target.value > -1  ) {
-            setFamilyTestingTrackerRequestDTO({
-              ...familyTestingTrackerRequestDTO,
-              [e.target.name]: e.target.value,
-            });
+    if (e.target.name === "positionOfChildEnumerated") {
+      if (e.target.value > -1) {
+        setFamilyTestingTrackerRequestDTO({
+          ...familyTestingTrackerRequestDTO,
+          [e.target.name]: e.target.value,
+        });
       }
     } else if (e.target.name === "trackerAge") {
-
-            if (e.target.value > -1) {
-              setFamilyTestingTrackerRequestDTO({
-                ...familyTestingTrackerRequestDTO,
-                [e.target.name]: e.target.value,
-              });
-            }
+      if (e.target.value > -1) {
+        setFamilyTestingTrackerRequestDTO({
+          ...familyTestingTrackerRequestDTO,
+          [e.target.name]: e.target.value,
+        });
+      }
     } else {
       setFamilyTestingTrackerRequestDTO({
         ...familyTestingTrackerRequestDTO,
         [e.target.name]: e.target.value,
       });
     }
- 
-    
 
     // clearf the error with e.target.name
     setErrors({ ...errors, [e.target.name]: "" });
@@ -648,54 +648,54 @@ const FamilyIndexTestingForm = (props) => {
     toggle();
   };
 
-  const handleSubmitfamilyTestingTrackerRequestDTO = (e) => {
-    if (familyTestingTrackerRequestDTO?.dateVisit !== "") {
-      let existingArray = arrayFamilyTestingTrackerRequestDTO;
+  // const handleSubmitfamilyTestingTrackerRequestDTO = (e) => {
+  //   if (familyTestingTrackerRequestDTO?.dateVisit !== "") {
+  //     let existingArray = arrayFamilyTestingTrackerRequestDTO;
 
-      let newDTO = familyTestingTrackerRequestDTO;
-      familyTestingTrackerRequestDTO.facilityId =
-        facilityInfo.currentOrganisationUnitId;
+  //     let newDTO = familyTestingTrackerRequestDTO;
+  //     familyTestingTrackerRequestDTO.facilityId =
+  //       facilityInfo.currentOrganisationUnitId;
 
-      existingArray.push(newDTO);
-      setFamilyTestingTrackerRequestDTO({
-        attempt: "",
-        dateEnrolledInOVC: "",
-        dateEnrolledOnArt: "",
-        dateTested: "",
-        dateVisit: "",
-        facilityId: "",
-        familyIndexTestingId: "",
-        familyIndexTestingUuid: "",
-        followUpAppointmentLocation: "",
-        hiveTestResult: "",
-        knownHivPositive: "",
-        ovcId: "",
-        positionOfChildEnumerated: "",
-        scheduleVisitDate: "",
-        trackerAge: "",
-        trackerSex: "",
-      });
+  //     existingArray.push(newDTO);
+  //     setFamilyTestingTrackerRequestDTO({
+  //       attempt: "",
+  //       dateEnrolledInOVC: "",
+  //       dateEnrolledOnArt: "",
+  //       dateTested: "",
+  //       dateVisit: "",
+  //       facilityId: "",
+  //       familyIndexTestingId: "",
+  //       familyIndexTestingUuid: "",
+  //       followUpAppointmentLocation: "",
+  //       hiveTestResult: "",
+  //       knownHivPositive: "",
+  //       ovcId: "",
+  //       positionOfChildEnumerated: "",
+  //       scheduleVisitDate: "",
+  //       trackerAge: "",
+  //       trackerSex: "",
+  //     });
 
-      setArrayFamilyTestingTrackerRequestDTO(existingArray);
-    } else {
-      let ans = Object.values(familyTestingTrackerRequestDTO).every(
-        (each) => each === ""
-      );
+  //     setArrayFamilyTestingTrackerRequestDTO(existingArray);
+  //   } else {
+  //     let ans = Object.values(familyTestingTrackerRequestDTO).every(
+  //       (each) => each === ""
+  //     );
 
-      if (ans) {
-        setaAddIndexTracker2(true);
-      } else {
-        let temp = {};
-        temp.dateVisit =
-          familyTestingTrackerRequestDTO?.dateVisit === ""
-            ? "field is required"
-            : "";
+  //     if (ans) {
+  //       setaAddIndexTracker2(true);
+  //     } else {
+  //       let temp = {};
+  //       temp.dateVisit =
+  //         familyTestingTrackerRequestDTO?.dateVisit === ""
+  //           ? "field is required"
+  //           : "";
 
-        setErrorFamilyIndexDTOTracker({ ...temp });
-        return Object.values(temp).every((x) => x == "");
-      }
-    }
-  };
+  //       setErrorFamilyIndexDTOTracker({ ...temp });
+  //       return Object.values(temp).every((x) => x == "");
+  //     }
+  //   }
+  // };
   //fetch province
   const getProvinces = (e) => {
     const stateId = e.target.value;
@@ -798,17 +798,17 @@ const FamilyIndexTestingForm = (props) => {
     }
   };
 
-  const removeFamilyIndexRow = (index) => {
-    arrayFamilyIndexRequestDto.splice(index, 1);
-    setArrayFamilyIndexRequestDto([...arrayFamilyIndexRequestDto]);
-  };
+  // const removeFamilyIndexRow = (index) => {
+  //   arrayFamilyIndexRequestDto.splice(index, 1);
+  //   setArrayFamilyIndexRequestDto([...arrayFamilyIndexRequestDto]);
+  // };
 
-  const removeFamilyTrackerRow = (index) => {
-    arrayFamilyTestingTrackerRequestDTO.splice(index, 1);
-    setArrayFamilyTestingTrackerRequestDTO([
-      ...arrayFamilyTestingTrackerRequestDTO,
-    ]);
-  };
+  // const removeFamilyTrackerRow = (index) => {
+  //   arrayFamilyTestingTrackerRequestDTO.splice(index, 1);
+  //   setArrayFamilyTestingTrackerRequestDTO([
+  //     ...arrayFamilyTestingTrackerRequestDTO,
+  //   ]);
+  // };
   const handleInputChange = (e) => {
     setErrors({ ...temp, [e.target.name]: "" });
     const { name, value } = e.target;
@@ -1063,9 +1063,8 @@ const FamilyIndexTestingForm = (props) => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    payload.familyIndexRequestDto = arrayFamilyIndexRequestDto;
-    payload.familyTestingTrackerRequestDTO =
-      arrayFamilyTestingTrackerRequestDTO;
+    payload.familyIndexRequestDto = familyIndexRequestDto;
+    payload.familyIndexRequestDto.familyTestingTrackerRequestDTO = familyTestingTrackerRequestDTO;
     payload.state = stateInfo;
     payload.lga = lgaInfo;
     payload.facilityName = facilityInfo.currentOrganisationUnitName;
@@ -1757,7 +1756,7 @@ const FamilyIndexTestingForm = (props) => {
                         border: "1px solid #014D88",
                         borderRadius: "0.25rem",
                       }}
-                      // disabled
+                      disabled
                     />
                     {errors.dateIndexClientConfirmedHivPositiveTestResult !==
                     "" ? (
@@ -1810,6 +1809,36 @@ const FamilyIndexTestingForm = (props) => {
                   </div>
                 )}
                 {/* )} */}
+
+                <div className="form-group col-md-4 ">
+                  <Label>
+                    {" "}
+                    Recency Testing{" "}
+                    <span> (for newly tested HIV-positive only) </span>{" "}
+                  </Label>
+                  <FormGroup>
+                    <select
+                      className="form-control"
+                      name="recencyTesting"
+                      id="reccencyTesting"
+                      onChange={handleInputChange}
+                      value={payload.recencyTesting}
+                      style={{
+                        border: "1px solid #014D88",
+                        borderRadius: "0.2rem",
+                      }}
+                    >
+                      <option value="">Select</option>
+                      <option value="Recent Infection">Recent Infection</option>
+                      <option value="Long Term Infection">
+                        {" "}
+                        Long Term Infection
+                      </option>
+                      <option value="Not Done">Not Done</option>
+                    </select>
+                  </FormGroup>
+                </div>
+
                 {/* if index client is hiv positive, and date is selected */}
                 <div className="form-group col-md-4 ">
                   <Label>Is client current on HIV treatment ?</Label>
@@ -1846,7 +1875,9 @@ const FamilyIndexTestingForm = (props) => {
                           id="dateClientEnrolledOnTreatment"
                           value={payload.dateClientEnrolledOnTreatment}
                           onChange={handleInputChange}
-                          min="1929-12-31"
+                          min={
+                            payload.dateIndexClientConfirmedHivPositiveTestResult
+                          }
                           max={moment(new Date()).format("YYYY-MM-DD")}
                           style={{
                             border: "1px solid #014D88",
@@ -1864,35 +1895,8 @@ const FamilyIndexTestingForm = (props) => {
                       </FormGroup>
                     </div>
                   )}
-                <div className="form-group col-md-4 ">
-                  <Label>
-                    {" "}
-                    Recency Testing{" "}
-                    <span> (for newly tested HIV-positive only) </span>{" "}
-                  </Label>
-                  <FormGroup>
-                    <select
-                      className="form-control"
-                      name="recencyTesting"
-                      id="reccencyTesting"
-                      onChange={handleInputChange}
-                      value={payload.recencyTesting}
-                      style={{
-                        border: "1px solid #014D88",
-                        borderRadius: "0.2rem",
-                      }}
-                    >
-                      <option value="">Select</option>
-                      <option value="Recent Infection">Recent Infection</option>
-                      <option value="Long Term Infection">
-                        {" "}
-                        Long Term Infection
-                      </option>
-                      <option value="Not Done">Not Done</option>
-                    </select>
-                  </FormGroup>
-                </div>
-                <div className="form-group col-md-4 ">
+               {payload.isClientCurrentlyOnHivTreatment &&
+                  payload.isClientCurrentlyOnHivTreatment === "Yes" && <div className="form-group col-md-4 ">
                   <Label>virally unsuppressed</Label>
                   <FormGroup>
                     <select
@@ -1911,7 +1915,7 @@ const FamilyIndexTestingForm = (props) => {
                       <option value="No">No</option>
                     </select>
                   </FormGroup>
-                </div>
+                </div>}
                 <div className="form-group col-md-4">
                   <FormGroup>
                     <Label for="willingToHaveChildrenTestedElseWhere">
@@ -2102,7 +2106,7 @@ const FamilyIndexTestingForm = (props) => {
                   </FormGroup>
                 </div>
               )}
-              {addIndexTracker && (
+              {/* {addIndexTracker && (
                 <div className="form-group mb-3 col-md-12">
                   <p style={{ color: "red" }}>Fill input in section B</p>
                 </div>
@@ -2117,7 +2121,7 @@ const FamilyIndexTestingForm = (props) => {
                 >
                   <Icon name="plus" /> Add
                 </LabelSui>
-              </div>
+              </div> */}
               {/* <div className="form-group mb-3 col-md-6">
                 <Button
                   content="Add"
@@ -2129,12 +2133,12 @@ const FamilyIndexTestingForm = (props) => {
                   //   disabled={saving}
                 />
               </div> */}
-              {console.log(
+              {/* {console.log(
                 "arrayFamilyIndexRequestDto",
                 arrayFamilyIndexRequestDto
-              )}
+              )} */}
 
-              {arrayFamilyIndexRequestDto &&
+              {/* {arrayFamilyIndexRequestDto &&
                 arrayFamilyIndexRequestDto.length > 0 && (
                   <List className="mb-5">
                     <Table striped responsive>
@@ -2182,7 +2186,7 @@ const FamilyIndexTestingForm = (props) => {
                       </tbody>
                     </Table>
                   </List>
-                )}
+                )} */}
             </div>
 
             <div className="row">
@@ -2436,6 +2440,7 @@ const FamilyIndexTestingForm = (props) => {
                       </FormGroup>
                     </div>
                   )}
+                {console.log("patient agee reaching ", payload.age)}
                 {payload.age < 21 && (
                   <div className="form-group mb-3 col-md-4">
                     <FormGroup>
@@ -2492,7 +2497,7 @@ const FamilyIndexTestingForm = (props) => {
                     )}
                   </FormGroup>
                 </div>
-                {addIndexTracker2 && (
+                {/* {addIndexTracker2 && (
                   <div className="form-group mb-3 col-md-12">
                     <p style={{ color: "red" }}>
                       Fill section C; Index Tracker
@@ -2509,11 +2514,11 @@ const FamilyIndexTestingForm = (props) => {
                   >
                     <Icon name="plus" /> Add
                   </LabelSui>
-                </div>
+                </div> */}
               </div>
             </div>
 
-            {arrayFamilyTestingTrackerRequestDTO.length > 0 && (
+            {/* {arrayFamilyTestingTrackerRequestDTO.length > 0 && (
               <List>
                 <Table striped responsive>
                   <thead>
@@ -2549,7 +2554,7 @@ const FamilyIndexTestingForm = (props) => {
                   </tbody>
                 </Table>
               </List>
-            )}
+            )} */}
 
             <br />
             <div className="row">

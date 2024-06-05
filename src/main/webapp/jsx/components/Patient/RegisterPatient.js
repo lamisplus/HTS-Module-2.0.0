@@ -439,25 +439,7 @@ const UserRegistration = (props) => {
                           </Menu.Item>
                         )}
 
-                      {/* 
-                      <Menu.Item
-                        name="spam"
-                        active={activeItem === "indexing"}
-                        onClick={() => handleItemClick("indexing")}
-                        style={{
-                          backgroundColor:
-                            activeItem === "indexing" ? "#000" : "",
-                        }}
-                        disabled={activeItem !== "indexing" ? true : false}
-                      >
-                   
-                      <span style={{ color: "#fff" }}>
-                          Index Notification Services - Elicitation
-                          {completed.includes("indexing") && (
-                            <Icon name="check" color="green" />
-                          )}
-                        </span>
-                      </Menu.Item> */}
+{/*               
 
                       {patientObj.hivTestResult &&
                         patientObj.hivTestResult.toLowerCase() ===
@@ -479,7 +461,9 @@ const UserRegistration = (props) => {
                               )}
                             </span>
                           </Menu.Item>
-                        )}
+                        )} */}
+
+                        
                       {/* uncomment this after  */}
 
                       {patientObj.hivTestResult &&

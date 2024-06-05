@@ -362,7 +362,10 @@ const Recency = (props) => {
           setSaving(false);
           props.setPatientObj(response.data);
           //toast.success("Risk Assesment successful");
-          handleItemClick("fit-history", "recency-testing");
+          //comment this out for release
+          // handleItemClick("fit-history", "recency-testing");
+handleItemClick("pns-history", "recency-testing");
+
         })
         .catch((error) => {
           setSaving(false);

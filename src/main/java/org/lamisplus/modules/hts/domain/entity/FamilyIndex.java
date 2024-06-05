@@ -18,6 +18,7 @@ import org.lamisplus.modules.base.domain.entities.Audit;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -49,18 +50,44 @@ public class FamilyIndex extends Audit implements Serializable  {
     private int archived=0;
 
     @Basic
+    @Column(name = "first_name")
+    private String firstName;
+
+    @Basic
+    @Column(name = "last_name")
+    private String lastName;
+
+    @Basic
+    @Column(name = "middle_name")
+    private String middleName;
+
+    @Basic
     @Column(name = "family_relationship")
     private String familyRelationship;
+
     @Basic
-    @Column(name = "family_index_hiv_status")
-    private String familyIndexHivStatus;
+    @Column(name = "live_with_parent")
+     private String liveWithParent;
+
+    @Basic
+    @Column(name = "status_of_contact")
+    private String statusOfContact;
+//    private String familyIndexHivStatus;
 
     @Basic
     @Column(name = "child_number")
     private int childNumber;
+
+    @Basic
+    @Column(name = "child_dead")
+    private String childDead;
+
+    @Basic
+    @Column(name = "year_child_dead")
+    private LocalDate yearChildDead;
+
     @Basic
     @Column(name = "mother_dead")
-
     private String motherDead;
 
     @Basic
@@ -78,6 +105,26 @@ public class FamilyIndex extends Audit implements Serializable  {
     @Basic
     @Column(name="uan")
     private String UAN;
+
+    @Basic
+    @Column(name="date_of_hts")
+    private LocalDate dateOfHts;
+
+    @Basic
+    @Column(name ="date_of_birth")
+    private LocalDate dateOfBirth;
+
+    @Basic
+    @Column(name= "age")
+    private int age;
+
+    @Basic
+    @Column(name ="is_date_of_birth_estimated")
+    private Boolean isDateOfBirthEstimated;
+
+
+    @OneToMany(mappedBy = "familyIndex", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FamilyTestingTracker> familyTestingTrackers;
 
     @PrePersist
     public void setFields(){

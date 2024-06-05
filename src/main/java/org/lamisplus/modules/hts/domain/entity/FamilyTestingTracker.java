@@ -1,5 +1,6 @@
 package org.lamisplus.modules.hts.domain.entity;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.vladmihalcea.hibernate.type.array.IntArrayType;
 import com.vladmihalcea.hibernate.type.array.StringArrayType;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
@@ -9,6 +10,7 @@ import com.vladmihalcea.hibernate.type.json.JsonStringType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
 import org.hibernate.annotations.Where;
@@ -82,9 +84,9 @@ public class FamilyTestingTracker extends Audit implements Serializable {
     @Column(name ="date_tested")
     private LocalDate dateTested ;
 
-    @Basic
-    @Column(name ="attempt")
-    private String attempt;
+//    @Basic
+//    @Column(name ="attempt")
+//    private String attempt;
 
     @Basic
     @Column(name="date_enrolledonart")
@@ -102,13 +104,18 @@ public class FamilyTestingTracker extends Audit implements Serializable {
     @Column(name = "facility_id", updatable = false)
     private Long facilityId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "family_index_testing_id")
-    private FamilyIndexTesting familyIndexTesting;
 
     @Basic
-    @Column(name = "family_index_testing_uuid")
-    private String familyIndexTestingUuid;
+    @Column(name = "family_index_uuid")
+    private String familyIndexUuid;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "family_index_id")
+    private FamilyIndex familyIndex;
+
+    @Type(type = "jsonb")
+    @Column(columnDefinition = "jsonb", name = "attempts")
+    private JsonNode attempts;
 
     @PrePersist
     public void setFields(){

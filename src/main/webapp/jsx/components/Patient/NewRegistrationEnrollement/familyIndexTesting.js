@@ -1153,6 +1153,7 @@ const FamilyIndexTesting = (props) => {
                   )} */}
                 </FormGroup>
               </div>
+              {console.log("patient agee reaching ", payload.age)}
 
               <div className="form-group col-md-4">
                 <FormGroup>

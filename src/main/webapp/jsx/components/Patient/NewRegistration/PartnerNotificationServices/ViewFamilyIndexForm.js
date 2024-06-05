@@ -191,7 +191,8 @@ const ViewFamilyIndexTestingForm = (props) => {
     ),
     alternatePhoneNumber: "",
     dateClientEnrolledOnTreatment: "",
-    dateIndexClientConfirmedHivPositiveTestResult: "",
+    dateIndexClientConfirmedHivPositiveTestResult:
+      props?.patientObj?.confirmatoryTest2.date2,
     dateOfBirth: props?.basicInfo?.personResponseDto?.dateOfBirth,
     extra: {},
     facilityName: "",
@@ -670,28 +671,26 @@ const ViewFamilyIndexTestingForm = (props) => {
       [e.target.name]: "",
     });
     setaAddIndexTracker2(false);
-    if (e.target.name === 'positionOfChildEnumerated') {
-
-      if (e.target.value > -1  ) {
-            setFamilyTestingTrackerRequestDTO({
-              ...familyTestingTrackerRequestDTO,
-              [e.target.name]: e.target.value,
-            });
+    if (e.target.name === "positionOfChildEnumerated") {
+      if (e.target.value > -1) {
+        setFamilyTestingTrackerRequestDTO({
+          ...familyTestingTrackerRequestDTO,
+          [e.target.name]: e.target.value,
+        });
       }
     } else if (e.target.name === "trackerAge") {
-
-            if (e.target.value > -1) {
-              setFamilyTestingTrackerRequestDTO({
-                ...familyTestingTrackerRequestDTO,
-                [e.target.name]: e.target.value,
-              });
-            }
-    } else{
+      if (e.target.value > -1) {
+        setFamilyTestingTrackerRequestDTO({
+          ...familyTestingTrackerRequestDTO,
+          [e.target.name]: e.target.value,
+        });
+      }
+    } else {
       setFamilyTestingTrackerRequestDTO({
-      ...familyTestingTrackerRequestDTO,
-      [e.target.name]: e.target.value,
-    });
-}
+        ...familyTestingTrackerRequestDTO,
+        [e.target.name]: e.target.value,
+      });
+    }
 
     // clearf the error with e.target.name
     setErrors({ ...errors, [e.target.name]: "" });
@@ -1124,6 +1123,7 @@ const ViewFamilyIndexTestingForm = (props) => {
       .then((response) => {
         setSaving(false);
         props.handleItemClick("fit-history");
+
         toast.success("Family Indexform save succesfully!");
       })
       .catch((error) => {
@@ -1775,7 +1775,7 @@ const ViewFamilyIndexTestingForm = (props) => {
                     )}
                   </FormGroup>
                 </div>
-
+                {/*  The Date of Treatmant initiation is validated against the date of HIV test confirmation (confirmatory 2)*/}
                 <div className="form-group col-md-4">
                   <FormGroup>
                     <Label for="">
@@ -1796,7 +1796,7 @@ const ViewFamilyIndexTestingForm = (props) => {
                         border: "1px solid #014D88",
                         borderRadius: "0.25rem",
                       }}
-                      disabled={props.action === "view" ? true : false}
+                      disabled
                     />
                     {errors.dateIndexClientConfirmedHivPositiveTestResult !==
                     "" ? (
@@ -1849,6 +1849,37 @@ const ViewFamilyIndexTestingForm = (props) => {
                   </div>
                 )}
                 {/* )} */}
+
+                <div className="form-group col-md-4 ">
+                  <Label>
+                    {" "}
+                    Recency Testing{" "}
+                    <span> (for newly tested HIV-positive only) </span>{" "}
+                  </Label>
+                  <FormGroup>
+                    <select
+                      className="form-control"
+                      name="recencyTesting"
+                      id="reccencyTesting"
+                      onChange={handleInputChange}
+                      value={payload.recencyTesting}
+                      style={{
+                        border: "1px solid #014D88",
+                        borderRadius: "0.2rem",
+                      }}
+                      disabled={props.action === "view" ? true : false}
+                    >
+                      <option value="">Select</option>
+                      <option value="Recent Infection">Recent Infection</option>
+                      <option value="Long Term Infection">
+                        {" "}
+                        Long Term Infection
+                      </option>
+                      <option value="Not Done">Not Done</option>
+                    </select>
+                  </FormGroup>
+                </div>
+
                 {/* if index client is hiv positive, and date is selected */}
                 <div className="form-group col-md-4 ">
                   <Label>Is client current on HIV treatment ?</Label>
@@ -1886,7 +1917,9 @@ const ViewFamilyIndexTestingForm = (props) => {
                           id="dateClientEnrolledOnTreatment"
                           value={payload.dateClientEnrolledOnTreatment}
                           onChange={handleInputChange}
-                          min="1929-12-31"
+                          min={
+                            payload.dateIndexClientConfirmedHivPositiveTestResult
+                          }
                           max={moment(new Date()).format("YYYY-MM-DD")}
                           style={{
                             border: "1px solid #014D88",
@@ -1904,56 +1937,31 @@ const ViewFamilyIndexTestingForm = (props) => {
                       </FormGroup>
                     </div>
                   )}
-                <div className="form-group col-md-4 ">
-                  <Label>
-                    {" "}
-                    Recency Testing{" "}
-                    <span> (for newly tested HIV-positive only) </span>{" "}
-                  </Label>
-                  <FormGroup>
-                    <select
-                      className="form-control"
-                      name="recencyTesting"
-                      id="reccencyTesting"
-                      onChange={handleInputChange}
-                      value={payload.recencyTesting}
-                      style={{
-                        border: "1px solid #014D88",
-                        borderRadius: "0.2rem",
-                      }}
-                      disabled={props.action === "view" ? true : false}
-                    >
-                      <option value="">Select</option>
-                      <option value="Recent Infection">Recent Infection</option>
-                      <option value="Long Term Infection">
-                        {" "}
-                        Long Term Infection
-                      </option>
-                      <option value="Not Done">Not Done</option>
-                    </select>
-                  </FormGroup>
-                </div>
-                <div className="form-group col-md-4 ">
-                  <Label>virally unsuppressed</Label>
-                  <FormGroup>
-                    <select
-                      className="form-control"
-                      name="virallyUnsuppressed"
-                      id="virallyUnsuppressed"
-                      onChange={handleInputChange}
-                      value={payload.virallyUnSuppressed}
-                      style={{
-                        border: "1px solid #014D88",
-                        borderRadius: "0.2rem",
-                      }}
-                      disabled={props.action === "view" ? true : false}
-                    >
-                      <option value="">Select</option>
-                      <option value="Yes">Yes</option>
-                      <option value="No">No</option>
-                    </select>
-                  </FormGroup>
-                </div>
+                {payload.isClientCurrentlyOnHivTreatment &&
+                  payload.isClientCurrentlyOnHivTreatment === "Yes" && (
+                    <div className="form-group col-md-4 ">
+                      <Label>virally unsuppressed</Label>
+                      <FormGroup>
+                        <select
+                          className="form-control"
+                          name="virallyUnsuppressed"
+                          id="virallyUnsuppressed"
+                          onChange={handleInputChange}
+                          value={payload.virallyUnSuppressed}
+                          style={{
+                            border: "1px solid #014D88",
+                            borderRadius: "0.2rem",
+                          }}
+                          disabled={props.action === "view" ? true : false}
+                        >
+                          <option value="">Select</option>
+                          <option value="Yes">Yes</option>
+                          <option value="No">No</option>
+                        </select>
+                      </FormGroup>
+                    </div>
+                  )}
+                {}
                 <div className="form-group col-md-4">
                   <FormGroup>
                     <Label for="willingToHaveChildrenTestedElseWhere">
@@ -2537,6 +2545,7 @@ const ViewFamilyIndexTestingForm = (props) => {
                             </FormGroup>
                           </div>
                         )}
+                      {console.log("patient agee reaching ", payload.age)}
                       {payload.age < 21 && (
                         <div className="form-group mb-3 col-md-4">
                           <FormGroup>

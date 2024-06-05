@@ -354,7 +354,10 @@ const Recency = (props) => {
           setSaving(false);
           props.setPatientObj(response.data);
           //toast.success("Risk Assesment successful");
-          handleItemClick("fit", "recency-testing");
+          //comment this out for release 
+          // handleItemClick("fit", "recency-testing");
+                   handleItemClick("pns", "recency-testing");
+         
         })
         .catch((error) => {
           setSaving(false);
@@ -679,7 +682,7 @@ const Recency = (props) => {
                               name="dateSampleSentToPCRLab"
                               id="dateSampleSentToPCRLab"
                               type="date"
-                              min={recency.optOutRTRITestDate}
+                              min={recency.sampleCollectedDate}
                               value={recency.dateSampleSentToPCRLab}
                               max={moment(new Date()).format("YYYY-MM-DD")}
                               onChange={handleInputChangeRecency}

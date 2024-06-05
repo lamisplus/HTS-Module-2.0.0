@@ -195,7 +195,9 @@ const Recency = (props) => {
 
   const handleDone = () => {
     toggle();
-    handleItemClick("pns", "recency-testing");
+    //commenting this out for release
+    // handleItemClick("pns", "recency-testing");
+    handleItemClick("client-referral", "recency-testing");
   };
   const loadOtherForm = (row) => {
     // setSaving(true);
@@ -205,7 +207,10 @@ const Recency = (props) => {
 
   const loadNextForm = (row) => {
     // setSaving(true);
-    handleItemClick("fit", "recency-testing");
+    //commenting this out for release
+    // handleItemClick("fit", "recency-testing");
+    handleItemClick("pns", "recency-testing");
+
     toggle();
   };
   useEffect(() => {
@@ -701,7 +706,7 @@ const Recency = (props) => {
                               name="dateSampleSentToPCRLab"
                               id="dateSampleSentToPCRLab"
                               type="date"
-                              min={recency.optOutRTRITestDate}
+                              min={recency.sampleCollectedDate}
                               value={recency.dateSampleSentToPCRLab}
                               max={moment(new Date()).format("YYYY-MM-DD")}
                               onChange={handleInputChangeRecency}
@@ -860,7 +865,7 @@ const Recency = (props) => {
                     display: "flex",
                     justifyContent: "space-between",
                     alignItems: "center",
-                    width: '100%'
+                    width: "100%",
                   }}
                 >
                   <div className="">
@@ -929,7 +934,7 @@ const Recency = (props) => {
         </Modal.Header>
         <Modal.Body>
           <h4>
-            Would you like to fill the Family Index form ?
+            Would you like to fill the next form ?
             {/* <b>{row && record.activityName}</b> */}
           </h4>
         </Modal.Body>

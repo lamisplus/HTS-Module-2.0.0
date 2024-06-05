@@ -260,7 +260,7 @@ const UserRegistration = (props) => {
                     </span>
                   </Menu.Item> */}
                   {/* Family Index Testing form */}
-                  {patientObj.hivTestResult && patientObj.hivTestResult.toLowerCase() ===
+                  {/* {patientObj.hivTestResult && patientObj.hivTestResult.toLowerCase() ===
                     "positive" &&  <Menu.Item
                     name="inbox"
                     active={activeItem === "fit-history"}
@@ -277,7 +277,7 @@ const UserRegistration = (props) => {
                         <Icon name="check" color="green" />
                       )}
                     </span>
-                  </Menu.Item>}
+                  </Menu.Item>} */}
 
                   {patientObj.hivTestResult && patientObj.hivTestResult.toLowerCase() ===
                     "positive" &&  <Menu.Item

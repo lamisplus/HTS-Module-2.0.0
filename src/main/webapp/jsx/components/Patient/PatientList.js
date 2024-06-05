@@ -92,6 +92,7 @@ const Patients = (props) => {
           },
           // { title: "Hospital Number", field: "hospital_number", filtering: false },
           { title: "Client Code", field: "clientCode", filtering: false },
+        
           { title: "Sex", field: "gender", filtering: false },
           { title: "Age", field: "age", filtering: false },
 
@@ -108,77 +109,81 @@ const Patients = (props) => {
               )
               .then((response) => response)
               .then((result) => {
-                //setLoading(false)
                 resolve({
-                  data: result.data.records.filter((a) => a.clientCode === null ).map((row) => ({
-                    //name:   row.hivPositive && row.hivPositive===true ? ( <><sup><b style={{color:"red"}}><Icon name='circle' size="small"/></b></sup> { " " + row.personResponseDto.firstName + " " + row.personResponseDto.surname} </>) :row.personResponseDto.firstName + " " + row.personResponseDto.surname,
-                    name: row.firstName + " " + row.surname,
-                    // hospital_number: row.hospitalNumber,
-                    clientCode: row.clientCode,
-                    gender: row.gender,
-                    age: row.age,
-                    count: (
-                      <Label color="blue" size="mini">
-                        {row.htsCount}
-                      </Label>
-                    ),
-                    actions: (
-                      <div>
-                        {row.htsCount >= 0 && (
-                          <>
-                            <Link
-                              to={{
-                                pathname: "/patient-history",
-                                state: {
-                                  patientObject: row,
-                                  patientObj: row,
-                                  clientCode: row.clientCode,
-                                },
-                              }}
-                            >
-                              <ButtonGroup
-                                variant="contained"
-                                aria-label="split button"
-                                style={{
-                                  backgroundColor: "rgb(153, 46, 98)",
-                                  height: "30px",
-                                  width: "215px",
+                  data: result.data.records
+                    .filter((a) => {
+                      return a.clientCode !== null;
+                    })
+                    .map((row) => ({
+                      name: row.firstName + " " + row.surname,
+                      // hospital_number: row.hospitalNumber,
+
+                      clientCode: row.clientCode,
+                      gender: row.gender,
+                      age: row.age,
+                      count: (
+                        <Label color="blue" size="mini">
+                          {row.htsCount}
+                        </Label>
+                      ),
+                      actions: (
+                        <div>
+                          {row.htsCount >= 0 && (
+                            <>
+                              {console.log(row)}
+                              <Link
+                                to={{
+                                  pathname: "/patient-history",
+                                  state: {
+                                    patientObject: row,
+                                    patientObj: row,
+                                    clientCode: row.clientCode,
+                                  },
                                 }}
-                                size="large"
                               >
-                                <Button
-                                  color="primary"
-                                  size="small"
-                                  aria-label="select merge strategy"
-                                  aria-haspopup="menu"
+                                <ButtonGroup
+                                  variant="contained"
+                                  aria-label="split button"
                                   style={{
                                     backgroundColor: "rgb(153, 46, 98)",
+                                    height: "30px",
+                                    width: "215px",
                                   }}
+                                  size="large"
                                 >
-                                  <MdDashboard />
-                                </Button>
-                                <Button
-                                  style={{
-                                    backgroundColor: "rgb(153, 46, 98)",
-                                  }}
-                                >
-                                  <span
+                                  <Button
+                                    color="primary"
+                                    size="small"
+                                    aria-label="select merge strategy"
+                                    aria-haspopup="menu"
                                     style={{
-                                      fontSize: "12px",
-                                      color: "#fff",
-                                      fontWeight: "bolder",
+                                      backgroundColor: "rgb(153, 46, 98)",
                                     }}
                                   >
-                                    Patient Dashboard
-                                  </span>
-                                </Button>
-                              </ButtonGroup>
-                            </Link>
-                          </>
-                        )}
-                      </div>
-                    ),
-                  })),
+                                    <MdDashboard />
+                                  </Button>
+                                  <Button
+                                    style={{
+                                      backgroundColor: "rgb(153, 46, 98)",
+                                    }}
+                                  >
+                                    <span
+                                      style={{
+                                        fontSize: "12px",
+                                        color: "#fff",
+                                        fontWeight: "bolder",
+                                      }}
+                                    >
+                                      Patient Dashboard
+                                    </span>
+                                  </Button>
+                                </ButtonGroup>
+                              </Link>
+                            </>
+                          )}
+                        </div>
+                      ),
+                    })),
                   page: query.page,
                   totalCount: result.data.totalRecords,
                 });

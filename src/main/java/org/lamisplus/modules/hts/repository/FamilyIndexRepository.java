@@ -16,8 +16,4 @@ public interface FamilyIndexRepository extends JpaRepository<FamilyIndex, Long> 
             "JOIN hts_family_index_testing c ON c.uuid = fi.family_index_testing_uuid " +
             "WHERE fi.family_index_testing_uuid = :uuid AND fi.archived = :unArchived", nativeQuery = true)
     List<FamilyIndex> findByFamilyIndexTestingUuid(@Param("uuid") String uuid, @Param("unArchived") int unArchived);
-
-    List<FamilyIndex> findByFamilyIndexTestingUuid(Long id);
-
-   Optional <FamilyIndex> findByUuid(String uuid);
 }

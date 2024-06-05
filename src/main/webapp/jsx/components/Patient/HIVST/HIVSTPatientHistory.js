@@ -28,7 +28,6 @@ import { FaUserPlus } from "react-icons/fa";
 import "@reach/menu-button/styles.css";
 import { Dropdown, Button, Menu, Icon } from "semantic-ui-react";
 
-
 const tableIcons = {
     Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
     Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
@@ -95,19 +94,40 @@ const useStyles = makeStyles((theme) => ({
         fontSize: "11px",
     },
 }));
+
 const HIVSTPatientHistory = (props) => {
+
+    const [hivstHistory, setHivstHistory] = useState([]);
     let history = useHistory();
+
     useEffect(() => {
         //patients()
+        FetchHivstHistory();
+
     }, [props.patientObj]);
+    console.log("HivstHistory", hivstHistory)
 
     const LoadViewPage = (row, actionType) => {
         props.setActivePage({
             ...props.activePage,
-            activePage: "view",
+            activePage: "hivst_view",
             activeObject: row,
             actionType: actionType,
         });
+    };
+
+    const FetchHivstHistory = () => {
+        axios
+            .get(`${baseUrl}hivst?patientId=${props.patientObj.personId}`, {
+                headers: { Authorization: `Bearer ${token}` },
+            })
+            .then((response) => {
+                //set the last date of visit after the response
+                setHivstHistory(response.data);
+            })
+            .catch((error) => {
+                //setLoading(false)
+            });
     };
 
     const handleHTSDelete = (row) => {
@@ -132,32 +152,23 @@ const HIVSTPatientHistory = (props) => {
         <div>
             <MaterialTable
                 icons={tableIcons}
-                title="HIVST HISTORY "
+                title="HIV Self Testing History "
                 columns={[
-                    // { title: "HTS ID", field: "id" },
-                    { title: "Date", field: "date" },
-                    { title: "Number of Kit Receive", field: "pre" },
-                    { title: "Recenc", field: "rencency" },
-                    { title: "Post Test", field: "post" },
-                    // { title: "Index Notification", field: "indexNotifiation", filtering: false },
-                    {
-                        title: "Request & Result",
-                        field: "requestResult",
-                        filtering: false,
-                    },
+                    { title: "Date of Visit", field: "dateOfVisit" },
+                    { title: "Service Delivery Point", field: "serviceDeliveryPoint" },
+                    { title: "Number of Test Kits Received", field: "numberOfHivstKitsReceived" },
+                    { title: "User Type", field: "userType" },
+                    { title: "Type of HIVST Kit Received", field: "typeOfHivstKitReceived", filtering: false },
                     { title: "Actions", field: "actions", filtering: false },
                 ]}
                 isLoading={props.loading}
-                data={props.patientList.map((row) => ({
+                data={hivstHistory.map((row) => ({
                     // id: row.id,
-                    date: row.dateVisit,
-                    pre: row.knowledgeAssessment ? "Filled" : "Not Filled ",
-                    requestResult: row.confirmatoryTest ? "Filled" : "Not Filled ",
-                    rencency: row.recency ? "Filled" : "Not Filled ",
-                    post: row.postTestCounselingKnowledgeAssessment
-                        ? "Filled"
-                        : "Not Filled ",
-                    //indexNotifiation:row.indexNotificationServicesElicitation ? "Filled":"Not Filled ",
+                    dateOfVisit: row.dateOfVisit,
+                    serviceDeliveryPoint: row.serviceDeliveryPoint,
+                    numberOfHivstKitsReceived: row.numberOfHivstKitsReceived,
+                    userType: row.userType,
+                    typeOfHivstKitReceived: row.typeOfHivstKitReceived,
 
                     actions: (
                         <div>
@@ -216,7 +227,6 @@ const HIVSTPatientHistory = (props) => {
             />
         </div>
     );
+};
 
-
-}
-export  default HIVSTPatientHistory;
+export default HIVSTPatientHistory;

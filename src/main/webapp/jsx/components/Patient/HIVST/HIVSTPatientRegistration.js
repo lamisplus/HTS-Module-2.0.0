@@ -829,7 +829,7 @@ const HIVSTPatientRegistration = (props) => {
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>
-                                        User Type Primary
+                                        User Type
                                         <span style={{color: "red"}}> *</span>
                                     </Label>
                                     <select
@@ -844,9 +844,8 @@ const HIVSTPatientRegistration = (props) => {
                                         }}
                                     >
                                         <option value={""}></option>
-                                        <option value="Primary User">Primary User (collector)</option>
-                                        <option value="Secondary User">secondary user
-                                        </option>
+                                        <option value="Primary User">Primary User</option>
+                                        <option value="Secondary User">secondary user</option>
                                     </select>
                                     {errors.userType !== "" ? (
                                         <span className={classes.error}>{errors.userType}</span>

@@ -71,22 +71,6 @@ const ExistenceClientHIVSTRegistration = (props) => {
                                         {completed.includes("reg") && (<Icon name="check" color="green" />)}
                                     </span>
                                 </Menu.Item>
-                                {/*{hideOtherMenu === false && (<>*/}
-                                <Menu.Item
-                                    name="inbox"
-                                    active={activeItem === "post"}
-                                    onClick={() => handleItemClick("post")}
-                                    style={{
-                                        backgroundColor: activeItem === "post" ? "#000" : "",
-                                    }}
-                                    // disabled={activeItem !== "post" ? true : false}
-                                >
-                                    <span style={{ color: "#fff" }}>
-                                        {" "}
-                                        HIV Prevention Service Access
-                                        {completed.includes("post") && (<Icon name="check" color="green" />)}
-                                    </span>
-                                </Menu.Item>
                             </Menu>
                         </div>
                         <div

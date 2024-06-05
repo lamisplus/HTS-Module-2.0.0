@@ -10,6 +10,8 @@ import { useHistory } from "react-router-dom";
 import { Tab, Tabs } from "react-bootstrap";
 import PatientHistory from "./../History/PatientHistory";
 import PatientHtsEnrollment from "./PatientHtsEnrollment";
+import ViewEditHivst from '../Patient/HIVST/ViewEditHivst'
+
 import moment from "moment";
 
 const styles = (theme) => ({
@@ -128,6 +130,17 @@ function PatientCard(props) {
               patientAge={patientAge}
               patientObject={patientObject}
             />
+          )}
+            {activePage.activePage === "hivst_view" && (
+              <ViewEditHivst
+                  patientObj={patientObj}
+                  activePage={activePage}
+                  setActivePage={setActivePage}
+                  clientCode={clientCode}
+                  patientAge={patientAge}
+                  patientObject={patientObject}
+
+              />
           )}
         </CardContent>
       </Card>

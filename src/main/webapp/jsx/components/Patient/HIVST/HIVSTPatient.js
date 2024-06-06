@@ -92,11 +92,11 @@ const HIVSTPatient = () => {
                     },
                     // { title: "Hospital Number", field: "hospital_number", filtering: false },
                     { title: "Client Code", field: "clientCode", filtering: false },
-                    { title: "Sex", field: "gender", filtering: false },
+                    // { title: "Sex", field: "gender", filtering: false },
                     { title: "Age", field: "age", filtering: false },
 
                     //{ title: "ART Number", field: "v_status", filtering: false },
-                    { title: "HTS Count", field: "count", filtering: false },
+                    { title: "HIVST Count", field: "count", filtering: false },
                     { title: "Actions", field: "actions", filtering: false },
                 ]}
                 data={(query) =>

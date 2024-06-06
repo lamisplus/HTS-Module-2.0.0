@@ -90,20 +90,41 @@ public class HivstServiceImpl implements HivstService {
         return hivstList;
     }
 
+//    @Override
+//    public HivstDto updateHivst(HivstDto hivstDto, Long id) {
+//        LOG.info("Finding Hivst by id: {}", id);
+//        Hivst hivst = hivstRepository.findByIdAndArchived(id, UN_ARCHIVED).orElseThrow(() -> new EntityNotFoundException(Hivst.class, "id", id.toString()));
+//        try{
+//            LOG.info("Found. Updating Hivst...");
+//
+//            Hivst hivstUpdate = Hivst.fromDto(hivstDto);
+//            hivstUpdate.setId(id);
+//            hivstUpdate.setTestKitUserDetails(hivst.getTestKitUserDetails());
+//            hivstUpdate.setTestKitUsers(objectMapper.valueToTree(hivst.getTestKitUsers()));
+//            hivstUpdate.setNumberOfHivstKitsReceived(hivst.getNumberOfHivstKitsReceived());
+//            hivstUpdate.setOtherTestKitUserInfoAvailable(hivst.getOtherTestKitUserInfoAvailable());
+//            hivstUpdate.setUserType(hivst.getUserType());
+//
+//            return HivstDto.fromEntity(hivstRepository.save(hivstUpdate));
+//        } catch (JsonProcessingException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
+
     @Override
-    public HivstDto updateHivst(HivstDto hivstDto, Long id) {
-        LOG.info("Finding Hivst by id: {}", id);
-        Hivst hivst = hivstRepository.findByIdAndArchived(id, UN_ARCHIVED).orElseThrow(() -> new EntityNotFoundException(Hivst.class, "id", id.toString()));
+    public HivstDto updateHivst(HivstDto hivstDto) {
+        LOG.info("Finding Hivst by id: {}", hivstDto.getId());
+        Hivst hivst = hivstRepository.findByIdAndArchived(hivstDto.getId(), UN_ARCHIVED).orElseThrow(() -> new EntityNotFoundException(Hivst.class, "id", hivstDto.getId().toString()));
         try{
             LOG.info("Found. Updating Hivst...");
 
             Hivst hivstUpdate = Hivst.fromDto(hivstDto);
-            hivstUpdate.setId(id);
             hivstUpdate.setTestKitUserDetails(hivst.getTestKitUserDetails());
             hivstUpdate.setTestKitUsers(objectMapper.valueToTree(hivst.getTestKitUsers()));
             hivstUpdate.setNumberOfHivstKitsReceived(hivst.getNumberOfHivstKitsReceived());
             hivstUpdate.setOtherTestKitUserInfoAvailable(hivst.getOtherTestKitUserInfoAvailable());
             hivstUpdate.setUserType(hivst.getUserType());
+            hivstUpdate.setArchived(0);
 
             return HivstDto.fromEntity(hivstRepository.save(hivstUpdate));
         } catch (JsonProcessingException e) {

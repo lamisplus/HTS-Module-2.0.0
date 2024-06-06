@@ -25,7 +25,6 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import {Modal, Table} from "react-bootstrap";
 import axios from "axios";
-import UserInformationCard from "./UserInformationCard";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
@@ -104,7 +103,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const HIVSTPatientRegistration = (props) => {
-    console.log(props.patientObject)
+    // // console.log(props.patientObject)
     const patient = props.patientObject;
     const [saving, setSaving] = useState(false)
     const classes = useStyles();
@@ -200,7 +199,7 @@ const HIVSTPatientRegistration = (props) => {
     );
 
 
-    // console.log("Selected Options", selectedUsers);
+    // // // console.log("Selected Options", selectedUsers);
     const options = [
         {value: 'myself', label: 'For myself'},
         {value: 'spouse', label: 'Spouse'},
@@ -231,7 +230,7 @@ const HIVSTPatientRegistration = (props) => {
                         }
                     });
                     setServiceNeeded(serviceNeeded);
-                    // console.log("serviceNeeded", serviceNeeded)
+                    // // console.log("serviceNeeded", serviceNeeded)
                 }
             })
             .catch((e) => {
@@ -239,8 +238,8 @@ const HIVSTPatientRegistration = (props) => {
             });
     };
 
-    // console.log("selectedUsers", selectedUsers);
-    console.log("showUserInfo", showUserInfo);
+    // // console.log("selectedUsers", selectedUsers);
+    // // console.log("showUserInfo", showUserInfo);
     useEffect(() => {
         SERVICE_NEEDED();
     }, []);
@@ -264,7 +263,7 @@ const HIVSTPatientRegistration = (props) => {
         if(selectedUsers.length === 0) {
             temp.selectedUsers =   objValues.testKitUsers ? "" : "Please select at least one user"
         }
-         console.log("temp", temp);
+         // console.log("temp", temp);
         setErrors({ ...temp });
         return Object.values(temp).every((x) => x == "");
     }
@@ -278,7 +277,7 @@ const HIVSTPatientRegistration = (props) => {
             temp.userCategory = testKitUserDetails.basicUserInfo.userCategory ? "" : "This field is required.";
             // temp.otherCategory = testKitUserDetails.basicUserInfo.userCategory === "Others" ? testKitUserDetails.basicUserInfo.otherCategory ? "" : "This field is required." : "";
             temp.clientCode = testKitUserDetails.basicUserInfo.clientCode ? "" : "This field is required.";
-            temp.dateOfBirth = testKitUserDetails.basicUserInfo.dateOfBirth ? "" : "This field is required.";
+            // temp.dateOfBirth = testKitUserDetails.basicUserInfo.dateOfBirth ? "" : "This field is required.";
             temp.typeOfHivst = testKitUserDetails.basicUserInfo.typeOfHivst ? "" : "This field is required.";
             // Check if the selected user category is in the selectedUsers array
             if (!selectedUsers.includes(testKitUserDetails.basicUserInfo.userCategory) && testKitUserDetails.basicUserInfo.userCategory !== "" ) {
@@ -516,7 +515,7 @@ const HIVSTPatientRegistration = (props) => {
                 });
                 setObjValues({...objValues, hasConductedHIVST: "No"});
             } else {
-                console.log("Cannot add more user information as it exceeds the number of HIVST kits received.");
+                // console.log("Cannot add more user information as it exceeds the number of HIVST kits received.");
             }
 
         } else{
@@ -546,7 +545,7 @@ const HIVSTPatientRegistration = (props) => {
         setObjValues({...objValues, testKitUserDetails: []});
     };
 
-    // console.log("Obj", objValues)
+    // // console.log("Obj", objValues)
 
     const handleKitSelectUserChange = selectedUsers => {
         // if (objValues.userType === "Secondary User") {
@@ -587,13 +586,13 @@ const HIVSTPatientRegistration = (props) => {
         if (e.target.name === "serialNumber") {
             code = createdCode + e.target.value;
             setCreatedCode(code);
-            // console.log("Code created is &&&& ", createdCode);
+            // // console.log("Code created is &&&& ", createdCode);
             setObjValues({...objValues, clientCode: code});
         }
 
         async function getIndexClientCode() {
             const indexClientCode = objValues.clientCode;
-            // console.log(indexClientCode);
+            // // console.log(indexClientCode);
             const response = await axios.get(
                 `${baseUrl}hts/client/${indexClientCode}`,
                 {
@@ -615,11 +614,11 @@ const HIVSTPatientRegistration = (props) => {
                 headers: {Authorization: `Bearer ${token}`},
             })
             .then((response) => {
-                //console.log(response.data);
+                //// console.log(response.data);
                 setSexs(response.data);
             })
             .catch((error) => {
-                //console.log(error);
+                //// console.log(error);
             });
     };
 
@@ -629,11 +628,11 @@ const HIVSTPatientRegistration = (props) => {
                 headers: {Authorization: `Bearer ${token}`},
             })
             .then((response) => {
-                //console.log(response.data);
+                //// console.log(response.data);
                 setMaritalStatus(response.data);
             })
             .catch((error) => {
-                //console.log(error);
+                //// console.log(error);
             });
     };
 
@@ -675,7 +674,7 @@ const HIVSTPatientRegistration = (props) => {
             const userInfoList = userInformationList;
             objValues.testKitUserDetails = userInformationList;
             toast.success("HIVST Registration Successful");
-            console.log("objValues", objValues)
+            // console.log("objValues", objValues)
 
             setSaving(true)
             axios
@@ -753,10 +752,10 @@ const HIVSTPatientRegistration = (props) => {
         setUserInformation({ ...testKitUserDetails, age: e.target.value });
     };
 
-    console.log("selectedUsers", selectedUsers)
-    console.log("objValues", objValues)
-    console.log("testKitUserDetails", testKitUserDetails)
-    console.log("userInformationList", userInformationList)
+    // console.log("selectedUsers", selectedUsers)
+    // console.log("objValues", objValues)
+    // console.log("testKitUserDetails", testKitUserDetails)
+    // console.log("userInformationList", userInformationList)
 
 
     return (
@@ -1673,7 +1672,7 @@ const HIVSTPatientRegistration = (props) => {
                             {/*                            ...prevState,*/}
                             {/*                            hasConductedHIVST: !prevState.hasConductedHIVST*/}
                             {/*                        }));*/}
-                            {/*                        console.log("Has Conducted HIVST", !objValues.hasConductedHIVST);*/}
+                            {/*                        // console.log("Has Conducted HIVST", !objValues.hasConductedHIVST);*/}
                             {/*                    }}*/}
                             {/*                    style={{marginRight: "10px"}}*/}
                             {/*                />*/}

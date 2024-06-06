@@ -25,7 +25,6 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import {Modal, Table} from "react-bootstrap";
 import axios from "axios";
-import UserInformationCard from "./UserInformationCard";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
@@ -104,8 +103,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ViewEditHivst = (props) => {
-    console.log(props.patientObject)
-    console.log("active page row", props.activePage.activeObject)
+    // console.log(props.patientObject)
+    // console.log("active page row", props.activePage.activeObject)
     const patient = props.patientObject;
     const hivstObj = props.activePage.activeObject
     const [saving, setSaving] = useState(false)
@@ -208,7 +207,7 @@ const ViewEditHivst = (props) => {
     // );
 
 
-    // console.log("Selected Options", selectedUsers);
+    // // console.log("Selected Options", selectedUsers);
     const options = [
         {value: 'myself', label: 'For myself'},
         {value: 'spouse', label: 'Spouse'},
@@ -239,7 +238,7 @@ const ViewEditHivst = (props) => {
                         }
                     });
                     setServiceNeeded(serviceNeeded);
-                    // console.log("serviceNeeded", serviceNeeded)
+                    // // console.log("serviceNeeded", serviceNeeded)
                 }
             })
             .catch((e) => {
@@ -247,8 +246,8 @@ const ViewEditHivst = (props) => {
             });
     };
 
-    // console.log("selectedUsers", selectedUsers);
-    console.log("showUserInfo", showUserInfo);
+    // // console.log("selectedUsers", selectedUsers);
+    // console.log("showUserInfo", showUserInfo);
     useEffect(() => {
         SERVICE_NEEDED();
     }, []);
@@ -258,7 +257,7 @@ const ViewEditHivst = (props) => {
         temp.clientCode = objValues.clientCode ? "" : "This field is required.";
         temp.serviceDeliveryPoint = objValues.serviceDeliveryPoint ? "" : "This field is required.";
         temp.userType = objValues.userType ? "" : "This field is required.";
-        temp.serialNumber = objValues.serialNumber ? "" : "This field is required.";
+        // temp.serialNumber = objValues.serialNumber ? "" : "This field is required.";
         temp.previouslyTestedWithin12Months = objValues.previouslyTestedWithin12Months ? "" : "This field is required.";
         temp.consentForFollowUpCalls = objValues.consentForFollowUpCalls ? "" : "This field is required.";
         if (objValues.previouslyTestedWithin12Months !== "" && objValues.previouslyTestedWithin12Months !== "No") {
@@ -267,12 +266,12 @@ const ViewEditHivst = (props) => {
         temp.nameOfTestKit = objValues.nameOfTestKit ? "" : "This field is required.";
         temp.typeOfHivstKitReceived = objValues.typeOfHivstKitReceived ? "" : "This field is required.";
         temp.numberOfHivstKitsReceived = objValues.numberOfHivstKitsReceived ? "" : "This field is required.";
-        temp.expiryDate = objValues.expiryDate ? "" : "This field is required.";
+        // temp.expiryDate = objValues.expiryDate ? "" : "This field is required.";
         temp.lotNumber = objValues.lotNumber ? "" : "This field is required.";
         if(selectedUsers.length === 0) {
             temp.selectedUsers =   objValues.testKitUsers ? "" : "Please select at least one user"
         }
-        console.log("temp", temp);
+        // console.log("temp", temp);
         setErrors({ ...temp });
         return Object.values(temp).every((x) => x == "");
     }
@@ -282,16 +281,16 @@ const ViewEditHivst = (props) => {
         // if (objValues.otherTestKitUserInfoAvailable === "Yes") {
         let temp = {};
         temp.firstName = testKitUserDetails.basicUserInfo.firstName ?  "" : "This field is required.";
-        temp.surname = testKitUserDetails.basicUserInfo.surname ?  "" : "This field is required.";
-        temp.userCategory = testKitUserDetails.basicUserInfo.userCategory ? "" : "This field is required.";
+        // temp.surname = testKitUserDetails.basicUserInfo.surname ?  "" : "This field is required.";
+        // temp.userCategory = testKitUserDetails.basicUserInfo.userCategory ? "" : "This field is required.";
         // temp.otherCategory = testKitUserDetails.basicUserInfo.userCategory === "Others" ? testKitUserDetails.basicUserInfo.otherCategory ? "" : "This field is required." : "";
         temp.clientCode = testKitUserDetails.basicUserInfo.clientCode ? "" : "This field is required.";
-        temp.dateOfBirth = testKitUserDetails.basicUserInfo.dateOfBirth ? "" : "This field is required.";
+        // temp.dateOfBirth = testKitUserDetails.basicUserInfo.dateOfBirth ? "" : "This field is required.";
         temp.typeOfHivst = testKitUserDetails.basicUserInfo.typeOfHivst ? "" : "This field is required.";
         // Check if the selected user category is in the selectedUsers array
-        if (!selectedUsers.includes(testKitUserDetails.basicUserInfo.userCategory) && testKitUserDetails.basicUserInfo.userCategory !== "" ) {
-            temp.userCategory = "The selected user category does not match the selected kit users.";
-        }
+        // if (!selectedUsers.includes(testKitUserDetails.basicUserInfo.userCategory) && testKitUserDetails.basicUserInfo.userCategory !== "" ) {
+        //     temp.userCategory = "The selected user category does not match the selected kit users.";
+        // }
         // the number of kit is empty
         setUserInformationErrors({...temp});
         return Object.values(temp).every((x) => x == "");
@@ -346,7 +345,7 @@ const ViewEditHivst = (props) => {
         setObjValues(newObjectValues);
     }
 
-    console.log("action type", props.activePage.actionType)
+    // console.log("action type", props.activePage.actionType)
 
     const handleUserInformationInputChange = (e, section) => {
         const {name, value} = e.target;
@@ -525,7 +524,7 @@ const ViewEditHivst = (props) => {
                 });
                 setObjValues({...objValues, hasConductedHIVST: "No"});
             } else {
-                console.log("Cannot add more user information as it exceeds the number of HIVST kits received.");
+                // console.log("Cannot add more user information as it exceeds the number of HIVST kits received.");
             }
 
         } else{
@@ -555,7 +554,7 @@ const ViewEditHivst = (props) => {
         setObjValues({...objValues, testKitUserDetails: []});
     };
 
-    // console.log("Obj", objValues)
+    // // console.log("Obj", objValues)
 
     const handleKitSelectUserChange = selectedUsers => {
         // if (objValues.userType === "Secondary User") {
@@ -596,13 +595,13 @@ const ViewEditHivst = (props) => {
         if (e.target.name === "serialNumber") {
             code = createdCode + e.target.value;
             setCreatedCode(code);
-            // console.log("Code created is &&&& ", createdCode);
+            // // console.log("Code created is &&&& ", createdCode);
             setObjValues({...objValues, clientCode: code});
         }
 
         async function getIndexClientCode() {
             const indexClientCode = objValues.clientCode;
-            // console.log(indexClientCode);
+            // // console.log(indexClientCode);
             const response = await axios.get(
                 `${baseUrl}hts/client/${indexClientCode}`,
                 {
@@ -624,11 +623,11 @@ const ViewEditHivst = (props) => {
                 headers: {Authorization: `Bearer ${token}`},
             })
             .then((response) => {
-                //console.log(response.data);
+                //// console.log(response.data);
                 setSexs(response.data);
             })
             .catch((error) => {
-                //console.log(error);
+                //// console.log(error);
             });
     };
 
@@ -638,11 +637,11 @@ const ViewEditHivst = (props) => {
                 headers: {Authorization: `Bearer ${token}`},
             })
             .then((response) => {
-                //console.log(response.data);
+                //// console.log(response.data);
                 setMaritalStatus(response.data);
             })
             .catch((error) => {
-                //console.log(error);
+                //// console.log(error);
             });
     };
 
@@ -681,15 +680,15 @@ const ViewEditHivst = (props) => {
         e.preventDefault()
         if (validateObjValues()) {
 
-            const userInfoList = userInformationList;
-            // objValues.testKitUserDetails = userInformationList;
-            objValues.testKitUserDetails = testKitUserDetails;
+            // const userInfoList = userInformationList;
+            objValues.testKitUserDetails = [testKitUserDetails] ;
+
             toast.success("HIVST Updated Successful");
-            console.log("objValues", objValues)
+            // console.log("objValues", objValues)
 
             setSaving(true)
             axios
-                .put(`${baseUrl}hivst/${objValues.id}`, objValues, {
+                .put(`${baseUrl}hivst/${props.activePage.activeObject.id}`, objValues, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         "Content-Type": "application/json",
@@ -763,10 +762,10 @@ const ViewEditHivst = (props) => {
         setUserInformation({ ...testKitUserDetails, age: e.target.value });
     };
 
-    console.log("selectedUsers", selectedUsers)
-    console.log("objValues", objValues)
-    console.log("testKitUserDetails", testKitUserDetails)
-    console.log("userInformationList", userInformationList)
+    // console.log("selectedUsers", selectedUsers)
+    // console.log("objValues", objValues)
+    // console.log("testKitUserDetails", testKitUserDetails)
+    // console.log("userInformationList", userInformationList)
 
 
     return (
@@ -873,7 +872,8 @@ const ViewEditHivst = (props) => {
                             <div className="form-group mb-3 col-md-4">
                                 <FormGroup>
                                     <Label for="">
-                                        Serial Number <span style={{color: "red"}}> *</span>
+                                        Serial Number
+                                        {/*<span style={{color: "red"}}> *</span> */}
                                     </Label>
                                     <Input
                                         type="text"
@@ -889,11 +889,11 @@ const ViewEditHivst = (props) => {
                                         }}
                                         disabled={isView}
                                     />
-                                    {errors.serialNumber !== "" ? (
-                                        <span className={classes.error}>{errors.serialNumber}</span>
-                                    ) : (
-                                        ""
-                                    )}
+                                    {/*{errors.serialNumber !== "" ? (*/}
+                                    {/*    <span className={classes.error}>{errors.serialNumber}</span>*/}
+                                    {/*) : (*/}
+                                    {/*    ""*/}
+                                    {/*)}*/}
                                 </FormGroup>
                             </div>
                             <div className="form-group mb-3 col-md-4">
@@ -1115,7 +1115,8 @@ const ViewEditHivst = (props) => {
                             <div className="form-group mb-3 col-md-4">
                                 <FormGroup>
                                     <Label for="">
-                                        Expiry Date <span style={{color: "red"}}> *</span>
+                                        Expiry Date
+                                        {/*<span style={{color: "red"}}> *</span>*/}
                                     </Label>
                                     <Input
                                         type="date"
@@ -1131,11 +1132,11 @@ const ViewEditHivst = (props) => {
                                         }}
                                         disabled={isView}
                                     />
-                                    {errors.expiryDate !== "" ? (
-                                        <span className={classes.error}>{errors.expiryDate}</span>
-                                    ) : (
-                                        ""
-                                    )}
+                                    {/*{errors.expiryDate !== "" ? (*/}
+                                    {/*    <span className={classes.error}>{errors.expiryDate}</span>*/}
+                                    {/*) : (*/}
+                                    {/*    ""*/}
+                                    {/*)}*/}
                                 </FormGroup>
                             </div>
                             <div className="form-group mb-3 col-md-12">
@@ -1278,7 +1279,8 @@ const ViewEditHivst = (props) => {
                                                         border: "1px solid #014D88",
                                                         borderRadius: "0.2rem",
                                                     }}
-                                                    // disabled
+                                                    disabled={isView}
+
                                                 />
                                                 {/*{errors.dateOfVisit !== "" ? (*/}
                                                 {/*    <span className={classes.error}>{errors.dateOfVisit}</span>*/}
@@ -1305,6 +1307,7 @@ const ViewEditHivst = (props) => {
                                                         border: "1px solid #014D88",
                                                         borderRadius: "0.2rem",
                                                     }}
+                                                    disabled={isView}
                                                 />
                                                 {userInformationErrors.firstName !== "" ? (
                                                     <span
@@ -1332,6 +1335,7 @@ const ViewEditHivst = (props) => {
                                                         border: "1px solid #014D88",
                                                         borderRadius: "0.2rem",
                                                     }}
+                                                    disabled={isView}
                                                 />
                                                 {userInformationErrors.surname !== "" ? (
                                                     <span
@@ -1358,6 +1362,7 @@ const ViewEditHivst = (props) => {
                                                         border: "1px solid #014D88",
                                                         borderRadius: "0.2rem",
                                                     }}
+                                                    disabled={isView}
                                                 />
                                             </FormGroup>
                                         </div>
@@ -1378,6 +1383,7 @@ const ViewEditHivst = (props) => {
                                                         border: "1px solid #014D88",
                                                         borderRadius: "0.2rem",
                                                     }}
+                                                    disabled={isView}
                                                 >
                                                     <option value={""}></option>
                                                     {/*{options.map(option => (*/}
@@ -1417,6 +1423,7 @@ const ViewEditHivst = (props) => {
                                                             border: "1px solid #014D88",
                                                             borderRadius: "0.2rem",
                                                         }}
+                                                        disabled={isView}
                                                     />
                                                 </FormGroup>
                                             </div>
@@ -1439,6 +1446,7 @@ const ViewEditHivst = (props) => {
                                                         border: "1px solid #014D88",
                                                         borderRadius: "0.2rem",
                                                     }}
+                                                    disabled={isView}
                                                 />
                                                 {userInformationErrors.clientCode !== "" ? (
                                                     <span
@@ -1515,6 +1523,7 @@ const ViewEditHivst = (props) => {
                                                                 border: "1px solid #014D88",
                                                                 borderRadius: "0.2rem",
                                                             }}
+                                                            disabled={isView}
                                                         />{" "}
                                                         Actual
                                                     </label>
@@ -1530,6 +1539,7 @@ const ViewEditHivst = (props) => {
                                                                 border: "1px solid #014D88",
                                                                 borderRadius: "0.2rem",
                                                             }}
+                                                            disabled={isView}
                                                         />{" "}
                                                         Estimated
                                                     </label>
@@ -1555,6 +1565,7 @@ const ViewEditHivst = (props) => {
                                                         border: "1px solid #014D88",
                                                         borderRadius: "0.2rem",
                                                     }}
+                                                    disabled={isView}
                                                 />
                                                 {/*{errors.dob !== "" ? (*/}
                                                 {/*    <span className={classes.error}>{errors.dob}</span>*/}
@@ -1581,6 +1592,7 @@ const ViewEditHivst = (props) => {
                                                         border: "1px solid #014D88",
                                                         borderRadius: "0.2rem",
                                                     }}
+                                                    disabled={isView}
                                                 />
                                                 {/*{errors.age !== "" ? (*/}
                                                 {/*    <span className={classes.error}>{errors.age}</span>*/}
@@ -1606,6 +1618,7 @@ const ViewEditHivst = (props) => {
                                                         border: "1px solid #014D88",
                                                         borderRadius: "0.2rem",
                                                     }}
+                                                    disabled={isView}
                                                 >
                                                     <option value={""}></option>
                                                     {sexs.map((value) => (
@@ -1631,6 +1644,7 @@ const ViewEditHivst = (props) => {
                                                             border: "1px solid #014D88",
                                                             borderRadius: "0.2rem",
                                                         }}
+                                                        disabled={isView}
                                                     >
                                                         <option value={""}></option>
                                                         {maritalStatus.map((value) => (
@@ -1655,6 +1669,7 @@ const ViewEditHivst = (props) => {
                                                         border: "1px solid #014D88",
                                                         borderRadius: "0.2rem",
                                                     }}
+                                                    disabled={isView}
                                                 >
                                                     <option value={""}></option>
                                                     <option value="Assisted">
@@ -1705,7 +1720,7 @@ const ViewEditHivst = (props) => {
                             {/*                            ...prevState,*/}
                             {/*                            hasConductedHIVST: !prevState.hasConductedHIVST*/}
                             {/*                        }));*/}
-                            {/*                        console.log("Has Conducted HIVST", !objValues.hasConductedHIVST);*/}
+                            {/*                        // // console.log("Has Conducted HIVST", !objValues.hasConductedHIVST);*/}
                             {/*                    }}*/}
                             {/*                    style={{marginRight: "10px"}}*/}
                             {/*                />*/}

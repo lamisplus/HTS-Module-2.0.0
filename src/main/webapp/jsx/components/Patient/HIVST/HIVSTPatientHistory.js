@@ -133,13 +133,13 @@ const HIVSTPatientHistory = (props) => {
     const handleHTSDelete = (row) => {
         console.log(props.patientList);
         axios
-            .delete(`${baseUrl}hts/${row.id}`, {
+            .delete(`${baseUrl}hivst/${props.patientObj.hivstId}`, {
                 headers: { Authorization: `Bearer ${token}` },
             })
             .then((response) => {
                 console.log(response);
                 toast.success(
-                    `HTS patient with client code ${row.clientCode}, deleted successfully`
+                    `HIVST patient deleted successfully`
                 );
                 history.push("/");
             })

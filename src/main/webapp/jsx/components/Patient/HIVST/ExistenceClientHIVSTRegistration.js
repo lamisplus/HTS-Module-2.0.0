@@ -11,7 +11,6 @@ import "react-phone-input-2/lib/style.css";
 import { Icon, Menu, Sticky } from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
 import HIVSTPatientRegistration from "./HIVSTPatientRegistration";
-import HIVSTPostTestAssessment from "./HIVSTPostTestAssessment";
 // import RiskStratification from "../ContinuesHTSEnrollment/RiskStratification";
 // import BasicInfo from "../ContinuesHTSEnrollment/BasicInfo";
 // import PreTest from "../ContinuesHTSEnrollment/PreTest";
@@ -26,7 +25,7 @@ import HIVSTPostTestAssessment from "./HIVSTPostTestAssessment";
 // import ReferralUnit from "../ContinuesHTSEnrollment/ClientReferral/ReferralUnit";
 
 const ExistenceClientHIVSTRegistration = (props) => {
-    console.log("ExistenceClientHIVSTRegistration", props.patientObj)
+    // console.log("ExistenceClientHIVSTRegistration", props.patientObj)
     const location = useLocation();
     const locationState = location.state;
     const [activeItem, setactiveItem] = useState("reg");
@@ -40,7 +39,7 @@ const ExistenceClientHIVSTRegistration = (props) => {
         //setCompleted({...completed, ...completedMenu})
     };
 
-    console.log("ExistenceClientHIVSTRegistration", locationState.patientObject)
+    // console.log("ExistenceClientHIVSTRegistration", locationState.patientObject)
     return (<>
         <ToastContainer autoClose={3000} hideProgressBar />
 
@@ -92,20 +91,6 @@ const ExistenceClientHIVSTRegistration = (props) => {
                                 patientObject={locationState.patientObject}
                             // activePage={props.activePage}
                             // setActivePage={props.setActivePage}
-                            />)}
-                            {activeItem === "post" && (<HIVSTPostTestAssessment
-                                handleItemClick={handleItemClick}
-                                setCompleted={setCompleted}
-                                completed={completed}
-                                setPatientObj={setPatientObj2}
-                                patientObj={patientObj2}
-                                // clientCode={props.clientCode}
-                                // patientAge={props.patientAge}
-                                // sex={props.patientObj.gender}
-                                // setExtra={setExtra}
-                                // extra={extra}
-                                patientObject={locationState.patientObject}
-                                // setBasicInfo={setBasicInfo}
                             />)}
                         </div>
                     </div>

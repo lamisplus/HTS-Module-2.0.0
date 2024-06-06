@@ -11,7 +11,7 @@ import java.util.List;
 public interface HivstService {
     List<HivstDto> saveHivst(HivstDto hivstDto);
 
-    HivstDto updateHivst(HivstDto hivstDto, Long id);
+//    HivstDto updateHivst(HivstDto hivstDto, Long id);
 
     String deleteHivst(Long id);
 
@@ -20,4 +20,6 @@ public interface HivstService {
     List<HivstDto> getAllHivstByPatientId(Long patientId);
 
     Page<HivstPerson> getAllHivstPerson(String searchValue, int pageNo, int pageSize);
+
+   HivstDto updateHivst(HivstDto hivstDto);
 }

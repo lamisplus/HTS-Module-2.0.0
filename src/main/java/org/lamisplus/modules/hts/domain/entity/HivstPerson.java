@@ -12,5 +12,8 @@ public interface HivstPerson {
     String getGender();
     LocalDate getDateOfBirth();
     String getClientCode();
+
+    Integer getHivstId();
+
     Integer getHivstCount();
 }

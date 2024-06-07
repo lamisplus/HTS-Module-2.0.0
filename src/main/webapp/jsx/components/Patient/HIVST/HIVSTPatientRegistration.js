@@ -199,7 +199,7 @@ const HIVSTPatientRegistration = (props) => {
     );
 
 
-    // // // console.log("Selected Options", selectedUsers);
+     console.log("Selected Options", selectedUsers);
     const options = [
         {value: 'myself', label: 'For myself'},
         {value: 'spouse', label: 'Spouse'},
@@ -263,7 +263,7 @@ const HIVSTPatientRegistration = (props) => {
         if(selectedUsers.length === 0) {
             temp.selectedUsers =   objValues.testKitUsers ? "" : "Please select at least one user"
         }
-         // console.log("temp", temp);
+        console.log("temp", temp);
         setErrors({ ...temp });
         return Object.values(temp).every((x) => x == "");
     }
@@ -487,7 +487,10 @@ const HIVSTPatientRegistration = (props) => {
                 // clear testKitUserDetails after adding to the list and also set the hasConductedHIVST to No
                 setUserInformation({
                     basicUserInfo: {
-                        id: "",
+                        firstName:"",
+                        surname:"",
+                        otherName:"",
+                        dateOfRegistration:"",
                         otherCategory: "",
                         clientCode: "",
                         dateOfBirth: "",
@@ -495,7 +498,8 @@ const HIVSTPatientRegistration = (props) => {
                         sex: "",
                         maritalStatusId: "",
                         typeOfHivst: "",
-                        userCategory: ""
+                        userCategory: "",
+                        isDateOfBirthEstimated: ""
                     },
                     postTestAssessment: {
                         everUsedHivstKit: "",
@@ -517,7 +521,6 @@ const HIVSTPatientRegistration = (props) => {
             } else {
                 // console.log("Cannot add more user information as it exceeds the number of HIVST kits received.");
             }
-
         } else{
             toast.error("Please fill all the required fields");
         }
@@ -674,7 +677,7 @@ const HIVSTPatientRegistration = (props) => {
             const userInfoList = userInformationList;
             objValues.testKitUserDetails = userInformationList;
             toast.success("HIVST Registration Successful");
-            // console.log("objValues", objValues)
+           console.log("objValues", objValues)
 
             setSaving(true)
             axios
@@ -700,62 +703,69 @@ const HIVSTPatientRegistration = (props) => {
 
     }
 
+
     const handleDobChange = (e) => {
-        if (e.target.value) {
-            const today = new Date();
-            const birthDate = new Date(e.target.value);
-            let age_now = today.getFullYear() - birthDate.getFullYear();
-            const m = today.getMonth() - birthDate.getMonth();
-            if (age_now <= 0 && m < 0 && today.getDate() < birthDate.getDate()) {
-                age_now--;
+        const today = new Date();
+        const birthDate = new Date(e.target.value);
+        let age_now = today.getFullYear() - birthDate.getFullYear();
+        const m = today.getMonth() - birthDate.getMonth();
+        if (age_now <= 0 && m < 0 && today.getDate() < birthDate.getDate()) {
+            age_now--;
+        }
+        setUserInformation({
+            ...testKitUserDetails,
+            basicUserInfo: {
+                ...testKitUserDetails.basicUserInfo,
+                dateOfBirth: e.target.value,
+                age: age_now
             }
-            // objValues.age = age_now;
-            testKitUserDetails.basicUserInfo.age = age_now;
-        } else {
-            setUserInformation({ ...testKitUserDetails, age: "" });
-            // setObjValues({ ...objValues, age: "" });
-        }
-        // setObjValues({ ...objValues, [e.target.name]: e.target.value });
-        setUserInformation({ ...testKitUserDetails, [e.target.name]: e.target.value });
-        setUserInformation({ ...testKitUserDetails, dateOfBirth: e.target.value });
-        // setObjValues({ ...objValues, dob: e.target.value });
-        if (testKitUserDetails.basicUserInfo.age !== "" && testKitUserDetails.basicUserInfo.age >= 85) {
-            toggle();
-        }
+        });
     };
+
     const handleDateOfBirthChange = (e) => {
         if (e.target.value == "Actual") {
-            testKitUserDetails.basicUserInfo.isDateOfBirthEstimated = false;
+            setUserInformation({
+                ...testKitUserDetails,
+                basicUserInfo: {
+                    ...testKitUserDetails.basicUserInfo,
+                    isDateOfBirthEstimated: false
+                }
+            });
             setAgeDisabled(true);
         } else if (e.target.value == "Estimated") {
-            // objValues.isDateOfBirthEstimated = true;
-            testKitUserDetails.basicUserInfo.isDateOfBirthEstimated = true;
+            setUserInformation({
+                ...testKitUserDetails,
+                basicUserInfo: {
+                    ...testKitUserDetails.basicUserInfo,
+                    isDateOfBirthEstimated: true
+                }
+            });
             setAgeDisabled(false);
         }
     };
+
     const handleAgeChange = (e) => {
         if (!ageDisabled && e.target.value) {
-            if (e.target.value !== "" && e.target.value >= 85) {
-                toggle();
-            }
             const currentDate = new Date();
             currentDate.setDate(15);
             currentDate.setMonth(5);
             const estDob = moment(currentDate.toISOString());
             const dobNew = estDob.add(e.target.value * -1, "years");
-            setUserInformation({ ...testKitUserDetails, dateOfBirth: moment(dobNew).format("YYYY-MM-DD") });
-            // setObjValues({ ...objValues, dob: moment(dobNew).format("YYYY-MM-DD") });
-            // objValues.dob = moment(dobNew).format("YYYY-MM-DD")
-            testKitUserDetails.basicUserInfo.dateOfBirth = moment(dobNew).format("YYYY-MM-DD");
+            setUserInformation({
+                ...testKitUserDetails,
+                basicUserInfo: {
+                    ...testKitUserDetails.basicUserInfo,
+                    age: e.target.value,
+                    dateOfBirth: moment(dobNew).format("YYYY-MM-DD")
+                }
+            });
         }
-        // setObjValues({ ...objValues, age: e.target.value });
-        setUserInformation({ ...testKitUserDetails, age: e.target.value });
     };
 
     // console.log("selectedUsers", selectedUsers)
-    // console.log("objValues", objValues)
-    // console.log("testKitUserDetails", testKitUserDetails)
-    // console.log("userInformationList", userInformationList)
+   console.log("objValues", objValues)
+   console.log("testKitUserDetails", testKitUserDetails)
+   console.log("userInformationList", userInformationList)
 
 
     return (
@@ -1416,55 +1426,6 @@ const HIVSTPatientRegistration = (props) => {
                                                 )}
                                             </FormGroup>
                                         </div>
-                                        {/*<div className="form-group mb-3 col-md-4">*/}
-                                        {/*    <FormGroup>*/}
-                                        {/*        <Label>*/}
-                                        {/*            Date Of Birth<span style={{color: "red"}}> *</span>*/}
-                                        {/*        </Label>*/}
-                                        {/*        <input*/}
-                                        {/*            className="form-control"*/}
-                                        {/*            type="date"*/}
-                                        {/*            name="dateOfBirth"*/}
-                                        {/*            id="dateOfBirth"*/}
-                                        {/*            min="1929-12-31"*/}
-                                        {/*            max={moment(new Date()).format("YYYY-MM-DD")}*/}
-                                        {/*            value={testKitUserDetails.basicUserInfo.dateOfBirth}*/}
-                                        {/*            onChange={handleDateOfBirthChange}*/}
-                                        {/*            // onChange={(e) => handleUserInformationInputChange(e, "basicUserInfo")}*/}
-                                        {/*            style={{*/}
-                                        {/*                border: "1px solid #014D88",*/}
-                                        {/*                borderRadius: "0.2rem",*/}
-                                        {/*            }}*/}
-                                        {/*            // disabled*/}
-                                        {/*        />*/}
-                                        {/*        {userInformationErrors.dateOfBirth !== "" ? (*/}
-                                        {/*            <span*/}
-                                        {/*                className={classes.error}>{userInformationErrors.dateOfBirth}</span>*/}
-                                        {/*        ) : (*/}
-                                        {/*            ""*/}
-                                        {/*        )}*/}
-                                        {/*    </FormGroup>*/}
-                                        {/*</div>*/}
-                                        {/*<div className="form-group mb-3 col-md-4">*/}
-                                        {/*    <FormGroup>*/}
-                                        {/*        <Label>*/}
-                                        {/*            Age {" "}*/}
-                                        {/*        </Label>*/}
-                                        {/*        <input*/}
-                                        {/*            className="form-control"*/}
-                                        {/*            type="number"*/}
-                                        {/*            name="age"*/}
-                                        {/*            id="age"*/}
-                                        {/*            disabled*/}
-                                        {/*            style={{*/}
-                                        {/*                border: "1px solid #014D88",*/}
-                                        {/*                borderRadius: "0.2rem",*/}
-                                        {/*            }}*/}
-                                        {/*            value={testKitUserDetails.basicUserInfo.age}*/}
-                                        {/*            onChange={(e) => handleUserInformationInputChange(e, "basicUserInfo")}*/}
-                                        {/*        />*/}
-                                        {/*    </FormGroup>*/}
-                                        {/*</div>*/}
 
                                         <div className="form-group mb-2 col-md-2">
                                             <FormGroup>
@@ -1516,7 +1477,6 @@ const HIVSTPatientRegistration = (props) => {
                                                     id="dob"
                                                     min="1929-12-31"
                                                     max={moment(new Date()).format("YYYY-MM-DD")}
-                                                    // value={objValues.dob}=
                                                     value={testKitUserDetails.basicUserInfo.dateOfBirth}
                                                     onChange={handleDobChange}
                                                     style={{
@@ -1524,11 +1484,6 @@ const HIVSTPatientRegistration = (props) => {
                                                         borderRadius: "0.2rem",
                                                     }}
                                                 />
-                                                {/*{errors.dob !== "" ? (*/}
-                                                {/*    <span className={classes.error}>{errors.dob}</span>*/}
-                                                {/*) : (*/}
-                                                {/*    ""*/}
-                                                {/*)}*/}
                                             </FormGroup>
                                         </div>
                                         <div className="form-group mb-3 col-md-3">
@@ -1541,7 +1496,6 @@ const HIVSTPatientRegistration = (props) => {
                                                     type="number"
                                                     name="age"
                                                     id="age"
-                                                    // value={objValues.age}
                                                     value={testKitUserDetails.basicUserInfo.age}
                                                     disabled={ageDisabled}
                                                     onChange={handleAgeChange}
@@ -1550,11 +1504,6 @@ const HIVSTPatientRegistration = (props) => {
                                                         borderRadius: "0.2rem",
                                                     }}
                                                 />
-                                                {/*{errors.age !== "" ? (*/}
-                                                {/*    <span className={classes.error}>{errors.age}</span>*/}
-                                                {/*) : (*/}
-                                                {/*    ""*/}
-                                                {/*)}*/}
                                             </FormGroup>
                                         </div>
 

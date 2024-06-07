@@ -496,7 +496,10 @@ const ViewEditHivst = (props) => {
                 // clear testKitUserDetails after adding to the list and also set the hasConductedHIVST to No
                 setUserInformation({
                     basicUserInfo: {
-                        id: "",
+                        firstName:"",
+                        surname:"",
+                        otherName:"",
+                        dateOfRegistration:"",
                         otherCategory: "",
                         clientCode: "",
                         dateOfBirth: "",
@@ -504,7 +507,8 @@ const ViewEditHivst = (props) => {
                         sex: "",
                         maritalStatusId: "",
                         typeOfHivst: "",
-                        userCategory: ""
+                        userCategory: "",
+                        isDateOfBirthEstimated: ""
                     },
                     postTestAssessment: {
                         everUsedHivstKit: "",
@@ -557,12 +561,6 @@ const ViewEditHivst = (props) => {
     // // console.log("Obj", objValues)
 
     const handleKitSelectUserChange = selectedUsers => {
-        // if (objValues.userType === "Secondary User") {
-        //     setSelectedUsers(["myself"]);
-        //     let newValues = {...objValues, testKitUsers: selectedUsers};
-        //     setObjValues(newValues);
-        // } else
-        // {
         setSelectedUsers(selectedUsers);
         let newValues = {...objValues, testKitUsers: selectedUsers};
         if (!selectedUsers || selectedUsers.length === 0) {
@@ -679,13 +677,8 @@ const ViewEditHivst = (props) => {
     const handleSubmit = (e) => {
         e.preventDefault()
         if (validateObjValues()) {
-
             // const userInfoList = userInformationList;
             objValues.testKitUserDetails = [testKitUserDetails] ;
-
-            toast.success("HIVST Updated Successful");
-            // console.log("objValues", objValues)
-
             setSaving(true)
             axios
                 .put(`${baseUrl}hivst/${props.activePage.activeObject.id}`, objValues, {
@@ -697,7 +690,7 @@ const ViewEditHivst = (props) => {
                 .then((response) => {
                     if (response.status === 200) {
                         setSaving(false)
-                        toast.success("HIVST Registration Successful");
+                        toast.success("HIVST Updated Successful");
                         history.push("/patient/hivst");
                     }
                 })
@@ -1260,451 +1253,386 @@ const ViewEditHivst = (props) => {
                                             Intended Kit User Information
                                         </div>
                                     </div>
-                                    <div className="row">
-                                        <div className="form-group mb-3 col-md-4">
-                                            <FormGroup>
-                                                <Label for="">
-                                                    Registration Date
-                                                    {/*<span style={{color: "red"}}> *</span>*/}
-                                                </Label>
-                                                <Input
-                                                    type="date"
-                                                    name="dateOfRegistration"
-                                                    id="dateOfRegistration"
-                                                    min="1929-12-31"
-                                                    max={moment(new Date()).format("YYYY-MM-DD")}
-                                                    value={testKitUserDetails.basicUserInfo.dateOfRegistration}
-                                                    onChange={(e) => handleUserInformationInputChange(e, "basicUserInfo")}
-                                                    style={{
-                                                        border: "1px solid #014D88",
-                                                        borderRadius: "0.2rem",
-                                                    }}
-                                                    disabled={isView}
+                                      <div className="row">
+                                          <div className="form-group mb-3 col-md-4">
+                                              <FormGroup>
+                                                  <Label for="">
+                                                      Registration Date
+                                                      {/*<span style={{color: "red"}}> *</span>*/}
+                                                  </Label>
+                                                  <Input
+                                                      type="date"
+                                                      name="dateOfRegistration"
+                                                      id="dateOfRegistration"
+                                                      min="1929-12-31"
+                                                      max={moment(new Date()).format("YYYY-MM-DD")}
+                                                      value={testKitUserDetails.basicUserInfo.dateOfRegistration}
+                                                      onChange={(e) => handleUserInformationInputChange(e, "basicUserInfo")}
+                                                      style={{
+                                                          border: "1px solid #014D88",
+                                                          borderRadius: "0.2rem",
+                                                      }}
+                                                      disabled={isView}
 
-                                                />
-                                                {/*{errors.dateOfVisit !== "" ? (*/}
-                                                {/*    <span className={classes.error}>{errors.dateOfVisit}</span>*/}
-                                                {/*) : (*/}
-                                                {/*    ""*/}
-                                                {/*)}*/}
-                                            </FormGroup>
-                                        </div>
-                                        <div className="form-group col-md-4">
-                                            <FormGroup>
-                                                <Label>
-                                                    First Name
-                                                    <span style={{color: "red"}}> *</span>
-                                                </Label>
-                                                <input
-                                                    type="text"
-                                                    className="form-control"
-                                                    name="firstName"
-                                                    id="firstName"
-                                                    value={testKitUserDetails.basicUserInfo.firstName}
-                                                    // onChange={handleInputChange1}
-                                                    onChange={(e) => handleUserInformationInputChange(e, "basicUserInfo")}
-                                                    style={{
-                                                        border: "1px solid #014D88",
-                                                        borderRadius: "0.2rem",
-                                                    }}
-                                                    disabled={isView}
-                                                />
-                                                {userInformationErrors.firstName !== "" ? (
-                                                    <span
-                                                        className={classes.error}>{userInformationErrors.firstName}</span>
-                                                ) : (
-                                                    ""
-                                                )}
-                                            </FormGroup>
-                                        </div>
-                                        <div className="form-group col-md-4">
-                                            <FormGroup>
-                                                <Label>
-                                                    Surname
-                                                    <span style={{color: "red"}}> *</span>
-                                                </Label>
-                                                <input
-                                                    type="text"
-                                                    className="form-control"
-                                                    name="surname"
-                                                    id="surname"
-                                                    value={testKitUserDetails.basicUserInfo.surname}
-                                                    // onChange={handleInputChange1}
-                                                    onChange={(e) => handleUserInformationInputChange(e, "basicUserInfo")}
-                                                    style={{
-                                                        border: "1px solid #014D88",
-                                                        borderRadius: "0.2rem",
-                                                    }}
-                                                    disabled={isView}
-                                                />
-                                                {userInformationErrors.surname !== "" ? (
-                                                    <span
-                                                        className={classes.error}>{userInformationErrors.surname}</span>
-                                                ) : (
-                                                    ""
-                                                )}
-                                            </FormGroup>
-                                        </div>
-                                        <div className="form-group col-md-4">
-                                            <FormGroup>
-                                                <Label>
-                                                    Other name
-                                                </Label>
-                                                <input
-                                                    type="text"
-                                                    className="form-control"
-                                                    name="otherName"
-                                                    id="otherName"
-                                                    value={testKitUserDetails.basicUserInfo.otherName}
-                                                    // onChange={handleInputChange1}
-                                                    onChange={(e) => handleUserInformationInputChange(e, "basicUserInfo")}
-                                                    style={{
-                                                        border: "1px solid #014D88",
-                                                        borderRadius: "0.2rem",
-                                                    }}
-                                                    disabled={isView}
-                                                />
-                                            </FormGroup>
-                                        </div>
+                                                  />
+                                                  {/*{errors.dateOfVisit !== "" ? (*/}
+                                                  {/*    <span className={classes.error}>{errors.dateOfVisit}</span>*/}
+                                                  {/*) : (*/}
+                                                  {/*    ""*/}
+                                                  {/*)}*/}
+                                              </FormGroup>
+                                          </div>
+                                          <div className="form-group col-md-4">
+                                              <FormGroup>
+                                                  <Label>
+                                                      First Name
+                                                      <span style={{color: "red"}}> *</span>
+                                                  </Label>
+                                                  <input
+                                                      type="text"
+                                                      className="form-control"
+                                                      name="firstName"
+                                                      id="firstName"
+                                                      value={testKitUserDetails.basicUserInfo.firstName}
+                                                      // onChange={handleInputChange1}
+                                                      onChange={(e) => handleUserInformationInputChange(e, "basicUserInfo")}
+                                                      style={{
+                                                          border: "1px solid #014D88",
+                                                          borderRadius: "0.2rem",
+                                                      }}
+                                                      disabled={isView}
+                                                  />
+                                                  {userInformationErrors.firstName !== "" ? (
+                                                      <span
+                                                          className={classes.error}>{userInformationErrors.firstName}</span>
+                                                  ) : (
+                                                      ""
+                                                  )}
+                                              </FormGroup>
+                                          </div>
+                                          <div className="form-group col-md-4">
+                                              <FormGroup>
+                                                  <Label>
+                                                      Surname
+                                                      <span style={{color: "red"}}> *</span>
+                                                  </Label>
+                                                  <input
+                                                      type="text"
+                                                      className="form-control"
+                                                      name="surname"
+                                                      id="surname"
+                                                      value={testKitUserDetails.basicUserInfo.surname}
+                                                      // onChange={handleInputChange1}
+                                                      onChange={(e) => handleUserInformationInputChange(e, "basicUserInfo")}
+                                                      style={{
+                                                          border: "1px solid #014D88",
+                                                          borderRadius: "0.2rem",
+                                                      }}
+                                                      disabled={isView}
+                                                  />
+                                                  {userInformationErrors.surname !== "" ? (
+                                                      <span
+                                                          className={classes.error}>{userInformationErrors.surname}</span>
+                                                  ) : (
+                                                      ""
+                                                  )}
+                                              </FormGroup>
+                                          </div>
+                                          <div className="form-group col-md-4">
+                                              <FormGroup>
+                                                  <Label>
+                                                      Other name
+                                                  </Label>
+                                                  <input
+                                                      type="text"
+                                                      className="form-control"
+                                                      name="otherName"
+                                                      id="otherName"
+                                                      value={testKitUserDetails.basicUserInfo.otherName}
+                                                      // onChange={handleInputChange1}
+                                                      onChange={(e) => handleUserInformationInputChange(e, "basicUserInfo")}
+                                                      style={{
+                                                          border: "1px solid #014D88",
+                                                          borderRadius: "0.2rem",
+                                                      }}
+                                                      disabled={isView}
+                                                  />
+                                              </FormGroup>
+                                          </div>
 
-                                        <div className="form-group  col-md-4">
-                                            <FormGroup>
-                                                <Label>
-                                                    user Category
-                                                    <span style={{color: "red"}}> *</span>
-                                                </Label>
-                                                <select
-                                                    className="form-control"
-                                                    name="userCategory"
-                                                    id="userCategory"
-                                                    value={testKitUserDetails.basicUserInfo.userCategory}
-                                                    onChange={(e) => handleUserInformationInputChange(e, "basicUserInfo")}
-                                                    style={{
-                                                        border: "1px solid #014D88",
-                                                        borderRadius: "0.2rem",
-                                                    }}
-                                                    disabled={isView}
-                                                >
-                                                    <option value={""}></option>
-                                                    {/*{options.map(option => (*/}
-                                                    {/*    <option key={option.value} value={option.value}>*/}
-                                                    {/*        {option.label}*/}
-                                                    {/*    </option>*/}
-                                                    {/*))}*/}
-                                                    {selectedUsers.map((user, index) => (
-                                                        <option key={index} value={user}>{user}</option>
-                                                    ))}
-                                                    ))
-                                                </select>
-                                                {userInformationErrors.userCategory !== "" ? (
-                                                    <span
-                                                        className={classes.error}>{userInformationErrors.userCategory}</span>
-                                                ) : (
-                                                    ""
-                                                )}
-                                            </FormGroup>
-                                        </div>
-                                        {testKitUserDetails.basicUserInfo.userCategory === "others" ? (
-                                            <div className="form-group col-md-4">
-                                                <FormGroup>
-                                                    <Label>
-                                                        Specify Other Category
-                                                        {/*<span style={{color: "red"}}> *</span>*/}
-                                                    </Label>
-                                                    <input
-                                                        type="text"
-                                                        className="form-control"
-                                                        name="otherCategory"
-                                                        id="otherCategory"
-                                                        value={testKitUserDetails.basicUserInfo.otherCategory}
-                                                        // onChange={handleInputChange1}
-                                                        onChange={(e) => handleUserInformationInputChange(e, "basicUserInfo")}
-                                                        style={{
-                                                            border: "1px solid #014D88",
-                                                            borderRadius: "0.2rem",
-                                                        }}
-                                                        disabled={isView}
-                                                    />
-                                                </FormGroup>
-                                            </div>
-                                        ) : ""}
-                                        <div className="form-group col-md-4">
-                                            <FormGroup>
-                                                <Label>
-                                                    Client Code
-                                                    <span style={{color: "red"}}> *</span>
-                                                </Label>
-                                                <input
-                                                    type="text"
-                                                    className="form-control"
-                                                    name="clientCode"
-                                                    id="clientCode"
-                                                    value={testKitUserDetails.basicUserInfo.clientCode}
-                                                    // onChange={handleInputChange1}
-                                                    onChange={(e) => handleUserInformationInputChange(e, "basicUserInfo")}
-                                                    style={{
-                                                        border: "1px solid #014D88",
-                                                        borderRadius: "0.2rem",
-                                                    }}
-                                                    disabled={isView}
-                                                />
-                                                {userInformationErrors.clientCode !== "" ? (
-                                                    <span
-                                                        className={classes.error}>{userInformationErrors.clientCode}</span>
-                                                ) : (
-                                                    ""
-                                                )}
-                                            </FormGroup>
-                                        </div>
-                                        {/*<div className="form-group mb-3 col-md-4">*/}
-                                        {/*    <FormGroup>*/}
-                                        {/*        <Label>*/}
-                                        {/*            Date Of Birth<span style={{color: "red"}}> *</span>*/}
-                                        {/*        </Label>*/}
-                                        {/*        <input*/}
-                                        {/*            className="form-control"*/}
-                                        {/*            type="date"*/}
-                                        {/*            name="dateOfBirth"*/}
-                                        {/*            id="dateOfBirth"*/}
-                                        {/*            min="1929-12-31"*/}
-                                        {/*            max={moment(new Date()).format("YYYY-MM-DD")}*/}
-                                        {/*            value={testKitUserDetails.basicUserInfo.dateOfBirth}*/}
-                                        {/*            onChange={handleDateOfBirthChange}*/}
-                                        {/*            // onChange={(e) => handleUserInformationInputChange(e, "basicUserInfo")}*/}
-                                        {/*            style={{*/}
-                                        {/*                border: "1px solid #014D88",*/}
-                                        {/*                borderRadius: "0.2rem",*/}
-                                        {/*            }}*/}
-                                        {/*            // disabled*/}
-                                        {/*        />*/}
-                                        {/*        {userInformationErrors.dateOfBirth !== "" ? (*/}
-                                        {/*            <span*/}
-                                        {/*                className={classes.error}>{userInformationErrors.dateOfBirth}</span>*/}
-                                        {/*        ) : (*/}
-                                        {/*            ""*/}
-                                        {/*        )}*/}
-                                        {/*    </FormGroup>*/}
-                                        {/*</div>*/}
-                                        {/*<div className="form-group mb-3 col-md-4">*/}
-                                        {/*    <FormGroup>*/}
-                                        {/*        <Label>*/}
-                                        {/*            Age {" "}*/}
-                                        {/*        </Label>*/}
-                                        {/*        <input*/}
-                                        {/*            className="form-control"*/}
-                                        {/*            type="number"*/}
-                                        {/*            name="age"*/}
-                                        {/*            id="age"*/}
-                                        {/*            disabled*/}
-                                        {/*            style={{*/}
-                                        {/*                border: "1px solid #014D88",*/}
-                                        {/*                borderRadius: "0.2rem",*/}
-                                        {/*            }}*/}
-                                        {/*            value={testKitUserDetails.basicUserInfo.age}*/}
-                                        {/*            onChange={(e) => handleUserInformationInputChange(e, "basicUserInfo")}*/}
-                                        {/*        />*/}
-                                        {/*    </FormGroup>*/}
-                                        {/*</div>*/}
+                                          <div className="form-group  col-md-4">
+                                              <FormGroup>
+                                                  <Label>
+                                                      user Category
+                                                      <span style={{color: "red"}}> *</span>
+                                                  </Label>
+                                                  <select
+                                                      className="form-control"
+                                                      name="userCategory"
+                                                      id="userCategory"
+                                                      value={testKitUserDetails.basicUserInfo.userCategory}
+                                                      onChange={(e) => handleUserInformationInputChange(e, "basicUserInfo")}
+                                                      style={{
+                                                          border: "1px solid #014D88",
+                                                          borderRadius: "0.2rem",
+                                                      }}
+                                                      disabled={isView}
+                                                  >
+                                                      <option value={""}></option>
+                                                      {/*{options.map(option => (*/}
+                                                      {/*    <option key={option.value} value={option.value}>*/}
+                                                      {/*        {option.label}*/}
+                                                      {/*    </option>*/}
+                                                      {/*))}*/}
+                                                      {selectedUsers.map((user, index) => (
+                                                          <option key={index} value={user}>{user}</option>
+                                                      ))}
+                                                      ))
+                                                  </select>
+                                                  {userInformationErrors.userCategory !== "" ? (
+                                                      <span
+                                                          className={classes.error}>{userInformationErrors.userCategory}</span>
+                                                  ) : (
+                                                      ""
+                                                  )}
+                                              </FormGroup>
+                                          </div>
+                                          {testKitUserDetails.basicUserInfo.userCategory === "others" ? (
+                                              <div className="form-group col-md-4">
+                                                  <FormGroup>
+                                                      <Label>
+                                                          Specify Other Category
+                                                          {/*<span style={{color: "red"}}> *</span>*/}
+                                                      </Label>
+                                                      <input
+                                                          type="text"
+                                                          className="form-control"
+                                                          name="otherCategory"
+                                                          id="otherCategory"
+                                                          value={testKitUserDetails.basicUserInfo.otherCategory}
+                                                          // onChange={handleInputChange1}
+                                                          onChange={(e) => handleUserInformationInputChange(e, "basicUserInfo")}
+                                                          style={{
+                                                              border: "1px solid #014D88",
+                                                              borderRadius: "0.2rem",
+                                                          }}
+                                                          disabled={isView}
+                                                      />
+                                                  </FormGroup>
+                                              </div>
+                                          ) : ""}
+                                          <div className="form-group col-md-4">
+                                              <FormGroup>
+                                                  <Label>
+                                                      Client Code
+                                                      <span style={{color: "red"}}> *</span>
+                                                  </Label>
+                                                  <input
+                                                      type="text"
+                                                      className="form-control"
+                                                      name="clientCode"
+                                                      id="clientCode"
+                                                      value={testKitUserDetails.basicUserInfo.clientCode}
+                                                      // onChange={handleInputChange1}
+                                                      onChange={(e) => handleUserInformationInputChange(e, "basicUserInfo")}
+                                                      style={{
+                                                          border: "1px solid #014D88",
+                                                          borderRadius: "0.2rem",
+                                                      }}
+                                                      disabled={isView}
+                                                  />
+                                                  {userInformationErrors.clientCode !== "" ? (
+                                                      <span
+                                                          className={classes.error}>{userInformationErrors.clientCode}</span>
+                                                  ) : (
+                                                      ""
+                                                  )}
+                                              </FormGroup>
+                                          </div>
 
-                                        <div className="form-group mb-2 col-md-2">
-                                            <FormGroup>
-                                                <Label>
-                                                    Date Of Birth <span style={{color: "red"}}> *</span>
-                                                </Label>
-                                                <div className="radio">
-                                                    <label>
-                                                        <input
-                                                            type="radio"
-                                                            value="Actual"
-                                                            name="dateOfBirth"
-                                                            defaultChecked
-                                                            onChange={(e) => handleDateOfBirthChange(e)}
-                                                            style={{
-                                                                border: "1px solid #014D88",
-                                                                borderRadius: "0.2rem",
-                                                            }}
-                                                            disabled={isView}
-                                                        />{" "}
-                                                        Actual
-                                                    </label>
-                                                </div>
-                                                <div className="radio">
-                                                    <label>
-                                                        <input
-                                                            type="radio"
-                                                            value="Estimated"
-                                                            name="dateOfBirth"
-                                                            onChange={(e) => handleDateOfBirthChange(e)}
-                                                            style={{
-                                                                border: "1px solid #014D88",
-                                                                borderRadius: "0.2rem",
-                                                            }}
-                                                            disabled={isView}
-                                                        />{" "}
-                                                        Estimated
-                                                    </label>
-                                                </div>
-                                            </FormGroup>
-                                        </div>
-                                        <div className="form-group mb-3 col-md-3">
-                                            <FormGroup>
-                                                <Label>
-                                                    Date <span style={{color: "red"}}> *</span>
-                                                </Label>
-                                                <input
-                                                    className="form-control"
-                                                    type="date"
-                                                    name="dob"
-                                                    id="dob"
-                                                    min="1929-12-31"
-                                                    max={moment(new Date()).format("YYYY-MM-DD")}
-                                                    // value={objValues.dob}=
-                                                    value={testKitUserDetails.basicUserInfo.dateOfBirth}
-                                                    onChange={handleDobChange}
-                                                    style={{
-                                                        border: "1px solid #014D88",
-                                                        borderRadius: "0.2rem",
-                                                    }}
-                                                    disabled={isView}
-                                                />
-                                                {/*{errors.dob !== "" ? (*/}
-                                                {/*    <span className={classes.error}>{errors.dob}</span>*/}
-                                                {/*) : (*/}
-                                                {/*    ""*/}
-                                                {/*)}*/}
-                                            </FormGroup>
-                                        </div>
-                                        <div className="form-group mb-3 col-md-3">
-                                            <FormGroup>
-                                                <Label>
-                                                    Age <span style={{color: "red"}}> *</span>
-                                                </Label>
-                                                <input
-                                                    className="form-control"
-                                                    type="number"
-                                                    name="age"
-                                                    id="age"
-                                                    // value={objValues.age}
-                                                    value={testKitUserDetails.basicUserInfo.age}
-                                                    disabled={ageDisabled}
-                                                    onChange={handleAgeChange}
-                                                    style={{
-                                                        border: "1px solid #014D88",
-                                                        borderRadius: "0.2rem",
-                                                    }}
-                                                    disabled={isView}
-                                                />
-                                                {/*{errors.age !== "" ? (*/}
-                                                {/*    <span className={classes.error}>{errors.age}</span>*/}
-                                                {/*) : (*/}
-                                                {/*    ""*/}
-                                                {/*)}*/}
-                                            </FormGroup>
-                                        </div>
+                                          <div className="form-group mb-2 col-md-2">
+                                              <FormGroup>
+                                                  <Label>
+                                                      Date Of Birth <span style={{color: "red"}}> *</span>
+                                                  </Label>
+                                                  <div className="radio">
+                                                      <label>
+                                                          <input
+                                                              type="radio"
+                                                              value="Actual"
+                                                              name="dateOfBirth"
+                                                              defaultChecked
+                                                              onChange={(e) => handleDateOfBirthChange(e)}
+                                                              style={{
+                                                                  border: "1px solid #014D88",
+                                                                  borderRadius: "0.2rem",
+                                                              }}
+                                                          />{" "}
+                                                          Actual
+                                                      </label>
+                                                  </div>
+                                                  <div className="radio">
+                                                      <label>
+                                                          <input
+                                                              type="radio"
+                                                              value="Estimated"
+                                                              name="dateOfBirth"
+                                                              onChange={(e) => handleDateOfBirthChange(e)}
+                                                              style={{
+                                                                  border: "1px solid #014D88",
+                                                                  borderRadius: "0.2rem",
+                                                              }}
+                                                          />{" "}
+                                                          Estimated
+                                                      </label>
+                                                  </div>
+                                              </FormGroup>
+                                          </div>
+                                          <div className="form-group mb-3 col-md-3">
+                                              <FormGroup>
+                                                  <Label>
+                                                      Date <span style={{color: "red"}}> *</span>
+                                                  </Label>
+                                                  <input
+                                                      className="form-control"
+                                                      type="date"
+                                                      name="dob"
+                                                      id="dob"
+                                                      min="1929-12-31"
+                                                      max={moment(new Date()).format("YYYY-MM-DD")}
+                                                      value={testKitUserDetails.basicUserInfo.dateOfBirth}
+                                                      onChange={handleDobChange}
+                                                      style={{
+                                                          border: "1px solid #014D88",
+                                                          borderRadius: "0.2rem",
+                                                      }}
+                                                  />
+                                              </FormGroup>
+                                          </div>
+                                          <div className="form-group mb-3 col-md-3">
+                                              <FormGroup>
+                                                  <Label>
+                                                      Age <span style={{color: "red"}}> *</span>
+                                                  </Label>
+                                                  <input
+                                                      className="form-control"
+                                                      type="number"
+                                                      name="age"
+                                                      id="age"
+                                                      value={testKitUserDetails.basicUserInfo.age}
+                                                      disabled={ageDisabled}
+                                                      onChange={handleAgeChange}
+                                                      style={{
+                                                          border: "1px solid #014D88",
+                                                          borderRadius: "0.2rem",
+                                                      }}
+                                                  />
+                                              </FormGroup>
+                                          </div>
 
-                                        <div className="form-group  col-md-4">
-                                            <FormGroup>
-                                                <Label>
-                                                    Sex
-                                                    {/*<span style={{color: "red"}}> *</span> */}
-                                                </Label>
-                                                <select
-                                                    className="form-control"
-                                                    name="sex"
-                                                    id="sex"
-                                                    value={testKitUserDetails.basicUserInfo.sex}
-                                                    onChange={(e) => handleUserInformationInputChange(e, "basicUserInfo")}
-                                                    style={{
-                                                        border: "1px solid #014D88",
-                                                        borderRadius: "0.2rem",
-                                                    }}
-                                                    disabled={isView}
-                                                >
-                                                    <option value={""}></option>
-                                                    {sexs.map((value) => (
-                                                        <option key={value.id} value={value.display}>
-                                                            {value.display}
-                                                        </option>
-                                                    ))}
-                                                </select>
-                                            </FormGroup>
-                                        </div>
-                                        {testKitUserDetails.basicUserInfo.age > 9 && (
-                                            <div className="form-group  col-md-4">
-                                                <FormGroup>
-                                                    <Label>Marital Status</Label>
-                                                    <select
-                                                        className="form-control"
-                                                        name="maritalStatusId"
-                                                        id="maritalStatusId"
-                                                        value={testKitUserDetails.basicUserInfo.maritalStatusId}
-                                                        // onChange={handleInputChange1}
-                                                        onChange={(e) => handleUserInformationInputChange(e, "basicUserInfo")}
-                                                        style={{
-                                                            border: "1px solid #014D88",
-                                                            borderRadius: "0.2rem",
-                                                        }}
-                                                        disabled={isView}
-                                                    >
-                                                        <option value={""}></option>
-                                                        {maritalStatus.map((value) => (
-                                                            <option key={value.id} value={value.id}>
-                                                                {value.display}
-                                                            </option>
-                                                        ))}
-                                                    </select>
-                                                </FormGroup>
-                                            </div>
-                                        )}
-                                        <div className="form-group  col-md-4">
-                                            <FormGroup>
-                                                <Label> Type of HIV Self-Test </Label>
-                                                <select
-                                                    className="form-control"
-                                                    name="typeOfHivst"
-                                                    id="typeOfHivst"
-                                                    value={testKitUserDetails.basicUserInfo.typeOfHivst}
-                                                    onChange={(e) => handleUserInformationInputChange(e, "basicUserInfo")}
-                                                    style={{
-                                                        border: "1px solid #014D88",
-                                                        borderRadius: "0.2rem",
-                                                    }}
-                                                    disabled={isView}
-                                                >
-                                                    <option value={""}></option>
-                                                    <option value="Assisted">
-                                                        Assisted
-                                                    </option>
-                                                    <option value="Unassisted">
-                                                        Unassisted
-                                                    </option>
-                                                </select>
-                                                {
-                                                    userInformationErrors.typeOfHivst !== "" ? (
-                                                        <span
-                                                            className={classes.error}>{userInformationErrors.typeOfHivst}</span>
-                                                    ) : ("")
+                                          <div className="form-group  col-md-4">
+                                              <FormGroup>
+                                                  <Label>
+                                                      Sex
+                                                      {/*<span style={{color: "red"}}> *</span> */}
+                                                  </Label>
+                                                  <select
+                                                      className="form-control"
+                                                      name="sex"
+                                                      id="sex"
+                                                      value={testKitUserDetails.basicUserInfo.sex}
+                                                      onChange={(e) => handleUserInformationInputChange(e, "basicUserInfo")}
+                                                      style={{
+                                                          border: "1px solid #014D88",
+                                                          borderRadius: "0.2rem",
+                                                      }}
+                                                      disabled={isView}
+                                                  >
+                                                      <option value={""}></option>
+                                                      {sexs.map((value) => (
+                                                          <option key={value.id} value={value.display}>
+                                                              {value.display}
+                                                          </option>
+                                                      ))}
+                                                  </select>
+                                              </FormGroup>
+                                          </div>
+                                          {testKitUserDetails.basicUserInfo.age > 9 && (
+                                              <div className="form-group  col-md-4">
+                                                  <FormGroup>
+                                                      <Label>Marital Status</Label>
+                                                      <select
+                                                          className="form-control"
+                                                          name="maritalStatusId"
+                                                          id="maritalStatusId"
+                                                          value={testKitUserDetails.basicUserInfo.maritalStatusId}
+                                                          // onChange={handleInputChange1}
+                                                          onChange={(e) => handleUserInformationInputChange(e, "basicUserInfo")}
+                                                          style={{
+                                                              border: "1px solid #014D88",
+                                                              borderRadius: "0.2rem",
+                                                          }}
+                                                          disabled={isView}
+                                                      >
+                                                          <option value={""}></option>
+                                                          {maritalStatus.map((value) => (
+                                                              <option key={value.id} value={value.id}>
+                                                                  {value.display}
+                                                              </option>
+                                                          ))}
+                                                      </select>
+                                                  </FormGroup>
+                                              </div>
+                                          )}
+                                          <div className="form-group  col-md-4">
+                                              <FormGroup>
+                                                  <Label> Type of HIV Self-Test </Label>
+                                                  <select
+                                                      className="form-control"
+                                                      name="typeOfHivst"
+                                                      id="typeOfHivst"
+                                                      value={testKitUserDetails.basicUserInfo.typeOfHivst}
+                                                      onChange={(e) => handleUserInformationInputChange(e, "basicUserInfo")}
+                                                      style={{
+                                                          border: "1px solid #014D88",
+                                                          borderRadius: "0.2rem",
+                                                      }}
+                                                      disabled={isView}
+                                                  >
+                                                      <option value={""}></option>
+                                                      <option value="Assisted">
+                                                          Assisted
+                                                      </option>
+                                                      <option value="Unassisted">
+                                                          Unassisted
+                                                      </option>
+                                                  </select>
+                                                  {
+                                                      userInformationErrors.typeOfHivst !== "" ? (
+                                                          <span
+                                                              className={classes.error}>{userInformationErrors.typeOfHivst}</span>
+                                                      ) : ("")
 
-                                                }
-                                            </FormGroup>
-                                        </div>
-                                        {/*<div className="form-group mb-3 col-md-6">*/}
-                                        {/*    <LabelSui*/}
-                                        {/*        as="a"*/}
-                                        {/*        color="black"*/}
-                                        {/*        // onClick={handleSubmitfamilyIndexRequestDto}*/}
-                                        {/*        size="small"*/}
-                                        {/*        style={{marginTop: 35}}*/}
-                                        {/*    >*/}
-                                        {/*        <Icon name="plus"/> Add*/}
-                                        {/*    </LabelSui>*/}
-                                        {/*</div>*/}
-                                    </div>
+                                                  }
+                                              </FormGroup>
+                                          </div>
+                                          {/*<div className="form-group mb-3 col-md-6">*/}
+                                          {/*    <LabelSui*/}
+                                          {/*        as="a"*/}
+                                          {/*        color="black"*/}
+                                          {/*        // onClick={handleSubmitfamilyIndexRequestDto}*/}
+                                          {/*        size="small"*/}
+                                          {/*        style={{marginTop: 35}}*/}
+                                          {/*    >*/}
+                                          {/*        <Icon name="plus"/> Add*/}
+                                          {/*    </LabelSui>*/}
+                                          {/*</div>*/}
+                                      </div>
 
 
-                                 </>
-                              )
-                            }
+                                  </>
+                                )
+                                }
 
                             {/*Checkbox to select if the User has conducted the HIVST – if checked, display the*/}
                             {/*following questions, else the user should be able to save the form.*/}

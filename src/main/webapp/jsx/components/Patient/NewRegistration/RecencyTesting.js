@@ -15,7 +15,9 @@ import { Label as LabelRibbon, Button } from "semantic-ui-react";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
 import { token, url as baseUrl } from "../../../../api";
+import { useHistory } from "react-router-dom/cjs/react-router-dom";
 
+import { Modal } from "react-bootstrap";
 const useStyles = makeStyles((theme) => ({
   card: {
     margin: theme.spacing(20),
@@ -85,6 +87,10 @@ const useStyles = makeStyles((theme) => ({
 const Recency = (props) => {
   console.log("recency new", props.patientObj);
   const classes = useStyles();
+  const [open, setOpen] = React.useState(false);
+  const toggle = () => setOpen(!open);
+
+  const history = useHistory();
   const patientID =
     props.patientObj && props.patientObj.personResponseDto
       ? props.patientObj.personResponseDto.id
@@ -187,20 +193,42 @@ const Recency = (props) => {
         : "",
   });
 
+  const handleDone = () => {
+    toggle();
+    //commenting this out for release
+    // handleItemClick("pns", "recency-testing");
+    handleItemClick("client-referral", "recency-testing");
+  };
+  const loadOtherForm = (row) => {
+    // setSaving(true);
+    //props.setActiveContent({...props.activeContent, route:'mental-health-view', id:row.id})
+    toggle();
+  };
+
+  const loadNextForm = (row) => {
+    // setSaving(true);
+    //commenting this out for release
+    // handleItemClick("fit", "recency-testing");
+    handleItemClick("pns", "recency-testing");
+
+    toggle();
+  };
   useEffect(() => {
     if (props.patientObj && props.patientObj.recency !== null) {
       console.log(props.patientObj.recency);
       setRecency(props.patientObj.recency);
+    }
+    if (props.patientObj) {
       if (
-        props.patientObj.confirmatoryTest &&
-        props.patientObj.confirmatoryTest.date !== ""
-      ) {
-        setHivTestDate(props.patientObj.confirmatoryTest.date);
-      } else if (
         props.patientObj.confirmatoryTest2 &&
         props.patientObj.confirmatoryTest2.date2 !== ""
       ) {
         setHivTestDate(props.patientObj.confirmatoryTest2.date2);
+      } else if (
+        props.patientObj.confirmatoryTest &&
+        props.patientObj.confirmatoryTest.date !== ""
+      ) {
+        setHivTestDate(props.patientObj.confirmatoryTest.date);
       } else {
         setHivTestDate("");
       }
@@ -267,7 +295,7 @@ const Recency = (props) => {
         viralLoadResultClassification: "",
         recencyResult: "",
         finalRecencyResult: "",
-        viralLoadConfirmationResult: ""
+        viralLoadConfirmationResult: "",
       });
     }
   }, [
@@ -284,7 +312,7 @@ const Recency = (props) => {
         recency.viralLoadResultClassification = ">=1000";
         recency.finalRecencyResult = "RITA Recent";
         setRecency({ ...recency, [e.target.name]: e.target.value });
-      }else if (e.target.value < 1000) {
+      } else if (e.target.value < 1000) {
         recency.viralLoadResultClassification = "<1000";
         recency.finalRecencyResult = "RITA Long term";
         setRecency({ ...recency, [e.target.name]: e.target.value });
@@ -351,8 +379,9 @@ const Recency = (props) => {
         .then((response) => {
           setSaving(false);
           props.setPatientObj(response.data);
+          loadOtherForm();
           //toast.success("Risk Assesment successful");
-          handleItemClick("indexing", "recency-testing");
+          // history.push('/')
         })
         .catch((error) => {
           setSaving(false);
@@ -615,7 +644,7 @@ const Recency = (props) => {
                         <div className="form-group  col-md-4">
                           <FormGroup>
                             <Label>
-                            Recency Sample Reference Number{" "}
+                              Recency Sample Reference Number{" "}
                               <span style={{ color: "red" }}> *</span>
                             </Label>
                             <Input
@@ -642,7 +671,7 @@ const Recency = (props) => {
                         <div className="form-group  col-md-4">
                           <FormGroup>
                             <Label>
-                            Recency Sample Type{" "}
+                              Recency Sample Type{" "}
                               <span style={{ color: "red" }}> *</span>
                             </Label>
                             <select
@@ -677,7 +706,7 @@ const Recency = (props) => {
                               name="dateSampleSentToPCRLab"
                               id="dateSampleSentToPCRLab"
                               type="date"
-                              min={recency.optOutRTRITestDate}
+                              min={recency.sampleCollectedDate}
                               value={recency.dateSampleSentToPCRLab}
                               max={moment(new Date()).format("YYYY-MM-DD")}
                               onChange={handleInputChangeRecency}
@@ -703,7 +732,8 @@ const Recency = (props) => {
                               name="sampleTestDate"
                               id="sampleTestDate"
                               type="date"
-                              min={recency.optOutRTRITestDate}
+                              // min={recency.optOutRTRITestDate}
+                              min={recency.dateSampleSentToPCRLab}
                               max={moment(new Date()).format("YYYY-MM-DD")}
                               value={recency.sampleTestDate}
                               onChange={handleInputChangeRecency}
@@ -731,26 +761,53 @@ const Recency = (props) => {
                             />
                           </FormGroup>
                         </div>
-                            <div className="form-group  col-md-4">
-                            <FormGroup>
-                                <Label>Recency Viral Load Confirmation Result (copies/ml)</Label>
-                                <Input
-                                    className="form-control"
-                                    name="viralLoadConfirmationResult"
-                                    id="viralLoadConfirmationResult"
-                                    type="number"
-                                    value={recency.viralLoadConfirmationResult}
-                                    onChange={handleInputChangeRecency}
-                                    style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
-                                />
-
-                            </FormGroup>
+                        <div className="form-group  col-md-4">
+                          <FormGroup>
+                            <Label>
+                              Recency Viral Load Confirmation Result (copies/ml)
+                            </Label>
+                            <Input
+                              className="form-control"
+                              name="viralLoadConfirmationResult"
+                              id="viralLoadConfirmationResult"
+                              type="number"
+                              value={recency.viralLoadConfirmationResult}
+                              onChange={handleInputChangeRecency}
+                              style={{
+                                border: "1px solid #014D88",
+                                borderRadius: "0.2rem",
+                              }}
+                            />
+                          </FormGroup>
                         </div>
                         <div className="form-group  col-md-4">
                           <FormGroup>
                             <Label>
-                            Recency Viral Load Result Classification and Result
-                              (copies/ml)
+                              Recency Viral Load Result Received Date
+                            </Label>
+                            <Input
+                              className="form-control"
+                              name="receivedResultDate"
+                              id="receivedResultDate"
+                              type="date"
+                              // min={recency.optOutRTRITestDate}
+                              min={recency.sampleTestDate}
+                              value={recency?.receivedResultDate}
+                              max={moment(new Date()).format("YYYY-MM-DD")}
+                              value={recency.receivedResultDate}
+                              onChange={handleInputChangeRecency}
+                              style={{
+                                border: "1px solid #014D88",
+                                borderRadius: "0.2rem",
+                              }}
+                            />
+                          </FormGroup>
+                        </div>
+                        <div className="form-group  col-md-4">
+                          <FormGroup>
+                            <Label>
+                              Recency Viral Load Result Classification and
+                              Result (copies/ml)
                             </Label>
                             <select
                               className="form-control"
@@ -774,7 +831,7 @@ const Recency = (props) => {
                             </select>
                           </FormGroup>
                         </div>
-             
+
                         <div className="form-group  col-md-4">
                           <FormGroup>
                             <Label>Final Recency Result</Label>
@@ -802,33 +859,103 @@ const Recency = (props) => {
               {saving ? <Spinner /> : ""}
               <br />
               <div className="row">
-                <div className="form-group mb-3 col-md-12">
-                  <Button
-                    content="Back"
-                    icon="left arrow"
-                    labelPosition="left"
-                    style={{ backgroundColor: "#992E62", color: "#fff" }}
-                    onClick={() => handleItemClick("post-test", "post-test")}
-                  />
-                  <Button
-                    content="Save & Continue"
-                    icon="right arrow"
-                    labelPosition="right"
-                    style={{ backgroundColor: "#014d88", color: "#fff" }}
-                    onClick={handleSubmit}
-                    disabled={
-                      props.patientObj?.postTestCounselingKnowledgeAssessment
-                        ?.hivTestResult === "true" && recency.optOutRTRI === ""
-                        ? true
-                        : false
-                    }
-                  />
+                <div
+                  className="form-group mb-3 "
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    width: "100%",
+                  }}
+                >
+                  <div className="">
+                    <Button
+                      content="Back"
+                      icon="left arrow"
+                      labelPosition="left"
+                      style={{ backgroundColor: "#992E62", color: "#fff" }}
+                      onClick={() => handleItemClick("post-test", "post-test")}
+                    />
+                    <Button
+                      content="Done"
+                      icon="right arrowrr"
+                      labelPosition="right"
+                      style={{ backgroundColor: "#014d88", color: "#fff" }}
+                      onClick={() => {
+                        history.push("/");
+                      }}
+                      disabled={
+                        props.patientObj?.postTestCounselingKnowledgeAssessment
+                          ?.hivTestResult === "true" &&
+                        recency.optOutRTRI === ""
+                          ? true
+                          : false
+                      }
+                    />
+                  </div>
+
+                  <div>
+                    {" "}
+                    <Button
+                      content="Save & Continue"
+                      icon="right arrow"
+                      labelPosition="right"
+                      style={{ backgroundColor: "#014d88", color: "#fff" }}
+                      onClick={handleSubmit}
+                      disabled={
+                        props.patientObj?.postTestCounselingKnowledgeAssessment
+                          ?.hivTestResult === "true" &&
+                        recency.optOutRTRI === ""
+                          ? true
+                          : false
+                      }
+                    />
+                  </div>
                 </div>
               </div>
             </div>
           </form>
         </CardBody>
       </Card>
+
+      <Modal
+        show={open}
+        toggle={toggle}
+        className="fade"
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+        backdrop="static"
+      >
+        <Modal.Header>
+          <Modal.Title id="contained-modal-title-vcenter">
+            Notification!
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <h4>
+            Would you like to fill the next form ?
+            {/* <b>{row && record.activityName}</b> */}
+          </h4>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            onClick={() => loadNextForm()}
+            style={{ backgroundColor: "red", color: "#fff" }}
+            // disabled={saving}
+          >
+            Yes
+            {/* {saving === false ? "Yes" : "Deleting..."} */}
+          </Button>
+          <Button
+            onClick={handleDone}
+            style={{ backgroundColor: "#014d88", color: "#fff" }}
+            // disabled={saving}
+          >
+            Skip
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 };

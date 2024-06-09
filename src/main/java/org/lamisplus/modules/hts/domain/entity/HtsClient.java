@@ -15,6 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
+import org.hibernate.annotations.Where;
 import org.lamisplus.modules.base.domain.entities.Audit;
 import org.lamisplus.modules.patient.domain.entity.Person;
 import javax.persistence.*;
@@ -27,6 +28,7 @@ import java.util.UUID;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Table(name = "hts_client")
+@Where(clause = "archived = 0")
 @TypeDefs({
         @TypeDef(name = "string-array", typeClass = StringArrayType.class),
         @TypeDef(name = "int-array", typeClass = IntArrayType.class),
@@ -293,4 +295,8 @@ public class HtsClient extends Audit implements Serializable {
 
     @Column(name = "other_drugs")
     private String otherDrugs;
+
+    private String offeredPns;
+
+    private String acceptedPns;
 }

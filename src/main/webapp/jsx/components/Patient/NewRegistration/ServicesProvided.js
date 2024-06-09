@@ -15,11 +15,12 @@ import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
 import "react-phone-input-2/lib/style.css";
 import { Button } from "semantic-ui-react";
-import { Modal } from "react-bootstrap";
-import { Label as LabelRibbon, Message } from "semantic-ui-react";
+
 import PhoneInput from "react-phone-input-2";
 import { getAllGenders, alphabetOnly } from "../../../../utility";
-import Select from "react-select";
+import {useHistory} from "react-router-dom";
+import DualListBox from "react-dual-listbox";
+
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -102,48 +103,190 @@ const ServicesProvided = (props) => {
   const [open, setOpen] = React.useState(false);
   const toggle = () => setOpen(!open);
   const [genders, setGenders] = useState([]);
-  const [allFacilities, setAllFacilities] = useState([]);
+    const [serviceNeeded, setServiceNeeded] = useState([]);
+    const [selectedServiceNeeded, setSelectServiceNeeded] = useState([]);
 
-  const [payload, setPayload] = useState({
-    nameOfFacilityProvider: "",
-    addressOfFacilityProvider: "",
-    referralDate: "",
-    comments: "",
-    clientFirstName: "",
-    clientLastName: "",
-    clientMiddleName: "",
-    nameOfServiceProvider: "",
-    signature: "",
-    phoneNumber: "",
-    categoryOfService: "",
-  });
+    const [payload, setPayload] = useState({
+        nameOfFacilityProvider: props?.formInfo?.nameOfReceivingFacility,
+        addressOfFacilityProvider: props?.formInfo?.addressOfReceivingFacility || "",
+        visitDate: props?.formInfo?.receivingOrganization?.visitDate || "",
+        comments: props?.formInfo?.comments || "",
+        clientFirstName: props?.patientObj?.personResponseDto?.firstName,
+        clientLastName: props?.patientObj?.personResponseDto?.surname,
+        clientMiddleName: props?.patientObj?.personResponseDto?.otherName,
+        nameOfServiceProvider: props?.formInfo?.receivingOrganization?.nameOfServiceProvider || "",
+        signature: props?.formInfo?.receivingOrganization?.signature || "",
+        phoneNumber: props?.formInfo?.receivingOrganization?.phoneNumber || "",
+        categoryOfService: props?.formInfo?.receivingOrganization?.categoryOfService
+            || {},
+        receivingFacilityLgaName: props?.formInfo?.receivingFacilityLgaName,
+        receivingFacilityStateName: props?.formInfo?.receivingFacilityStateName
+    });
 
+ const history = useHistory();
+  const [states1, setStates1] = useState([])
+  const [lgas1, setLGAs1] = useState([])
+  const [facilities1, setFacilities1] = useState([])
+  const [selectedState, setSelectedState] = useState({})
+  const [selectedFacility, setSelectedFacility] = useState({});
+  const [selectedLga, setSelectedLga] = useState({});
+
+    const handleItemClick = (page, completedMenu) => {
+        props.handleItemClick(page);
+        if (props.completed.includes(completedMenu)) {
+        } else {
+            props.setCompleted([...props.completed, completedMenu]);
+        }
+    };
+
+    const checkNumberLimit = (e) => {
+        const limit = 11;
+        const acceptedNumber = e.slice(0, limit);
+        return acceptedNumber;
+    };
+    const handleInputChangePhoneNumber = (e, inputName) => {
+        const limit = 11;
+        const NumberValue = checkNumberLimit(e.target.value.replace(/\D/g, ""));
+        setPayload({ ...payload, [inputName]: NumberValue });
+    };
+
+
+  // ##############################################
+
+    const SERVICE_NEEDED = () => {
+        axios
+            .get(`${baseUrl}application-codesets/v2/SERVICE_PROVIDED`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+            .then((response) => {
+                if (response.data) {
+                    // create array of objects from the response
+                    const serviceNeeded = response.data.map((service) => {
+                        return {
+                            value: service.display,
+                            label: service.display
+                        }
+                    });
+                    setServiceNeeded(serviceNeeded);
+                    // console.log("serviceNeeded", serviceNeeded)
+                }
+            })
+            .catch((e) => {
+                // handle error
+            });
+    };
+
+    useEffect(() => {
+        // Fetch the saved serviceNeeded from the backend
+        axios.get(`${baseUrl}hts-client-referral/${props.row.row.id}`, {
+            headers: { Authorization: `Bearer ${token}` },
+        })
+            .then((response) => {
+                // Convert the serviceNeeded object into an array of its values
+                const serviceNeededArray = Object.values(response.data.serviceNeeded);
+
+                // Set the serviceNeededArray to selectedServiceNeeded state
+                setSelectServiceNeeded(serviceNeededArray);
+            })
+            .catch((error) => {
+                // Handle error...
+            });
+    }, []);
+
+
+  const loadStates1 = () => {
+    axios.get(`${baseUrl}organisation-units/parent-organisation-units/1`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+        .then((response) => {
+          if (response.data) {
+            setStates1(response.data);
+          }
+        })
+        .catch((e) => {
+          // console.log("Fetch states error" + e);
+        });
+  };
+
+
+
+  const loadLGA1 = (id) => {
+    axios.get(`${baseUrl}organisation-units/parent-organisation-units/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+        .then((response) => {
+          if (response.data) {
+            setLGAs1(response.data);
+            // const selectedLga = response.data.find(lga => lga.id === id);
+            // setPayload(prevPayload => ({ ...prevPayload, lgaTransferTo: selectedLga ? selectedLga.name : "" }));
+          }
+
+        })
+        .catch((e) => {
+          // console.log("Fetch LGA error" + e);
+        });
+  };
+
+  const loadFacilities1 = (id) => {
+    axios.get(`${baseUrl}organisation-units/parent-organisation-units/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+        .then((response) => {
+          if (response.data) {
+            setFacilities1(response.data);
+
+          }
+        })
+        .catch((e) => {
+          // console.log("Fetch Facilities error" + e);
+        });
+  };
+
+  const handleInputChangeLocation = (e) => {
+    setErrors({ ...temp, [e.target.name]: "" });
+    if(e.target.name === 'stateTransferTo'){
+      let filteredState = states1.filter((each)=>{
+        return each.name.toLowerCase()  === e.target.value.toLowerCase()
+      })
+      setPayload({ ...payload, receivingFacilityStateName : e.target.value });
+
+      loadLGA1(filteredState[0].id);
+    }
+    if(e.target.name === 'lgaTransferTo'){
+      let filteredState = lgas1.filter((each)=>{
+        return each.name.toLowerCase()  === e.target.value.toLowerCase()
+      })
+      setPayload({ ...payload, [e.target.name]: e.target.value });
+      loadFacilities1(filteredState[0].id);
+
+    }
+
+  };
+  // ################################################
   const getGenders = () => {
     getAllGenders()
       .then((res) => {
         setGenders(res);
       })
       .catch((e) => {
-        console.log("error", e);
+        // console.log("error", e);
       });
     // ;
   };
-  // handle Facility Name to slect drop down
-  const handleInputChangeObject = (e) => {
-    // console.log(e);
-    setPayload({
-      ...payload,
-      nameOfFacilityProvider: e.name,
-      addressOfFacilityProvider: e.parentParentOrganisationUnitName,
-      // lgaTransferTo: e.parentOrganisationUnitName,
-    });
-    setErrors({ ...errors, nameOfRecievingFacility: "" });
-    // setSelectedState(e.parentParentOrganisationUnitName);
-    // setSelectedLga(e.parentOrganisationUnitName);
-  };
+
+
   useEffect(() => {
     getGenders();
-    getAllFacilities();
+    loadStates1()
+    SERVICE_NEEDED()
   }, []);
 
   const checkPhoneNumberBasic = (e, inputName) => {
@@ -152,31 +295,6 @@ const ServicesProvided = (props) => {
     }
     const limit = 10;
     setPayload({ ...payload, phoneNumber: e.slice(0, limit) });
-  };
-
-  // get all facilities
-  const getAllFacilities = () => {
-    axios
-      .get(
-        `${baseUrl}organisation-units/parent-organisation-units/1/organisation-units-level/4/hierarchy`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      )
-      .then((response) => {
-        // console.log(response.data);
-
-        let updatedFaclilties = response.data.map((each, id) => {
-          return {
-            ...each,
-            value: each.id,
-            label: each.name,
-          };
-        });
-
-        setAllFacilities(updatedFaclilties);
-      })
-      .catch((error) => {});
   };
 
   const handleInputChange = (e) => {
@@ -211,37 +329,6 @@ const ServicesProvided = (props) => {
     }
   };
 
-  const postPayload = (payload) => {
-    setSaving(true);
-    // props.setHideOtherMenu(false);
-    axios
-      .post(`${baseUrl}risk-stratification`, payload, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((response) => {
-        setSaving(false);
-        console.log(response.data);
-        //toast.success("Risk stratification save succesfully!");
-      })
-      .catch((error) => {
-        setSaving(false);
-        if (error.response && error.response.data) {
-          let errorMessage =
-            error.response.data.apierror &&
-            error.response.data.apierror.message !== ""
-              ? error.response.data.apierror.message
-              : "Something went wrong, please try again";
-          toast.error(errorMessage, {
-            position: toast.POSITION.BOTTOM_CENTER,
-          });
-        } else {
-          toast.error("Something went wrong. Please try again...", {
-            position: toast.POSITION.BOTTOM_CENTER,
-          });
-        }
-      });
-  };
-
   /*****  Validation  */
   const validate = () => {
     //HTS FORM VALIDATION
@@ -252,13 +339,13 @@ const ServicesProvided = (props) => {
     temp.addressOfFacilityProvider = payload.addressOfFacilityProvider
       ? ""
       : "This field is required.";
-    temp.referralDate = payload.referralDate ? "" : "This field is required.";
-    temp.clientFirstName = payload.clientFirstName
-      ? ""
-      : "This field is required.";
-    temp.clientLastName = payload.clientLastName
-      ? ""
-      : "This field is required.";
+    temp.visitDate = payload.visitDate ? "" : "This field is required.";
+    // temp.clientFirstName = payload.clientFirstName
+    //   ? ""
+    //   : "This field is required.";
+    // temp.clientLastName = payload.clientLastName
+    //   ? ""
+    //   : "This field is required.";
     temp.nameOfServiceProvider = payload.nameOfServiceProvider
       ? ""
       : "This field is required.";
@@ -269,17 +356,32 @@ const ServicesProvided = (props) => {
     temp.categoryOfService = payload.categoryOfService
       ? ""
       : "This field is required.";
-
+     // console.log("temp", temp);
     setErrors({ ...temp });
     return Object.values(temp).every((x) => x == "");
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(payload);
+
+    const data = {
+      htsClientReferralId: props.row.row.id,
+      receivingOrganizationDTO: payload
+    };
     if (validate()) {
-      console.log(payload);
-      //   postPayload(payload);
+      try {
+        setSaving(true);
+        await axios.put(`${baseUrl}hts-client-referral/${props.row.row.id}`, data, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        setSaving(false);
+        toast.success("Record saved successfully", { position: toast.POSITION.BOTTOM_CENTER });
+          props.handleItemClick("refferal-history");
+      } catch (error) {
+        setSaving(false);
+        const errorMessage = error.response?.data?.apierror?.message || "Something went wrong, please try again";
+        toast.error(errorMessage, { position: toast.POSITION.BOTTOM_CENTER });
+      }
     }
   };
 
@@ -310,29 +412,60 @@ const ServicesProvided = (props) => {
             </i>
           </p>
           <div className="row">
+            {/*###############################*/}
+            {/*<div className="form-group mb-3 col-md-6">*/}
+            {/*  <FormGroup>*/}
+            {/*    <Label for="firstName">*/}
+            {/*      Facility providing service State*/}
+            {/*    </Label>*/}
+            {/*    <Input*/}
+            {/*        className="form-control"*/}
+            {/*        type="text"*/}
+            {/*        name="receivingFacilityStateName"*/}
+            {/*        id="receivingFacilityStateName"*/}
+            {/*        value={payload.receivingFacilityStateName}*/}
+            {/*        onChange={handleInputChange}*/}
+            {/*        style={{*/}
+            {/*          border: "1px solid #014D88",*/}
+            {/*          borderRadius: "0.2rem",*/}
+            {/*        }}*/}
+            {/*        disabled*/}
+            {/*    />*/}
+            {/*    {errors.nameOfServiceProvider !== "" ? (*/}
+            {/*        <span className={classes.error}>*/}
+            {/*        {errors.nameOfServiceProvider}*/}
+            {/*      </span>*/}
+            {/*    ) : (*/}
+            {/*        ""*/}
+            {/*    )}*/}
+            {/*  </FormGroup>*/}
+            {/*</div>*/}
+
+            {/*<div className="form-group mb-3 col-md-6">*/}
+            {/*  <FormGroup>*/}
+            {/*    <Label for="firstName">*/}
+            {/*      Facility providing service LGA*/}
+            {/*    </Label>*/}
+            {/*    <Input*/}
+            {/*        className="form-control"*/}
+            {/*        type="text"*/}
+            {/*        name="receivingFacilityLgaName"*/}
+            {/*        id="receivingFacilityLgaName"*/}
+            {/*        value={payload.receivingFacilityLgaName}*/}
+            {/*        onChange={handleInputChange}*/}
+            {/*        style={{*/}
+            {/*          border: "1px solid #014D88",*/}
+            {/*          borderRadius: "0.2rem",*/}
+            {/*        }}*/}
+            {/*        disabled*/}
+            {/*    />*/}
+            {/*  </FormGroup>*/}
+            {/*</div>*/}
+
             <div className="form-group mb-3 col-md-6">
               <FormGroup>
-                <Label for="firstName">
-                  Name of Facility providing the service
-                  <span style={{ color: "red" }}> *</span>
-                </Label>
-                <Select
-                  //value={selectedOption}
-                  onChange={handleInputChangeObject}
-                  name="nameOfFacilityProvider"
-                  options={allFacilities}
-                  theme={(theme) => ({
-                    ...theme,
-                    borderRadius: "0.25rem",
-                    border: "1px solid #014D88",
-                    colors: {
-                      ...theme.colors,
-                      primary25: "#014D88",
-                      primary: "#014D88",
-                    },
-                  })}
-                />
-                {/* <Input
+                <Label for="firstName">Facility providing Service</Label>
+                <Input
                   className="form-control"
                   type="text"
                   name="nameOfFacilityProvider"
@@ -343,16 +476,12 @@ const ServicesProvided = (props) => {
                     border: "1px solid #014D88",
                     borderRadius: "0.2rem",
                   }}
-                /> */}
-                {errors.nameOfFacilityProvider !== "" ? (
-                  <span className={classes.error}>
-                    {errors.nameOfFacilityProvider}
-                  </span>
-                ) : (
-                  ""
-                )}
+                  disabled
+                />
               </FormGroup>
             </div>
+            {/*###############################*/}
+
             <div className="form-group mb-3 col-md-6">
               <FormGroup>
                 <Label for="firstName">
@@ -370,6 +499,8 @@ const ServicesProvided = (props) => {
                     border: "1px solid #014D88",
                     borderRadius: "0.2rem",
                   }}
+                  // disabled={props.row.action === "view" ? true : false}
+                  disabled
                 />
                 {errors.addressOfFacilityProvider !== "" ? (
                   <span className={classes.error}>
@@ -388,19 +519,20 @@ const ServicesProvided = (props) => {
                 </Label>
                 <Input
                   type="date"
-                  name="referralDate"
-                  id="referralDate"
-                  value={payload.referralDate}
+                  name="visitDate"
+                  id="visitDate"
+                  value={payload.visitDate}
                   onChange={handleInputChange}
-                  min="1929-12-31"
+                  min={props.formInfo.dateVisit}
                   max={moment(new Date()).format("YYYY-MM-DD")}
                   style={{
                     border: "1px solid #014D88",
                     borderRadius: "0.25rem",
                   }}
+                  disabled={props.row.action === "view" ? true : false}
                 />
-                {errors.referralDate !== "" ? (
-                  <span className={classes.error}>{errors.referralDate}</span>
+                {errors.visitDate !== "" ? (
+                  <span className={classes.error}>{errors.visitDate}</span>
                 ) : (
                   ""
                 )}
@@ -422,6 +554,8 @@ const ServicesProvided = (props) => {
                     border: "1px solid #014D88",
                     borderRadius: "0.2rem",
                   }}
+                  // disabled={props.row.action === "view" ? true : false}
+                  disabled
                 />
                 {errors.clientFirstName !== "" ? (
                   <span className={classes.error}>
@@ -449,6 +583,8 @@ const ServicesProvided = (props) => {
                     border: "1px solid #014D88",
                     borderRadius: "0.2rem",
                   }}
+                  // disabled={props.row.action === "view" ? true : false}
+                  disabled
                 />
               </FormGroup>
             </div>
@@ -469,6 +605,8 @@ const ServicesProvided = (props) => {
                     border: "1px solid #014D88",
                     borderRadius: "0.2rem",
                   }}
+                  // disabled={props.row.action === "view" ? true : false}
+                  disabled
                 />
                 {errors.clientLastName !== "" ? (
                   <span className={classes.error}>{errors.clientLastName}</span>
@@ -498,6 +636,7 @@ const ServicesProvided = (props) => {
                     borderRadius: "0.2rem",
                     height: "100px",
                   }}
+                  disabled={props.row.action === "view" ? true : false}
                 />
                 {/* {errors.firstName !== "" ? (
                   <span className={classes.error}>{errors.firstName}</span>
@@ -523,6 +662,7 @@ const ServicesProvided = (props) => {
                     border: "1px solid #014D88",
                     borderRadius: "0.2rem",
                   }}
+                  disabled={props.row.action === "view" ? true : false}
                 />
                 {errors.nameOfServiceProvider !== "" ? (
                   <span className={classes.error}>
@@ -550,6 +690,7 @@ const ServicesProvided = (props) => {
                     border: "1px solid #014D88",
                     borderRadius: "0.2rem",
                   }}
+                  disabled={props.row.action === "view" ? true : false}
                 />
                 {errors.signature !== "" ? (
                   <span className={classes.error}>{errors.signature}</span>
@@ -558,94 +699,109 @@ const ServicesProvided = (props) => {
                 )}
               </FormGroup>
             </div>
-
-            <div className="form-group  col-md-6">
+            <div className="form-group  col-md-4">
               <FormGroup>
                 <Label>
                   Phone Number <span style={{ color: "red" }}> *</span>
                 </Label>
-                <PhoneInput
-                  containerStyle={{
-                    width: "100%",
-                    border: "1px solid #014D88",
-                  }}
-                  inputStyle={{ width: "100%", borderRadius: "0px" }}
-                  country={"ng"}
-                  placeholder="(234)7099999999"
-                  maxLength={5}
+                <Input
+                  type="text"
                   name="phoneNumber"
                   id="phoneNumber"
-                  masks={{ ng: "...-...-....", at: "(....) ...-...." }}
-                  value={payload.phoneNumber}
                   onChange={(e) => {
-                    checkPhoneNumberBasic(e, "phoneNumber");
+                    handleInputChangePhoneNumber(e, "phoneNumber");
                   }}
-                  //onChange={(e)=>{handleInputChangeBasic(e,'phoneNumber')}}
+                  value={payload.phoneNumber}
+                  style={{
+                    border: "1px solid #014D88",
+                    borderRadius: "0.2rem",
+                  }}
+                  disabled={props.row.action === "view" ? true : false}
+                  // required
                 />
-
                 {errors.phoneNumber !== "" ? (
                   <span className={classes.error}>{errors.phoneNumber}</span>
                 ) : (
                   ""
                 )}
-                {/* {basicInfo.phoneNumber.length >13 ||  basicInfo.phoneNumber.length <13? (
-                                                <span className={classes.error}>{"The maximum and minimum required number is 13 digit"}</span>
-                                                ) : "" } */}
               </FormGroup>
             </div>
-
-            <div className="form-group  col-md-6">
-              <FormGroup>
-                <Label>
-                  Categories of Services{" "}
-                  <span style={{ color: "red" }}> *</span>
-                </Label>
-                <select
-                  className="form-control"
-                  name="categoryOfService"
-                  id="categoryOfService"
-                  onChange={handleInputChange}
-                  value={payload.categoryOfService}
-                  style={{
-                    border: "1px solid #014D88",
-                    borderRadius: "0.2rem",
+            {/*<div className="form-group mb-3 col-md-6">*/}
+            {/*  <FormGroup>*/}
+            {/*    <Label for="firstName">Categories of Services </Label>*/}
+            {/*    <Input*/}
+            {/*      className="form-control"*/}
+            {/*      type="text"*/}
+            {/*      name="serviceCategory"*/}
+            {/*      id="serviceCategory"*/}
+            {/*      value={payload.categoryOfService}*/}
+            {/*      onChange={handleInputChange}*/}
+            {/*      style={{*/}
+            {/*        border: "1px solid #014D88",*/}
+            {/*        borderRadius: "0.2rem",*/}
+            {/*      }}*/}
+            {/*      disabled*/}
+            {/*    />*/}
+            {/*  </FormGroup>*/}
+            {/*</div>*/}
+              <div className="form-group mb-3 col-md-12">
+                  <FormGroup>
+                      <Label for="dualListBox">
+                          Categories of Services
+                      </Label>
+              <DualListBox
+                  options={serviceNeeded}
+                  selected={selectedServiceNeeded}
+                  onChange={(value) => {
+                      // Update selectedServiceNeeded state
+                      setSelectServiceNeeded(value);
+                      // Convert selectedServiceNeeded array into an object
+                      const serviceNeededObject = value.reduce((obj, item, index) => {
+                          obj[index] = item;
+                          return obj;
+                      }, {});
+                      // Update serviceNeeded in payload
+                      setPayload({ ...payload, categoryOfService: serviceNeededObject });
                   }}
-                >
-                  <option value={""}>Select</option>
-                  {genders.map((gender, index) => (
-                    <option key={gender?.id} value={gender?.id}>
-                      {gender?.display}
-                    </option>
-                  ))}
-                </select>
-                {errors.categoryOfService !== "" ? (
-                  <span className={classes.error}>
-                    {errors.categoryOfService}
-                  </span>
-                ) : (
-                  ""
-                )}
-              </FormGroup>
-            </div>
-          </div>
-          <br />
-
-          <br />
-
-          <br />
-          <div className="row">
-            <div className="form-group mb-3 col-md-6">
-              <Button
-                content="Save"
-                type="submit"
-                icon="right arrow"
-                labelPosition="right"
-                style={{ backgroundColor: "#014d88", color: "#fff" }}
-                onClick={handleSubmit}
-                disabled={saving}
+                  // disabled={props.row.action === "view" ? true : false}
+                  disabled
               />
-            </div>
+                  </FormGroup>
+              </div>
           </div>
+          <br />
+
+          <br />
+
+          <br />
+          {props.row.action === "update" && (
+            <div className="row">
+              {/*<div className="form-group mb-3 col-md-12">*/}
+              {/*  <Button*/}
+              {/*    content="Done"*/}
+              {/*    type="submit"*/}
+              {/*    // icon="right arrow"*/}
+              {/*    // labelPosition="right"*/}
+              {/*    style={{ backgroundColor: "#014d88", color: "#fff" }}*/}
+              {/*    onClick={() => {*/}
+              {/*      history.push("/");*/}
+              {/*    }}*/}
+              {/*    disabled={saving}*/}
+              {/*  />*/}
+              {/*</div>*/}
+              <div className="form-group mb-3 mt-5 col-md-6">
+                <Button
+                  content="Done"
+                  type="submit"
+                  // icon="right arrow"
+                  // labelPosition="right"
+                  style={{ backgroundColor: "#014d88", color: "#fff" }}
+                  onClick={handleSubmit}
+                  disabled={saving}
+                />
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </>

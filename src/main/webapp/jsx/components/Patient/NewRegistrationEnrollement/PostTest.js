@@ -148,8 +148,16 @@ const PostTest = (props) => {
         postTestCounselingKnowledgeAssessment?.lubricantProvidedToClientCount,
     });
     const handleInputChangePostTest = (e) => {
-        //setErrors({...temp, [e.target.name]:""})
-        setPostTest({...postTest, [e.target.name]: e.target.value});
+   if (e.target.name === "lubricantProvidedToClientCount") {
+     if (e.target.value >= 0) {
+       setPostTest({ ...postTest, [e.target.name]: e.target.value });
+     }
+   } else {
+     setPostTest({ ...postTest, [e.target.name]: e.target.value });
+   }
+
+
+
     };
     const handleItemClick = (page, completedMenu) => {
         props.handleItemClick(page);
@@ -211,11 +219,11 @@ const PostTest = (props) => {
                 .then((response) => {
                     setSaving(false);
                     props.setPatientObj(response.data);
-                    //toast.success("Risk Assesment successful");
+                    toast.success("Post Test Assesment successful");
                     if (postTest.hivTestResult === "true") {
                         handleItemClick("recency-testing", "post-test");
                     } else if (postTest.hivTestResult === "false") {
-                        history.push("/");
+                        handleItemClick("client-referral", "post-test");
                     }
                 })
                 .catch((error) => {
@@ -264,7 +272,9 @@ const PostTest = (props) => {
                                             border: "1px solid #014D88",
                                             borderRadius: "0.2rem",
                                         }}
-                                        disabled={props.activePage.actionType === "view"}
+                                        // disabled={props.activePage.actionType === "view"}
+                                    disabled={true}
+
                                     >
                                         <option value={""}></option>
                                         <option value="true">Positive</option>
@@ -736,7 +746,7 @@ const PostTest = (props) => {
                                             labelPosition="right"
                                             style={{backgroundColor: "#014d88", color: "#fff"}}
                                             onClick={handleSubmit}
-                                            disabled={saving}
+                                            // disabled={saving}
                                         />
                                     )}
                                     {props.activePage.actionType === "view" && (

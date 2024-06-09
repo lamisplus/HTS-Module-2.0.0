@@ -8,6 +8,8 @@ import History from "./History";
 import ContineousRegistrationTesting from "./../Patient/ContineousRegistrationTesting";
 //import CheckedInPatients from './Patient/CheckedInPatients'
 import * as moment from "moment";
+import ExistenceClientHIVSTRegistration from "../Patient/HIVST/ExistenceClientHIVSTRegistration";
+import HIVSTPatientHistory from '../Patient/HIVST/HIVSTPatientHistory'
 
 const divStyle = {
   borderRadius: "2px",
@@ -15,6 +17,7 @@ const divStyle = {
 };
 
 const Home = (props) => {
+  console.log(props.patientObj);
   const [patientList, setPatientList] = useState([]);
   const [loading, setLoading] = useState(true);
   const patientId =
@@ -28,7 +31,7 @@ const Home = (props) => {
     const monthDifference = moment(
       new Date(moment(new Date()).format("YYYY-MM-DD"))
     ).diff(new Date(visitDate), "months", true);
-    //console.log(monthDifference)
+    console.log(monthDifference)
     return monthDifference;
   };
   useEffect(() => {
@@ -62,6 +65,7 @@ const Home = (props) => {
       })
       .then((response) => {
         //set the last date of visit after the response
+        console.log(response.data.dateVisit);
         setLastVisitCount(
           Math.round(calculateLastVisitDate(response.data.dateVisit))
         );
@@ -112,6 +116,29 @@ const Home = (props) => {
                         />
                       </Tab>
                     )}
+                  <Tab eventKey="hivst-history" title="HIVST HISTORY">
+                    <HIVSTPatientHistory
+                        patientObj={props.patientObj}
+                        setPatientObj={props.setPatientObj}
+                        activePage={props.activePage}
+                        setActivePage={props.setActivePage}
+                        clientCode={props.clientCode}
+                        patientAge={props.patientAge}
+                        patients={patients}
+                        patientList={patientList}
+                        loading={loading}
+                    />
+                  </Tab>
+                  <Tab eventKey="new-hivst" title="NEW HIVST">
+                            <ExistenceClientHIVSTRegistration
+                                patientObj={props.patientObj}
+                                activePage={props.activePage}
+                                setActivePage={props.setActivePage}
+                                clientCode={props.clientCode}
+                                patientAge={props.patientAge}
+                                patients={patients}
+                            />
+                  </Tab>
                 </Tabs>
               </div>
             </Card.Body>

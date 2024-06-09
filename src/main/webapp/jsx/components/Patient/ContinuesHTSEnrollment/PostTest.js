@@ -186,7 +186,15 @@ const PostTest = (props) => {
   }, [props.patientObj, postTest.hivTestResult]);
   const handleInputChangePostTest = (e) => {
     //setErrors({...temp, [e.target.name]:""})
-    setPostTest({ ...postTest, [e.target.name]: e.target.value });
+
+    if (e.target.name === "lubricantProvidedToClientCount") {
+          if(e.target.value >= 0){
+           setPostTest({ ...postTest, [e.target.name]: e.target.value });
+          }
+
+    } else {
+      setPostTest({ ...postTest, [e.target.name]: e.target.value });
+    }
   };
   const handleItemClick = (page, completedMenu) => {
     props.handleItemClick(page);
@@ -212,12 +220,14 @@ const PostTest = (props) => {
       .then((response) => {
         setSaving(false);
         props.setPatientObj(response.data);
-        //toast.success("Risk Assesment successful");
+        toast.success("Risk Assesment successful");
         if (postTest.hivTestResult === "true") {
           handleItemClick("recency-testing", "post-test");
         } else if (postTest.hivTestResult === "false") {
-          history.push("/");
+          // history.push("/");
+          handleItemClick("client-referral", "post-test");
         }
+        // handleItemClick("recency-testing", "post-test");
       })
       .catch((error) => {
         setSaving(false);
@@ -270,6 +280,7 @@ const PostTest = (props) => {
                       border: "1px solid #014D88",
                       borderRadius: "0.2rem",
                     }}
+                    disabled={true}
                   >
                     <option value={""}></option>
                     <option value="true">Positive</option>
@@ -714,24 +725,31 @@ const PostTest = (props) => {
                     style={{ backgroundColor: "#992E62", color: "#fff" }}
                     onClick={() => handleItemClick("hiv-test", "hiv-test")}
                   />
-                  {postTest.hivTestResult === "true" && (
-                    <Button
+                  {/*{postTest.hivTestResult === "true" && (*/}
+                  {/*  <Button*/}
+                  {/*    content="Save & Continue"*/}
+                  {/*    icon="right arrow"*/}
+                  {/*    labelPosition="right"*/}
+                  {/*    style={{ backgroundColor: "#014d88", color: "#fff" }}*/}
+                  {/*    onClick={handleSubmit}*/}
+                  {/*  />*/}
+                  {/*)}*/}
+                  {/*{postTest.hivTestResult === "false" && (*/}
+                  {/*  <Button*/}
+                  {/*    content="Save & Finish"*/}
+                  {/*    icon="right arrow"*/}
+                  {/*    labelPosition="right"*/}
+                  {/*    style={{ backgroundColor: "#014d88", color: "#fff" }}*/}
+                  {/*    onClick={handleSubmit}*/}
+                  {/*  />*/}
+                  {/*)}*/}
+                  <Button
                       content="Save & Continue"
                       icon="right arrow"
                       labelPosition="right"
                       style={{ backgroundColor: "#014d88", color: "#fff" }}
                       onClick={handleSubmit}
-                    />
-                  )}
-                  {postTest.hivTestResult === "false" && (
-                    <Button
-                      content="Save & Finish"
-                      icon="right arrow"
-                      labelPosition="right"
-                      style={{ backgroundColor: "#014d88", color: "#fff" }}
-                      onClick={handleSubmit}
-                    />
-                  )}
+                  />
                 </div>
               </div>
             </div>

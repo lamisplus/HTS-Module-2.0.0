@@ -2,10 +2,13 @@ package org.lamisplus.modules.hts.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.audit4j.core.util.Log;
 import org.lamisplus.modules.base.controller.apierror.EntityNotFoundException;
 import org.lamisplus.modules.hts.domain.dto.RiskStratificationDto;
 import org.lamisplus.modules.hts.domain.dto.RiskStratificationResponseDto;
+import org.lamisplus.modules.hts.domain.entity.HtsClient;
 import org.lamisplus.modules.hts.domain.entity.RiskStratification;
+import org.lamisplus.modules.hts.domain.enums.Source;
 import org.lamisplus.modules.hts.repository.RiskStratificationRepository;
 import org.lamisplus.modules.patient.domain.entity.Person;
 import org.lamisplus.modules.patient.repository.PersonRepository;
@@ -17,9 +20,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static org.lamisplus.modules.base.util.Constants.ArchiveStatus.ARCHIVED;
 import static org.lamisplus.modules.base.util.Constants.ArchiveStatus.UN_ARCHIVED;
 
 @Service
@@ -32,6 +35,16 @@ public class RiskStratificationService {
     private final JdbcTemplate jdbcTemplate;
 
     public RiskStratificationResponseDto save(RiskStratificationDto riskStratificationDTO) {
+
+        if(riskStratificationDTO.getSource().equalsIgnoreCase(Source.Mobile.toString())) {
+
+            Optional<RiskStratification> riskStratificationExists = stratificationRepository.findByCode(riskStratificationDTO.getCode());
+            if (riskStratificationExists.isPresent()) {
+                LOG.info("Risk stratification with code {} has already been synced.", riskStratificationDTO.getCode());
+                return toRiskStratificationResponseDTO(riskStratificationExists.get());
+            }
+        }
+
         String personUuid=null;
         if(riskStratificationDTO.getPersonId() != null){
             personUuid = getPerson(riskStratificationDTO.getPersonId()).getUuid();

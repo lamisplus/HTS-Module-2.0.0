@@ -13,6 +13,7 @@ import org.lamisplus.modules.hts.domain.entity.HtsClient;
 import org.lamisplus.modules.hts.domain.entity.HtsPerson;
 import org.lamisplus.modules.hts.domain.entity.IndexElicitation;
 import org.lamisplus.modules.hts.domain.entity.RiskStratification;
+import org.lamisplus.modules.hts.domain.enums.Source;
 import org.lamisplus.modules.hts.repository.HtsClientRepository;
 import org.lamisplus.modules.hts.repository.IndexElicitationRepository;
 import org.lamisplus.modules.hts.util.RandomCodeGenerator;
@@ -53,6 +54,14 @@ public class HtsClientService {
                 throw new IllegalTypeException(HtsClientRequestDto.class, "RiskStratificationCode is ", "already exist for an hts client");
             }
         }
+
+        if(htsClientRequestDto.getSource().equalsIgnoreCase(Source.Mobile.toString())){
+            Optional<HtsClient> htsClientExists = htsClientRepository.findByUuid(htsClientRequestDto.getUuid());
+            if (htsClientExists.isPresent()) {
+                LOG.info("HTS Client with code {} has already been synced", htsClientRequestDto.getClientCode());
+                return htsClientToHtsClientDto(htsClientExists.get());
+        }}
+
         HtsClient htsClient;
         PersonResponseDto personResponseDto;
         Person person;
@@ -236,7 +245,7 @@ public class HtsClientService {
         htsClient.setTypeCounseling( htsClientRequestDto.getTypeCounseling() );
         htsClient.setIndexClient( htsClientRequestDto.getIndexClient() );
         htsClient.setIndexClientCode( htsClientRequestDto.getIndexClientCode());
-        htsClient.setPreviouslyTested( htsClientRequestDto.getPreviouslyTested() );
+        htsClient.setPreviouslyTested( htsClientRequestDto.getPreviouslyTested());
         htsClient.setExtra( htsClientRequestDto.getExtra() );
         htsClient.setPersonUuid( personUuid);
         htsClient.setPregnant(htsClientRequestDto.getPregnant());
@@ -465,6 +474,9 @@ public class HtsClientService {
         htsClientDto.setPrepGiven(htsClient.getPrepGiven());
         htsClientDto.setOtherDrugs(htsClient.getOtherDrugs());
         htsClientDto.setHivTestResult(htsClient.getHivTestResult());
+
+        htsClient.setPrepOffered(htsClient.getPrepOffered());
+        htsClient.setPrepAccepted(htsClient.getPrepAccepted());
 
         return htsClientDto;
     }

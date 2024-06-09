@@ -161,6 +161,9 @@ const HivTestResult = (props) => {
     cd4SemiQuantitative: "",
     cd4FlowCyteometry: "",
   });
+
+  const [finalResult, setFinalResult] = useState("");
+
   const handleInputChangeInitial = (e) => {
     //setErrors({...temp, [e.target.name]:""})
     if (e.target.value === "No") {
@@ -269,6 +272,9 @@ const HivTestResult = (props) => {
       setShowCD4Count(true);
     }
   };
+
+
+
   const [syphills, setSyphills] = useState({
     syphilisTestResult: "",
     // result  :"",
@@ -430,8 +436,163 @@ const HivTestResult = (props) => {
     setErrors({ ...temp });
     return Object.values(temp).every((x) => x == "");
   };
+
+  // track and set final result
+  useEffect(() => {
+    let result = "";
+
+    if (initialTest1.result === "No") {
+      result = "Negative";
+    } else if (
+        confirmatoryTest.result === "No" &&
+        tieBreakerTest.result === "No" &&
+        (initialTest1.result === "Yes" || initialTest1.result !== "")
+    ) {
+      result = "Negative";
+    } else if (
+        initialTest1.result === "Yes" &&
+        confirmatoryTest.result === "No" &&
+        tieBreakerTest.result === "Yes" &&
+        initialTest12.result2 === "Yes" &&
+        confirmatoryTest2.result2 === "Yes"
+    ) {
+      result = "Negative";
+    } else if (
+        initialTest1.result === "Yes" &&
+        confirmatoryTest.result === "Yes" &&
+        initialTest12.result2 === "Yes" &&
+        confirmatoryTest2.result2 === "Yes"
+    ) {
+      result = "Positive";
+    } else if (
+        initialTest1.result === "Yes" &&
+        confirmatoryTest.result === "No" &&
+        tieBreakerTest.result === "Yes" &&
+        initialTest12.result2 === "Yes" &&
+        confirmatoryTest2.result2 === "Yes"
+    ) {
+      result = "Positive";
+    } else if(
+        initialTest1.result === "Yes" &&
+        confirmatoryTest.result === "Yes" &&
+        initialTest12.result2 === "Yes" &&
+        confirmatoryTest2.result2 === "No" &&
+        tieBreakerTest2.result2 === "No"
+
+    ){
+      result = "Negative";
+    }
+    else if (
+        initialTest1.result === "Yes" &&
+        confirmatoryTest.result === "No" &&
+        tieBreakerTest.result === "Yes" &&
+        initialTest12.result2 === "Yes" &&
+        confirmatoryTest2.result2 === "No" &&
+        tieBreakerTest2.result2 === "No"
+    ) {
+      result = "Negative";
+    }
+
+    setFinalResult(result);
+  }, [
+    initialTest1.result,
+    confirmatoryTest.result,
+    tieBreakerTest.result,
+    initialTest12.result2,
+    confirmatoryTest2.result2,
+    tieBreakerTest2.result2,
+  ]);
+  // clear the all other fields if there changes in initialTest1 result is changes
+  useEffect(() => {
+    setConfirmatoryTest({
+      date: "",
+      result: "",
+    })
+    setTieBreakerTest({
+      date: "",
+      result: "",
+    })
+    setInitailTest2({
+      date2: "",
+      result2: "",
+    });
+    setConfirmatoryTest2({
+      date2: "",
+      result2: "",
+    });
+    setTieBreakerTest2({
+      date2: "",
+      result2: "",
+    });
+    // clear the prepOffered and prepAccepted fields
+    setObjValues({...objValues, prepOffered: "", prepAccepted: ""})
+  }, [initialTest1.result]);
+
+  // clear the all other the input fields that follows the initialTest2, if there changes in initialTest12 result is changes
+
+  useEffect(() => {
+    setTieBreakerTest({
+      date: "",
+      result: "",
+    })
+    setInitailTest2({
+      date2: "",
+      result2: "",
+    });
+    setConfirmatoryTest2({
+      date2: "",
+      result2: "",
+    });
+    setTieBreakerTest2({
+      date2: "",
+      result2: "",
+    });
+    setObjValues({...objValues, prepOffered: "", prepAccepted: ""})
+  }, [confirmatoryTest.result]);
+
+  // clear all the input fields that follows the confirmatoryTest, if there changes in confirmatoryTest result is changes.
+  useEffect(() => {
+    setInitailTest2({
+      date2: "",
+      result2: "",
+    });
+    setConfirmatoryTest2({
+      date2: "",
+      result2: "",
+    });
+    setTieBreakerTest2({
+      date2: "",
+      result2: "",
+    });
+    setObjValues({...objValues, prepOffered: "", prepAccepted: ""})
+  }, [tieBreakerTest.result]);
+
+  useEffect(() => {
+    setConfirmatoryTest2({
+      date2: "",
+      result2: "",
+    });
+    setTieBreakerTest2({
+      date2: "",
+      result2: "",
+    });
+    setObjValues({...objValues, prepOffered: "", prepAccepted: ""})
+  }, [initialTest12.result2]);
+
+  useEffect(() => {
+    setTieBreakerTest2({
+      date2: "",
+      result2: "",
+    });
+    setObjValues({...objValues, prepOffered: "", prepAccepted: ""})
+  }, [confirmatoryTest2.result2]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (finalResult === "") {
+      toast.error("Final result is required for submission.");
+      return;
+    }
     if (validate()) {
       setSaving(true);
       //logic to get Hiv result test
@@ -701,15 +862,18 @@ const HivTestResult = (props) => {
               <div className="row">
                 <div className="form-group  col-md-12">
                   {initialTest1.result === "No" && (
-                    <>
-                      <b> Result : </b>
-                      <LabelRibbon color="green">Non Reactive</LabelRibbon>
-                    </>
-                  )}
-                  {initialTest1.result === "No" &&
-                    confirmatoryTest.result === "No" && (
                       <>
                         <b> Result : </b>
+                        <LabelRibbon color="green">Non Reactive</LabelRibbon>
+                        <b> Final Result : </b>
+                        <LabelRibbon color="green">Negative</LabelRibbon>
+                        <br/>
+                      </>
+                  )}
+                  {initialTest1.result === "No" &&
+                      confirmatoryTest.result === "No" && (
+                          <>
+                          <b> Result : </b>
                         <LabelRibbon color="green">Non Reactive</LabelRibbon>
                       </>
                     )}
@@ -1085,9 +1249,13 @@ const HivTestResult = (props) => {
                     (initialTest1.result === "Yes" ||
                       initialTest1.result !== "") && (
                       <>
-                        <b> Result : </b>
-                        <LabelRibbon color="green">Non Reactive</LabelRibbon>
-                        <br />
+                        <>
+                          <b> Result : </b>
+                          <LabelRibbon color="green">Non Reactive</LabelRibbon>
+                          <b> Final Result : </b>
+                          <LabelRibbon color="green"> Negative</LabelRibbon>
+                        </>
+                        <br/>
                         <div className="row">
                           <div className="form-group  col-md-6">
                             <FormGroup>
@@ -1604,7 +1772,7 @@ const HivTestResult = (props) => {
               <br />
               <div className="row">
                 <div className="form-group mb-3 col-md-12">
-                  {patientAge <= 15 ? (
+                  {/* {patientAge <= 15 ? (
                     <>
                       <Button
                         content="Back"
@@ -1629,7 +1797,7 @@ const HivTestResult = (props) => {
                         }
                       />
                     </>
-                  )}
+                  )} */}
 
                   <Button
                     content="Save & Continue"

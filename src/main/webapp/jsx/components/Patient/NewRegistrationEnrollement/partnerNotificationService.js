@@ -1029,7 +1029,7 @@ const PartnerNotificationService = (props) => {
                   )} */}
                 </FormGroup>
               </div>
-              <div className="form-group col-md-4">
+           {payload.age  < 21 &&  <div className="form-group col-md-4">
                 <FormGroup>
                   <Label for="">
                     Date enrolled in OVC
@@ -1055,6 +1055,7 @@ const PartnerNotificationService = (props) => {
                   )} */}
                 </FormGroup>
               </div>
+              }
               <div className="form-group col-md-4">
                 <FormGroup>
                   <Label for="">

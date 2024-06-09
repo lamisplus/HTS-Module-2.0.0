@@ -28,6 +28,10 @@ import {
   getAllGenders,
   alphabetOnly,
 } from "../../../../utility";
+import { calculate_age } from "../../utils";
+import { useHistory } from "react-router-dom";
+import DualListBox from "react-dual-listbox";
+
 const useStyles = makeStyles((theme) => ({
   card: {
     margin: theme.spacing(20),
@@ -100,8 +104,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const RefferralUnit = (props) => {
+  // console.log("props.patientObj", props.patientObj);
+  const patientObj = props.patientObj;
   const classes = useStyles();
-
   const [errors, setErrors] = useState({});
   const [ageDisabled, setAgeDisabled] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -116,43 +121,72 @@ const RefferralUnit = (props) => {
   const [states, setStates] = useState([]);
   const [genders, setGenders] = useState([]);
   const [hivStatus, setHivStatus] = useState([]);
-  const [serviceNeeded, setServiceNeeded] = useState([]);
 
   const [facilityName, setFacilityName] = useState(Cookies.get("facilityName"));
   const [allFacilities, setAllFacilities] = useState([]);
   // console.log(Cookies.get("facilityName"));
+  const [statesOfTheReceivingFacility, setStateOfTheReceivingFacility] =
+    useState([]);
+  const [lgasOfTheReceivingFacility, setLgasOfTheReceivingFacility] = useState(
+    []
+  );
+  const [receivingFacilities, setReceivingFacilities] = useState([]);
+  const [receivingFacility, setReceivingFacility] = useState([]);
+  const [selectedReceivingState, setSelectedReceivingState] = useState({});
+  const [selectedReceivingFacility, setSelectedReceivingFacility] = useState(
+    {}
+  );
+  const [selectedReceivingLga, setSelectedReceivingLga] = useState({});
+  const history = useHistory();
+  const [serviceNeeded, setServiceNeeded] = useState([]);
+  const [selectedServiceNeeded, setSelectServiceNeeded] = useState([]);
 
   const [payload, setPayload] = useState({
-    referralDate: "",
-    firstName: "",
-    middleName: "",
-    lastName: "",
-    hospitalNumber: "",
+    dateVisit: "",
+    firstName: props?.patientObj?.personResponseDto?.firstName,
+    middleName: props?.patientObj?.personResponseDto?.otherName,
+    lastName: props?.patientObj?.personResponseDto?.surname,
+    hospitalNumber:
+      props.patientObj?.personResponseDto?.identifier?.identifier[0]?.value,
     countryId: "1",
-    stateId: "",
-    province: "1",
-    address: "",
+    stateId: props?.patientObj?.personResponseDto?.address?.address[0]?.stateId,
+    province: Number(
+      props?.patientObj?.personResponseDto?.address?.address[0]?.district
+    ),
+    address: props?.patientObj?.personResponseDto?.address?.address[0]?.city,
     landmark: "",
-    phoneNumber: "",
-    sexId: "",
-    dob: "",
+    phoneNumber:
+      props?.patientObj?.personResponseDto?.contactPoint?.contactPoint[0]
+        ?.value,
+    sexId: props?.patientObj?.personResponseDto?.gender?.id,
+    dob: props?.patientObj.personResponseDto?.dateOfBirth,
     age: "",
-    dateOfBirth: "",
-    hivStatus: "",
-    referreFromFacility: "",
-    nameOfPersonRefferringClient: "",
+    dateOfBirth: props?.patientObj.personResponseDto?.dateOfBirth,
+    hivStatus: props?.patientObj?.hivTestResult2
+      ? props?.patientObj?.hivTestResult2
+      : props?.patientObj?.hivTestResult
+      ? props?.patientObj?.hivTestResult
+      : "",
+    referredFromFacility: "",
+    nameOfPersonReferringClient: "",
     nameOfReferringFacility: Cookies.get("facilityName"),
-    addressOfReferrringFacility: "",
-    phoneNoOfReferrringFacility: "",
+    addressOfReferringFacility: "",
+    phoneNoOfReferringFacility: "",
     referredTo: "",
     nameOfContactPerson: "",
-    nameOfRecievingFacility: "",
-    addressOfRecievingFacility: "",
-    phoneNoOfRecievingFacility: "",
+    nameOfReceivingFacility: "",
+    addressOfReceivingFacility: "",
+    phoneNoOfReceivingFacility: "",
     isDateOfBirthEstimated: false,
-    serviceNeeded: "",
+    serviceNeeded: {},
     comments: "",
+    receivingFacilityStateName: "",
+    receivingFacilityLgaNam: "",
+    htsClientId: props && props.patientObj ? props.patientObj?.id : "",
+    htsClientUuid: props && props.patientObj ? props.patientObj?.uuid : "",
   });
+  // console.log("payload in referalUnit", payload);
+  // console.log("PAYLOAD", payload);
   const loadGenders = useCallback(async () => {
     getAllGenders()
       .then((response) => {
@@ -161,13 +195,31 @@ const RefferralUnit = (props) => {
       .catch(() => {});
   }, []);
 
+
+    const getProvincesWithId = (id) => {
+      getAllProvinces(id)
+        .then((res) => {
+          setProvinces(res);
+        })
+        .catch((e) => {});
+    };
+
   useEffect(() => {
     loadGenders();
     getCountry();
     getStateByCountryId();
-    getAllFacilities();
+    
+        if (
+          props?.patientObj?.personResponseDto?.address?.address[0]?.stateId
+        ) {
+          getProvincesWithId(
+            props?.patientObj?.personResponseDto?.address?.address[0]?.stateId
+          );
+        }
   }, []);
 
+
+ 
   //Get list of State
   const getStateByCountryId = () => {
     getAllStateByCountryId()
@@ -184,13 +236,13 @@ const RefferralUnit = (props) => {
 
     if (inputName === "phoneNumber") {
       setPayload({ ...payload, phoneNumber: e.slice(0, limit) });
-    } else if (inputName === "phoneNoOfReferrringFacility") {
+    } else if (inputName === "phoneNoOfReferringFacility") {
       setPayload({
         ...payload,
-        phoneNoOfReferrringFacility: e.slice(0, limit),
+        phoneNoOfReferringFacility: e.slice(0, limit),
       });
-    } else if (inputName === "phoneNoOfRecievingFacility") {
-      setPayload({ ...payload, phoneNoOfRecievingFacility: e.slice(0, limit) });
+    } else if (inputName === "phoneNoOfReceivingFacility") {
+      setPayload({ ...payload, phoneNoOfReceivingFacility: e.slice(0, limit) });
     }
   };
 
@@ -199,38 +251,13 @@ const RefferralUnit = (props) => {
     // console.log(e);
     setPayload({
       ...payload,
-      nameOfRecievingFacility: e.name,
-      addressOfRecievingFacility: e.parentParentOrganisationUnitName,
+      nameOfReceivingFacility: e.name,
+      addressOfReceivingFacility: e.parentParentOrganisationUnitName,
       // lgaTransferTo: e.parentOrganisationUnitName,
     });
-    setErrors({ ...errors, nameOfRecievingFacility: "" });
+    setErrors({ ...errors, nameOfReceivingFacility: "" });
     // setSelectedState(e.parentParentOrganisationUnitName);
     // setSelectedLga(e.parentOrganisationUnitName);
-  };
-
-  // get all facilities
-  const getAllFacilities = () => {
-    axios
-      .get(
-        `${baseUrl}organisation-units/parent-organisation-units/1/organisation-units-level/4/hierarchy`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      )
-      .then((response) => {
-        // console.log(response.data);
-
-        let updatedFaclilties = response.data.map((each, id) => {
-          return {
-            ...each,
-            value: each.id,
-            label: each.name,
-          };
-        });
-
-        setAllFacilities(updatedFaclilties);
-      })
-      .catch((error) => {});
   };
 
   //fetch province
@@ -252,12 +279,116 @@ const RefferralUnit = (props) => {
         setCountries(res);
       })
       .catch((e) => {
-        console.log(e);
+        // console.log(e);
       });
 
     // console.log(response);
   };
 
+    const checkNumberLimit = (e) => {
+        const limit = 11;
+        const acceptedNumber = e.slice(0, limit);
+        return acceptedNumber;
+    };
+    const handleInputChangePhoneNumber = (e, inputName) => {
+        const limit = 11;
+        const NumberValue = checkNumberLimit(e.target.value.replace(/\D/g, ""));
+        setPayload({ ...payload, [inputName]: NumberValue });
+        if(inputName === "phoneNumber"){
+            setPayload({ ...payload, [inputName]: NumberValue });
+        }
+        if(inputName === "phoneNoOfReferringFacility"){
+            setPayload({ ...payload, [inputName]: NumberValue });
+        }
+        if(inputName === "phoneNoOfReceivingFacility"){
+            setPayload({ ...payload, [inputName]: NumberValue });
+        }
+    };
+
+  // ########################################################################
+  const loadStates = () => {
+    axios
+      .get(`${baseUrl}organisation-units/parent-organisation-units/1`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        if (response.data) {
+          setStateOfTheReceivingFacility(response.data);
+        }
+      })
+      .catch((e) => {
+        // console.log("Fetch states error" + e);
+      });
+  };
+
+  const loadLGA = (id) => {
+    axios
+      .get(`${baseUrl}organisation-units/parent-organisation-units/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        if (response.data) {
+          setLgasOfTheReceivingFacility(response.data);
+        }
+      })
+      .catch((e) => {
+        // console.log("Fetch LGA error" + e);
+      });
+  };
+
+  const loadFacilities = (id) => {
+    axios
+      .get(`${baseUrl}organisation-units/parent-organisation-units/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        if (response.data) {
+          setReceivingFacilities(response.data);
+        }
+      })
+      .catch((e) => {
+        // console.log("Fetch Facilities error" + e);
+      });
+  };
+
+  const SERVICE_NEEDED = () => {
+    axios
+        .get(`${baseUrl}application-codesets/v2/SERVICE_PROVIDED`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => {
+          if (response.data) {
+            // create array of objects from the response
+            const serviceNeeded = response.data.map((service) => {
+              return {
+                value: service.display,
+                label: service.display
+              }
+            });
+            setServiceNeeded(serviceNeeded);
+            // console.log("serviceNeeded", serviceNeeded)
+          }
+        })
+        .catch((e) => {
+          // handle error
+        });
+  };
+
+  useEffect(() => {
+    loadStates();
+    SERVICE_NEEDED();
+  }, []);
+
+  // console.log("selectedServiceNeeded", selectedServiceNeeded);
+  // ###########################################################################
   //Get list of HIV STATUS ENROLLMENT
 
   const handleInputChange = (e) => {
@@ -279,7 +410,7 @@ const RefferralUnit = (props) => {
       const name = alphabetOnly(e.target.value);
       setPayload({ ...payload, [e.target.name]: name });
     } else if (
-      e.target.name === "nameOfPersonRefferringClient" &&
+      e.target.name === "nameOfPersonReferringClient" &&
       e.target.value !== ""
     ) {
       const name = alphabetOnly(e.target.value);
@@ -306,6 +437,7 @@ const RefferralUnit = (props) => {
           setHospitalNumStatus(true);
         }
       }
+
       getHosiptalNumber();
     } else {
       setPayload({ ...payload, [e.target.name]: e.target.value });
@@ -355,6 +487,7 @@ const RefferralUnit = (props) => {
       setAgeDisabled(false);
     }
   };
+
   const handleAgeChange = (e) => {
     if (!ageDisabled && e.target.value) {
       if (e.target.value !== "" && e.target.value >= 85) {
@@ -380,93 +513,101 @@ const RefferralUnit = (props) => {
 
   //End of Date of Birth and Age handling
   /*****  Validation  */
+
+  const handleItemClick = (page, completedMenu) => {
+    props.handleItemClick(page);
+    if (props.completed.includes(completedMenu)) {
+    } else {
+      props.setCompleted([...props.completed, completedMenu]);
+    }
+  };
   const validate = () => {
     //HTS FORM VALIDATION
 
-    temp.referralDate = payload.referralDate ? "" : "This field is required.";
+    temp.dateVisit = payload.dateVisit ? "" : "This field is required.";
     temp.firstName = payload.firstName ? "" : "This field is required.";
     temp.lastName = payload.lastName ? "" : "This field is required.";
     temp.stateId = payload.stateId ? "" : "This field is required.";
     temp.province = payload.province ? "" : "This field is required.";
-    temp.address = payload.address ? "" : "This field is required.";
+    // temp.address = payload.address ? "" : "This field is required.";
     temp.phoneNumber = payload.phoneNumber ? "" : "This field is required.";
-    temp.sexId = payload.sexId ? "" : "This field is required.";
+    // temp.sexId = payload.sexId ? "" : "This field is required.";
     temp.dob = payload.dob ? "" : "This field is required.";
-    temp.age = payload.age ? "" : "This field is required.";
+    // temp.age = payload.age ? "" : "This field is required.";
     temp.hivStatus = payload.hivStatus ? "" : "This field is required.";
-    temp.referreFromFacility = payload.referreFromFacility
+    // temp.stateTransferTo = payload.receivingStateFacility? "" : "This field is required.";
+    temp.receivingFacilityLgaName = payload.receivingFacilityLgaName
       ? ""
       : "This field is required.";
-    temp.nameOfPersonRefferringClient = payload.nameOfPersonRefferringClient
+    temp.receivingFacilityStateName = payload.receivingFacilityStateName
+      ? ""
+      : "This field is required.";
+    // temp.referredFromFacility = payload.referredFromFacility
+    //     ? ""
+    //     : "This field is required.";
+    temp.nameOfPersonReferringClient = payload.nameOfPersonReferringClient
       ? ""
       : "This field is required.";
 
     temp.nameOfReferringFacility = payload.nameOfReferringFacility
       ? ""
       : "This field is required.";
-    temp.addressOfReferrringFacility = payload.addressOfReferrringFacility
+    temp.addressOfReferringFacility = payload.addressOfReferringFacility
       ? ""
       : "This field is required.";
-    temp.phoneNoOfReferrringFacility = payload.phoneNoOfReferrringFacility
+    temp.phoneNoOfReferringFacility = payload.phoneNoOfReferringFacility
       ? ""
       : "This field is required.";
     temp.nameOfContactPerson = payload.nameOfContactPerson
       ? ""
       : "This field is required.";
-    temp.nameOfRecievingFacility = payload.nameOfRecievingFacility
+    temp.nameOfReceivingFacility = payload.nameOfReceivingFacility
       ? ""
       : "This field is required.";
-    temp.addressOfRecievingFacility = payload.addressOfRecievingFacility
+    temp.addressOfReceivingFacility = payload.addressOfReceivingFacility
       ? ""
       : "This field is required.";
-    temp.phoneNoOfRecievingFacility = payload.phoneNoOfRecievingFacility
+    temp.phoneNoOfReceivingFacility = payload.phoneNoOfReceivingFacility
       ? ""
       : "This field is required.";
-    temp.serviceNeeded = payload.serviceNeeded ? "" : "This field is required.";
-    temp.age = payload.age ? "" : "This field is required.";
-    temp.referredTo = payload.referredTo ? "" : "This field is required.";
+    // temp.serviceNeeded = payload.serviceNeeded ? "" : "This field is required.";
+
+    temp.serviceNeeded = selectedServiceNeeded.length > 0 ? "" : "At least one service must be selected.";
+    // console.log("temp", temp)
+    // temp.referredTo = payload.referredTo ? "" : "This field is required.";
     setErrors({ ...temp });
     return Object.values(temp).every((x) => x == "");
   };
 
-  const postPayload = (payload) => {
-    axios
-      .post(`${baseUrl}risk-stratification`, payload, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((response) => {
-        setSaving(false);
-
-        //toast.success("Risk stratification save succesfully!");
-      })
-      .catch((error) => {
-        setSaving(false);
-        if (error.response && error.response.data) {
-          let errorMessage =
-            error.response.data.apierror &&
-            error.response.data.apierror.message !== ""
-              ? error.response.data.apierror.message
-              : "Something went wrong, please try again";
-          toast.error(errorMessage, {
-            position: toast.POSITION.BOTTOM_CENTER,
-          });
-        } else {
-          toast.error("Something went wrong. Please try again...", {
-            position: toast.POSITION.BOTTOM_CENTER,
-          });
-        }
-      });
-  };
-  const handleSubmit = (e) => {
+  // console.log("payload before submit", payload)
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(payload);
     if (validate()) {
-      setSaving(true);
+      try {
+        setSaving(true);
+        await axios.post(`${baseUrl}hts-client-referral`, payload, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setSaving(false);
+        toast.success("Record saved successfully", {
+          position: toast.POSITION.BOTTOM_CENTER,
+        });
 
-      // postPayload(payload)
-      //  handleItemClick("basic", "risk");
+        // history.push("/");
+
+        handleItemClick("refferal-history", "refferal");
+        // props.handleItemClick();
+      } catch (error) {
+        // console.log("error", error);
+        setSaving(false);
+        const errorMessage =
+          error.response?.data?.apierror?.message ||
+          "Something went wrong, please try again";
+        toast.error(errorMessage, { position: toast.POSITION.BOTTOM_CENTER });
+      }
     }
   };
+
 
   return (
     <>
@@ -499,53 +640,51 @@ const RefferralUnit = (props) => {
                 <div className="form-group mb-3 col-md-4">
                   <FormGroup>
                     <Label for="">
-                      Date <span style={{ color: "red" }}> *</span>{" "}
+                      Date <span style={{color: "red"}}> *</span>{" "}
                     </Label>
                     <Input
-                      type="date"
-                      name="referralDate"
-                      id="referralDate"
-                      value={payload.referralDate}
-                      onChange={handleInputChange}
-                      min="1929-12-31"
-                      max={moment(new Date()).format("YYYY-MM-DD")}
-                      style={{
-                        border: "1px solid #014D88",
-                        borderRadius: "0.25rem",
-                      }}
-                      disabled
+                        type="date"
+                        name="dateVisit"
+                        id="dateVisit"
+                        value={payload.dateVisit}
+                        onChange={handleInputChange}
+                        min="1929-12-31"
+                        max={moment(new Date()).format("YYYY-MM-DD")}
+                        style={{
+                          border: "1px solid #014D88",
+                          borderRadius: "0.25rem",
+                        }}
+                        // disabled
                     />
-                    {errors.referralDate !== "" ? (
-                      <span className={classes.error}>
-                        {errors.referralDate}
-                      </span>
+                    {errors.dateVisit !== "" ? (
+                        <span className={classes.error}>{errors.dateVisit}</span>
                     ) : (
-                      ""
+                        ""
                     )}
                   </FormGroup>
                 </div>
                 <div className="form-group mb-3 col-md-4">
                   <FormGroup>
                     <Label for="firstName">
-                      First Name <span style={{ color: "red" }}> *</span>
+                      First Name <span style={{color: "red"}}> *</span>
                     </Label>
                     <Input
-                      className="form-control"
-                      type="text"
-                      name="firstName"
-                      id="firstName"
-                      value={payload.firstName}
-                      onChange={handleInputChange}
-                      style={{
-                        border: "1px solid #014D88",
-                        borderRadius: "0.2rem",
-                      }}
-                      disabled
+                        className="form-control"
+                        type="text"
+                        name="firstName"
+                        id="firstName"
+                        value={payload.firstName}
+                        onChange={handleInputChange}
+                        style={{
+                          border: "1px solid #014D88",
+                          borderRadius: "0.2rem",
+                        }}
+                        disabled
                     />
                     {errors.firstName !== "" ? (
-                      <span className={classes.error}>{errors.firstName}</span>
+                        <span className={classes.error}>{errors.firstName}</span>
                     ) : (
-                      ""
+                        ""
                     )}
                   </FormGroup>
                 </div>
@@ -554,17 +693,17 @@ const RefferralUnit = (props) => {
                   <FormGroup>
                     <Label>Middle Name</Label>
                     <Input
-                      className="form-control"
-                      type="text"
-                      name="middleName"
-                      id="middleName"
-                      value={payload.middleName}
-                      onChange={handleInputChange}
-                      style={{
-                        border: "1px solid #014D88",
-                        borderRadius: "0.2rem",
-                      }}
-                      disabled
+                        className="form-control"
+                        type="text"
+                        name="middleName"
+                        id="middleName"
+                        value={payload.middleName}
+                        onChange={handleInputChange}
+                        style={{
+                          border: "1px solid #014D88",
+                          borderRadius: "0.2rem",
+                        }}
+                        disabled
                     />
                   </FormGroup>
                 </div>
@@ -572,59 +711,59 @@ const RefferralUnit = (props) => {
                 <div className="form-group mb-3 col-md-4">
                   <FormGroup>
                     <Label>
-                      Last Name <span style={{ color: "red" }}> *</span>
+                      Last Name <span style={{color: "red"}}> *</span>
                     </Label>
                     <input
-                      className="form-control"
-                      type="text"
-                      name="lastName"
-                      id="lastName"
-                      value={payload.lastName}
-                      onChange={handleInputChange}
-                      style={{
-                        border: "1px solid #014D88",
-                        borderRadius: "0.2rem",
-                      }}
-                      disabled
+                        className="form-control"
+                        type="text"
+                        name="lastName"
+                        id="lastName"
+                        value={payload.lastName}
+                        onChange={handleInputChange}
+                        style={{
+                          border: "1px solid #014D88",
+                          borderRadius: "0.2rem",
+                        }}
+                        disabled
                     />
                     {errors.lastName !== "" ? (
-                      <span className={classes.error}>{errors.lastName}</span>
+                        <span className={classes.error}>{errors.lastName}</span>
                     ) : (
-                      ""
+                        ""
                     )}
                   </FormGroup>
                 </div>
                 <div className="form-group mb-3 col-md-4">
                   <FormGroup>
                     <Label for="patientId">
-                      Hospital Number <span style={{ color: "red" }}> *</span>{" "}
+                      Hospital Number <span style={{color: "red"}}> *</span>{" "}
                     </Label>
                     <input
-                      className="form-control"
-                      type="text"
-                      name="hospitalNumber"
-                      id="hospitalNumber"
-                      value={payload.hospitalNumber}
-                      onChange={handleInputChange}
-                      style={{
-                        border: "1px solid #014D88",
-                        borderRadius: "0.2rem",
-                      }}
-                      disabled
+                        className="form-control"
+                        type="text"
+                        name="hospitalNumber"
+                        id="hospitalNumber"
+                        value={payload.hospitalNumber}
+                        onChange={handleInputChange}
+                        style={{
+                          border: "1px solid #014D88",
+                          borderRadius: "0.2rem",
+                        }}
+                        disabled
                     />
                     {errors.hospitalNumber !== "" ? (
-                      <span className={classes.error}>
+                        <span className={classes.error}>
                         {errors.hospitalNumber}
                       </span>
                     ) : (
-                      ""
+                        ""
                     )}
                     {hospitalNumStatus === true ? (
-                      <span className={classes.error}>
+                        <span className={classes.error}>
                         {"Hospital number already exist"}
                       </span>
                     ) : (
-                      ""
+                        ""
                     )}
                     {/* {hospitalNumStatus2===true ? (
                                                         <span className={classes.success}>{"Hospital number is OK."}</span>
@@ -635,26 +774,26 @@ const RefferralUnit = (props) => {
                 <div className="form-group  col-md-4">
                   <FormGroup>
                     <Label>
-                      Country <span style={{ color: "red" }}> *</span>
+                      Country <span style={{color: "red"}}> *</span>
                     </Label>
                     <select
-                      className="form-control"
-                      type="text"
-                      name="countryId"
-                      id="countryId"
-                      style={{
-                        border: "1px solid #014D88",
-                        borderRadius: "0.2rem",
-                      }}
-                      value={payload.countryId}
-                      disabled
-                      //onChange={getStates}
+                        className="form-control"
+                        type="text"
+                        name="countryId"
+                        id="countryId"
+                        style={{
+                          border: "1px solid #014D88",
+                          borderRadius: "0.2rem",
+                        }}
+                        value={payload.countryId}
+                        disabled
+                        //onChange={getStates}
                     >
                       <option value={""}>Select</option>
                       {countries.map((value, index) => (
-                        <option key={index} value={value.id}>
-                          {value.name}
-                        </option>
+                          <option key={index} value={value.id}>
+                            {value.name}
+                          </option>
                       ))}
                     </select>
                   </FormGroup>
@@ -662,32 +801,32 @@ const RefferralUnit = (props) => {
                 <div className="form-group  col-md-4">
                   <FormGroup>
                     <Label>
-                      State <span style={{ color: "red" }}> *</span>
+                      State <span style={{color: "red"}}> *</span>
                     </Label>
                     <select
-                      className="form-control"
-                      type="text"
-                      name="stateId"
-                      id="stateId"
-                      value={payload.stateId}
-                      style={{
-                        border: "1px solid #014D88",
-                        borderRadius: "0.2rem",
-                      }}
-                      onChange={getProvinces}
-                      disabled
+                        className="form-control"
+                        type="text"
+                        name="stateId"
+                        id="stateId"
+                        value={payload.stateId}
+                        style={{
+                          border: "1px solid #014D88",
+                          borderRadius: "0.2rem",
+                        }}
+                        onChange={getProvinces}
+                        disabled
                     >
                       <option value="">Select</option>
                       {states.map((value, index) => (
-                        <option key={index} value={value.id}>
-                          {value.name}
-                        </option>
+                          <option key={index} value={value.id}>
+                            {value.name}
+                          </option>
                       ))}
                     </select>
                     {errors.stateId !== "" ? (
-                      <span className={classes.error}>{errors.stateId}</span>
+                        <span className={classes.error}>{errors.stateId}</span>
                     ) : (
-                      ""
+                        ""
                     )}
                   </FormGroup>
                 </div>
@@ -696,57 +835,57 @@ const RefferralUnit = (props) => {
                   <FormGroup>
                     <Label>
                       Province/District/LGA{" "}
-                      <span style={{ color: "red" }}> *</span>
+                      <span style={{color: "red"}}> *</span>
                     </Label>
                     <select
-                      className="form-control"
-                      type="text"
-                      name="province"
-                      id="province"
-                      value={payload.province}
-                      style={{
-                        border: "1px solid #014D88",
-                        borderRadius: "0.2rem",
-                      }}
-                      disabled
-                      onChange={handleInputChange}
+                        className="form-control"
+                        type="text"
+                        name="province"
+                        id="province"
+                        value={payload.province}
+                        style={{
+                          border: "1px solid #014D88",
+                          borderRadius: "0.2rem",
+                        }}
+                        disabled
+                        onChange={handleInputChange}
                     >
                       <option value="">Select</option>
                       {provinces.map((value, index) => (
-                        <option key={index} value={value.id}>
-                          {value.name}
-                        </option>
+                          <option key={index} value={value.id}>
+                            {value.name}
+                          </option>
                       ))}
                     </select>
                     {errors.province !== "" ? (
-                      <span className={classes.error}>{errors.province}</span>
+                        <span className={classes.error}>{errors.province}</span>
                     ) : (
-                      ""
+                        ""
                     )}
                   </FormGroup>
                 </div>
                 <div className="form-group  col-md-4">
                   <FormGroup>
                     <Label>
-                      Street Address <span style={{ color: "red" }}> *</span>
+                      Street Address <span style={{color: "red"}}> *</span>
                     </Label>
                     <input
-                      className="form-control"
-                      type="text"
-                      name="address"
-                      id="address"
-                      value={payload.address}
-                      disabled
-                      onChange={handleInputChange}
-                      style={{
-                        border: "1px solid #014D88",
-                        borderRadius: "0.2rem",
-                      }}
+                        className="form-control"
+                        type="text"
+                        name="address"
+                        id="address"
+                        value={payload.address}
+                        disabled
+                        onChange={handleInputChange}
+                        style={{
+                          border: "1px solid #014D88",
+                          borderRadius: "0.2rem",
+                        }}
                     />
                     {errors.address !== "" ? (
-                      <span className={classes.error}>{errors.address}</span>
+                        <span className={classes.error}>{errors.address}</span>
                     ) : (
-                      ""
+                        ""
                     )}
                   </FormGroup>
                 </div>
@@ -755,207 +894,201 @@ const RefferralUnit = (props) => {
                   <FormGroup>
                     <Label>Landmark</Label>
                     <input
-                      className="form-control"
-                      type="text"
-                      name="landmark"
-                      id="landmark"
-                      value={payload.landmark}
-                      disabled
-                      onChange={handleInputChange}
-                      style={{
-                        border: "1px solid #014D88",
-                        borderRadius: "0.2rem",
-                      }}
+                        className="form-control"
+                        type="text"
+                        name="landmark"
+                        id="landmark"
+                        value={payload.landmark}
+                        disabled
+                        onChange={handleInputChange}
+                        style={{
+                          border: "1px solid #014D88",
+                          borderRadius: "0.2rem",
+                        }}
                     />
                   </FormGroup>
                 </div>
 
+                {/*          <div className="form-group  col-md-4">*/}
+                {/*              <FormGroup>*/}
+                {/*                  <Label>*/}
+                {/*                      Phone Number <span style={{color: "red"}}> *</span>*/}
+                {/*                  </Label>*/}
+                {/*                  <PhoneInput*/}
+                {/*                      disabled={true}*/}
+                {/*                      containerStyle={{*/}
+                {/*                          width: "100%",*/}
+                {/*                          border: "1px solid #014D88",*/}
+                {/*                      }}*/}
+                {/*                      inputStyle={{width: "100%", borderRadius: "0px"}}*/}
+                {/*                      country={"ng"}*/}
+                {/*                      placeholder="(234)7099999999"*/}
+                {/*                      maxLength={5}*/}
+                {/*                      name="phoneNumber"*/}
+                {/*                      id="phoneNumber"*/}
+                {/*                      masks={{ng: "...-...-....", at: "(....) ...-...."}}*/}
+                {/*                      value={payload.phoneNumber}*/}
+                {/*                      onChange={(e) => {*/}
+                {/*                          checkPhoneNumberBasic(e, "phoneNumber");*/}
+                {/*                      }}*/}
+                {/*                      //onChange={(e)=>{handleInputChangeBasic(e,'phoneNumber')}}*/}
+                {/*                  />*/}
+
+                {/*                  {errors.phoneNumber !== "" ? (*/}
+                {/*                      <span className={classes.error}>*/}
+                {/*  {errors.phoneNumber}*/}
+                {/*</span>*/}
+                {/*                  ) : (*/}
+                {/*                      ""*/}
+                {/*                  )}*/}
+                {/*              </FormGroup>*/}
+                {/*          </div>*/}
                 <div className="form-group  col-md-4">
                   <FormGroup>
                     <Label>
-                      Phone Number <span style={{ color: "red" }}> *</span>
+                      Phone Number <span style={{color: "red"}}> *</span>
                     </Label>
-                    <PhoneInput
-                      disabled={true}
-                      containerStyle={{
-                        width: "100%",
-                        border: "1px solid #014D88",
-                      }}
-                      inputStyle={{ width: "100%", borderRadius: "0px" }}
-                      country={"ng"}
-                      placeholder="(234)7099999999"
-                      maxLength={5}
-                      name="phoneNumber"
-                      id="phoneNumber"
-                      masks={{ ng: "...-...-....", at: "(....) ...-...." }}
-                      value={payload.phoneNumber}
-                      onChange={(e) => {
-                        checkPhoneNumberBasic(e, "phoneNumber");
-                      }}
-                      //onChange={(e)=>{handleInputChangeBasic(e,'phoneNumber')}}
+                    <Input
+                        type="text"
+                        name="phoneNumber"
+                        id="phoneNumber"
+                        onChange={(e) => {
+                          handleInputChangePhoneNumber(e, "phoneNumber");
+                        }}
+                        value={payload.phoneNumber}
+                        style={{
+                          border: "1px solid #014D88",
+                          borderRadius: "0.2rem",
+                        }}
+                        disabled
+                        // required
                     />
-
                     {errors.phoneNumber !== "" ? (
-                      <span className={classes.error}>
+                        <span className={classes.error}>
                         {errors.phoneNumber}
                       </span>
                     ) : (
-                      ""
+                        ""
                     )}
-                    {/* {basicInfo.phoneNumber.length >13 ||  basicInfo.phoneNumber.length <13? (
-                                                <span className={classes.error}>{"The maximum and minimum required number is 13 digit"}</span>
-                                                ) : "" } */}
                   </FormGroup>
                 </div>
+
                 <div className="form-group  col-md-4">
                   <FormGroup>
-                    <Label>
-                      Sex <span style={{ color: "red" }}> *</span>
-                    </Label>
+                    <Label>Sex</Label>
                     <select
-                      className="form-control"
-                      name="sexId"
-                      id="sexId"
-                      onChange={handleInputChange}
-                      value={payload.sexId}
-                      style={{
-                        border: "1px solid #014D88",
-                        borderRadius: "0.2rem",
-                      }}
-                      disabled
+                        className="form-control"
+                        name="sexId"
+                        id="sexId"
+                        onChange={handleInputChange}
+                        value={payload.sexId}
+                        style={{
+                          border: "1px solid #014D88",
+                          borderRadius: "0.2rem",
+                        }}
+                        disabled
                     >
                       <option value={""}>Select</option>
                       {genders &&
-                        genders.map((gender, index) => (
-                          <option key={gender.id} value={gender.id}>
-                            {gender.display}
-                          </option>
-                        ))}
+                          genders.map((gender, index) => (
+                              <option key={gender.id} value={gender.id}>
+                                {gender.display}
+                              </option>
+                          ))}
                     </select>
-                    {errors.sexId !== "" ? (
-                      <span className={classes.error}>{errors.sexId}</span>
-                    ) : (
-                      ""
-                    )}
                   </FormGroup>
                 </div>
-                {/* <div className="form-group mb-2 col-md-4">
-                  <FormGroup>
-                    <Label>
-                      Date Of Birth <span style={{ color: "red" }}> *</span>
-                    </Label>
-                    <div className="radio">
-                      <label>
-                        <input
-                          type="radio"
-                          value="Actual"
-                          name="dateOfBirth"
-                          defaultChecked
-                          onChange={(e) => handleDateOfBirthChange(e)}
-                          style={{
-                            border: "1px solid #014D88",
-                            borderRadius: "0.2rem",
-                          }}
-                        />{" "}
-                        Actual
-                      </label>
-                    </div>
-                    <div className="radio">
-                      <label>
-                        <input
-                          type="radio"
-                          value="Estimated"
-                          name="dateOfBirth"
-                          onChange={(e) => handleDateOfBirthChange(e)}
-                          style={{
-                            border: "1px solid #014D88",
-                            borderRadius: "0.2rem",
-                          }}
-                        />{" "}
-                        Estimated
-                      </label>
-                    </div>
-                  </FormGroup>
-                </div> */}
                 <div className="form-group mb-3 col-md-4">
                   <FormGroup>
                     <Label>
-                      Date Of Birth<span style={{ color: "red" }}> *</span>
+                      Date Of Birth<span style={{color: "red"}}> *</span>
                     </Label>
                     <input
-                      className="form-control"
-                      type="date"
-                      name="dob"
-                      id="dob"
-                      min="1929-12-31"
-                      max={moment(new Date()).format("YYYY-MM-DD")}
-                      value={payload.dob}
-                      onChange={handleDobChange}
-                      style={{
-                        border: "1px solid #014D88",
-                        borderRadius: "0.2rem",
-                      }}
-                      disabled
+                        className="form-control"
+                        type="date"
+                        name="dob"
+                        id="dob"
+                        min="1929-12-31"
+                        max={moment(new Date()).format("YYYY-MM-DD")}
+                        value={payload.dob}
+                        onChange={handleDobChange}
+                        style={{
+                          border: "1px solid #014D88",
+                          borderRadius: "0.2rem",
+                        }}
+                        disabled
                     />
                     {errors.dob !== "" ? (
-                      <span className={classes.error}>{errors.dob}</span>
+                        <span className={classes.error}>{errors.dob}</span>
                     ) : (
-                      ""
+                        ""
                     )}
                   </FormGroup>
                 </div>
                 <div className="form-group mb-3 col-md-4">
                   <FormGroup>
                     <Label>
-                      Age <span style={{ color: "red" }}> *</span>
+                      Age <span style={{color: "red"}}> *</span>
                     </Label>
                     <input
-                      className="form-control"
-                      type="number"
-                      name="age"
-                      id="age"
-                      value={payload.age}
-                      disabled={ageDisabled}
-                      onChange={handleAgeChange}
-                      style={{
-                        border: "1px solid #014D88",
-                        borderRadius: "0.2rem",
-                      }}
+                        className="form-control"
+                        type="number"
+                        name="age"
+                        id="age"
+                        disabled={ageDisabled}
+                        onChange={payload.age}
+                        style={{
+                          border: "1px solid #014D88",
+                          borderRadius: "0.2rem",
+                        }}
+                        value={calculate_age(
+                            props?.patientObj.personResponseDto?.dateOfBirth
+                                ? props?.patientObj?.personResponseDto?.dateOfBirth
+                                : props?.patientObj?.personResponseDto?.dateOfBirth
+                        )}
                     />
-                    {errors.age !== "" ? (
-                      <span className={classes.error}>{errors.age}</span>
-                    ) : (
-                      ""
-                    )}
                   </FormGroup>
                 </div>
                 <div className="form-group  col-md-4">
                   <FormGroup>
                     <Label>
-                      HIV Status<span style={{ color: "red" }}> *</span>
+                      HIV Status<span style={{color: "red"}}> *</span>
                     </Label>
-                    <select
-                      className="form-control"
-                      name="hivStatus"
-                      id="hivStatus"
-                      onChange={handleInputChange}
-                      value={payload.hivStatus}
-                      style={{
-                        border: "1px solid #014D88",
-                        borderRadius: "0.2rem",
-                      }}
-                    >
-                      <option value={""}>Select</option>
-                      {hivStatus.map((gender, index) => (
-                        <option key={gender.id} value={gender.id}>
-                          {gender.display}
-                        </option>
-                      ))}
-                    </select>
+                    <input
+                        className="form-control"
+                        type="text"
+                        name="hivStatus"
+                        id="hivStatus"
+                        value={payload.hivStatus}
+                        disabled={ageDisabled}
+                        onChange={handleAgeChange}
+                        style={{
+                          border: "1px solid #014D88",
+                          borderRadius: "0.2rem",
+                        }}
+                    />
+                    {/*<select*/}
+                    {/*  className="form-control"*/}
+                    {/*  name="hivStatus"*/}
+                    {/*  id="hivStatus"*/}
+                    {/*  onChange={handleInputChange}*/}
+                    {/*  value={payload.hivStatus}*/}
+                    {/*  style={{*/}
+                    {/*    border: "1px solid #014D88",*/}
+                    {/*    borderRadius: "0.2rem",*/}
+                    {/*  }}*/}
+                    {/*>*/}
+                    {/*<option value={""}>Select</option>*/}
+                    {/*{hivStatus.map((gender, index) => (*/}
+                    {/*  <option key={gender.id} value={gender.id}>*/}
+                    {/*    {gender.display}*/}
+                    {/*  </option>*/}
+                    {/*))}*/}
+                    {/*</select>*/}
                     {errors.hivStatus !== "" ? (
-                      <span className={classes.error}>{errors.hivStatus}</span>
+                        <span className={classes.error}>{errors.hivStatus}</span>
                     ) : (
-                      ""
+                        ""
                     )}
                   </FormGroup>
                 </div>
@@ -964,26 +1097,26 @@ const RefferralUnit = (props) => {
                   <FormGroup>
                     <Label for="firstName">
                       Referred from (Department):
-                      <span style={{ color: "red" }}> *</span>
+                      <span style={{color: "red"}}> *</span>
                     </Label>
                     <Input
-                      className="form-control"
-                      name="referreFromFacility"
-                      id="referreFromFacility"
-                      value={payload.referreFromFacility}
-                      onChange={handleInputChange}
-                      style={{
-                        border: "1px solid #014D88",
-                        borderRadius: "0.2rem",
-                      }}
+                        className="form-control"
+                        name="referredFromFacility"
+                        id="referredFromFacility"
+                        value={payload.referredFromFacility}
+                        onChange={handleInputChange}
+                        style={{
+                          border: "1px solid #014D88",
+                          borderRadius: "0.2rem",
+                        }}
                     />
 
-                    {errors.referreFromFacility !== "" ? (
-                      <span className={classes.error}>
-                        {errors.referreFromFacility}
+                    {errors.referredFromFacility !== "" ? (
+                        <span className={classes.error}>
+                        {errors.referredFromFacility}
                       </span>
                     ) : (
-                      ""
+                        ""
                     )}
                   </FormGroup>
                 </div>
@@ -991,54 +1124,54 @@ const RefferralUnit = (props) => {
                   <FormGroup>
                     <Label for="firstName">
                       Name of Person Referring Client
-                      <span style={{ color: "red" }}> *</span>
+                      <span style={{color: "red"}}> *</span>
                     </Label>
                     <Input
-                      className="form-control"
-                      type="text"
-                      name="nameOfPersonRefferringClient"
-                      id="nameOfPersonRefferringClient"
-                      value={payload.nameOfPersonRefferringClient}
-                      onChange={handleInputChange}
-                      style={{
-                        border: "1px solid #014D88",
-                        borderRadius: "0.2rem",
-                      }}
+                        className="form-control"
+                        type="text"
+                        name="nameOfPersonReferringClient"
+                        id="nameOfPersonReferringClient"
+                        value={payload.nameOfPersonReferringClient}
+                        onChange={handleInputChange}
+                        style={{
+                          border: "1px solid #014D88",
+                          borderRadius: "0.2rem",
+                        }}
                     />
-                    {errors.nameOfPersonRefferringClient !== "" ? (
-                      <span className={classes.error}>
-                        {errors.nameOfPersonRefferringClient}
+                    {errors.nameOfPersonReferringClient !== "" ? (
+                        <span className={classes.error}>
+                        {errors.nameOfPersonReferringClient}
                       </span>
                     ) : (
-                      ""
+                        ""
                     )}
                   </FormGroup>
                 </div>
                 <div className="form-group mb-3 col-md-4">
                   <FormGroup>
                     <Label for="firstName">
-                      Name of Referring Facility
-                      <span style={{ color: "red" }}> *</span>
+                      <span style={{color: "red"}}> *</span>Name of Referring
+                      Facility
                     </Label>
                     <Input
-                      className="form-control"
-                      type="text"
-                      name="nameOfReferringFacility"
-                      id="nameOfReferringFacility"
-                      value={payload.nameOfReferringFacility}
-                      onChange={handleInputChange}
-                      style={{
-                        border: "1px solid #014D88",
-                        borderRadius: "0.2rem",
-                      }}
-                      disabled
+                        className="form-control"
+                        type="text"
+                        name="nameOfReferringFacility"
+                        id="nameOfReferringFacility"
+                        value={payload.nameOfReferringFacility}
+                        onChange={handleInputChange}
+                        style={{
+                          border: "1px solid #014D88",
+                          borderRadius: "0.2rem",
+                        }}
+                        disabled
                     />
                     {errors.nameOfReferringFacility !== "" ? (
-                      <span className={classes.error}>
+                        <span className={classes.error}>
                         {errors.nameOfReferringFacility}
                       </span>
                     ) : (
-                      ""
+                        ""
                     )}
                   </FormGroup>
                 </div>
@@ -1046,271 +1179,463 @@ const RefferralUnit = (props) => {
                   <FormGroup>
                     <Label for="firstName">
                       Address of Referring Facility
-                      <span style={{ color: "red" }}> *</span>
+                      <span style={{color: "red"}}> *</span>
                     </Label>
                     <Input
-                      className="form-control"
-                      type="text"
-                      name="addressOfReferrringFacility"
-                      id="addressOfReferrringFacility"
-                      value={payload.addressOfReferrringFacility}
-                      onChange={handleInputChange}
-                      style={{
-                        border: "1px solid #014D88",
-                        borderRadius: "0.2rem",
-                      }}
-                      // disabled
+                        className="form-control"
+                        type="text"
+                        name="addressOfReferringFacility"
+                        id="addressOfReferringFacility"
+                        value={payload.addressOfReferringFacility}
+                        onChange={handleInputChange}
+                        style={{
+                          border: "1px solid #014D88",
+                          borderRadius: "0.2rem",
+                        }}
+                        // disabled
                     />
-                    {errors.addressOfReferrringFacility !== "" ? (
-                      <span className={classes.error}>
-                        {errors.addressOfReferrringFacility}
+                    {errors.addressOfReferringFacility !== "" ? (
+                        <span className={classes.error}>
+                        {errors.addressOfReferringFacility}
                       </span>
                     ) : (
-                      ""
+                        ""
                     )}
                   </FormGroup>
                 </div>
-                <div className="form-group mb-3 col-md-4">
-                  <FormGroup>
-                    <Label for="firstName">
-                      Phone Number of Refering Facility
-                      {/* <span style={{ color: "red" }}> *</span> */}
-                    </Label>
-                    <PhoneInput
-                      containerStyle={{
-                        width: "100%",
-                        border: "1px solid #014D88",
-                      }}
-                      inputStyle={{ width: "100%", borderRadius: "0px" }}
-                      country={"ng"}
-                      placeholder="(234)7099999999"
-                      maxLength={5}
-                      name="phoneNoOfReferrringFacility"
-                      id="phoneNoOfReferrringFacility"
-                      masks={{ ng: "...-...-....", at: "(....) ...-...." }}
-                      value={payload.phoneNoOfReferrringFacility}
-                      onChange={(e) => {
-                        checkPhoneNumberBasic(e, "phoneNoOfReferrringFacility");
-                      }}
-                      //onChange={(e)=>{handleInputChangeBasic(e,'phoneNumber')}}
-                    />
+                {/*          <div className="form-group mb-3 col-md-4">*/}
+                {/*              <FormGroup>*/}
+                {/*                  <Label for="firstName">*/}
+                {/*                      Phone Number of Referring Facility*/}
+                {/*                      /!* <span style={{ color: "red" }}> *</span> *!/*/}
+                {/*                  </Label>*/}
+                {/*                  <PhoneInput*/}
+                {/*                      containerStyle={{*/}
+                {/*                          width: "100%",*/}
+                {/*                          border: "1px solid #014D88",*/}
+                {/*                      }}*/}
+                {/*                      inputStyle={{width: "100%", borderRadius: "0px"}}*/}
+                {/*                      country={"ng"}*/}
+                {/*                      placeholder="(234)7099999999"*/}
+                {/*                      maxLength={5}*/}
+                {/*                      name="phoneNoOfReferringFacility"*/}
+                {/*                      id="phoneNoOfReferringFacility"*/}
+                {/*                      masks={{ng: "...-...-....", at: "(....) ...-...."}}*/}
+                {/*                      value={payload.phoneNoOfReferringFacility}*/}
+                {/*                      onChange={(e) => {*/}
+                {/*                          checkPhoneNumberBasic(e, "phoneNoOfReferringFacility");*/}
+                {/*                      }}*/}
+                {/*                      //onChange={(e)=>{handleInputChangeBasic(e,'phoneNumber')}}*/}
+                {/*                  />*/}
 
-                    {errors.phoneNoOfReferrringFacility !== "" ? (
-                      <span className={classes.error}>
-                        {errors.phoneNoOfReferrringFacility}
+                {/*                  {errors.phoneNoOfReferringFacility !== "" ? (*/}
+                {/*                      <span className={classes.error}>*/}
+                {/*  {errors.phoneNoOfReferringFacility}*/}
+                {/*</span>*/}
+                {/*                  ) : (*/}
+                {/*                      ""*/}
+                {/*                  )}*/}
+                {/*              </FormGroup>*/}
+                {/*          </div>*/}
+                <div className="form-group  col-md-4">
+                  <FormGroup>
+                    <Label>
+                      Phone Number of Referring Facility{" "}
+                      <span style={{color: "red"}}> *</span>
+                    </Label>
+                    <Input
+                        type="text"
+                        name="phoneNoOfReferringFacility"
+                        id="phoneNoOfReferringFacility"
+                        onChange={(e) => {
+                          handleInputChangePhoneNumber(
+                              e,
+                              "phoneNoOfReferringFacility"
+                          );
+                        }}
+                        value={payload.phoneNoOfReferringFacility}
+                        style={{
+                          border: "1px solid #014D88",
+                          borderRadius: "0.2rem",
+                        }}
+                    />
+                    {errors.phoneNoOfReferringFacility !== "" ? (
+                        <span className={classes.error}>
+                        {errors.phoneNoOfReferringFacility}
                       </span>
                     ) : (
-                      ""
+                        ""
                     )}
                   </FormGroup>
                 </div>
                 <div className="form-group mb-3 col-md-4">
                   <FormGroup>
-                    <Label for="firstName">
-                      Referred to (Department)
-                      <span style={{ color: "red" }}> *</span>
-                    </Label>
+                    <Label for="firstName">Referred to (Department)</Label>
                     <Input
-                      className="form-control"
-                      type="text"
-                      name="referredTo"
-                      id="referredTo"
-                      value={payload.referredTo}
-                      onChange={handleInputChange}
-                      style={{
-                        border: "1px solid #014D88",
-                        borderRadius: "0.2rem",
-                      }}
+                        className="form-control"
+                        type="text"
+                        name="referredTo"
+                        id="referredTo"
+                        value={payload.referredTo}
+                        onChange={handleInputChange}
+                        style={{
+                          border: "1px solid #014D88",
+                          borderRadius: "0.2rem",
+                        }}
                     />
-                    {errors.referredTo !== "" ? (
-                      <span className={classes.error}>{errors.referredTo}</span>
-                    ) : (
-                      ""
-                    )}
                   </FormGroup>
                 </div>
                 <div className="form-group mb-3 col-md-4">
                   <FormGroup>
                     <Label for="firstName">
                       Name of Contact Person:
-                      <span style={{ color: "red" }}> *</span>
+                      <span style={{color: "red"}}> *</span>
                     </Label>
                     <Input
-                      className="form-control"
-                      type="text"
-                      name="nameOfContactPerson"
-                      id="nameOfContactPerson"
-                      value={payload.nameOfContactPerson}
-                      onChange={handleInputChange}
-                      style={{
-                        border: "1px solid #014D88",
-                        borderRadius: "0.2rem",
-                      }}
+                        className="form-control"
+                        type="text"
+                        name="nameOfContactPerson"
+                        id="nameOfContactPerson"
+                        value={payload.nameOfContactPerson}
+                        onChange={handleInputChange}
+                        style={{
+                          border: "1px solid #014D88",
+                          borderRadius: "0.2rem",
+                        }}
                     />
                     {errors.nameOfContactPerson !== "" ? (
-                      <span className={classes.error}>
+                        <span className={classes.error}>
                         {errors.nameOfContactPerson}
                       </span>
                     ) : (
-                      ""
+                        ""
                     )}
                   </FormGroup>
                 </div>
                 <div className="form-group mb-3 col-md-4">
                   <FormGroup>
-                    <Label for="testGroup">
-                      Name of the Receiving Facility{" "}
-                      <span style={{ color: "red" }}> *</span>
+                    <Label
+                        for=""
+                        style={{color: "#014d88", fontWeight: "bolder"}}
+                    >
+                      Receiving Facility State{" "}
+                      <span style={{color: "red"}}> *</span>{" "}
                     </Label>
+                    <Input
+                        type="select"
+                        name="stateId"
+                        style={{
+                          height: "40px",
+                          border: "solid 1px #014d88",
+                          borderRadius: "5px",
+                          fontWeight: "bolder",
+                          appearance: "auto",
+                        }}
+                        required
+                        // onChange={loadLGA1}
+                        onChange={(e) => {
+                          if (e.target.value !== "") {
+                            const filterState =
+                                statesOfTheReceivingFacility.filter((st) => {
+                                  return Number(st.id) === Number(e.target.value);
+                                });
+                            setSelectedReceivingState(filterState);
 
-                    <Select
-                      //value={selectedOption}
-                      onChange={handleInputChangeObject}
-                      name="nameOfRecievingFacility"
-                      options={allFacilities}
-                      theme={(theme) => ({
-                        ...theme,
-                        borderRadius: "0.25rem",
-                        border: "1px solid #014D88",
-                        colors: {
-                          ...theme.colors,
-                          primary25: "#014D88",
-                          primary: "#014D88",
-                        },
-                      })}
-                    />
-                    {errors.nameOfRecievingFacility !== "" ? (
-                      <span className={classes.error}>
-                        {errors.nameOfRecievingFacility}
+                            setPayload((prevPayload) => ({
+                              ...prevPayload,
+                              receivingFacilityStateName: filterState[0].name,
+                            }));
+                          }
+                          loadLGA(e.target.value);
+                        }}
+                    >
+                      <option>Select State</option>
+                      {states.map((state) => (
+                          <option key={state.id} value={state.id}>
+                            {state.name}
+                          </option>
+                      ))}
+                    </Input>
+                    {errors.receivingFacilityStateName !== "" ? (
+                        <span className={classes.error}>
+                        {errors.receivingFacilityStateName}
                       </span>
                     ) : (
-                      ""
+                        ""
                     )}
                   </FormGroup>
                 </div>
-
-                {/* <div className="form-group mb-3 col-md-4">
+                <div className="form-group mb-3 col-md-4">
                   <FormGroup>
-                    <Label for="firstName">
-                      Name of the Receiving Facility
-                      <span style={{ color: "red" }}> *</span>
+                    <Label
+                        for=""
+                        style={{color: "#014d88", fontWeight: "bolder"}}
+                    >
+                      {" "}
+                      Receiving Facility LGA{" "}
+                      <span style={{color: "red"}}> *</span>
                     </Label>
                     <Input
-                      className="form-control"
-                      type="text"
-                      name="nameOfRecievingFacility"
-                      id="nameOfRecievingFacility"
-                      value={payload.nameOfRecievingFacility}
-                      onChange={handleInputChange}
-                      style={{
-                        border: "1px solid #014D88",
-                        borderRadius: "0.2rem",
-                      }}
-                    />
-                    {errors.nameOfRecievingFacility !== "" ? (
-                      <span className={classes.error}>
-                        {errors.nameOfRecievingFacility}
+                        type="select"
+                        name="lgaId"
+                        style={{
+                          height: "40px",
+                          border: "solid 1px #014d88",
+                          borderRadius: "5px",
+                          fontWeight: "bolder",
+                          appearance: "auto",
+                        }}
+                        required
+                        // onChange={loadFacilities1}
+                        onChange={(e) => {
+                          if (e.target.value !== "") {
+                            const filterlga = lgasOfTheReceivingFacility.filter(
+                                (lg) => {
+                                  return Number(lg.id) === Number(e.target.value);
+                                }
+                            );
+                            setSelectedReceivingLga(filterlga);
+                            setPayload((prevPayload) => ({
+                              ...prevPayload,
+                              receivingFacilityLgaName: filterlga[0].name,
+                            }));
+                          }
+                          loadFacilities(e.target.value);
+                        }}
+                    >
+                      <option>Select LGA</option>
+                      {lgasOfTheReceivingFacility.map((lga) => (
+                          <option key={lga.id} value={lga.id}>
+                            {lga.name}
+                          </option>
+                      ))}
+                    </Input>
+                    {errors.receivingFacilityLgaName !== "" ? (
+                        <span className={classes.error}>
+                        {errors.receivingFacilityLgaName}
                       </span>
                     ) : (
-                      ""
+                        ""
                     )}
                   </FormGroup>
-                </div> */}
+                </div>
+                <div className="form-group mb-3 col-md-4">
+                  <FormGroup>
+                    <Label
+                        for=""
+                        style={{color: "#014d88", fontWeight: "bolder"}}
+                    >
+                      Name of Receiving Facility
+                      <span style={{color: "red"}}> *</span>{" "}
+                    </Label>
+                    <Input
+                        type="select"
+                        name="nameOfReceivingFacility"
+                        style={{
+                          height: "40px",
+                          border: "solid 1px #014d88",
+                          borderRadius: "5px",
+                          fontWeight: "bolder",
+                          appearance: "auto",
+                        }}
+                        required
+                        onChange={(e) => {
+                          // setPayload(prevPayload => ({ ...prevPayload, facilityTransferTo: e.target.value }));
+                          if (e.target.value !== "") {
+                            const filterFacility = receivingFacilities.filter(
+                                (fa) => {
+                                  return Number(fa.id) === Number(e.target.value);
+                                }
+                            );
+                            setSelectedReceivingFacility(filterFacility);
+                            setPayload((prevPayload) => ({
+                              ...prevPayload,
+                              nameOfReceivingFacility: filterFacility[0].name,
+                            }));
+                          }
+                        }}
+                    >
+                      <option>Select Facility</option>
+                      {receivingFacilities.map((facility) => (
+                          <option key={facility.id} value={facility.id}>
+                            {facility.name}
+                          </option>
+                      ))}
+                    </Input>
+                    {errors.nameOfReceivingFacility !== "" ? (
+                        <span className={classes.error}>
+                        {errors.nameOfReceivingFacility}
+                      </span>
+                    ) : (
+                        ""
+                    )}
+                  </FormGroup>
+                </div>
                 <div className="form-group mb-3 col-md-4">
                   <FormGroup>
                     <Label for="firstName">
                       Address of the Receiving Facility
-                      <span style={{ color: "red" }}> *</span>
+                      <span style={{color: "red"}}> *</span>
                     </Label>
                     <Input
-                      className="form-control"
-                      type="text"
-                      name="addressOfRecievingFacility"
-                      id="addressOfRecievingFacility"
-                      value={payload.addressOfRecievingFacility}
-                      onChange={handleInputChange}
-                      style={{
-                        border: "1px solid #014D88",
-                        borderRadius: "0.2rem",
-                      }}
+                        className="form-control"
+                        type="text"
+                        name="addressOfReceivingFacility"
+                        id="addressOfReceivingFacility"
+                        value={payload.addressOfReceivingFacility}
+                        onChange={handleInputChange}
+                        style={{
+                          border: "1px solid #014D88",
+                          borderRadius: "0.2rem",
+                        }}
                     />
-                    {errors.addressOfRecievingFacility !== "" ? (
-                      <span className={classes.error}>
-                        {errors.addressOfRecievingFacility}
-                      </span>
-                    ) : (
-                      ""
-                    )}
                   </FormGroup>
                 </div>
-                <div className="form-group mb-3 col-md-4">
+                {/*          <div className="form-group mb-3 col-md-4">*/}
+                {/*              <FormGroup>*/}
+                {/*                  <Label for="firstName">*/}
+                {/*                      Phone No of Receiving Facility*/}
+                {/*                      <span style={{color: "red"}}> *</span>*/}
+                {/*                  </Label>*/}
+                {/*                  <PhoneInput*/}
+                {/*                      containerStyle={{*/}
+                {/*                          width: "100%",*/}
+                {/*                          border: "1px solid #014D88",*/}
+                {/*                      }}*/}
+                {/*                      inputStyle={{width: "100%", borderRadius: "0px"}}*/}
+                {/*                      country={"ng"}*/}
+                {/*                      placeholder="(234)7099999999"*/}
+                {/*                      maxLength={5}*/}
+                {/*                      name="phoneNoOfReceivingFacility"*/}
+                {/*                      id="phoneNoOfReceivingFacility"*/}
+                {/*                      masks={{ng: "...-...-....", at: "(....) ...-...."}}*/}
+                {/*                      value={payload.phoneNoOfReceivingFacility}*/}
+                {/*                      onChange={(e) => {*/}
+                {/*                          checkPhoneNumberBasic(e, "phoneNoOfReceivingFacility");*/}
+                {/*                      }}*/}
+                {/*                      //onChange={(e)=>{handleInputChangeBasic(e,'phoneNumber')}}*/}
+                {/*                  />*/}
+
+                {/*                  {errors.phoneNoOfReceivingFacility !== "" ? (*/}
+                {/*                      <span className={classes.error}>*/}
+                {/*  {errors.phoneNoOfReceivingFacility}*/}
+                {/*</span>*/}
+                {/*                  ) : (*/}
+                {/*                      ""*/}
+                {/*                  )}*/}
+                {/*              </FormGroup>*/}
+                {/*          </div>*/}
+                <div className="form-group  col-md-4">
                   <FormGroup>
-                    <Label for="firstName">
+                    <Label>
                       Phone No of Receiving Facility
-                      <span style={{ color: "red" }}> *</span>
+                      <span style={{color: "red"}}> *</span>
                     </Label>
-                    <PhoneInput
-                      containerStyle={{
-                        width: "100%",
-                        border: "1px solid #014D88",
-                      }}
-                      inputStyle={{ width: "100%", borderRadius: "0px" }}
-                      country={"ng"}
-                      placeholder="(234)7099999999"
-                      maxLength={5}
-                      name="phoneNoOfRecievingFacility"
-                      id="phoneNoOfRecievingFacility"
-                      masks={{ ng: "...-...-....", at: "(....) ...-...." }}
-                      value={payload.phoneNoOfRecievingFacility}
-                      onChange={(e) => {
-                        checkPhoneNumberBasic(e, "phoneNoOfRecievingFacility");
-                      }}
-                      //onChange={(e)=>{handleInputChangeBasic(e,'phoneNumber')}}
+                    <Input
+                        type="text"
+                        name="phoneNoOfReceivingFacility"
+                        id="phoneNoOfReceivingFacility"
+                        onChange={(e) => {
+                          handleInputChangePhoneNumber(
+                              e,
+                              "phoneNoOfReceivingFacility"
+                          );
+                        }}
+                        value={payload.phoneNoOfReceivingFacility}
+                        style={{
+                          border: "1px solid #014D88",
+                          borderRadius: "0.2rem",
+                        }}
                     />
-
-                    {errors.phoneNoOfRecievingFacility !== "" ? (
-                      <span className={classes.error}>
-                        {errors.phoneNoOfRecievingFacility}
+                    {errors.phoneNoOfReceivingFacility !== "" ? (
+                        <span className={classes.error}>
+                        {errors.phoneNoOfReceivingFacility}
                       </span>
                     ) : (
-                      ""
+                        ""
                     )}
                   </FormGroup>
                 </div>
-                <div className="form-group mb-3 col-md-4">
+                {/*<div className="form-group mb-3 col-md-4">*/}
+                {/*  <FormGroup>*/}
+                {/*    <Label for="firstName">*/}
+                {/*      Services needed*/}
+                {/*      <span style={{ color: "red" }}> *</span>*/}
+                {/*    </Label>*/}
+                {/*    <select*/}
+                {/*      className="form-control"*/}
+                {/*      name="serviceNeeded"*/}
+                {/*      id="serviceNeeded"*/}
+                {/*      onChange={handleInputChange}*/}
+                {/*      value={payload.serviceNeeded}*/}
+                {/*      style={{*/}
+                {/*        border: "1px solid #014D88",*/}
+                {/*        borderRadius: "0.2rem",*/}
+                {/*      }}*/}
+                {/*    >*/}
+                {/*      <option value={""}>Select Service</option>*/}
+                {/*      {serviceNeeded.map((value, index) => (*/}
+                {/*        <option key={value.id} value={value.code}>*/}
+                {/*          {value.display}*/}
+                {/*        </option>*/}
+                {/*      ))}*/}
+                {/*    </select>*/}
+
+                {/*    {errors.serviceNeeded !== "" ? (*/}
+                {/*      <span className={classes.error}>*/}
+                {/*        {errors.serviceNeeded}*/}
+                {/*      </span>*/}
+                {/*    ) : (*/}
+                {/*      ""*/}
+                {/*    )}*/}
+                {/*  </FormGroup>*/}
+                {/*</div>*/}
+                {/*<div className="form-group mb-3 col-md-12">*/}
+                {/*  <FormGroup>*/}
+                {/*    <Label>*/}
+                {/*      Services needed{" "}*/}
+                {/*      <span style={{color: "red"}}> *</span>*/}
+                {/*    </Label>*/}
+                {/*    <DualListBox*/}
+                {/*        //canFilter*/}
+                {/*        // options={indicationForClientVerification}*/}
+                {/*        // onChange={(value) => setSelected(value)}*/}
+                {/*        // selected={selected}*/}
+                {/*    />*/}
+                {/*    /!*{errors.indicationForClientVerification !== "" ? (*!/*/}
+                {/*    /!*    <span className={classes.error}>*!/*/}
+                {/*    /!*  {errors.indicationForClientVerification}*!/*/}
+                {/*    /!*</span>*!/*/}
+                {/*    /!*) : (*!/*/}
+                {/*    /!*    ""*!/*/}
+                {/*    /!*)}*!/*/}
+                {/*  </FormGroup>*/}
+                {/*</div>*/}
+                <div className="form-group mb-3 col-md-12">
                   <FormGroup>
-                    <Label for="firstName">
-                      Services needed
-                      <span style={{ color: "red" }}> *</span>
+                    <Label for="dualListBox">
+                       Services Needed
                     </Label>
-                    <select
-                      className="form-control"
-                      name="serviceNeeded"
-                      id="serviceNeeded"
-                      onChange={handleInputChange}
-                      value={payload.serviceNeeded}
-                      style={{
-                        border: "1px solid #014D88",
-                        borderRadius: "0.2rem",
-                      }}
-                    >
-                      <option value={""}>Select Service</option>
-                      {serviceNeeded.map((gender, index) => (
-                        <option key={gender.id} value={gender.id}>
-                          {gender.display}
-                        </option>
-                      ))}
-                    </select>
-
-                    {errors.serviceNeeded !== "" ? (
-                      <span className={classes.error}>
-                        {errors.serviceNeeded}
-                      </span>
-                    ) : (
-                      ""
-                    )}
+                    <DualListBox
+                        options={serviceNeeded}
+                        selected={selectedServiceNeeded}
+                        onChange={(value) => {
+                          // Update selectedServiceNeeded state
+                          setSelectServiceNeeded(value);
+                          // Convert selectedServiceNeeded array into an object
+                          const serviceNeededObject = value.reduce((obj, item, index) => {
+                            obj[index] = item;
+                            return obj;
+                          }, {});
+                          // Update serviceNeeded in payload
+                          setPayload({...payload, serviceNeeded: serviceNeededObject});
+                        }}
+                        // disabled={props.row.action === "view" ? true : false}
+                        // disabled
+                    />
                   </FormGroup>
                 </div>
+
                 <div className="form-group mb-3 col-md-12">
                   <FormGroup>
                     <Label for="firstName">
@@ -1318,46 +1643,56 @@ const RefferralUnit = (props) => {
                       {/* <span style={{ color: "red" }}> *</span> */}
                     </Label>
                     <Input
-                      className="form-control"
-                      type="textarea"
-                      rows="4"
-                      cols="7"
-                      name="comments"
-                      id="comments"
-                      value={payload.comments}
-                      onChange={handleInputChange}
-                      style={{
-                        border: "1px solid #014D88",
-                        borderRadius: "0.2rem",
-                        height: "100px",
-                      }}
+                        className="form-control"
+                        type="textarea"
+                        rows="4"
+                        cols="7"
+                        name="comments"
+                        id="comments"
+                        value={payload.comments}
+                        onChange={handleInputChange}
+                        style={{
+                          border: "1px solid #014D88",
+                          borderRadius: "0.2rem",
+                          height: "100px",
+                        }}
                     />
-                    {/* {errors.firstName !== "" ? (
-                      <span className={classes.error}>{errors.firstName}</span>
-                    ) : (
-                      ""
-                    )} */}
                   </FormGroup>
                 </div>
               </div>
-              <br />
+              <br/>
 
-              <br />
+              <br/>
 
               {/* <hr /> */}
-              <br />
+              <br/>
               <div className="row">
-                <div className="form-group mb-3 col-md-6">
+                <div
+                    className="form-group mb-3 col-md-12"
+                    style={{display: "flex"}}
+                >
                   <Button
-                    content="Save"
-                    type="submit"
-                    icon="right arrow"
-                    labelPosition="right"
-                    style={{ backgroundColor: "#014d88", color: "#fff" }}
-                    onClick={handleSubmit}
-                    disabled={saving}
+                      content="Done"
+                      type="submit"
+                      // icon="right arrow"
+                      // labelPosition="right"
+                      style={{backgroundColor: "#014d88", color: "#fff"}}
+                      onClick={() => {
+                        history.push("/");
+                      }}
+                      disabled={saving}
+                  />
+                  <Button
+                      content="Add Form"
+                      type="submit"
+                      // icon="right arrow"
+                      // labelPosition="right"
+                      style={{backgroundColor: "#014d88", color: "#fff"}}
+                      onClick={handleSubmit}
+                      disabled={saving}
                   />
                 </div>
+
               </div>
             </div>
           </form>

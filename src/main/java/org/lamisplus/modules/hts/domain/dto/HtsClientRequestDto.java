@@ -2,6 +2,7 @@ package org.lamisplus.modules.hts.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import org.lamisplus.modules.hts.domain.enums.Source;
 import org.lamisplus.modules.patient.domain.dto.PersonDto;
 
 import javax.validation.constraints.NotBlank;
@@ -46,4 +47,6 @@ public class HtsClientRequestDto {
     private String otherDrugs;
     private String hivTestResult;
     private String ConfirmatoryTest2;
+    private String source = Source.Web.toString();
+    private String uuid;
 }

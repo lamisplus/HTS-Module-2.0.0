@@ -23,4 +23,40 @@
             WHERE modality = 'TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL'|| chr(38) || 'DBF)';
         </sql>
     </changeSet>
+    <changeSet failOnError="true" author="Peter Abiodun" id="hivst-creation">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="hivst"/>
+            </not>
+        </preConditions>
+        <sql>
+            CREATE TABLE hivst (
+                id SERIAL PRIMARY KEY,
+                patient_id BIGINT,
+                date_of_visit DATE,
+                service_delivery_point VARCHAR(255),
+                user_type VARCHAR(255),
+                serial_number VARCHAR(255),
+                client_code VARCHAR(255),
+                previously_tested_within_12_months VARCHAR(255),
+                result_of_previously_tested_within_12_months VARCHAR(255),
+                consent_for_follow_up_calls VARCHAR(255),
+                type_of_hivst_kit_received VARCHAR(255),
+                number_of_hivst_kits_received BIGINT,
+                name_of_test_kit VARCHAR(255),
+                lot_number VARCHAR(255),
+                expiry_date DATE,
+                test_kit_users JSONB,
+                other_test_kit_user_info_available VARCHAR(255),
+                other_test_kit_user_details JSONB,
+                part_b JSONB,
+                referral_information JSONB,
+                archived INTEGER DEFAULT 0,
+                created_by VARCHAR(255) NOT NULL,
+                date_created TIMESTAMP NOT NULL,
+                modified_by VARCHAR(255),
+                date_modified TIMESTAMP
+            );
+        </sql>
+    </changeSet>
 </databaseChangeLog>

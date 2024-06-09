@@ -96,10 +96,11 @@ const useStyles = makeStyles((theme) => ({
 
 const BasicInfo = (props) => {
   const classes = useStyles();
-  // console.log("new", props.patientObj);
+  console.log("new", props.patientObj);
   const history = useHistory();
   const [errors, setErrors] = useState({});
   const [saving, setSaving] = useState(false);
+
   const [hideNumChild, setHideNumChild] = useState(false);
   const [kP, setKP] = useState([]);
   const [enrollSetting, setEnrollSetting] = useState([]);
@@ -122,6 +123,8 @@ const BasicInfo = (props) => {
   const [createdCode, setCreatedCode] = useState("");
   const [facilityCode, setFacilityCode] = useState("");
   const [serialNumber, setSerialNumber] = useState(null);
+  const [showPregancy, setShowPregnancy] = useState(false);
+
   const getPhoneNumber = (identifier) => {
     const identifiers = identifier;
     const phoneNumber = identifiers.contactPoint.find(
@@ -163,6 +166,7 @@ const BasicInfo = (props) => {
     props.patientObj.personResponseDto.dateOfBirth
   );
 
+  console.log(props.extra);
   const [objValues, setObjValues] = useState({
     active: true,
     clientCode:
@@ -301,55 +305,53 @@ const BasicInfo = (props) => {
   });
 
   const CreateClientCode = () => {
-      let facilityShortCode = '';
-      axios
-          .get(`${baseUrl}hts/get-facility-code`, {
-            headers: { Authorization: `Bearer ${token}` },
-          })
-          .then((response) => {
-            // console.log('Response Facility Short Code **** ', response.data);
-            setFacilityCode(response.data)
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+    let facilityShortCode = "";
+    axios
+      .get(`${baseUrl}hts/get-facility-code`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        // console.log('Response Facility Short Code **** ', response.data);
+        setFacilityCode(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
 
-      let visitDate = new Date(props.patientObj.dateVisit);
+    let visitDate = new Date(props.patientObj.dateVisit);
 
-      let modality = props.patientObj.modality;
-      let modalityCode = '';
-      if(modality?.includes('STI')) {
-        modalityCode = 'STI';
-      }else if (modality?.includes('EMERGENCY')) {
-        modalityCode = 'EME';
-      }else if (modality?.includes('INDEX')) {
-        modalityCode = 'IND';
-      }else if (modality?.includes('INPATIENT')) {
-        modalityCode = 'INP';
-      }else if (modality?.includes('PMTCT')) {
-        modalityCode = 'PMTCT';
-      }else if (modality?.includes('TB')) {
-        modalityCode = 'TB';
-      }else if (modality?.includes('VCT')) {
-        modalityCode = 'VCT';
-      }
-      else if (modality?.includes('MOBILE')) {
-        modalityCode = 'MOB';
-      }
-      else if (modality?.includes('SNS')) {
-        modalityCode = 'SNS';
-      }
-      else if (modality?.includes('OTHER')) {
-        modalityCode = 'OTH';
-      }
-
-      let month = visitDate.getMonth();
-      let year = visitDate.getFullYear();
-      let codeCreated = 'C' + facilityCode + '/' +modalityCode + '/' +month + '/' + year + '/';
-      setCreatedCode(codeCreated);
-      setObjValues({...objValues, clientCode: createdCode})
-      // console.log('Created Code **** ', createdCode);
+    let modality = props.patientObj.modality;
+    let modalityCode = "";
+    if (modality?.includes("STI")) {
+      modalityCode = "STI";
+    } else if (modality?.includes("EMERGENCY")) {
+      modalityCode = "EME";
+    } else if (modality?.includes("INDEX")) {
+      modalityCode = "IND";
+    } else if (modality?.includes("INPATIENT")) {
+      modalityCode = "INP";
+    } else if (modality?.includes("PMTCT")) {
+      modalityCode = "PMTCT";
+    } else if (modality?.includes("TB")) {
+      modalityCode = "TB";
+    } else if (modality?.includes("VCT")) {
+      modalityCode = "VCT";
+    } else if (modality?.includes("MOBILE")) {
+      modalityCode = "MOB";
+    } else if (modality?.includes("SNS")) {
+      modalityCode = "SNS";
+    } else if (modality?.includes("OTHER")) {
+      modalityCode = "OTH";
     }
+
+    let month = visitDate.getMonth();
+    let year = visitDate.getFullYear();
+    let codeCreated =
+      "C" + facilityCode + "/" + modalityCode + "/" + month + "/" + year + "/";
+    setCreatedCode(codeCreated);
+    setObjValues({ ...objValues, clientCode: createdCode });
+    // console.log('Created Code **** ', createdCode);
+  };
 
   useEffect(() => {
     KP();
@@ -374,6 +376,36 @@ const BasicInfo = (props) => {
     }
     if (country && country.stateId !== "") {
       getProvincesId(country.stateId);
+    }
+
+    if (
+      props.extra.modality === "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||
+      props.extra.modality ===
+        "TEST_SETTING_STANDALONE_HTS_PMTCT_(ANC1_ONLY)" ||
+      props.extra.modality ===
+        "TEST_SETTING_OTHERS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
+      props.extra.modality === "TEST_SETTING_CPMTCT" ||
+      props.extra.modality ===
+        "TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
+      props.extra.modality ===
+        "TEST_SETTING_STANDALONE_HTS_PMTCT_(ANC1_ONLY)" ||
+      props.extra.modality === "TEST_SETTING_OTHERS_POST_ANC1_PREGNANT_L&D" ||
+      props.extra.modality === "TEST_SETTING_OTHERS_POST_ANC1_BREASTFEEDING" ||
+      props.extra.modality === "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||
+      props.extra.modality ===
+        "TEST_SETTING_STANDALONE_HTS_POST_ANC1_BREASTFEEDING"
+    ) {
+      let sexDetetrmined = "Female";
+      setObjValues({ ...objValues, sex: "Female", pregnant: 73 });
+
+      if (
+        sexDetetrmined.toLowerCase() === "female" ||
+        props.extra.modality !==
+          "TEST_SETTING_OTHERS_POST_ANC1_BREASTFEEDING" ||
+        props.extra.modality !== "TEST_SETTING_STANDALONE_HTS_PMTCT_(ANC1_ONLY)"
+      ) {
+        setShowPregnancy(true);
+      }
     }
   }, [objValues.age, props.patientObj, props.extra.age, facilityCode]);
   //Get list of KP
@@ -566,9 +598,10 @@ const BasicInfo = (props) => {
       const name = alphabetOnly(e.target.value);
       setObjValues({ ...objValues, [e.target.name]: name });
     }
-    // if((e.target.name !=='maritalStatusId' && e.target.value!=='5' )){//logic for marital status
-    //     setHideNumChild(true)
-    // }else{
+    if (e.target.name === "sex" && e.target.value.toLowerCase() === "female") {
+      setShowPregnancy(true);
+    }
+    // else{
     //     setHideNumChild(false)
     // }
 
@@ -599,13 +632,13 @@ const BasicInfo = (props) => {
   };
   //checkClientCode
   const checkClientCode = (e) => {
-     let code = '';
-        if(e.target.name === "serialNumber"){
-          code = createdCode + e.target.value;
-          setCreatedCode(code);
-          console.log("Code created is &&&& ", createdCode);
-          setObjValues({...objValues, clientCode: code})
-        }
+    let code = "";
+    if (e.target.name === "serialNumber") {
+      code = createdCode + e.target.value;
+      setCreatedCode(code);
+      console.log("Code created is &&&& ", createdCode);
+      setObjValues({ ...objValues, clientCode: code });
+    }
     async function getIndexClientCode() {
       const indexClientCode = objValues.clientCode;
       console.log(indexClientCode);
@@ -692,9 +725,7 @@ const BasicInfo = (props) => {
     temp.typeCounseling = objValues.typeCounseling
       ? ""
       : "This field is required.";
-    temp.testingx = objValues.testingSetting
-      ? ""
-      : "This field is required.";
+    temp.testingx = objValues.testingSetting ? "" : "This field is required.";
     temp.targetGroup = objValues.targetGroup ? "" : "This field is required.";
     temp.referredFrom = objValues.referredFrom ? "" : "This field is required.";
     temp.previouslyTested = objValues.previouslyTested
@@ -725,6 +756,17 @@ const BasicInfo = (props) => {
     } else {
       props.setCompleted([...props.completed, completedMenu]);
     }
+  };
+
+  const checkNumberLimit = (e) => {
+    const limit = 11;
+    const acceptedNumber = e.slice(0, limit);
+    return acceptedNumber;
+  };
+  const handleInputChangePhoneNumber = (e, inputName) => {
+    const limit = 11;
+    const NumberValue = checkNumberLimit(e.target.value.replace(/\D/g, ""));
+    setObjValues({ ...objValues, [inputName]: NumberValue });
   };
 
   const handleSubmit = (e) => {
@@ -809,11 +851,38 @@ const BasicInfo = (props) => {
         .then((response) => {
           setSaving(false);
           props.setPatientObj(response.data);
+          props.setBasicInfo(response.data);
+
           //props.patientObj.personResponseDto=patientForm.personDto
           //props.setPatientObj({...patientObj, })
           //toast.success("HTS Test successful");
           if (objValues.age > 14) {
-            handleItemClick("pre-test-counsel", "basic");
+            if (
+              props.extra.modality ===
+                "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||
+              props.extra.modality === "TEST_SETTING_STI_STI" ||
+              props.extra.modality === "TEST_SETTING_TB_TB" ||
+              props.extra.modality ===
+                "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||
+              props.extra.modality === "TEST_SETTING_CT_PMTCT" ||
+              props.extra.modality ===
+                "TEST_SETTING_OTHERS_POST_ANC1_BREASTFEEDING" ||
+              props.extra.modality ===
+                "TEST_SETTING_OTHERS_POST_ANC1_PREGNANT_L&D" ||
+              props.extra.modality ===
+                "TEST_SETTING_STANDALONE_HTS_PMTCT_(ANC1_ONLY)" ||
+              props.extra.modality ===
+                "TEST_SETTING_STANDALONE_HTS_POST_ANC1_BREASTFEEDING" ||
+              props.extra.modality ===
+                "TEST_SETTING_STANDALONE_HTS_POST_ANC1_PREGNANT_L&D" ||
+              props.extra.modality ===
+                "TEST_SETTING_STANDALONE_HTS_PMTCT_(ANC1_ONLY)" ||
+              props.extra.modality === "TEST_SETTING_STANDALONE_HTS_STI"
+            ) {
+              handleItemClick("hiv-test", "basic");
+            } else {
+              handleItemClick("pre-test-counsel", "basic");
+            }
           } else {
             handleItemClick("hiv-test", "basic");
           }
@@ -857,17 +926,17 @@ const BasicInfo = (props) => {
                       Serial Number <span style={{ color: "red" }}> *</span>
                     </Label>
                     <Input
-                        type="text"
-                        name="serialNumber"
-                        id="serialNumber"
-                        value={serialNumber}
-                        //value={Math.floor(Math.random() * 1093328)}
-                        onBlur={checkClientCode}
-                        onChange={handleInputChange}
-                        style={{
-                          border: "1px solid #014D88",
-                          borderRadius: "0.25rem",
-                        }}
+                      type="text"
+                      name="serialNumber"
+                      id="serialNumber"
+                      value={serialNumber}
+                      //value={Math.floor(Math.random() * 1093328)}
+                      onBlur={checkClientCode}
+                      onChange={handleInputChange}
+                      style={{
+                        border: "1px solid #014D88",
+                        borderRadius: "0.25rem",
+                      }}
                     />
                   </FormGroup>
                 </div>
@@ -1148,29 +1217,56 @@ const BasicInfo = (props) => {
                   />
                 </FormGroup>
               </div>
-              <div className="form-group mb-3 col-md-4">
-                <FormGroup>
-                  <Label for="">
-                    Phone Number <span style={{ color: "red" }}> *</span>
-                  </Label>
+              {/*<div className="form-group mb-3 col-md-4">*/}
+              {/*  <FormGroup>*/}
+              {/*    <Label for="">*/}
+              {/*      Phone Number <span style={{ color: "red" }}> *</span>*/}
+              {/*    </Label>*/}
 
-                  <PhoneInput
-                    containerStyle={{
-                      width: "100%",
-                      border: "1px solid #014D88",
-                    }}
-                    inputStyle={{ width: "100%", borderRadius: "0px" }}
-                    country={"ng"}
-                    placeholder="(234)7099999999"
-                    minLength={10}
+              {/*    <PhoneInput*/}
+              {/*      containerStyle={{*/}
+              {/*        width: "100%",*/}
+              {/*        border: "1px solid #014D88",*/}
+              {/*      }}*/}
+              {/*      inputStyle={{ width: "100%", borderRadius: "0px" }}*/}
+              {/*      country={"ng"}*/}
+              {/*      placeholder="(234)7099999999"*/}
+              {/*      minLength={10}*/}
+              {/*      name="phoneNumber"*/}
+              {/*      id="phoneNumber"*/}
+              {/*      masks={{ ng: "...-...-....", at: "(....) ...-...." }}*/}
+              {/*      value={objValues.phoneNumber}*/}
+              {/*      onChange={(e) => {*/}
+              {/*        checkPhoneNumberBasic(e, "phoneNumber");*/}
+              {/*      }}*/}
+              {/*      //onChange={(e)=>{handleInputChangeBasic(e,'phoneNumber')}}*/}
+              {/*    />*/}
+              {/*    {errors.phoneNumber !== "" ? (*/}
+              {/*      <span className={classes.error}>{errors.phoneNumber}</span>*/}
+              {/*    ) : (*/}
+              {/*      ""*/}
+              {/*    )}*/}
+              {/*  </FormGroup>*/}
+              {/*</div>*/}
+              <div className="form-group  col-md-4">
+                <FormGroup>
+                  <Label>
+                    Phone Number
+                    <span style={{ color: "red" }}> *</span>
+                  </Label>
+                  <Input
+                    type="text"
                     name="phoneNumber"
                     id="phoneNumber"
-                    masks={{ ng: "...-...-....", at: "(....) ...-...." }}
-                    value={objValues.phoneNumber}
                     onChange={(e) => {
-                      checkPhoneNumberBasic(e, "phoneNumber");
+                      handleInputChangePhoneNumber(e, "phoneNumber");
                     }}
-                    //onChange={(e)=>{handleInputChangeBasic(e,'phoneNumber')}}
+                    value={objValues.phoneNumber}
+                    style={{
+                      border: "1px solid #014D88",
+                      borderRadius: "0.2rem",
+                    }}
+                    // disabled
                   />
                   {errors.phoneNumber !== "" ? (
                     <span className={classes.error}>{errors.phoneNumber}</span>
@@ -1262,6 +1358,7 @@ const BasicInfo = (props) => {
                   )}
                 </FormGroup>
               </div>
+
               <div className="form-group  col-md-4">
                 <FormGroup>
                   <Label>
@@ -1277,6 +1374,31 @@ const BasicInfo = (props) => {
                       border: "1px solid #014D88",
                       borderRadius: "0.2rem",
                     }}
+                    disabled={
+                      props.extra.modality ===
+                        "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||
+                      props.extra.modality ===
+                        "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||
+                      props.extra.modality ===
+                        "TEST_SETTING_STANDALONE_HTS_PMTCT_(ANC1_ONLY)" ||
+                      props.extra.modality ===
+                        "TEST_SETTING_OTHERS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
+                      props.extra.modality === "TEST_SETTING_CPMTCT" ||
+                      props.extra.modality ===
+                        "TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
+                      props.extra.modality ===
+                        "TEST_SETTING_STANDALONE_HTS_PMTCT_(ANC1_ONLY)" ||
+                      props.extra.modality ===
+                        "TEST_SETTING_OTHERS_POST_ANC1_PREGNANT_L&D" ||
+                      props.extra.modality ===
+                        "TEST_SETTING_OTHERS_POST_ANC1_BREASTFEEDING" ||
+                      props.extra.modality ===
+                        "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||
+                      props.extra.modality ===
+                        "TEST_SETTING_STANDALONE_HTS_POST_ANC1_BREASTFEEDING"
+                        ? true
+                        : false
+                    }
                   >
                     <option value={""}></option>
                     {sexs.map((value) => (
@@ -1522,10 +1644,15 @@ const BasicInfo = (props) => {
                   </div>
                 </>
               )}
+              {console.log(
+                objValues.sex.toLowerCase() === "female" ||
+                  props.extra.modality !==
+                    "TEST_SETTING_OTHERS_POST_ANC1_BREASTFEEDING" ||
+                  props.extra.modality !==
+                    "TEST_SETTING_STANDALONE_HTS_POST_ANC1_BREASTFEEDING"
+              )}
 
-              {(objValues.sex === "Female" ||
-                objValues.sex === "female" ||
-                objValues.sex === "FEMALE") && (
+              {showPregancy && (
                 <>
                   <div className="form-group  col-md-4">
                     <FormGroup>
@@ -1540,17 +1667,55 @@ const BasicInfo = (props) => {
                           border: "1px solid #014D88",
                           borderRadius: "0.2rem",
                         }}
+                        disabled={
+                          props.extra.modality ===
+                            "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||
+                          props.extra.modality ===
+                            "TEST_SETTING_STANDALONE_HTS_POST_ANC1_BREASTFEEDING" ||
+                          props.extra.modality ===
+                            "TEST_SETTING_OTHERS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
+                          props.extra.modality === "TEST_SETTING_CPMTCT" ||
+                          props.extra.modality ===
+                            "TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
+                          props.extra.modality ===
+                            "TEST_SETTING_STANDALONE_HTS_PMTCT_(ANC1_ONLY)"
+                            ? true
+                            : false
+                        }
                       >
                         <option value={""}></option>
-                        {pregnancyStatus.map((value) => (
-                            ((props.patientObj.riskStratificationResponseDto.modality === "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" || props.patientObj.riskStratificationResponseDto.modality ==="TEST_SETTING_OTHERS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" || props.patientObj.riskStratificationResponseDto.testingSetting==="TEST_SETTING_CPMTCT" || props.patientObj.riskStratificationResponseDto.modality ==="TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)")  && value.code === "PREGANACY_STATUS_NOT_PREGNANT") ? (
-                                <></>
-                            ) : (
-                                <option key={value.id} value={value.id}>
-                                  {value.display}
-                                </option>
-                            )
-                        ))}
+                        {pregnancyStatus.map((value) =>
+                          (props.patientObj.riskStratificationResponseDto
+                            .modality ===
+                            "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||
+                            props.patientObj.riskStratificationResponseDto
+                              .modality ===
+                              "TEST_SETTING_OTHERS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
+                            props.patientObj.riskStratificationResponseDto
+                              .testingSetting === "TEST_SETTING_CPMTCT" ||
+                            props.patientObj.riskStratificationResponseDto
+                              .modality ===
+                              "TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
+                            props.patientObj.riskStratificationResponseDto
+                              .modality ===
+                              "TEST_SETTING_STANDALONE_HTS_PMTCT_(ANC1_ONLY)" ||
+                            props.patientObj.riskStratificationResponseDto
+                              .modality ===
+                              "TEST_SETTING_OTHERS_POST_ANC1_PREGNANT_L&D" ||
+                            props.patientObj.riskStratificationResponseDto
+                              .modality ===
+                              "TEST_SETTING_OTHERS_POST_ANC1_BREASTFEEDING" ||
+                            props.patientObj.riskStratificationResponseDto
+                              .modality ===
+                              "TEST_SETTING_STANDALONE_HTS_POST_ANC1_BREASTFEEDING") &&
+                          value.code === "PREGANACY_STATUS_NOT_PREGNANT" ? (
+                            <></>
+                          ) : (
+                            <option key={value.id} value={value.id}>
+                              {value.display}
+                            </option>
+                          )
+                        )}
                       </select>
                     </FormGroup>
                   </div>

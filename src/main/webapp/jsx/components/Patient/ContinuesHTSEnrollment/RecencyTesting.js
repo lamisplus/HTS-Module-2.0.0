@@ -182,9 +182,9 @@ const Recency = (props) => {
         ? props.patientObj.recency.finalRecencyResult
         : "",
     viralLoadConfirmationResult:
-        props.patientObj && props.patientObj.recency !== null
-          ? props.patientObj.recency.viralLoadConfirmationResult
-          : "",
+      props.patientObj && props.patientObj.recency !== null
+        ? props.patientObj.recency.viralLoadConfirmationResult
+        : "",
   });
 
   useEffect(() => {
@@ -194,9 +194,9 @@ const Recency = (props) => {
       if (recency.optOutRTRI === "true") {
         setRecency({
           optOutRTRI:
-            props.patientObj && props.patientObj.recency !== null
-              ? props.patientObj.recency.optOutRTRI
-              : "",
+              props.patientObj && props.patientObj.recency !== null
+                  ? props.patientObj.recency.optOutRTRI
+                  : "",
           optOutRTRITestName: "",
           optOutRTRITestDate: "",
           rencencyId: "",
@@ -214,22 +214,24 @@ const Recency = (props) => {
           viralLoadResultClassification: "",
           recencyResult: "",
           finalRecencyResult: "",
-          viralLoadConfirmationResult: ""
+          viralLoadConfirmationResult: "",
         });
       }
-      if (
-        props.patientObj.confirmatoryTest &&
-        props.patientObj.confirmatoryTest.date !== ""
-      ) {
-        setHivTestDate(props.patientObj.confirmatoryTest.date);
-      } else if (
-        props.patientObj.confirmatoryTest2 &&
-        props.patientObj.confirmatoryTest2.date2 !== ""
-      ) {
-        setHivTestDate(props.patientObj.confirmatoryTest2.date2);
-      } else {
-        setHivTestDate("");
-      }
+    }
+      if(props.patientObj){
+        if (
+            props.patientObj.confirmatoryTest2 &&
+            props.patientObj.confirmatoryTest2.date2 !== ""
+        ) {
+          setHivTestDate(props.patientObj.confirmatoryTest2.date2);
+        } else if (
+            props.patientObj.confirmatoryTest &&
+            props.patientObj.confirmatoryTest.date !== ""
+        ) {
+          setHivTestDate(props.patientObj.confirmatoryTest.date);
+        } else {
+          setHivTestDate("");
+        }
     }
     if (
       recency.longTermLine === "true" &&
@@ -284,7 +286,7 @@ const Recency = (props) => {
         recency.viralLoadResultClassification = ">=1000";
         recency.finalRecencyResult = "RITA Recent";
         setRecency({ ...recency, [e.target.name]: e.target.value });
-      }else if (e.target.value < 1000) {
+      } else if (e.target.value < 1000) {
         recency.viralLoadResultClassification = "<1000";
         recency.finalRecencyResult = "RITA Long term";
         setRecency({ ...recency, [e.target.name]: e.target.value });
@@ -352,7 +354,10 @@ const Recency = (props) => {
           setSaving(false);
           props.setPatientObj(response.data);
           //toast.success("Risk Assesment successful");
-          handleItemClick("indexing", "recency-testing");
+          //comment this out for release 
+          // handleItemClick("fit", "recency-testing");
+                   handleItemClick("pns", "recency-testing");
+         
         })
         .catch((error) => {
           setSaving(false);
@@ -642,7 +647,7 @@ const Recency = (props) => {
                         <div className="form-group  col-md-4">
                           <FormGroup>
                             <Label>
-                            Recency Sample Type{" "}
+                              Recency Sample Type{" "}
                               <span style={{ color: "red" }}> *</span>
                             </Label>
                             <select
@@ -677,7 +682,7 @@ const Recency = (props) => {
                               name="dateSampleSentToPCRLab"
                               id="dateSampleSentToPCRLab"
                               type="date"
-                              min={recency.optOutRTRITestDate}
+                              min={recency.sampleCollectedDate}
                               value={recency.dateSampleSentToPCRLab}
                               max={moment(new Date()).format("YYYY-MM-DD")}
                               onChange={handleInputChangeRecency}
@@ -703,7 +708,8 @@ const Recency = (props) => {
                               name="sampleTestDate"
                               id="sampleTestDate"
                               type="date"
-                              min={recency.optOutRTRITestDate}
+                              // min={recency.optOutRTRITestDate}
+                              min={recency.dateSampleSentToPCRLab}
                               max={moment(new Date()).format("YYYY-MM-DD")}
                               value={recency.sampleTestDate}
                               onChange={handleInputChangeRecency}
@@ -732,25 +738,29 @@ const Recency = (props) => {
                           </FormGroup>
                         </div>
                         <div className="form-group  col-md-4">
-                            <FormGroup>
-                                <Label>Recency Viral Load Confirmation Result (copies/ml)</Label>
-                                <Input
-                                    className="form-control"
-                                    name="viralLoadConfirmationResult"
-                                    id="viralLoadConfirmationResult"
-                                    type="number"
-                                    value={recency.viralLoadConfirmationResult}
-                                    onChange={handleInputChangeRecency}
-                                    style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
-                                />
-
-                            </FormGroup>
+                          <FormGroup>
+                            <Label>
+                              Recency Viral Load Confirmation Result (copies/ml)
+                            </Label>
+                            <Input
+                              className="form-control"
+                              name="viralLoadConfirmationResult"
+                              id="viralLoadConfirmationResult"
+                              type="number"
+                              value={recency.viralLoadConfirmationResult}
+                              onChange={handleInputChangeRecency}
+                              style={{
+                                border: "1px solid #014D88",
+                                borderRadius: "0.2rem",
+                              }}
+                            />
+                          </FormGroup>
                         </div>
                         <div className="form-group  col-md-4">
                           <FormGroup>
                             <Label>
-                            Recency Viral Load Result Classification and Result
-                              (copies/ml)
+                              Recency Viral Load Result Classification and
+                              Result (copies/ml)
                             </Label>
                             <select
                               className="form-control"

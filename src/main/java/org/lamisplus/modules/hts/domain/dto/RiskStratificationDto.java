@@ -1,6 +1,7 @@
 package org.lamisplus.modules.hts.domain.dto;
 
 import lombok.*;
+import org.lamisplus.modules.hts.domain.enums.Source;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -30,4 +31,5 @@ public class RiskStratificationDto {
     private Long personId;
     private String communityEntryPoint ;
     private  Object riskAssessment;
+    private String source = Source.Web.toString();
 }

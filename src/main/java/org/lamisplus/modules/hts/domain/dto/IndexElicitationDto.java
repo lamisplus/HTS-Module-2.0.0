@@ -1,6 +1,7 @@
 package org.lamisplus.modules.hts.domain.dto;
 
 import lombok.*;
+import org.lamisplus.modules.hts.domain.enums.Source;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -35,4 +36,6 @@ public class IndexElicitationDto {
     private LocalDate datePartnerCameForTesting;
     private String offeredIns;
     private String acceptedIns;
+    private String source = Source.Web.toString();
+    private  String uuid;
 }

@@ -148,26 +148,26 @@ const UserRegistration = (props) => {
                       )}
                     </span>
                   </Menu.Item>
-                
-                    <Menu.Item
-                      name="spam"
-                      active={activeItem === "pre-test-counsel"}
-                      onClick={() => handleItemClick("pre-test-counsel")}
-                      style={{
-                        backgroundColor:
-                          activeItem === "pre-test-counsel" ? "#000" : "",
-                      }}
-                      //disabled={activeItem !== 'pre-test-counsel' ? true : false}
-                    >
-                      {/* <Label>2</Label> */}
-                      <span style={{ color: "#fff" }}>
-                        Pre Test Counseling
-                        {completed.includes("pre-test-counsel") && (
-                          <Icon name="check" color="green" />
-                        )}
-                      </span>
-                    </Menu.Item>
-                  
+
+                  <Menu.Item
+                    name="spam"
+                    active={activeItem === "pre-test-counsel"}
+                    onClick={() => handleItemClick("pre-test-counsel")}
+                    style={{
+                      backgroundColor:
+                        activeItem === "pre-test-counsel" ? "#000" : "",
+                    }}
+                    //disabled={activeItem !== 'pre-test-counsel' ? true : false}
+                  >
+                    {/* <Label>2</Label> */}
+                    <span style={{ color: "#fff" }}>
+                      Pre Test Counseling
+                      {completed.includes("pre-test-counsel") && (
+                        <Icon name="check" color="green" />
+                      )}
+                    </span>
+                  </Menu.Item>
+
                   <Menu.Item
                     name="inbox"
                     active={activeItem === "hiv-test"}
@@ -203,27 +203,28 @@ const UserRegistration = (props) => {
                     </span>
                   </Menu.Item>
 
-                  {patientObj.hivTestResult && patientObj.hivTestResult.toLowerCase() ===
-                    "positive" && (
-                    <Menu.Item
-                      name="spam"
-                      active={activeItem === "recency-testing"}
-                      onClick={() => handleItemClick("recency-testing")}
-                      style={{
-                        backgroundColor:
-                          activeItem === "recency-testing" ? "#000" : "",
-                      }}
-                      //disabled={activeItem !== 'recency-testing' ? true : false}
-                    >
-                      {/* <Label>4</Label> */}
-                      <span style={{ color: "#fff" }}>
-                        HIV Recency Testing
-                        {completed.includes("recency-testing") && (
-                          <Icon name="check" color="green" />
-                        )}
-                      </span>
-                    </Menu.Item>
-                  )}
+                  {patientObj.hivTestResult &&
+                    patientObj.hivTestResult.toLowerCase() === "positive" &&
+                    patientObj.riskStratificationResponseDto?.age &&(
+                      <Menu.Item
+                        name="spam"
+                        active={activeItem === "recency-testing"}
+                        onClick={() => handleItemClick("recency-testing")}
+                        style={{
+                          backgroundColor:
+                            activeItem === "recency-testing" ? "#000" : "",
+                        }}
+                        //disabled={activeItem !== 'recency-testing' ? true : false}
+                      >
+                        {/* <Label>4</Label> */}
+                        <span style={{ color: "#fff" }}>
+                          HIV Recency Testing
+                          {completed.includes("recency-testing") && (
+                            <Icon name="check" color="green" />
+                          )}
+                        </span>
+                      </Menu.Item>
+                    )}
                   {/* 
                   <Menu.Item
                     name="spam"
@@ -279,24 +280,26 @@ const UserRegistration = (props) => {
                     </span>
                   </Menu.Item>} */}
 
-                  {patientObj.hivTestResult && patientObj.hivTestResult.toLowerCase() ===
-                    "positive" &&  <Menu.Item
-                    name="inbox"
-                    active={activeItem === "pns-history"}
-                    onClick={() => handleItemClick("pns-history")}
-                    style={{
-                      backgroundColor:
-                        activeItem === "pns-history" ? "#000" : "",
-                    }}
-                  >
-                    <span style={{ color: "#fff" }}>
-                      {" "}
-                      Partner Notification Services
-                      {completed.includes("pns") && (
-                        <Icon name="check" color="green" />
-                      )}
-                    </span>
-                  </Menu.Item>}
+                  {patientObj.hivTestResult &&
+                    patientObj.hivTestResult.toLowerCase() === "positive" && (
+                      <Menu.Item
+                        name="inbox"
+                        active={activeItem === "pns-history"}
+                        onClick={() => handleItemClick("pns-history")}
+                        style={{
+                          backgroundColor:
+                            activeItem === "pns-history" ? "#000" : "",
+                        }}
+                      >
+                        <span style={{ color: "#fff" }}>
+                          {" "}
+                          Partner Notification Services
+                          {completed.includes("pns") && (
+                            <Icon name="check" color="green" />
+                          )}
+                        </span>
+                      </Menu.Item>
+                    )}
                   <Menu.Item
                     name="inbox"
                     active={activeItem === "refferal-history"}

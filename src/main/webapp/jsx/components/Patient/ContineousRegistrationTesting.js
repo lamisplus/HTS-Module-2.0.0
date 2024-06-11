@@ -368,28 +368,32 @@ const UserRegistration = (props) => {
                       </Menu.Item>
 
                       {patientObj2?.hivTestResult &&
-                        patientObj2?.hivTestResult === "Positive" && (
-                          <Menu.Item
-                            name="spam"
-                            active={activeItem === "recency-testing"}
-                            onClick={() => handleItemClick("recency-testing")}
-                            style={{
-                              backgroundColor:
-                                activeItem === "recency-testing" ? "#000" : "",
-                            }}
-                            disabled={
-                              activeItem !== "recency-testing" ? true : false
-                            }
-                          >
-                            {/* <Label>4</Label> */}
-                            <span style={{ color: "#fff" }}>
-                              HIV Recency Testing
-                              {completed.includes("recency-testing") && (
-                                <Icon name="check" color="green" />
-                              )}
-                            </span>
-                          </Menu.Item>
-                        )}
+                        patientObj2?.hivTestResult === "Positive" &&
+                        patientObj2.riskStratificationResponseDto?.age >
+                          14 && (
+                            <Menu.Item
+                              name="spam"
+                              active={activeItem === "recency-testing"}
+                              onClick={() => handleItemClick("recency-testing")}
+                              style={{
+                                backgroundColor:
+                                  activeItem === "recency-testing"
+                                    ? "#000"
+                                    : "",
+                              }}
+                              disabled={
+                                activeItem !== "recency-testing" ? true : false
+                              }
+                            >
+                              {/* <Label>4</Label> */}
+                              <span style={{ color: "#fff" }}>
+                                HIV Recency Testing
+                                {completed.includes("recency-testing") && (
+                                  <Icon name="check" color="green" />
+                                )}
+                              </span>
+                            </Menu.Item>
+                          )}
                       {/* <Menu.Item
                         name="spam"
                         active={activeItem === "indexing"}

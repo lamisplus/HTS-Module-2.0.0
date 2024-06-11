@@ -220,10 +220,10 @@ const PostTest = (props) => {
                     setSaving(false);
                     props.setPatientObj(response.data);
                     toast.success("Post Test Assesment successful");
-                    if (postTest.hivTestResult === "true") {
-                        handleItemClick("recency-testing", "post-test");
+                    if (postTest.hivTestResult === "true" && postTest.riskStratificationResponseDto.age > 14) {
+                      handleItemClick("recency-testing", "post-test");
                     } else if (postTest.hivTestResult === "false") {
-                        handleItemClick("client-referral", "post-test");
+                      handleItemClick("client-referral", "post-test");
                     }
                 })
                 .catch((error) => {

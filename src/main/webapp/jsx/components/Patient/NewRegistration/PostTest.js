@@ -203,7 +203,7 @@ const PostTest = (props) => {
         setSaving(false);
         props.setPatientObj(response.data);
         toast.success("Risk Assesment successful");
-        if (postTest.hivTestResult === "true") {
+        if (postTest.hivTestResult === "true" && postTest.riskStratificationResponseDto.age > 14) {
           handleItemClick("recency-testing", "post-test");
         } else if (postTest.hivTestResult === "false") {
           // history.push("/");

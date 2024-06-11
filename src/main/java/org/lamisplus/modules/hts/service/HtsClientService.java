@@ -257,6 +257,9 @@ public class HtsClientService {
         htsClient.setOtherDrugs(htsClientRequestDto.getOtherDrugs());
         htsClient.setHivTestResult(htsClientRequestDto.getHivTestResult());
         htsClient.setHivTestResult(htsClientRequestDto.getConfirmatoryTest2());
+
+        htsClient.setSource(htsClientRequestDto.getSource());
+        htsClient.setReferredForSti(htsClientRequestDto.getReferredForSti());
         return htsClient;
     }
 
@@ -309,6 +312,8 @@ public class HtsClientService {
         htsClient.setSexPartnerRiskAssessment(htsClientDto.getSexPartnerRiskAssessment());
         htsClient.setPrepOffered(htsClientDto.getPrepOffered());
         htsClient.setPrepAccepted(htsClientDto.getPrepAccepted());
+        htsClient.setSource(htsClientDto.getSource());
+        htsClient.setReferredForSti(htsClientDto.getReferredForSti());
         return htsClient;
     }
 
@@ -477,6 +482,9 @@ public class HtsClientService {
 
         htsClient.setPrepOffered(htsClient.getPrepOffered());
         htsClient.setPrepAccepted(htsClient.getPrepAccepted());
+
+        htsClientDto.setSource(htsClient.getSource());
+        htsClientDto.setReferredForSti(htsClient.getReferredForSti());
 
         return htsClientDto;
     }

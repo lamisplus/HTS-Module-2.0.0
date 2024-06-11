@@ -415,8 +415,8 @@ const UserRegistration = (props) => {
                         </span>
                       </Menu.Item>
                       {patientObj.hivTestResult &&
-                        patientObj.hivTestResult.toLowerCase() ===
-                          "positive" && (
+                        patientObj.hivTestResult.toLowerCase() === "positive" &&
+                        patientObj?.riskStratificationResponseDto?.age > 14 &&(
                           <Menu.Item
                             name="spam"
                             active={activeItem === "recency-testing"}
@@ -439,7 +439,7 @@ const UserRegistration = (props) => {
                           </Menu.Item>
                         )}
 
-{/*               
+                      {/*               
 
                       {patientObj.hivTestResult &&
                         patientObj.hivTestResult.toLowerCase() ===
@@ -463,7 +463,6 @@ const UserRegistration = (props) => {
                           </Menu.Item>
                         )} */}
 
-                        
                       {/* uncomment this after  */}
 
                       {patientObj.hivTestResult &&

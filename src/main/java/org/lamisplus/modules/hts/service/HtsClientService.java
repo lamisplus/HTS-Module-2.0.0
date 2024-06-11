@@ -257,6 +257,7 @@ public class HtsClientService {
         htsClient.setOtherDrugs(htsClientRequestDto.getOtherDrugs());
         htsClient.setHivTestResult(htsClientRequestDto.getHivTestResult());
         htsClient.setHivTestResult(htsClientRequestDto.getConfirmatoryTest2());
+        htsClient.setComment(htsClientRequestDto.getComment());
         return htsClient;
     }
 
@@ -309,6 +310,7 @@ public class HtsClientService {
         htsClient.setSexPartnerRiskAssessment(htsClientDto.getSexPartnerRiskAssessment());
         htsClient.setPrepOffered(htsClientDto.getPrepOffered());
         htsClient.setPrepAccepted(htsClientDto.getPrepAccepted());
+        htsClient.setComment(htsClientDto.getComment());
         return htsClient;
     }
 
@@ -475,8 +477,9 @@ public class HtsClientService {
         htsClientDto.setOtherDrugs(htsClient.getOtherDrugs());
         htsClientDto.setHivTestResult(htsClient.getHivTestResult());
 
-        htsClient.setPrepOffered(htsClient.getPrepOffered());
-        htsClient.setPrepAccepted(htsClient.getPrepAccepted());
+        htsClientDto.setPrepOffered(htsClient.getPrepOffered());
+        htsClientDto.setPrepAccepted(htsClient.getPrepAccepted());
+        htsClientDto.setComment(htsClient.getComment());
 
         return htsClientDto;
     }
@@ -674,5 +677,9 @@ public class HtsClientService {
         HtsClientDtos htsClientDtos = this.getHtsClientByPersonId(personId);
         htsClientDtos.setRiskStratificationResponseDtos(riskStratificationService.getAllByPersonId(personId));
         return htsClientDtos;
+    }
+
+    public Boolean checkForClientCode(String clientCode) {
+        return !htsClientRepository.existsByClientCode(clientCode);
     }
 }

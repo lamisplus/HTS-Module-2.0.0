@@ -83,5 +83,7 @@ public class HtsClientDto {
     private Boolean prepAccepted;
     private String prepGiven;
     private String otherDrugs;
+    private String comment;
+
 
 }

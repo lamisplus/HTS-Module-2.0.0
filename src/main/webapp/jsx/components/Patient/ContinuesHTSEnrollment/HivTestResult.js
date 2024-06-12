@@ -152,6 +152,7 @@ const HivTestResult = (props) => {
     date2: "",
     result2: "",
   });
+
   const handleInputChangeCd4Count = (e) => {
     //setErrors({...temp, [e.target.name]:""})
     setCd4Count({ ...cd4Count, [e.target.name]: e.target.value });
@@ -177,7 +178,7 @@ const HivTestResult = (props) => {
       setShowCD4Count(false);
     } else {
       setInitailTest({ ...initialTest1, [e.target.name]: e.target.value });
-      setErrors({date: "", prepOffered: "", prepAccepted: ""})
+      setErrors({ date: "", prepOffered: "", prepAccepted: "" });
       //This is to show cd4 count section
       setShowCD4Count(true);
     }
@@ -351,6 +352,7 @@ const HivTestResult = (props) => {
           ? props.patientObj.tieBreakerTest2
           : {}
       );
+
     }
   }, [props.patientObj]); //initialTest12, tieBreakerTest2, confirmatoryTest2,
 
@@ -396,51 +398,49 @@ const HivTestResult = (props) => {
     if (initialTest1.result === "No") {
       result = "Negative";
     } else if (
-        confirmatoryTest.result === "No" &&
-        tieBreakerTest.result === "No" &&
-        (initialTest1.result === "Yes" || initialTest1.result !== "")
+      confirmatoryTest.result === "No" &&
+      tieBreakerTest.result === "No" &&
+      (initialTest1.result === "Yes" || initialTest1.result !== "")
     ) {
       result = "Negative";
     } else if (
-        initialTest1.result === "Yes" &&
-        confirmatoryTest.result === "No" &&
-        tieBreakerTest.result === "Yes" &&
-        initialTest12.result2 === "Yes" &&
-        confirmatoryTest2.result2 === "Yes"
+      initialTest1.result === "Yes" &&
+      confirmatoryTest.result === "No" &&
+      tieBreakerTest.result === "Yes" &&
+      initialTest12.result2 === "Yes" &&
+      confirmatoryTest2.result2 === "Yes"
     ) {
       result = "Negative";
     } else if (
-        initialTest1.result === "Yes" &&
-        confirmatoryTest.result === "Yes" &&
-        initialTest12.result2 === "Yes" &&
-        confirmatoryTest2.result2 === "Yes"
+      initialTest1.result === "Yes" &&
+      confirmatoryTest.result === "Yes" &&
+      initialTest12.result2 === "Yes" &&
+      confirmatoryTest2.result2 === "Yes"
     ) {
       result = "Positive";
     } else if (
-        initialTest1.result === "Yes" &&
-        confirmatoryTest.result === "No" &&
-        tieBreakerTest.result === "Yes" &&
-        initialTest12.result2 === "Yes" &&
-        confirmatoryTest2.result2 === "Yes"
+      initialTest1.result === "Yes" &&
+      confirmatoryTest.result === "No" &&
+      tieBreakerTest.result === "Yes" &&
+      initialTest12.result2 === "Yes" &&
+      confirmatoryTest2.result2 === "Yes"
     ) {
       result = "Positive";
-    }
-    else if(
-        initialTest1.result === "Yes" &&
-        confirmatoryTest.result === "Yes" &&
-        initialTest12.result2 === "Yes" &&
-        confirmatoryTest2.result2 === "No" &&
-        tieBreakerTest2.result2 === "No"
-
-    ){
-       result = "Negative";
     } else if (
-        initialTest1.result === "Yes" &&
-        confirmatoryTest.result === "No" &&
-        tieBreakerTest.result === "Yes" &&
-        initialTest12.result2 === "Yes" &&
-        confirmatoryTest2.result2 === "No" &&
-        tieBreakerTest2.result2 === "No"
+      initialTest1.result === "Yes" &&
+      confirmatoryTest.result === "Yes" &&
+      initialTest12.result2 === "Yes" &&
+      confirmatoryTest2.result2 === "No" &&
+      tieBreakerTest2.result2 === "No"
+    ) {
+      result = "Negative";
+    } else if (
+      initialTest1.result === "Yes" &&
+      confirmatoryTest.result === "No" &&
+      tieBreakerTest.result === "Yes" &&
+      initialTest12.result2 === "Yes" &&
+      confirmatoryTest2.result2 === "No" &&
+      tieBreakerTest2.result2 === "No"
     ) {
       result = "Negative";
     }
@@ -459,11 +459,11 @@ const HivTestResult = (props) => {
     setConfirmatoryTest({
       date: "",
       result: "",
-    })
+    });
     setTieBreakerTest({
       date: "",
       result: "",
-    })
+    });
     setInitailTest2({
       date2: "",
       result2: "",
@@ -477,7 +477,7 @@ const HivTestResult = (props) => {
       result2: "",
     });
     // clear the prepOffered and prepAccepted fields
-    setObjValues({...objValues, prepOffered: "", prepAccepted: ""})
+    setObjValues({ ...objValues, prepOffered: "", prepAccepted: "" });
   }, [initialTest1.result]);
 
   // clear the all other the input fields that follows the initialTest2, if there changes in initialTest12 result is changes
@@ -486,7 +486,7 @@ const HivTestResult = (props) => {
     setTieBreakerTest({
       date: "",
       result: "",
-    })
+    });
     setInitailTest2({
       date2: "",
       result2: "",
@@ -499,7 +499,7 @@ const HivTestResult = (props) => {
       date2: "",
       result2: "",
     });
-    setObjValues({...objValues, prepOffered: "", prepAccepted: ""})
+    setObjValues({ ...objValues, prepOffered: "", prepAccepted: "" });
   }, [confirmatoryTest.result]);
 
   // clear all the input fields that follows the confirmatoryTest, if there changes in confirmatoryTest result is changes.
@@ -516,7 +516,7 @@ const HivTestResult = (props) => {
       date2: "",
       result2: "",
     });
-    setObjValues({...objValues, prepOffered: "", prepAccepted: ""})
+    setObjValues({ ...objValues, prepOffered: "", prepAccepted: "" });
   }, [tieBreakerTest.result]);
 
   useEffect(() => {
@@ -528,7 +528,7 @@ const HivTestResult = (props) => {
       date2: "",
       result2: "",
     });
-    setObjValues({...objValues, prepOffered: "", prepAccepted: ""})
+    setObjValues({ ...objValues, prepOffered: "", prepAccepted: "" });
   }, [initialTest12.result2]);
 
   useEffect(() => {
@@ -536,7 +536,7 @@ const HivTestResult = (props) => {
       date2: "",
       result2: "",
     });
-    setObjValues({...objValues, prepOffered: "", prepAccepted: ""})
+    setObjValues({ ...objValues, prepOffered: "", prepAccepted: "" });
   }, [confirmatoryTest2.result2]);
 
   const handleSubmit = (e) => {
@@ -814,18 +814,18 @@ const HivTestResult = (props) => {
               <div className="row">
                 <div className="form-group  col-md-12">
                   {initialTest1.result === "No" && (
-                      <>
-                        <b> Result : </b>
-                        <LabelRibbon color="green">Non Reactive</LabelRibbon>
-                        <b> Final Result : </b>
-                        <LabelRibbon color="green">Negative</LabelRibbon>
-                        <br/>
-                      </>
+                    <>
+                      <b> Result : </b>
+                      <LabelRibbon color="green">Non Reactive</LabelRibbon>
+                      <b> Final Result : </b>
+                      <LabelRibbon color="green">Negative</LabelRibbon>
+                      <br />
+                    </>
                   )}
                   {initialTest1.result === "No" &&
-                      confirmatoryTest.result === "No" && (
-                          <>
-                          <b> Result : </b>
+                    confirmatoryTest.result === "No" && (
+                      <>
+                        <b> Result : </b>
                         <LabelRibbon color="green">Non Reactive</LabelRibbon>
                       </>
                     )}
@@ -1206,7 +1206,7 @@ const HivTestResult = (props) => {
                           <b> Final Result : </b>
                           <LabelRibbon color="green"> Negative</LabelRibbon>
                         </>
-                        <br/>
+                        <br />
                         <div className="row">
                           <div className="form-group  col-md-6">
                             <FormGroup>
@@ -1849,12 +1849,12 @@ const HivTestResult = (props) => {
                         icon="left arrow"
                         labelPosition="left"
                         style={{ backgroundColor: "#992E62", color: "#fff" }}
-                        onClick={() =>
+                        onClick={() => {
                           handleItemClick(
                             "pre-test-counsel",
                             "pre-test-counsel"
-                          )
-                        }
+                          );
+                        }}
                       />
                     </>
                   )}

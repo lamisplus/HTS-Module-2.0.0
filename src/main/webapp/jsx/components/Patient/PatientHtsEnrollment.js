@@ -6,6 +6,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
 import { Link } from "react-router-dom";
+import { getCheckModality } from "../../../utility";
 //import {TiArrowBack} from 'react-icons/ti'
 //import {token, url as baseUrl } from "../../../api";
 import "react-phone-input-2/lib/style.css";
@@ -60,6 +61,8 @@ const UserRegistration = (props) => {
     familyIndexTesting: "",
     pns: "",
   });
+    const [modalityCheck, setModalityCheck] = useState("");
+
   const [basicInfo, setBasicInfo] = useState({});
   const [organizationInfo, setOrganizationInfo] = useState({});
   const [row, setRow] = useState({});
@@ -84,6 +87,16 @@ const UserRegistration = (props) => {
     });
   };
 
+
+  useEffect(( ) => {
+
+
+    setModalityCheck(
+      getCheckModality(patientObj?.riskStratificationResponseDto?.modality)
+    );
+
+
+  }, [patientObj]);
   console.log(familyIndexList);
   return (
     <>
@@ -149,24 +162,26 @@ const UserRegistration = (props) => {
                     </span>
                   </Menu.Item>
 
-                  <Menu.Item
-                    name="spam"
-                    active={activeItem === "pre-test-counsel"}
-                    onClick={() => handleItemClick("pre-test-counsel")}
-                    style={{
-                      backgroundColor:
-                        activeItem === "pre-test-counsel" ? "#000" : "",
-                    }}
-                    //disabled={activeItem !== 'pre-test-counsel' ? true : false}
-                  >
-                    {/* <Label>2</Label> */}
-                    <span style={{ color: "#fff" }}>
-                      Pre Test Counseling
-                      {completed.includes("pre-test-counsel") && (
-                        <Icon name="check" color="green" />
-                      )}
-                    </span>
-                  </Menu.Item>
+                  {modalityCheck == "fill" && (
+                    <Menu.Item
+                      name="spam"
+                      active={activeItem === "pre-test-counsel"}
+                      onClick={() => handleItemClick("pre-test-counsel")}
+                      style={{
+                        backgroundColor:
+                          activeItem === "pre-test-counsel" ? "#000" : "",
+                      }}
+                      //disabled={activeItem !== 'pre-test-counsel' ? true : false}
+                    >
+                      {/* <Label>2</Label> */}
+                      <span style={{ color: "#fff" }}>
+                        Pre Test Counseling
+                        {completed.includes("pre-test-counsel") && (
+                          <Icon name="check" color="green" />
+                        )}
+                      </span>
+                    </Menu.Item>
+                  )}
 
                   <Menu.Item
                     name="inbox"
@@ -202,10 +217,10 @@ const UserRegistration = (props) => {
                       )}
                     </span>
                   </Menu.Item>
-
+                 
                   {patientObj.hivTestResult &&
                     patientObj.hivTestResult.toLowerCase() === "positive" &&
-                    patientObj.riskStratificationResponseDto?.age &&(
+                    patientObj.riskStratificationResponseDto?.age <= 15 && (
                       <Menu.Item
                         name="spam"
                         active={activeItem === "recency-testing"}

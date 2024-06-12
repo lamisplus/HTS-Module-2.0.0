@@ -69,3 +69,45 @@ export const getAcount = async () => {
     return response.data;
   } catch (e) {}
 };
+
+//check modality
+export const getCheckModality = (patientObj) => {
+  if (
+    patientObj === "TEST_SETTING_STI_STI" ||
+    patientObj === "TEST_SETTING_TB_TB" ||
+    patientObj === "TEST_SETTING_CT_TB" ||
+    patientObj === "TEST_SETTING_CT_STI" ||
+    patientObj === "TEST_SETTING_CT_PMTCT" ||
+    patientObj === "TEST_SETTING_OPD_STI" ||
+    patientObj === "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||
+    patientObj === "TEST_SETTING_OTHERS_POST_ANC1_BREASTFEEDING" ||
+    patientObj === "TEST_SETTING_OTHERS_POST_ANC1_PREGNANT_L&D" ||
+    patientObj === "TEST_SETTING_STANDALONE_HTS_PMTCT_(ANC1_ONLY)" ||
+    patientObj === "TEST_SETTING_STANDALONE_HTS_POST_ANC1_BREASTFEEDING" ||
+    patientObj === "TEST_SETTING_STANDALONE_HTS_POST_ANC1_PREGNANT_L&D" ||
+    patientObj === "TEST_SETTING_STANDALONE_HTS_STI" ||
+    patientObj === "TEST_SETTING_STANDALONE_HTS_TB"
+  ) {
+    return "skip";
+  } else {
+    return "fill";
+  }
+};
+
+//check modality for new HTS
+export const getCheckModalityForHTS = (patientObj) => {
+  console.log(patientObj);
+  if (
+    patientObj === "TEST_SETTING_CT_PMTCT" ||
+    patientObj === "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||
+    patientObj === "TEST_SETTING_OTHERS_POST_ANC1_BREASTFEEDING" ||
+    patientObj === "TEST_SETTING_OTHERS_POST_ANC1_PREGNANT_L&D" ||
+    patientObj === "TEST_SETTING_STANDALONE_HTS_PMTCT_(ANC1_ONLY)" ||
+    patientObj === "TEST_SETTING_STANDALONE_HTS_POST_ANC1_BREASTFEEDING" ||
+    patientObj === "TEST_SETTING_STANDALONE_HTS_POST_ANC1_PREGNANT_L&D"
+  ) {
+    return "show";
+  } else {
+    return "hidden";
+  }
+};

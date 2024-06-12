@@ -23,6 +23,9 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { Modal } from "react-bootstrap";
 //import { objectValues } from "react-toastify/dist/utils";
+import { getCheckModality } from "../../../../utility";
+
+
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -107,7 +110,7 @@ const BasicInfo = (props) => {
   const [indexTesting, setIndexTesting] = useState([]);
   let temp = { ...errors };
   //console.log(props?.patientObj?.dateVisit)
-
+const [modalityCheck, setModalityCheck]=useState("")
   const [objValues, setObjValues] = useState({
     active: true,
     clientCode: "",
@@ -164,6 +167,7 @@ const BasicInfo = (props) => {
     // }
     //setObjValues({...objectValues, genderId: props.patientObj.personResponseDto.gender.id})
     //objValues.genderId = props.patientObj && props.patientObj.personResponseDto ? props.patientObj.personResponseDto.gender.id : ""
+    setModalityCheck(getCheckModality(props?.patientObj?.riskStratificationResponseDto?.modality));
   }, [props.patientObj]);
   //Get list of KP
   const KP = () => {
@@ -333,7 +337,7 @@ const BasicInfo = (props) => {
             setSaving(false);
             props.setPatientObj(response.data);
             toast.success("HTS Test successful");
-            if (props.patientAge > 14) {
+            if (props.patientAge > 14 && modalityCheck === "fill") {
               handleItemClick("pre-test-counsel", "basic");
             } else {
               handleItemClick("hiv-test", "basic");
@@ -357,12 +361,12 @@ const BasicInfo = (props) => {
     if (props.activePage.actionType === "view") {
       //e.preventDefault();
       setSaving(true);
-      if (props.patientAge > 14) {
+      if (props.patientAge > 14 && modalityCheck === "fill") {
         setSaving(false);
         handleItemClick("pre-test-counsel", "basic");
       } else {
         setSaving(false);
-        handleItemClick("hiv-test", "pre-test-counsel");
+        handleItemClick("hiv-test", "basic");
       }
     }
   };

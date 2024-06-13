@@ -105,7 +105,6 @@ const HIVSTPatientHistory = (props) => {
         FetchHivstHistory();
 
     }, [props.patientObj]);
-    console.log("HivstHistory", hivstHistory)
 
     const LoadViewPage = (row, actionType) => {
         props.setActivePage({
@@ -123,7 +122,7 @@ const HIVSTPatientHistory = (props) => {
             })
             .then((response) => {
                 //set the last date of visit after the response
-                setHivstHistory(response.data);
+                setHivstHistory(typeof response.data === 'object' ? response.data : []);
             })
             .catch((error) => {
                 //setLoading(false)
@@ -131,13 +130,11 @@ const HIVSTPatientHistory = (props) => {
     };
 
     const handleHTSDelete = (row) => {
-        console.log(props.patientList);
         axios
             .delete(`${baseUrl}hivst/${props.patientObj.hivstId}`, {
                 headers: { Authorization: `Bearer ${token}` },
             })
             .then((response) => {
-                console.log(response);
                 toast.success(
                     `HIVST patient deleted successfully`
                 );

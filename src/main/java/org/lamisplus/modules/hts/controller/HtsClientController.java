@@ -125,7 +125,8 @@ public class HtsClientController {
 
 
     @PostMapping(HTS_URL_VERSION_ONE + "/clientCodeCheck")
-    public ResponseEntity<Boolean>checkForClientCode(String clientCode){
-        return ResponseEntity.ok(htsClientService.checkForClientCode(clientCode));
+    public ResponseEntity<Boolean>checkForClientCode(
+            @RequestBody ClientCodeCheckRequestDto clientCode){
+        return ResponseEntity.ok(htsClientService.checkForClientCode(clientCode.getClientCode()));
     }
 }

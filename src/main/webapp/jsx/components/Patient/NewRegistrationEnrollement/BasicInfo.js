@@ -89,7 +89,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "12.8px",
   },
 }));
-
+// THIS IS THE VIEW AND UPDATE PAGE
 const BasicInfo = (props) => {
   console.log("#############",props.patientObj);
   const classes = useStyles();
@@ -148,6 +148,7 @@ const BasicInfo = (props) => {
     relationWithIndexClient:
       props.activePage?.activeObject?.relationWithIndexClient,
     indexClientCode: "",
+    comment: ""
   });
 
   useEffect(() => {
@@ -263,6 +264,20 @@ const BasicInfo = (props) => {
     setErrors({ ...temp, [e.target.name]: "" });
     setObjValues({ ...objValues, [e.target.name]: e.target.value });
   };
+
+  const handleClientCodeCheck = (e) => {
+    axios
+    .get(`${baseUrl}hts/clientCodeCheck`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    .then((response) => {
+      //console.log(response.data);
+      setGender(response.data);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }
   /*****  Validation  */
   const validate = () => {
     //HTS FORM VALIDATION
@@ -321,6 +336,7 @@ const BasicInfo = (props) => {
         indexClientCode: objValues.indexClientCode,
         pregnant: objValues.pregnant,
         relationWithIndexClient: objValues.relationWithIndexClient,
+        comment: objValues.comment,
       };
 
       if (validate()) {
@@ -371,7 +387,7 @@ const BasicInfo = (props) => {
     <>
       <Card className={classes.root}>
         <CardBody>
-          <h2 style={{ color: "#000" }}>CLIENT INTAKE FORM </h2>
+          <h2 style={{ color: "#000" }}>CLIENT INTAKE FORM</h2>
           <br />
           <form>
             <div className="row">
@@ -421,7 +437,7 @@ const BasicInfo = (props) => {
                       border: "1px solid #014D88",
                       borderRadius: "0.25rem",
                     }}
-                    readOnly={props.activePage.actionType === "view"}
+                    readOnly={props.activePage.actionType === "view" || props.activePage.actionType === "update"}
                   />
                   {errors.clientCode !== "" ? (
                     <span className={classes.error}>{errors.clientCode}</span>
@@ -833,6 +849,30 @@ const BasicInfo = (props) => {
                   ) : (
                     ""
                   )}
+                </FormGroup>
+              </div>
+              <div className="form-group mb-3 col-md-12">
+                <FormGroup>
+                  <Label for="firstName">
+                    Comments
+                    {/* <span style={{ color: "red" }}> *</span> */}
+                  </Label>
+                  <Input
+                    className="form-control"
+                    type="textarea"
+                    rows="4"
+                    cols="7"
+                    name="comment"
+                    id="comment"
+                    value={objValues.comment}
+                    onChange={handleInputChange}
+                    style={{
+                      border: "1px solid #014D88",
+                      borderRadius: "0.2rem",
+                      height: "100px",
+                    }}
+                    disabled={props.activePage.actionType === "view"}
+                  />
                 </FormGroup>
               </div>
 

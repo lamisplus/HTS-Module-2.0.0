@@ -680,6 +680,9 @@ public class HtsClientService {
     }
 
     public Boolean checkForClientCode(String clientCode) {
+        // if the repository finds that the client code exists,
+        // should return false to indicate that
+        // this client code doesn't pass the check, else true
         return !htsClientRepository.existsByClientCode(clientCode);
     }
 }

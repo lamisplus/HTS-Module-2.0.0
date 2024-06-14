@@ -38,7 +38,7 @@ public class HtsClientUpdateRequestDto {
     private Long personId;
     //private final String personUuid;
     //private PersonDto personDto;
-    private final Long pregnant;
+    private final String pregnant;
     private final Boolean breastFeeding;
     private final Long relationWithIndexClient;
 

@@ -61,7 +61,7 @@
     </changeSet>
     <changeSet failOnError="true" author="tyav barnabas" id="hts_345">
         <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="1">
+            <sqlCheck expectedResult="0">
                 SELECT count(column_name)
                 FROM information_schema.columns
                 WHERE table_schema = 'public'
@@ -70,7 +70,7 @@
             </sqlCheck>
         </preConditions>
         <sql>
-            ALTER TABLE hts_client ADD COLUMN comment VARCHAR(255);
+            ALTER TABLE hts_client ADD COLUMN IF NOT EXISTS comment VARCHAR(255);
         </sql>
     </changeSet>
 </databaseChangeLog>

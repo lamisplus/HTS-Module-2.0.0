@@ -56,7 +56,6 @@ const UserRegistration = (props) => {
     //setCompleted({...completed, ...completedMenu})
   };
 
-
   const getFacilityAccount = () => {
     getAcount()
       .then((response) => {
@@ -270,12 +269,18 @@ const UserRegistration = (props) => {
     }
   }, []);
 
-    useEffect(() => {
-      setModalityCheck(
-        getCheckModality(patientObj?.riskStratificationResponseDto?.modality)
-      );
-      
-    }, [patientObj]);
+  useEffect(() => {
+    console.log(
+      "component on mountttttttttttttt",
+      patientObj?.riskStratificationResponseDto?.modality,
+      getCheckModality(patientObj?.riskStratificationResponseDto?.modality),
+      "but modaqlity is ",
+      modalityCheck
+    );
+    setModalityCheck(
+      getCheckModality(patientObj?.riskStratificationResponseDto?.modality)
+    );
+  }, [patientObj]);
   return (
     <>
       <ToastContainer autoClose={3000} hideProgressBar />
@@ -363,7 +368,14 @@ const UserRegistration = (props) => {
                           )}
                         </span>
                       </Menu.Item>
-                      {console.log("register-agee ", props)}
+                      {console.log(
+                        "testing modality ",
+                        patientObj?.riskStratificationResponseDto?.modality,
+                        modalityCheck,
+                        getCheckModality(
+                          patientObj?.riskStratificationResponseDto?.modality
+                        )
+                      )}
 
                       {modalityCheck == "fill" && (
                         <Menu.Item
@@ -427,7 +439,8 @@ const UserRegistration = (props) => {
                       </Menu.Item>
                       {patientObj.hivTestResult &&
                         patientObj.hivTestResult.toLowerCase() === "positive" &&
-                        patientObj?.riskStratificationResponseDto?.age <= 15 && (
+                        patientObj?.riskStratificationResponseDto?.age <=
+                          15 && (
                           <Menu.Item
                             name="spam"
                             active={activeItem === "recency-testing"}
@@ -549,7 +562,7 @@ const UserRegistration = (props) => {
                         </span>
                       </Menu.Item>
                     </>
-                  )}
+                )} 
                 </Menu>
               </div>
 

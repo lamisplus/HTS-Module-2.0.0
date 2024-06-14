@@ -188,10 +188,9 @@ const PostTest = (props) => {
     //setErrors({...temp, [e.target.name]:""})
 
     if (e.target.name === "lubricantProvidedToClientCount") {
-          if(e.target.value >= 0){
-           setPostTest({ ...postTest, [e.target.name]: e.target.value });
-          }
-
+      if (e.target.value >= 0) {
+        setPostTest({ ...postTest, [e.target.name]: e.target.value });
+      }
     } else {
       setPostTest({ ...postTest, [e.target.name]: e.target.value });
     }
@@ -207,6 +206,7 @@ const PostTest = (props) => {
     e.preventDefault();
     //handleItemClick('recency-testing', 'post-test')
     // if(!(Object.values(postTest).every(x => x === ""))){
+
     setSaving(true);
     objValues.htsClientId = props.patientObj.id;
     objValues.postTestCounselingKnowledgeAssessment = postTest;
@@ -221,10 +221,15 @@ const PostTest = (props) => {
         setSaving(false);
         props.setPatientObj(response.data);
         toast.success("Risk Assesment successful");
-        if (postTest.hivTestResult === "true" && postTest.riskStratificationResponseDto.age <= 15 ) {
+        if (
+          postTest.hivTestResult === "true" &&
+          props.patientObj.riskStratificationResponseDto.age >= 15
+        ) {
           handleItemClick("recency-testing", "post-test");
         } else if (postTest.hivTestResult === "false") {
           // history.push("/");
+          handleItemClick("client-referral", "post-test");
+        } else {
           handleItemClick("client-referral", "post-test");
         }
         // handleItemClick("recency-testing", "post-test");
@@ -744,11 +749,11 @@ const PostTest = (props) => {
                   {/*  />*/}
                   {/*)}*/}
                   <Button
-                      content="Save & Continue"
-                      icon="right arrow"
-                      labelPosition="right"
-                      style={{ backgroundColor: "#014d88", color: "#fff" }}
-                      onClick={handleSubmit}
+                    content="Save & Continue"
+                    icon="right arrow"
+                    labelPosition="right"
+                    style={{ backgroundColor: "#014d88", color: "#fff" }}
+                    onClick={handleSubmit}
                   />
                 </div>
               </div>

@@ -220,7 +220,7 @@ const UserRegistration = (props) => {
                  
                   {patientObj.hivTestResult &&
                     patientObj.hivTestResult.toLowerCase() === "positive" &&
-                    patientObj.riskStratificationResponseDto?.age <= 15 && (
+                    patientObj.riskStratificationResponseDto?.age >= 15 && (
                       <Menu.Item
                         name="spam"
                         active={activeItem === "recency-testing"}

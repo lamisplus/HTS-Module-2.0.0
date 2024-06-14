@@ -111,6 +111,9 @@ const RiskStratification = (props) => {
   const toggle = () => setOpen(!open);
   const [setting, setSetting] = useState([]);
   const [riskCount, setRiskCount] = useState(0);
+  const [isPMTCTModality, setIsPMTCTModality] = useState(false);
+  const [showRiskAssessment, setShowRiskAssessment] = useState(false);
+
   const [objValues, setObjValues] = useState({
     age: props.patientAge,
     dob: props.patientObj.dateOfBirth,
@@ -232,6 +235,47 @@ const RiskStratification = (props) => {
         //console.log(error);
       });
   };
+  //Set HTS menu registration
+  const getMenuLogic = () => {
+    // first logic
+    // if (objValues.age !== "" && objValues.age <= 15) {
+    //   props.setHideOtherMenu(true);
+    // } else if (objValues.age !== "" && objValues.age > 15) {
+    //   props.setHideOtherMenu(true);
+    // } else {
+    //   props.setHideOtherMenu(true);
+    // }
+
+    // if (objValues.age !== "" && objValues.age >= 85) {
+    //   toggle();
+    // }
+
+    //secound logic
+    props.setHideOtherMenu(false);
+  };
+
+  const checkPMTCTModality = (modality) => {
+    console.log("modality", modality);
+    if (
+      modality === "TEST_SETTING_CT_PMTCT" ||
+      modality === "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||
+      modality === "TEST_SETTING_OTHERS_POST_ANC1_BREASTFEEDING" ||
+      modality === "TEST_SETTING_OTHERS_POST_ANC1_PREGNANT_L&D" ||
+      modality === "TEST_SETTING_STANDALONE_HTS_PMTCT_(ANC1_ONLY)" ||
+      modality === "TEST_SETTING_STANDALONE_HTS_POST_ANC1_BREASTFEEDING" ||
+      modality === "TEST_SETTING_STANDALONE_HTS_POST_ANC1_PREGNANT_L&D"
+    ) {
+      console.log("it is PMTCT MODALITY ");
+      setIsPMTCTModality(true);
+      return true;
+    } else {
+      console.log("it is NOT pmtct modality ");
+
+      setIsPMTCTModality(false);
+      return false;
+    }
+  };
+
   const handleInputChange = (e) => {
     setErrors({ ...temp, [e.target.name]: "" });
     if (e.target.name === "testingSetting" && e.target.value !== "") {
@@ -286,10 +330,53 @@ const RiskStratification = (props) => {
         setRiskCount(0);
         setObjValues({ ...objValues, [e.target.name]: e.target.value });
       }
+
+      let ans = checkPMTCTModality(e.target.value);
+
+      console.log("answerrrr", ans);
+      displayRiskAssessment(
+        riskAssessment.lastHivTestBasedOnRequest,
+        objValues.age,
+        ans
+      );
     }
 
     setObjValues({ ...objValues, [e.target.name]: e.target.value });
   };
+
+  const displayRiskAssessment = (lastVisit, age, isPMTCTModalityValue) => {
+    let SecAge = age !== "" ? age : 0;
+    let ans;
+    console.log(
+      "variable lastVisit",
+      lastVisit,
+      "objValues.age",
+      objValues.age,
+      "isPMTCTModality",
+      isPMTCTModalityValue,
+      "SecAge",
+      SecAge
+    );
+    // for the section to show
+    //  Conditions are : age > 15, riskAssessment.lastHivTestBasedOnRequest === "false" and PMTCT Modality === true
+    if (lastVisit === "false") {
+      if (SecAge > 15 && isPMTCTModalityValue) {
+        setShowRiskAssessment(false);
+        ans = false;
+      } else if (SecAge > 15) {
+        setShowRiskAssessment(true);
+        ans = true;
+      } else {
+        setShowRiskAssessment(false);
+        ans = false;
+      }
+    } else {
+      setShowRiskAssessment(false);
+      ans = false;
+    }
+    console.log("This is the answer", ans);
+  };
+
   //Date of Birth and Age handle
   //Get list of DSD Model Type
   function SettingModality(settingId) {
@@ -300,7 +387,7 @@ const RiskStratification = (props) => {
       })
       .then((response) => {
         setSetting(response.data);
-        console.log("#################### modality",response.data)
+        console.log("#################### modality", response.data);
       })
       .catch((error) => {
         //console.log(error);
@@ -336,49 +423,47 @@ const RiskStratification = (props) => {
         ? ""
         : "This field is required.");
 
-    riskAssessment.lastHivTestDone !== "" &&
-      riskAssessment.lastHivTestDone !== "Never" &&
-      (temp.whatWasTheResult = riskAssessment.whatWasTheResult
-        ? ""
-        : "This field is required.");
+    if (
+      objValues.age > 15 &&
+      riskAssessment.lastHivTestBasedOnRequest === "false" &&
+      showRiskAssessment
+    ) {
+      riskAssessment.lastHivTestDone !== "" &&
+        riskAssessment.lastHivTestDone !== "Never" &&
+        (temp.whatWasTheResult = riskAssessment.whatWasTheResult
+          ? ""
+          : "This field is required.");
 
-    objValues.age > 15 &&
-      riskAssessment.lastHivTestBasedOnRequest === "false" &&
-      (temp.lastHivTestVaginalOral = riskAssessment.lastHivTestVaginalOral
+      temp.lastHivTestVaginalOral = riskAssessment.lastHivTestVaginalOral
         ? ""
-        : "This field is required.");
-    objValues.age > 15 &&
-      riskAssessment.lastHivTestBasedOnRequest === "false" &&
-      (temp.lastHivTestBloodTransfusion =
+        : "This field is required.";
+
+      temp.lastHivTestBloodTransfusion =
         riskAssessment.lastHivTestBloodTransfusion
           ? ""
-          : "This field is required.");
-    objValues.age > 15 &&
-      riskAssessment.lastHivTestBasedOnRequest === "false" &&
-      (temp.lastHivTestPainfulUrination =
+          : "This field is required.";
+
+      temp.lastHivTestPainfulUrination =
         riskAssessment.lastHivTestPainfulUrination
           ? ""
-          : "This field is required.");
-    objValues.age > 15 &&
-      riskAssessment.lastHivTestBasedOnRequest === "false" &&
-      (temp.diagnosedWithTb = riskAssessment.diagnosedWithTb
+          : "This field is required.";
+
+      temp.diagnosedWithTb = riskAssessment.diagnosedWithTb
         ? ""
-        : "This field is required.");
-    objValues.age > 15 &&
-      riskAssessment.lastHivTestBasedOnRequest === "false" &&
-      (temp.lastHivTestInjectedDrugs = riskAssessment.lastHivTestInjectedDrugs
+        : "This field is required.";
+
+      temp.lastHivTestInjectedDrugs = riskAssessment.lastHivTestInjectedDrugs
         ? ""
-        : "This field is required.");
-    objValues.age > 15 &&
-      riskAssessment.lastHivTestBasedOnRequest === "false" &&
-      (temp.lastHivTestHadAnal = riskAssessment.lastHivTestHadAnal
+        : "This field is required.";
+
+      temp.lastHivTestHadAnal = riskAssessment.lastHivTestHadAnal
         ? ""
-        : "This field is required.");
-    objValues.age > 15 &&
-      riskAssessment.lastHivTestBasedOnRequest === "false" &&
-      (temp.lastHivTestForceToHaveSex = riskAssessment.lastHivTestForceToHaveSex
+        : "This field is required.";
+
+      temp.lastHivTestForceToHaveSex = riskAssessment.lastHivTestForceToHaveSex
         ? ""
-        : "This field is required.");
+        : "This field is required.";
+    }
 
     //targetGroup
     setErrors({ ...temp });
@@ -396,12 +481,15 @@ const RiskStratification = (props) => {
   const actualRiskCountTrue = Object.values(riskAssessment);
   riskCountQuestion = actualRiskCountTrue.filter((x) => x === "true");
   const handleInputChangeRiskAssessment = (e) => {
+
     setErrors({ ...temp, [e.target.name]: "" });
     setRiskAssessment({ ...riskAssessment, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+   getMenuLogic(objValues);
+
     //console.log(riskAssessment)
     props.patientObj.targetGroup = objValues.targetGroup;
     props.patientObj.testingSetting = objValues.testingSetting;
@@ -627,32 +715,23 @@ const RiskStratification = (props) => {
                       disabled={props.activePage.actionType === "view"}
                     >
                       <option value={""}>Select</option>
-                      {
-                        (objValues.communityEntryPoint==="HTS_ENTRY_POINT_COMMUNITY_CPMTCT" && objValues.entryPoint==="HTS_ENTRY_POINT_COMMUNITY")?
-                            enrollSetting.map((value) => (
-                                  (value.code === "TEST_SETTING_CPMTCT") ? (
-                                      <option key={value.id} value={value.code}>
-                                        {value.display}
-                                      </option>
-                                  ) : (
-                                      <></>
-
-                                  )
-
-                              ))
-                            :
-                            enrollSetting.map((value) => (
-                                <option key={value.id} value={value.code}>
-                                  {value.display}
-                                </option>
-                            ))
-
-                      }
-
-
-
-
-
+                      {objValues.communityEntryPoint ===
+                        "HTS_ENTRY_POINT_COMMUNITY_CPMTCT" &&
+                      objValues.entryPoint === "HTS_ENTRY_POINT_COMMUNITY"
+                        ? enrollSetting.map((value) =>
+                            value.code === "TEST_SETTING_CPMTCT" ? (
+                              <option key={value.id} value={value.code}>
+                                {value.display}
+                              </option>
+                            ) : (
+                              <></>
+                            )
+                          )
+                        : enrollSetting.map((value) => (
+                            <option key={value.id} value={value.code}>
+                              {value.display}
+                            </option>
+                          ))}
 
                       {/* <option value="TEST_SETTING_CT">CT</option>
                                         <option value="TEST_SETTING_TB">TB</option>
@@ -776,8 +855,7 @@ const RiskStratification = (props) => {
               </div>
               <br />
 
-              {props.patientAge > 15 &&
-                riskAssessment.lastHivTestBasedOnRequest === "false" && (
+              {showRiskAssessment && (
                   <>
                     <div
                       className="form-group  col-md-12 text-center pt-2 mb-4"

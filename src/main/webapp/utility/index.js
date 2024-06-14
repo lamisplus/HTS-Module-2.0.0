@@ -32,6 +32,9 @@ export const getAllCountry = async () => {
   } catch (e) {}
 };
 
+//  
+//  
+
 //Get all state by state by country Id
 export const getAllStateByCountryId = async () => {
   try {
@@ -72,6 +75,9 @@ export const getAcount = async () => {
 
 //check modality
 export const getCheckModality = (patientObj) => {
+
+
+  console.log("MODALITY CHECK UP ", patientObj);
   if (
     patientObj === "TEST_SETTING_STI_STI" ||
     patientObj === "TEST_SETTING_TB_TB" ||
@@ -88,6 +94,7 @@ export const getCheckModality = (patientObj) => {
     patientObj === "TEST_SETTING_STANDALONE_HTS_STI" ||
     patientObj === "TEST_SETTING_STANDALONE_HTS_TB"
   ) {
+    console.log("IT IS SKIP")
     return "skip";
   } else {
     return "fill";

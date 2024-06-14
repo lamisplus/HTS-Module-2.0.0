@@ -861,35 +861,10 @@ const BasicInfo = (props) => {
           //props.patientObj.personResponseDto=patientForm.personDto
           //props.setPatientObj({...patientObj, })
           //toast.success("HTS Test successful");
-          if (objValues.age <= 15 && modalityCheck === "fill") {
-            if (
-              props.extra.modality ===
-                "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||
-              props.extra.modality === "TEST_SETTING_STI_STI" ||
-              props.extra.modality === "TEST_SETTING_TB_TB" ||
-              props.extra.modality ===
-                "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||
-              props.extra.modality === "TEST_SETTING_CT_PMTCT" ||
-              props.extra.modality ===
-                "TEST_SETTING_OTHERS_POST_ANC1_BREASTFEEDING" ||
-              props.extra.modality ===
-                "TEST_SETTING_OTHERS_POST_ANC1_PREGNANT_L&D" ||
-              props.extra.modality ===
-                "TEST_SETTING_STANDALONE_HTS_PMTCT_(ANC1_ONLY)" ||
-              props.extra.modality ===
-                "TEST_SETTING_STANDALONE_HTS_POST_ANC1_BREASTFEEDING" ||
-              props.extra.modality ===
-                "TEST_SETTING_STANDALONE_HTS_POST_ANC1_PREGNANT_L&D" ||
-              props.extra.modality ===
-                "TEST_SETTING_STANDALONE_HTS_PMTCT_(ANC1_ONLY)" ||
-              props.extra.modality === "TEST_SETTING_STANDALONE_HTS_STI"
-            ) {
-              handleItemClick("hiv-test", "basic");
-            } else {
-              handleItemClick("pre-test-counsel", "basic");
-            }
-          } else {
+          if (objValues.age <= 15 || modalityCheck === "skip") {
             handleItemClick("hiv-test", "basic");
+          } else {
+            handleItemClick("pre-test-counsel", "basic");
           }
         })
         .catch((error) => {

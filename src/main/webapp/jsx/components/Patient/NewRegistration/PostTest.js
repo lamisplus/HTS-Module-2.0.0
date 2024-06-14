@@ -170,13 +170,13 @@ const PostTest = (props) => {
     }
   }, [props.patientObj, postTest.hivTestResult]);
   const handleInputChangePostTest = (e) => {
- if (e.target.name === "lubricantProvidedToClientCount") {
-   if (e.target.value >= 0) {
-     setPostTest({ ...postTest, [e.target.name]: e.target.value });
-   }
- } else {
-   setPostTest({ ...postTest, [e.target.name]: e.target.value });
- }
+    if (e.target.name === "lubricantProvidedToClientCount") {
+      if (e.target.value >= 0) {
+        setPostTest({ ...postTest, [e.target.name]: e.target.value });
+      }
+    } else {
+      setPostTest({ ...postTest, [e.target.name]: e.target.value });
+    }
   };
   const handleItemClick = (page, completedMenu) => {
     props.handleItemClick(page);
@@ -188,8 +188,7 @@ const PostTest = (props) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setSaving(true);
-    //handleItemClick('recency-testing', 'post-test')
-    //if(!(Object.values(postTest).every(x => x === ""))){
+
     objValues.htsClientId = props.patientObj.id;
     objValues.postTestCounselingKnowledgeAssessment = postTest;
     objValues.personId = props.patientObj.personResponseDto.id;
@@ -203,16 +202,23 @@ const PostTest = (props) => {
         setSaving(false);
         props.setPatientObj(response.data);
         toast.success("Risk Assesment successful");
-        if (postTest.hivTestResult === "true" && postTest.riskStratificationResponseDto.age <= 15) {
+      
+        if (
+          postTest.hivTestResult === "true" &&
+          props?.patientObj?.riskStratificationResponseDto?.age >= 15
+        ) {
           handleItemClick("recency-testing", "post-test");
         } else if (postTest.hivTestResult === "false") {
           // history.push("/");
+          handleItemClick("client-referral", "post-test");
+        } else {
           handleItemClick("client-referral", "post-test");
         }
         // handleItemClick("recency-testing", "post-test");
       })
       .catch((error) => {
         setSaving(false);
+        console.log(error);
         if (error.response && error.response.data) {
           let errorMessage =
             error.response.data.apierror &&
@@ -725,12 +731,12 @@ const PostTest = (props) => {
                   {/*)}*/}
 
                   <Button
-                     content="Save & Continue"
+                    content="Save & Continue"
                     icon="right arrow"
-                     labelPosition="right"
-                      style={{ backgroundColor: "#014d88", color: "#fff" }}
-                      onClick={handleSubmit}
-                     disabled={saving}
+                    labelPosition="right"
+                    style={{ backgroundColor: "#014d88", color: "#fff" }}
+                    onClick={handleSubmit}
+                    disabled={saving}
                   />
                 </div>
               </div>

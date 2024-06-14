@@ -20,7 +20,7 @@ import axios from "axios";
 import { url as baseUrl, token } from "./../../../api";
 import Typography from "@material-ui/core/Typography";
 import { Label, Sticky } from "semantic-ui-react";
-
+import { calculate_age } from "../utils";
 //Dtate Picker package
 Moment.locale("en");
 momentLocalizer();
@@ -101,24 +101,6 @@ function PatientCard(props) {
       .catch((error) => {});
   }
 
-  const calculate_age = (dob) => {
-    var today = new Date();
-    var dateParts = dob.split("-");
-    var dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
-    var birthDate = new Date(dateObject); // create a date object directlyfrom`dob1`argument
-    var age_now = today.getFullYear() - birthDate.getFullYear();
-    var m = today.getMonth() - birthDate.getMonth();
-    if (age_now <= 0 && m < 0 && today.getDate() < birthDate.getDate()) {
-      age_now--;
-    }
-    // if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-    //   age_now--;
-    // }
-    if (age_now === 0) {
-      return m + " month(s)";
-    }
-    return age_now + " year(s)";
-  };
   const getHospitalNumber = (identifier) => {
     const identifiers = identifier;
     const hospitalNumber = identifiers?.identifier?.find(
@@ -210,7 +192,7 @@ function PatientCard(props) {
                             {calculate_age(
                               moment(
                                 patientObj.personResponseDto.dateOfBirth
-                              ).format("DD-MM-YYYY")
+                              ).format("YYYY-MM-DD")
                             )}
                           </b>
                         </span>

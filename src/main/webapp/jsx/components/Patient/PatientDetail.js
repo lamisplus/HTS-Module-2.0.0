@@ -10,8 +10,8 @@ import { useHistory } from "react-router-dom";
 import { Tab, Tabs } from "react-bootstrap";
 import PatientHistory from "./../History/PatientHistory";
 import PatientHtsEnrollment from "./PatientHtsEnrollment";
-import ViewEditHivst from '../Patient/HIVST/ViewEditHivst'
-
+import ViewEditHivst from "../Patient/HIVST/ViewEditHivst";
+import { calculate_age } from "../utils";
 import moment from "moment";
 
 const styles = (theme) => ({
@@ -70,25 +70,12 @@ function PatientCard(props) {
     history.location && history.location.state
       ? history.location.state.clientCode
       : "";
-  const calculate_age = (dob) => {
-    var today = new Date();
-    var dateParts = dob.split("-");
-    var dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
-    var birthDate = new Date(dateObject); // create a date object directlyfrom`dob1`argument
-    var age_now = today.getFullYear() - birthDate.getFullYear();
-    var m = today.getMonth() - birthDate.getMonth();
-    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-      age_now--;
-    }
-    if (age_now === 0) {
-      return m;
-    }
-    return age_now;
-  };
+
   const patientAge = calculate_age(
-    moment(patientObj.dateOfBirth).format("DD-MM-YYYY")
+    moment(patientObj.dateOfBirth).format("YYYY-MM-DD")
   );
 
+ 
   return (
     <div className={classes.root}>
       <div
@@ -131,16 +118,15 @@ function PatientCard(props) {
               patientObject={patientObject}
             />
           )}
-            {activePage.activePage === "hivst_view" && (
-              <ViewEditHivst
-                  patientObj={patientObj}
-                  activePage={activePage}
-                  setActivePage={setActivePage}
-                  clientCode={clientCode}
-                  patientAge={patientAge}
-                  patientObject={patientObject}
-
-              />
+          {activePage.activePage === "hivst_view" && (
+            <ViewEditHivst
+              patientObj={patientObj}
+              activePage={activePage}
+              setActivePage={setActivePage}
+              clientCode={clientCode}
+              patientAge={patientAge}
+              patientObject={patientObject}
+            />
           )}
         </CardContent>
       </Card>

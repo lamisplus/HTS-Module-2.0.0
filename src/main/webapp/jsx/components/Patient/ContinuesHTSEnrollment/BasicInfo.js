@@ -22,6 +22,7 @@ import "react-widgets/dist/css/react-widgets.css";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { Modal } from "react-bootstrap";
+import { getCheckModality } from "../../../../utility";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -118,7 +119,7 @@ const BasicInfo = (props) => {
   const [createdCode, setCreatedCode] = useState("");
   const [facilityCode, setFacilityCode] = useState("");
   const [serialNumber, setSerialNumber] = useState(null);
-
+ const [modalityCheck, setModality]=useState("")
   const [objValues, setObjValues] = useState({
     active: true,
     personId: props.patientObj.personId,
@@ -239,6 +240,8 @@ const BasicInfo = (props) => {
       clientCode: props.patientObj.clientCode,
     });
     CreateClientCode();
+
+    setModality(getCheckModality(props?.patientObj?.riskStratificationResponseDto?.modality));
   }, [props.patientObj, facilityCode]);
   //Get list of KP
   const KP = () => {
@@ -473,7 +476,7 @@ const BasicInfo = (props) => {
           setSaving(false);
           props.setPatientObj(response.data);
           //toast.success("HTS Test successful");
-          if (props.patientAge > 15) {
+          if (props.patientAge > 15 && modalityCheck === "fill") {
             handleItemClick("pre-test-counsel", "basic");
           } else {
             handleItemClick("hiv-test", "basic");

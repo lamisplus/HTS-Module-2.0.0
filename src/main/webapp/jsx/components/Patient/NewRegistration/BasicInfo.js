@@ -22,6 +22,7 @@ import "react-phone-input-2/lib/style.css";
 import { Button } from "semantic-ui-react";
 import { Modal } from "react-bootstrap";
 import { fontWeight } from "@mui/system";
+import { getCheckModality } from "../../../../utility";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -100,7 +101,7 @@ const BasicInfo = (props) => {
   const history = useHistory();
   const [errors, setErrors] = useState({});
   const [saving, setSaving] = useState(false);
-
+  const [modalityCheck, setModalityCheck] = useState("");
   const [hideNumChild, setHideNumChild] = useState(false);
   const [kP, setKP] = useState([]);
   const [enrollSetting, setEnrollSetting] = useState([]);
@@ -367,7 +368,11 @@ const BasicInfo = (props) => {
     CreateClientCode();
     //objValues.dateVisit=moment(new Date()).format("YYYY-MM-DD")
     //setObjValues(props.patientObj)
-
+    setModalityCheck(
+      getCheckModality(
+        props?.patientObj?.riskStratificationResponseDto?.modality
+      )
+    );
     if (objValues.age !== "") {
       props.setPatientObjAge(objValues.age);
     }
@@ -856,7 +861,7 @@ const BasicInfo = (props) => {
           //props.patientObj.personResponseDto=patientForm.personDto
           //props.setPatientObj({...patientObj, })
           //toast.success("HTS Test successful");
-          if (objValues.age > 14) {
+          if (objValues.age <= 15 && modalityCheck === "fill") {
             if (
               props.extra.modality ===
                 "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||

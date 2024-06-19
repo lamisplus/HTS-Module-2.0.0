@@ -86,5 +86,7 @@ public class HtsClientDto {
     private String otherDrugs;
     private String source;
     private String referredForSti;
+    private String comment;
+
 
 }

@@ -305,4 +305,8 @@ public class HtsClient extends Audit implements Serializable {
 
     @Column(name = "source")
     private String source;
+    @Column(name = "comment")
+    private String comment;
+    
+
 }

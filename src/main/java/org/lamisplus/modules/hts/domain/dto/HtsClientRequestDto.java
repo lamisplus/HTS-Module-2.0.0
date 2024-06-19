@@ -50,4 +50,5 @@ public class HtsClientRequestDto {
     private String source = Source.Web.toString();
     private String uuid;
     private String referredForSti;
+    private String comment;
 }

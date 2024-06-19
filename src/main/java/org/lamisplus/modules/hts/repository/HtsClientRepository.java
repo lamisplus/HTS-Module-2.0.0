@@ -105,4 +105,6 @@ public interface HtsClientRepository extends JpaRepository<HtsClient, Long> {
     Optional<String> findInPatientByHospitalNumber(String hospitalNumber);
 
     boolean existsByRiskStratificationCode(String  riskStratificationCode);
+
+    boolean existsByClientCode(String clientCode);
 }

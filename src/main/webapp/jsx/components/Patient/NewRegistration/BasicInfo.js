@@ -97,7 +97,6 @@ const useStyles = makeStyles((theme) => ({
 
 const BasicInfo = (props) => {
   const classes = useStyles();
-  console.log("new", props.patientObj);
   const history = useHistory();
   const [errors, setErrors] = useState({});
   const [saving, setSaving] = useState(false);
@@ -167,7 +166,6 @@ const BasicInfo = (props) => {
     props.patientObj.personResponseDto.dateOfBirth
   );
 
-  console.log(props.extra);
   const [objValues, setObjValues] = useState({
     active: true,
     clientCode:
@@ -303,6 +301,7 @@ const BasicInfo = (props) => {
       ? props.patientObj.relationWithIndexClient
       : "",
     indexClientCode: "",
+    comment: ""
   });
 
   const CreateClientCode = () => {
@@ -312,7 +311,6 @@ const BasicInfo = (props) => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        // console.log('Response Facility Short Code **** ', response.data);
         setFacilityCode(response.data);
       })
       .catch((error) => {
@@ -351,7 +349,6 @@ const BasicInfo = (props) => {
       "C" + facilityCode + "/" + modalityCode + "/" + month + "/" + year + "/";
     setCreatedCode(codeCreated);
     setObjValues({ ...objValues, clientCode: createdCode });
-    // console.log('Created Code **** ', createdCode);
   };
 
   useEffect(() => {
@@ -472,7 +469,6 @@ const BasicInfo = (props) => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        //console.log(response.data);
         setEnrollSetting(response.data);
       })
       .catch((error) => {
@@ -486,7 +482,6 @@ const BasicInfo = (props) => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        //console.log(response.data);
         setMaritalStatus(response.data);
       })
       .catch((error) => {
@@ -500,7 +495,6 @@ const BasicInfo = (props) => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        //console.log(response.data);
         setSourceReferral(response.data);
       })
       .catch((error) => {
@@ -641,12 +635,10 @@ const BasicInfo = (props) => {
     if (e.target.name === "serialNumber") {
       code = createdCode + e.target.value;
       setCreatedCode(code);
-      console.log("Code created is &&&& ", createdCode);
       setObjValues({ ...objValues, clientCode: code });
     }
     async function getIndexClientCode() {
       const indexClientCode = objValues.clientCode;
-      console.log(indexClientCode);
       const response = await axios.get(
         `${baseUrl}hts/client/${indexClientCode}`,
         {
@@ -845,10 +837,10 @@ const BasicInfo = (props) => {
         relationWithIndexClient: objValues.relationWithIndexClient,
         riskStratificationCode:
           props.extra && props.extra.code !== "" ? props.extra.code : "",
+        comment: objValues.comment
       };
       props.setPatientObj({ ...props.patientObj, ...objValues });
 
-      //console.log(patientForm)
       axios
         .post(`${baseUrl}hts`, patientForm, {
           headers: { Authorization: `Bearer ${token}` },
@@ -895,7 +887,7 @@ const BasicInfo = (props) => {
     <>
       <Card className={classes.root}>
         <CardBody>
-          <h2 style={{ color: "#000" }}>CLIENT INTAKE FORM</h2>
+          <h2 style={{ color: "#000" }}>CLIENT INTAKE FORM </h2>
           <br />
           <form>
             <div className="row">
@@ -1624,13 +1616,6 @@ const BasicInfo = (props) => {
                   </div>
                 </>
               )}
-              {console.log(
-                objValues.sex.toLowerCase() === "female" ||
-                  props.extra.modality !==
-                    "TEST_SETTING_OTHERS_POST_ANC1_BREASTFEEDING" ||
-                  props.extra.modality !==
-                    "TEST_SETTING_STANDALONE_HTS_POST_ANC1_BREASTFEEDING"
-              )}
 
               {showPregancy && (
                 <>
@@ -1815,6 +1800,29 @@ const BasicInfo = (props) => {
                   ) : (
                     ""
                   )}
+                </FormGroup>
+              </div>
+              <div className="form-group mb-3 col-md-12">
+                <FormGroup>
+                  <Label for="firstName">
+                    Comments
+                    {/* <span style={{ color: "red" }}> *</span> */}
+                  </Label>
+                  <Input
+                    className="form-control"
+                    type="textarea"
+                    rows="4"
+                    cols="7"
+                    name="comment"
+                    id="comment"
+                    value={objValues.comment}
+                    onChange={handleInputChange}
+                    style={{
+                      border: "1px solid #014D88",
+                      borderRadius: "0.2rem",
+                      height: "100px",
+                    }}
+                  />
                 </FormGroup>
               </div>
 

@@ -928,7 +928,7 @@ const BasicInfo = (props) => {
                           value.code === "PREGANACY_STATUS_NOT_PREGNANT" ? (
                             <></>
                           ) : (
-                            <option key={value.id} value={value.code}>
+                            <option key={value.id} value={value.id}>
                               {value.display}
                             </option>
                           )

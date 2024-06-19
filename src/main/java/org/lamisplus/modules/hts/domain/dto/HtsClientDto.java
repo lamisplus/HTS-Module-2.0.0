@@ -39,7 +39,7 @@ public class HtsClientDto {
     private  Long personId;
     private PersonResponseDto personResponseDto;
     private  Object extra;
-    private String pregnant;
+    private Long pregnant;
     private Boolean breastFeeding;
     private Long relationWithIndexClient;
     private String capturedBy;

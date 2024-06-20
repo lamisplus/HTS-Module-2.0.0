@@ -2373,7 +2373,7 @@ const ViewFamilyIndexTestingForm = (props) => {
                         <FormGroup>
                           <Label for="">
                             Schedule Visit Date{" "}
-                            <span style={{ color: "red" }}> *</span>{" "}
+                            
                           </Label>
                           <Input
                             type="date"
@@ -2404,7 +2404,7 @@ const ViewFamilyIndexTestingForm = (props) => {
                         <FormGroup>
                           <Label for="">
                             Date visited{" "}
-                            <span style={{ color: "red" }}> *</span>{" "}
+                            {/* <span style={{ color: "red" }}> *</span>{" "} */}
                           </Label>
                           <Input
                             type="date"
@@ -2432,7 +2432,7 @@ const ViewFamilyIndexTestingForm = (props) => {
                       <div className="form-group mb-3 col-md-4">
                         <FormGroup>
                           <Label for="">
-                            Attempts <span style={{ color: "red" }}> *</span>{" "}
+                            {/* Attempts <span style={{ color: "red" }}> *</span>{" "} */}
                           </Label>
                           <select
                             className="form-control"
@@ -2545,8 +2545,8 @@ const ViewFamilyIndexTestingForm = (props) => {
                             </FormGroup>
                           </div>
                         )}
-                      {console.log("patient agee reaching ", payload.age)}
-                      {payload.age < 21 && (
+                      
+                      {familyTestingTrackerRequestDTO?.trackerAge < 21 && (
                         <div className="form-group mb-3 col-md-4">
                           <FormGroup>
                             <Label for="">Date Enrolled In Ovc</Label>

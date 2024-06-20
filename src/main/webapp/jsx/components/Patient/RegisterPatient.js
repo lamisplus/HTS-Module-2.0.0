@@ -439,7 +439,7 @@ const UserRegistration = (props) => {
                       </Menu.Item>
                       {patientObj.hivTestResult &&
                         patientObj.hivTestResult.toLowerCase() === "positive" &&
-                        patientObj?.riskStratificationResponseDto?.age <=
+                        patientObj?.riskStratificationResponseDto?.age >=
                           15 && (
                           <Menu.Item
                             name="spam"
@@ -463,8 +463,6 @@ const UserRegistration = (props) => {
                           </Menu.Item>
                         )}
 
-                      {/*               
-
                       {patientObj.hivTestResult &&
                         patientObj.hivTestResult.toLowerCase() ===
                           "positive" && (
@@ -485,7 +483,7 @@ const UserRegistration = (props) => {
                               )}
                             </span>
                           </Menu.Item>
-                        )} */}
+                        )}
 
                       {/* uncomment this after  */}
 
@@ -562,7 +560,7 @@ const UserRegistration = (props) => {
                         </span>
                       </Menu.Item>
                     </>
-                )} 
+                  )}
                 </Menu>
               </div>
 

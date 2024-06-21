@@ -152,6 +152,12 @@ const PostTest = (props) => {
       if (e.target.value >= 0) {
         setPostTest({ ...postTest, [e.target.name]: e.target.value });
       }
+    }else if (e.target.name === "lubricantProvidedToClientCount") {
+       if (e.target.value >= 0) {
+         setPostTest({ ...postTest, [e.target.name]: e.target.value });
+       } else {
+         setPostTest({ ...postTest, [e.target.name]: 0 });
+       }
     } else {
       setPostTest({ ...postTest, [e.target.name]: e.target.value });
     }

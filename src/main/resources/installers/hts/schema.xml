@@ -297,20 +297,6 @@
         </sql>
     </changeSet>
 
-    <changeSet failOnError="false" author="israel" id="hts-client-140424">
-        <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">
-                SELECT COUNT(*)
-                FROM pg_attribute
-                WHERE attrelid = (SELECT oid FROM pg_class WHERE relname = 'hts_client')
-                AND attname = 'referred_for_sti';
-            </sqlCheck>
-        </preConditions>
-        <sql>
-            ALTER TABLE IF EXISTS hts_client ADD COLUMN referred_for_sti character varying;
-        </sql>
-    </changeSet>
-
     <changeSet failOnError="false" author="israel" id="hts-client-140424-alter-column-type">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="1">
@@ -327,7 +313,19 @@
     </changeSet>
 
 
-
+    <changeSet failOnError="true" author="Ganiyat" id="hts-client-1404659">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*)
+                FROM pg_attribute
+                WHERE attrelid = (SELECT oid FROM pg_class WHERE relname = 'hts_client')
+                AND attname = 'referred_for_sti';
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            ALTER TABLE IF EXISTS hts_client ADD COLUMN referred_for_sti character varying;
+        </sql>
+    </changeSet>
 
 
 </databaseChangeLog>

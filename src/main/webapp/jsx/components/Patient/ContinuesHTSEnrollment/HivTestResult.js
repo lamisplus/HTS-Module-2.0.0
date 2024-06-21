@@ -664,6 +664,7 @@ const HivTestResult = (props) => {
                     name="date"
                     id="date"
                     value={initialTest1.date}
+                    min={props?.patientObj?.dateVisit}
                     onChange={handleInputChangeInitial}
                     max={moment(new Date()).format("YYYY-MM-DD")}
                     style={{

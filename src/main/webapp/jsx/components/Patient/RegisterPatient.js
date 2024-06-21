@@ -463,7 +463,7 @@ const UserRegistration = (props) => {
                           </Menu.Item>
                         )}
 
-                      {patientObj.hivTestResult &&
+                      {/* {patientObj.hivTestResult &&
                         patientObj.hivTestResult.toLowerCase() ===
                           "positive" && (
                           <Menu.Item
@@ -483,7 +483,7 @@ const UserRegistration = (props) => {
                               )}
                             </span>
                           </Menu.Item>
-                        )}
+                        )} */}
 
                       {/* uncomment this after  */}
 

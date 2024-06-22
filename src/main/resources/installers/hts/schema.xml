@@ -312,6 +312,20 @@
         </sql>
     </changeSet>
 
+    <changeSet failOnError="false" author="israel" id="hts-client-220624">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*)
+                FROM pg_attribute
+                WHERE attrelid = (SELECT oid FROM pg_class WHERE relname = 'hts_pns_index_client_partner')
+                AND attname = 'other_reason_for_decline';
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            ALTER TABLE IF EXISTS hts_pns_index_client_partner ADD COLUMN other_reason_for_decline character varying;
+        </sql>
+    </changeSet>
+
 
     <changeSet failOnError="true" author="Ganiyat" id="hts-client-1404659">
         <preConditions onFail="MARK_RAN">

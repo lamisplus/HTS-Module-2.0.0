@@ -312,20 +312,6 @@
         </sql>
     </changeSet>
 
-    <changeSet failOnError="false" author="israel" id="hts-client-220624">
-        <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">
-                SELECT COUNT(*)
-                FROM pg_attribute
-                WHERE attrelid = (SELECT oid FROM pg_class WHERE relname = 'hts_pns_index_client_partner')
-                AND attname = 'other_reason_for_decline';
-            </sqlCheck>
-        </preConditions>
-        <sql>
-            ALTER TABLE IF EXISTS hts_pns_index_client_partner ADD COLUMN other_reason_for_decline character varying;
-        </sql>
-    </changeSet>
-
 
     <changeSet failOnError="true" author="Ganiyat" id="hts-client-1404659">
         <preConditions onFail="MARK_RAN">
@@ -341,7 +327,34 @@
         </sql>
     </changeSet>
 
+    <changeSet failOnError="true" author="Ganiyat" id="20240624-001">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="hts_pns_index_client_partner" columnName="other_reason_for_decline" />
 
+            </not>
+        </preConditions>
+        <sql>ALTER TABLE hts_pns_index_client_partner ADD other_reason_for_decline VARCHAR(255);</sql>
+    </changeSet>
 
+    <changeSet failOnError="true" author="Ganiyat" id="20240624-002">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="hts_pns_index_client_partner" columnName="partner_id" />
+
+            </not>
+        </preConditions>
+        <sql>ALTER TABLE hts_pns_index_client_partner ADD partner_id VARCHAR(255);</sql>
+    </changeSet>
+
+    <changeSet failOnError="true" author="Ganiyat" id="20240624-003">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="hts_pns_index_client_partner" columnName="reason_for_decline" />
+
+            </not>
+        </preConditions>
+        <sql>ALTER TABLE hts_pns_index_client_partner ADD reason_for_decline VARCHAR(255);</sql>
+    </changeSet>
 
 </databaseChangeLog>

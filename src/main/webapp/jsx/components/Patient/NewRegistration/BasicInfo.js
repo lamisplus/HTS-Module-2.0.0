@@ -301,7 +301,7 @@ const BasicInfo = (props) => {
       ? props.patientObj.relationWithIndexClient
       : "",
     indexClientCode: "",
-    comment: ""
+    comment: "",
   });
 
   const CreateClientCode = () => {
@@ -588,23 +588,31 @@ const BasicInfo = (props) => {
     if (e.target.name === "firstName" && e.target.value !== "") {
       const name = alphabetOnly(e.target.value);
       setObjValues({ ...objValues, [e.target.name]: name });
-    }
-    if (e.target.name === "lastName" && e.target.value !== "") {
+    } else if (e.target.name === "lastName" && e.target.value !== "") {
       const name = alphabetOnly(e.target.value);
       setObjValues({ ...objValues, [e.target.name]: name });
-    }
-    if (e.target.name === "middleName" && e.target.value !== "") {
+    } else if (e.target.name === "middleName" && e.target.value !== "") {
       const name = alphabetOnly(e.target.value);
       setObjValues({ ...objValues, [e.target.name]: name });
-    }
-    if (e.target.name === "sex" && e.target.value.toLowerCase() === "female") {
-      setShowPregnancy(true);
-    }
-    // else{
-    //     setHideNumChild(false)
-    // }
-
-    if (e.target.name === "indexClientCode" && e.target.value !== "") {
+    } else if (e.target.name === "numChildren") {
+      if (e.target.value >= 0) {
+        setObjValues({ ...objValues, [e.target.name]: e.target.value });
+      } else {
+        setObjValues({
+          ...objValues,
+          [e.target.name]: 0,
+        });
+      }
+    } else if (e.target.name === "numWives") {
+      if (e.target.value >= 0) {
+        setObjValues({ ...objValues, [e.target.name]: e.target.value });
+      } else {
+        setObjValues({
+          ...objValues,
+          [e.target.name]: 0,
+        });
+      }
+    } else if (e.target.name === "indexClientCode" && e.target.value !== "") {
       async function getIndexClientCode() {
         const indexClientCode = e.target.value;
         const response = await axios.get(
@@ -626,8 +634,14 @@ const BasicInfo = (props) => {
         }
       }
       getIndexClientCode();
+    } else {
+      setObjValues({ ...objValues, [e.target.name]: e.target.value });
     }
-    setObjValues({ ...objValues, [e.target.name]: e.target.value });
+
+    if (e.target.name === "sex" && e.target.value.toLowerCase() === "female") {
+      setShowPregnancy(true);
+    }
+
   };
   //checkClientCode
   const checkClientCode = (e) => {
@@ -837,7 +851,7 @@ const BasicInfo = (props) => {
         relationWithIndexClient: objValues.relationWithIndexClient,
         riskStratificationCode:
           props.extra && props.extra.code !== "" ? props.extra.code : "",
-        comment: objValues.comment
+        comment: objValues.comment,
       };
       props.setPatientObj({ ...props.patientObj, ...objValues });
 

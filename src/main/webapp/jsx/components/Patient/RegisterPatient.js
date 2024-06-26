@@ -368,16 +368,9 @@ const UserRegistration = (props) => {
                           )}
                         </span>
                       </Menu.Item>
-                      {console.log(
-                        "testing modality ",
-                        patientObj?.riskStratificationResponseDto?.modality,
-                        modalityCheck,
-                        getCheckModality(
-                          patientObj?.riskStratificationResponseDto?.modality
-                        )
-                      )}
+                
 
-                      {modalityCheck == "fill" && (
+                      {props.patientAge >= 15 && modalityCheck == "fill" && (
                         <Menu.Item
                           name="spam"
                           active={activeItem === "pre-test-counsel"}

@@ -162,7 +162,7 @@ const UserRegistration = (props) => {
                     </span>
                   </Menu.Item>
 
-                  {modalityCheck == "fill" && (
+                  {props.patientAge >= 15 && modalityCheck == "fill" && (
                     <Menu.Item
                       name="spam"
                       active={activeItem === "pre-test-counsel"}
@@ -217,7 +217,7 @@ const UserRegistration = (props) => {
                       )}
                     </span>
                   </Menu.Item>
-                 
+
                   {patientObj.hivTestResult &&
                     patientObj.hivTestResult.toLowerCase() === "positive" &&
                     patientObj.riskStratificationResponseDto?.age >= 15 && (
@@ -276,7 +276,7 @@ const UserRegistration = (props) => {
                     </span>
                   </Menu.Item> */}
                   {/* Family Index Testing form */}
-           {/* {patientObj.hivTestResult && patientObj.hivTestResult.toLowerCase() ===
+                  {/* {patientObj.hivTestResult && patientObj.hivTestResult.toLowerCase() ===
                     "positive" &&  <Menu.Item
                     name="inbox"
                     active={activeItem === "fit-history"}

@@ -355,8 +355,29 @@ const BasicInfo = (props) => {
         }
       }
       getIndexClientCode();
+          setObjValues({ ...objValues, [e.target.name]: e.target.value });
+
+    }else if (e.target.name === "numChildren") {
+      if (e.target.value >= 0) {
+        setObjValues({ ...objValues, [e.target.name]: e.target.value });
+      } else {
+        setObjValues({
+          ...objValues,
+          [e.target.name]: 0,
+        });
+      }
+    } else if (e.target.name === "numWives") {
+      if (e.target.value >= 0) {
+        setObjValues({ ...objValues, [e.target.name]: e.target.value });
+      } else {
+        setObjValues({
+          ...objValues,
+          [e.target.name]: 0,
+        });
+      }
+    } else {
+      setObjValues({ ...objValues, [e.target.name]: e.target.value });
     }
-    setObjValues({ ...objValues, [e.target.name]: e.target.value });
   };
 
   /*****  Validation  */

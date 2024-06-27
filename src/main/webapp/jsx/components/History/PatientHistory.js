@@ -132,10 +132,7 @@ const Home = (props) => {
                       loading={loading}
                     />
                   </Tab>
-                  {/*lastVistAndModality  is just newly added to the condition base on the patient PMTCT modality */}
-                  {/* lastVisitCount !== null && lastVisitCount >= 3 && */}
-                  {/* lastVistAndModality &&( //check if the last test is more than
-                  3months */}
+
                   {lastVistAndModality && (
                     <Tab eventKey="new" title="NEW HTS">
                       <ContineousRegistrationTesting
@@ -148,7 +145,8 @@ const Home = (props) => {
                       />
                     </Tab>
                   )}
-                  <Tab eventKey="hivst-history" title="HIVST HISTORY">
+                  {/* uncomment E001 */}
+                  {/* <Tab eventKey="hivst-history" title="HIVST HISTORY">
                     <HIVSTPatientHistory
                       patientObj={props.patientObj}
                       setPatientObj={props.setPatientObj}
@@ -160,7 +158,8 @@ const Home = (props) => {
                       patientList={patientList}
                       loading={loading}
                     />
-                  </Tab>
+                  </Tab> */}
+{/* 
                   <Tab eventKey="new-hivst" title="NEW HIVST">
                     <ExistenceClientHIVSTRegistration
                       patientObj={props.patientObj}
@@ -170,7 +169,7 @@ const Home = (props) => {
                       patientAge={props.patientAge}
                       patients={patients}
                     />
-                  </Tab>
+                  </Tab> */}
                 </Tabs>
               </div>
             </Card.Body>

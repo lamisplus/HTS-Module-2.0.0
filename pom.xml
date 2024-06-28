@@ -36,9 +36,9 @@
 
 	<repositories>
 		<repository>
-			<id>foreach-nexus</id>
+			<id>local-repo</id>
 			<name>Foreach nexus</name>
-			<url>https://repository.foreach.be/nexus/repository/public/</url>
+			<url>/home/sonar/.m2/repository/repository/</url>
 		</repository>
 	</repositories>
 

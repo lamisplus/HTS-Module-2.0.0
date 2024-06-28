@@ -1,12 +1,10 @@
 name: Build
-
+ 
 on:
-  workflow_dispatch:
   push:
     branches:
       - nell-pall-patch-1
-
-
+ 
 jobs:
   build:
     name: Build
@@ -29,7 +27,7 @@ jobs:
       - name: Cache Maven packages
         uses: actions/cache@v1
         with:
-          path: ~/.m2
+          path: ~/.m2/repository
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
       - name: Build and analyze

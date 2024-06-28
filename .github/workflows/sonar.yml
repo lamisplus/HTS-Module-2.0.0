@@ -1,6 +1,7 @@
 name: Build
- 
+  workflow_dispatch:
 on:
+  
   push:
     branches:
       - nell-pall-patch-1

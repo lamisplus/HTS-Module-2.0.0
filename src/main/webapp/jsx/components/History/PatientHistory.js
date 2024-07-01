@@ -146,7 +146,7 @@ const Home = (props) => {
                     </Tab>
                   )}
                   {/* uncomment E001 */}
-                  {/* <Tab eventKey="hivst-history" title="HIVST HISTORY">
+                  <Tab eventKey="hivst-history" title="HIVST HISTORY">
                     <HIVSTPatientHistory
                       patientObj={props.patientObj}
                       setPatientObj={props.setPatientObj}
@@ -158,8 +158,8 @@ const Home = (props) => {
                       patientList={patientList}
                       loading={loading}
                     />
-                  </Tab> */}
-{/* 
+                  </Tab>
+
                   <Tab eventKey="new-hivst" title="NEW HIVST">
                     <ExistenceClientHIVSTRegistration
                       patientObj={props.patientObj}
@@ -169,7 +169,7 @@ const Home = (props) => {
                       patientAge={props.patientAge}
                       patients={patients}
                     />
-                  </Tab> */}
+                  </Tab>
                 </Tabs>
               </div>
             </Card.Body>

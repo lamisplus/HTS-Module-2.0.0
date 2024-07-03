@@ -327,34 +327,8 @@
         </sql>
     </changeSet>
 
-    <changeSet failOnError="true" author="Ganiyat" id="20240624-001">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <columnExists tableName="hts_pns_index_client_partner" columnName="other_reason_for_decline" />
 
-            </not>
-        </preConditions>
-        <sql>ALTER TABLE hts_pns_index_client_partner ADD other_reason_for_decline VARCHAR(255);</sql>
-    </changeSet>
 
-    <changeSet failOnError="true" author="Ganiyat" id="20240624-002">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <columnExists tableName="hts_pns_index_client_partner" columnName="partner_id" />
 
-            </not>
-        </preConditions>
-        <sql>ALTER TABLE hts_pns_index_client_partner ADD partner_id VARCHAR(255);</sql>
-    </changeSet>
-
-    <changeSet failOnError="true" author="Ganiyat" id="20240624-003">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <columnExists tableName="hts_pns_index_client_partner" columnName="reason_for_decline" />
-
-            </not>
-        </preConditions>
-        <sql>ALTER TABLE hts_pns_index_client_partner ADD reason_for_decline VARCHAR(255);</sql>
-    </changeSet>
 
 </databaseChangeLog>

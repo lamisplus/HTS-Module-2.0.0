@@ -251,9 +251,9 @@
         </addColumn>
     </changeSet>
 
-    <changeSet id="HTS-20230705-001-0001" author="Anana">
-        <sqlFile path="installers/hts/facility_short_code.sql" splitStatements="false"/>
-    </changeSet>
+<!--    <changeSet id="HTS-20230705-001-0001" author="Anana">-->
+<!--        <sqlFile path="installers/hts/facility_short_code.sql" splitStatements="false"/>-->
+<!--    </changeSet>-->
 
     <changeSet failOnError="false" author="Dikum" id="hts-26022024">
         <preConditions onFail="MARK_RAN">

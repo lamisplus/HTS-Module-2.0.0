@@ -613,6 +613,7 @@ const BasicInfo = (props) => {
         });
       }
     } else if (e.target.name === "indexClientCode" && e.target.value !== "") {
+      setObjValues({ ...objValues, [e.target.name]: e.target.value });
       async function getIndexClientCode() {
         const indexClientCode = e.target.value;
         const response = await axios.get(
@@ -641,7 +642,6 @@ const BasicInfo = (props) => {
     if (e.target.name === "sex" && e.target.value.toLowerCase() === "female") {
       setShowPregnancy(true);
     }
-
   };
   //checkClientCode
   const checkClientCode = (e) => {

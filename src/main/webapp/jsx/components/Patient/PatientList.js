@@ -92,7 +92,7 @@ const Patients = (props) => {
           },
           // { title: "Hospital Number", field: "hospital_number", filtering: false },
           { title: "Client Code", field: "clientCode", filtering: false },
-        
+
           { title: "Sex", field: "gender", filtering: false },
           { title: "Age", field: "age", filtering: false },
 
@@ -112,7 +112,7 @@ const Patients = (props) => {
                 resolve({
                   data: result.data.records
                     .filter((a) => {
-                      return a.clientCode !== null;
+                      return a.personId !== null;
                     })
                     .map((row) => ({
                       name: row.firstName + " " + row.surname,

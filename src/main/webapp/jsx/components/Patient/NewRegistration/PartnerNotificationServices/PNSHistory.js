@@ -54,8 +54,8 @@ const PNSHistory = (props) => {
                 icon="left arrow"
                 labelPosition="left"
                 style={{ backgroundColor: "#992E62", color: "#fff" }}
-                onClick={() =>
-                  handleItemClick("recency-testing", "recency-testing")
+                onClick={() =>{
+                  handleItemClick("recency-testing", "recency-testing")}
                 }
               />
               <Button

@@ -1691,7 +1691,7 @@ const FamilyIndexTestingForm = (props) => {
                   <FormGroup>
                     <Label>
                       Alternative Contact Number
-                      <span style={{ color: "red" }}> *</span>
+                      {/* <span style={{ color: "red" }}> *</span> */}
                     </Label>
                     <Input
                       type="text"
@@ -1895,27 +1895,29 @@ const FamilyIndexTestingForm = (props) => {
                       </FormGroup>
                     </div>
                   )}
-               {payload.isClientCurrentlyOnHivTreatment &&
-                  payload.isClientCurrentlyOnHivTreatment === "Yes" && <div className="form-group col-md-4 ">
-                  <Label>virally unsuppressed</Label>
-                  <FormGroup>
-                    <select
-                      className="form-control"
-                      name="virallyUnSuppressed"
-                      id="virallyUnSuppressed"
-                      onChange={handleInputChange}
-                      value={payload.virallyUnSuppressed}
-                      style={{
-                        border: "1px solid #014D88",
-                        borderRadius: "0.2rem",
-                      }}
-                    >
-                      <option value="">Select</option>
-                      <option value="Yes">Yes</option>
-                      <option value="No">No</option>
-                    </select>
-                  </FormGroup>
-                </div>}
+                {payload.isClientCurrentlyOnHivTreatment &&
+                  payload.isClientCurrentlyOnHivTreatment === "Yes" && (
+                    <div className="form-group col-md-4 ">
+                      <Label>virally unsuppressed</Label>
+                      <FormGroup>
+                        <select
+                          className="form-control"
+                          name="virallyUnSuppressed"
+                          id="virallyUnSuppressed"
+                          onChange={handleInputChange}
+                          value={payload.virallyUnSuppressed}
+                          style={{
+                            border: "1px solid #014D88",
+                            borderRadius: "0.2rem",
+                          }}
+                        >
+                          <option value="">Select</option>
+                          <option value="Yes">Yes</option>
+                          <option value="No">No</option>
+                        </select>
+                      </FormGroup>
+                    </div>
+                  )}
                 <div className="form-group col-md-4">
                   <FormGroup>
                     <Label for="willingToHaveChildrenTestedElseWhere">
@@ -2284,8 +2286,8 @@ const FamilyIndexTestingForm = (props) => {
                 <div className="form-group mb-3 col-md-4">
                   <FormGroup>
                     <Label for="">
-                      Schedule Visit Date{" "}
-                      <span style={{ color: "red" }}> *</span>{" "}
+                      Schedule Visit Date
+                      {/* <span style={{ color: "red" }}> *</span>{" "} */}
                     </Label>
                     <Input
                       type="date"
@@ -2312,9 +2314,7 @@ const FamilyIndexTestingForm = (props) => {
                 </div>
                 <div className="form-group mb-3 col-md-4">
                   <FormGroup>
-                    <Label for="">
-                      Date visited <span style={{ color: "red" }}> *</span>{" "}
-                    </Label>
+                    <Label for="">Date visited</Label>
                     <Input
                       type="date"
                       name="dateVisit"
@@ -2341,7 +2341,8 @@ const FamilyIndexTestingForm = (props) => {
                 <div className="form-group mb-3 col-md-4">
                   <FormGroup>
                     <Label for="">
-                      Attempts <span style={{ color: "red" }}> *</span>{" "}
+                      Attempts
+                      {/* <span style={{ color: "red" }}> *</span>{" "} */}
                     </Label>
                     <select
                       className="form-control"
@@ -2440,8 +2441,8 @@ const FamilyIndexTestingForm = (props) => {
                       </FormGroup>
                     </div>
                   )}
-                {console.log("patient agee reaching ", payload.age)}
-                {payload.age < 21 && (
+
+                {familyTestingTrackerRequestDTO?.trackerAge < 21 && (
                   <div className="form-group mb-3 col-md-4">
                     <FormGroup>
                       <Label for="">Date Enrolled In Ovc</Label>

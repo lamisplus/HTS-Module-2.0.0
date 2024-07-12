@@ -713,6 +713,7 @@ const HivTestResult = (props) => {
                     id="date"
                     value={initialTest1.date}
                     onChange={handleInputChangeInitial}
+                    min={ props?.patientObj?.dateVisit}
                     max={moment(new Date()).format("YYYY-MM-DD")}
                     style={{
                       border: "1px solid #014D88",
@@ -862,18 +863,18 @@ const HivTestResult = (props) => {
               <div className="row">
                 <div className="form-group  col-md-12">
                   {initialTest1.result === "No" && (
-                      <>
-                        <b> Result : </b>
-                        <LabelRibbon color="green">Non Reactive</LabelRibbon>
-                        <b> Final Result : </b>
-                        <LabelRibbon color="green">Negative</LabelRibbon>
-                        <br/>
-                      </>
+                    <>
+                      <b> Result : </b>
+                      <LabelRibbon color="green">Non Reactive</LabelRibbon>
+                      <b> Final Result : </b>
+                      <LabelRibbon color="green">Negative</LabelRibbon>
+                      <br />
+                    </>
                   )}
                   {initialTest1.result === "No" &&
-                      confirmatoryTest.result === "No" && (
-                          <>
-                          <b> Result : </b>
+                    confirmatoryTest.result === "No" && (
+                      <>
+                        <b> Result : </b>
                         <LabelRibbon color="green">Non Reactive</LabelRibbon>
                       </>
                     )}
@@ -1255,7 +1256,7 @@ const HivTestResult = (props) => {
                           <b> Final Result : </b>
                           <LabelRibbon color="green"> Negative</LabelRibbon>
                         </>
-                        <br/>
+                        <br />
                         <div className="row">
                           <div className="form-group  col-md-6">
                             <FormGroup>

@@ -21,7 +21,7 @@ import RecencyTesting from "./NewRegistration/RecencyTesting";
 import RiskStratification from "./NewRegistration/RiskStratification";
 import ClientRefferalForm from "./NewRegistration/RefferalForm";
 import { getAcount } from "../../../utility";
-
+import { getCheckModality } from "../../../utility";
 import FamilyIndexTestingForm from "./NewRegistration/FamilyIndexTestingForm";
 import PnsForm from "./NewRegistration/PartnerNotificationServices/PnsForm";
 import RefferralUnit from "./NewRegistration/RefferalUnit";
@@ -55,6 +55,7 @@ const UserRegistration = (props) => {
     setactiveItem(activeItem);
     //setCompleted({...completed, ...completedMenu})
   };
+
   const getFacilityAccount = () => {
     getAcount()
       .then((response) => {
@@ -258,6 +259,7 @@ const UserRegistration = (props) => {
     typeCounseling: "",
     riskStratificationResponseDto: null,
   });
+  const [modalityCheck, setModalityCheck] = useState("");
 
   console.log(patientObj);
   useEffect(() => {
@@ -267,6 +269,18 @@ const UserRegistration = (props) => {
     }
   }, []);
 
+  useEffect(() => {
+    console.log(
+      "component on mountttttttttttttt",
+      patientObj?.riskStratificationResponseDto?.modality,
+      getCheckModality(patientObj?.riskStratificationResponseDto?.modality),
+      "but modaqlity is ",
+      modalityCheck
+    );
+    setModalityCheck(
+      getCheckModality(patientObj?.riskStratificationResponseDto?.modality)
+    );
+  }, [patientObj]);
   return (
     <>
       <ToastContainer autoClose={3000} hideProgressBar />
@@ -354,28 +368,30 @@ const UserRegistration = (props) => {
                           )}
                         </span>
                       </Menu.Item>
-                      {console.log("register-agee ", props)}
+                
 
-                      <Menu.Item
-                        name="spam"
-                        active={activeItem === "pre-test-counsel"}
-                        onClick={() => handleItemClick("pre-test-counsel")}
-                        style={{
-                          backgroundColor:
-                            activeItem === "pre-test-counsel" ? "#000" : "",
-                        }}
-                        disabled={
-                          activeItem !== "pre-test-counsel" ? true : false
-                        }
-                      >
-                        {/* <Label>2</Label> */}
-                        <span style={{ color: "#fff" }}>
-                          Pre Test Counseling
-                          {completed.includes("pre-test-counsel") && (
-                            <Icon name="check" color="green" />
-                          )}
-                        </span>
-                      </Menu.Item>
+                      {props.patientAge >= 15 && modalityCheck == "fill" && (
+                        <Menu.Item
+                          name="spam"
+                          active={activeItem === "pre-test-counsel"}
+                          onClick={() => handleItemClick("pre-test-counsel")}
+                          style={{
+                            backgroundColor:
+                              activeItem === "pre-test-counsel" ? "#000" : "",
+                          }}
+                          disabled={
+                            activeItem !== "pre-test-counsel" ? true : false
+                          }
+                        >
+                          {/* <Label>2</Label> */}
+                          <span style={{ color: "#fff" }}>
+                            Pre Test Counseling
+                            {completed.includes("pre-test-counsel") && (
+                              <Icon name="check" color="green" />
+                            )}
+                          </span>
+                        </Menu.Item>
+                      )}
 
                       <Menu.Item
                         name="inbox"
@@ -415,8 +431,9 @@ const UserRegistration = (props) => {
                         </span>
                       </Menu.Item>
                       {patientObj.hivTestResult &&
-                        patientObj.hivTestResult.toLowerCase() ===
-                          "positive" && (
+                        patientObj.hivTestResult.toLowerCase() === "positive" &&
+                        patientObj?.riskStratificationResponseDto?.age >=
+                          15 && (
                           <Menu.Item
                             name="spam"
                             active={activeItem === "recency-testing"}
@@ -439,9 +456,7 @@ const UserRegistration = (props) => {
                           </Menu.Item>
                         )}
 
-{/*               
-
-                      {patientObj.hivTestResult &&
+                      {/* {patientObj.hivTestResult &&
                         patientObj.hivTestResult.toLowerCase() ===
                           "positive" && (
                           <Menu.Item
@@ -463,7 +478,6 @@ const UserRegistration = (props) => {
                           </Menu.Item>
                         )} */}
 
-                        
                       {/* uncomment this after  */}
 
                       {patientObj.hivTestResult &&

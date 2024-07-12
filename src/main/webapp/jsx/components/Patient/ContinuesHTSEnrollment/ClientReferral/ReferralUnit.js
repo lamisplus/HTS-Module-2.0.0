@@ -600,7 +600,7 @@ const ReferralUnit = (props) => {
               >
                 Referral Form For Referring Unit
               </div>
-
+            
               <p style={{ color: "black", marginBottom: "20px" }}>
                 <i>
                   Note: This form is to be filed by the organization making the
@@ -949,6 +949,7 @@ const ReferralUnit = (props) => {
                     <Label>
                       Sex <span style={{ color: "red" }}> *</span>
                     </Label>
+
                     <select
                       className="form-control"
                       name="sexId"
@@ -1593,9 +1594,7 @@ const ReferralUnit = (props) => {
                 </div>
               </div>
               <br />
-
               <br />
-
               {/* <hr /> */}
               <br />
               <div className="row">

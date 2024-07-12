@@ -22,6 +22,7 @@ import "react-widgets/dist/css/react-widgets.css";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { Modal } from "react-bootstrap";
+import { getCheckModality } from "../../../../utility";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -93,12 +94,8 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: "bold",
   },
 }));
-
+// THIS IS THE CREATE FORM
 const BasicInfo = (props) => {
-  console.log("patient object", props.patientObj);
-  console.log("basic", props.patientObj.clientCode);
-  console.log("############# Continues model")
-
   const classes = useStyles();
   const history = useHistory();
   const [errors, setErrors] = useState({});
@@ -118,7 +115,7 @@ const BasicInfo = (props) => {
   const [createdCode, setCreatedCode] = useState("");
   const [facilityCode, setFacilityCode] = useState("");
   const [serialNumber, setSerialNumber] = useState(null);
-
+ const [modalityCheck, setModality]=useState("")
   const [objValues, setObjValues] = useState({
     active: true,
     personId: props.patientObj.personId,
@@ -172,6 +169,7 @@ const BasicInfo = (props) => {
       ? props.patientObj.relationWithIndexClient
       : "",
     indexClientCode: "",
+    comment: ""
   });
 
   const CreateClientCode = () => {
@@ -225,7 +223,7 @@ const BasicInfo = (props) => {
   };
 
   useEffect(() => {
-    console.log("############# Continues model")
+    // console.log("############# Continues model")
 
     KP();
     EnrollmentSetting();
@@ -239,6 +237,8 @@ const BasicInfo = (props) => {
       clientCode: props.patientObj.clientCode,
     });
     CreateClientCode();
+
+    setModality(getCheckModality(props?.patientObj?.riskStratificationResponseDto?.modality));
   }, [props.patientObj, facilityCode]);
   //Get list of KP
   const KP = () => {
@@ -318,7 +318,6 @@ const BasicInfo = (props) => {
         setSourceReferral(response.data);
       })
       .catch((error) => {
-        //console.log(error);
       });
   };
   //Get list of Genders from
@@ -328,11 +327,9 @@ const BasicInfo = (props) => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        //console.log(response.data);
         setGender(response.data);
       })
       .catch((error) => {
-        //console.log(error);
       });
   };
   const handleInputChange = (e) => {
@@ -358,8 +355,29 @@ const BasicInfo = (props) => {
         }
       }
       getIndexClientCode();
+          setObjValues({ ...objValues, [e.target.name]: e.target.value });
+
+    }else if (e.target.name === "numChildren") {
+      if (e.target.value >= 0) {
+        setObjValues({ ...objValues, [e.target.name]: e.target.value });
+      } else {
+        setObjValues({
+          ...objValues,
+          [e.target.name]: 0,
+        });
+      }
+    } else if (e.target.name === "numWives") {
+      if (e.target.value >= 0) {
+        setObjValues({ ...objValues, [e.target.name]: e.target.value });
+      } else {
+        setObjValues({
+          ...objValues,
+          [e.target.name]: 0,
+        });
+      }
+    } else {
+      setObjValues({ ...objValues, [e.target.name]: e.target.value });
     }
-    setObjValues({ ...objValues, [e.target.name]: e.target.value });
   };
 
   /*****  Validation  */
@@ -415,28 +433,29 @@ const BasicInfo = (props) => {
   //     getIndexClientCode();
   //   };
   //checkClientCode
-  const checkClientCode = (e) => {
-    let code = "";
+  const checkClientCode = async (e) => {
+    // let code = "";
     if (e.target.name === "serialNumber") {
-      code = createdCode + e.target.value;
-      setCreatedCode(code);
-      console.log("Code created is &&&& ", createdCode);
+      const code = createdCode + e.target.value;
+      // setCreatedCode(code);
+      // console.log("Code created is &&&& ", createdCode);
       setObjValues({ ...objValues, clientCode: code });
+      await handleClientCodeCheck(code);
     }
-    async function getIndexClientCode() {
-      const indexClientCode = objValues.clientCode;
-      console.log(indexClientCode);
-      const response = await axios.get(
-        `${baseUrl}hts/client/${indexClientCode}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "text/plain",
-          },
-        }
-      );
-    }
-    getIndexClientCode();
+    // async function getIndexClientCode() {
+    //   const indexClientCode = objValues.clientCode;
+    //   console.log(indexClientCode);
+    //   const response = await axios.get(
+    //     `${baseUrl}hts/client/${indexClientCode}`,
+    //     {
+    //       headers: {
+    //         Authorization: `Bearer ${token}`,
+    //         "Content-Type": "text/plain",
+    //       },
+    //     }
+    //   );
+    // }
+    // getIndexClientCode();
   };
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -461,7 +480,10 @@ const BasicInfo = (props) => {
       relationWithIndexClient: objValues.relationWithIndexClient,
       riskStratificationCode:
         props.extra && props.extra.code !== "" ? props.extra.code : "",
+      comment: objValues.comment
+
     };
+
 
     if (validate()) {
       setSaving(true);
@@ -473,7 +495,7 @@ const BasicInfo = (props) => {
           setSaving(false);
           props.setPatientObj(response.data);
           //toast.success("HTS Test successful");
-          if (props.patientAge > 15) {
+          if (props.patientAge > 15 && modalityCheck === "fill") {
             handleItemClick("pre-test-counsel", "basic");
           } else {
             handleItemClick("hiv-test", "basic");
@@ -502,6 +524,34 @@ const BasicInfo = (props) => {
       });
     }
   };
+
+  // useEffect(async ()=> {
+
+  //   await handleClientCodeCheck();
+  //   temp.clientCode = clientCodeCheck === true ? "" : "This field is required.";
+    
+
+  // },[objValues.clientCode])
+
+  const handleClientCodeCheck = async (code) => {
+    // console.log("VALUE", e.target.value);
+    const data = {clientCode : code};
+    axios
+        .post(`${baseUrl}hts/clientCodeCheck`, data, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((response) => {
+          // console.log(response.data)
+          setClientCodeCheck(response.data)
+          temp.clientCodeCheck = response.data === true ? "" : "This client code already exists.";
+          setErrors({ ...temp });
+        })
+        .catch((error)=>{
+          console.log("error", error);
+          setClientCodeCheck(false)
+        })
+    
+  }
 
   return (
     <>
@@ -596,16 +646,25 @@ const BasicInfo = (props) => {
                     type="text"
                     name="clientCode"
                     id="clientCode"
+                    // value={createdCode + (serialNumber ? serialNumber : "")}
                     value={objValues.clientCode}
-                    onChange={handleInputChange}
+                    onChange={(e) => {
+                      // handleInputChange(e);
+                      // handleClientCodeCheck(e);
+                    }}
                     style={{
                       border: "1px solid #014D88",
                       borderRadius: "0.25rem",
                     }}
-                    //readOnly={props.activePage.actionType === "view"}
+                    readOnly
                   />
                   {errors.clientCode !== "" ? (
                     <span className={classes.error}>{errors.clientCode}</span>
+                  ) : (
+                    ""
+                  )}
+                  {errors.clientCode !== "" ? (
+                    <span className={classes.error}> {errors.clientCodeCheck}</span>
                   ) : (
                     ""
                   )}
@@ -831,11 +890,11 @@ const BasicInfo = (props) => {
                           borderRadius: "0.25rem",
                         }}
                       />
-                      {clientCodeCheck !== "" ? (
+                      {/* {clientCodeCheck !== "" ? (
                         <span className={classes.error}>{clientCodeCheck}</span>
                       ) : (
                         ""
-                      )}
+                      )} */}
                     </FormGroup>
                   </div>
                 </>
@@ -1010,6 +1069,29 @@ const BasicInfo = (props) => {
                   ) : (
                     ""
                   )}
+                </FormGroup>
+              </div>
+              <div className="form-group mb-3 col-md-12">
+                <FormGroup>
+                  <Label for="firstName">
+                    Comments
+                    {/* <span style={{ color: "red" }}> *</span> */}
+                  </Label>
+                  <Input
+                    className="form-control"
+                    type="textarea"
+                    rows="4"
+                    cols="7"
+                    name="comment"
+                    id="comment"
+                    value={objValues.comment}
+                    onChange={handleInputChange}
+                    style={{
+                      border: "1px solid #014D88",
+                      borderRadius: "0.2rem",
+                      height: "100px",
+                    }}
+                  />
                 </FormGroup>
               </div>
 

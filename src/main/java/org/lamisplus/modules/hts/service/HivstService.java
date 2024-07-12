@@ -21,5 +21,5 @@ public interface HivstService {
 
     Page<HivstPerson> getAllHivstPerson(String searchValue, int pageNo, int pageSize);
 
-   HivstDto updateHivst(HivstDto hivstDto);
+   List<HivstDto> updateHivst(HivstDto hivstDto, Long id);
 }

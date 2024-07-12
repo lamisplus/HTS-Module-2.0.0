@@ -257,6 +257,10 @@ public class HtsClientService {
         htsClient.setOtherDrugs(htsClientRequestDto.getOtherDrugs());
         htsClient.setHivTestResult(htsClientRequestDto.getHivTestResult());
         htsClient.setHivTestResult(htsClientRequestDto.getConfirmatoryTest2());
+
+        htsClient.setSource(htsClientRequestDto.getSource());
+        htsClient.setReferredForSti(htsClientRequestDto.getReferredForSti());
+        htsClient.setComment(htsClientRequestDto.getComment());
         return htsClient;
     }
 
@@ -309,6 +313,9 @@ public class HtsClientService {
         htsClient.setSexPartnerRiskAssessment(htsClientDto.getSexPartnerRiskAssessment());
         htsClient.setPrepOffered(htsClientDto.getPrepOffered());
         htsClient.setPrepAccepted(htsClientDto.getPrepAccepted());
+        htsClient.setSource(htsClientDto.getSource());
+        htsClient.setReferredForSti(htsClientDto.getReferredForSti());
+        htsClient.setComment(htsClientDto.getComment());
         return htsClient;
     }
 
@@ -475,8 +482,12 @@ public class HtsClientService {
         htsClientDto.setOtherDrugs(htsClient.getOtherDrugs());
         htsClientDto.setHivTestResult(htsClient.getHivTestResult());
 
-        htsClient.setPrepOffered(htsClient.getPrepOffered());
-        htsClient.setPrepAccepted(htsClient.getPrepAccepted());
+        htsClientDto.setPrepOffered(htsClient.getPrepOffered());
+        htsClientDto.setPrepAccepted(htsClient.getPrepAccepted());
+        htsClientDto.setComment(htsClient.getComment());
+
+        htsClientDto.setSource(htsClient.getSource());
+        htsClientDto.setReferredForSti(htsClient.getReferredForSti());
 
         return htsClientDto;
     }
@@ -674,5 +685,12 @@ public class HtsClientService {
         HtsClientDtos htsClientDtos = this.getHtsClientByPersonId(personId);
         htsClientDtos.setRiskStratificationResponseDtos(riskStratificationService.getAllByPersonId(personId));
         return htsClientDtos;
+    }
+
+    public Boolean checkForClientCode(String clientCode) {
+        // if the repository finds that the client code exists,
+        // should return false to indicate that
+        // this client code doesn't pass the check, else true
+        return !htsClientRepository.existsByClientCode(clientCode);
     }
 }

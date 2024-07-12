@@ -25,4 +25,5 @@ public class RiskStratificationResponseDto {
     private long personId;
     private String communityEntryPoint ;
     private  Object riskAssessment;
+    private String source;
 }

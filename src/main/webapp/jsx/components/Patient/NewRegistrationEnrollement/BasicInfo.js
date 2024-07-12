@@ -23,6 +23,7 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { Modal } from "react-bootstrap";
 //import { objectValues } from "react-toastify/dist/utils";
+import { getCheckModality } from "../../../../utility";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -89,9 +90,9 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "12.8px",
   },
 }));
-
+// THIS IS THE VIEW AND UPDATE PAGE
 const BasicInfo = (props) => {
-  console.log("#############",props.patientObj);
+  console.log("#############", props.patientObj);
   const classes = useStyles();
   const history = useHistory();
   //console.log("enr", props.activePage.activeObject);
@@ -107,7 +108,7 @@ const BasicInfo = (props) => {
   const [indexTesting, setIndexTesting] = useState([]);
   let temp = { ...errors };
   //console.log(props?.patientObj?.dateVisit)
-
+  const [modalityCheck, setModalityCheck] = useState("");
   const [objValues, setObjValues] = useState({
     active: true,
     clientCode: "",
@@ -148,6 +149,7 @@ const BasicInfo = (props) => {
     relationWithIndexClient:
       props.activePage?.activeObject?.relationWithIndexClient,
     indexClientCode: "",
+    comment: "",
   });
 
   useEffect(() => {
@@ -164,6 +166,11 @@ const BasicInfo = (props) => {
     // }
     //setObjValues({...objectValues, genderId: props.patientObj.personResponseDto.gender.id})
     //objValues.genderId = props.patientObj && props.patientObj.personResponseDto ? props.patientObj.personResponseDto.gender.id : ""
+    setModalityCheck(
+      getCheckModality(
+        props?.patientObj?.riskStratificationResponseDto?.modality
+      )
+    );
   }, [props.patientObj]);
   //Get list of KP
   const KP = () => {
@@ -260,8 +267,42 @@ const BasicInfo = (props) => {
       });
   };
   const handleInputChange = (e) => {
+    if (e.target.name === "numChildren") {
+      if (e.target.value >= 0) {
+        setObjValues({ ...objValues, [e.target.name]: e.target.value });
+      } else {
+        setObjValues({
+          ...objValues,
+          [e.target.name]: 0,
+        });
+      }
+    } else if (e.target.name === "numWives") {
+      if (e.target.value >= 0) {
+        setObjValues({ ...objValues, [e.target.name]: e.target.value });
+      } else {
+        setObjValues({
+          ...objValues,
+          [e.target.name]: 0,
+        });
+      }
+    } else {
+      setObjValues({ ...objValues, [e.target.name]: e.target.value });
+    }
     setErrors({ ...temp, [e.target.name]: "" });
-    setObjValues({ ...objValues, [e.target.name]: e.target.value });
+  };
+
+  const handleClientCodeCheck = (e) => {
+    axios
+      .get(`${baseUrl}hts/clientCodeCheck`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        //console.log(response.data);
+        setGender(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
   /*****  Validation  */
   const validate = () => {
@@ -321,6 +362,7 @@ const BasicInfo = (props) => {
         indexClientCode: objValues.indexClientCode,
         pregnant: objValues.pregnant,
         relationWithIndexClient: objValues.relationWithIndexClient,
+        comment: objValues.comment,
       };
 
       if (validate()) {
@@ -333,7 +375,7 @@ const BasicInfo = (props) => {
             setSaving(false);
             props.setPatientObj(response.data);
             toast.success("HTS Test successful");
-            if (props.patientAge > 14) {
+            if (props.patientAge > 14 && modalityCheck === "fill") {
               handleItemClick("pre-test-counsel", "basic");
             } else {
               handleItemClick("hiv-test", "basic");
@@ -357,12 +399,12 @@ const BasicInfo = (props) => {
     if (props.activePage.actionType === "view") {
       //e.preventDefault();
       setSaving(true);
-      if (props.patientAge > 14) {
+      if (props.patientAge > 14 && modalityCheck === "fill") {
         setSaving(false);
         handleItemClick("pre-test-counsel", "basic");
       } else {
         setSaving(false);
-        handleItemClick("hiv-test", "pre-test-counsel");
+        handleItemClick("hiv-test", "basic");
       }
     }
   };
@@ -371,7 +413,7 @@ const BasicInfo = (props) => {
     <>
       <Card className={classes.root}>
         <CardBody>
-          <h2 style={{ color: "#000" }}>CLIENT INTAKE FORM </h2>
+          <h2 style={{ color: "#000" }}>CLIENT INTAKE FORM</h2>
           <br />
           <form>
             <div className="row">
@@ -421,7 +463,10 @@ const BasicInfo = (props) => {
                       border: "1px solid #014D88",
                       borderRadius: "0.25rem",
                     }}
-                    readOnly={props.activePage.actionType === "view"}
+                    readOnly={
+                      props.activePage.actionType === "view" ||
+                      props.activePage.actionType === "update"
+                    }
                   />
                   {errors.clientCode !== "" ? (
                     <span className={classes.error}>{errors.clientCode}</span>
@@ -833,6 +878,30 @@ const BasicInfo = (props) => {
                   ) : (
                     ""
                   )}
+                </FormGroup>
+              </div>
+              <div className="form-group mb-3 col-md-12">
+                <FormGroup>
+                  <Label for="firstName">
+                    Comments
+                    {/* <span style={{ color: "red" }}> *</span> */}
+                  </Label>
+                  <Input
+                    className="form-control"
+                    type="textarea"
+                    rows="4"
+                    cols="7"
+                    name="comment"
+                    id="comment"
+                    value={objValues.comment}
+                    onChange={handleInputChange}
+                    style={{
+                      border: "1px solid #014D88",
+                      borderRadius: "0.2rem",
+                      height: "100px",
+                    }}
+                    disabled={props.activePage.actionType === "view"}
+                  />
                 </FormGroup>
               </div>
 

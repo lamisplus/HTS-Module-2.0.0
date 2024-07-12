@@ -299,4 +299,14 @@ public class HtsClient extends Audit implements Serializable {
     private String offeredPns;
 
     private String acceptedPns;
+
+    @Column(name = "referred_for_sti")
+    private String referredForSti;
+
+    @Column(name = "source")
+    private String source;
+    @Column(name = "comment")
+    private String comment;
+    
+
 }

@@ -2,6 +2,7 @@ package org.lamisplus.modules.hts.domain.dto;
 
 import lombok.*;
 import org.lamisplus.modules.hts.domain.entity.IndexElicitation;
+import org.lamisplus.modules.hts.domain.enums.Source;
 import org.lamisplus.modules.patient.domain.dto.PersonResponseDto;
 
 import javax.persistence.Column;
@@ -83,5 +84,9 @@ public class HtsClientDto {
     private Boolean prepAccepted;
     private String prepGiven;
     private String otherDrugs;
+    private String source;
+    private String referredForSti;
+    private String comment;
+
 
 }

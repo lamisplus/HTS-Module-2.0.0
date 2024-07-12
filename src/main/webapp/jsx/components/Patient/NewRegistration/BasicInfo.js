@@ -22,6 +22,7 @@ import "react-phone-input-2/lib/style.css";
 import { Button } from "semantic-ui-react";
 import { Modal } from "react-bootstrap";
 import { fontWeight } from "@mui/system";
+import { getCheckModality } from "../../../../utility";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -96,11 +97,10 @@ const useStyles = makeStyles((theme) => ({
 
 const BasicInfo = (props) => {
   const classes = useStyles();
-  console.log("new", props.patientObj);
   const history = useHistory();
   const [errors, setErrors] = useState({});
   const [saving, setSaving] = useState(false);
-
+  const [modalityCheck, setModalityCheck] = useState("");
   const [hideNumChild, setHideNumChild] = useState(false);
   const [kP, setKP] = useState([]);
   const [enrollSetting, setEnrollSetting] = useState([]);
@@ -166,7 +166,6 @@ const BasicInfo = (props) => {
     props.patientObj.personResponseDto.dateOfBirth
   );
 
-  console.log(props.extra);
   const [objValues, setObjValues] = useState({
     active: true,
     clientCode:
@@ -302,6 +301,7 @@ const BasicInfo = (props) => {
       ? props.patientObj.relationWithIndexClient
       : "",
     indexClientCode: "",
+    comment: "",
   });
 
   const CreateClientCode = () => {
@@ -311,7 +311,6 @@ const BasicInfo = (props) => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        // console.log('Response Facility Short Code **** ', response.data);
         setFacilityCode(response.data);
       })
       .catch((error) => {
@@ -350,7 +349,6 @@ const BasicInfo = (props) => {
       "C" + facilityCode + "/" + modalityCode + "/" + month + "/" + year + "/";
     setCreatedCode(codeCreated);
     setObjValues({ ...objValues, clientCode: createdCode });
-    // console.log('Created Code **** ', createdCode);
   };
 
   useEffect(() => {
@@ -367,7 +365,11 @@ const BasicInfo = (props) => {
     CreateClientCode();
     //objValues.dateVisit=moment(new Date()).format("YYYY-MM-DD")
     //setObjValues(props.patientObj)
-
+    setModalityCheck(
+      getCheckModality(
+        props?.patientObj?.riskStratificationResponseDto?.modality
+      )
+    );
     if (objValues.age !== "") {
       props.setPatientObjAge(objValues.age);
     }
@@ -467,7 +469,6 @@ const BasicInfo = (props) => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        //console.log(response.data);
         setEnrollSetting(response.data);
       })
       .catch((error) => {
@@ -481,7 +482,6 @@ const BasicInfo = (props) => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        //console.log(response.data);
         setMaritalStatus(response.data);
       })
       .catch((error) => {
@@ -495,7 +495,6 @@ const BasicInfo = (props) => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        //console.log(response.data);
         setSourceReferral(response.data);
       })
       .catch((error) => {
@@ -589,23 +588,32 @@ const BasicInfo = (props) => {
     if (e.target.name === "firstName" && e.target.value !== "") {
       const name = alphabetOnly(e.target.value);
       setObjValues({ ...objValues, [e.target.name]: name });
-    }
-    if (e.target.name === "lastName" && e.target.value !== "") {
+    } else if (e.target.name === "lastName" && e.target.value !== "") {
       const name = alphabetOnly(e.target.value);
       setObjValues({ ...objValues, [e.target.name]: name });
-    }
-    if (e.target.name === "middleName" && e.target.value !== "") {
+    } else if (e.target.name === "middleName" && e.target.value !== "") {
       const name = alphabetOnly(e.target.value);
       setObjValues({ ...objValues, [e.target.name]: name });
-    }
-    if (e.target.name === "sex" && e.target.value.toLowerCase() === "female") {
-      setShowPregnancy(true);
-    }
-    // else{
-    //     setHideNumChild(false)
-    // }
-
-    if (e.target.name === "indexClientCode" && e.target.value !== "") {
+    } else if (e.target.name === "numChildren") {
+      if (e.target.value >= 0) {
+        setObjValues({ ...objValues, [e.target.name]: e.target.value });
+      } else {
+        setObjValues({
+          ...objValues,
+          [e.target.name]: 0,
+        });
+      }
+    } else if (e.target.name === "numWives") {
+      if (e.target.value >= 0) {
+        setObjValues({ ...objValues, [e.target.name]: e.target.value });
+      } else {
+        setObjValues({
+          ...objValues,
+          [e.target.name]: 0,
+        });
+      }
+    } else if (e.target.name === "indexClientCode" && e.target.value !== "") {
+      setObjValues({ ...objValues, [e.target.name]: e.target.value });
       async function getIndexClientCode() {
         const indexClientCode = e.target.value;
         const response = await axios.get(
@@ -627,8 +635,13 @@ const BasicInfo = (props) => {
         }
       }
       getIndexClientCode();
+    } else {
+      setObjValues({ ...objValues, [e.target.name]: e.target.value });
     }
-    setObjValues({ ...objValues, [e.target.name]: e.target.value });
+
+    if (e.target.name === "sex" && e.target.value.toLowerCase() === "female") {
+      setShowPregnancy(true);
+    }
   };
   //checkClientCode
   const checkClientCode = (e) => {
@@ -636,12 +649,10 @@ const BasicInfo = (props) => {
     if (e.target.name === "serialNumber") {
       code = createdCode + e.target.value;
       setCreatedCode(code);
-      console.log("Code created is &&&& ", createdCode);
       setObjValues({ ...objValues, clientCode: code });
     }
     async function getIndexClientCode() {
       const indexClientCode = objValues.clientCode;
-      console.log(indexClientCode);
       const response = await axios.get(
         `${baseUrl}hts/client/${indexClientCode}`,
         {
@@ -840,10 +851,10 @@ const BasicInfo = (props) => {
         relationWithIndexClient: objValues.relationWithIndexClient,
         riskStratificationCode:
           props.extra && props.extra.code !== "" ? props.extra.code : "",
+        comment: objValues.comment,
       };
       props.setPatientObj({ ...props.patientObj, ...objValues });
 
-      //console.log(patientForm)
       axios
         .post(`${baseUrl}hts`, patientForm, {
           headers: { Authorization: `Bearer ${token}` },
@@ -856,35 +867,10 @@ const BasicInfo = (props) => {
           //props.patientObj.personResponseDto=patientForm.personDto
           //props.setPatientObj({...patientObj, })
           //toast.success("HTS Test successful");
-          if (objValues.age > 14) {
-            if (
-              props.extra.modality ===
-                "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||
-              props.extra.modality === "TEST_SETTING_STI_STI" ||
-              props.extra.modality === "TEST_SETTING_TB_TB" ||
-              props.extra.modality ===
-                "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||
-              props.extra.modality === "TEST_SETTING_CT_PMTCT" ||
-              props.extra.modality ===
-                "TEST_SETTING_OTHERS_POST_ANC1_BREASTFEEDING" ||
-              props.extra.modality ===
-                "TEST_SETTING_OTHERS_POST_ANC1_PREGNANT_L&D" ||
-              props.extra.modality ===
-                "TEST_SETTING_STANDALONE_HTS_PMTCT_(ANC1_ONLY)" ||
-              props.extra.modality ===
-                "TEST_SETTING_STANDALONE_HTS_POST_ANC1_BREASTFEEDING" ||
-              props.extra.modality ===
-                "TEST_SETTING_STANDALONE_HTS_POST_ANC1_PREGNANT_L&D" ||
-              props.extra.modality ===
-                "TEST_SETTING_STANDALONE_HTS_PMTCT_(ANC1_ONLY)" ||
-              props.extra.modality === "TEST_SETTING_STANDALONE_HTS_STI"
-            ) {
-              handleItemClick("hiv-test", "basic");
-            } else {
-              handleItemClick("pre-test-counsel", "basic");
-            }
-          } else {
+          if (objValues.age <= 15 || modalityCheck === "skip") {
             handleItemClick("hiv-test", "basic");
+          } else {
+            handleItemClick("pre-test-counsel", "basic");
           }
         })
         .catch((error) => {
@@ -915,7 +901,7 @@ const BasicInfo = (props) => {
     <>
       <Card className={classes.root}>
         <CardBody>
-          <h2 style={{ color: "#000" }}>CLIENT INTAKE FORM</h2>
+          <h2 style={{ color: "#000" }}>CLIENT INTAKE FORM </h2>
           <br />
           <form>
             <div className="row">
@@ -1644,13 +1630,6 @@ const BasicInfo = (props) => {
                   </div>
                 </>
               )}
-              {console.log(
-                objValues.sex.toLowerCase() === "female" ||
-                  props.extra.modality !==
-                    "TEST_SETTING_OTHERS_POST_ANC1_BREASTFEEDING" ||
-                  props.extra.modality !==
-                    "TEST_SETTING_STANDALONE_HTS_POST_ANC1_BREASTFEEDING"
-              )}
 
               {showPregancy && (
                 <>
@@ -1835,6 +1814,29 @@ const BasicInfo = (props) => {
                   ) : (
                     ""
                   )}
+                </FormGroup>
+              </div>
+              <div className="form-group mb-3 col-md-12">
+                <FormGroup>
+                  <Label for="firstName">
+                    Comments
+                    {/* <span style={{ color: "red" }}> *</span> */}
+                  </Label>
+                  <Input
+                    className="form-control"
+                    type="textarea"
+                    rows="4"
+                    cols="7"
+                    name="comment"
+                    id="comment"
+                    value={objValues.comment}
+                    onChange={handleInputChange}
+                    style={{
+                      border: "1px solid #014D88",
+                      borderRadius: "0.2rem",
+                      height: "100px",
+                    }}
+                  />
                 </FormGroup>
               </div>
 

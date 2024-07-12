@@ -687,6 +687,17 @@ const PnsForm = (props) => {
   const validate = () => {
     // HTS FORM VALIDATION
     temp.offeredPns = objValues.offeredPns ? "" : "This field is required.";
+
+    if (objValues.offeredPns === "No") {
+      temp.reasonForDecline = objValues.reasonForDecline
+        ? ""
+        : "This field is required.";
+      temp.otherReasonForDecline =
+        objValues.reasonForDecline === "others" &&
+        objValues.otherReasonForDecline
+          ? ""
+          : "This field is required.";
+    }
     // temp.lga = objValues.lga ? "" : "This field is required.";
     // temp.facilityId = objValues.facilityId ? "" : "This field is required.";
     // temp.testingSetting = htsClientInformation.testingSetting

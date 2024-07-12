@@ -26,7 +26,7 @@ import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
 import PanToolIcon from "@mui/icons-material/PanTool";
 //import * as moment from 'moment';
-
+import { getCheckModality } from "../../../../utility";
 const useStyles = makeStyles((theme) => ({
   card: {
     margin: theme.spacing(20),
@@ -129,6 +129,7 @@ const BasicInfo = (props) => {
   const [savingResult, setSavingRsult] = useState(false);
   const [errors, setErrors] = useState({});
   let temp = { ...errors };
+  const [modalityCheck, setModalityCheck] = useState("");
   //console.log("data_pre_test", props.patientObj);
   // const calculate_age = dob => {
   //     var today = new Date();
@@ -209,6 +210,12 @@ const BasicInfo = (props) => {
       }
       knowledgeAssessment.clientPregnant =
         props.patientObj.pregnant === 73 ? "true" : "";
+
+      setModalityCheck(
+        getCheckModality(
+          props.patientObj?.riskStratificationResponseDto?.modality
+        )
+      );
     }
   }, [props.patientObj]);
 
@@ -475,7 +482,10 @@ const BasicInfo = (props) => {
           setSaving(false);
           props.setPatientObj(response.data);
           //toast.success("Risk Assesment successful");
-          handleItemClick("hiv-test", "pre-test-counsel");
+
+          if (modalityCheck == "fill") {
+            handleItemClick("hiv-test", "pre-test-counsel");
+          }
         })
         .catch((error) => {
           setSaving(false);

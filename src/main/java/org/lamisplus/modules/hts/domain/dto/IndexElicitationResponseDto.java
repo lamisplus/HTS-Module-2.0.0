@@ -37,4 +37,5 @@ public class IndexElicitationResponseDto {
 
     private String offeredIns;
     private String acceptedIns;
+    private String source;
 }

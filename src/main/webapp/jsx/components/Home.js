@@ -72,9 +72,9 @@ const Home = () => {
                   <Tab eventKey="hts" title="HTS Patients">
                     <HTSList />
                   </Tab>
-                    <Tab eventKey="hivst" title="HIVST Patients">
-                        <HIVSTPatient />
-                    </Tab>
+                  <Tab eventKey="hivst" title="HIVST Patients">
+                    <HIVSTPatient />
+                  </Tab>
                 </Tabs>
               </div>
             </Card.Body>

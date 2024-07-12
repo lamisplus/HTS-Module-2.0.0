@@ -9,7 +9,8 @@ import ContineousRegistrationTesting from "./../Patient/ContineousRegistrationTe
 //import CheckedInPatients from './Patient/CheckedInPatients'
 import * as moment from "moment";
 import ExistenceClientHIVSTRegistration from "../Patient/HIVST/ExistenceClientHIVSTRegistration";
-import HIVSTPatientHistory from '../Patient/HIVST/HIVSTPatientHistory'
+import HIVSTPatientHistory from "../Patient/HIVST/HIVSTPatientHistory";
+import { getCheckModalityForHTS } from "../../../utility";
 
 const divStyle = {
   borderRadius: "2px",
@@ -26,12 +27,15 @@ const Home = (props) => {
       : null;
   const [key, setKey] = useState("home");
   const [lastVisitCount, setLastVisitCount] = useState(null);
+  const [checkModality, setCheckModality] = useState("");
+  const [lastVistAndModality, setLastVistAndModality] = useState("");
+
   //Calculate last date of visit
   const calculateLastVisitDate = (visitDate) => {
     const monthDifference = moment(
       new Date(moment(new Date()).format("YYYY-MM-DD"))
     ).diff(new Date(visitDate), "months", true);
-    console.log(monthDifference)
+    console.log(monthDifference);
     return monthDifference;
   };
   useEffect(() => {
@@ -49,7 +53,6 @@ const Home = (props) => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        //console.log(response.data)
         setLoading(false);
         setPatientList(response.data.htsClientDtoList);
       })
@@ -65,10 +68,36 @@ const Home = (props) => {
       })
       .then((response) => {
         //set the last date of visit after the response
-        console.log(response.data.dateVisit);
+        console.log(response.data);
+
         setLastVisitCount(
           Math.round(calculateLastVisitDate(response.data.dateVisit))
         );
+        setCheckModality(
+          getCheckModalityForHTS(
+            response.data.riskStratificationResponseDto?.modality
+          )
+        );
+
+        // new adjustment-- for patient with pmtct modality, they should skip the 3 month
+
+        let condition =
+          Math.round(calculateLastVisitDate(response.data.dateVisit)) >= 3 ||
+          getCheckModalityForHTS(
+            response.data.riskStratificationResponseDto?.modality
+          ) === "show"
+            ? true
+            : false;
+
+        console.log(
+          "tessssssssssssssssting",
+          condition,
+          calculateLastVisitDate(response.data.dateVisit),
+          getCheckModalityForHTS(
+            response.data.riskStratificationResponseDto?.modality
+          )
+        );
+        setLastVistAndModality(condition);
       })
       .catch((error) => {
         //setLoading(false)
@@ -103,41 +132,43 @@ const Home = (props) => {
                       loading={loading}
                     />
                   </Tab>
-                  {lastVisitCount !== null &&
-                    lastVisitCount >= 3 && ( //check if the last test is more than 3months
-                      <Tab eventKey="new" title="NEW HTS">
-                        <ContineousRegistrationTesting
-                          patientObj={props.patientObj}
-                          activePage={props.activePage}
-                          setActivePage={props.setActivePage}
-                          clientCode={props.clientCode}
-                          patientAge={props.patientAge}
-                          patients={patients}
-                        />
-                      </Tab>
-                    )}
-                  <Tab eventKey="hivst-history" title="HIVST HISTORY">
-                    <HIVSTPatientHistory
+
+                  {lastVistAndModality && (
+                    <Tab eventKey="new" title="NEW HTS">
+                      <ContineousRegistrationTesting
                         patientObj={props.patientObj}
-                        setPatientObj={props.setPatientObj}
                         activePage={props.activePage}
                         setActivePage={props.setActivePage}
                         clientCode={props.clientCode}
                         patientAge={props.patientAge}
                         patients={patients}
-                        patientList={patientList}
-                        loading={loading}
+                      />
+                    </Tab>
+                  )}
+                  {/* uncomment E001 */}
+                  <Tab eventKey="hivst-history" title="HIVST HISTORY">
+                    <HIVSTPatientHistory
+                      patientObj={props.patientObj}
+                      setPatientObj={props.setPatientObj}
+                      activePage={props.activePage}
+                      setActivePage={props.setActivePage}
+                      clientCode={props.clientCode}
+                      patientAge={props.patientAge}
+                      patients={patients}
+                      patientList={patientList}
+                      loading={loading}
                     />
                   </Tab>
+
                   <Tab eventKey="new-hivst" title="NEW HIVST">
-                            <ExistenceClientHIVSTRegistration
-                                patientObj={props.patientObj}
-                                activePage={props.activePage}
-                                setActivePage={props.setActivePage}
-                                clientCode={props.clientCode}
-                                patientAge={props.patientAge}
-                                patients={patients}
-                            />
+                    <ExistenceClientHIVSTRegistration
+                      patientObj={props.patientObj}
+                      activePage={props.activePage}
+                      setActivePage={props.setActivePage}
+                      clientCode={props.clientCode}
+                      patientAge={props.patientAge}
+                      patients={patients}
+                    />
                   </Tab>
                 </Tabs>
               </div>

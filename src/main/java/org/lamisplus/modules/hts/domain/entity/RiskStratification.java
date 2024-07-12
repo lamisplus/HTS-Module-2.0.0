@@ -96,6 +96,9 @@ public class RiskStratification extends Audit implements Serializable {
     @Column(name = "facility_id ")
     private Long facilityId;
 
+    @Column(name = "source")
+    private String source;
+
     @PrePersist
     public void setFields(){
         if(StringUtils.isEmpty(code)){

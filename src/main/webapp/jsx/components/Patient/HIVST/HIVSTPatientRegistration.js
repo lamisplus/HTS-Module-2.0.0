@@ -669,16 +669,14 @@ const HIVSTPatientRegistration = (props) => {
         setUserInformation(newUserInformation);
     }
 
+    console.log("userInformationList :",  userInformationList )
+    console.log("saviing :",  saving )
 
     const handleSubmit = (e) => {
         e.preventDefault()
         if (validateObjValues()) {
-
             const userInfoList = userInformationList;
             objValues.testKitUserDetails = userInformationList;
-            toast.success("HIVST Registration Successful");
-           console.log("objValues", objValues)
-
             setSaving(true)
             axios
                 .post(`${baseUrl}hivst`, objValues, {
@@ -700,7 +698,6 @@ const HIVSTPatientRegistration = (props) => {
                 });
 
         }
-
     }
 
 
@@ -1630,20 +1627,7 @@ const HIVSTPatientRegistration = (props) => {
                             {/*        </FormGroup>*/}
                             {/*    </div>*/}
                             {/*</div>*/}
-                            {objValues?.otherTestKitUserInfoAvailable === "No" &&
-                                <div className="row mb-7">
-                                    <div className="form-group mb-3 col-md-6">
-                                        <Button
-                                            content="Save wihout user Info"
-                                            icon="save"
-                                            labelPosition="right"
-                                            style={{backgroundColor: "#014d88", color: "#fff"}}
-                                            onClick={handleSubmit}
-                                            disabled={saving}
-                                        />
-                                    </div>
-                                </div>
-                            }
+
 
                             {objValues && objValues.otherTestKitUserInfoAvailable === "Yes" &&
                                 <div style={{display: 'flex', justifyContent: 'center'}}>
@@ -2060,9 +2044,9 @@ const HIVSTPatientRegistration = (props) => {
                                                         >
                                                             <DeleteIcon fontSize="inherit"/>
                                                         </IconButton>
-                                                        <IconButton>
-                                                            <EditIcon fontSize="inherit"/>
-                                                        </IconButton>
+                                                        {/*<IconButton>*/}
+                                                        {/*    <EditIcon fontSize="inherit"/>*/}
+                                                        {/*</IconButton>*/}
                                                     </td>
                                                 </tr>
                                             ))}
@@ -2071,19 +2055,52 @@ const HIVSTPatientRegistration = (props) => {
                                     </List>
                                 </div>
                                 ) : " "}
-                            {selectedUsers.length > 0 &&
-                                <div className="row">
-                                    <div className="form-group mb-3 col-md-6">
-                                        <Button
-                                            content="save"
-                                            icon="save"
-                                            labelPosition="right"
-                                            style={{backgroundColor: "#014d88", color: "#fff"}}
-                                            onClick={handleSubmit}
-                                            disabled={saving}
-                                        />
-                                    </div>
-                                </div>
+                            {/*{selectedUsers.length > 0 &&*/}
+                            {/*    <div className="row">*/}
+                            {/*        <div className="form-group mb-3 col-md-6">*/}
+                            {/*            <Button*/}
+                            {/*                content="save"*/}
+                            {/*                icon="save"*/}
+                            {/*                labelPosition="right"*/}
+                            {/*                style={{backgroundColor: "#014d88", color: "#fff"}}*/}
+                            {/*                onClick={handleSubmit}*/}
+                            {/*                // disabled={saving}*/}
+                            {/*                disabled={userInformationList.length === 0}*/}
+                            {/*            />*/}
+                            {/*        </div>*/}
+                            {/*    </div>*/}
+                            {/*}*/}
+
+                            {
+                                objValues?.otherTestKitUserInfoAvailable === "No" ?
+                                    (
+                                        <div className="row mb-7">
+                                            <div className="form-group mb-3 col-md-6">
+                                                <Button
+                                                    content="Save without user Info"
+                                                    icon="save"
+                                                    labelPosition="right"
+                                                    style={{backgroundColor: "#014d88", color: "#fff"}}
+                                                    onClick={handleSubmit}
+                                                    disabled={saving}
+                                                />
+                                            </div>
+                                        </div>
+                                    ) :
+                                    (
+                                        <div className="row">
+                                            <div className="form-group mb-3 col-md-6">
+                                                <Button
+                                                    content="Save"
+                                                    icon="save"
+                                                    labelPosition="right"
+                                                    style={{backgroundColor: "#014d88", color: "#fff"}}
+                                                    onClick={handleSubmit}
+                                                    disabled={userInformationList.length === 0}
+                                                />
+                                            </div>
+                                        </div>
+                                    )
                             }
 
                         </div>

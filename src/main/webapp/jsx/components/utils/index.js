@@ -1,4 +1,5 @@
 export const calculate_age = (dob) => {
+// the format should be YYYY-MM-DD
   if (dob !== null && dob != "") {
     //Check if the DOB is not null or empty
     const today = new Date();

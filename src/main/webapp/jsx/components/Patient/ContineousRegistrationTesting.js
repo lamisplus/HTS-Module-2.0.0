@@ -416,7 +416,7 @@ const UserRegistration = (props) => {
                           )}
                         </span>
                       </Menu.Item> */}
-                      {/* {patientObj2?.hivTestResult &&
+                      {patientObj2?.hivTestResult &&
                         patientObj2?.hivTestResult === "Positive" && (
                           <Menu.Item
                             name="spam"
@@ -435,7 +435,7 @@ const UserRegistration = (props) => {
                               )}
                             </span>
                           </Menu.Item>
-                        )} */}
+                        )}
                       {patientObj2?.hivTestResult &&
                         patientObj2?.hivTestResult === "Positive" && (
                           <Menu.Item

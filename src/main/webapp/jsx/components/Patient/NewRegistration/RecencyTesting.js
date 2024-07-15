@@ -209,7 +209,7 @@ const Recency = (props) => {
     // setSaving(true);
     //commenting this out for release
     // handleItemClick("fit", "recency-testing");
-    handleItemClick("pns", "recency-testing");
+    handleItemClick("fit", "recency-testing");
 
     toggle();
   };

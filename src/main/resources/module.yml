@@ -18,3 +18,6 @@ permissions:
   - name: hts_view
     description: View hts
     moduleName: HtsModule
+  - name: Request_and_Result_Form
+    description: Request and Result Form
+    moduleName: HtsModule

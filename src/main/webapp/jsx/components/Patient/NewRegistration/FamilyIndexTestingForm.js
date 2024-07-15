@@ -36,6 +36,7 @@ import {
 } from "../../../../utility";
 
 import { calculate_age } from "../../utils";
+import { LiveHelp } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -159,12 +160,14 @@ const FamilyIndexTestingForm = (props) => {
     motherDead: "",
     yearMotherDead: "",
     uan: "",
+    dateOfHts: "",
+    liveWithParent: "",
   });
 
   const [arrayFamilyIndexRequestDto, setArrayFamilyIndexRequestDto] = useState(
     []
   );
-    const [
+  const [
     arrayFamilyTestingTrackerRequestDTO,
     setArrayFamilyTestingTrackerRequestDTO,
   ] = useState([]);
@@ -208,15 +211,13 @@ const FamilyIndexTestingForm = (props) => {
     extra: {},
     facilityName: "",
     familyIndexClient: "",
-    familyIndexRequestDto: 
-      {
-        childNumber: 0,
-        familyRelationship: "",
-        motherDead: "",
-        yearMotherDead: "",
+    familyIndexRequestDto: {
+      childNumber: 0,
+      familyRelationship: "",
+      motherDead: "",
+      yearMotherDead: "",
 
- familyTestingTrackerRequestDTO: 
-      {
+      familyTestingTrackerRequestDTO: {
         attempt: "",
         dateEnrolledInOVC: "",
         dateEnrolledOnArt: "",
@@ -232,20 +233,15 @@ const FamilyIndexTestingForm = (props) => {
         trackerAge: 0,
         trackerSex: "",
 
-        // not there 
-            familyIndexTestingId: 0,
-            familyIndexTestingUuid: "",
-      },
-    
-
-
-// not there 
-        familyIndexHivStatus: "",
+        // not there
+        familyIndexTestingId: 0,
         familyIndexTestingUuid: "",
-    
       },
-    
-   
+
+      // not there
+      familyIndexHivStatus: "",
+      familyIndexTestingUuid: "",
+    },
 
     htsClientId: props && props.patientObj ? props.patientObj?.id : "",
     htsClientUuid: "",
@@ -258,13 +254,11 @@ const FamilyIndexTestingForm = (props) => {
       props?.patientObj?.personResponseDto?.contactPoint?.contactPoint[0]
         ?.value,
     recencyTesting: "",
-   setting: props.patientObj.testingSetting,
-        // chnage position
+    setting: props.patientObj.testingSetting,
+    // chnage position
     middleName: props?.patientObj?.personResponseDto?.otherName,
     lastName: props?.patientObj?.personResponseDto?.surname,
     visitDate: "",
-   
-    
 
     sex: props?.patientObj?.personResponseDto?.gender?.id,
     state: "",
@@ -334,42 +328,51 @@ const FamilyIndexTestingForm = (props) => {
     let temp = {};
 
     // if all are empty
+    if(familyTestingTrackerRequestDTO?.knownHivPositive === "Yes"){
+            temp.dateTested =
+        familyTestingTrackerRequestDTO?.dateTested === "" ? "field is required" : "";
+            temp.dateTested =
+              familyTestingTrackerRequestDTO.hiveTestResult === ""
+                ? "field is required"
+                : "";
 
-    if (
-      familyIndexRequestDto.familyRelationship === "" &&
-      familyIndexRequestDto.familyIndexHivStatus === "" &&
-      familyIndexRequestDto.motherDead === ""
-    ) {
-      setaAddIndexTracker(true);
-    } else {
-      setaAddIndexTracker(false);
 
-      temp.familyRelationship =
-        familyIndexRequestDto.familyRelationship === ""
-          ? "field is required"
-          : "";
-      temp.childNumber =
-        familyIndexRequestDto.familyRelationship ===
-          "FAMILY_RELATIONSHIP_BIOLOGICAL_CHILD" &&
-        familyIndexRequestDto.childNumber === ""
-          ? "field is required"
-          : "";
+    }
+    
+    // if (
+    //   familyIndexRequestDto.familyRelationship === "" &&
+    //   familyIndexRequestDto.familyIndexHivStatus === "" &&
+    //   familyIndexRequestDto.motherDead === ""
+    // ) {
+    //   setaAddIndexTracker(true);
+    // } else {
+    //   setaAddIndexTracker(false);
 
-      temp.familyIndexHivStatus =
-        familyIndexRequestDto.familyIndexHivStatus === ""
-          ? "field is required"
-          : "";
-      temp.motherDead =
-        familyIndexRequestDto.motherDead === "" ? "field is required" : "";
-      temp.yearMotherDead =
-        familyIndexRequestDto.motherDead.toLowerCase() === "yes" &&
-        familyIndexRequestDto.yearMotherDead === ""
-          ? "field is required"
-          : "";
+    //   temp.familyRelationship =
+    //     familyIndexRequestDto.familyRelationship === ""
+    //       ? "field is required"
+    //       : "";
+    //   temp.childNumber =
+    //     familyIndexRequestDto.familyRelationship ===
+    //       "FAMILY_RELATIONSHIP_BIOLOGICAL_CHILD" &&
+    //     familyIndexRequestDto.childNumber === ""
+    //       ? "field is required"
+    //       : "";
 
+    //   temp.familyIndexHivStatus =
+    //     familyIndexRequestDto.familyIndexHivStatus === ""
+    //       ? "field is required"
+    //       : "";
+
+    //   temp.yearMotherDead =
+    //     familyIndexRequestDto.motherDead.toLowerCase() === "yes" &&
+    //     familyIndexRequestDto.yearMotherDead === ""
+    //       ? "field is required"
+    //       : "";
+    // }
       setErrorFamilyIndexDTO({ ...temp });
       return Object.values(temp).every((x) => x == "");
-    }
+
   };
 
   const loadFacilities = (id) => {
@@ -579,10 +582,24 @@ const FamilyIndexTestingForm = (props) => {
     setErrorFamilyIndexDTO({ ...errorFamilyIndexDTO, [e.target.name]: "" });
     setaAddIndexTracker(false);
     // console.log(e);
-    setFamilyIndexRequestDto({
-      ...familyIndexRequestDto,
-      [e.target.name]: e.target.value,
-    });
+    if (e.target.name === "childNumber") {
+      setFamilyIndexRequestDto({
+        ...familyIndexRequestDto,
+        [e.target.name]: e.target.value,
+      });
+      console.log(e.target.value);
+
+      //set position to child number
+      setFamilyTestingTrackerRequestDTO({
+        ...familyTestingTrackerRequestDTO,
+        positionOfChildEnumerated: e.target.value,
+      });
+    } else {
+      setFamilyIndexRequestDto({
+        ...familyIndexRequestDto,
+        [e.target.name]: e.target.value,
+      });
+    }
 
     // clearf the error with e.target.name
     setErrors({ ...errors, [e.target.name]: "" });
@@ -646,6 +663,32 @@ const FamilyIndexTestingForm = (props) => {
     // setSaving(true);
     handleItemClick("pns", "fit");
     toggle();
+  };
+
+  const getSelectedDFamilyIndex = (relationship) => {
+    // use the code to get object in the codeset
+    let result = familyIndex.filter((each, index) => {
+      return each.code === relationship;
+    });
+    console.log(result);
+    // filter family relationship
+    let result2 = familyRelationship.filter((each, index) => {
+      if (
+        each.display === "Biological Child" &&
+        result[0].display === "Child"
+      ) {
+        return each;
+      } else {
+        return each.display === result[0].display;
+      }
+    });
+
+    if (result2.length > 0) {
+      setFamilyIndexRequestDto({
+        ...familyIndexRequestDto,
+        familyRelationship: result2[0].code,
+      });
+    }
   };
 
   // const handleSubmitfamilyTestingTrackerRequestDTO = (e) => {
@@ -911,6 +954,10 @@ const FamilyIndexTestingForm = (props) => {
       }
 
       getHosiptalNumber();
+    } else if (e.target.name === "familyIndexClient" && e.target.value !== "") {
+      getSelectedDFamilyIndex(e.target.value);
+
+      setPayload({ ...payload, [e.target.name]: e.target.value });
     } else {
       console.log(e.target.name, e.target.value);
       setPayload({ ...payload, [e.target.name]: e.target.value });
@@ -1027,7 +1074,7 @@ const FamilyIndexTestingForm = (props) => {
       .then((response) => {
         setSaving(false);
 
-        toast.success("Family Indexform save succesfully!");
+        toast.success("Family Index form save succesfully!");
 
         if (props.history) {
           handleItemClick("pns-history", "fit");
@@ -1064,7 +1111,8 @@ const FamilyIndexTestingForm = (props) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     payload.familyIndexRequestDto = familyIndexRequestDto;
-    payload.familyIndexRequestDto.familyTestingTrackerRequestDTO = familyTestingTrackerRequestDTO;
+    payload.familyIndexRequestDto.familyTestingTrackerRequestDTO =
+      familyTestingTrackerRequestDTO;
     payload.state = stateInfo;
     payload.lga = lgaInfo;
     payload.facilityName = facilityInfo.currentOrganisationUnitName;
@@ -1348,7 +1396,7 @@ const FamilyIndexTestingForm = (props) => {
                       <option value={""}>Select</option>
                       {familyIndex &&
                         familyIndex.map((x, index) => (
-                          <option key={x.id} value={x.id}>
+                          <option key={x.id} value={x.code}>
                             {x.display}
                           </option>
                         ))}
@@ -1577,53 +1625,8 @@ const FamilyIndexTestingForm = (props) => {
                         </option>
                       ))}
                     </select>
-                    {/* {errors.setting !== "" ? (
-                                            <span className={classes.error}>
-                                                {errors.setting}
-                                            </span>
-                                        ) : (
-                                            ""
-                                        )} */}
                   </FormGroup>
                 </div>
-                {/*<div className="form-group  col-md-4">*/}
-                {/*  <FormGroup>*/}
-                {/*    <Label>*/}
-                {/*      Phone Number <span style={{color: "red"}}> *</span>*/}
-                {/*    </Label>*/}
-                {/*    <PhoneInput*/}
-                {/*        // disabled={true}*/}
-                {/*        containerStyle={{*/}
-                {/*          width: "100%",*/}
-                {/*          border: "1px solid #014D88",*/}
-                {/*        }}*/}
-                {/*        inputStyle={{width: "100%", borderRadius: "0px"}}*/}
-                {/*        country={"ng"}*/}
-                {/*        placeholder="(234)7099999999"*/}
-                {/*        maxLength={5}*/}
-                {/*        name="phoneNumber"*/}
-                {/*        id="phoneNumber"*/}
-                {/*        masks={{ng: "...-...-....", at: "(....) ...-...."}}*/}
-                {/*        value={payload.phoneNumber}*/}
-                {/*        onChange={(e) => {*/}
-                {/*          checkPhoneNumberBasic(e, "phoneNumber");*/}
-                {/*        }}*/}
-                {/*        disabled*/}
-                {/*        //onChange={(e)=>{handleInputChangeBasic(e,'phoneNumber')}}*/}
-                {/*    />*/}
-
-                {/*    {errors.phoneNumber !== "" ? (*/}
-                {/*        <span className={classes.error}>*/}
-                {/*        {errors.phoneNumber}*/}
-                {/*      </span>*/}
-                {/*    ) : (*/}
-                {/*        ""*/}
-                {/*    )}*/}
-                {/*    /!* {basicInfo.phoneNumber.length >13 ||  basicInfo.phoneNumber.length <13? (*/}
-                {/*                                <span className={classes.error}>{"The maximum and minimum required number is 13 digit"}</span>*/}
-                {/*                                ) : "" } *!/*/}
-                {/*  </FormGroup>*/}
-                {/*</div>*/}
 
                 <div className="form-group  col-md-4">
                   <FormGroup>
@@ -1654,45 +1657,10 @@ const FamilyIndexTestingForm = (props) => {
                     )}
                   </FormGroup>
                 </div>
-                {/*<div className="form-group  col-md-4">*/}
-                {/*  <FormGroup>*/}
-                {/*    <Label>Alternative Contact Number</Label>*/}
-                {/*    <PhoneInput*/}
-                {/*        // disabled={true}*/}
-                {/*        containerStyle={{*/}
-                {/*          width: "100%",*/}
-                {/*          border: "1px solid #014D88",*/}
-                {/*        }}*/}
-                {/*        inputStyle={{width: "100%", borderRadius: "0px"}}*/}
-                {/*        country={"ng"}*/}
-                {/*        placeholder="(234)7099999999"*/}
-                {/*        maxLength={5}*/}
-                {/*        name="alternatePhoneNumber"*/}
-                {/*        id="alternatePhoneNumber"*/}
-                {/*        masks={{ng: "...-...-....", at: "(....) ...-...."}}*/}
-                {/*        value={payload.alternatePhoneNumber}*/}
-                {/*        onChange={(e) => {*/}
-                {/*          checkPhoneNumberBasic(e, "alternatePhoneNumber");*/}
-                {/*        }}*/}
-                {/*        //onChange={(e)=>{handleInputChangeBasic(e,'phoneNumber')}}*/}
-                {/*    />*/}
-
-                {/*    /!*{errors.phoneNumber !== "" ? (*!/*/}
-                {/*    /!*    <span className={classes.error}>*!/*/}
-                {/*    /!*        {errors.phoneNumber}*!/*/}
-                {/*    /!*    </span>*!/*/}
-                {/*    /!*) : (*!/*/}
-                {/*    /!*    ""*!/*/}
-                {/*    /!*)}*!/*/}
-                {/*  </FormGroup>*/}
-                {/*</div>*/}
 
                 <div className="form-group  col-md-4">
                   <FormGroup>
-                    <Label>
-                      Alternative Contact Number
-                      <span style={{ color: "red" }}> *</span>
-                    </Label>
+                    <Label>Alternative Contact Number</Label>
                     <Input
                       type="text"
                       name="alternatePhoneNumber"
@@ -1816,6 +1784,25 @@ const FamilyIndexTestingForm = (props) => {
                     Recency Testing{" "}
                     <span> (for newly tested HIV-positive only) </span>{" "}
                   </Label>
+
+                  {/* {
+                    <FormGroup>
+                      <Input
+                        className="form-control"
+                        name="finalRecencyResult"
+                        id="finalRecencyResult"
+                        type="text"
+                        disabled
+                        // value={recency.finalRecencyResult}
+                        // onChange={handleInputChangeRecency}
+                        style={{
+                          border: "1px solid #014D88",
+                          borderRadius: "0.2rem",
+                        }}
+                        disabled
+                      />
+                    </FormGroup>
+                  } */}
                   <FormGroup>
                     <select
                       className="form-control"
@@ -1895,27 +1882,29 @@ const FamilyIndexTestingForm = (props) => {
                       </FormGroup>
                     </div>
                   )}
-               {payload.isClientCurrentlyOnHivTreatment &&
-                  payload.isClientCurrentlyOnHivTreatment === "Yes" && <div className="form-group col-md-4 ">
-                  <Label>virally unsuppressed</Label>
-                  <FormGroup>
-                    <select
-                      className="form-control"
-                      name="virallyUnSuppressed"
-                      id="virallyUnSuppressed"
-                      onChange={handleInputChange}
-                      value={payload.virallyUnSuppressed}
-                      style={{
-                        border: "1px solid #014D88",
-                        borderRadius: "0.2rem",
-                      }}
-                    >
-                      <option value="">Select</option>
-                      <option value="Yes">Yes</option>
-                      <option value="No">No</option>
-                    </select>
-                  </FormGroup>
-                </div>}
+                {payload.isClientCurrentlyOnHivTreatment &&
+                  payload.isClientCurrentlyOnHivTreatment === "Yes" && (
+                    <div className="form-group col-md-4 ">
+                      <Label>virally unsuppressed</Label>
+                      <FormGroup>
+                        <select
+                          className="form-control"
+                          name="virallyUnSuppressed"
+                          id="virallyUnSuppressed"
+                          onChange={handleInputChange}
+                          value={payload.virallyUnSuppressed}
+                          style={{
+                            border: "1px solid #014D88",
+                            borderRadius: "0.2rem",
+                          }}
+                        >
+                          <option value="">Select</option>
+                          <option value="Yes">Yes</option>
+                          <option value="No">No</option>
+                        </select>
+                      </FormGroup>
+                    </div>
+                  )}
                 <div className="form-group col-md-4">
                   <FormGroup>
                     <Label for="willingToHaveChildrenTestedElseWhere">
@@ -1954,6 +1943,30 @@ const FamilyIndexTestingForm = (props) => {
               </div>
             </div>
             <div className="row">
+              <div className="form-group col-md-4">
+                <FormGroup>
+                  <Label for="DateofHTS">Date of HTS</Label>
+                  <Input
+                    type="date"
+                    name="dateOfHts"
+                    id="dateOfHts"
+                    value={familyIndexRequestDto.dateOfHts}
+                    onChange={handlefamilyIndexRequestDto}
+                    min="1929-12-31"
+                    max={moment(new Date()).format("YYYY-MM-DD")}
+                    style={{
+                      border: "1px solid #014D88",
+                      borderRadius: "0.25rem",
+                    }}
+                    // disabled
+                  />
+                  {errorFamilyIndexDTO.familyRelationship && (
+                    <span className={classes.error}>
+                      {errorFamilyIndexDTO.familyRelationship}
+                    </span>
+                  )}
+                </FormGroup>
+              </div>
               <div className="form-group col-md-4">
                 <FormGroup>
                   <Label for="familyRelationship">Family Relationship</Label>
@@ -1998,6 +2011,7 @@ const FamilyIndexTestingForm = (props) => {
                       <option value="5">5th Child</option>
                       <option value="6">6th Child</option>
                       <option value="7">7th Child</option>
+                      {/* <option value="others">Others</option> */}
                     </select>
                     {errorFamilyIndexDTO.childNumber && (
                       <span className={classes.error}>
@@ -2007,11 +2021,53 @@ const FamilyIndexTestingForm = (props) => {
                   </FormGroup>
                 </div>
               )}
+              {/* <div className="form-group col-md-4">
+                <FormGroup>
+                  <Label for="DateofHTS">Other Child Number </Label>
+                  <Input
+                    type="date"
+                    name="otherChildNumber"
+                    id="otherChildNumber"
+                    value={familyIndexRequestDto.otherChildNumber}
+                    onChange={handlefamilyIndexRequestDto}
+                    min="1929-12-31"
+                    max={moment(new Date()).format("YYYY-MM-DD")}
+                    style={{
+                      border: "1px solid #014D88",
+                      borderRadius: "0.25rem",
+                    }}
+                    // disabled
+                  />
+                  {errorFamilyIndexDTO.familyRelationship && (
+                    <span className={classes.error}>
+                      {errorFamilyIndexDTO.familyRelationship}
+                    </span>
+                  )}
+                </FormGroup>
+              </div> */}
+              {familyIndexRequestDto.familyRelationship ===
+                "FAMILY_RELATIONSHIP_BIOLOGICAL_CHILD" && (
+                <div className="form-group col-md-4">
+                  <FormGroup>
+                    <Label for="liveWithParent">Live with Parent</Label>
+                    <select
+                      className="form-control"
+                      id="liveWithParent"
+                      name="liveWithParent"
+                      onChange={handlefamilyIndexRequestDto}
+                      value={familyIndexRequestDto.liveWithParent}
+                    >
+                      <option value="">Select</option>
+                      <option value="yes">Yes</option>
+                      <option value="no">No</option>
+                    </select>
+                  </FormGroup>
+                </div>
+              )}
+
               <div className="form-group col-md-4">
                 <FormGroup>
-                  <Label for="familyIndexHivStatus">
-                    Family Index HIV Status
-                  </Label>
+                  <Label for="familyIndexHivStatus">Contact HIV Status</Label>
                   <select
                     className="form-control"
                     id="familyIndexHivStatus"
@@ -2022,7 +2078,7 @@ const FamilyIndexTestingForm = (props) => {
                     <option value="">Select</option>
                     {familyIndexHivStatus.map((value, index) => (
                       <option key={index} value={value.code}>
-                        {index}
+                        {value.display}
                       </option>
                     ))}
                   </select>
@@ -2033,15 +2089,10 @@ const FamilyIndexTestingForm = (props) => {
                   )}
                 </FormGroup>
               </div>
+
               {familyIndexRequestDto.familyIndexHivStatus &&
                 familyIndexRequestDto.familyIndexHivStatus ===
-                  "FAMILY_INDEX_HIV_STATUS_CURRENT_ON_ART" &&
-                [
-                  "FAMILY_RELATIONSHIP_BIOLOGICAL_CHILD",
-                  "FAMILY_RELATIONSHIP_FATHER",
-                  "FAMILY_RELATIONSHIP_MOTHER",
-                  "FAMILY_RELATIONSHIP_SIBLINGS",
-                ].includes(familyIndexRequestDto.familyRelationship) && (
+                  "FAMILY_INDEX_HIV_STATUS_CURRENT_ON_ART" && (
                   <div className="form-group col-md-4">
                     <FormGroup>
                       <Label for="uan">Unique Art No (UAN)</Label>
@@ -2063,27 +2114,33 @@ const FamilyIndexTestingForm = (props) => {
                     </FormGroup>
                   </div>
                 )}
-              <div className="form-group col-md-4">
-                <FormGroup>
-                  <Label for="motherDead">Mother Dead?</Label>
-                  <select
-                    className="form-control"
-                    id="motherDead"
-                    name="motherDead"
-                    onChange={handlefamilyIndexRequestDto}
-                    value={familyIndexRequestDto.motherDead}
-                  >
-                    <option value="">Select</option>
-                    <option value="Yes">Yes</option>
-                    <option value="No">No</option>
-                  </select>
-                  {errorFamilyIndexDTO.motherDead && (
-                    <span className={classes.error}>
-                      {errorFamilyIndexDTO.motherDead}
-                    </span>
-                  )}
-                </FormGroup>
-              </div>
+
+              {familyIndexRequestDto.familyRelationship &&
+                familyIndexRequestDto.familyRelationship !==
+                  "FAMILY_RELATIONSHIP_MOTHER" && (
+                  <div className="form-group col-md-4">
+                    <FormGroup>
+                      <Label for="motherDead">Mother Dead?</Label>
+                      <select
+                        className="form-control"
+                        id="motherDead"
+                        name="motherDead"
+                        onChange={handlefamilyIndexRequestDto}
+                        value={familyIndexRequestDto.motherDead}
+                      >
+                        <option value="">Select</option>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                      </select>
+                      {errorFamilyIndexDTO.motherDead && (
+                        <span className={classes.error}>
+                          {errorFamilyIndexDTO.motherDead}
+                        </span>
+                      )}
+                    </FormGroup>
+                  </div>
+                )}
+
               {familyIndexRequestDto.motherDead === "Yes" && (
                 <div className="form-group col-md-4">
                   <FormGroup>
@@ -2364,7 +2421,7 @@ const FamilyIndexTestingForm = (props) => {
                   </FormGroup>
                 </div>
                 <div className="form-group col-md-4 ">
-                  <Label>Known HIV Positive ?</Label>
+                  <Label>Known HIV Status  ?</Label>
                   <FormGroup>
                     <select
                       className="form-control"
@@ -2402,9 +2459,9 @@ const FamilyIndexTestingForm = (props) => {
                           }}
                           // disabled
                         />
-                        {errors.referralDate !== "" ? (
+                        {errors.dateTested !== "" ? (
                           <span className={classes.error}>
-                            {errors.referralDate}
+                            {errors.dateTested }
                           </span>
                         ) : (
                           ""
@@ -2440,8 +2497,7 @@ const FamilyIndexTestingForm = (props) => {
                       </FormGroup>
                     </div>
                   )}
-                {console.log("patient agee reaching ", payload.age)}
-                {payload.age < 21 && (
+                {familyTestingTrackerRequestDTO?.trackerAge < 21 && (
                   <div className="form-group mb-3 col-md-4">
                     <FormGroup>
                       <Label for="">Date Enrolled In Ovc</Label>
@@ -2471,32 +2527,36 @@ const FamilyIndexTestingForm = (props) => {
                     </FormGroup>
                   </div>
                 )}
-                <div className="form-group mb-3 col-md-4">
-                  <FormGroup>
-                    <Label for="">Date Enrolled On ART</Label>
-                    <Input
-                      type="date"
-                      name="dateEnrolledOnArt"
-                      id="dateEnrolledOnArt"
-                      value={familyTestingTrackerRequestDTO?.dateEnrolledOnArt}
-                      onChange={handlefamilyTestingTrackerRequestDTO}
-                      min="1929-12-31"
-                      max={moment(new Date()).format("YYYY-MM-DD")}
-                      style={{
-                        border: "1px solid #014D88",
-                        borderRadius: "0.25rem",
-                      }}
-                      // disabled
-                    />
-                    {errors.referralDate !== "" ? (
-                      <span className={classes.error}>
-                        {errors.referralDate}
-                      </span>
-                    ) : (
-                      ""
-                    )}
-                  </FormGroup>
-                </div>
+                {familyTestingTrackerRequestDTO?.knownHivPositive === "No" && (
+                  <div className="form-group mb-3 col-md-4">
+                    <FormGroup>
+                      <Label for="">Date Enrolled On ART</Label>
+                      <Input
+                        type="date"
+                        name="dateEnrolledOnArt"
+                        id="dateEnrolledOnArt"
+                        value={
+                          familyTestingTrackerRequestDTO?.dateEnrolledOnArt
+                        }
+                        onChange={handlefamilyTestingTrackerRequestDTO}
+                        min="1929-12-31"
+                        max={moment(new Date()).format("YYYY-MM-DD")}
+                        style={{
+                          border: "1px solid #014D88",
+                          borderRadius: "0.25rem",
+                        }}
+                        // disabled
+                      />
+                      {errors.referralDate !== "" ? (
+                        <span className={classes.error}>
+                          {errors.referralDate}
+                        </span>
+                      ) : (
+                        ""
+                      )}
+                    </FormGroup>
+                  </div>
+                )}
                 {/* {addIndexTracker2 && (
                   <div className="form-group mb-3 col-md-12">
                     <p style={{ color: "red" }}>

@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,4 +36,7 @@ public interface HivstRepository extends JpaRepository<Hivst, Long>{
             "OR p.hospital_number ILIKE ?3 OR hst.client_code ILIKE ?3) " +
             "GROUP BY hst.client_code, hst.id, p.id, p.first_name, p.first_name, p.surname, p.other_name, p.hospital_number, p.date_of_birth", nativeQuery = true)
     Page<HivstPerson> findAllPersonHivstBySearchParam(Integer archived, Long facilityId, String search, Pageable pageable);
+
+    @Query(value = "SELECT * from hivst where patient_id = ?1 and date_of_visit = ?2 LIMIT 1 ", nativeQuery = true)
+    Optional<Hivst> findOneByPatientIdAndDateOfVisit(Long patientId, LocalDate dateOfVisit);
 }

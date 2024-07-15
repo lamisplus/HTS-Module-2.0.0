@@ -52,8 +52,8 @@ public class HivstController {
 //    }
 
     @PutMapping("/{id}")
-    public HivstDto updateHivst(@RequestBody HivstDto hivstDto) {
-        return hivstService.updateHivst(hivstDto);
+    public List<HivstDto> updateHivst(@RequestBody HivstDto hivstDto, @PathVariable Long id) {
+        return hivstService.updateHivst(hivstDto, id);
     }
 
     @DeleteMapping("/{id}")

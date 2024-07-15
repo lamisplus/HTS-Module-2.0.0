@@ -2122,7 +2122,8 @@ const ViewEditHivst = (props) => {
                                             labelPosition="right"
                                             style={{backgroundColor: "#014d88", color: "#fff"}}
                                             onClick={handleSubmit}
-                                            disabled={saving}
+                                            // disabled={saving}
+                                            disabled={userInformationList.length === 0}
                                         />
                                     </div>
                                 </div>

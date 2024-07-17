@@ -56,6 +56,7 @@ const UserRegistration = (props) => {
     //setCompleted({...completed, ...completedMenu})
   };
 
+  const [permissions, setPermission]= useState(localStorage.getItem("permissions")?.split(","))
   const getFacilityAccount = () => {
     getAcount()
       .then((response) => {
@@ -270,13 +271,7 @@ const UserRegistration = (props) => {
   }, []);
 
   useEffect(() => {
-    console.log(
-      "component on mountttttttttttttt",
-      patientObj?.riskStratificationResponseDto?.modality,
-      getCheckModality(patientObj?.riskStratificationResponseDto?.modality),
-      "but modaqlity is ",
-      modalityCheck
-    );
+  
     setModalityCheck(
       getCheckModality(patientObj?.riskStratificationResponseDto?.modality)
     );
@@ -368,7 +363,6 @@ const UserRegistration = (props) => {
                           )}
                         </span>
                       </Menu.Item>
-                
 
                       {props.patientAge >= 15 && modalityCheck == "fill" && (
                         <Menu.Item
@@ -393,25 +387,25 @@ const UserRegistration = (props) => {
                         </Menu.Item>
                       )}
 
-                      <Menu.Item
-                        name="inbox"
-                        active={activeItem === "hiv-test"}
-                        onClick={() => handleItemClick("hiv-test")}
-                        style={{
-                          backgroundColor:
-                            activeItem === "hiv-test" ? "#000" : "",
-                        }}
-                        disabled={activeItem !== "hiv-test" ? true : false}
-                      >
-                        <span style={{ color: "#fff" }}>
-                          Request {"&"} Result Form
-                          {completed.includes("hiv-test") && (
-                            <Icon name="check" color="green" />
-                          )}
-                        </span>
-
-                        {/* <Label color='teal'>3</Label> */}
-                      </Menu.Item>
+                      {permissions.includes("Request_and_Result_Form") && (
+                        <Menu.Item
+                          name="inbox"
+                          active={activeItem === "hiv-test"}
+                          onClick={() => handleItemClick("hiv-test")}
+                          style={{
+                            backgroundColor:
+                              activeItem === "hiv-test" ? "#000" : "",
+                          }}
+                          disabled={activeItem !== "hiv-test" ? true : false}
+                        >
+                          <span style={{ color: "#fff" }}>
+                            Request {"&"} Result Form
+                            {completed.includes("hiv-test") && (
+                              <Icon name="check" color="green" />
+                            )}
+                          </span>
+                        </Menu.Item>
+                      )}
                       <Menu.Item
                         name="spam"
                         active={activeItem === "post-test"}
@@ -480,7 +474,8 @@ const UserRegistration = (props) => {
 
                       {/* uncomment this after  */}
 
-                      {patientObj.hivTestResult &&
+                      {permissions.includes("Nigeria_PNS_Form") &&
+                        patientObj.hivTestResult &&
                         patientObj.hivTestResult.toLowerCase() ===
                           "positive" && (
                           <Menu.Item
@@ -501,57 +496,26 @@ const UserRegistration = (props) => {
                             </span>
                           </Menu.Item>
                         )}
-                      {/*<Menu.Item
-                      {/*    name="inbox"*/}
-                      {/*    active={activeItem === "refferal"}*/}
-                      {/*    onClick={() => handleItemClick("refferal")}*/}
-                      {/*    style={{*/}
-                      {/*      backgroundColor:*/}
-                      {/*          activeItem === "refferal" ? "#000" : "",*/}
-                      {/*    }}*/}
-                      {/*>*/}
-                      {/*  <span style={{ color: "#fff" }}>*/}
-                      {/*    {" "}*/}
-                      {/*    Client Refferral Form*/}
-                      {/*    {completed.includes("referral") && (*/}
-                      {/*        <Icon name="check" color="green" />*/}
-                      {/*    )}*/}
-                      {/*  </span>*/}
-                      {/*</Menu.Item>*/}
-                      {/*<Menu.Item*/}
-                      {/*  name="inbox"*/}
-                      {/*  active={activeItem === "new-referral"}*/}
-                      {/*  onClick={() => handleItemClick("new-referral")}*/}
-                      {/*  style={{*/}
-                      {/*    backgroundColor:*/}
-                      {/*      activeItem === "new-referral" ? "#000" : "",*/}
-                      {/*  }}*/}
-                      {/*>*/}
-                      {/*  <span style={{ color: "#fff" }}>*/}
-                      {/*    {" "}*/}
-                      {/*    Client Referral Service*/}
-                      {/*    {completed.includes("new-referral") && (*/}
-                      {/*      <Icon name="check" color="green" />*/}
-                      {/*    )}*/}
-                      {/*  </span>*/}
-                      {/*</Menu.Item>*/}
-                      <Menu.Item
-                        name="inbox"
-                        active={activeItem === "refferal-history"}
-                        onClick={() => handleItemClick("refferal-history")}
-                        style={{
-                          backgroundColor:
-                            activeItem === "refferal-history" ? "#000" : "",
-                        }}
-                      >
-                        <span style={{ color: "#fff" }}>
-                          {" "}
-                          Client Referral Service
-                          {completed.includes("refferal") && (
-                            <Icon name="check" color="green" />
-                          )}
-                        </span>
-                      </Menu.Item>
+
+                      {permissions.includes("Referral_Form") && (
+                        <Menu.Item
+                          name="inbox"
+                          active={activeItem === "refferal-history"}
+                          onClick={() => handleItemClick("refferal-history")}
+                          style={{
+                            backgroundColor:
+                              activeItem === "refferal-history" ? "#000" : "",
+                          }}
+                        >
+                          <span style={{ color: "#fff" }}>
+                            {" "}
+                            Client Referral Service
+                            {completed.includes("refferal") && (
+                              <Icon name="check" color="green" />
+                            )}
+                          </span>
+                        </Menu.Item>
+                      )}
                     </>
                   )}
                 </Menu>

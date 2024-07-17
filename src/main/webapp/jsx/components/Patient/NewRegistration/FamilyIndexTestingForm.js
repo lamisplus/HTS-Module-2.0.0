@@ -142,7 +142,9 @@ const FamilyIndexTestingForm = (props) => {
       ? props?.basicInfo?.personResponseDto?.address?.address[0]?.stateId
       : props?.patientObj?.personResponseDto?.address?.address[0]?.stateId
   );
-
+  const [permissions, setPermission] = useState(
+    localStorage.getItem("permissions")?.split(",")
+  );
   const [lgaInfo, setLgaInfo] = useState(
     props?.basicInfo?.personResponseDto?.address?.address[0].district
       ? props?.basicInfo?.personResponseDto?.address?.address[0].district
@@ -644,8 +646,15 @@ const FamilyIndexTestingForm = (props) => {
   };
   const loadNextForm = (row) => {
     // setSaving(true);
-    handleItemClick("pns", "fit");
-    toggle();
+    if (permissions.includes("Nigeria_PNS_Form")) {
+          handleItemClick("pns", "fit");
+          toggle();
+
+    }else if (permissions.includes("Referral_Form")) {
+            handleItemClick("pns", "client-referral");
+            toggle();
+
+          }
   };
 
   // const handleSubmitfamilyTestingTrackerRequestDTO = (e) => {

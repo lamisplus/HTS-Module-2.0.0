@@ -50,6 +50,10 @@ const UserRegistration = (props) => {
   const [organizationInfo, setOrganizationInfo] = useState({});
   const [row, setRow] = useState({});
   const [modalityCheck, setModalityCheck] = useState("")
+  const [permissions, setPermission] = useState(
+    localStorage.getItem("permissions")?.split(",")
+  );
+
 
   const [patientObj2, setPatientObj2] = useState({
     breastFeeding: "",
@@ -331,7 +335,7 @@ const UserRegistration = (props) => {
                           </span>
                         </Menu.Item>
                       )}
-                      <Menu.Item
+                    {permissions.includes("Request_and_Result_Form") &&   <Menu.Item
                         name="inbox"
                         active={activeItem === "hiv-test"}
                         onClick={() => handleItemClick("hiv-test")}
@@ -349,7 +353,7 @@ const UserRegistration = (props) => {
                         </span>
 
                         {/* <Label color='teal'>3</Label> */}
-                      </Menu.Item>
+                      </Menu.Item>}
                       <Menu.Item
                         name="spam"
                         active={activeItem === "post-test"}
@@ -374,7 +378,8 @@ const UserRegistration = (props) => {
                       )}
                       {patientObj2?.hivTestResult &&
                         patientObj2?.hivTestResult === "Positive" &&
-                        patientObj2.riskStratificationResponseDto?.age >= 15 && (
+                        patientObj2.riskStratificationResponseDto?.age >=
+                          15 && (
                           <Menu.Item
                             name="spam"
                             active={activeItem === "recency-testing"}
@@ -436,7 +441,8 @@ const UserRegistration = (props) => {
                             </span>
                           </Menu.Item>
                         )} */}
-                      {patientObj2?.hivTestResult &&
+                      {permissions.includes("Nigeria_PNS_Form") &&
+                        patientObj2?.hivTestResult &&
                         patientObj2?.hivTestResult === "Positive" && (
                           <Menu.Item
                             name="inbox"
@@ -475,23 +481,25 @@ const UserRegistration = (props) => {
                       {/*    )}*/}
                       {/*  </span>*/}
                       {/*</Menu.Item>*/}
-                      <Menu.Item
-                        name="inbox"
-                        active={activeItem === "refferal-history"}
-                        onClick={() => handleItemClick("refferal-history")}
-                        style={{
-                          backgroundColor:
-                            activeItem === "refferal-history" ? "#000" : "",
-                        }}
-                      >
-                        <span style={{ color: "#fff" }}>
-                          {" "}
-                          Client Referral Service
-                          {completed.includes("refferal") && (
-                            <Icon name="check" color="green" />
-                          )}
-                        </span>
-                      </Menu.Item>
+                      {permissions.includes("Referral_Form") && (
+                        <Menu.Item
+                          name="inbox"
+                          active={activeItem === "refferal-history"}
+                          onClick={() => handleItemClick("refferal-history")}
+                          style={{
+                            backgroundColor:
+                              activeItem === "refferal-history" ? "#000" : "",
+                          }}
+                        >
+                          <span style={{ color: "#fff" }}>
+                            {" "}
+                            Client Referral Service
+                            {completed.includes("refferal") && (
+                              <Icon name="check" color="green" />
+                            )}
+                          </span>
+                        </Menu.Item>
+                      )}
                     </>
                   )}
                 </Menu>

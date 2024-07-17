@@ -1,6 +1,6 @@
 basePackage: org.lamisplus.modules.hts
 name: HtsModule
-dependencies: {PatientModule: 2.0.4}
+dependencies: { PatientModule: 2.0.4 }
 menus:
   - icon: fa-solid fa-microscope
     disabled: false
@@ -33,6 +33,9 @@ permissions:
   - name: Referral_Form
     description: Referral Form
     moduleName: HtsModule
+  - name: Referral_Register
+    description: Referral Register
+    moduleName: HtsModule
   - name: Family_Index_Testing_Form
     description: Family Index Testing Form
     moduleName: HtsModule
@@ -42,4 +45,3 @@ permissions:
   - name: Index_Testing_register
     description: Index Testing register
     moduleName: HtsModule
-

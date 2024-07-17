@@ -108,7 +108,9 @@ const Recency = (props) => {
       props.setCompleted([...props.completed, completedMenu]);
     }
   };
-
+  const [permissions, setPermission] = useState(
+    localStorage.getItem("permissions")?.split(",")
+  );
   const [objValues, setObjValues] = useState({
     htsClientId: clientId,
     recency: {},
@@ -207,9 +209,16 @@ const Recency = (props) => {
 
   const loadNextForm = (row) => {
     // setSaving(true);
-    //commenting this out for release
-    // handleItemClick("fit", "recency-testing");
-    handleItemClick("pns", "recency-testing");
+    if (permissions.includes("Nigeria_PNS_Form")) {
+          handleItemClick("pns", "recency-testing");
+
+    } else if (permissions.includes("Referral_Form")) {
+       
+      handleItemClick("pns", "client-referral");
+
+    } 
+    // else if (permissions.includes("Nigeria_PNS_Form")) {
+    // }
 
     toggle();
   };

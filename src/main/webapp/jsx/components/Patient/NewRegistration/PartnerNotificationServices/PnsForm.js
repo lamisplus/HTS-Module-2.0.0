@@ -113,6 +113,9 @@ const PnsForm = (props) => {
 
   let history = useHistory();
   const [open, setOpen] = React.useState(false);
+  const [permissions, setPermission] = useState(
+    localStorage.getItem("permissions")?.split(",")
+  );
 
   const [stateInfo, setStateInfo] = useState(
     props?.basicInfo?.personResponseDto?.address?.address[0]?.stateId
@@ -208,8 +211,10 @@ const PnsForm = (props) => {
 
   const loadNextForm = (row) => {
     // setSaving(true);
-    handleItemClick("client-referral", "pns");
-    toggle();
+   if (permissions.includes("Referral_Form")) {
+     handleItemClick("client-referral", "pns");
+     toggle();
+   }
   };
   const [htsClientInformation, sethtsClientInformation] = useState({
     testingSetting: props.patientObj.testingSetting,
@@ -246,7 +251,9 @@ const PnsForm = (props) => {
   const loadOtherForm = (row) => {
     // setSaving(true);
     //props.setActiveContent({...props.activeContent, route:'mental-health-view', id:row.id})
-    toggle();
+if (permissions.includes("Referral_Form")) {
+  toggle();
+}
   };
   const getPNSInfo = (id) => {
     axios

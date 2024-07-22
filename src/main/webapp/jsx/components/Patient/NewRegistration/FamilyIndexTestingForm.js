@@ -244,7 +244,7 @@ const FamilyIndexTestingForm = (props) => {
     },
 
     htsClientId: props && props.patientObj ? props.patientObj?.id : "",
-    htsClientUuid: "",
+    htsClientUuid: props && props.patientObj ? props.patientObj?.id : "",
     indexClientId: props?.patientObj?.clientCode,
     isClientCurrentlyOnHivTreatment: "",
     lga: "",
@@ -253,7 +253,9 @@ const FamilyIndexTestingForm = (props) => {
     phoneNumber:
       props?.patientObj?.personResponseDto?.contactPoint?.contactPoint[0]
         ?.value,
-    recencyTesting: "",
+    recencyTesting: props?.patientObj.recency.finalRecencyResult
+      ? props?.patientObj.recency.finalRecencyResult
+      : "Not Done",
     setting: props.patientObj.testingSetting,
     // chnage position
     middleName: props?.patientObj?.personResponseDto?.otherName,
@@ -267,7 +269,7 @@ const FamilyIndexTestingForm = (props) => {
 
     reasonForIndexClientDateHivConfirmedNotSelected: "",
     address: props?.patientObj?.personResponseDto?.address?.address[0].city,
-    recencyTesting: "",
+    // recencyTesting: "",
   });
 
   const [lgas, setLGAs] = useState([]);
@@ -328,17 +330,17 @@ const FamilyIndexTestingForm = (props) => {
     let temp = {};
 
     // if all are empty
-    if(familyTestingTrackerRequestDTO?.knownHivPositive === "Yes"){
-            temp.dateTested =
-        familyTestingTrackerRequestDTO?.dateTested === "" ? "field is required" : "";
-            temp.dateTested =
-              familyTestingTrackerRequestDTO.hiveTestResult === ""
-                ? "field is required"
-                : "";
-
-
+    if (familyTestingTrackerRequestDTO?.knownHivPositive === "Yes") {
+      temp.dateTested =
+        familyTestingTrackerRequestDTO?.dateTested === ""
+          ? "field is required"
+          : "";
+      temp.dateTested =
+        familyTestingTrackerRequestDTO.hiveTestResult === ""
+          ? "field is required"
+          : "";
     }
-    
+
     // if (
     //   familyIndexRequestDto.familyRelationship === "" &&
     //   familyIndexRequestDto.familyIndexHivStatus === "" &&
@@ -370,9 +372,8 @@ const FamilyIndexTestingForm = (props) => {
     //       ? "field is required"
     //       : "";
     // }
-      setErrorFamilyIndexDTO({ ...temp });
-      return Object.values(temp).every((x) => x == "");
-
+    setErrorFamilyIndexDTO({ ...temp });
+    return Object.values(temp).every((x) => x == "");
   };
 
   const loadFacilities = (id) => {
@@ -957,7 +958,16 @@ const FamilyIndexTestingForm = (props) => {
     } else if (e.target.name === "familyIndexClient" && e.target.value !== "") {
       getSelectedDFamilyIndex(e.target.value);
 
-      setPayload({ ...payload, [e.target.name]: e.target.value });
+      setPayload({
+        ...payload,
+        [e.target.name]: e.target.value,
+        trackerSex:
+          e.target.value === "FAMILY_INDEX_MOTHER"
+            ? "SEX_FEMALE"
+            : e.target.value === "FAMILY_INDEX_FATHER"
+            ? "SEX_MALE"
+            : "",
+      });
     } else {
       console.log(e.target.name, e.target.value);
       setPayload({ ...payload, [e.target.name]: e.target.value });
@@ -1804,7 +1814,20 @@ const FamilyIndexTestingForm = (props) => {
                     </FormGroup>
                   } */}
                   <FormGroup>
-                    <select
+                    <Input
+                      type="text"
+                      className="form-control"
+                      name="recencyTesting"
+                      id="reccencyTesting"
+                      onChange={handleInputChange}
+                      value={payload.recencyTesting}
+                      style={{
+                        border: "1px solid #014D88",
+                        borderRadius: "0.25rem",
+                      }}
+                      disabled
+                    />
+                    {/* <select
                       className="form-control"
                       name="recencyTesting"
                       id="reccencyTesting"
@@ -1815,14 +1838,14 @@ const FamilyIndexTestingForm = (props) => {
                         borderRadius: "0.2rem",
                       }}
                     >
-                      <option value="">Select</option>
-                      <option value="Recent Infection">Recent Infection</option>
+                      <option value="">Select</option> */}
+                    {/* <option value="Recent Infection">Recent Infection</option>
                       <option value="Long Term Infection">
                         {" "}
                         Long Term Infection
                       </option>
-                      <option value="Not Done">Not Done</option>
-                    </select>
+                      <option value="Not Done">Not Done</option> */}
+                    {/* </select> */}
                   </FormGroup>
                 </div>
 
@@ -2312,6 +2335,13 @@ const FamilyIndexTestingForm = (props) => {
                         border: "1px solid #014D88",
                         borderRadius: "0.2rem",
                       }}
+                      disbaled={
+                        payload.familyIndexClient === "FAMILY_INDEX_MOTHER"
+                          ? true
+                          : payload.familyIndexClient === "FAMILY_INDEX_FATHER"
+                          ? true
+                          : false
+                      }
                     />
                   </FormGroup>
                 </div>
@@ -2421,7 +2451,7 @@ const FamilyIndexTestingForm = (props) => {
                   </FormGroup>
                 </div>
                 <div className="form-group col-md-4 ">
-                  <Label>Known HIV Status  ?</Label>
+                  <Label>Known HIV Status ?</Label>
                   <FormGroup>
                     <select
                       className="form-control"
@@ -2461,7 +2491,7 @@ const FamilyIndexTestingForm = (props) => {
                         />
                         {errors.dateTested !== "" ? (
                           <span className={classes.error}>
-                            {errors.dateTested }
+                            {errors.dateTested}
                           </span>
                         ) : (
                           ""

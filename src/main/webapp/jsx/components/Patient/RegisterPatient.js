@@ -270,13 +270,7 @@ const UserRegistration = (props) => {
   }, []);
 
   useEffect(() => {
-    console.log(
-      "component on mountttttttttttttt",
-      patientObj?.riskStratificationResponseDto?.modality,
-      getCheckModality(patientObj?.riskStratificationResponseDto?.modality),
-      "but modaqlity is ",
-      modalityCheck
-    );
+
     setModalityCheck(
       getCheckModality(patientObj?.riskStratificationResponseDto?.modality)
     );

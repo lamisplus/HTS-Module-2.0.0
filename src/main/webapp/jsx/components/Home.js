@@ -11,6 +11,7 @@ import { FaUserPlus } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import HIVSTPatient from "./Patient/HIVST/HIVSTPatient";
+import CheckedInPatients from "./Patient/CheckedInPatients";
 
 const divStyle = {
   borderRadius: "2px",
@@ -91,6 +92,9 @@ const Home = () => {
                   </Tab>
                   <Tab eventKey="hts" title="HTS Patients">
                     <HTSList />
+                  </Tab>
+                  <Tab eventKey="checkedin" title="CheckedIn Patients">
+                    <CheckedInPatients />
                   </Tab>
                   <Tab eventKey="hivst" title="HIVST Patients">
                     <HIVSTPatient />

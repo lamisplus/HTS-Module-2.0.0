@@ -13,7 +13,6 @@ import PatientHtsEnrollment from "./PatientHtsEnrollment";
 import ViewEditHivst from "../Patient/HIVST/ViewEditHivst";
 import { calculate_age } from "../utils";
 import moment from "moment";
-import ContineousRegistrationTesting from "./ContineousRegistrationTesting";
 
 const styles = (theme) => ({
   root: {
@@ -51,14 +50,8 @@ const styles = (theme) => ({
 });
 
 function PatientCard(props) {
-  let history = useHistory();
-  const [activePage, setActivePage] = useState({
-    activePage: "home",
-    activeObject: {},
-    actionType: "",
-  });
   const { classes } = props;
-  useEffect(() => {}, [activePage]);
+  let history = useHistory();
   const patientObject =
     history.location && history.location.state
       ? history.location.state.patientObject
@@ -72,6 +65,12 @@ function PatientCard(props) {
       ? history.location.state.clientCode
       : "";
 
+  const [activePage, setActivePage] = useState({
+    activePage: "home",
+    activeObject: {},
+    actionType: "",
+  });
+  useEffect(() => {}, [activePage]);
   const patientAge = calculate_age(
     moment(patientObj.dateOfBirth).format("YYYY-MM-DD")
   );
@@ -101,7 +100,16 @@ function PatientCard(props) {
           {activePage.activePage === "home" && (
             <PatientHistory
               patientObj={patientObj}
-              activePage={activePage}
+              activePage={
+                history?.location?.state?.activepage
+                  ? history?.location?.state?.activepage
+                  : "home"
+              }
+              checkedInPatient={
+                history?.location?.state?.checkedInPatient
+                  ? history?.location?.state?.checkedInPatient
+                  : ""
+              }
               setActivePage={setActivePage}
               clientCode={clientCode}
               patientAge={patientAge}
@@ -118,14 +126,6 @@ function PatientCard(props) {
               patientObject={patientObject}
             />
           )}
-          {/* <ContineousRegistrationTesting
-              patientObj={patientObj}
-              activePage={activePage}
-              setActivePage={setActivePage}
-              clientCode={clientCode}
-              patientAge={patientAge}
-              patients={patientAge}
-            /> */}
 
           {activePage.activePage === "hivst_view" && (
             <ViewEditHivst

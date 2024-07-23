@@ -49,11 +49,10 @@ const UserRegistration = (props) => {
   const [hideOtherMenu, setHideOtherMenu] = useState(true);
   const [organizationInfo, setOrganizationInfo] = useState({});
   const [row, setRow] = useState({});
-  const [modalityCheck, setModalityCheck] = useState("")
+  const [modalityCheck, setModalityCheck] = useState("");
   const [permissions, setPermission] = useState(
     localStorage.getItem("permissions")?.split(",")
   );
-
 
   const [patientObj2, setPatientObj2] = useState({
     breastFeeding: "",
@@ -335,25 +334,27 @@ const UserRegistration = (props) => {
                           </span>
                         </Menu.Item>
                       )}
-                    {permissions.includes("Request_and_Result_Form") &&   <Menu.Item
-                        name="inbox"
-                        active={activeItem === "hiv-test"}
-                        onClick={() => handleItemClick("hiv-test")}
-                        style={{
-                          backgroundColor:
-                            activeItem === "hiv-test" ? "#000" : "",
-                        }}
-                        //disabled={activeItem !== 'hiv-test' ? true : false}
-                      >
-                        <span style={{ color: "#fff" }}>
-                          Request {"&"} Result Form
-                          {completed.includes("hiv-test") && (
-                            <Icon name="check" color="green" />
-                          )}
-                        </span>
+                      {permissions.includes("Request_and_Result_Form") && (
+                        <Menu.Item
+                          name="inbox"
+                          active={activeItem === "hiv-test"}
+                          onClick={() => handleItemClick("hiv-test")}
+                          style={{
+                            backgroundColor:
+                              activeItem === "hiv-test" ? "#000" : "",
+                          }}
+                          //disabled={activeItem !== 'hiv-test' ? true : false}
+                        >
+                          <span style={{ color: "#fff" }}>
+                            Request {"&"} Result Form
+                            {completed.includes("hiv-test") && (
+                              <Icon name="check" color="green" />
+                            )}
+                          </span>
 
-                        {/* <Label color='teal'>3</Label> */}
-                      </Menu.Item>}
+                          {/* <Label color='teal'>3</Label> */}
+                        </Menu.Item>
+                      )}
                       <Menu.Item
                         name="spam"
                         active={activeItem === "post-test"}
@@ -538,9 +539,10 @@ const UserRegistration = (props) => {
                     patientObj={patientObj2}
                     clientCode={props.clientCode}
                     patientAge={props.patientAge}
-                    sex={props.patientObj.gender}
+                    sex={locationState.patientObject.gender}
                     setExtra={setExtra}
                     extra={extra}
+                    patientList={props.patientList}
                     patientObject={locationState.patientObject}
                     setBasicInfo={setBasicInfo}
                   />

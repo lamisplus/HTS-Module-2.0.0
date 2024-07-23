@@ -189,6 +189,8 @@ const CheckedInPatients = (props) => {
                       patientObject: row,
                       patientObj: row,
                       clientCode: row?.clientCode,
+                      activepage: "NEW HTS",
+                      checkedInPatient: true
                     },
                   }}
                 >

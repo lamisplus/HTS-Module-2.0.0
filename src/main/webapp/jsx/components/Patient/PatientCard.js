@@ -80,9 +80,14 @@ function PatientCard(props) {
   ///GET LIST OF Patients
   async function PatientCurrentObject() {
     axios
-      .get(`${baseUrl}hts/persons/${patientObjs.personId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      .get(
+        `${baseUrl}hts/persons/${
+          patientObjs.personId ? patientObjs.personId : patientObjs.id
+        }`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
       .then((response) => {
         //console.log("data", response.data);
         setPatientObj(response.data);

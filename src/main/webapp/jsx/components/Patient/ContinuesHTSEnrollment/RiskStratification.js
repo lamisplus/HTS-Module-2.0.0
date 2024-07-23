@@ -97,7 +97,7 @@ const useStyles = makeStyles((theme) => ({
 const RiskStratification = (props) => {
   const classes = useStyles();
   const history = useHistory();
-  console.log("cons", props.patientObj);
+  console.log("Risk Props", props);
   const [enrollSetting, setEnrollSetting] = useState([]);
   const [entryPoint, setEntryPoint] = useState([]);
   const [entryPointCommunity, setEntryPointCommunity] = useState([]);
@@ -393,40 +393,40 @@ const RiskStratification = (props) => {
         ? ""
         : "This field is required.");
 
-if( objValues.age > 15 &&
-      riskAssessment.lastHivTestBasedOnRequest === "false" ){
-  
-   
-      (temp.lastHivTestVaginalOral = riskAssessment.lastHivTestVaginalOral
+    if (
+      objValues.age > 15 &&
+      riskAssessment.lastHivTestBasedOnRequest === "false"
+    ) {
+      temp.lastHivTestVaginalOral = riskAssessment.lastHivTestVaginalOral
         ? ""
-        : "This field is required.");
-    
-      (temp.lastHivTestBloodTransfusion =
+        : "This field is required.";
+
+      temp.lastHivTestBloodTransfusion =
         riskAssessment.lastHivTestBloodTransfusion
           ? ""
-          : "This field is required.");
-    
-      (temp.lastHivTestPainfulUrination =
+          : "This field is required.";
+
+      temp.lastHivTestPainfulUrination =
         riskAssessment.lastHivTestPainfulUrination
           ? ""
-          : "This field is required.");
-    
-      (temp.diagnosedWithTb = riskAssessment.diagnosedWithTb
+          : "This field is required.";
+
+      temp.diagnosedWithTb = riskAssessment.diagnosedWithTb
         ? ""
-        : "This field is required.");
-    
-      (temp.lastHivTestInjectedDrugs = riskAssessment.lastHivTestInjectedDrugs
+        : "This field is required.";
+
+      temp.lastHivTestInjectedDrugs = riskAssessment.lastHivTestInjectedDrugs
         ? ""
-        : "This field is required.");
-    
-      (temp.lastHivTestHadAnal = riskAssessment.lastHivTestHadAnal
+        : "This field is required.";
+
+      temp.lastHivTestHadAnal = riskAssessment.lastHivTestHadAnal
         ? ""
-        : "This field is required.");
-    
-      (temp.lastHivTestForceToHaveSex = riskAssessment.lastHivTestForceToHaveSex
+        : "This field is required.";
+
+      temp.lastHivTestForceToHaveSex = riskAssessment.lastHivTestForceToHaveSex
         ? ""
-        : "This field is required.");
-}
+        : "This field is required.";
+    }
     //targetGroup
     setErrors({ ...temp });
     return Object.values(temp).every((x) => x == "");
@@ -533,6 +533,8 @@ if( objValues.age > 15 &&
         });
       }
     }
+
+    console.log("risk props at the end ", props);
   };
 
   return (

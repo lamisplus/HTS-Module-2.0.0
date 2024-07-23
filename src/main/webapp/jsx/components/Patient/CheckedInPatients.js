@@ -131,7 +131,9 @@ const CheckedInPatients = (props) => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        setPatientList(response.data);
+        console.log("look for me ", response.data);
+
+        setPatientList(response.data.reverse());
       })
       .catch((error) => {});
   }
@@ -146,8 +148,6 @@ const CheckedInPatients = (props) => {
 
   return (
     <div>
-      {/* <Card> */}
-      {/* <CardBody> */}
       <MaterialTable
         icons={tableIcons}
         title="Checked In Patients "
@@ -167,10 +167,10 @@ const CheckedInPatients = (props) => {
           //   { title: "ART Status", field: "status", filtering: false },
           { title: "Actions", field: "actions", filtering: false },
         ]}
-        data={patientList.reverse().map((row) => ({
-          name: row.firstName + " " + row.surname,
-          hospital_number: getHospitalNumber(row.identifier),
-          gender: row.gender.display,
+        data={patientList.map((row) => ({
+          name: row.fullname,
+          hospital_number: row.hospitalNumber,
+          gender: row.sex,
           age:
             row.dateOfBirth === 0 ||
             row.dateOfBirth === undefined ||
@@ -178,11 +178,6 @@ const CheckedInPatients = (props) => {
             row.dateOfBirth === ""
               ? 0
               : calculate_age(row.dateOfBirth),
-          //   status: (
-          //     <Label color="blue" size="mini">
-          //       {`Not Enrolled`}
-          //     </Label>
-          //   ),
 
           actions: (
             <div>
@@ -190,7 +185,11 @@ const CheckedInPatients = (props) => {
                 <Link
                   to={{
                     pathname: "/patient-history",
-                    state: { patientId: row.id, patientObj: row },
+                    state: {
+                      patientObject: row,
+                      patientObj: row,
+                      clientCode: row?.clientCode,
+                    },
                   }}
                 >
                   <ButtonGroup
@@ -253,8 +252,6 @@ const CheckedInPatients = (props) => {
           debounceInterval: 400,
         }}
       />
-      {/* </CardBody> */}
-      {/* </Card> */}
     </div>
   );
 };

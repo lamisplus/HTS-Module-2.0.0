@@ -44,6 +44,9 @@ const Home = (props) => {
     if (props.activePage.activePage === "home") {
       setKey("home");
     }
+    if (props.activePage.activePage === "NEW HTS") {
+      setKey("NEW HTS");
+    }
   }, [props.patientObj, props.activePage]);
   ///GET LIST OF Patients
   async function patients() {
@@ -89,14 +92,6 @@ const Home = (props) => {
             ? true
             : false;
 
-        console.log(
-          "tessssssssssssssssting",
-          condition,
-          calculateLastVisitDate(response.data.dateVisit),
-          getCheckModalityForHTS(
-            response.data.riskStratificationResponseDto?.modality
-          )
-        );
         setLastVistAndModality(condition);
       })
       .catch((error) => {

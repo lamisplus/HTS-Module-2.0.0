@@ -74,6 +74,7 @@ function PatientCard(props) {
 
   useEffect(() => {
     PatientCurrentObject();
+    console.log("look for me props", props);
   }, []);
 
   ///GET LIST OF Patients
@@ -234,8 +235,8 @@ function PatientCard(props) {
                           {" "}
                           Client Code :{" "}
                           <b style={{ color: "#0B72AA" }}>
-                            {patientObj && patientObj.clientCode
-                              ? patientObj.clientCode
+                            {patientObj && patientObj?.clientCode
+                              ? patientObj?.clientCode
                               : ""}{" "}
                           </b>
                         </span>

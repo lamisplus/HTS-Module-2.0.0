@@ -13,6 +13,7 @@ import PatientHtsEnrollment from "./PatientHtsEnrollment";
 import ViewEditHivst from "../Patient/HIVST/ViewEditHivst";
 import { calculate_age } from "../utils";
 import moment from "moment";
+import ContineousRegistrationTesting from "./ContineousRegistrationTesting";
 
 const styles = (theme) => ({
   root: {
@@ -75,7 +76,6 @@ function PatientCard(props) {
     moment(patientObj.dateOfBirth).format("YYYY-MM-DD")
   );
 
- 
   return (
     <div className={classes.root}>
       <div
@@ -118,6 +118,15 @@ function PatientCard(props) {
               patientObject={patientObject}
             />
           )}
+          {/* <ContineousRegistrationTesting
+              patientObj={patientObj}
+              activePage={activePage}
+              setActivePage={setActivePage}
+              clientCode={clientCode}
+              patientAge={patientAge}
+              patients={patientAge}
+            /> */}
+
           {activePage.activePage === "hivst_view" && (
             <ViewEditHivst
               patientObj={patientObj}

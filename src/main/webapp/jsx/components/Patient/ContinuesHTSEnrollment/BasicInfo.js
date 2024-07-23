@@ -245,6 +245,27 @@ const BasicInfo = (props) => {
       )
     );
   }, [props.patientObj, facilityCode]);
+
+  const handleSubmitCheckOut = () => {
+    if (
+      props.patientObject.visitId !== null &&
+      props.patientObject.status === "PENDING"
+    ) {
+      axios
+        .put(
+          `${baseUrl}patient/visit/checkout/${props.patientObject.visitId}`,
+          props.patientObject.visitId,
+          { headers: { Authorization: `Bearer ${token}` } }
+        )
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  };
+
   //Get list of KP
   const KP = () => {
     axios
@@ -495,6 +516,10 @@ const BasicInfo = (props) => {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((response) => {
+          if (props.checkedInPatient) {
+            handleSubmitCheckOut();
+          }
+
           setSaving(false);
           props.setPatientObj(response.data);
           //toast.success("HTS Test successful");

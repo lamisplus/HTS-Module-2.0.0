@@ -545,6 +545,7 @@ const UserRegistration = (props) => {
                     patientList={props.patientList}
                     patientObject={locationState.patientObject}
                     setBasicInfo={setBasicInfo}
+                    checkedInPatient={props.checkedInPatient}
                   />
                 )}
                 {activeItem === "pre-test-counsel" && (

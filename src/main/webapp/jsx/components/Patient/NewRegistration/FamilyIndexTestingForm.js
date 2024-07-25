@@ -253,8 +253,8 @@ const FamilyIndexTestingForm = (props) => {
     phoneNumber:
       props?.patientObj?.personResponseDto?.contactPoint?.contactPoint[0]
         ?.value,
-    recencyTesting: props?.patientObj.recency.finalRecencyResult
-      ? props?.patientObj.recency.finalRecencyResult
+    recencyTesting: props?.patientObj?.recency?.finalRecencyResult
+      ? props?.patientObj?.recency?.finalRecencyResult
       : "Not Done",
     setting: props.patientObj.testingSetting,
     // chnage position
@@ -1126,7 +1126,8 @@ const FamilyIndexTestingForm = (props) => {
     payload.state = stateInfo;
     payload.lga = lgaInfo;
     payload.facilityName = facilityInfo.currentOrganisationUnitName;
-    postPayload(payload);
+    
+    // postPayload(payload);
     //    handleItemClick("basic", "risk");
     // }
   };

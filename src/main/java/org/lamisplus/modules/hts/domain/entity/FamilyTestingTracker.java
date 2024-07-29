@@ -113,9 +113,9 @@ public class FamilyTestingTracker extends Audit implements Serializable {
     @JoinColumn(name = "family_index_id")
     private FamilyIndex familyIndex;
 
-    @Type(type = "jsonb")
-    @Column(columnDefinition = "jsonb", name = "attempts")
-    private JsonNode attempts;
+
+    @Column(name = "attempt")
+    private String  attempt;
 
     @PrePersist
     public void setFields(){

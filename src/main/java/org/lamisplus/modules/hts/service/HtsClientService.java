@@ -485,6 +485,7 @@ public class HtsClientService {
         htsClientDto.setPrepOffered(htsClient.getPrepOffered());
         htsClientDto.setPrepAccepted(htsClient.getPrepAccepted());
         htsClientDto.setComment(htsClient.getComment());
+        htsClientDto.setHtsClientUUid(htsClient.getUuid());
 
         htsClientDto.setSource(htsClient.getSource());
         htsClientDto.setReferredForSti(htsClient.getReferredForSti());

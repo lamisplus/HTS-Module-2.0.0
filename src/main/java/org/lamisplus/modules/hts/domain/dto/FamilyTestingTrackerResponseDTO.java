@@ -34,5 +34,5 @@ public class FamilyTestingTrackerResponseDTO implements Serializable {
 //    private Long familyIndexTestingId;
 //    private String familyIndexTestingUuid;
 
-    private JsonNode attempts;
+    private String attempt;
 }

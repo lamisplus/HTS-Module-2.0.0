@@ -24,6 +24,6 @@ public class FamilyTestingTrackerRequestDTO {
     private LocalDate dateEnrolledInOVC;
     private String ovcId;
     private Long facilityId;
-    private JsonNode attempts;
+    private String attempt;
 
 }

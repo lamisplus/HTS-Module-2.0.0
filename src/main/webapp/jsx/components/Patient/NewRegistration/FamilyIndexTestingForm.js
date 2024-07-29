@@ -255,7 +255,7 @@ const FamilyIndexTestingForm = (props) => {
     },
 
     htsClientId: props && props.patientObj ? props.patientObj?.id : "",
-    htsClientUuid: props && props.patientObj ? props.patientObj.personResponseDto.uuid: "",
+    htsClientUuid: props && props.patientObj ? props.patientObj.htsClientUUid: "",
     indexClientId: props?.patientObj?.clientCode,
     isClientCurrentlyOnHivTreatment: "",
     lga: "",
@@ -288,8 +288,7 @@ const FamilyIndexTestingForm = (props) => {
   const [selectedLga, setSelectedLga] = useState({});
 
 
-  console.log("props props",props)
-    console.log("props props",props.patientObj.personResponseDto.uuid)
+
 
   const loadStates = () => {
     axios

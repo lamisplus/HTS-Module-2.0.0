@@ -73,4 +73,17 @@
             ALTER TABLE hts_client ADD COLUMN IF NOT EXISTS comment VARCHAR(255);
         </sql>
     </changeSet>
+
+    <changeSet failOnError="true" author="Taiwo Gboyegun" id="20240726-001">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="hts_family_index_testing_tracker"/>
+        </preConditions>
+        <sql>
+            ALTER TABLE hts_family_index_testing_tracker
+                RENAME COLUMN attempts TO attempt;
+
+            ALTER TABLE hts_family_index_testing_tracker
+            ALTER COLUMN attempt TYPE character varying;
+        </sql>
+    </changeSet>
 </databaseChangeLog>

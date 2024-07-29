@@ -74,14 +74,20 @@ function PatientCard(props) {
 
   useEffect(() => {
     PatientCurrentObject();
+    console.log("look for me props", props);
   }, []);
 
   ///GET LIST OF Patients
   async function PatientCurrentObject() {
     axios
-      .get(`${baseUrl}hts/persons/${patientObjs.personId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      .get(
+        `${baseUrl}hts/persons/${
+          patientObjs.personId ? patientObjs.personId : patientObjs.id
+        }`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
       .then((response) => {
         //console.log("data", response.data);
         setPatientObj(response.data);
@@ -234,8 +240,8 @@ function PatientCard(props) {
                           {" "}
                           Client Code :{" "}
                           <b style={{ color: "#0B72AA" }}>
-                            {patientObj && patientObj.clientCode
-                              ? patientObj.clientCode
+                            {patientObj && patientObj?.clientCode
+                              ? patientObj?.clientCode
                               : ""}{" "}
                           </b>
                         </span>

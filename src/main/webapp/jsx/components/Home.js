@@ -1,4 +1,7 @@
-import React, { useState, Fragment } from "react";
+import React, { useState, Fragment, useEffect } from "react";
+import axios from "axios";
+import { url as baseUrl } from "./../../api";
+import { token as token } from "./../../api";
 import { makeStyles } from "@material-ui/core/styles";
 import { Row, Col, Card, Tab, Tabs } from "react-bootstrap";
 import Dashboard from "./Patient/PatientList";
@@ -8,6 +11,7 @@ import { FaUserPlus } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import HIVSTPatient from "./Patient/HIVST/HIVSTPatient";
+import CheckedInPatients from "./Patient/CheckedInPatients";
 
 const divStyle = {
   borderRadius: "2px",
@@ -16,6 +20,23 @@ const divStyle = {
 
 const Home = () => {
   const [key, setKey] = useState("home");
+
+  const getPermissions = async () => {
+    await axios
+      .get(`${baseUrl}account`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        localStorage.setItem("permissions", response.data.permissions);
+      })
+      .catch((error) => {});
+  };
+
+  useEffect(() => {
+    getPermissions();
+    const permissions = localStorage.getItem("permissions")?.split(",");
+    console.log("perms", permissions);
+  }, []);
 
   return (
     <Fragment>
@@ -69,12 +90,16 @@ const Home = () => {
                   <Tab eventKey="home" title="Patients">
                     <Dashboard />
                   </Tab>
+                  <Tab eventKey="checkedin" title="CheckedIn Patients">
+                    <CheckedInPatients />
+                  </Tab>
                   <Tab eventKey="hts" title="HTS Patients">
                     <HTSList />
                   </Tab>
-                    <Tab eventKey="hivst" title="HIVST Patients">
-                        <HIVSTPatient />
-                    </Tab>
+
+                  <Tab eventKey="hivst" title="HIVST Patients">
+                    <HIVSTPatient />
+                  </Tab>
                 </Tabs>
               </div>
             </Card.Body>

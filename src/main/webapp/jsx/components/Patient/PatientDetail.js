@@ -50,14 +50,8 @@ const styles = (theme) => ({
 });
 
 function PatientCard(props) {
-  let history = useHistory();
-  const [activePage, setActivePage] = useState({
-    activePage: "home",
-    activeObject: {},
-    actionType: "",
-  });
   const { classes } = props;
-  useEffect(() => {}, [activePage]);
+  let history = useHistory();
   const patientObject =
     history.location && history.location.state
       ? history.location.state.patientObject
@@ -71,11 +65,16 @@ function PatientCard(props) {
       ? history.location.state.clientCode
       : "";
 
+  const [activePage, setActivePage] = useState({
+    activePage: "home",
+    activeObject: {},
+    actionType: "",
+  });
+  useEffect(() => {}, [activePage]);
   const patientAge = calculate_age(
     moment(patientObj.dateOfBirth).format("YYYY-MM-DD")
   );
 
- 
   return (
     <div className={classes.root}>
       <div
@@ -101,7 +100,16 @@ function PatientCard(props) {
           {activePage.activePage === "home" && (
             <PatientHistory
               patientObj={patientObj}
-              activePage={activePage}
+              activePage={
+                history?.location?.state?.activepage
+                  ? history?.location?.state?.activepage
+                  : "home"
+              }
+              checkedInPatient={
+                history?.location?.state?.checkedInPatient
+                  ? history?.location?.state?.checkedInPatient
+                  : ""
+              }
               setActivePage={setActivePage}
               clientCode={clientCode}
               patientAge={patientAge}
@@ -118,6 +126,7 @@ function PatientCard(props) {
               patientObject={patientObject}
             />
           )}
+
           {activePage.activePage === "hivst_view" && (
             <ViewEditHivst
               patientObj={patientObj}

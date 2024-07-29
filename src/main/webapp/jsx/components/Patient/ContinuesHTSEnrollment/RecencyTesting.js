@@ -102,7 +102,9 @@ const Recency = (props) => {
       props.setCompleted([...props.completed, completedMenu]);
     }
   };
-
+  const [permissions, setPermission] = useState(
+    localStorage.getItem("permissions")?.split(",")
+  );
   const [objValues, setObjValues] = useState({
     htsClientId: clientId,
     recency: {},
@@ -354,10 +356,10 @@ const Recency = (props) => {
           setSaving(false);
           props.setPatientObj(response.data);
           //toast.success("Risk Assesment successful");
-          //comment this out for release 
+          //comment this out for release
           // handleItemClick("fit", "recency-testing");
-                   handleItemClick("pns", "recency-testing");
-         
+      
+          // }
         })
         .catch((error) => {
           setSaving(false);

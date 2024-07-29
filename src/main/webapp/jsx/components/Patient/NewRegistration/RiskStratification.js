@@ -277,7 +277,14 @@ const BasicInfo = (props) => {
       modality === "TEST_SETTING_OTHERS_POST_ANC1_PREGNANT_L&D" ||
       modality === "TEST_SETTING_STANDALONE_HTS_PMTCT_(ANC1_ONLY)" ||
       modality === "TEST_SETTING_STANDALONE_HTS_POST_ANC1_BREASTFEEDING" ||
-      modality === "TEST_SETTING_STANDALONE_HTS_POST_ANC1_PREGNANT_L&D"
+      modality === "TEST_SETTING_STANDALONE_HTS_POST_ANC1_PREGNANT_L&D" ||
+      modality === "PMTCT (Post ANC1: Pregnancy/L&D/BF)" ||
+      modality === "Post ANC1 Pregnant/L&D ? 72hrs" ||
+      modality ===
+        "TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
+      modality === "TEST_SETTING_OTHERS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
+      modality ===
+        "TEST_SETTING_STANDALONE_HTS_POST_ANC1_PREGNANT_L&D ? 72hrs"
     ) {
       console.log("it is PMTCT MODALITY ");
       setIsPMTCTModality(true);
@@ -1066,7 +1073,6 @@ const BasicInfo = (props) => {
                   )}
                 </FormGroup>
               </div>
-              {console.log(riskAssessment)}
               <div className="form-group  col-md-6">
                 <FormGroup>
                   <Label>

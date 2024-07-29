@@ -113,6 +113,9 @@ const PnsForm = (props) => {
 
   let history = useHistory();
   const [open, setOpen] = React.useState(false);
+  const [permissions, setPermission] = useState(
+    localStorage.getItem("permissions")?.split(",")
+  );
 
   const [stateInfo, setStateInfo] = useState(
     props?.basicInfo?.personResponseDto?.address?.address[0]?.stateId
@@ -207,9 +210,7 @@ const PnsForm = (props) => {
   console.log("thusssssss", props.patientObj);
 
   const loadNextForm = (row) => {
-    // setSaving(true);
     handleItemClick("client-referral", "pns");
-    toggle();
   };
   const [htsClientInformation, sethtsClientInformation] = useState({
     testingSetting: props.patientObj.testingSetting,
@@ -687,6 +688,17 @@ const PnsForm = (props) => {
   const validate = () => {
     // HTS FORM VALIDATION
     temp.offeredPns = objValues.offeredPns ? "" : "This field is required.";
+
+    if (objValues.offeredPns === "No") {
+      temp.reasonForDecline = objValues.reasonForDecline
+        ? ""
+        : "This field is required.";
+      temp.otherReasonForDecline =
+        objValues.reasonForDecline === "others" &&
+        objValues.otherReasonForDecline
+          ? ""
+          : "This field is required.";
+    }
     // temp.lga = objValues.lga ? "" : "This field is required.";
     // temp.facilityId = objValues.facilityId ? "" : "This field is required.";
     // temp.testingSetting = htsClientInformation.testingSetting

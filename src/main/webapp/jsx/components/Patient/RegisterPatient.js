@@ -27,6 +27,8 @@ import PnsForm from "./NewRegistration/PartnerNotificationServices/PnsForm";
 import RefferralUnit from "./NewRegistration/RefferalUnit";
 import ClientReferralHistory from "./NewRegistrationEnrollement/ClientReferral/ClientReferralHistory";
 import ViewClientReferral from "./NewRegistrationEnrollement/ClientReferral/Referrall_view_update";
+import FamilyIndexHistory from "./NewRegistration/PartnerNotificationServices/FamilyIndexhIstory";
+import ViewFamilyIndexTestingForm from "./NewRegistration/PartnerNotificationServices/ViewFamilyIndexForm";
 
 const useStyles = makeStyles((theme) => ({
   error: {
@@ -54,8 +56,11 @@ const UserRegistration = (props) => {
   const handleItemClick = (activeItem) => {
     setactiveItem(activeItem);
     //setCompleted({...completed, ...completedMenu})
-  };
+  };  const [action, setAction] = useState("");
 
+  const [permissions, setPermission] = useState(
+    localStorage.getItem("permissions")?.split(",")
+  );
   const getFacilityAccount = () => {
     getAcount()
       .then((response) => {
@@ -270,7 +275,6 @@ const UserRegistration = (props) => {
   }, []);
 
   useEffect(() => {
-
     setModalityCheck(
       getCheckModality(patientObj?.riskStratificationResponseDto?.modality)
     );
@@ -316,6 +320,21 @@ const UserRegistration = (props) => {
                     <span style={{ textTransform: "capitalize" }}>Back</span>
                   </Button>
                 </Link>
+                {activeItem === "fit-history" && (
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    className=" float-end"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleItemClick("pns");
+                    }}
+                    //startIcon={<FaUserPlus size="10"/>}
+                    style={{ backgroundColor: "#014d88" }}
+                  >
+                    <span style={{ textTransform: "capitalize" }}>Next</span>
+                  </Button>
+                )}
               </h3>
               <br />
               <br />
@@ -362,16 +381,8 @@ const UserRegistration = (props) => {
                           )}
                         </span>
                       </Menu.Item>
-                      {console.log(
-                        "testing modality ",
-                        patientObj?.riskStratificationResponseDto?.modality,
-                        modalityCheck,
-                        getCheckModality(
-                          patientObj?.riskStratificationResponseDto?.modality
-                        )
-                      )}
 
-                      {modalityCheck == "fill" && (
+                      {props.patientAge >= 15 && modalityCheck == "fill" && (
                         <Menu.Item
                           name="spam"
                           active={activeItem === "pre-test-counsel"}
@@ -410,9 +421,8 @@ const UserRegistration = (props) => {
                             <Icon name="check" color="green" />
                           )}
                         </span>
-
-                        {/* <Label color='teal'>3</Label> */}
                       </Menu.Item>
+
                       <Menu.Item
                         name="spam"
                         active={activeItem === "post-test"}
@@ -433,7 +443,7 @@ const UserRegistration = (props) => {
                       </Menu.Item>
                       {patientObj.hivTestResult &&
                         patientObj.hivTestResult.toLowerCase() === "positive" &&
-                        patientObj?.riskStratificationResponseDto?.age <=
+                        patientObj?.riskStratificationResponseDto?.age >=
                           15 && (
                           <Menu.Item
                             name="spam"
@@ -457,8 +467,6 @@ const UserRegistration = (props) => {
                           </Menu.Item>
                         )}
 
-                          
-
                       {patientObj.hivTestResult &&
                         patientObj.hivTestResult.toLowerCase() ===
                           "positive" && (
@@ -479,11 +487,10 @@ const UserRegistration = (props) => {
                               )}
                             </span>
                           </Menu.Item>
-                        )} 
+                        )}
 
-            
-
-                      {patientObj.hivTestResult &&
+                      {"Nigeria_PNS_Form" &&
+                        patientObj.hivTestResult &&
                         patientObj.hivTestResult.toLowerCase() ===
                           "positive" && (
                           <Menu.Item
@@ -504,40 +511,7 @@ const UserRegistration = (props) => {
                             </span>
                           </Menu.Item>
                         )}
-                      {/*<Menu.Item
-                      {/*    name="inbox"*/}
-                      {/*    active={activeItem === "refferal"}*/}
-                      {/*    onClick={() => handleItemClick("refferal")}*/}
-                      {/*    style={{*/}
-                      {/*      backgroundColor:*/}
-                      {/*          activeItem === "refferal" ? "#000" : "",*/}
-                      {/*    }}*/}
-                      {/*>*/}
-                      {/*  <span style={{ color: "#fff" }}>*/}
-                      {/*    {" "}*/}
-                      {/*    Client Refferral Form*/}
-                      {/*    {completed.includes("referral") && (*/}
-                      {/*        <Icon name="check" color="green" />*/}
-                      {/*    )}*/}
-                      {/*  </span>*/}
-                      {/*</Menu.Item>*/}
-                      {/*<Menu.Item*/}
-                      {/*  name="inbox"*/}
-                      {/*  active={activeItem === "new-referral"}*/}
-                      {/*  onClick={() => handleItemClick("new-referral")}*/}
-                      {/*  style={{*/}
-                      {/*    backgroundColor:*/}
-                      {/*      activeItem === "new-referral" ? "#000" : "",*/}
-                      {/*  }}*/}
-                      {/*>*/}
-                      {/*  <span style={{ color: "#fff" }}>*/}
-                      {/*    {" "}*/}
-                      {/*    Client Referral Service*/}
-                      {/*    {completed.includes("new-referral") && (*/}
-                      {/*      <Icon name="check" color="green" />*/}
-                      {/*    )}*/}
-                      {/*  </span>*/}
-                      {/*</Menu.Item>*/}
+
                       <Menu.Item
                         name="inbox"
                         active={activeItem === "refferal-history"}
@@ -556,7 +530,7 @@ const UserRegistration = (props) => {
                         </span>
                       </Menu.Item>
                     </>
-                )} 
+                  )}
                 </Menu>
               </div>
 
@@ -675,6 +649,42 @@ const UserRegistration = (props) => {
                     history={false}
                   />
                 )}
+
+                {activeItem === "fit-history" && (
+                  <FamilyIndexHistory
+                    handleItemClick={handleItemClick}
+                    setCompleted={setCompleted}
+                    completed={completed}
+                    setPatientObj={setPatientObj}
+                    patientObj={patientObj}
+                    setExtra={setExtra}
+                    extra={extra}
+                    basicInfo={basicInfo}
+                    organizationInfo={organizationInfo}
+                    addNewForm={true}
+                    nextButton={true}
+                    // row={row}
+                    // setAction={setAction}
+                  />
+                )}
+
+                {activeItem === "view-fit" && (
+                  <ViewFamilyIndexTestingForm
+                    handleItemClick={handleItemClick}
+                    setCompleted={setCompleted}
+                    completed={completed}
+                    setPatientObj={setPatientObj}
+                    patientObj={patientObj}
+                    setExtra={setExtra}
+                    extra={extra}
+                    basicInfo={basicInfo}
+                    action={action}
+                    organizationInfo={organizationInfo}
+                    addNewForm={false}
+                    row={row}
+                  />
+                )}
+
                 {activeItem === "pns" && (
                   <PnsForm
                     handleItemClick={handleItemClick}

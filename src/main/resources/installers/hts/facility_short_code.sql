@@ -1,3 +1,6 @@
+SELECT pg_catalog.setval('base_organisation_unit_identifier_id_seq', (SELECT MAX(id) FROM base_organisation_unit_identifier), true);
+
+
 with org_short as (
     select organisation_unit_id, cast(row_number() over () as text) as short_code
     from base_organisation_unit_identifier

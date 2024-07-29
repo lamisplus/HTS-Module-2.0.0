@@ -174,6 +174,13 @@ const PostTest = (props) => {
       if (e.target.value >= 0) {
         setPostTest({ ...postTest, [e.target.name]: e.target.value });
       }
+    }else if (e.target.name === "condomProvidedToClientCount") {
+    if (e.target.value >= 0) {
+      setPostTest({ ...postTest, [e.target.name]: e.target.value });
+    } else {
+      setPostTest({ ...postTest, [e.target.name]: 0 });
+    }
+
     } else {
       setPostTest({ ...postTest, [e.target.name]: e.target.value });
     }
@@ -201,7 +208,7 @@ const PostTest = (props) => {
       .then((response) => {
         setSaving(false);
         props.setPatientObj(response.data);
-        toast.success("Risk Assesment successful");
+        toast.success("Post test  successful");
       
         if (
           postTest.hivTestResult === "true" &&
@@ -580,7 +587,7 @@ const PostTest = (props) => {
                     <FormGroup>
                       <Label>How many condoms were provided to client </Label>
                       <Input
-                        type="text"
+                        type="number"
                         name="condomProvidedToClientCount"
                         id="condomProvidedToClientCount"
                         value={postTest.condomProvidedToClientCount}

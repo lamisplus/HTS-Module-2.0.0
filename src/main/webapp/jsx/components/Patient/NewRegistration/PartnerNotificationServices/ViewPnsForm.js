@@ -663,16 +663,29 @@ const ViewPNSForm = (props) => {
     // temp.stateId = objValues.stateId ? "" : "This field is required.";
     // temp.lga = objValues.lga ? "" : "This field is required.";
     // temp.facilityId = objValues.facilityId ? "" : "This field is required.";
-    temp.testingSetting = htsClientInformation.testingSetting
-      ? ""
-      : "This field is required.";
-    temp.providerRoleCompletingForm =
-      htsClientInformation.providerRoleCompletingForm
+   if (objValues.offeredPns !== "No") {
+     temp.testingSetting = htsClientInformation.testingSetting
+       ? ""
+       : "This field is required.";
+     temp.providerRoleCompletingForm =
+       htsClientInformation.providerRoleCompletingForm
+         ? ""
+         : "This field is required.";
+     temp.relativeToIndexClient = htsClientInformation.relativeToIndexClient
+       ? ""
+       : "This field is required.";
+   }
+    if (objValues.offeredPns === "No") {
+      temp.reasonForDecline = objValues.reasonForDecline
         ? ""
         : "This field is required.";
-    temp.relativeToIndexClient = htsClientInformation.relativeToIndexClient
-      ? ""
-      : "This field is required.";
+      temp.otherReasonForDecline =
+        objValues.reasonForDecline === "others" &&
+        objValues.otherReasonForDecline
+          ? ""
+          : "This field is required.";
+    }
+
     setErrors({ ...temp });
     return Object.values(temp).every((x) => x == "");
   };

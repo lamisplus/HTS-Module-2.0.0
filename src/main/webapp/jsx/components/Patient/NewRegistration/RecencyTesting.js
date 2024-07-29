@@ -108,7 +108,9 @@ const Recency = (props) => {
       props.setCompleted([...props.completed, completedMenu]);
     }
   };
-
+  const [permissions, setPermission] = useState(
+    localStorage.getItem("permissions")?.split(",")
+  );
   const [objValues, setObjValues] = useState({
     htsClientId: clientId,
     recency: {},
@@ -207,9 +209,10 @@ const Recency = (props) => {
 
   const loadNextForm = (row) => {
     // setSaving(true);
-    //commenting this out for release
-    // handleItemClick("fit", "recency-testing");
-    handleItemClick("fit", "recency-testing");
+
+   handleItemClick("fit", "recency-testing");
+
+
 
     toggle();
   };
@@ -794,7 +797,6 @@ const Recency = (props) => {
                               min={recency.sampleTestDate}
                               value={recency?.receivedResultDate}
                               max={moment(new Date()).format("YYYY-MM-DD")}
-                              value={recency.receivedResultDate}
                               onChange={handleInputChangeRecency}
                               style={{
                                 border: "1px solid #014D88",

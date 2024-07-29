@@ -133,7 +133,7 @@ const PatientnHistory = (props) => {
     <div>
       <MaterialTable
         icons={tableIcons}
-        title="HTS HISTORY "
+        title="HTS HISTORY"
         columns={[
           // { title: "HTS ID", field: "id" },
           { title: "Date", field: "date" },

@@ -49,7 +49,10 @@ const UserRegistration = (props) => {
   const [hideOtherMenu, setHideOtherMenu] = useState(true);
   const [organizationInfo, setOrganizationInfo] = useState({});
   const [row, setRow] = useState({});
-  const [modalityCheck, setModalityCheck] = useState("")
+  const [modalityCheck, setModalityCheck] = useState("");
+  const [permissions, setPermission] = useState(
+    localStorage.getItem("permissions")?.split(",")
+  );
 
   const [patientObj2, setPatientObj2] = useState({
     breastFeeding: "",
@@ -331,25 +334,27 @@ const UserRegistration = (props) => {
                           </span>
                         </Menu.Item>
                       )}
-                      <Menu.Item
-                        name="inbox"
-                        active={activeItem === "hiv-test"}
-                        onClick={() => handleItemClick("hiv-test")}
-                        style={{
-                          backgroundColor:
-                            activeItem === "hiv-test" ? "#000" : "",
-                        }}
-                        //disabled={activeItem !== 'hiv-test' ? true : false}
-                      >
-                        <span style={{ color: "#fff" }}>
-                          Request {"&"} Result Form
-                          {completed.includes("hiv-test") && (
-                            <Icon name="check" color="green" />
-                          )}
-                        </span>
+               
+                        <Menu.Item
+                          name="inbox"
+                          active={activeItem === "hiv-test"}
+                          onClick={() => handleItemClick("hiv-test")}
+                          style={{
+                            backgroundColor:
+                              activeItem === "hiv-test" ? "#000" : "",
+                          }}
+                          //disabled={activeItem !== 'hiv-test' ? true : false}
+                        >
+                          <span style={{ color: "#fff" }}>
+                            Request {"&"} Result Form
+                            {completed.includes("hiv-test") && (
+                              <Icon name="check" color="green" />
+                            )}
+                          </span>
 
-                        {/* <Label color='teal'>3</Label> */}
-                      </Menu.Item>
+                          {/* <Label color='teal'>3</Label> */}
+                        </Menu.Item>
+                     
                       <Menu.Item
                         name="spam"
                         active={activeItem === "post-test"}
@@ -374,7 +379,8 @@ const UserRegistration = (props) => {
                       )}
                       {patientObj2?.hivTestResult &&
                         patientObj2?.hivTestResult === "Positive" &&
-                        patientObj2.riskStratificationResponseDto?.age >= 15 && (
+                        patientObj2.riskStratificationResponseDto?.age >=
+                          15 && (
                           <Menu.Item
                             name="spam"
                             active={activeItem === "recency-testing"}
@@ -436,7 +442,8 @@ const UserRegistration = (props) => {
                             </span>
                           </Menu.Item>
                         )}
-                      {patientObj2?.hivTestResult &&
+ 
+                        patientObj2?.hivTestResult &&
                         patientObj2?.hivTestResult === "Positive" && (
                           <Menu.Item
                             name="inbox"
@@ -455,7 +462,7 @@ const UserRegistration = (props) => {
                               )}
                             </span>
                           </Menu.Item>
-                        )}
+                   
                       {/*<Menu.Item*/}
                       {/*  name="spam"*/}
                       {/*  active={activeItem === "continuous-referral"}*/}
@@ -475,23 +482,25 @@ const UserRegistration = (props) => {
                       {/*    )}*/}
                       {/*  </span>*/}
                       {/*</Menu.Item>*/}
-                      <Menu.Item
-                        name="inbox"
-                        active={activeItem === "refferal-history"}
-                        onClick={() => handleItemClick("refferal-history")}
-                        style={{
-                          backgroundColor:
-                            activeItem === "refferal-history" ? "#000" : "",
-                        }}
-                      >
-                        <span style={{ color: "#fff" }}>
-                          {" "}
-                          Client Referral Service
-                          {completed.includes("refferal") && (
-                            <Icon name="check" color="green" />
-                          )}
-                        </span>
-                      </Menu.Item>
+           
+                        <Menu.Item
+                          name="inbox"
+                          active={activeItem === "refferal-history"}
+                          onClick={() => handleItemClick("refferal-history")}
+                          style={{
+                            backgroundColor:
+                              activeItem === "refferal-history" ? "#000" : "",
+                          }}
+                        >
+                          <span style={{ color: "#fff" }}>
+                            {" "}
+                            Client Referral Service
+                            {completed.includes("refferal") && (
+                              <Icon name="check" color="green" />
+                            )}
+                          </span>
+                        </Menu.Item>
+               
                     </>
                   )}
                 </Menu>
@@ -530,11 +539,13 @@ const UserRegistration = (props) => {
                     patientObj={patientObj2}
                     clientCode={props.clientCode}
                     patientAge={props.patientAge}
-                    sex={props.patientObj.gender}
+                    sex={locationState.patientObject.gender}
                     setExtra={setExtra}
                     extra={extra}
+                    patientList={props.patientList}
                     patientObject={locationState.patientObject}
                     setBasicInfo={setBasicInfo}
+                    checkedInPatient={props.checkedInPatient}
                   />
                 )}
                 {activeItem === "pre-test-counsel" && (

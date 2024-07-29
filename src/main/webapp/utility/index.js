@@ -32,8 +32,8 @@ export const getAllCountry = async () => {
   } catch (e) {}
 };
 
-//  
-//  
+//
+//
 
 //Get all state by state by country Id
 export const getAllStateByCountryId = async () => {
@@ -72,11 +72,10 @@ export const getAcount = async () => {
     return response.data;
   } catch (e) {}
 };
+// TEST_SETTING_OTHERS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)
 
 //check modality
 export const getCheckModality = (patientObj) => {
-
-
   console.log("MODALITY CHECK UP ", patientObj);
   if (
     patientObj === "TEST_SETTING_STI_STI" ||
@@ -92,9 +91,15 @@ export const getCheckModality = (patientObj) => {
     patientObj === "TEST_SETTING_STANDALONE_HTS_POST_ANC1_BREASTFEEDING" ||
     patientObj === "TEST_SETTING_STANDALONE_HTS_POST_ANC1_PREGNANT_L&D" ||
     patientObj === "TEST_SETTING_STANDALONE_HTS_STI" ||
-    patientObj === "TEST_SETTING_STANDALONE_HTS_TB"
+    patientObj === "TEST_SETTING_STANDALONE_HTS_TB" ||
+    patientObj === "PMTCT (Post ANC1: Pregnancy/L&D/BF)" ||
+    patientObj === "Post ANC1 Pregnant/L&D ? 72hrs" ||
+    patientObj ===
+      "TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
+    patientObj === "TEST_SETTING_OTHERS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
+    patientObj === "TEST_SETTING_STANDALONE_HTS_POST_ANC1_PREGNANT_L&D ? 72hrs"
   ) {
-    console.log("IT IS SKIP")
+    console.log("IT IS SKIP");
     return "skip";
   } else {
     return "fill";
@@ -111,7 +116,15 @@ export const getCheckModalityForHTS = (patientObj) => {
     patientObj === "TEST_SETTING_OTHERS_POST_ANC1_PREGNANT_L&D" ||
     patientObj === "TEST_SETTING_STANDALONE_HTS_PMTCT_(ANC1_ONLY)" ||
     patientObj === "TEST_SETTING_STANDALONE_HTS_POST_ANC1_BREASTFEEDING" ||
-    patientObj === "TEST_SETTING_STANDALONE_HTS_POST_ANC1_PREGNANT_L&D"
+    patientObj === "TEST_SETTING_STANDALONE_HTS_POST_ANC1_PREGNANT_L&D" ||
+    patientObj === "PMTCT (Post ANC1: Pregnancy/L&D/BF)" ||
+    patientObj === "Post ANC1 Pregnant/L&D ? 72hrs" ||
+    patientObj ===
+      "TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
+    patientObj ===
+      "TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
+    patientObj === "TEST_SETTING_OTHERS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
+    patientObj === "TEST_SETTING_STANDALONE_HTS_POST_ANC1_PREGNANT_L&D ? 72hrs"
   ) {
     return "show";
   } else {

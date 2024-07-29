@@ -35,7 +35,7 @@ import {
   alphabetOnly,
 } from "../../../../utility";
 
-import { calculate_age } from "../../utils";
+import { calculate_age } from "../../utils/index.js";
 import { LiveHelp } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
@@ -113,7 +113,7 @@ const FamilyIndexTestingForm = (props) => {
   const classes = useStyles();
   let history = useHistory();
   const [errors, setErrors] = useState({});
-  const [ageDisabled, setAgeDisabled] = useState(true);
+  const [ageDisabled2, setAgeDisabled2] = useState(true);
   const [saving, setSaving] = useState(false);
   let temp = { ...errors };
   const [open, setOpen] = React.useState(false);
@@ -131,19 +131,23 @@ const FamilyIndexTestingForm = (props) => {
     useState(false);
   const [familyRelationship, setFamilyRelationship] = useState([]);
   const [selectedFamilyIndex, setSelectedFamilyIndex] = useState({});
-  const [familyIndexHivStatus, setFamilyIndexHivStatus] = useState([]);
+  const [statusOfContact, setFamilyIndexHivStatus] = useState([]);
   const [familyIndex, setFamilyIndex] = useState([]);
   const [followUpAppointmentLocation, setFollowUpAppointmentLocation] =
     useState([]);
   const [indexVisitAttempt, setIndexVisitAttempt] = useState([]);
   const [isWillingToHaveChildrenTested, setIsWillingToHaveChildrenTested] =
     useState(false);
+  const [ageDisabled, setAgeDisabled] = useState(true);
+
   const [stateInfo, setStateInfo] = useState(
     props?.basicInfo?.personResponseDto?.address?.address[0]?.stateId
       ? props?.basicInfo?.personResponseDto?.address?.address[0]?.stateId
       : props?.patientObj?.personResponseDto?.address?.address[0]?.stateId
   );
-
+  const [permissions, setPermission] = useState(
+    localStorage.getItem("permissions")?.split(",")
+  );
   const [lgaInfo, setLgaInfo] = useState(
     props?.basicInfo?.personResponseDto?.address?.address[0].district
       ? props?.basicInfo?.personResponseDto?.address?.address[0].district
@@ -154,14 +158,21 @@ const FamilyIndexTestingForm = (props) => {
 
   const [familyIndexRequestDto, setFamilyIndexRequestDto] = useState({
     childNumber: "",
-    familyIndexHivStatus: "",
-    familyIndexTestingUuid: "",
+    age: "",
+    childDead: "",
+    dateOfBirth: "",
+    dateOfHts: "",
     familyRelationship: "",
+    statusOfContact: "",
     motherDead: "",
     yearMotherDead: "",
+    yearChildDead: "",
     uan: "",
-    dateOfHts: "",
     liveWithParent: "",
+    isDateOfBirthEstimated: "",
+    firstName: props?.patientObj?.personResponseDto?.firstName,
+    middleName: props?.patientObj?.personResponseDto?.otherName,
+    lastName: props?.patientObj?.personResponseDto?.surname,
   });
 
   const [arrayFamilyIndexRequestDto, setArrayFamilyIndexRequestDto] = useState(
@@ -185,8 +196,6 @@ const FamilyIndexTestingForm = (props) => {
       dateTested: "",
       dateVisit: "",
       facilityId: "",
-      familyIndexTestingId: "",
-      familyIndexTestingUuid: "",
       followUpAppointmentLocation: "",
       hiveTestResult: "",
       knownHivPositive: "",
@@ -198,11 +207,13 @@ const FamilyIndexTestingForm = (props) => {
     });
 
   const [payload, setPayload] = useState({
-    age: calculate_age(
-      props?.basicInfo?.personResponseDto?.dateOfBirth
-        ? props?.basicInfo?.personResponseDto?.dateOfBirth
-        : props?.patientObj?.personResponseDto?.dateOfBirth
-    ),
+    age:
+      props &&
+      calculate_age(
+        props?.basicInfo?.personResponseDto?.dateOfBirth
+          ? props?.basicInfo?.personResponseDto?.dateOfBirth
+          : props?.patientObj?.personResponseDto?.dateOfBirth
+      ),
     alternatePhoneNumber: "",
     dateClientEnrolledOnTreatment: "",
     dateIndexClientConfirmedHivPositiveTestResult:
@@ -239,12 +250,12 @@ const FamilyIndexTestingForm = (props) => {
       },
 
       // not there
-      familyIndexHivStatus: "",
+      statusOfContact: "",
       familyIndexTestingUuid: "",
     },
 
     htsClientId: props && props.patientObj ? props.patientObj?.id : "",
-    htsClientUuid: props && props.patientObj ? props.patientObj?.id : "",
+    htsClientUuid: props && props.patientObj ? props.patientObj.personResponseDto.uuid: "",
     indexClientId: props?.patientObj?.clientCode,
     isClientCurrentlyOnHivTreatment: "",
     lga: "",
@@ -258,8 +269,6 @@ const FamilyIndexTestingForm = (props) => {
       : "Not Done",
     setting: props.patientObj.testingSetting,
     // chnage position
-    middleName: props?.patientObj?.personResponseDto?.otherName,
-    lastName: props?.patientObj?.personResponseDto?.surname,
     visitDate: "",
 
     sex: props?.patientObj?.personResponseDto?.gender?.id,
@@ -278,6 +287,10 @@ const FamilyIndexTestingForm = (props) => {
   const [selectedFacility, setSelectedFacility] = useState({});
   const [selectedLga, setSelectedLga] = useState({});
 
+
+  console.log("props props",props)
+    console.log("props props",props.patientObj.personResponseDto.uuid)
+
   const loadStates = () => {
     axios
       .get(`${baseUrl}organisation-units/parent-organisation-units/1`, {
@@ -290,9 +303,7 @@ const FamilyIndexTestingForm = (props) => {
           setStates(response.data);
         }
       })
-      .catch((e) => {
-        // console.log("Fetch states error" + e);
-      });
+      .catch((e) => {});
   };
 
   const loadOtherForm = (row) => {
@@ -318,7 +329,6 @@ const FamilyIndexTestingForm = (props) => {
         // console.log("Fetch LGA error" + e);
       });
   };
-  console.log(props);
   const handleItemClick = (next, present) => {
     props.handleItemClick(next);
     if (props.completed.includes(present)) {
@@ -343,7 +353,7 @@ const FamilyIndexTestingForm = (props) => {
 
     // if (
     //   familyIndexRequestDto.familyRelationship === "" &&
-    //   familyIndexRequestDto.familyIndexHivStatus === "" &&
+    //   familyIndexRequestDto.statusOfContact === "" &&
     //   familyIndexRequestDto.motherDead === ""
     // ) {
     //   setaAddIndexTracker(true);
@@ -361,8 +371,8 @@ const FamilyIndexTestingForm = (props) => {
     //       ? "field is required"
     //       : "";
 
-    //   temp.familyIndexHivStatus =
-    //     familyIndexRequestDto.familyIndexHivStatus === ""
+    //   temp.statusOfContact =
+    //     familyIndexRequestDto.statusOfContact === ""
     //       ? "field is required"
     //       : "";
 
@@ -374,6 +384,54 @@ const FamilyIndexTestingForm = (props) => {
     // }
     setErrorFamilyIndexDTO({ ...temp });
     return Object.values(temp).every((x) => x == "");
+  };
+
+  //Calculate Date of birth
+  // const calculate_age = (dob) => {
+  //   var today = new Date();
+  //   var dateParts = dob.split("-");
+  //   var dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
+  //   var birthDate = new Date(dateObject); // create a date object directlyfrom`dob1`argument
+  //   var age_now = today.getFullYear() - birthDate.getFullYear();
+  //   var m = today.getMonth() - birthDate.getMonth();
+  //   if (age_now <= 0 && m < 0 && today.getDate() < birthDate.getDate()) {
+  //     age_now--;
+  //   }
+  //   // if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+  //   //   age_now--;
+  //   // }
+  //   if (age_now === 0) {
+  //     return m + " month(s)";
+  //   }
+  //   return age_now;
+  // };
+  //Date of Birth and Age handle
+  const handleDobChange2 = (e) => {
+    if (e.target.value) {
+      const today = new Date();
+      const birthDate = new Date(e.target.value);
+      let age_now = today.getFullYear() - birthDate.getFullYear();
+      const m = today.getMonth() - birthDate.getMonth();
+      if (age_now <= 0 && m < 0 && today.getDate() < birthDate.getDate()) {
+        age_now--;
+      }
+      // if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      //   age_now--;
+      // }
+      familyIndexRequestDto.age = age_now;
+
+      //setBasicInfo({...basicInfo, age: age_now});
+    } else {
+      setFamilyIndexRequestDto({ ...familyIndexRequestDto, age: "" });
+    }
+    setFamilyIndexRequestDto({
+      ...familyIndexRequestDto,
+      dateOfBirth: e.target.value,
+    });
+
+    if (familyIndexRequestDto.age !== "" && familyIndexRequestDto.age >= 85) {
+      toggle();
+    }
   };
 
   const loadFacilities = (id) => {
@@ -612,7 +670,7 @@ const FamilyIndexTestingForm = (props) => {
   //     existingArray.push(familyIndexRequestDto);
   //     setFamilyIndexRequestDto({
   //       childNumber: "",
-  //       familyIndexHivStatus: "",
+  //       statusOfContact: "",
   //       familyIndexTestingUuid: "",
   //       familyRelationship: "",
   //       motherDead: "",
@@ -661,9 +719,7 @@ const FamilyIndexTestingForm = (props) => {
     handleItemClick("new-referral", "");
   };
   const loadNextForm = (row) => {
-    // setSaving(true);
     handleItemClick("pns", "fit");
-    toggle();
   };
 
   const getSelectedDFamilyIndex = (relationship) => {
@@ -775,15 +831,15 @@ const FamilyIndexTestingForm = (props) => {
         value === "FAMILY_RELATIONSHIP_BIOLOGICAL_CHILD"
           ? ""
           : prevPayload.childNumber,
-      // Reset familyIndexHivStatus when family relationship changes, where mother = '1293', father = '1294', biological child = '1295', siblings = '1296'
-      familyIndexHivStatus: [
+      // Reset statusOfContact when family relationship changes, where mother = '1293', father = '1294', biological child = '1295', siblings = '1296'
+      statusOfContact: [
         "FAMILY_RELATIONSHIP_BIOLOGICAL_CHILD",
         "FAMILY_RELATIONSHIP_FATHER",
         "FAMILY_RELATIONSHIP_MOTHER",
         "FAMILY_RELATIONSHIP_SIBLINGS",
       ].includes(value)
         ? ""
-        : prevPayload.familyIndexHivStatus,
+        : prevPayload.statusOfContact,
       // Reset uan when family relationship changes
       uan:
         value === "FAMILY_RELATIONSHIP_BIOLOGICAL_CHILD" ||
@@ -822,8 +878,8 @@ const FamilyIndexTestingForm = (props) => {
 
       return data[0].display;
     }
-    if (type === "familyIndexHivStatus") {
-      data = familyIndexHivStatus.filter((each) => {
+    if (type === "statusOfContact") {
+      data = statusOfContact.filter((each) => {
         if (each.code === value) {
           return each;
         }
@@ -831,8 +887,8 @@ const FamilyIndexTestingForm = (props) => {
 
       return data[0].display;
     }
-    if (type === "familyIndexHivStatus") {
-      data = familyIndexHivStatus.filter((each) => {
+    if (type === "statusOfContact") {
+      data = statusOfContact.filter((each) => {
         if (each.code === value) {
           return each;
         }
@@ -1010,10 +1066,10 @@ const FamilyIndexTestingForm = (props) => {
   };
   const handleDateOfBirthChange = (e) => {
     if (e.target.value == "Actual") {
-      payload.isDateOfBirthEstimated = false;
+      familyIndexRequestDto.isDateOfBirthEstimated = false;
       setAgeDisabled(true);
     } else if (e.target.value == "Estimated") {
-      payload.isDateOfBirthEstimated = true;
+      familyIndexRequestDto.isDateOfBirthEstimated = true;
       setAgeDisabled(false);
     }
   };
@@ -1021,26 +1077,43 @@ const FamilyIndexTestingForm = (props) => {
     if (!ageDisabled && e.target.value) {
       if (e.target.value !== "" && e.target.value >= 85) {
         toggle();
+
+        const currentDate = new Date();
+        currentDate.setDate(15);
+        currentDate.setMonth(5);
+        const estDob = moment(currentDate.toISOString());
+        const dobNew = estDob.add(e.target.value * -1, "years");
+        setPayload({
+          ...payload,
+          dateOfBirth: moment(dobNew).format("YYYY-MM-DD"),
+        });
+        payload.dateOfBirth = moment(dobNew).format("YYYY-MM-DD");
       }
-      if (e.target.value !== "" && e.target.value <= 15) {
-        props.setHideOtherMenu(false);
-      } else if (e.target.value !== "" && e.target.value > 15) {
-        props.setHideOtherMenu(true);
-      } else {
-        props.setHideOtherMenu(true);
-      }
-      const currentDate = new Date();
-      currentDate.setDate(15);
-      currentDate.setMonth(5);
-      const estDob = moment(currentDate.toISOString());
-      const dobNew = estDob.add(e.target.value * -1, "years");
-      setPayload({
-        ...payload,
-        dateOfBirth: moment(dobNew).format("YYYY-MM-DD"),
-      });
-      payload.dateOfBirth = moment(dobNew).format("YYYY-MM-DD");
+      setPayload({ ...payload, age: e.target.value });
     }
-    setPayload({ ...payload, age: e.target.value });
+  };
+
+  const handleAgeChange2 = (e) => {
+    if (!ageDisabled2 && e.target.value) {
+      if (e.target.value !== "" && e.target.value >= 85) {
+        toggle();
+
+        const currentDate = new Date();
+        currentDate.setDate(15);
+        currentDate.setMonth(5);
+        const estDob = moment(currentDate.toISOString());
+        const dobNew = estDob.add(e.target.value * -1, "years");
+        setFamilyIndexRequestDto({
+          ...familyIndexRequestDto,
+          dateOfBirth: moment(dobNew).format("YYYY-MM-DD"),
+        });
+        familyIndexRequestDto.dateOfBirth = moment(dobNew).format("YYYY-MM-DD");
+      }
+      setFamilyIndexRequestDto({
+        ...familyIndexRequestDto,
+        age: e.target.value,
+      });
+    }
   };
 
   //End of Date of Birth and Age handling
@@ -1085,12 +1158,13 @@ const FamilyIndexTestingForm = (props) => {
         setSaving(false);
 
         toast.success("Family Index form save succesfully!");
+        handleItemClick("fit-history", "risk");
 
-        if (props.history) {
-          handleItemClick("pns-history", "fit");
-        } else {
-          loadOtherForm();
-        }
+        // if (props.history) {
+        //   handleItemClick("pns-history", "fit");
+        // } else {
+        //   loadOtherForm();
+        // }
 
         // history.push({pathName: "/patient-history",
         //   state: {
@@ -1120,16 +1194,14 @@ const FamilyIndexTestingForm = (props) => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
+    familyTestingTrackerRequestDTO.facilityId =
+      facilityInfo.currentOrganisationUnitId;
     payload.familyIndexRequestDto = familyIndexRequestDto;
     payload.familyIndexRequestDto.familyTestingTrackerRequestDTO =
       familyTestingTrackerRequestDTO;
     payload.state = stateInfo;
     payload.lga = lgaInfo;
-    payload.facilityName = facilityInfo.currentOrganisationUnitName;
-    
-    // postPayload(payload);
-    //    handleItemClick("basic", "risk");
-    // }
+    postPayload(payload);
   };
 
   const checkNumberLimit = (e) => {
@@ -1427,10 +1499,10 @@ const FamilyIndexTestingForm = (props) => {
                     <Input
                       className="form-control"
                       type="text"
-                      name="name"
-                      id="name"
-                      value={payload.name}
-                      onChange={handleInputChange}
+                      name="firstName"
+                      id="firstName"
+                      value={familyIndexRequestDto.firstName}
+                      onChange={handlefamilyIndexRequestDto}
                       style={{
                         border: "1px solid #014D88",
                         borderRadius: "0.2rem",
@@ -1454,8 +1526,8 @@ const FamilyIndexTestingForm = (props) => {
                       type="text"
                       name="name"
                       id="name"
-                      value={payload.middleName}
-                      onChange={handleInputChange}
+                      value={familyIndexRequestDto.middleName}
+                      onChange={handlefamilyIndexRequestDto}
                       style={{
                         border: "1px solid #014D88",
                         borderRadius: "0.2rem",
@@ -1480,8 +1552,8 @@ const FamilyIndexTestingForm = (props) => {
                       type="text"
                       name="name"
                       id="name"
-                      value={payload.lastName}
-                      onChange={handleInputChange}
+                      value={familyIndexRequestDto.lastName}
+                      onChange={handlefamilyIndexRequestDto}
                       style={{
                         border: "1px solid #014D88",
                         borderRadius: "0.2rem",
@@ -1576,13 +1648,13 @@ const FamilyIndexTestingForm = (props) => {
                       }}
                       disabled
                     />
-                    {errors.dateOfBirth !== "" ? (
+                    {/* {errors.dateOfBirth !== "" ? (
                       <span className={classes.error}>
                         {errors.dateOfBirth}
                       </span>
                     ) : (
                       ""
-                    )}
+                    )} */}
                   </FormGroup>
                 </div>
                 <div className="form-group mb-3 col-md-4">
@@ -1671,7 +1743,10 @@ const FamilyIndexTestingForm = (props) => {
 
                 <div className="form-group  col-md-4">
                   <FormGroup>
-                    <Label>Alternative Contact Number</Label>
+                    <Label>
+                      Alternative Contact Number
+                      {/* <span style={{ color: "red" }}> *</span> */}
+                    </Label>
                     <Input
                       type="text"
                       name="alternatePhoneNumber"
@@ -2015,6 +2090,80 @@ const FamilyIndexTestingForm = (props) => {
                   )}
                 </FormGroup>
               </div>
+              <div className="form-group mb-2 col-md-2">
+                <FormGroup>
+                  <Label>Date Of Birth</Label>
+                  <div className="radio">
+                    <label>
+                      <input
+                        type="radio"
+                        value="Actual"
+                        name="dateOfBirth"
+                        defaultChecked
+                        onChange={(e) => handleDateOfBirthChange(e)}
+                        style={{
+                          border: "1px solid #014D88",
+                          borderRadius: "0.2rem",
+                        }}
+                      />{" "}
+                      Actual
+                    </label>
+                  </div>
+                  <div className="radio">
+                    <label>
+                      <input
+                        type="radio"
+                        value="Estimated"
+                        name="dateOfBirth"
+                        onChange={(e) => handleDateOfBirthChange(e)}
+                        style={{
+                          border: "1px solid #014D88",
+                          borderRadius: "0.2rem",
+                        }}
+                      />{" "}
+                      Estimated
+                    </label>
+                  </div>
+                </FormGroup>
+              </div>
+              <div className="form-group mb-3 col-md-3">
+                <FormGroup>
+                  <Label>Date </Label>
+                  <input
+                    className="form-control"
+                    type="date"
+                    name="dateOfBirth"
+                    id="dateOfBirth"
+                    // min={familyIndexRequestDto.dateVisit}
+                    max={moment(new Date()).format("YYYY-MM-DD")}
+                    value={familyIndexRequestDto.dateOfBirth}
+                    onChange={handleDobChange2}
+                    style={{
+                      border: "1px solid #014D88",
+                      borderRadius: "0.2rem",
+                    }}
+                  />
+                </FormGroup>
+              </div>
+              <div className="form-group mb-3 col-md-3">
+                <FormGroup>
+                  <Label>Age</Label>
+                  <input
+                    className="form-control"
+                    type="number"
+                    name="age"
+                    id="age"
+                    value={familyIndexRequestDto.age}
+                    disabled={ageDisabled}
+                    onChange={handleAgeChange}
+                    style={{
+                      border: "1px solid #014D88",
+                      borderRadius: "0.2rem",
+                    }}
+                  />
+                </FormGroup>
+              </div>
+
               {familyIndexRequestDto.familyRelationship ===
                 "FAMILY_RELATIONSHIP_BIOLOGICAL_CHILD" && (
                 <div className="form-group col-md-4">
@@ -2042,6 +2191,30 @@ const FamilyIndexTestingForm = (props) => {
                         {errorFamilyIndexDTO.childNumber}
                       </span>
                     )}
+                  </FormGroup>
+                </div>
+              )}
+              {familyIndexRequestDto.familyRelationship ===
+                "FAMILY_RELATIONSHIP_BIOLOGICAL_CHILD" && (
+                <div className="form-group col-md-4">
+                  <FormGroup>
+                    <Label for="childNumber">Child Dead</Label>
+                    <select
+                      className="form-control"
+                      id="childDead"
+                      name="childDead"
+                      onChange={handlefamilyIndexRequestDto}
+                      value={familyIndexRequestDto.childDead}
+                    >
+                      <option value="">Select</option>
+                      <option value="yes">Yes</option>
+                      <option value="no">No</option>
+                    </select>
+                    {/* {errorFamilyIndexDTO.childNumber && (
+                      <span className={classes.error}>
+                        {errorFamilyIndexDTO.childNumber}
+                      </span>
+                    )} */}
                   </FormGroup>
                 </div>
               )}
@@ -2091,31 +2264,31 @@ const FamilyIndexTestingForm = (props) => {
 
               <div className="form-group col-md-4">
                 <FormGroup>
-                  <Label for="familyIndexHivStatus">Contact HIV Status</Label>
+                  <Label for="statusOfContact">Contact HIV Status</Label>
                   <select
                     className="form-control"
-                    id="familyIndexHivStatus"
-                    name="familyIndexHivStatus"
+                    id="statusOfContact"
+                    name="statusOfContact"
                     onChange={handlefamilyIndexRequestDto}
-                    value={familyIndexRequestDto.familyIndexHivStatus}
+                    value={familyIndexRequestDto.statusOfContact}
                   >
                     <option value="">Select</option>
-                    {familyIndexHivStatus.map((value, index) => (
+                    {statusOfContact.map((value, index) => (
                       <option key={index} value={value.code}>
                         {value.display}
                       </option>
                     ))}
                   </select>
-                  {errorFamilyIndexDTO.familyIndexHivStatus && (
+                  {errorFamilyIndexDTO.statusOfContact && (
                     <span className={classes.error}>
-                      {errorFamilyIndexDTO.familyIndexHivStatus}
+                      {errorFamilyIndexDTO.statusOfContact}
                     </span>
                   )}
                 </FormGroup>
               </div>
 
-              {familyIndexRequestDto.familyIndexHivStatus &&
-                familyIndexRequestDto.familyIndexHivStatus ===
+              {familyIndexRequestDto.statusOfContact &&
+                familyIndexRequestDto.statusOfContact ===
                   "FAMILY_INDEX_HIV_STATUS_CURRENT_ON_ART" && (
                   <div className="form-group col-md-4">
                     <FormGroup>
@@ -2128,7 +2301,7 @@ const FamilyIndexTestingForm = (props) => {
                         value={familyIndexRequestDto.uan}
                         onChange={handlefamilyIndexRequestDto}
                         disabled={
-                          familyIndexRequestDto.familyIndexHivStatus !==
+                          familyIndexRequestDto.statusOfContact !==
                           "FAMILY_INDEX_HIV_STATUS_CURRENT_ON_ART"
                         }
                       />
@@ -2187,6 +2360,29 @@ const FamilyIndexTestingForm = (props) => {
                   </FormGroup>
                 </div>
               )}
+
+              {familyIndexRequestDto.childDead === "yes" && (
+                <div className="form-group col-md-4">
+                  <FormGroup>
+                    <Label for="yearMotherDied">Year Child Died</Label>
+                    <input
+                      className="form-control"
+                      id="yearMotherDied"
+                      type="date"
+                      min="1929-12-31"
+                      max={moment(new Date()).format("YYYY-MM-DD")}
+                      name="yearChildDead"
+                      value={familyIndexRequestDto.yearChildDead}
+                      onChange={handlefamilyIndexRequestDto}
+                    />
+                    {errorFamilyIndexDTO.yearChildDead && (
+                      <span className={classes.error}>
+                        {errorFamilyIndexDTO.yearChildDead}
+                      </span>
+                    )}
+                  </FormGroup>
+                </div>
+              )}
               {/* {addIndexTracker && (
                 <div className="form-group mb-3 col-md-12">
                   <p style={{ color: "red" }}>Fill input in section B</p>
@@ -2214,10 +2410,6 @@ const FamilyIndexTestingForm = (props) => {
                   //   disabled={saving}
                 />
               </div> */}
-              {/* {console.log(
-                "arrayFamilyIndexRequestDto",
-                arrayFamilyIndexRequestDto
-              )} */}
 
               {/* {arrayFamilyIndexRequestDto &&
                 arrayFamilyIndexRequestDto.length > 0 && (
@@ -2245,8 +2437,8 @@ const FamilyIndexTestingForm = (props) => {
                                 </td>
                                 <td>
                                   {convertCodeToDisplay(
-                                    "familyIndexHivStatus",
-                                    each.familyIndexHivStatus
+                                    "statusOfContact",
+                                    each.statusOfContact
                                   )}
                                 </td>
                                 <td>{each.motherDead}</td>
@@ -2372,8 +2564,8 @@ const FamilyIndexTestingForm = (props) => {
                 <div className="form-group mb-3 col-md-4">
                   <FormGroup>
                     <Label for="">
-                      Schedule Visit Date{" "}
-                      <span style={{ color: "red" }}> *</span>{" "}
+                      Schedule Visit Date
+                      {/* <span style={{ color: "red" }}> *</span>{" "} */}
                     </Label>
                     <Input
                       type="date"
@@ -2400,9 +2592,7 @@ const FamilyIndexTestingForm = (props) => {
                 </div>
                 <div className="form-group mb-3 col-md-4">
                   <FormGroup>
-                    <Label for="">
-                      Date visited <span style={{ color: "red" }}> *</span>{" "}
-                    </Label>
+                    <Label for="">Date visited</Label>
                     <Input
                       type="date"
                       name="dateVisit"
@@ -2429,7 +2619,8 @@ const FamilyIndexTestingForm = (props) => {
                 <div className="form-group mb-3 col-md-4">
                   <FormGroup>
                     <Label for="">
-                      Attempts <span style={{ color: "red" }}> *</span>{" "}
+                      Attempts
+                      {/* <span style={{ color: "red" }}> *</span>{" "} */}
                     </Label>
                     <select
                       className="form-control"

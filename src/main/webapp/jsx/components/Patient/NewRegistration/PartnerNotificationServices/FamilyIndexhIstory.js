@@ -172,7 +172,7 @@ const FamilyIndexHistory = (props) => {
       <div>
         <div className="form-group mb-3 col-md-12">
           {console.log(familyIndexList)}
-          {familyIndexList.length < 1 && (
+          {
             <Button
               content="Add New form"
               icon="left add"
@@ -180,7 +180,7 @@ const FamilyIndexHistory = (props) => {
               style={{ backgroundColor: "#992E62", color: "#fff" }}
               onClick={() => props.handleItemClick("fit")}
             />
-          )}
+          }
           {/* <Button
             content="Done"
             icon="list"

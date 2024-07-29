@@ -25,8 +25,6 @@ import { Modal } from "react-bootstrap";
 //import { objectValues } from "react-toastify/dist/utils";
 import { getCheckModality } from "../../../../utility";
 
-
-
 const useStyles = makeStyles((theme) => ({
   card: {
     margin: theme.spacing(20),
@@ -94,7 +92,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 // THIS IS THE VIEW AND UPDATE PAGE
 const BasicInfo = (props) => {
-  console.log("#############",props.patientObj);
+  console.log("#############", props.patientObj);
   const classes = useStyles();
   const history = useHistory();
   //console.log("enr", props.activePage.activeObject);
@@ -110,7 +108,7 @@ const BasicInfo = (props) => {
   const [indexTesting, setIndexTesting] = useState([]);
   let temp = { ...errors };
   //console.log(props?.patientObj?.dateVisit)
-const [modalityCheck, setModalityCheck]=useState("")
+  const [modalityCheck, setModalityCheck] = useState("");
   const [objValues, setObjValues] = useState({
     active: true,
     clientCode: "",
@@ -151,7 +149,7 @@ const [modalityCheck, setModalityCheck]=useState("")
     relationWithIndexClient:
       props.activePage?.activeObject?.relationWithIndexClient,
     indexClientCode: "",
-    comment: ""
+    comment: "",
   });
 
   useEffect(() => {
@@ -168,7 +166,11 @@ const [modalityCheck, setModalityCheck]=useState("")
     // }
     //setObjValues({...objectValues, genderId: props.patientObj.personResponseDto.gender.id})
     //objValues.genderId = props.patientObj && props.patientObj.personResponseDto ? props.patientObj.personResponseDto.gender.id : ""
-    setModalityCheck(getCheckModality(props?.patientObj?.riskStratificationResponseDto?.modality));
+    setModalityCheck(
+      getCheckModality(
+        props?.patientObj?.riskStratificationResponseDto?.modality
+      )
+    );
   }, [props.patientObj]);
   //Get list of KP
   const KP = () => {
@@ -265,23 +267,43 @@ const [modalityCheck, setModalityCheck]=useState("")
       });
   };
   const handleInputChange = (e) => {
+    if (e.target.name === "numChildren") {
+      if (e.target.value >= 0) {
+        setObjValues({ ...objValues, [e.target.name]: e.target.value });
+      } else {
+        setObjValues({
+          ...objValues,
+          [e.target.name]: 0,
+        });
+      }
+    } else if (e.target.name === "numWives") {
+      if (e.target.value >= 0) {
+        setObjValues({ ...objValues, [e.target.name]: e.target.value });
+      } else {
+        setObjValues({
+          ...objValues,
+          [e.target.name]: 0,
+        });
+      }
+    } else {
+      setObjValues({ ...objValues, [e.target.name]: e.target.value });
+    }
     setErrors({ ...temp, [e.target.name]: "" });
-    setObjValues({ ...objValues, [e.target.name]: e.target.value });
   };
 
   const handleClientCodeCheck = (e) => {
     axios
-    .get(`${baseUrl}hts/clientCodeCheck`, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-    .then((response) => {
-      //console.log(response.data);
-      setGender(response.data);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-  }
+      .get(`${baseUrl}hts/clientCodeCheck`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        //console.log(response.data);
+        setGender(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   /*****  Validation  */
   const validate = () => {
     //HTS FORM VALIDATION
@@ -441,7 +463,10 @@ const [modalityCheck, setModalityCheck]=useState("")
                       border: "1px solid #014D88",
                       borderRadius: "0.25rem",
                     }}
-                    readOnly={props.activePage.actionType === "view" || props.activePage.actionType === "update"}
+                    readOnly={
+                      props.activePage.actionType === "view" ||
+                      props.activePage.actionType === "update"
+                    }
                   />
                   {errors.clientCode !== "" ? (
                     <span className={classes.error}>{errors.clientCode}</span>

@@ -146,6 +146,11 @@ const BasicInfo = (props) => {
   //             }
   //             return age_now ;
   // };
+
+  const [permissions, setPermission] = useState(
+    localStorage.getItem("permissions")?.split(",")
+  );
+
   const [knowledgeAssessment, setKnowledgeAssessment] = useState({
     previousTestedHIVNegative: "",
     timeLastHIVNegativeTestResult: "",
@@ -483,7 +488,10 @@ const BasicInfo = (props) => {
           props.setPatientObj(response.data);
           //toast.success("Risk Assesment successful");
 
-          if (modalityCheck == "fill") {
+          if (
+            modalityCheck == "fill" 
+   
+          ) {
             handleItemClick("hiv-test", "pre-test-counsel");
           }
         })

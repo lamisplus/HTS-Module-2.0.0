@@ -617,9 +617,7 @@ const HivTestResult = (props) => {
         .then((response) => {
           setSaving(false);
           props.setPatientObj(response.data);
-          //console.log(response.data)
-          //props.setPatientObj(props && props.patientObj ? props.patientObj : "")
-          //toast.success("HIV test successful");
+
           handleItemClick("post-test", "hiv-test");
         })
         .catch((error) => {
@@ -664,6 +662,7 @@ const HivTestResult = (props) => {
                     name="date"
                     id="date"
                     value={initialTest1.date}
+                    min={props?.patientObj?.dateVisit}
                     onChange={handleInputChangeInitial}
                     max={moment(new Date()).format("YYYY-MM-DD")}
                     style={{

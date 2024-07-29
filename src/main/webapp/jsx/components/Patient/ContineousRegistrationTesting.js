@@ -334,7 +334,7 @@ const UserRegistration = (props) => {
                           </span>
                         </Menu.Item>
                       )}
-               
+                      {permissions.includes("Request_and_Result_Form") && (
                         <Menu.Item
                           name="inbox"
                           active={activeItem === "hiv-test"}
@@ -354,7 +354,7 @@ const UserRegistration = (props) => {
 
                           {/* <Label color='teal'>3</Label> */}
                         </Menu.Item>
-                     
+                      )}
                       <Menu.Item
                         name="spam"
                         active={activeItem === "post-test"}
@@ -373,10 +373,7 @@ const UserRegistration = (props) => {
                           )}
                         </span>
                       </Menu.Item>
-                      {console.log(
-                        "testing recency age",
-                        patientObj2.riskStratificationResponseDto?.age
-                      )}
+                
                       {patientObj2?.hivTestResult &&
                         patientObj2?.hivTestResult === "Positive" &&
                         patientObj2.riskStratificationResponseDto?.age >=
@@ -404,24 +401,7 @@ const UserRegistration = (props) => {
                             </span>
                           </Menu.Item>
                         )}
-                      {/* <Menu.Item
-                        name="spam"
-                        active={activeItem === "indexing"}
-                        onClick={() => handleItemClick("indexing")}
-                        style={{
-                          backgroundColor:
-                            activeItem === "indexing" ? "#000" : "",
-                        }}
-                        disabled={activeItem !== "indexing" ? true : false}
-                      >
-               
-                        <span style={{ color: "#fff" }}>
-                          Index Notification Services - Elicitation
-                          {completed.includes("indexing") && (
-                            <Icon name="check" color="green" />
-                          )}
-                        </span>
-                      </Menu.Item> */}
+              
                       {patientObj2?.hivTestResult &&
                         patientObj2?.hivTestResult === "Positive" && (
                           <Menu.Item
@@ -441,8 +421,8 @@ const UserRegistration = (props) => {
                               )}
                             </span>
                           </Menu.Item>
-                        )}
- 
+                        )} 
+                      {permissions.includes("Nigeria_PNS_Form") &&
                         patientObj2?.hivTestResult &&
                         patientObj2?.hivTestResult === "Positive" && (
                           <Menu.Item
@@ -461,28 +441,10 @@ const UserRegistration = (props) => {
                                 <Icon name="check" color="green" />
                               )}
                             </span>
-                          </Menu.Item>
-                   
-                      {/*<Menu.Item*/}
-                      {/*  name="spam"*/}
-                      {/*  active={activeItem === "continuous-referral"}*/}
-                      {/*  onClick={() => handleItemClick("continuous-referral")}*/}
-                      {/*  style={{*/}
-                      {/*    backgroundColor:*/}
-                      {/*      activeItem === "continuous-referral" ? "#000" : "",*/}
-                      {/*  }}*/}
-                      {/*  disabled={*/}
-                      {/*    activeItem !== "continuous-referral" ? true : false*/}
-                      {/*  }*/}
-                      {/*>*/}
-                      {/*  <span style={{ color: "#fff" }}>*/}
-                      {/*    Client Referral Service*/}
-                      {/*    {completed.includes("continuous-referral") && (*/}
-                      {/*      <Icon name="check" color="green" />*/}
-                      {/*    )}*/}
-                      {/*  </span>*/}
-                      {/*</Menu.Item>*/}
-           
+                          </Menu.Item>)}
+
+                     
+                     {permissions.includes("Referral_Form") && ( 
                         <Menu.Item
                           name="inbox"
                           active={activeItem === "refferal-history"}
@@ -500,11 +462,11 @@ const UserRegistration = (props) => {
                             )}
                           </span>
                         </Menu.Item>
-               
-                    </>
                   )}
+                  </>)}
                 </Menu>
               </div>
+              
               <div
                 className="col-md-9 col-sm-9 col-lg-9 "
                 style={{

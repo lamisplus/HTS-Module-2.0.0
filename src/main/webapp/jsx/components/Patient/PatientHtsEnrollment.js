@@ -180,6 +180,7 @@ const UserRegistration = (props) => {
                       </span>
                     </Menu.Item>
                   )}
+                  {permissions.includes("Request_and_Result_Form") && (
                     <Menu.Item
                       name="inbox"
                       active={activeItem === "hiv-test"}
@@ -198,7 +199,7 @@ const UserRegistration = (props) => {
                       </span>
                       {/* <Label color='teal'>3</Label> */}
                     </Menu.Item>
-       
+                  )}
                   <Menu.Item
                     name="spam"
                     active={activeItem === "post-test"}
@@ -275,7 +276,27 @@ const UserRegistration = (props) => {
                     </span>
                   </Menu.Item> */}
                   {/* Family Index Testing form */}
-                  {patientObj.hivTestResult &&
+                  {/* {patientObj.hivTestResult && patientObj.hivTestResult.toLowerCase() ===
+                    "positive" &&  <Menu.Item
+                    name="inbox"
+                    active={activeItem === "fit-history"}
+                    onClick={() => handleItemClick("fit-history")}
+                    style={{
+                      backgroundColor:
+                        activeItem === "fit-history" ? "#000" : "",
+                    }}
+                  >
+                    <span style={{ color: "#fff" }}>
+                      {" "}
+                      Family Index Testing form
+                      {completed.includes("fit") && (
+                        <Icon name="check" color="green" />
+                      )}
+                    </span>
+                  </Menu.Item>}  */}
+
+                  {permissions.includes("Nigeria_PNS_Form") &&
+                    patientObj.hivTestResult &&
                     patientObj.hivTestResult.toLowerCase() === "positive" && (
                       <Menu.Item
                         name="inbox"
@@ -317,7 +338,7 @@ const UserRegistration = (props) => {
                         </span>
                       </Menu.Item>
                     )}
-              
+                  {permissions.includes("Referral_Form") && (
                     <Menu.Item
                       name="inbox"
                       active={activeItem === "refferal-history"}
@@ -335,7 +356,7 @@ const UserRegistration = (props) => {
                         )}
                       </span>
                     </Menu.Item>
-        
+                  )}
                 </Menu>
               </div>
 

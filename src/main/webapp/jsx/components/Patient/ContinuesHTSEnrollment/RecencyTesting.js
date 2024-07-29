@@ -358,7 +358,12 @@ const Recency = (props) => {
           //toast.success("Risk Assesment successful");
           //comment this out for release
           // handleItemClick("fit", "recency-testing");
-      
+          if (permissions.includes("Nigeria_PNS_Form")) {
+            handleItemClick("pns", "recency-testing");
+          } else if (permissions.includes("Referral_Form")) {
+            handleItemClick("client-referral", "recency-testing");
+          }
+          // else if (permissions.includes("Nigeria_PNS_Form")) {
           // }
         })
         .catch((error) => {

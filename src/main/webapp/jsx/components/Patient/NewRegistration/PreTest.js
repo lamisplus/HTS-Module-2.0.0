@@ -489,8 +489,8 @@ const BasicInfo = (props) => {
           //toast.success("Risk Assesment successful");
 
           if (
-            modalityCheck == "fill" 
-   
+            modalityCheck == "fill" &&
+            permissions.includes("Request_and_Result_Form")
           ) {
             handleItemClick("hiv-test", "pre-test-counsel");
           }

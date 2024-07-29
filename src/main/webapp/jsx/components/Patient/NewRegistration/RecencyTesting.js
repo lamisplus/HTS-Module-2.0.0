@@ -209,10 +209,16 @@ const Recency = (props) => {
 
   const loadNextForm = (row) => {
     // setSaving(true);
+    if (permissions.includes("Nigeria_PNS_Form")) {
+          handleItemClick("pns", "recency-testing");
 
-   handleItemClick("fit", "recency-testing");
+    } else if (permissions.includes("Referral_Form")) {
+       
+      handleItemClick("pns", "client-referral");
 
-
+    } 
+    // else if (permissions.includes("Nigeria_PNS_Form")) {
+    // }
 
     toggle();
   };

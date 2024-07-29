@@ -210,7 +210,11 @@ const PnsForm = (props) => {
   console.log("thusssssss", props.patientObj);
 
   const loadNextForm = (row) => {
-    handleItemClick("client-referral", "pns");
+    // setSaving(true);
+   if (permissions.includes("Referral_Form")) {
+     handleItemClick("client-referral", "pns");
+     toggle();
+   }
   };
   const [htsClientInformation, sethtsClientInformation] = useState({
     testingSetting: props.patientObj.testingSetting,
@@ -247,7 +251,9 @@ const PnsForm = (props) => {
   const loadOtherForm = (row) => {
     // setSaving(true);
     //props.setActiveContent({...props.activeContent, route:'mental-health-view', id:row.id})
-    toggle();
+if (permissions.includes("Referral_Form")) {
+  toggle();
+}
   };
   const getPNSInfo = (id) => {
     axios

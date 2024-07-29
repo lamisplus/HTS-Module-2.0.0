@@ -745,6 +745,16 @@ const FamilyIndexTestingForm = (props) => {
         familyRelationship: result2[0].code,
       });
     }
+    // setSaving(true);
+    if (permissions.includes("Nigeria_PNS_Form")) {
+          handleItemClick("pns", "fit");
+          toggle();
+
+    }else if (permissions.includes("Referral_Form")) {
+            handleItemClick("pns", "client-referral");
+            toggle();
+
+          }
   };
 
   // const handleSubmitfamilyTestingTrackerRequestDTO = (e) => {

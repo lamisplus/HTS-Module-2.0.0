@@ -24,7 +24,7 @@ import "react-phone-input-2/lib/style.css";
 import { Modal } from "react-bootstrap";
 //import { objectValues } from "react-toastify/dist/utils";
 import { getCheckModality } from "../../../../utility";
-
+import { getNextForm } from "../../../../utility";
 const useStyles = makeStyles((theme) => ({
   card: {
     margin: theme.spacing(20),
@@ -338,7 +338,12 @@ const BasicInfo = (props) => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-
+ let latestForm = getNextForm(
+   "Client_intake_form",
+   props.patientAge,
+   modalityCheck,
+   "unknown"
+ );
     if (props.activePage.actionType === "update") {
       //e.preventDefault();
       const patientForm = {
@@ -375,11 +380,8 @@ const BasicInfo = (props) => {
             setSaving(false);
             props.setPatientObj(response.data);
             toast.success("HTS Test successful");
-            if (props.patientAge > 14 && modalityCheck === "fill") {
-              handleItemClick("pre-test-counsel", "basic");
-            } else {
-              handleItemClick("hiv-test", "basic");
-            }
+             handleItemClick(latestForm[0], latestForm[1]);
+
           })
           .catch((error) => {
             setSaving(false);
@@ -399,13 +401,8 @@ const BasicInfo = (props) => {
     if (props.activePage.actionType === "view") {
       //e.preventDefault();
       setSaving(true);
-      if (props.patientAge > 14 && modalityCheck === "fill") {
-        setSaving(false);
-        handleItemClick("pre-test-counsel", "basic");
-      } else {
-        setSaving(false);
-        handleItemClick("hiv-test", "basic");
-      }
+            handleItemClick(latestForm[0], latestForm[1]);
+
     }
   };
 

@@ -15,7 +15,7 @@ import { Label as LabelRibbon, Button } from "semantic-ui-react";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
 import { token, url as baseUrl } from "../../../../api";
-
+import { getNextForm } from "../../../../utility";
 const useStyles = makeStyles((theme) => ({
   card: {
     margin: theme.spacing(20),
@@ -348,6 +348,12 @@ const Recency = (props) => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
+      let latestForm = getNextForm(
+        "HIV_Recency_Testing",
+        props.patientAge,
+        "",
+        props?.patientObj?.hivTestResult
+      );
     objValues.htsClientId = clientId;
     objValues.recency = recency;
     objValues.personId = patientID;
@@ -364,7 +370,12 @@ const Recency = (props) => {
           //toast.success("Risk Assesment successful");
           //comment this out for release
           // handleItemClick("fit-history", "recency-testing");
-handleItemClick("pns-history", "recency-testing");
+          if (
+            props?.patientObj?.hivTestResult && props?.patientObj?.hivTestResult.toLowerCase() ===
+            "positive"
+          ) {
+            handleItemClick("pns-history", "recency-testing");
+          }
 
         })
         .catch((error) => {
@@ -877,13 +888,13 @@ handleItemClick("pns-history", "recency-testing");
               <br />
               <div className="row">
                 <div className="form-group mb-3 col-md-12">
-                  <Button
+                  {/* <Button
                     content="Back"
                     icon="left arrow"
                     labelPosition="left"
                     style={{ backgroundColor: "#992E62", color: "#fff" }}
                     onClick={() => handleItemClick("post-test", "post-test")}
-                  />
+                  /> */}
                   <Button
                     content="Save & Continue"
                     icon="right arrow"

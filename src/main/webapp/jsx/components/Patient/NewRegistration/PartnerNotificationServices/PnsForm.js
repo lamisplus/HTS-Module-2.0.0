@@ -21,7 +21,7 @@ import "react-phone-input-2/lib/style.css";
 import Badge from "@mui/material/Badge";
 import { useHistory } from "react-router-dom";
 import { Modal } from "react-bootstrap";
-
+import { getNextForm } from "../../../../../utility";
 import { calculate_age } from "../../../utils";
 import PersonIcon from "@mui/icons-material/Person";
 const useStyles = makeStyles((theme) => ({
@@ -114,8 +114,9 @@ const PnsForm = (props) => {
   let history = useHistory();
   const [open, setOpen] = React.useState(false);
   const [permissions, setPermission] = useState(
-    localStorage.getItem("permissions")?.split(",")
+    localStorage.getItem("stringifiedPermmision")?.split(",")
   );
+  const [nextForm, setNextForm] = useState([]);
 
   const [stateInfo, setStateInfo] = useState(
     props?.basicInfo?.personResponseDto?.address?.address[0]?.stateId
@@ -207,14 +208,11 @@ const PnsForm = (props) => {
       // numberOfPartnerIdentifiedFromClientIndex: "",
     },
   });
-  console.log("thusssssss", props.patientObj);
 
   const loadNextForm = (row) => {
-    // setSaving(true);
-   if (permissions.includes("Referral_Form")) {
-     handleItemClick("client-referral", "pns");
-     toggle();
-   }
+    handleItemClick(nextForm[0], nextForm[1]);
+
+    toggle();
   };
   const [htsClientInformation, sethtsClientInformation] = useState({
     testingSetting: props.patientObj.testingSetting,
@@ -249,11 +247,7 @@ const PnsForm = (props) => {
   });
 
   const loadOtherForm = (row) => {
-    // setSaving(true);
-    //props.setActiveContent({...props.activeContent, route:'mental-health-view', id:row.id})
-if (permissions.includes("Referral_Form")) {
-  toggle();
-}
+    toggle();
   };
   const getPNSInfo = (id) => {
     axios
@@ -300,6 +294,7 @@ if (permissions.includes("Referral_Form")) {
   };
 
   useEffect(() => {
+
     Sex();
     getStates();
     NotificationContact();
@@ -729,6 +724,17 @@ if (permissions.includes("Referral_Form")) {
   // };
   const handleSubmit = (e) => {
     e.preventDefault();
+    let age = calculate_age(
+      props?.basicInfo?.personResponseDto?.dateOfBirth
+        ? props?.basicInfo?.personResponseDto?.dateOfBirth
+        : props?.patientObj?.personResponseDto?.dateOfBirth
+    );
+
+    let hivStatus = props?.patientObj?.hivTestResult;
+    let latestForm = getNextForm("Nigeria_PNS_Form", age, "", hivStatus);
+
+    setNextForm(latestForm);
+
     objValues.htsClientInformation = htsClientInformation;
     objValues.contactTracing = contactTracing;
     objValues.partnerId = partnerId;

@@ -23,6 +23,8 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { Modal } from "react-bootstrap";
 import { getCheckModality } from "../../../../utility";
+import { getNextForm } from "../../../../utility";
+
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -483,6 +485,14 @@ const BasicInfo = (props) => {
   const handleSubmit = (e) => {
     console.log(props.patientObject);
     e.preventDefault();
+    // check next form
+    let latestForm = getNextForm(
+      "Client_intake_form",
+      props.patientAge,
+      modalityCheck,
+      "unknown"
+    );
+
     const patientForm = {
       clientCode: objValues.clientCode,
       dateVisit: objValues.dateVisit,
@@ -523,11 +533,8 @@ const BasicInfo = (props) => {
           setSaving(false);
           props.setPatientObj(response.data);
           //toast.success("HTS Test successful");
-          if (props.patientAge > 15 && modalityCheck === "fill") {
-            handleItemClick("pre-test-counsel", "basic");
-          } else {
-            handleItemClick("hiv-test", "basic");
-          }
+         handleItemClick(latestForm[0], latestForm[1]);
+
         })
         .catch((error) => {
           setSaving(false);
@@ -1128,13 +1135,13 @@ const BasicInfo = (props) => {
               <br />
               <div className="row">
                 <div className="form-group mb-3 col-md-12">
-                  <Button
+                  {/* <Button
                     content="Back"
                     icon="left arrow"
                     labelPosition="left"
                     style={{ backgroundColor: "#992E62", color: "#fff" }}
                     onClick={() => handleItemClick("risk", "risk")}
-                  />
+                  /> */}
                   <Button
                     content="Save & Continue"
                     type="submit"

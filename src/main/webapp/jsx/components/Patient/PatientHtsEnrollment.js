@@ -63,7 +63,7 @@ const UserRegistration = (props) => {
   });
   const [modalityCheck, setModalityCheck] = useState("");
   const [permissions, setPermission] = useState(
-    localStorage.getItem("permissions")?.split(",")
+    JSON.parse(localStorage.getItem("stringifiedPermmision"))
   );
 
   const [basicInfo, setBasicInfo] = useState({});

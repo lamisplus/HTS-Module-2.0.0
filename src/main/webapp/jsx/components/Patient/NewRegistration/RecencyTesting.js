@@ -16,7 +16,8 @@ import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
 import { token, url as baseUrl } from "../../../../api";
 import { useHistory } from "react-router-dom/cjs/react-router-dom";
-
+import { getNextForm } from "../../../../utility";
+import { calculate_age } from "../../utils";
 import { Modal } from "react-bootstrap";
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -100,6 +101,8 @@ const Recency = (props) => {
   const [saving, setSaving] = useState(false);
   const [errors, setErrors] = useState({});
   const [hivTestDate, setHivTestDate] = useState("");
+  const [nextForm, setNextForm] = useState([]);
+
   let temp = { ...errors };
   const handleItemClick = (page, completedMenu) => {
     props.handleItemClick(page);
@@ -199,30 +202,23 @@ const Recency = (props) => {
     toggle();
     //commenting this out for release
     // handleItemClick("pns", "recency-testing");
-    handleItemClick("client-referral", "recency-testing");
+    handleItemClick(nextForm[0], nextForm[1]);
   };
   const loadOtherForm = (row) => {
-    // setSaving(true);
-    //props.setActiveContent({...props.activeContent, route:'mental-health-view', id:row.id})
     toggle();
   };
 
   const loadNextForm = (row) => {
     // setSaving(true);
-    if (permissions.includes("Nigeria_PNS_Form")) {
-          handleItemClick("pns", "recency-testing");
+    handleItemClick(nextForm[0], nextForm[1]);
 
-    } else if (permissions.includes("Referral_Form")) {
-       
-      handleItemClick("pns", "client-referral");
-
-    } 
     // else if (permissions.includes("Nigeria_PNS_Form")) {
     // }
 
     toggle();
   };
   useEffect(() => {
+
     if (props.patientObj && props.patientObj.recency !== null) {
       console.log(props.patientObj.recency);
       setRecency(props.patientObj.recency);
@@ -375,6 +371,15 @@ const Recency = (props) => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    let  age = calculate_age(props?.patientObj?.personResponseDto?.dateOfBirth)
+           let latestForm = getNextForm(
+             "HIV_Recency_Testing",
+             age,
+             "",
+             props?.patientObj?.hivTestResult
+           );
+           setNextForm(latestForm);
     objValues.htsClientId = clientId;
     objValues.recency = recency;
     objValues.personId = patientID;

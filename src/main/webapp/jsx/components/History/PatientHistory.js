@@ -33,7 +33,9 @@ const Home = (props) => {
   );
 
   const [patientInfo, setPatientInfo] = useState(null);
-
+  const [permissions, setPermission] = useState(
+    JSON.parse(localStorage.getItem("stringifiedPermmision"))
+  );
   const [lastVisitCount, setLastVisitCount] = useState(null);
   const [checkModality, setCheckModality] = useState("");
   const [lastVistAndModality, setLastVistAndModality] = useState("");

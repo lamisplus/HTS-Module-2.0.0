@@ -17,6 +17,7 @@ import "react-phone-input-2/lib/style.css";
 import "semantic-ui-css/semantic.min.css";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
+import { getNextForm } from "../../../../utility";
 //import PhoneInput from 'react-phone-input-2'
 import "react-phone-input-2/lib/style.css";
 import { Button } from "semantic-ui-react";
@@ -112,7 +113,10 @@ const BasicInfo = (props) => {
   const [riskCount, setRiskCount] = useState(0);
   const [isPMTCTModality, setIsPMTCTModality] = useState(false);
   const [showRiskAssessment, setShowRiskAssessment] = useState(false);
-
+  const [permissions, setPermission] = useState(
+    localStorage.getItem("stringifiedPermmision")?.split(",")
+  );
+  const [nextForm, setNextForm] = useState([]);
   const [targetGroupValue, setTargetGroupValue] = useState(null);
   const [objValues, setObjValues] = useState({
     age: "",
@@ -166,8 +170,9 @@ const BasicInfo = (props) => {
     EnrollmentSetting();
     EntryPoint();
     HTS_ENTRY_POINT_COMMUNITY();
-    //objValues.dateVisit=moment(new Date()).format("YYYY-MM-DD")
-    if (objValues.age !== "") {
+
+
+if (objValues.age !== "") {
       props.setPatientObjAge(objValues.age);
     }
     if (props.patientObj.riskStratificationResponseDto !== null) {
@@ -249,22 +254,11 @@ const BasicInfo = (props) => {
       });
   };
 
+
+
+  
   //Set HTS menu registration
   const getMenuLogic = () => {
-    // first logic
-    // if (objValues.age !== "" && objValues.age <= 15) {
-    //   props.setHideOtherMenu(true);
-    // } else if (objValues.age !== "" && objValues.age > 15) {
-    //   props.setHideOtherMenu(true);
-    // } else {
-    //   props.setHideOtherMenu(true);
-    // }
-
-    // if (objValues.age !== "" && objValues.age >= 85) {
-    //   toggle();
-    // }
-
-    //secound logic
     props.setHideOtherMenu(false);
   };
 
@@ -575,6 +569,12 @@ const BasicInfo = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    // get next form
+    let newModality = isPMTCTModality ? "skip" : "fill";
+
+  let latestForm =  getNextForm("Risk_Stratification", objValues.age, newModality, "unknown")
+ 
+
     getMenuLogic(objValues);
     props.patientObj.riskStratificationResponseDto = objValues;
     props.patientObj.personResponseDto.dob = objValues.dob;
@@ -637,7 +637,6 @@ const BasicInfo = (props) => {
       ) {
         if (validate()) {
           setSaving(true);
-          handleItemClick("basic", "risk");
 
           props.setHideOtherMenu(false);
           axios
@@ -649,6 +648,10 @@ const BasicInfo = (props) => {
               props.patientObj.riskStratificationResponseDto = response.data;
               objValues.code = response.data.code;
               props.setExtra(objValues);
+              console.log("nextForm", nextForm);
+
+              handleItemClick(latestForm[0], latestForm[1]);
+
               //toast.success("Risk stratification save succesfully!");
             })
             .catch((error) => {
@@ -685,7 +688,7 @@ const BasicInfo = (props) => {
               props.patientObj.riskStratificationResponseDto = response.data;
               objValues.code = response.data.code;
               props.setExtra(objValues);
-              handleItemClick("basic", "risk");
+              handleItemClick(latestForm[0], latestForm[1]);
               //toast.success("Risk stratification save succesfully!");
             })
             .catch((error) => {
@@ -725,7 +728,7 @@ const BasicInfo = (props) => {
               objValues.code = response.data.code;
               props.setExtra(objValues);
               toast.success("Risk stratification save succesfully!");
-              handleItemClick("basic", "risk");
+              handleItemClick(latestForm[0], latestForm[1]);
             })
             .catch((error) => {
               setSaving(false);

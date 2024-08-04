@@ -22,6 +22,8 @@ import "react-phone-input-2/lib/style.css";
 import { Button } from "semantic-ui-react";
 import { Modal } from "react-bootstrap";
 import { Label as LabelRibbon, Message } from "semantic-ui-react";
+import { getNextForm } from "../../../../utility";
+
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -449,6 +451,15 @@ const RiskStratification = (props) => {
     e.preventDefault();
     //console.log(riskAssessment)
     getMenuLogic();
+      let newModality = isPMTCTModality ? "skip" : "fill";
+
+        let latestForm = getNextForm(
+          "Risk_Stratification",
+          objValues.age,
+          newModality,
+          "unknown"
+        );
+
     props.patientObj.targetGroup = objValues.targetGroup;
     props.patientObj.testingSetting = objValues.testingSetting;
     props.patientObj.dateVisit = objValues.visitDate;
@@ -506,7 +517,7 @@ const RiskStratification = (props) => {
             setSaving(false);
             objValues.code = response.data.code;
             props.setExtra(objValues);
-            handleItemClick("basic", "risk");
+           handleItemClick(latestForm[0], latestForm[1]);
             props.setHideOtherMenu(false);
             //toast.success("Risk stratification save succesfully!");
           })
@@ -557,6 +568,7 @@ const RiskStratification = (props) => {
               >
                 Modality
               </div>
+
               <div className="row">
                 <div className="form-group  col-md-6">
                   <FormGroup>

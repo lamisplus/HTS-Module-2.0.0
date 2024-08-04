@@ -23,7 +23,8 @@ import { Button } from "semantic-ui-react";
 import { Modal } from "react-bootstrap";
 import { fontWeight } from "@mui/system";
 import { getCheckModality } from "../../../../utility";
-
+import { getDoubleSkipForm } from "../../../../utility";
+import { getNextForm } from "../../../../utility";
 const useStyles = makeStyles((theme) => ({
   card: {
     margin: theme.spacing(20),
@@ -124,6 +125,10 @@ const BasicInfo = (props) => {
   const [facilityCode, setFacilityCode] = useState("");
   const [serialNumber, setSerialNumber] = useState(null);
   const [showPregancy, setShowPregnancy] = useState(false);
+  const [permissions, setPermission] = useState(
+    localStorage.getItem("stringifiedPermmision")?.split(",")
+  );
+
 
   const getPhoneNumber = (identifier) => {
     const identifiers = identifier;
@@ -363,6 +368,7 @@ const BasicInfo = (props) => {
     PregnancyStatus();
     IndexTesting();
     CreateClientCode();
+
     //objValues.dateVisit=moment(new Date()).format("YYYY-MM-DD")
     //setObjValues(props.patientObj)
     setModalityCheck(
@@ -782,6 +788,27 @@ const BasicInfo = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // check next form 
+    let latestForm = getNextForm(
+      "Client_intake_form",
+      objValues.age,
+      modalityCheck,
+      "unknown"
+    );
+
+    console.log(
+      "getPemission",
+      latestForm,
+      "value =>",
+      "Client_intake_form",
+      objValues.age,
+      "fill",
+      "unknown"
+    );
+  
+
+ 
     if (validate()) {
       setSaving(true);
       const getSexId = sexs.find((x) => x.display === objValues.sex); //get patient sex ID by filtering the request
@@ -853,8 +880,11 @@ const BasicInfo = (props) => {
           props.extra && props.extra.code !== "" ? props.extra.code : "",
         comment: objValues.comment,
       };
-      props.setPatientObj({ ...props.patientObj, ...objValues });
 
+      props.setPatientObj({ ...props.patientObj, ...objValues });
+      // get permission
+
+ 
       axios
         .post(`${baseUrl}hts`, patientForm, {
           headers: { Authorization: `Bearer ${token}` },
@@ -863,18 +893,11 @@ const BasicInfo = (props) => {
           setSaving(false);
           props.setPatientObj(response.data);
           props.setBasicInfo(response.data);
-
-          //props.patientObj.personResponseDto=patientForm.personDto
-          //props.setPatientObj({...patientObj, })
-          //toast.success("HTS Test successful");
-          if (objValues.age <= 15 || modalityCheck === "skip") {
-            handleItemClick("hiv-test", "basic");
-          } else {
-            handleItemClick("pre-test-counsel", "basic");
-          }
+         handleItemClick(latestForm[0], latestForm[1]);
         })
         .catch((error) => {
           setSaving(false);
+          console.log(error)
           if (error.response && error.response.data) {
             let errorMessage =
               error.response.data.apierror &&
@@ -1843,13 +1866,13 @@ const BasicInfo = (props) => {
               <br />
               <div className="row">
                 <div className="form-group mb-3 col-md-12">
-                  <Button
+                  {/* <Button
                     content="Back"
                     icon="left arrow"
                     labelPosition="left"
                     style={{ backgroundColor: "#992E62", color: "#fff" }}
                     onClick={() => handleItemClick("risk", "risk")}
-                  />
+                  /> */}
                   <Button
                     content="Save & Continue"
                     type="submit"

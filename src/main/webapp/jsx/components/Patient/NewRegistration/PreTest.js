@@ -27,6 +27,7 @@ import "react-widgets/dist/css/react-widgets.css";
 import PanToolIcon from "@mui/icons-material/PanTool";
 //import * as moment from 'moment';
 import { getCheckModality } from "../../../../utility";
+import { getNextForm } from "../../../../utility";
 const useStyles = makeStyles((theme) => ({
   card: {
     margin: theme.spacing(20),
@@ -146,11 +147,9 @@ const BasicInfo = (props) => {
   //             }
   //             return age_now ;
   // };
-
   const [permissions, setPermission] = useState(
-    localStorage.getItem("permissions")?.split(",")
+    localStorage.getItem("stringifiedPermmision")?.split(",")
   );
-
   const [knowledgeAssessment, setKnowledgeAssessment] = useState({
     previousTestedHIVNegative: "",
     timeLastHIVNegativeTestResult: "",
@@ -162,6 +161,9 @@ const BasicInfo = (props) => {
     informConsentHivTest: "",
   });
   useEffect(() => {
+
+        
+
     if (props.patientObj) {
       setKnowledgeAssessment(
         props.patientObj.knowledgeAssessment &&
@@ -469,6 +471,12 @@ const BasicInfo = (props) => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
+      let latestForm = getNextForm(
+        "Pre_Test_Counseling",
+        objValues.age,
+        modalityCheck,
+        "unknown"
+      );
     if (validate()) {
       setSaving(true);
       objValues.htsClientId = clientId;
@@ -485,15 +493,9 @@ const BasicInfo = (props) => {
         })
         .then((response) => {
           setSaving(false);
-          props.setPatientObj(response.data);
-          //toast.success("Risk Assesment successful");
-
-          if (
-            modalityCheck == "fill" &&
-            permissions.includes("Request_and_Result_Form")
-          ) {
-            handleItemClick("hiv-test", "pre-test-counsel");
-          }
+          props.setPatientObj(response.data);    
+          handleItemClick(latestForm[0], latestForm[1]);
+          
         })
         .catch((error) => {
           setSaving(false);
@@ -1900,13 +1902,13 @@ const BasicInfo = (props) => {
               <br />
               <div className="row">
                 <div className="form-group mb-3 col-md-12">
-                  <Button
+                  {/* <Button
                     content="Back"
                     icon="left arrow"
                     labelPosition="left"
                     style={{ backgroundColor: "#992E62", color: "#fff" }}
                     onClick={() => handleItemClick("basic", "basic")}
-                  />
+                  /> */}
                   <Button
                     content="Save & Continue"
                     icon="right arrow"

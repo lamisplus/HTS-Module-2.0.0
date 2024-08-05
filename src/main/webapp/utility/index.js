@@ -328,7 +328,10 @@ export const getNextForm = (formName, age, pmtctModality, hivStatus) => {
 
     //
   } else {
-    return "non";
+      return [
+        authorizedForm[IndexOfForm].code,
+        authorizedForm[IndexOfForm].code,
+      ];
   }
 };
 

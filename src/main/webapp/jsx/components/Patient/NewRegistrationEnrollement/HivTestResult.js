@@ -16,6 +16,7 @@ import {Label as LabelRibbon, Button} from "semantic-ui-react";
 // import 'semantic-ui-css/semantic.min.css';
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
+import { getNextForm } from "../../../../utility";
 
 const useStyles = makeStyles((theme) => ({
     card: {
@@ -574,6 +575,13 @@ const HivTestResult = (props) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log(errors);
+
+            let latestForm = getNextForm(
+        "Request_and_Result_Form",
+        props.patientAge,
+        "",
+        "unknown"
+      );
         if (finalResult === "") {
             toast.error("Final result is required for submission.");
             return;
@@ -632,7 +640,7 @@ const HivTestResult = (props) => {
             }
             if (props.activePage.actionType === "view") {
                 //e.preventDefault();
-                handleItemClick("post-test", "hiv-test");
+          handleItemClick(latestForm[0], latestForm[1]);
             }
             if (props.activePage.actionType === "update") {
                 objValues.htsClientId = clientId;
@@ -660,7 +668,7 @@ const HivTestResult = (props) => {
                         console.log("saved", response.data);
                         //props.setPatientObj(props && props.patientObj ? props.patientObj : "")
                         //toast.success("HIV test successful");
-                        handleItemClick("post-test", "hiv-test");
+          handleItemClick(latestForm[0], latestForm[1]);
                     })
                     .catch((error) => {
                         setSaving(false);
@@ -1828,7 +1836,7 @@ const HivTestResult = (props) => {
                             <br/>
                             <div className="row">
                                 <div className="form-group mb-3 col-md-12">
-                                    {patientAge <= 15 ? (
+                                    {/* {patientAge <= 15 ? (
                                         <>
                                             <Button
                                                 content="Back"
@@ -1853,7 +1861,7 @@ const HivTestResult = (props) => {
                                                 }
                                             />
                                         </>
-                                    )}
+                                    )} */}
                                     {props.activePage.actionType === "update" && (
                                         <Button
                                             content="Update & Continue"

@@ -16,6 +16,8 @@ import { Label as LabelRibbon, Button } from "semantic-ui-react";
 // import 'semantic-ui-css/semantic.min.css';
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
+import { getNextForm } from "../../../../utility";
+
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -541,6 +543,13 @@ const HivTestResult = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+      let latestForm = getNextForm(
+        "Request_and_Result_Form",
+        props.patientAge,
+        "",
+        "unknown"
+      );
     if (finalResult === "") {
       toast.error("Final result is required for submission.");
       return;
@@ -618,7 +627,7 @@ const HivTestResult = (props) => {
           setSaving(false);
           props.setPatientObj(response.data);
 
-          handleItemClick("post-test", "hiv-test");
+          handleItemClick(latestForm[0], latestForm[1]);
         })
         .catch((error) => {
           setSaving(false);
@@ -1831,7 +1840,7 @@ const HivTestResult = (props) => {
               <br />
               <div className="row">
                 <div className="form-group mb-3 col-md-12">
-                  {patientAge <= 15 ? (
+                  {/* {patientAge <= 15 ? (
                     <>
                       <Button
                         content="Back"
@@ -1856,7 +1865,7 @@ const HivTestResult = (props) => {
                         }}
                       />
                     </>
-                  )}
+                  )} */}
 
                   <Button
                     content="Save & Continue"

@@ -15,6 +15,7 @@ import { Label as LabelRibbon, Button, Message } from "semantic-ui-react";
 // import 'semantic-ui-css/semantic.min.css';
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
+import { getNextForm } from "../../../../utility";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -92,6 +93,10 @@ const PostTest = (props) => {
   const clientId =
     props.patientObj && props.patientObj ? props.patientObj.id : "";
   const [saving, setSaving] = useState(false);
+  const [permissions, setPermission] = useState(
+    localStorage.getItem("stringifiedPermmision")?.split(",")
+  );
+  const [nextForm, setNextForm] = useState([]);
   ///const [errors, setErrors] = useState({});
   const [objValues, setObjValues] = useState({
     htsClientId: clientId,
@@ -126,7 +131,6 @@ const PostTest = (props) => {
     lubricantProvidedToClientCount: "",
   });
   useEffect(() => {
-    //console.log(props.patientObj)
     if (
       props.patientObj &&
       props.patientObj.postTestCounselingKnowledgeAssessment
@@ -174,13 +178,12 @@ const PostTest = (props) => {
       if (e.target.value >= 0) {
         setPostTest({ ...postTest, [e.target.name]: e.target.value });
       }
-    }else if (e.target.name === "condomProvidedToClientCount") {
-    if (e.target.value >= 0) {
-      setPostTest({ ...postTest, [e.target.name]: e.target.value });
-    } else {
-      setPostTest({ ...postTest, [e.target.name]: 0 });
-    }
-
+    } else if (e.target.name === "condomProvidedToClientCount") {
+      if (e.target.value >= 0) {
+        setPostTest({ ...postTest, [e.target.name]: e.target.value });
+      } else {
+        setPostTest({ ...postTest, [e.target.name]: 0 });
+      }
     } else {
       setPostTest({ ...postTest, [e.target.name]: e.target.value });
     }
@@ -195,6 +198,12 @@ const PostTest = (props) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setSaving(true);
+     let latestForm = getNextForm(
+       "Post_Test_Counseling",
+       props?.patientObj?.riskStratificationResponseDto?.age,
+       '',
+       props?.patientObj?.hivTestResult
+     );
 
     objValues.htsClientId = props.patientObj.id;
     objValues.postTestCounselingKnowledgeAssessment = postTest;
@@ -209,19 +218,10 @@ const PostTest = (props) => {
         setSaving(false);
         props.setPatientObj(response.data);
         toast.success("Post test  successful");
-      
-        if (
-          postTest.hivTestResult === "true" &&
-          props?.patientObj?.riskStratificationResponseDto?.age >= 15
-        ) {
-          handleItemClick("recency-testing", "post-test");
-        } else if (postTest.hivTestResult === "false") {
-          // history.push("/");
-          handleItemClick("client-referral", "post-test");
-        } else {
-          handleItemClick("client-referral", "post-test");
-        }
-        // handleItemClick("recency-testing", "post-test");
+        
+      handleItemClick(latestForm[0], latestForm[1]);
+
+
       })
       .catch((error) => {
         setSaving(false);
@@ -709,33 +709,13 @@ const PostTest = (props) => {
               <br />
               <div className="row">
                 <div className="form-group mb-3 col-md-12">
-                  <Button
+                  {/* <Button
                     content="Back"
                     icon="left arrow"
                     labelPosition="left"
                     style={{ backgroundColor: "#992E62", color: "#fff" }}
                     onClick={() => handleItemClick("hiv-test", "hiv-test")}
-                  />
-                  {/*{postTest.hivTestResult === "true" && (*/}
-                  {/*  <Button*/}
-                  {/*    content="Save & Continue"*/}
-                  {/*    icon="right arrow"*/}
-                  {/*    labelPosition="right"*/}
-                  {/*    style={{ backgroundColor: "#014d88", color: "#fff" }}*/}
-                  {/*    onClick={handleSubmit}*/}
-                  {/*    disabled={saving}*/}
-                  {/*  />*/}
-                  {/*)}*/}
-                  {/*{postTest.hivTestResult === "false" && (*/}
-                  {/*  <Button*/}
-                  {/*    content="Save & Finish"*/}
-                  {/*    icon="right arrow"*/}
-                  {/*    labelPosition="right"*/}
-                  {/*    style={{ backgroundColor: "#014d88", color: "#fff" }}*/}
-                  {/*    onClick={handleSubmit}*/}
-                  {/*    disabled={saving}*/}
-                  {/*  />*/}
-                  {/*)}*/}
+                  /> */}
 
                   <Button
                     content="Save & Continue"

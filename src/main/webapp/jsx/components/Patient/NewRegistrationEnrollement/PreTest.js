@@ -16,7 +16,8 @@ import {Label as LabelRibbon, Button, Message} from 'semantic-ui-react'
 // import 'semantic-ui-css/semantic.min.css';
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
-
+import { getNextForm } from "../../../../utility";
+import { getCheckModality } from "../../../../utility";
 const useStyles = makeStyles((theme) => ({
     card: {
         margin: theme.spacing(20),
@@ -301,6 +302,16 @@ const BasicInfo = (props) => {
     }
     const handleSubmit =(e)=>{
         e.preventDefault();
+
+       let modality = getCheckModality(
+         props.patientObj?.riskStratificationResponseDto?.modality
+       );    
+            let latestForm = getNextForm(
+              "Pre_Test_Counseling",
+              props.patientAge,
+              modality,
+              "unknown"
+            );
         if(validate()){
             setSaving(true);
             objValues.htsClientId= clientId
@@ -318,7 +329,7 @@ const BasicInfo = (props) => {
                 setSaving(false);
                 props.setPatientObj(response.data)
                 //toast.success("Risk Assesment successful");
-                handleItemClick('hiv-test', 'pre-test-counsel' )
+                handleItemClick(latestForm[0], latestForm[1]);
 
             })
             .catch(error => {
@@ -1307,7 +1318,7 @@ const BasicInfo = (props) => {
                             <br />
                             <div className="row">
                             <div className="form-group mb-3 col-md-12">
-                            <Button content='Back' icon='left arrow' labelPosition='left' style={{backgroundColor:"#992E62", color:'#fff'}} onClick={()=>handleItemClick('basic','basic')}/>
+                            {/* <Button content='Back' icon='left arrow' labelPosition='left' style={{backgroundColor:"#992E62", color:'#fff'}} onClick={()=>handleItemClick('basic','basic')}/> */}
                             <Button content='Save & Continue' icon='right arrow' labelPosition='right' style={{backgroundColor:"#014d88", color:'#fff'}} onClick={handleSubmit} disabled={saving}/>
                             </div>
                             </div>

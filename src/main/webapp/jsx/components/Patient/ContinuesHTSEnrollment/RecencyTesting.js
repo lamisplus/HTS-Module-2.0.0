@@ -15,7 +15,7 @@ import { Label as LabelRibbon, Button } from "semantic-ui-react";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
 import { token, url as baseUrl } from "../../../../api";
-
+import { getNextForm } from "../../../../utility";
 const useStyles = makeStyles((theme) => ({
   card: {
     margin: theme.spacing(20),
@@ -196,9 +196,9 @@ const Recency = (props) => {
       if (recency.optOutRTRI === "true") {
         setRecency({
           optOutRTRI:
-              props.patientObj && props.patientObj.recency !== null
-                  ? props.patientObj.recency.optOutRTRI
-                  : "",
+            props.patientObj && props.patientObj.recency !== null
+              ? props.patientObj.recency.optOutRTRI
+              : "",
           optOutRTRITestName: "",
           optOutRTRITestDate: "",
           rencencyId: "",
@@ -220,20 +220,20 @@ const Recency = (props) => {
         });
       }
     }
-      if(props.patientObj){
-        if (
-            props.patientObj.confirmatoryTest2 &&
-            props.patientObj.confirmatoryTest2.date2 !== ""
-        ) {
-          setHivTestDate(props.patientObj.confirmatoryTest2.date2);
-        } else if (
-            props.patientObj.confirmatoryTest &&
-            props.patientObj.confirmatoryTest.date !== ""
-        ) {
-          setHivTestDate(props.patientObj.confirmatoryTest.date);
-        } else {
-          setHivTestDate("");
-        }
+    if (props.patientObj) {
+      if (
+        props.patientObj.confirmatoryTest2 &&
+        props.patientObj.confirmatoryTest2.date2 !== ""
+      ) {
+        setHivTestDate(props.patientObj.confirmatoryTest2.date2);
+      } else if (
+        props.patientObj.confirmatoryTest &&
+        props.patientObj.confirmatoryTest.date !== ""
+      ) {
+        setHivTestDate(props.patientObj.confirmatoryTest.date);
+      } else {
+        setHivTestDate("");
+      }
     }
     if (
       recency.longTermLine === "true" &&
@@ -342,6 +342,12 @@ const Recency = (props) => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
+    let latestForm = getNextForm(
+      "HIV_Recency_Testing",
+      props.patientAge,
+      "",
+      props?.patientObj?.hivTestResult
+    );
     objValues.htsClientId = clientId;
     objValues.recency = recency;
     objValues.personId = patientID;
@@ -358,11 +364,8 @@ const Recency = (props) => {
           //toast.success("Risk Assesment successful");
           //comment this out for release
           // handleItemClick("fit", "recency-testing");
-          if (permissions.includes("Nigeria_PNS_Form")) {
-            handleItemClick("pns", "recency-testing");
-          } else if (permissions.includes("Referral_Form")) {
-            handleItemClick("client-referral", "recency-testing");
-          }
+          handleItemClick(latestForm[0], latestForm[1]);
+
           // else if (permissions.includes("Nigeria_PNS_Form")) {
           // }
         })
@@ -834,13 +837,13 @@ const Recency = (props) => {
               <br />
               <div className="row">
                 <div className="form-group mb-3 col-md-12">
-                  <Button
+                  {/* <Button
                     content="Back"
                     icon="left arrow"
                     labelPosition="left"
                     style={{ backgroundColor: "#992E62", color: "#fff" }}
                     onClick={() => handleItemClick("post-test", "post-test")}
-                  />
+                  /> */}
                   <Button
                     content="Save & Continue"
                     icon="right arrow"

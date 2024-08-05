@@ -4,7 +4,7 @@ import { FormGroup, Label, CardBody, Spinner, Input, Form } from "reactstrap";
 import * as moment from "moment";
 import { makeStyles } from "@material-ui/core/styles";
 import { Card, CardContent } from "@material-ui/core";
-
+import { getNextForm } from "../../../../utility";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
 import { toast } from "react-toastify";
@@ -98,6 +98,10 @@ const HivTestResult = (props) => {
     props.patientObj && props.patientObj ? props.patientObj.id : "";
   const [hivTestDate, setHivTestDate] = useState("");
   const [showCD4Count, setShowCD4Count] = useState(true);
+  const [permissions, setPermission] = useState(
+    localStorage.getItem("stringifiedPermmision")?.split(",")
+  );
+  const [nextForm, setNextForm] = useState([]);
   const calculate_age = (dob) => {
     var today = new Date();
     var dateParts = dob.split("-");
@@ -273,8 +277,6 @@ const HivTestResult = (props) => {
     }
   };
 
-
-
   const [syphills, setSyphills] = useState({
     syphilisTestResult: "",
     // result  :"",
@@ -301,6 +303,7 @@ const HivTestResult = (props) => {
   });
   useEffect(() => {
     //console.log(props.patientObj)
+
     if (props.patientObj) {
       if (props.patientObj.dateVisit && props.patientObj.dateVisit !== "") {
         setHivTestDate(props.patientObj.dateVisit);
@@ -444,51 +447,49 @@ const HivTestResult = (props) => {
     if (initialTest1.result === "No") {
       result = "Negative";
     } else if (
-        confirmatoryTest.result === "No" &&
-        tieBreakerTest.result === "No" &&
-        (initialTest1.result === "Yes" || initialTest1.result !== "")
+      confirmatoryTest.result === "No" &&
+      tieBreakerTest.result === "No" &&
+      (initialTest1.result === "Yes" || initialTest1.result !== "")
     ) {
       result = "Negative";
     } else if (
-        initialTest1.result === "Yes" &&
-        confirmatoryTest.result === "No" &&
-        tieBreakerTest.result === "Yes" &&
-        initialTest12.result2 === "Yes" &&
-        confirmatoryTest2.result2 === "Yes"
+      initialTest1.result === "Yes" &&
+      confirmatoryTest.result === "No" &&
+      tieBreakerTest.result === "Yes" &&
+      initialTest12.result2 === "Yes" &&
+      confirmatoryTest2.result2 === "Yes"
     ) {
       result = "Negative";
     } else if (
-        initialTest1.result === "Yes" &&
-        confirmatoryTest.result === "Yes" &&
-        initialTest12.result2 === "Yes" &&
-        confirmatoryTest2.result2 === "Yes"
+      initialTest1.result === "Yes" &&
+      confirmatoryTest.result === "Yes" &&
+      initialTest12.result2 === "Yes" &&
+      confirmatoryTest2.result2 === "Yes"
     ) {
       result = "Positive";
     } else if (
-        initialTest1.result === "Yes" &&
-        confirmatoryTest.result === "No" &&
-        tieBreakerTest.result === "Yes" &&
-        initialTest12.result2 === "Yes" &&
-        confirmatoryTest2.result2 === "Yes"
+      initialTest1.result === "Yes" &&
+      confirmatoryTest.result === "No" &&
+      tieBreakerTest.result === "Yes" &&
+      initialTest12.result2 === "Yes" &&
+      confirmatoryTest2.result2 === "Yes"
     ) {
       result = "Positive";
-    } else if(
-        initialTest1.result === "Yes" &&
-        confirmatoryTest.result === "Yes" &&
-        initialTest12.result2 === "Yes" &&
-        confirmatoryTest2.result2 === "No" &&
-        tieBreakerTest2.result2 === "No"
-
-    ){
+    } else if (
+      initialTest1.result === "Yes" &&
+      confirmatoryTest.result === "Yes" &&
+      initialTest12.result2 === "Yes" &&
+      confirmatoryTest2.result2 === "No" &&
+      tieBreakerTest2.result2 === "No"
+    ) {
       result = "Negative";
-    }
-    else if (
-        initialTest1.result === "Yes" &&
-        confirmatoryTest.result === "No" &&
-        tieBreakerTest.result === "Yes" &&
-        initialTest12.result2 === "Yes" &&
-        confirmatoryTest2.result2 === "No" &&
-        tieBreakerTest2.result2 === "No"
+    } else if (
+      initialTest1.result === "Yes" &&
+      confirmatoryTest.result === "No" &&
+      tieBreakerTest.result === "Yes" &&
+      initialTest12.result2 === "Yes" &&
+      confirmatoryTest2.result2 === "No" &&
+      tieBreakerTest2.result2 === "No"
     ) {
       result = "Negative";
     }
@@ -507,11 +508,11 @@ const HivTestResult = (props) => {
     setConfirmatoryTest({
       date: "",
       result: "",
-    })
+    });
     setTieBreakerTest({
       date: "",
       result: "",
-    })
+    });
     setInitailTest2({
       date2: "",
       result2: "",
@@ -525,7 +526,7 @@ const HivTestResult = (props) => {
       result2: "",
     });
     // clear the prepOffered and prepAccepted fields
-    setObjValues({...objValues, prepOffered: "", prepAccepted: ""})
+    setObjValues({ ...objValues, prepOffered: "", prepAccepted: "" });
   }, [initialTest1.result]);
 
   // clear the all other the input fields that follows the initialTest2, if there changes in initialTest12 result is changes
@@ -534,7 +535,7 @@ const HivTestResult = (props) => {
     setTieBreakerTest({
       date: "",
       result: "",
-    })
+    });
     setInitailTest2({
       date2: "",
       result2: "",
@@ -547,7 +548,7 @@ const HivTestResult = (props) => {
       date2: "",
       result2: "",
     });
-    setObjValues({...objValues, prepOffered: "", prepAccepted: ""})
+    setObjValues({ ...objValues, prepOffered: "", prepAccepted: "" });
   }, [confirmatoryTest.result]);
 
   // clear all the input fields that follows the confirmatoryTest, if there changes in confirmatoryTest result is changes.
@@ -564,7 +565,7 @@ const HivTestResult = (props) => {
       date2: "",
       result2: "",
     });
-    setObjValues({...objValues, prepOffered: "", prepAccepted: ""})
+    setObjValues({ ...objValues, prepOffered: "", prepAccepted: "" });
   }, [tieBreakerTest.result]);
 
   useEffect(() => {
@@ -576,7 +577,7 @@ const HivTestResult = (props) => {
       date2: "",
       result2: "",
     });
-    setObjValues({...objValues, prepOffered: "", prepAccepted: ""})
+    setObjValues({ ...objValues, prepOffered: "", prepAccepted: "" });
   }, [initialTest12.result2]);
 
   useEffect(() => {
@@ -584,11 +585,19 @@ const HivTestResult = (props) => {
       date2: "",
       result2: "",
     });
-    setObjValues({...objValues, prepOffered: "", prepAccepted: ""})
+    setObjValues({ ...objValues, prepOffered: "", prepAccepted: "" });
   }, [confirmatoryTest2.result2]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    let latestForm = getNextForm(
+      "Request_and_Result_Form",
+      objValues.age,
+      "",
+      "unknown"
+    );
+
     if (finalResult === "") {
       toast.error("Final result is required for submission.");
       return;
@@ -668,7 +677,7 @@ const HivTestResult = (props) => {
           //console.log(response.data)
           //props.setPatientObj(props && props.patientObj ? props.patientObj : "")
           //toast.success("HIV test successful");
-          handleItemClick("post-test", "hiv-test");
+          handleItemClick(latestForm[0], latestForm[1]);
         })
         .catch((error) => {
           setSaving(false);
@@ -713,7 +722,7 @@ const HivTestResult = (props) => {
                     id="date"
                     value={initialTest1.date}
                     onChange={handleInputChangeInitial}
-                    min={ props?.patientObj?.dateVisit}
+                    min={props?.patientObj?.dateVisit}
                     max={moment(new Date()).format("YYYY-MM-DD")}
                     style={{
                       border: "1px solid #014D88",

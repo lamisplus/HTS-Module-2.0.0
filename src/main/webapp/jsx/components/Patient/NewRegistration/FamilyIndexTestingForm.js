@@ -255,7 +255,8 @@ const FamilyIndexTestingForm = (props) => {
     },
 
     htsClientId: props && props.patientObj ? props.patientObj?.id : "",
-    htsClientUuid: props && props.patientObj ? props.patientObj.htsClientUUid: "",
+    htsClientUuid:
+      props && props.patientObj ? props.patientObj.htsClientUUid : "",
     indexClientId: props?.patientObj?.clientCode,
     isClientCurrentlyOnHivTreatment: "",
     lga: "",
@@ -566,6 +567,7 @@ const FamilyIndexTestingForm = (props) => {
   }, []);
 
   useEffect(() => {
+    console.log(props.patientObj)
     loadGenders();
     loadStates();
     loadFamilyIndexSetting();

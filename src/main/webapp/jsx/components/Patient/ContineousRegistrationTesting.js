@@ -50,8 +50,9 @@ const UserRegistration = (props) => {
   const [organizationInfo, setOrganizationInfo] = useState({});
   const [row, setRow] = useState({});
   const [modalityCheck, setModalityCheck] = useState("");
+
   const [permissions, setPermission] = useState(
-    localStorage.getItem("permissions")?.split(",")
+    JSON.parse(localStorage.getItem("stringifiedPermmision"))
   );
 
   const [patientObj2, setPatientObj2] = useState({
@@ -312,28 +313,29 @@ const UserRegistration = (props) => {
                           )}
                         </span>
                       </Menu.Item>
-                      {props.patientAge >= 15 && modalityCheck == "fill" && (
-                        <Menu.Item
-                          name="spam"
-                          active={activeItem === "pre-test-counsel"}
-                          onClick={() => handleItemClick("pre-test-counsel")}
-                          style={{
-                            backgroundColor:
-                              activeItem === "pre-test-counsel" ? "#000" : "",
-                          }}
-                          disabled={
-                            activeItem !== "pre-test-counsel" ? true : false
-                          }
-                        >
-                          {/* <Label>2</Label> */}
-                          <span style={{ color: "#fff" }}>
-                            Pre Test Counseling
-                            {completed.includes("pre-test-counsel") && (
-                              <Icon name="check" color="green" />
-                            )}
-                          </span>
-                        </Menu.Item>
-                      )}
+                      {patientObj2.riskStratificationResponseDto?.age &&
+                        modalityCheck == "fill" && (
+                          <Menu.Item
+                            name="spam"
+                            active={activeItem === "pre-test-counsel"}
+                            onClick={() => handleItemClick("pre-test-counsel")}
+                            style={{
+                              backgroundColor:
+                                activeItem === "pre-test-counsel" ? "#000" : "",
+                            }}
+                            disabled={
+                              activeItem !== "pre-test-counsel" ? true : false
+                            }
+                          >
+                            {/* <Label>2</Label> */}
+                            <span style={{ color: "#fff" }}>
+                              Pre Test Counseling
+                              {completed.includes("pre-test-counsel") && (
+                                <Icon name="check" color="green" />
+                              )}
+                            </span>
+                          </Menu.Item>
+                        )}
                       {permissions.includes("Request_and_Result_Form") && (
                         <Menu.Item
                           name="inbox"
@@ -377,7 +379,8 @@ const UserRegistration = (props) => {
                       {patientObj2?.hivTestResult &&
                         patientObj2?.hivTestResult === "Positive" &&
                         patientObj2.riskStratificationResponseDto?.age >=
-                          15 && (
+                          15 &&
+                        permissions.includes("Request_and_Result_Form") && (
                           <Menu.Item
                             name="spam"
                             active={activeItem === "recency-testing"}
@@ -466,7 +469,6 @@ const UserRegistration = (props) => {
                   </>)}
                 </Menu>
               </div>
-              
               <div
                 className="col-md-9 col-sm-9 col-lg-9 "
                 style={{

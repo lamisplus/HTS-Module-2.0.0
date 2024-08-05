@@ -117,6 +117,7 @@ const FamilyIndexHistory = (props) => {
       .then((response) => {
         if (response.data) {
           setFamilyIndexList([response.data]);
+          getListOfFamliyIndices(response.data.uuid);
           props.handleItemClick("fit-history");
         } else {
           setFamilyIndexList([]);
@@ -126,6 +127,44 @@ const FamilyIndexHistory = (props) => {
         // console.log("Fetch Facilities error" + e);
       });
   };
+
+
+    const convertRelationship = (relationship) => {
+       if (relationship === "FAMILY_RELATIONSHIP_FATHER") {
+         return "Father";
+       } else if (relationship === "FAMILY_RELATIONSHIP_MOTHER") {
+         return "Mother";
+       } else if (relationship === "FAMILY_RELATIONSHIP_CHILD") {
+         return "Child";
+       }else{
+        return "";
+       }
+    };
+
+
+
+    const getListOfFamliyIndices = (uuid) => {
+      axios
+        .get(
+          `${baseUrl}hts-family-index-testing/family-index?familyIndexTestingUuid=${uuid}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        .then((response) => {
+          if (response.data) {
+            setFamilyIndexList(response.data);
+            props.handleItemClick("fit-history");
+          } else {
+            setFamilyIndexList([]);
+          }
+        })
+        .catch((e) => {
+          // console.log("Fetch Facilities error" + e);
+        });
+    };
 
   useEffect(() => {
     getListoFFamilyIndexInfo();
@@ -144,9 +183,12 @@ const FamilyIndexHistory = (props) => {
     // setSaving(true);
     //props.setActiveContent({...props.activeContent, route:'mental-health-view', id:row.id})
     axios
-      .delete(`${baseUrl}hts-family-index-testing/${recordSelected.id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      .delete(
+        `${baseUrl}hts-family-index-testing/family-index/${recordSelected.id}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
       .then((response) => {
         toast.success("Record Deleted Successfully");
         getListoFFamilyIndexInfo();
@@ -193,20 +235,18 @@ const FamilyIndexHistory = (props) => {
           icons={tableIcons}
           // title=''
           columns={[
-            // { title: "HTS ID", field: "id" },
-            { title: "Family Index Client", field: "date" },
-            { title: "Date of Birth", field: "pre" },
-            { title: "Recency Test", field: "rencency" },
+            { title: "HTS ID", field: "id" },
+            { title: "Date", field: "date" },
+            { title: "family Relationship", field: "familyRelationship" },
             // { title: "Index Notification", field: "indexNotifiation", filtering: false },
 
             { title: "Actions", field: "actions", filtering: false },
           ]}
           isLoading={props.loading}
           data={familyIndexList.map((row) => ({
-            // id: row.id,
-            date: row.indexClientId,
-            pre: row.dateOfBirth,
-            rencency: row.recencyTesting,
+            id: row.id,
+            date: row.dateOfHts,
+            familyRelationship: convertRelationship(row.familyRelationship),
 
             //indexNotifiation:row.indexNotificationServicesElicitation ? "Filled":"Not Filled ",
 

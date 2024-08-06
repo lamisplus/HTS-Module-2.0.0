@@ -326,6 +326,12 @@ const BasicInfo = (props) => {
     temp.firstTimeVisit =
       objValues.firstTimeVisit !== "" ? "" : "This field is required.";
     temp.dateVisit = objValues.dateVisit ? "" : "This field is required.";
+    
+    if (props.patientObj.personResponseDto.sex.includes("female")) {
+     temp.pregnant = objValues.pregnant !== "" ? "" : "This field is required.";
+    }
+    
+  
     setErrors({ ...temp });
     return Object.values(temp).every((x) => x == "");
   };
@@ -702,72 +708,82 @@ const BasicInfo = (props) => {
                     </div>
                   </>
                 ))}
-              {(props.patientObj.personResponseDto.sex === "Female" ||
-                props.patientObj.personResponseDto.sex === "female" ||
-                props.patientObj.personResponseDto.sex === "FEMALE") && (
-                <>
-                  <div className="form-group  col-md-4">
-                    <FormGroup>
-                      <Label>Pregnant Status</Label>
-                      <select
-                        className="form-control"
-                        name="pregnant"
-                        id="pregnant"
-                        value={objValues.pregnant}
-                        onChange={handleInputChange}
-                        style={{
-                          border: "1px solid #014D88",
-                          borderRadius: "0.2rem",
-                        }}
-                        disabled={
-                          props.patientObj.riskStratificationResponseDto
-                            .modality ===
-                            "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||
-                          props.patientObj.riskStratificationResponseDto
-                            .modality ===
-                            "TEST_SETTING_STANDALONE_HTS_POST_ANC1_BREASTFEEDING" ||
-                          props.patientObj.riskStratificationResponseDto
-                            .modality ===
-                            "TEST_SETTING_OTHERS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
-                          props.patientObj.riskStratificationResponseDto
-                            .modality === "TEST_SETTING_CPMTCT" ||
-                          props.patientObj.riskStratificationResponseDto
-                            .modality ===
-                            "TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)"
-                            ? true
-                            : props.activePage.actionType === "view"
-                            ? true
-                            : false
-                        }
-                      >
-                        <option value={""}></option>
-                        {pregnancyStatus.map((value) =>
-                          (props.patientObj.riskStratificationResponseDto
-                            .modality ===
-                            "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||
+              {props.patientObj.personResponseDto.sex &&
+                props.patientObj.personResponseDto.sex.toLowerCase() ===
+                  "female" && (
+                  <>
+                    <div className="form-group  col-md-4">
+                      <FormGroup>
+                        <Label>
+                          Pregnant Status{" "}
+                          <span style={{ color: "red" }}> *</span>
+                        </Label>
+                        <select
+                          className="form-control"
+                          name="pregnant"
+                          id="pregnant"
+                          value={objValues.pregnant}
+                          onChange={handleInputChange}
+                          style={{
+                            border: "1px solid #014D88",
+                            borderRadius: "0.2rem",
+                          }}
+                          disabled={
+                            props.patientObj.riskStratificationResponseDto
+                              .modality ===
+                              "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||
+                            props.patientObj.riskStratificationResponseDto
+                              .modality ===
+                              "TEST_SETTING_STANDALONE_HTS_POST_ANC1_BREASTFEEDING" ||
                             props.patientObj.riskStratificationResponseDto
                               .modality ===
                               "TEST_SETTING_OTHERS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
                             props.patientObj.riskStratificationResponseDto
-                              .testingSetting === "TEST_SETTING_CPMTCT" ||
+                              .modality === "TEST_SETTING_CPMTCT" ||
                             props.patientObj.riskStratificationResponseDto
                               .modality ===
-                              "TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
-                            props.patientObj.riskStratificationResponseDto
+                              "TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)"
+                              ? true
+                              : props.activePage.actionType === "view"
+                              ? true
+                              : false
+                          }
+                        >
+                          <option value={""}></option>
+                          {pregnancyStatus.map((value) =>
+                            (props.patientObj.riskStratificationResponseDto
                               .modality ===
-                              "TEST_SETTING_STANDALONE_HTS_POST_ANC1_BREASTFEEDING") &&
-                          value.code === "PREGANACY_STATUS_NOT_PREGNANT" ? (
-                            <></>
-                          ) : (
-                            <option key={value.id} value={value.id}>
-                              {value.display}
-                            </option>
-                          )
+                              "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||
+                              props.patientObj.riskStratificationResponseDto
+                                .modality ===
+                                "TEST_SETTING_OTHERS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
+                              props.patientObj.riskStratificationResponseDto
+                                .testingSetting === "TEST_SETTING_CPMTCT" ||
+                              props.patientObj.riskStratificationResponseDto
+                                .modality ===
+                                "TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
+                              props.patientObj.riskStratificationResponseDto
+                                .modality ===
+                                "TEST_SETTING_STANDALONE_HTS_POST_ANC1_BREASTFEEDING") &&
+                            value.code === "PREGANACY_STATUS_NOT_PREGNANT" ? (
+                              <></>
+                            ) : (
+                              <option key={value.id} value={value.id}>
+                                {value.display}
+                              </option>
+                            )
+                          )}
+                        </select>
+                        {errors.pregnant !== "" ? (
+                          <span className={classes.error}>
+                            {errors.pregnant}
+                          </span>
+                        ) : (
+                          ""
                         )}
-                      </select>
-                    </FormGroup>
-                  </div>
-                  {/*objValues.pregnant!== 73 || objValues.pregnant!== "73" && (
+                      </FormGroup>
+                    </div>
+                    {/*objValues.pregnant!== 73 || objValues.pregnant!== "73" && (
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Breast Feeding</Label>
@@ -787,8 +803,8 @@ const BasicInfo = (props) => {
                                 </FormGroup>
                             </div>
                             )*/}
-                </>
-              )}
+                  </>
+                )}
 
               <div className="form-group  col-md-4">
                 <FormGroup>

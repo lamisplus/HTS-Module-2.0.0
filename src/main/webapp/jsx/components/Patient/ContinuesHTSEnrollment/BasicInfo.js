@@ -118,6 +118,18 @@ const BasicInfo = (props) => {
   const [createdCode, setCreatedCode] = useState("");
   const [facilityCode, setFacilityCode] = useState("");
   const [serialNumber, setSerialNumber] = useState(null);
+    const [disableModality, setDisableModality] = useState(props.extra.modality ===
+                              "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||
+                            props.extra.modality ===
+                              "TEST_SETTING_STANDALONE_HTS_POST_ANC1_BREASTFEEDING" ||
+                            props.extra.modality ===
+                              "TEST_SETTING_OTHERS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
+                            props.extra.modality === "TEST_SETTING_CPMTCT" ||
+                            props.extra.modality ===
+                              "TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)"
+                              ? true
+                              : false);
+
   const [modalityCheck, setModality] = useState("");
   const [objValues, setObjValues] = useState({
     active: true,
@@ -426,6 +438,15 @@ const BasicInfo = (props) => {
       ? ""
       : "This field is required.";
     temp.dateVisit = objValues.dateVisit ? "" : "This field is required.";
+        
+    if (
+      props?.patientObject?.gender &&
+      props?.patientObject?.gender.toLowerCase() === "female"
+    ) {
+      temp.pregnant =
+        objValues.pregnant !== "" ? "" : "This field is required.";
+    }
+    
     setErrors({ ...temp });
     return Object.values(temp).every((x) => x == "");
   };
@@ -942,7 +963,10 @@ const BasicInfo = (props) => {
                   <>
                     <div className="form-group  col-md-4">
                       <FormGroup>
-                        <Label>Pregnant Status</Label>
+                        <Label>
+                          Pregnant Status{" "}
+                          <span style={{ color: "red" }}> *</span>
+                        </Label>
                         <select
                           className="form-control"
                           name="pregnant"
@@ -953,19 +977,7 @@ const BasicInfo = (props) => {
                             border: "1px solid #014D88",
                             borderRadius: "0.2rem",
                           }}
-                          disabled={
-                            props.extra.modality ===
-                              "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||
-                            props.extra.modality ===
-                              "TEST_SETTING_STANDALONE_HTS_POST_ANC1_BREASTFEEDING" ||
-                            props.extra.modality ===
-                              "TEST_SETTING_OTHERS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
-                            props.extra.modality === "TEST_SETTING_CPMTCT" ||
-                            props.extra.modality ===
-                              "TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)"
-                              ? true
-                              : false
-                          }
+                          disabled={disableModality}
                         >
                           <option value={""}></option>
                           {pregnancyStatus.map((value) =>
@@ -992,6 +1004,13 @@ const BasicInfo = (props) => {
                             )
                           )}
                         </select>
+                        {errors.pregnant !== "" ? (
+                          <span className={classes.error}>
+                            {errors.pregnant}
+                          </span>
+                        ) : (
+                          ""
+                        )}
                       </FormGroup>
                     </div>
                     {/* objValues.pregnant === "" && (objValues.pregnant!== 73 || objValues.pregnant!== '73') && (

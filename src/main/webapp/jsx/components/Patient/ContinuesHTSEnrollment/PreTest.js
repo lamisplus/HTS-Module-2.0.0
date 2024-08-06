@@ -1,5 +1,6 @@
 import React, {useCallback, useEffect, useState} from "react";
 import axios from "axios";
+import { checkPregnantPatient } from "../../../../utility";
 import {FormGroup, Label , CardBody, Spinner,Input,Form} from "reactstrap";
 import {makeStyles} from "@material-ui/core/styles";
 import {Card, CardContent} from "@material-ui/core";
@@ -92,6 +93,8 @@ const BasicInfo = (props) => {
     const clientId = props.patientObj && props.patientObj ? props.patientObj.id : "";
     const [saving, setSaving] = useState(false);
     const [errors, setErrors] = useState({});
+
+
     let temp = { ...errors }
     //console.log("data1", props.patientObj)
     const [riskAssessmentPartner, setRiskAssessmentPartner]= useState(
@@ -168,21 +171,71 @@ const BasicInfo = (props) => {
     useEffect(() => { 
 
         if(props.patientObj){
-            setKnowledgeAssessment(props.patientObj.knowledgeAssessment  && props.patientObj.knowledgeAssessment!==null ? props.patientObj.knowledgeAssessment : {})
-            setRiskAssessment(props.patientObj.riskAssessment  && props.patientObj.riskAssessment!==null ? props.patientObj.riskAssessment : {})
-            setRiskAssessmentPartner(props.patientObj.sexPartnerRiskAssessment && props.patientObj.sexPartnerRiskAssessment!==null ? props.patientObj.sexPartnerRiskAssessment : {})
-            setStiScreening(props.patientObj.stiScreening  && props.patientObj.stiScreening!==null? props.patientObj.stiScreening : {})
-            setTbScreening(props.patientObj.tbScreening  && props.patientObj.tbScreening!==null? props.patientObj.tbScreening : {})
-            //patientAge=calculate_age(moment(props.patientObj.personResponseDto.dateOfBirth).format("DD-MM-YYYY"))
-            //console.log(props.patientObj.riskStratificationResponseDto.riskAssessment)
-            if(props.patientObj.riskStratificationResponseDto && Object.keys(props.patientObj.riskStratificationResponseDto.riskAssessment).length !== 0 && props.patientObj.riskAssessment===null){
-                //setRiskAssessment({...riskAssessment, ...props.patientObj.riskStratificationResponseDto.riskAssessment})
-                props.patientObj.riskStratificationResponseDto.riskAssessment.whatWasTheResult!=="" && props.patientObj.riskStratificationResponseDto.riskAssessment.whatWasTheResult==='Positive' ? knowledgeAssessment.previousTestedHIVNegative='false' :
-                knowledgeAssessment.previousTestedHIVNegative='true'
-            }else{
-                setRiskAssessment({...riskAssessment, ...props.patientObj.riskAssessment})   
-            } 
-            knowledgeAssessment.clientPregnant=props.patientObj.pregnant===73 ? "true" :"" ;
+          setKnowledgeAssessment(
+            props.patientObj.knowledgeAssessment &&
+              props.patientObj.knowledgeAssessment !== null
+              ? props.patientObj.knowledgeAssessment
+              : {}
+          );
+          setRiskAssessment(
+            props.patientObj.riskAssessment &&
+              props.patientObj.riskAssessment !== null
+              ? props.patientObj.riskAssessment
+              : {}
+          );
+          setRiskAssessmentPartner(
+            props.patientObj.sexPartnerRiskAssessment &&
+              props.patientObj.sexPartnerRiskAssessment !== null
+              ? props.patientObj.sexPartnerRiskAssessment
+              : {}
+          );
+          setStiScreening(
+            props.patientObj.stiScreening &&
+              props.patientObj.stiScreening !== null
+              ? props.patientObj.stiScreening
+              : {}
+          );
+          setTbScreening(
+            props.patientObj.tbScreening &&
+              props.patientObj.tbScreening !== null
+              ? props.patientObj.tbScreening
+              : {}
+          );
+          //patientAge=calculate_age(moment(props.patientObj.personResponseDto.dateOfBirth).format("DD-MM-YYYY"))
+          //console.log(props.patientObj.riskStratificationResponseDto.riskAssessment)
+          
+          if (props?.patientObj?.pregnant) {
+             checkPregnantPatient(props.patientObj.pregnant).then((res) => {
+               console.log("my result", res);
+               setKnowledgeAssessment({
+                 ...knowledgeAssessment,
+                 clientPregnant: res ? "true" : "false",
+               });
+             });  
+          }
+
+          if (
+            props.patientObj.riskStratificationResponseDto &&
+            Object.keys(
+              props.patientObj.riskStratificationResponseDto.riskAssessment
+            ).length !== 0 &&
+            props.patientObj.riskAssessment === null
+          ) {
+            //setRiskAssessment({...riskAssessment, ...props.patientObj.riskStratificationResponseDto.riskAssessment})
+            props.patientObj.riskStratificationResponseDto.riskAssessment
+              .whatWasTheResult !== "" &&
+            props.patientObj.riskStratificationResponseDto.riskAssessment
+              .whatWasTheResult === "Positive"
+              ? (knowledgeAssessment.previousTestedHIVNegative = "false")
+              : (knowledgeAssessment.previousTestedHIVNegative = "true");
+          } else {
+            setRiskAssessment({
+              ...riskAssessment,
+              ...props.patientObj.riskAssessment,
+            });
+          }
+          knowledgeAssessment.clientPregnant =
+            props.patientObj.pregnant === 73 ? "true" : "";
         }
     }, [props.patientObj]);
     const handleItemClick =(page, completedMenu)=>{        
@@ -421,6 +474,7 @@ const BasicInfo = (props) => {
                                         value={knowledgeAssessment.clientPregnant}
                                         onChange={handleInputChangeKnowledgeAssessment}
                                         style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
+                                        disabled={true}
                                     >
                                         <option value={""}></option>
                                         <option value="true">Yes</option>

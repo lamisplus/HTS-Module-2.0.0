@@ -72,6 +72,45 @@ export const getAcount = async () => {
     return response.data;
   } catch (e) {}
 };
+//get if patient is pregnant
+
+
+
+export const checkPregnantPatient =  async(id) => {
+   try {
+     const response = await axios.get(
+       `${baseUrl}application-codesets/v2/PREGNANCY_STATUS`,
+       {
+         headers: { Authorization: `Bearer ${token}` },
+       }
+     );
+     //Get the pregnant object
+     let result = response.data.filter((each, index) => {
+       return each.code === "PREGANACY_STATUS_PREGNANT";
+     });
+     //compare the object id with  parameter
+
+     console.log(result[0].id, id, Number(result[0].id) === Number(id));
+
+    //  return result[0].id;
+     if (Number(result[0].id) === Number(id)) {
+       // return true;
+       return true;
+     } else {
+       return false;
+     }
+   } catch (e) {}
+
+
+  
+
+};
+
+
+
+
+
+
 // TEST_SETTING_OTHERS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)
 
 //check modality

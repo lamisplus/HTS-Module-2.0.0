@@ -764,6 +764,10 @@ const BasicInfo = (props) => {
     temp.dateVisit = objValues.dateVisit ? "" : "This field is required.";
     temp.dob = objValues.dob ? "" : "This field is required.";
     temp.age = objValues.age ? "" : "This field is required.";
+    if (objValues.sex === "Female") {
+        temp.pregnant =
+          objValues.pregnant !== "" ? "" : "This field is required.";
+      }
     setErrors({ ...temp });
     return Object.values(temp).every((x) => x == "");
   };
@@ -1654,7 +1658,7 @@ const BasicInfo = (props) => {
                 </>
               )}
 
-              {showPregancy && (
+              {showPregancy && objValues.sex === "Female" && (
                 <>
                   <div className="form-group  col-md-4">
                     <FormGroup>
@@ -1719,6 +1723,13 @@ const BasicInfo = (props) => {
                           )
                         )}
                       </select>
+                      {errors.pregnant !== "" ? (
+                        <span className={classes.error}>
+                          {errors.pregnant}
+                        </span>
+                      ) : (
+                        ""
+                      )}
                     </FormGroup>
                   </div>
                   {/*objValues.pregnant === "" &&

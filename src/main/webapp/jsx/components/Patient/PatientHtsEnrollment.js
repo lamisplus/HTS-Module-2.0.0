@@ -91,6 +91,7 @@ const UserRegistration = (props) => {
   };
 
   useEffect(() => {
+    console.log("hts enrollment")
     setModalityCheck(
       getCheckModality(patientObj?.riskStratificationResponseDto?.modality)
     );

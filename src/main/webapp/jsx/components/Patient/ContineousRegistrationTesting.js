@@ -27,6 +27,8 @@ import ClientReferralHistory from "./NewRegistrationEnrollement/ClientReferral/C
 import ViewClientReferral from "./NewRegistrationEnrollement/ClientReferral/Referrall_view_update";
 import { set } from "js-cookie";
 import { getCheckModality } from "../../../utility";
+import { getPreviousForm } from "../../../utility";
+import { calculate_age } from "../utils";
 
 const useStyles = makeStyles((theme) => ({
   error: {
@@ -40,6 +42,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const UserRegistration = (props) => {
+    const history = useHistory();
+
   const location = useLocation();
   const locationState = location.state;
   // const [saving, setSaving] = useState(false);
@@ -255,6 +259,21 @@ const UserRegistration = (props) => {
     setactiveItem(activeItem);
     //setCompleted({...completed, ...completedMenu})
   };
+
+  console.log("patientObj2",patientObj2);
+    const getPrevForm = (e) => {
+      e.preventDefault();
+      let age = calculate_age(patientObj2?.personResponseDto?.dateOfBirth);
+
+      let hivStatus = patientObj2?.hivTestResult;
+      let answer = getPreviousForm("Nigeria_PNS_Form", age, "", hivStatus);
+      console.log("previous => ", answer);
+      if (answer[0] && answer[1]) {
+        handleItemClick(answer[0]);
+      } else {
+        history.push("/");
+      }
+    }; 
   useEffect(() => {
     setModalityCheck(
       getCheckModality(patientObj2?.riskStratificationResponseDto?.modality)
@@ -269,7 +288,41 @@ const UserRegistration = (props) => {
         <CardBody>
           <form>
             <div className="row">
-              <h3>HIV COUNSELLING AND TESTING</h3>
+              <h3>
+                HIV COUNSELLING AND TESTING
+                {activeItem !== "pns" ? (
+                  <div>
+                    <Link to={"/"}>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        className=" float-end"
+                        //startIcon={<FaUserPlus size="10"/>}
+                        style={{ backgroundColor: "#014d88" }}
+                      >
+                        <span style={{ textTransform: "capitalize" }}>
+                          Back
+                        </span>
+                      </Button>
+                    </Link>
+                  </div>
+                ) : (
+                  <div>
+                    {/* <Link to={"/"}> */}
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      className=" float-end"
+                      //startIcon={<FaUserPlus size="10"/>}
+                      onClick={getPrevForm}
+                      style={{ backgroundColor: "#014d88" }}
+                    >
+                      <span style={{ textTransform: "capitalize" }}>Back</span>
+                    </Button>
+                    {/* </Link> */}
+                  </div>
+                )}
+              </h3>{" "}
               <br />
               <br />
               <div className="col-md-3 col-sm-3 col-lg-3">
@@ -381,8 +434,7 @@ const UserRegistration = (props) => {
                       )}
                       {patientObj2?.hivTestResult &&
                         patientObj2?.hivTestResult === "Positive" &&
-                        patientObj2.riskStratificationResponseDto?.age >=
-                          15 &&
+                        patientObj2.riskStratificationResponseDto?.age >= 15 &&
                         permissions.includes("Request_and_Result_Form") && (
                           <Menu.Item
                             name="spam"
@@ -508,7 +560,6 @@ const UserRegistration = (props) => {
                   )}
                 </Menu>
               </div>
-
               <div
                 className="col-md-9 col-sm-9 col-lg-9 "
                 style={{

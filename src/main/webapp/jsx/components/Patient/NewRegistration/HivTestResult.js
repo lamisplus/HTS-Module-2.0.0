@@ -170,24 +170,54 @@ const HivTestResult = (props) => {
 
   const handleInputChangeInitial = (e) => {
     //setErrors({...temp, [e.target.name]:""})
-    if (e.target.value === "No") {
-      setInitailTest({ ...initialTest1, [e.target.name]: e.target.value });
-      setConfirmatoryTest({
-        date: "",
-        result: "",
-      });
-      setTieBreakerTest({
-        date: "",
-        result: "",
-      });
-      //This is to show cd4 count section
-      setShowCD4Count(false);
-    } else {
-      setInitailTest({ ...initialTest1, [e.target.name]: e.target.value });
-      setErrors({ date: "", prepOffered: "", prepAccepted: "" });
-      //This is to show cd4 count section
-      setShowCD4Count(true);
-    }
+     if (e.target.name === "result") {
+     
+          setConfirmatoryTest({
+                date: "",
+                result: "",
+              });
+
+         setTieBreakerTest({
+                date: "",
+                result: "",
+              });
+
+          setInitailTest({
+            ...initialTest1,
+            [e.target.name]: e.target.value,
+          });
+              
+          if (e.target.value === "No") {
+            setShowCD4Count(false);
+          } else {
+            //This is to show cd4 count section
+            setShowCD4Count(true);
+          }
+
+     setErrors({  ...errors, [e.target.id ]: "" });
+
+     } else if (e.target.name === "date") {
+
+            setInitailTest({
+              ...initialTest1,
+              [e.target.name]: e.target.value,
+            });
+
+         setShowCD4Count(true);
+
+       setErrors({ ...errors, [e.target.id]: "" });
+
+         
+      //  setErrors({ date: "", prepOffered: "", prepAccepted: "" });
+
+          }
+         
+
+
+
+
+    // new implementation
+
   };
   const handleInputChangeInitial2 = (e) => {
     //setErrors({...temp, [e.target.name]:""})
@@ -410,8 +440,6 @@ const HivTestResult = (props) => {
   }
   const validate = () => {
     //HTS FORM VALIDATION
-    initialTest1.date !== "" &&
-      (temp.date = initialTest1.result ? "" : "This field is required.");
 
     initialTest1.date !== "" &&
       initialTest1.result === "No" &&
@@ -424,21 +452,66 @@ const HivTestResult = (props) => {
       (temp.prepAccepted = objValues.prepAccepted
         ? ""
         : "The Prep Accepted field is required.");
-    // temp.syphilisTestResult = syphills.syphilisTestResult
-    //   ? ""
-    //   : "This field is required.";
-    // temp.hepatitisBTestResult = hepatitis.hepatitisBTestResult
-    //   ? ""
-    //   : "This field is required.";
-    // temp.hepatitisCTestResult = hepatitis.hepatitisBTestResult
-    //   ? ""
-    //   : "This field is required.";
-    //  initialTest1.result!==""  && (temp.date = confirmatoryTest.date ? "" : "This field is required.")
-    // initialTest1.result!==""  && (temp.date = tieBreakerTest.date ? "" : "This field is required.")
+
+    //if the initial test date is filled then the initial test result should be compulsory and vice versa
+    initialTest1.date !== "" &&
+      (temp.initialResult = initialTest1.result
+        ? ""
+        : "This field is required.");
+    initialTest1.result !== "" &&
+      (temp.initialDate = initialTest1.date ? "" : "This field is required.");
+    //if the initial test result === reactive/yes then confirmatory test should be compulsory
+    initialTest1.result === "Yes" &&
+      (temp.confirmatoryDate = confirmatoryTest.date
+        ? ""
+        : "This field is required.");
+
+    //if comfirmatory date is filled then the result is compulsory
+    confirmatoryTest.date !== "" &&
+      (temp.confirmatoryResult = confirmatoryTest.result
+        ? ""
+        : "This field is required.");
+
+    //if confirmatory test =reactive the  Retesting is compulsory
+    confirmatoryTest.result === "Yes" &&
+      (temp.retestingDate = initialTest12.date2
+        ? ""
+        : "This field is required.");
+    initialTest12.date2 !== "" &&
+      (temp.retestingDate = initialTest12.result2
+        ? ""
+        : "This field is required.");
+
+    //if confirmatory test = non-reactive the  Retesting is compulsory
+  confirmatoryTest.result === "No" &&
+    (temp.tieBreakerDate = tieBreakerTest.date
+      ? ""
+      : "This field is required.");
+
+
+   tieBreakerTest.date !== "" &&
+     (temp.tieBreakerResult = initialTest12.result2
+       ? ""
+       : "This field is required."); 
+       
+  //if retesting = reactive then confirmatory 2 should be compulsory  
+  initialTest12.result2 === "Yes" &&
+    (temp.confirmatoryTest2Date = confirmatoryTest2.date2
+      ? ""
+      : "This field is required.");
+
+   confirmatoryTest2.date2 !== "" &&
+     (temp.confirmatoryTest2Result = confirmatoryTest2.result2
+       ? ""
+       : "This field is required."); 
+  
 
     setErrors({ ...temp });
     return Object.values(temp).every((x) => x == "");
   };
+
+
+
 
   // track and set final result
   useEffect(() => {
@@ -604,6 +677,12 @@ const HivTestResult = (props) => {
     }
     if (validate()) {
       setSaving(true);
+
+    if (finalResult === "") {
+      toast.error("Final result is required for submission.");
+      return;
+    }
+
       //logic to get Hiv result test
       if (initialTest12.result2 === "No") {
         objValues.hivTestResult2 = "Negative";
@@ -719,7 +798,7 @@ const HivTestResult = (props) => {
                   <Input
                     type="date"
                     name="date"
-                    id="date"
+                    id="initialDate"
                     value={initialTest1.date}
                     onChange={handleInputChangeInitial}
                     min={props?.patientObj?.dateVisit}
@@ -744,7 +823,7 @@ const HivTestResult = (props) => {
                     <select
                       className="form-control"
                       name="result"
-                      id="result"
+                      id="initialResult"
                       value={initialTest1.result}
                       onChange={handleInputChangeInitial}
                       style={{
@@ -757,8 +836,10 @@ const HivTestResult = (props) => {
                       <option value="Yes">Reactive</option>
                       <option value="No">Non Reactive</option>
                     </select>
-                    {errors.result !== "" ? (
-                      <span className={classes.error}>{errors.result}</span>
+                    {errors.initialResult !== "" ? (
+                      <span className={classes.error}>
+                        {errors.initialResult}
+                      </span>
                     ) : (
                       ""
                     )}
@@ -775,7 +856,7 @@ const HivTestResult = (props) => {
                       <Input
                         type="date"
                         name="date"
-                        id="date"
+                        id="confirmatoryDate"
                         value={confirmatoryTest.date}
                         onChange={handleInputChangeConfirmatory}
                         min={initialTest1.date}
@@ -786,9 +867,9 @@ const HivTestResult = (props) => {
                         }}
                         required
                       />
-                      {errors.dateOfEac1 !== "" ? (
+                      {errors.confirmatoryDate !== "" ? (
                         <span className={classes.error}>
-                          {errors.dateOfEac1}
+                          {errors.confirmatoryDate}
                         </span>
                       ) : (
                         ""
@@ -802,7 +883,7 @@ const HivTestResult = (props) => {
                         <select
                           className="form-control"
                           name="result"
-                          id="result"
+                          id="confirmatoryResult"
                           value={confirmatoryTest.result}
                           onChange={handleInputChangeConfirmatory}
                           style={{
@@ -830,7 +911,7 @@ const HivTestResult = (props) => {
                       <Input
                         type="date"
                         name="date"
-                        id="date"
+                        id="tieBreakerDate"
                         value={tieBreakerTest.date}
                         onChange={handleInputChangeTie}
                         min={confirmatoryTest.date}
@@ -850,7 +931,7 @@ const HivTestResult = (props) => {
                         <select
                           className="form-control"
                           name="result"
-                          id="result"
+                          id="tieBreakerResult"
                           value={tieBreakerTest.result}
                           onChange={handleInputChangeTie}
                           style={{
@@ -965,7 +1046,7 @@ const HivTestResult = (props) => {
                                   <Input
                                     type="date"
                                     name="date2"
-                                    id="date2"
+                                    id="confirmatoryTest2Date"
                                     value={confirmatoryTest2.date2}
                                     onChange={handleInputChangeConfirmatory2}
                                     min={initialTest12.date2}
@@ -986,7 +1067,7 @@ const HivTestResult = (props) => {
                                   <select
                                     className="form-control"
                                     name="result2"
-                                    id="result2"
+                                    id="confirmatoryTest2Result"
                                     value={confirmatoryTest2.result2}
                                     onChange={handleInputChangeConfirmatory2}
                                     style={{
@@ -1085,7 +1166,7 @@ const HivTestResult = (props) => {
                               <Input
                                 type="date"
                                 name="date2"
-                                id="date2"
+                                id="retestingDate"
                                 value={initialTest12.date2}
                                 onChange={handleInputChangeInitial2}
                                 min={tieBreakerTest.date}

@@ -99,6 +99,8 @@ const PnsForm = (props) => {
   const [indexTesting, setIndexTesting] = useState([]);
   const [consent, setConsent] = useState([]);
   const [hivTestDate, setHivTestDate] = useState("");
+  const [showSaveButton, setShowSaveButton] = useState(true);
+
   const [errors, setErrors] = useState({});
   const [states, setStates] = useState([]);
   const [provinces, setProvinces] = useState([]);
@@ -294,7 +296,6 @@ const PnsForm = (props) => {
   };
 
   useEffect(() => {
-
     Sex();
     getStates();
     NotificationContact();
@@ -756,7 +757,13 @@ const PnsForm = (props) => {
           if (props?.addNewForm === false) {
             handleItemClick("pns-history", "pns");
           } else {
-            loadOtherForm();
+            if (latestForm[0] === latestForm[1]) {
+              // loadNextForm();
+
+              setShowSaveButton(false);
+            } else {
+              loadOtherForm();
+            }
           }
           if (
             objValues.offeredPns !== "No" &&
@@ -2192,14 +2199,29 @@ const PnsForm = (props) => {
                     }}
                     disabled={saving}
                   />
-                  <Button
-                    content="Save"
-                    icon="save"
-                    labelPosition="right"
-                    style={{ backgroundColor: "#014d88", color: "#fff" }}
-                    onClick={handleSubmit}
-                    disabled={saving}
-                  />
+
+                  {console.log(showSaveButton)}
+                  {showSaveButton ? (
+                    <Button
+                      content="Save"
+                      icon="save"
+                      labelPosition="right"
+                      style={{ backgroundColor: "#014d88", color: "#fff" }}
+                      onClick={handleSubmit}
+                      disabled={saving}
+                    />
+                  ) : (
+                    <Button
+                      content="Done"
+                      icon="save"
+                      labelPosition="right"
+                      style={{ backgroundColor: "#014d88", color: "#fff" }}
+                      onClick={() => {
+                        history.push("/");
+                      }}
+                      disabled={saving}
+                    />
+                  )}
                 </div>
               </div>
             </div>

@@ -641,6 +641,13 @@ const BasicInfo = (props) => {
         }
       }
       getIndexClientCode();
+    } else if (e.target.name === "indexClient") {
+      setObjValues({
+        ...objValues,
+        [e.target.name]: e.target.value,
+        relationWithIndexClient: "",
+        indexClientCode: "",
+      });
     } else {
       setObjValues({ ...objValues, [e.target.name]: e.target.value });
     }
@@ -768,6 +775,20 @@ const BasicInfo = (props) => {
         temp.pregnant =
           objValues.pregnant !== "" ? "" : "This field is required.";
       }
+
+    if (objValues.indexClient === "true") {
+      temp.relationWithIndexClient =
+        objValues.relationWithIndexClient !== "" ? "" : "This field is required.";
+
+       temp.indexClientCode =
+        objValues.indexClientCode !== "" ? "" : "This field is required.";
+  
+
+
+    }
+
+
+
     setErrors({ ...temp });
     return Object.values(temp).every((x) => x == "");
   };
@@ -1627,6 +1648,13 @@ const BasicInfo = (props) => {
                           </option>
                         ))}
                       </select>
+                      {errors.relationWithIndexClient !== "" ? (
+                        <span className={classes.error}>
+                          {errors.relationWithIndexClient}
+                        </span>
+                      ) : (
+                        ""
+                      )}
                     </FormGroup>
                   </div>
                   <div className="form-group  col-md-4">
@@ -1643,6 +1671,13 @@ const BasicInfo = (props) => {
                           borderRadius: "0.25rem",
                         }}
                       />
+                      {errors.indexClientCode !== "" ? (
+                        <span className={classes.error}>
+                          {errors.indexClientCode}
+                        </span>
+                      ) : (
+                        ""
+                      )}
                     </FormGroup>
                     {clientCodeetail2 !== "" ? (
                       <span className={classes.error}>{clientCodeetail2}</span>
@@ -1724,9 +1759,7 @@ const BasicInfo = (props) => {
                         )}
                       </select>
                       {errors.pregnant !== "" ? (
-                        <span className={classes.error}>
-                          {errors.pregnant}
-                        </span>
+                        <span className={classes.error}>{errors.pregnant}</span>
                       ) : (
                         ""
                       )}

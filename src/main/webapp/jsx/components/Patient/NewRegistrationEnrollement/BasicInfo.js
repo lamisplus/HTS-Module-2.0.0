@@ -276,6 +276,13 @@ const BasicInfo = (props) => {
           [e.target.name]: 0,
         });
       }
+    } else if (e.target.name === "indexClient") {
+      setObjValues({
+        ...objValues,
+        [e.target.name]: e.target.value,
+        relationWithIndexClient: "",
+        indexClientCode:"",
+      });
     } else if (e.target.name === "numWives") {
       if (e.target.value >= 0) {
         setObjValues({ ...objValues, [e.target.name]: e.target.value });
@@ -326,12 +333,21 @@ const BasicInfo = (props) => {
     temp.firstTimeVisit =
       objValues.firstTimeVisit !== "" ? "" : "This field is required.";
     temp.dateVisit = objValues.dateVisit ? "" : "This field is required.";
-    
+
     if (props.patientObj.personResponseDto.sex.includes("female")) {
-     temp.pregnant = objValues.pregnant !== "" ? "" : "This field is required.";
+      temp.pregnant =
+        objValues.pregnant !== "" ? "" : "This field is required.";
     }
-    
-  
+
+    if (objValues.indexClient === "true") {
+      temp.relationWithIndexClient =
+        objValues.relationWithIndexClient !== ""
+          ? ""
+          : "This field is required.";
+
+      temp.indexClientCode =
+        objValues.indexClientCode !== "" ? "" : "This field is required.";
+    }
     setErrors({ ...temp });
     return Object.values(temp).every((x) => x == "");
   };
@@ -344,12 +360,12 @@ const BasicInfo = (props) => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
- let latestForm = getNextForm(
-   "Client_intake_form",
-   props.patientAge,
-   modalityCheck,
-   "unknown"
- );
+    let latestForm = getNextForm(
+      "Client_intake_form",
+      props.patientAge,
+      modalityCheck,
+      "unknown"
+    );
     if (props.activePage.actionType === "update") {
       //e.preventDefault();
       const patientForm = {
@@ -386,8 +402,7 @@ const BasicInfo = (props) => {
             setSaving(false);
             props.setPatientObj(response.data);
             toast.success("HTS Test successful");
-             handleItemClick(latestForm[0], latestForm[1]);
-
+            handleItemClick(latestForm[0], latestForm[1]);
           })
           .catch((error) => {
             setSaving(false);
@@ -407,8 +422,7 @@ const BasicInfo = (props) => {
     if (props.activePage.actionType === "view") {
       //e.preventDefault();
       setSaving(true);
-            handleItemClick(latestForm[0], latestForm[1]);
-
+      handleItemClick(latestForm[0], latestForm[1]);
     }
   };
 
@@ -662,52 +676,65 @@ const BasicInfo = (props) => {
                   )}
                 </FormGroup>
               </div>
-              {objValues.indexClient === "true" ||
-                (objValues.indexClient === true && (
-                  <>
-                    <div className="form-group  col-md-4">
-                      <FormGroup>
-                        <Label>Relationship of the index client</Label>
-                        <select
-                          className="form-control"
-                          name="relationWithIndexClient"
-                          id="relationWithIndexClient"
-                          value={objValues.relationWithIndexClient}
-                          onChange={handleInputChange}
-                          style={{
-                            border: "1px solid #014D88",
-                            borderRadius: "0.2rem",
-                          }}
-                          disabled={props.activePage.actionType === "view"}
-                        >
-                          <option value={""}></option>
-                          {indexTesting.map((value) => (
-                            <option key={value.id} value={value.id}>
-                              {value.display}
-                            </option>
-                          ))}
-                        </select>
-                      </FormGroup>
-                    </div>
-                    <div className="form-group  col-md-4">
-                      <FormGroup>
-                        <Label>Index Client Code/ID</Label>
-                        <Input
-                          type="text"
-                          name="indexClientCode"
-                          id="indexClientCode"
-                          value={objValues.indexClientCode}
-                          onChange={handleInputChange}
-                          style={{
-                            border: "1px solid #014D88",
-                            borderRadius: "0.25rem",
-                          }}
-                          readOnly={props.activePage.actionType === "view"}
-                        />
-                      </FormGroup>
-                    </div>
-                  </>
-                ))}
+              {objValues.indexClient === "true" && (
+                <>
+                  <div className="form-group  col-md-4">
+                    <FormGroup>
+                      <Label>Relationship of the index client</Label>
+                      <select
+                        className="form-control"
+                        name="relationWithIndexClient"
+                        id="relationWithIndexClient"
+                        value={objValues.relationWithIndexClient}
+                        onChange={handleInputChange}
+                        style={{
+                          border: "1px solid #014D88",
+                          borderRadius: "0.2rem",
+                        }}
+                        disabled={props.activePage.actionType === "view"}
+                      >
+                        <option value={""}></option>
+                        {indexTesting.map((value) => (
+                          <option key={value.id} value={value.id}>
+                            {value.display}
+                          </option>
+                        ))}
+                      </select>
+                      {errors.relationWithIndexClient !== "" ? (
+                        <span className={classes.error}>
+                          {errors.relationWithIndexClient}
+                        </span>
+                      ) : (
+                        ""
+                      )}
+                    </FormGroup>
+                  </div>
+                  <div className="form-group  col-md-4">
+                    <FormGroup>
+                      <Label>Index Client Code/ID</Label>
+                      <Input
+                        type="text"
+                        name="indexClientCode"
+                        id="indexClientCode"
+                        value={objValues.indexClientCode}
+                        onChange={handleInputChange}
+                        style={{
+                          border: "1px solid #014D88",
+                          borderRadius: "0.25rem",
+                        }}
+                        readOnly={props.activePage.actionType === "view"}
+                      />
+                    </FormGroup>
+                    {errors.indexClientCode !== "" ? (
+                      <span className={classes.error}>
+                        {errors.indexClientCode}
+                      </span>
+                    ) : (
+                      ""
+                    )}
+                  </div>
+                </>
+              )}
               {props.patientObj.personResponseDto.sex &&
                 props.patientObj.personResponseDto.sex.toLowerCase() ===
                   "female" && (

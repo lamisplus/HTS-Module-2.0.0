@@ -343,6 +343,12 @@ const Recency = (props) => {
       recency.hasViralLoad == "true" &&
         (temp.sampleType = recency.sampleType ? "" : "This field is required.");
     }
+        {
+          recency.rencencyInterpretation === "RTRI Recent" &&
+            (temp.hasViralLoad = recency.hasViralLoad
+              ? ""
+              : "This field is required.");
+        }
     setErrors({ ...temp });
     return Object.values(temp).every((x) => x == "");
   };

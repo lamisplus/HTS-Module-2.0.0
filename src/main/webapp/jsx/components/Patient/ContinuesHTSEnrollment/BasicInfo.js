@@ -393,7 +393,19 @@ const BasicInfo = (props) => {
         }
       }
       getIndexClientCode();
-      setObjValues({ ...objValues, [e.target.name]: e.target.value });
+      setObjValues({
+        ...objValues,
+        [e.target.name]: e.target.value,
+   
+      });
+    } else if (e.target.name === "indexClient") {
+        setObjValues({
+          ...objValues,
+          [e.target.name]: e.target.value,
+          relationWithIndexClient: "",
+          indexClientCode: "",
+        });
+
     } else if (e.target.name === "numChildren") {
       if (e.target.value >= 0) {
         setObjValues({ ...objValues, [e.target.name]: e.target.value });
@@ -447,6 +459,17 @@ const BasicInfo = (props) => {
         objValues.pregnant !== "" ? "" : "This field is required.";
     }
     
+    if (objValues.indexClient === "true") {
+      temp.relationWithIndexClient =
+        objValues.relationWithIndexClient !== ""
+          ? ""
+          : "This field is required.";
+
+        temp.indexClientCode =
+          objValues.indexClientCode !== "" ? "" : "This field is required.";
+
+
+    }
     setErrors({ ...temp });
     return Object.values(temp).every((x) => x == "");
   };
@@ -913,7 +936,10 @@ const BasicInfo = (props) => {
                 <>
                   <div className="form-group  col-md-4">
                     <FormGroup>
-                      <Label>Relationship of the index client</Label>
+                      <Label>
+                        Relationship of the index client{" "}
+                        <span style={{ color: "red" }}> *</span>
+                      </Label>
                       <select
                         className="form-control"
                         name="relationWithIndexClient"
@@ -932,11 +958,21 @@ const BasicInfo = (props) => {
                           </option>
                         ))}
                       </select>
+                       {errors.relationWithIndexClient !== "" ? (
+                          <span className={classes.error}>
+                            {errors.relationWithIndexClient}
+                          </span>
+                        ) : (
+                          ""
+                        )}
                     </FormGroup>
                   </div>
                   <div className="form-group  col-md-4">
                     <FormGroup>
-                      <Label>Index Client Code/ID</Label>
+                      <Label>
+                        Index Client Code/ID{" "}
+                        <span style={{ color: "red" }}> *</span>
+                      </Label>
                       <Input
                         type="text"
                         name="indexClientCode"
@@ -954,6 +990,13 @@ const BasicInfo = (props) => {
                       ) : (
                         ""
                       )} */}
+                       {errors.indexClientCode !== "" ? (
+                          <span className={classes.error}>
+                            {errors.indexClientCode}
+                          </span>
+                        ) : (
+                          ""
+                        )}
                     </FormGroup>
                   </div>
                 </>

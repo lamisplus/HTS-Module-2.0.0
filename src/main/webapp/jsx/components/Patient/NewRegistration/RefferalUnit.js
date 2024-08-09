@@ -1690,7 +1690,7 @@ const RefferralUnit = (props) => {
                     disabled={saving}
                   />
                   <Button
-                    content="Add Form"
+                    content="Submit"
                     type="submit"
                     // icon="right arrow"
                     // labelPosition="right"

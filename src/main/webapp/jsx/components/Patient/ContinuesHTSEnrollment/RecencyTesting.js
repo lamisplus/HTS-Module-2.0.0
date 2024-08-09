@@ -337,6 +337,13 @@ const Recency = (props) => {
       recency.hasViralLoad == "true" &&
         (temp.sampleType = recency.sampleType ? "" : "This field is required.");
     }
+
+
+    {recency.rencencyInterpretation === "RTRI Recent" &&
+      (temp.hasViralLoad = recency.hasViralLoad
+        ? ""
+        : "This field is required."); }
+        
     setErrors({ ...temp });
     return Object.values(temp).every((x) => x == "");
   };
@@ -584,7 +591,10 @@ const Recency = (props) => {
                   {recency.rencencyInterpretation === "RTRI Recent" && (
                     <div className="form-group  col-md-4">
                       <FormGroup>
-                        <Label>Has Viral Load been ordered? </Label>
+                        <Label>
+                          Has Viral Load been ordered?{" "}
+                          <span style={{ color: "red" }}> *</span>
+                        </Label>
                         <select
                           className="form-control"
                           name="hasViralLoad"

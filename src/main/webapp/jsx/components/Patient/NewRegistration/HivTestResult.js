@@ -145,7 +145,7 @@ const HivTestResult = (props) => {
     prepAccepted: "",
   });
   const handleInputChange = (e) => {
-    //setErrors({...temp, [e.target.name]:""})
+    // setErrors({...temp, [e.target.name]:""})
     setObjValues({ ...objValues, [e.target.name]: e.target.value });
   };
   const [initialTest1, setInitailTest] = useState({
@@ -238,6 +238,8 @@ const HivTestResult = (props) => {
       //This is to show cd4 count section
       setShowCD4Count(true);
     }
+   setErrors({ ...errors, [e.target.id]: "" });
+
   };
   const [confirmatoryTest, setConfirmatoryTest] = useState({
     date: "",
@@ -259,6 +261,8 @@ const HivTestResult = (props) => {
     } else {
       setShowCD4Count(true);
     }
+    setErrors({ ...errors, [e.target.id]: "" });
+
   };
   const handleInputChangeConfirmatory2 = (e) => {
     //setErrors({...temp, [e.target.name]:""})
@@ -272,6 +276,8 @@ const HivTestResult = (props) => {
     } else {
       setShowCD4Count(true);
     }
+    setErrors({ ...errors, [e.target.id]: "" });
+
   };
   const [tieBreakerTest, setTieBreakerTest] = useState({
     date: "",
@@ -293,6 +299,8 @@ const HivTestResult = (props) => {
     } else {
       setShowCD4Count(true);
     }
+   setErrors({ ...errors, [e.target.id]: "" });
+
   };
   const handleInputChangeTie2 = (e) => {
     //setErrors({...temp, [e.target.name]:""})
@@ -305,6 +313,8 @@ const HivTestResult = (props) => {
     } else {
       setShowCD4Count(true);
     }
+         setErrors({ ...errors, [e.target.id]: "" });
+
   };
 
   const [syphills, setSyphills] = useState({
@@ -478,7 +488,7 @@ const HivTestResult = (props) => {
         ? ""
         : "This field is required.");
     initialTest12.date2 !== "" &&
-      (temp.retestingDate = initialTest12.result2
+      (temp.retestingResult = initialTest12.result2
         ? ""
         : "This field is required.");
 
@@ -490,7 +500,7 @@ const HivTestResult = (props) => {
 
 
    tieBreakerTest.date !== "" &&
-     (temp.tieBreakerResult = initialTest12.result2
+     (temp.tieBreakerResult = tieBreakerTest.result
        ? ""
        : "This field is required."); 
        
@@ -671,10 +681,10 @@ const HivTestResult = (props) => {
       "unknown"
     );
 
-    if (finalResult === "") {
-      toast.error("Final result is required for submission.");
-      return;
-    }
+    // if (finalResult === "") {
+    //   toast.error("Final result is required for submission.");
+    //   return;
+    // }
     if (validate()) {
       setSaving(true);
 
@@ -809,8 +819,8 @@ const HivTestResult = (props) => {
                     }}
                     required
                   />
-                  {errors.date !== "" ? (
-                    <span className={classes.error}>{errors.date}</span>
+                  {errors.initialDate !== "" ? (
+                    <span className={classes.error}>{errors.initialDate}</span>
                   ) : (
                     ""
                   )}
@@ -896,6 +906,13 @@ const HivTestResult = (props) => {
                           <option value="Yes">Reactive</option>
                           <option value="No">Non Reactive</option>
                         </select>
+                        {errors.confirmatoryResult !== "" ? (
+                          <span className={classes.error}>
+                            {errors.confirmatoryResult}
+                          </span>
+                        ) : (
+                          ""
+                        )}
                       </FormGroup>
                     </div>
                   )}
@@ -922,6 +939,13 @@ const HivTestResult = (props) => {
                         }}
                         required
                       />
+                      {errors.tieBreakerDate !== "" ? (
+                        <span className={classes.error}>
+                          {errors.tieBreakerDate}
+                        </span>
+                      ) : (
+                        ""
+                      )}
                     </FormGroup>
                   </div>
                   {tieBreakerTest.date && (
@@ -944,6 +968,13 @@ const HivTestResult = (props) => {
                           <option value="Yes">Reactive</option>
                           <option value="No">Non Reactive</option>
                         </select>
+                        {errors.tieBreakerResult !== "" ? (
+                          <span className={classes.error}>
+                            {errors.tieBreakerResult}
+                          </span>
+                        ) : (
+                          ""
+                        )}
                       </FormGroup>
                     </div>
                   )}
@@ -1059,6 +1090,13 @@ const HivTestResult = (props) => {
                                     }}
                                     required
                                   />
+                                  {errors.confirmatoryTest2Date !== "" ? (
+                                    <span className={classes.error}>
+                                      {errors.confirmatoryTest2Date}
+                                    </span>
+                                  ) : (
+                                    ""
+                                  )}
                                 </FormGroup>
                               </div>
                               <div className="form-group  col-md-5">
@@ -1085,6 +1123,13 @@ const HivTestResult = (props) => {
                                     <option value="No">Non Reactive</option>
                                   </select>
                                 </FormGroup>
+                                {errors.confirmatoryTest2Result !== "" ? (
+                                  <span className={classes.error}>
+                                    {errors.confirmatoryTest2Result}
+                                  </span>
+                                ) : (
+                                  ""
+                                )}
                               </div>
                               <div className="form-group  col-md-2"></div>
                             </>
@@ -1177,9 +1222,9 @@ const HivTestResult = (props) => {
                                 }}
                                 required
                               />
-                              {errors.date2 !== "" ? (
+                              {errors.retestingDate !== "" ? (
                                 <span className={classes.error}>
-                                  {errors.date2}
+                                  {errors.retestingDate}
                                 </span>
                               ) : (
                                 ""
@@ -1192,7 +1237,7 @@ const HivTestResult = (props) => {
                               <select
                                 className="form-control"
                                 name="result2"
-                                id="result2"
+                                id="retestingResult"
                                 value={initialTest12.result2}
                                 onChange={handleInputChangeInitial2}
                                 style={{

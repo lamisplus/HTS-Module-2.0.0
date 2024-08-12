@@ -65,6 +65,7 @@ const UserRegistration = (props) => {
   const [permissions, setPermission] = useState(
     JSON.parse(localStorage.getItem("stringifiedPermmision"))
   );
+  const [selectedRow, setSelectedRow] = useState({});
 
   const [basicInfo, setBasicInfo] = useState({});
   const [organizationInfo, setOrganizationInfo] = useState({});
@@ -317,8 +318,7 @@ const UserRegistration = (props) => {
                       </Menu.Item>
                     )}
 
-                  {
-                    patientObj.hivTestResult &&
+                  {patientObj.hivTestResult &&
                     patientObj.hivTestResult.toLowerCase() === "positive" && (
                       <Menu.Item
                         name="inbox"
@@ -531,6 +531,8 @@ const UserRegistration = (props) => {
                     organizationInfo={organizationInfo}
                     addNewForm={false}
                     row={row}
+                    setRow={setRow}
+                    selectedRow={selectedRow}
                   />
                 )}
 
@@ -546,6 +548,7 @@ const UserRegistration = (props) => {
                     basicInfo={basicInfo}
                     organizationInfo={organizationInfo}
                     addNewForm={false}
+                    setSelectedRow={setSelectedRow}
                     // row={row}
                     // setAction={setAction}
                   />

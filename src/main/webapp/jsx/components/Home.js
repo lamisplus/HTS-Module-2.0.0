@@ -13,7 +13,7 @@ import Button from "@material-ui/core/Button";
 import HIVSTPatient from "./Patient/HIVST/HIVSTPatient";
 import CheckedInPatients from "./Patient/CheckedInPatients";
 import { getListOfPermission } from "../../utility";
-
+import { getAcount } from "../../utility";
 
 const divStyle = {
   borderRadius: "2px",
@@ -30,8 +30,15 @@ const Home = () => {
       })
       .then((response) => {
         localStorage.setItem("permissions", response.data.permissions);
-        let generatedPermission = getListOfPermission(response.data.permissions);
-        localStorage.setItem("generatedPermission", JSON.stringify(generatedPermission));
+        localStorage.setItem("FacId", response.data.currentOrganisationUnitId);
+
+        let generatedPermission = getListOfPermission(
+          response.data.permissions
+        );
+        localStorage.setItem(
+          "generatedPermission",
+          JSON.stringify(generatedPermission)
+        );
         let stringifiedPermmision = generatedPermission.map((each, index) => {
           return each.name;
         });
@@ -41,9 +48,9 @@ const Home = () => {
           JSON.stringify(stringifiedPermmision)
         );
 
-        
         console.log(
-          "permissison and permission",stringifiedPermmision,
+          "permissison and permission",
+          stringifiedPermmision,
           getListOfPermission(response.data.permissions)
         );
       })
@@ -54,8 +61,6 @@ const Home = () => {
     getPermissions();
     const permissions = localStorage.getItem("permissions")?.split(",");
     console.log("perms", permissions);
-     
-
   }, []);
 
   return (

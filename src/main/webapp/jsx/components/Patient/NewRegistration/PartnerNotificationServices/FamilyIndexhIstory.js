@@ -128,51 +128,52 @@ const FamilyIndexHistory = (props) => {
       });
   };
 
+  const convertRelationship = (relationship) => {
+    if (relationship === "FAMILY_RELATIONSHIP_FATHER") {
+      return "Father";
+    } else if (relationship === "FAMILY_RELATIONSHIP_MOTHER") {
+      return "Mother";
+    } else if (relationship === "FAMILY_RELATIONSHIP_BIOLOGICAL_CHILD") {
+      return "Child";
+    } else {
+      return relationship;
+    }
+  };
 
-    const convertRelationship = (relationship) => {
-       if (relationship === "FAMILY_RELATIONSHIP_FATHER") {
-         return "Father";
-       } else if (relationship === "FAMILY_RELATIONSHIP_MOTHER") {
-         return "Mother";
-       } else if (relationship === "FAMILY_RELATIONSHIP_CHILD") {
-         return "Child";
-       }else{
-        return "";
-       }
-    };
-
-
-
-    const getListOfFamliyIndices = (uuid) => {
-      axios
-        .get(
-          `${baseUrl}hts-family-index-testing/family-index?familyIndexTestingUuid=${uuid}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        )
-        .then((response) => {
-          if (response.data) {
-            setFamilyIndexList(response.data);
-            props.handleItemClick("fit-history");
-          } else {
-            setFamilyIndexList([]);
-          }
-        })
-        .catch((e) => {
-          // console.log("Fetch Facilities error" + e);
-        });
-    };
+  const getListOfFamliyIndices = (uuid) => {
+    axios
+      .get(
+        `${baseUrl}hts-family-index-testing/family-index?familyIndexTestingUuid=${uuid}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((response) => {
+        if (response.data) {
+          setFamilyIndexList(response.data);
+          props.handleItemClick("fit-history");
+        } else {
+          setFamilyIndexList([]);
+        }
+      })
+      .catch((e) => {
+        // console.log("Fetch Facilities error" + e);
+      });
+  };
 
   useEffect(() => {
     getListoFFamilyIndexInfo();
   }, [props.patientObj]);
 
   const LoadViewPage = (row, actionType) => {
+    console.log(row);
+    console.log(props);
+
     props.handleItemClick("view-fit");
-    props.setAction(actionType);
+    props.setSelectedRow(row);
+    // props.setAction(actionType);
   };
 
   const LoadModal = (row) => {

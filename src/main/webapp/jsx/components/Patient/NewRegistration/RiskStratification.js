@@ -171,7 +171,6 @@ const BasicInfo = (props) => {
     EntryPoint();
     HTS_ENTRY_POINT_COMMUNITY();
 
-
 if (objValues.age !== "") {
       props.setPatientObjAge(objValues.age);
     }

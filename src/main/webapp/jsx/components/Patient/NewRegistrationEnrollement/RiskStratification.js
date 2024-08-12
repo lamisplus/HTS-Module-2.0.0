@@ -180,6 +180,7 @@ const RiskStratification = (props) => {
             .riskAssessment
       );
     }
+    console.log("risk props", props)
   }, [props.patientObj]);
 
   //Get list of HIV STATUS ENROLLMENT

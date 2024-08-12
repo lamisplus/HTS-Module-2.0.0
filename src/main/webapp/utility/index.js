@@ -72,6 +72,45 @@ export const getAcount = async () => {
     return response.data;
   } catch (e) {}
 };
+//get if patient is pregnant
+
+
+
+export const checkPregnantPatient =  async(id) => {
+   try {
+     const response = await axios.get(
+       `${baseUrl}application-codesets/v2/PREGNANCY_STATUS`,
+       {
+         headers: { Authorization: `Bearer ${token}` },
+       }
+     );
+     //Get the pregnant object
+     let result = response.data.filter((each, index) => {
+       return each.code === "PREGANACY_STATUS_PREGNANT";
+     });
+     //compare the object id with  parameter
+
+     console.log(result[0].id, id, Number(result[0].id) === Number(id));
+
+    //  return result[0].id;
+     if (Number(result[0].id) === Number(id)) {
+       // return true;
+       return true;
+     } else {
+       return false;
+     }
+   } catch (e) {}
+
+
+  
+
+};
+
+
+
+
+
+
 // TEST_SETTING_OTHERS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)
 
 //check modality
@@ -170,7 +209,7 @@ const generateFormCode = (formName) => {
       return {
         name: "Request_and_Result_Form",
         code: "hiv-test",
-        general: false,
+        general: true,
         condition: [],
       };
       break;
@@ -203,6 +242,7 @@ const generateFormCode = (formName) => {
         name: "Referral_Form",
         code: "refferal-history",
         general: false,
+        condition: [],
       };
   }
 };
@@ -225,7 +265,7 @@ let ArrayOfAllForms = [
   {
     name: "Request_and_Result_Form",
     code: "hiv-test",
-    general: false,
+    general: true,
     condition: [],
   },
   {
@@ -289,6 +329,7 @@ export const getListOfPermission = (permittedForms) => {
   }
 };
 
+
 export const getNextForm = (formName, age, pmtctModality, hivStatus) => {
   let ageCondition = undefined;
   let pmctctModalityCondition = undefined;
@@ -334,14 +375,18 @@ export const getNextForm = (formName, age, pmtctModality, hivStatus) => {
 
     //
   } else {
-    return "non";
+      return [
+        authorizedForm[IndexOfForm].code,
+        authorizedForm[IndexOfForm].code,
+      ];
   }
 };
 
 //function to double skip a form due to other condition
-let authorizedForm = JSON.parse(localStorage.getItem("generatedPermission"));
 
 export const getDoubleSkipForm = (code) => {
+  let authorizedForm = JSON.parse(localStorage.getItem("generatedPermission"));
+
   let lengthOfAuthForm = authorizedForm.length;
 
   // get the index of the form
@@ -377,6 +422,11 @@ export const checkNextPageCondition = (
   let ageCondition = undefined;
   let pmctctModalityCondition = undefined;
   let HivStatuscondition = undefined;
+let authorizedForm = JSON.parse(localStorage.getItem("generatedPermission"));
+console.log(
+  "length of the authorized form checkNextPageCondition ",
+  authorizedForm.length
+);
 
   console.log(
     "nextform",
@@ -402,6 +452,9 @@ export const checkNextPageCondition = (
      } else if (each === "-HIV status" && hivStatus) {
        HivStatuscondition =
          hivStatus.toLowerCase() === "negative" ? true : false;
+     } else if (each === "-HIV status" && !hivStatus) {
+       HivStatuscondition = true
+       
      }
    });
    //type of form
@@ -440,6 +493,8 @@ export const loopThroughForms = (
   pmtctModality,
   hivStatus
 ) => {
+let authorizedForm = JSON.parse(localStorage.getItem("generatedPermission"));
+console.log("length of the authorized form ", authorizedForm.length);
 let latestNextForm = nextForm;
 let nextFormIndex =
   authorizedForm.length > IndexOfForm + 1 ? IndexOfForm + 1 : IndexOfForm;
@@ -462,5 +517,88 @@ let nextFormIndex =
     } else {
       return theNextPage;
     }
+  }
+};
+
+
+export const loopThroughFormBackward = (
+  nextForm,
+  currentForm,
+  IndexOfForm,
+  age,
+  pmtctModality,
+  hivStatus
+) => {
+  let authorizedForm = JSON.parse(localStorage.getItem("generatedPermission"));
+  console.log("length of the authorized form ", authorizedForm.length);
+  let nextFormIndex =
+  IndexOfForm - 1 >= 0 ? IndexOfForm - 1 : IndexOfForm;
+
+  //get the index of the next form
+
+  for (let i = nextFormIndex; i > 0; i--) {
+    let theNextPage = checkNextPageCondition(
+      authorizedForm[i],
+      authorizedForm[IndexOfForm],
+      IndexOfForm,
+      age,
+      pmtctModality,
+      hivStatus
+    );
+
+    if (theNextPage.includes("recall")) {
+      console.log(authorizedForm[i]);
+    } else {
+      return theNextPage;
+    }
+  }
+};
+export const getPreviousForm = (formName, age, pmtctModality, hivStatus) => {
+  let ageCondition = undefined;
+  let pmctctModalityCondition = undefined;
+  let HivStatuscondition = undefined;
+  pmtctModality = pmtctModality
+    ? pmtctModality
+    : localStorage.getItem("modality");
+
+  let authorizedForm = JSON.parse(localStorage.getItem("generatedPermission"));
+
+  let lengthOfAuthForm = authorizedForm.length;
+
+  // get the index of the form
+  let IndexOfForm = authorizedForm.findIndex((each) => {
+    return each.name === formName;
+  });
+
+  // use the index of the form to send the code of the next page
+  let prevPage;
+
+  
+  if (IndexOfForm - 1 >= 0) {
+    prevPage = IndexOfForm - 1;
+
+    let nextForm = authorizedForm[prevPage];
+
+    console.log(nextForm);
+    console.log([nextForm.code, authorizedForm[IndexOfForm].code]);
+
+    //  confirm if there are no condition on the  NEXT form
+    if (nextForm.condition.length === 0) {
+      return [nextForm.code, authorizedForm[IndexOfForm].code];
+    } else {
+      let answer = loopThroughFormBackward(
+        nextForm,
+        authorizedForm[IndexOfForm],
+        IndexOfForm,
+        age,
+        pmtctModality,
+        hivStatus
+      );
+      return answer;
+    }
+
+    //
+  } else {
+    return ["", ""];
   }
 };

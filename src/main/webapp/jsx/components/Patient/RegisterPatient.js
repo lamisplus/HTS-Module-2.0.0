@@ -29,6 +29,8 @@ import ClientReferralHistory from "./NewRegistrationEnrollement/ClientReferral/C
 import ViewClientReferral from "./NewRegistrationEnrollement/ClientReferral/Referrall_view_update";
 import FamilyIndexHistory from "./NewRegistration/PartnerNotificationServices/FamilyIndexhIstory";
 import ViewFamilyIndexTestingForm from "./NewRegistration/PartnerNotificationServices/ViewFamilyIndexForm";
+import { getPreviousForm } from "../../../utility";
+import { calculate_age } from "../utils";
 
 const useStyles = makeStyles((theme) => ({
   error: {
@@ -45,6 +47,7 @@ const UserRegistration = (props) => {
   //const classes = useStyles();
   const location = useLocation();
   const locationState = location.state;
+  const history = useHistory();
   const [saving, setSaving] = useState(false);
   const [activeItem, setactiveItem] = useState("risk");
   const [completed, setCompleted] = useState([]);
@@ -53,8 +56,11 @@ const UserRegistration = (props) => {
   const [patientObjAge, setPatientObjAge] = useState(0);
   const [hideOtherMenu, setHideOtherMenu] = useState(true);
   const [row, setRow] = useState({});
+  const [showBackButton, setShowBackButton] = useState(false);
+
   const handleItemClick = (activeItem) => {
     setactiveItem(activeItem);
+
     //setCompleted({...completed, ...completedMenu})
   };  const [action, setAction] = useState("");
 
@@ -276,6 +282,26 @@ console.log(permissions);
     }
   }, []);
 
+
+  const getPrevForm=(e)=>{
+      e.preventDefault()
+          let age = calculate_age(
+            basicInfo?.personResponseDto?.dateOfBirth
+              ? basicInfo?.personResponseDto?.dateOfBirth
+              : patientObj?.personResponseDto?.dateOfBirth
+          );
+
+          let hivStatus = patientObj?.hivTestResult;
+      let answer =  getPreviousForm("Nigeria_PNS_Form", age, "", hivStatus); 
+      console.log("previous => ", answer);
+   if (answer[0]  && answer[1]) {
+     handleItemClick(answer[0]);
+   }else{
+       history.push("/");
+
+   }
+  } 
+
   useEffect(() => {
   
     setModalityCheck(
@@ -312,31 +338,39 @@ console.log(permissions);
             <div className="row">
               <h3>
                 HIV COUNSELLING AND TESTING
-                <Link to={"/"}>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    className=" float-end"
-                    //startIcon={<FaUserPlus size="10"/>}
-                    style={{ backgroundColor: "#014d88" }}
-                  >
-                    <span style={{ textTransform: "capitalize" }}>Back</span>
-                  </Button>
-                </Link>
-                {activeItem === "fit-history" && (
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    className=" float-end"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleItemClick("pns");
-                    }}
-                    //startIcon={<FaUserPlus size="10"/>}
-                    style={{ backgroundColor: "#014d88" }}
-                  >
-                    <span style={{ textTransform: "capitalize" }}>Next</span>
-                  </Button>
+                {activeItem !== "pns" ? (
+                  <div>
+                    <Link to={"/"}>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        className=" float-end"
+                        //startIcon={<FaUserPlus size="10"/>}
+                        style={{ backgroundColor: "#014d88" }}
+                      >
+                        <span style={{ textTransform: "capitalize" }}>
+                          Back
+                        </span>
+                      </Button>
+                    </Link>
+                  </div>
+                ) : (
+                  <div>
+                    {/* <Link to={"/"}> */}
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      className=" float-end"
+                      //startIcon={<FaUserPlus size="10"/>}
+                      onClick={getPrevForm}
+                      style={{ backgroundColor: "#014d88" }}
+                    >
+                      <span style={{ textTransform: "capitalize" }}>
+                        Back
+                      </span>
+                    </Button>
+                    {/* </Link> */}
+                  </div>
                 )}
               </h3>
               <br />
@@ -449,7 +483,8 @@ console.log(permissions);
                       </Menu.Item>
                       {patientObj.hivTestResult &&
                         patientObj.hivTestResult.toLowerCase() === "positive" &&
-                        patientObj?.riskStratificationResponseDto?.age >= 15 && (
+                        patientObj?.riskStratificationResponseDto?.age >=
+                          15 && (
                           <Menu.Item
                             name="spam"
                             active={activeItem === "recency-testing"}

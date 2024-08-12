@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import axios from "axios";
+import { checkPregnantPatient } from "../../../../utility";
 import {
   FormGroup,
   Label,
@@ -193,6 +194,18 @@ const BasicInfo = (props) => {
           ? props.patientObj.tbScreening
           : {}
       );
+
+                 if (props?.patientObj?.pregnant) {
+                   checkPregnantPatient(props.patientObj.pregnant).then(
+                     (res) => {
+                       console.log("my result", res);
+                       setKnowledgeAssessment({
+                         ...knowledgeAssessment,
+                         clientPregnant: res ? "true" : "false",
+                       });
+                     }
+                   );
+                 }
       //patientAge=calculate_age(moment(props.patientObj.personResponseDto.dateOfBirth).format("DD-MM-YYYY"))
       //console.log(props.patientObj.riskStratificationResponseDto.riskAssessment)
       if (
@@ -628,6 +641,7 @@ const BasicInfo = (props) => {
                           border: "1px solid #014D88",
                           borderRadius: "0.2rem",
                         }}
+                        disabled={true}
                       >
                         <option value={""}></option>
                         <option value="true">Yes</option>

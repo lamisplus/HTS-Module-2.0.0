@@ -1600,7 +1600,7 @@ const ReferralUnit = (props) => {
               <div className="row">
                 <div className="form-group mb-3 col-md-12">
                   <Button
-                    content="Add Form"
+                    content="Submit"
                     type="submit"
                     // icon="right arrow"
                     // labelPosition="right"

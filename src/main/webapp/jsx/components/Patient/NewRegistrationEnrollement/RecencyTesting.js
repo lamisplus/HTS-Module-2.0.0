@@ -332,17 +332,22 @@ const Recency = (props) => {
   /*****  Validation  */
   const validate = () => {
     //HTS FORM VALIDATION
-    {
       recency.hasViralLoad == "true" &&
         (temp.sampleReferanceNumber = recency.sampleReferanceNumber
           ? ""
           : "This field is required.");
-    }
+
     // {  recency.sampleCollectedDate!=='' && (temp.dateSampleSentToPCRLab = recency.dateSampleSentToPCRLab ? "" : "This field is required.")}
-    {
+
       recency.hasViralLoad == "true" &&
         (temp.sampleType = recency.sampleType ? "" : "This field is required.");
-    }
+
+
+          recency.rencencyInterpretation === "RTRI Recent" &&
+            (temp.hasViralLoad = recency.hasViralLoad
+              ? ""
+              : "This field is required.");
+ 
     setErrors({ ...temp });
     return Object.values(temp).every((x) => x == "");
   };

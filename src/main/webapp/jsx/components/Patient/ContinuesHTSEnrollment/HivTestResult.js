@@ -385,6 +385,14 @@ const HivTestResult = (props) => {
       (temp.prepAccepted = objValues.prepAccepted
         ? ""
         : "The Prep Accepted field is required.");
+
+      // initialTest1.result === "Yes" &&
+      //   (temp.result = confirmatoryTest.result
+      //     ? ""
+      //     : "ConfirmatoryTest field is required.");
+
+
+
     // initialTest1.result!==""  && (temp.date = confirmatoryTest.date ? "" : "This field is required.")
     // initialTest1.result!==""  && (temp.date = tieBreakerTest.date ? "" : "This field is required.")
     // temp.syphilisTestResult = syphills.syphilisTestResult ? "" : "This field is required."

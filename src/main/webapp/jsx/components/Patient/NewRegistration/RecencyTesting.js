@@ -102,6 +102,7 @@ const Recency = (props) => {
   const [errors, setErrors] = useState({});
   const [hivTestDate, setHivTestDate] = useState("");
   const [nextForm, setNextForm] = useState([]);
+  const [showSaveButton, setShowSaveButton] = useState(true);
 
   let temp = { ...errors };
   const handleItemClick = (page, completedMenu) => {
@@ -355,17 +356,22 @@ const Recency = (props) => {
   /*****  Validation  */
   const validate = () => {
     //HTS FORM VALIDATION
-    {
+    
       recency.hasViralLoad == "true" &&
         (temp.sampleReferanceNumber = recency.sampleReferanceNumber
           ? ""
           : "This field is required.");
-    }
+  
     // {  recency.sampleCollectedDate!=='' && (temp.dateSampleSentToPCRLab = recency.dateSampleSentToPCRLab ? "" : "This field is required.")}
-    {
-      recency.hasViralLoad == "true" &&
+ 
+            recency.hasViralLoad == "true" &&
         (temp.sampleType = recency.sampleType ? "" : "This field is required.");
-    }
+
+          recency.rencencyInterpretation === "RTRI Recent" &&
+            (temp.hasViralLoad = recency.hasViralLoad
+              ? ""
+              : "This field is required.");
+   
     setErrors({ ...temp });
     return Object.values(temp).every((x) => x == "");
   };
@@ -393,7 +399,18 @@ const Recency = (props) => {
         .then((response) => {
           setSaving(false);
           props.setPatientObj(response.data);
-          loadOtherForm();
+          if (
+            latestForm[0] === "recency-testing" &&
+            latestForm[1] === "recency-testing"
+          ) {
+            // loadNextForm();
+
+            // if there are no other form then we should hide the save button
+
+            setShowSaveButton(false)
+          } else {
+            loadOtherForm();
+          }
           //toast.success("Risk Assesment successful");
           // history.push('/')
         })
@@ -882,48 +899,68 @@ const Recency = (props) => {
                   }}
                 >
                   <div className="">
-                    <Button
-                      content="Back"
-                      icon="left arrow"
-                      labelPosition="left"
-                      style={{ backgroundColor: "#992E62", color: "#fff" }}
-                      onClick={() => handleItemClick("post-test", "post-test")}
-                    />
-                    <Button
-                      content="Done"
-                      icon="right arrowrr"
-                      labelPosition="right"
-                      style={{ backgroundColor: "#014d88", color: "#fff" }}
-                      onClick={() => {
-                        history.push("/");
-                      }}
-                      disabled={
-                        props.patientObj?.postTestCounselingKnowledgeAssessment
-                          ?.hivTestResult === "true" &&
-                        recency.optOutRTRI === ""
-                          ? true
-                          : false
-                      }
-                    />
+                    {/* // <Button
+                    //   content="Back"
+                    //   icon="left arrow"
+                    //   labelPosition="left"
+                    //   style={{ backgroundColor: "#992E62", color: "#fff" }}
+                    //   onClick={() => handleItemClick("post-test", "post-test")}
+                    // /> */}
+                    {showSaveButton && (
+                      <Button
+                        content="Done"
+                        icon="right arrowrr"
+                        labelPosition="right"
+                        style={{ backgroundColor: "#014d88", color: "#fff" }}
+                        onClick={() => {
+                          history.push("/");
+                        }}
+                        disabled={
+                          props.patientObj
+                            ?.postTestCounselingKnowledgeAssessment
+                            ?.hivTestResult === "true" &&
+                          recency.optOutRTRI === ""
+                            ? true
+                            : false
+                        }
+                      />
+                    )}
                   </div>
 
-                  <div>
-                    {" "}
-                    <Button
-                      content="Save & Continue"
-                      icon="right arrow"
-                      labelPosition="right"
-                      style={{ backgroundColor: "#014d88", color: "#fff" }}
-                      onClick={handleSubmit}
-                      disabled={
-                        props.patientObj?.postTestCounselingKnowledgeAssessment
-                          ?.hivTestResult === "true" &&
-                        recency.optOutRTRI === ""
-                          ? true
-                          : false
-                      }
-                    />
-                  </div>
+                  {showSaveButton ? (
+                    <div>
+                      {" "}
+                      <Button
+                        content="Save & Continue"
+                        icon="right arrow"
+                        labelPosition="right"
+                        style={{ backgroundColor: "#014d88", color: "#fff" }}
+                        onClick={handleSubmit}
+                        disabled={
+                          props.patientObj
+                            ?.postTestCounselingKnowledgeAssessment
+                            ?.hivTestResult === "true" &&
+                          recency.optOutRTRI === ""
+                            ? true
+                            : false
+                        }
+                      />
+                    </div>
+                  ) : (
+                    <div>
+                      {" "}
+                      <Button
+                        content="Done"
+                        icon="right arrow"
+                        labelPosition="right"
+                        style={{ backgroundColor: "#014d88", color: "#fff" }}
+                        onClick={() => {
+                          history.push("/");
+                        }}
+                       
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

@@ -5,7 +5,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { getCheckModality } from "../../../utility";
 //import {TiArrowBack} from 'react-icons/ti'
 //import {token, url as baseUrl } from "../../../api";
@@ -33,6 +33,9 @@ import FamilyIndexHistory from "./NewRegistration/PartnerNotificationServices/Fa
 import FamilyIndexTestingForm from "./NewRegistration/FamilyIndexTestingForm";
 import axios from "axios";
 import { token, url as baseUrl } from "../../../api";
+import { getPreviousForm } from "../../../utility";
+import { calculate_age } from "../utils";
+
 
 const useStyles = makeStyles((theme) => ({
   error: {
@@ -47,6 +50,8 @@ const useStyles = makeStyles((theme) => ({
 
 const UserRegistration = (props) => {
   const classes = useStyles();
+  const history = useHistory();
+
   const [activeItem, setactiveItem] = useState("basic");
   const [completed, setCompleted] = useState([]);
   const [hideOtherMenu, setHideOtherMenu] = useState(true);
@@ -90,8 +95,25 @@ const UserRegistration = (props) => {
       actionType: actionType,
     });
   };
+ const getPrevForm = (e) => {
+   e.preventDefault();
+   let age = calculate_age(
+     basicInfo?.personResponseDto?.dateOfBirth
+       ? basicInfo?.personResponseDto?.dateOfBirth
+       : patientObj?.personResponseDto?.dateOfBirth
+   );
 
+   let hivStatus = patientObj?.hivTestResult;
+   let answer = getPreviousForm("Nigeria_PNS_Form", age, "", hivStatus);
+   console.log("previous => ", answer);
+   if (answer[0] && answer[1]) {
+     handleItemClick(answer[0]);
+   } else {
+     history.push("/");
+   }
+ }; 
   useEffect(() => {
+    console.log("hts enrollment")
     setModalityCheck(
       getCheckModality(patientObj?.riskStratificationResponseDto?.modality)
     );
@@ -108,16 +130,41 @@ const UserRegistration = (props) => {
               <h3>
                 HIV COUNSELLING AND TESTING -{" "}
                 {patientObj && patientObj.dateVisit ? patientObj.dateVisit : ""}
-                <Button
-                  variant="contained"
-                  color="primary"
-                  className=" float-end"
-                  //startIcon={<FaUserPlus size="10"/>}
-                  style={{ backgroundColor: "#014d88" }}
-                  onClick={LoadViewPage}
-                >
-                  <span style={{ textTransform: "capitalize" }}>Back</span>
-                </Button>
+                {activeItem === "pns" || activeItem === "pns-history" ? (
+                  <div>
+                    {/* <Link to={"/"}> */}
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      className=" float-end"
+                      //startIcon={<FaUserPlus size="10"/>}
+                      onClick={getPrevForm}
+                      style={{ backgroundColor: "#014d88" }}
+                    >
+                      <span style={{ textTransform: "capitalize" }}>
+                        Back
+                      </span>
+                    </Button>
+                    {/* </Link> */}
+                  </div>
+                ) : (
+                  <div>
+                    <Link to={"/"}>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        className=" float-end"
+                        //startIcon={<FaUserPlus size="10"/>}
+                        style={{ backgroundColor: "#014d88" }}
+                        onClick={LoadViewPage}
+                      >
+                        <span style={{ textTransform: "capitalize" }}>
+                          Back
+                        </span>
+                      </Button>
+                    </Link>
+                  </div>
+                )}
               </h3>
               <br />
               <br />

@@ -596,7 +596,7 @@ const UserRegistration = (props) => {
                     selectedRow={selectedRow}
                     setSelectedRow={setSelectedRow}
                     // row={row}
-                    // setAction={setAction}
+                    setAction={setAction}
                   />
                 )}
 

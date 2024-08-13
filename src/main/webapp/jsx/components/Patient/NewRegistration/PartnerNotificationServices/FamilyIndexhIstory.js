@@ -173,7 +173,7 @@ const FamilyIndexHistory = (props) => {
 
     props.handleItemClick("view-fit");
     props.setSelectedRow(row);
-    // props.setAction(actionType);
+    props.setAction(actionType);
   };
 
   const LoadModal = (row) => {

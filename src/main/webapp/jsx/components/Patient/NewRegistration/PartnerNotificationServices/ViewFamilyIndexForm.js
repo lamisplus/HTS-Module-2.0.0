@@ -584,6 +584,7 @@ const ViewFamilyIndexTestingForm = (props) => {
       )
       .then((response) => {
         toast.success("Family Tracker Deleted Successfully");
+      setViewFamilyTrackerForm(false);
 
       })
       .catch((error) => {
@@ -1672,7 +1673,7 @@ familyTestingTrackerRequestDTO.trackerAge=age_now;
                         border: "1px solid #014D88",
                         borderRadius: "0.25rem",
                       }}
-                      // disabled
+                      disabled={props.action === "view" ? true : false}
                     />
                     {errors.visitDate !== "" ? (
                       <span className={classes.error}>{errors.visitDate}</span>
@@ -1730,7 +1731,7 @@ familyTestingTrackerRequestDTO.trackerAge=age_now;
                         border: "1px solid #014D88",
                         borderRadius: "0.2rem",
                       }}
-                      // disabled
+                      disabled={props.action === "view" ? true : false}
                     >
                       <option value={""}>Select</option>
                       {familyIndex &&
@@ -2015,6 +2016,7 @@ familyTestingTrackerRequestDTO.trackerAge=age_now;
                         border: "1px solid #014D88",
                         borderRadius: "0.2rem",
                       }}
+                      disabled={props.action === "view" ? true : false}
                     />
                   </FormGroup>
                 </div>
@@ -2195,6 +2197,8 @@ familyTestingTrackerRequestDTO.trackerAge=age_now;
                         border: "1px solid #014D88",
                         borderRadius: "0.2rem",
                       }}
+                                        disabled={props.action === "view" ? true : false}
+
                     >
                       <option value="">Select</option>
                       <option value="Yes">Yes</option>
@@ -2225,7 +2229,7 @@ familyTestingTrackerRequestDTO.trackerAge=age_now;
                             border: "1px solid #014D88",
                             borderRadius: "0.25rem",
                           }}
-                          //   disabledg
+                  disabled={props.action === "view" ? true : false}
                         />
                         {errors.treatmentDate !== "" ? (
                           <span className={classes.error}>
@@ -2252,6 +2256,8 @@ familyTestingTrackerRequestDTO.trackerAge=age_now;
                             border: "1px solid #014D88",
                             borderRadius: "0.2rem",
                           }}
+                                            disabled={props.action === "view" ? true : false}
+
                         >
                           <option value="">Select</option>
                           <option value="Yes">Yes</option>
@@ -2272,6 +2278,8 @@ familyTestingTrackerRequestDTO.trackerAge=age_now;
                       name="willingToHaveChildrenTestedElseWhere"
                       onChange={handleInputChange}
                       value={payload.willingToHaveChildrenTestedElseWhere}
+                                        disabled={props.action === "view" ? true : false}
+
                     >
                       <option value="">Select</option>
                       <option value="Yes">Yes</option>
@@ -2314,7 +2322,7 @@ familyTestingTrackerRequestDTO.trackerAge=age_now;
                       border: "1px solid #014D88",
                       borderRadius: "0.25rem",
                     }}
-                    // disabled
+                  disabled={props.action === "view" ? true : false}
                   />
                   {errorFamilyIndexDTO.familyRelationship && (
                     <span className={classes.error}>
@@ -2332,6 +2340,8 @@ familyTestingTrackerRequestDTO.trackerAge=age_now;
                     name="familyRelationship"
                     onChange={handlefamilyIndexRequestDto}
                     value={familyIndexRequestDto.familyRelationship}
+              disabled={props.action === "view" ? true : false}
+
                   >
                     <option value="">Select</option>
                     {familyRelationship.map((value, index) => (
@@ -2362,6 +2372,8 @@ familyTestingTrackerRequestDTO.trackerAge=age_now;
                           border: "1px solid #014D88",
                           borderRadius: "0.2rem",
                         }}
+                     disabled={props.action === "view" ? true : false}
+
                       />{" "}
                       Actual
                     </label>
@@ -2377,6 +2389,8 @@ familyTestingTrackerRequestDTO.trackerAge=age_now;
                           border: "1px solid #014D88",
                           borderRadius: "0.2rem",
                         }}
+                       disabled={props.action === "view" ? true : false}
+
                       />{" "}
                       Estimated
                     </label>
@@ -2399,8 +2413,10 @@ familyTestingTrackerRequestDTO.trackerAge=age_now;
                       border: "1px solid #014D88",
                       borderRadius: "0.2rem",
                     }}
+                    disabled={props.action === "view" ? true : false}
                   />
                 </FormGroup>
+                {console.log(props)}
               </div>
               <div className="form-group mb-3 col-md-4">
                 <FormGroup>
@@ -2417,6 +2433,8 @@ familyTestingTrackerRequestDTO.trackerAge=age_now;
                       border: "1px solid #014D88",
                       borderRadius: "0.2rem",
                     }}
+                disabled={props.action === "view" ? true : false}
+
                   />
                 </FormGroup>
               </div>
@@ -2432,6 +2450,8 @@ familyTestingTrackerRequestDTO.trackerAge=age_now;
                       name="childNumber"
                       onChange={handlefamilyIndexRequestDto}
                       value={familyIndexRequestDto.childNumber}
+                     disabled={props.action === "view" ? true : false}
+
                     >
                       <option value="">Select</option>
                       <option value="1">1st Child</option>
@@ -2462,6 +2482,8 @@ familyTestingTrackerRequestDTO.trackerAge=age_now;
                       name="childDead"
                       onChange={handlefamilyIndexRequestDto}
                       value={familyIndexRequestDto.childDead}
+                    disabled={props.action === "view" ? true : false}
+
                     >
                       <option value="">Select</option>
                       <option value="yes">Yes</option>
@@ -2510,6 +2532,8 @@ familyTestingTrackerRequestDTO.trackerAge=age_now;
                       name="liveWithParent"
                       onChange={handlefamilyIndexRequestDto}
                       value={familyIndexRequestDto.liveWithParent}
+                  disabled={props.action === "view" ? true : false}
+  
                     >
                       <option value="">Select</option>
                       <option value="yes">Yes</option>
@@ -2528,6 +2552,8 @@ familyTestingTrackerRequestDTO.trackerAge=age_now;
                     name="statusOfContact"
                     onChange={handlefamilyIndexRequestDto}
                     value={familyIndexRequestDto.statusOfContact}
+                   disabled={props.action === "view" ? true : false}
+
                   >
                     <option value="">Select</option>
                     {statusOfContact.map((value, index) => (
@@ -2561,6 +2587,7 @@ familyTestingTrackerRequestDTO.trackerAge=age_now;
                           familyIndexRequestDto.statusOfContact !==
                           "FAMILY_INDEX_HIV_STATUS_CURRENT_ON_ART"
                         }
+
                       />
                       {errors.uan && (
                         <span className={classes.error}>{errors.uan}</span>
@@ -2581,6 +2608,8 @@ familyTestingTrackerRequestDTO.trackerAge=age_now;
                         name="motherDead"
                         onChange={handlefamilyIndexRequestDto}
                         value={familyIndexRequestDto.motherDead}
+                        disabled={props.action === "view" ? true : false}
+
                       >
                         <option value="">Select</option>
                         <option value="Yes">Yes</option>
@@ -2608,6 +2637,8 @@ familyTestingTrackerRequestDTO.trackerAge=age_now;
                       name="yearMotherDead"
                       value={familyIndexRequestDto.yearMotherDead}
                       onChange={handlefamilyIndexRequestDto}
+                  disabled={props.action === "view" ? true : false}
+
                     />
                     {errorFamilyIndexDTO.yearMotherDead && (
                       <span className={classes.error}>
@@ -2631,6 +2662,8 @@ familyTestingTrackerRequestDTO.trackerAge=age_now;
                       name="yearChildDead"
                       value={familyIndexRequestDto.yearChildDead}
                       onChange={handlefamilyIndexRequestDto}
+                     disabled={props.action === "view" ? true : false}
+
                     />
                     {errorFamilyIndexDTO.yearChildDead && (
                       <span className={classes.error}>
@@ -2735,7 +2768,7 @@ familyTestingTrackerRequestDTO.trackerAge=age_now;
 
               {/* SECTION C INPUT FILEDS  */}
               <div className="row ">
-                {!viewFamilyTrackerForm && (
+                {!viewFamilyTrackerForm && props.action === "update" && (
                   <div className="form-group mb-3  col-md-12 ">
                     <div class="d-flex justify-content-end">
                       <LabelSui
@@ -2766,6 +2799,8 @@ familyTestingTrackerRequestDTO.trackerAge=age_now;
                             familyTestingTrackerRequestDTO?.positionOfChildEnumerated
                           }
                           onChange={handlefamilyTestingTrackerRequestDTO}
+            disabled={props.action === "view" ? true : false}
+
                         />
                       </FormGroup>
                     </div>
@@ -2778,6 +2813,8 @@ familyTestingTrackerRequestDTO.trackerAge=age_now;
                           name="trackerSex"
                           onChange={handlefamilyTestingTrackerRequestDTO}
                           value={familyTestingTrackerRequestDTO?.trackerSex}
+                      disabled={props.action === "view" ? true : false}
+
                         >
                           <option value="">Select</option>
                           {genders.map((value, index) => (
@@ -2802,9 +2839,7 @@ familyTestingTrackerRequestDTO.trackerAge=age_now;
                             border: "1px solid #014D88",
                             borderRadius: "0.2rem",
                           }}
-                          disabled={
-                            true
-                          }
+                          disabled={true}
                         />
                       </FormGroup>
                     </div>
@@ -2821,6 +2856,8 @@ familyTestingTrackerRequestDTO.trackerAge=age_now;
                           value={
                             familyTestingTrackerRequestDTO?.followUpAppointmentLocation
                           }
+                        disabled={props.action === "view" ? true : false}
+
                         >
                           <option value="">Select</option>
                           {followUpAppointmentLocation.map((value, index) => (
@@ -2851,7 +2888,7 @@ familyTestingTrackerRequestDTO.trackerAge=age_now;
                             border: "1px solid #014D88",
                             borderRadius: "0.25rem",
                           }}
-                          // disabled
+                  disabled={props.action === "view" ? true : false}
                         />
                         {/* {errors.referralDate !== "" ? (
                         <span className={classes.error}>
@@ -2877,7 +2914,8 @@ familyTestingTrackerRequestDTO.trackerAge=age_now;
                             border: "1px solid #014D88",
                             borderRadius: "0.25rem",
                           }}
-                          // disabled
+                  disabled={props.action === "view" ? true : false}
+
                         />
                         {errorFamilyIndexTracker.dateVisit !== "" ? (
                           <span className={classes.error}>
@@ -2904,6 +2942,8 @@ familyTestingTrackerRequestDTO.trackerAge=age_now;
                             border: "1px solid #014D88",
                             borderRadius: "0.2rem",
                           }}
+      disabled={props.action === "view" ? true : false}
+         
                         >
                           <option value="">Select</option>
                           {indexVisitAttempt.map((value, index) => (
@@ -2929,6 +2969,8 @@ familyTestingTrackerRequestDTO.trackerAge=age_now;
                             border: "1px solid #014D88",
                             borderRadius: "0.2rem",
                           }}
+                    disabled={props.action === "view" ? true : false}
+ 
                         >
                           <option value="">Select</option>
                           <option value="Yes">Yes</option>
@@ -2954,7 +2996,8 @@ familyTestingTrackerRequestDTO.trackerAge=age_now;
                                 border: "1px solid #014D88",
                                 borderRadius: "0.25rem",
                               }}
-                              // disabled
+                           disabled={props.action === "view" ? true : false}
+
                             />
                             {errors.dateTested !== "" ? (
                               <span className={classes.error}>
@@ -2984,6 +3027,8 @@ familyTestingTrackerRequestDTO.trackerAge=age_now;
                                 border: "1px solid #014D88",
                                 borderRadius: "0.2rem",
                               }}
+                              disabled={props.action === "view" ? true : false}
+
                             >
                               <option value="">Select</option>
                               <option value="Tested Positive">
@@ -3014,7 +3059,8 @@ familyTestingTrackerRequestDTO.trackerAge=age_now;
                               border: "1px solid #014D88",
                               borderRadius: "0.25rem",
                             }}
-                            // disabled
+                  disabled={props.action === "view" ? true : false}
+
                           />
                           {errors.referralDate !== "" ? (
                             <span className={classes.error}>
@@ -3045,7 +3091,8 @@ familyTestingTrackerRequestDTO.trackerAge=age_now;
                               border: "1px solid #014D88",
                               borderRadius: "0.25rem",
                             }}
-                            // disabled
+                        disabled={props.action === "view" ? true : false}
+
                           />
                           {errors.referralDate !== "" ? (
                             <span className={classes.error}>
@@ -3058,7 +3105,7 @@ familyTestingTrackerRequestDTO.trackerAge=age_now;
                       </div>
                     )}
 
-                    <div className="form-group mb-3 col-md-12">
+                  {props.action === "update" &&  <div className="form-group mb-3 col-md-12">
                       {addNewAttempt ? (
                         <LabelSui
                           as="a"
@@ -3080,7 +3127,7 @@ familyTestingTrackerRequestDTO.trackerAge=age_now;
                           <Icon name="plus" /> Update Family index
                         </LabelSui>
                       )}
-                    </div>
+                    </div>}
                   </>
                 )}
               </div>
@@ -3091,12 +3138,12 @@ familyTestingTrackerRequestDTO.trackerAge=age_now;
               <List>
                 <Table striped responsive>
                   <thead>
-                    <tr>
-                      <th>Attempt</th>
+                    <tr >
+                      <th style={{ fontSize: "15px"}}>Attempt</th>
 
-                      <th>Schedule Visit Date</th>
-                      <th>Follow Up Appointment Location</th>
-                      <th>Action</th>
+                     <th style={{ fontSize: "15px"}}>Schedule Visit Date</th>
+                     <th style={{ fontSize: "15px"}}>Follow Up Appointment Location</th>
+                     <th style={{ fontSize: "15px"}}>Action</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -3106,10 +3153,12 @@ familyTestingTrackerRequestDTO.trackerAge=age_now;
                           <td>{getAttemptDisplay(each.attempt)}</td>
                           <td>{each.scheduleVisitDate}</td>
 
-                          <td>{FollowUpDisplay(each.followUpAppointmentLocation)}</td>
+                          <td>
+                            {FollowUpDisplay(each.followUpAppointmentLocation)}
+                          </td>
                           <td>
                             {/* props.action === "update" */}
-                            {true ? (
+                            {props.action === "update" ? (
                               <>
                                 <IconButton
                                   aria-label="update"
@@ -3126,7 +3175,9 @@ familyTestingTrackerRequestDTO.trackerAge=age_now;
                                   aria-label="delete"
                                   size="small"
                                   color="error"
-                                  onClick={() => removeFamilyTrackerRow(index, each)}
+                                  onClick={() =>
+                                    removeFamilyTrackerRow(index, each)
+                                  }
                                 >
                                   <DeleteIcon fontSize="inherit" />
                                 </IconButton>
@@ -3154,7 +3205,8 @@ familyTestingTrackerRequestDTO.trackerAge=age_now;
 
             <br />
             <div className="row">
-              <div className="form-group mb-3 col-md-6">
+            { props.action === "update"  &&
+ <div className="form-group mb-3 col-md-6">
                 <Button
                   content="Done"
                   type="Done"
@@ -3175,7 +3227,7 @@ familyTestingTrackerRequestDTO.trackerAge=age_now;
                   onClick={handleSubmit}
                   disabled={saving}
                 />
-              </div>
+              </div>}
             </div>
           </form>
         </CardBody>

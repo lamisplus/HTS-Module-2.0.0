@@ -707,7 +707,7 @@ console.log(permissions);
                     setSelectedRow={setSelectedRow}
 
                     // row={row}
-                    // setAction={setAction}
+                    setAction={setAction}
                   />
                 )}
 

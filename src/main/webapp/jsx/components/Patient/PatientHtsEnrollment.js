@@ -141,9 +141,7 @@ const UserRegistration = (props) => {
                       onClick={getPrevForm}
                       style={{ backgroundColor: "#014d88" }}
                     >
-                      <span style={{ textTransform: "capitalize" }}>
-                        Back
-                      </span>
+                      <span style={{ textTransform: "capitalize" }}>Back</span>
                     </Button>
                     {/* </Link> */}
                   </div>
@@ -595,6 +593,7 @@ const UserRegistration = (props) => {
                     basicInfo={basicInfo}
                     organizationInfo={organizationInfo}
                     addNewForm={false}
+                    selectedRow={selectedRow}
                     setSelectedRow={setSelectedRow}
                     // row={row}
                     // setAction={setAction}

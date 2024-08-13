@@ -4,9 +4,8 @@ export const url =
     : "/api/v1/";
 export const token =
   process.env.NODE_ENV === "development"
-    ? "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJndWVzdEBsYW1pc3BsdXMub3JnIiwiYXV0aCI6IlN1cGVyIEFkbWluIiwibmFtZSI6Ikd1ZXN0IEd1ZXN0IiwiZXhwIjoxNzIzNDc4Mjk0fQ.9xeuJlYtVSr-gSQPSBQdgRKsV1H2DhkM7eTE9qyr7xBol5TCj8FfNwwkB3xMnO5-_ZEr6dLC-tYmqbv25cwDVw"
+    ? "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJndWVzdEBsYW1pc3BsdXMub3JnIiwiYXV0aCI6IlN1cGVyIEFkbWluIiwibmFtZSI6Ikd1ZXN0IEd1ZXN0IiwiZXhwIjoxNzIzNTA3NzM5fQ.eQ5Erdkmztw-geYSNGK_rCxr352uchJn2ymK2NOZbqPZoN-11YhEhA7TqH2x_CusMrMaY6UiK8omaxbM3SYUAg"
     : new URLSearchParams(window.location.search).get("jwt");
-
 
 let payload = {
   // id: 7,
@@ -71,9 +70,6 @@ let payload = {
   // isDateOfBirthEstimated: null,
   // uan: "",
 };
-
-
-
 
 let expected = {
   age: 0,

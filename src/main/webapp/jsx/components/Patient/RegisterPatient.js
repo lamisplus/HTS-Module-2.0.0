@@ -76,7 +76,7 @@ console.log(permissions);
       })
       .catch(() => {});
   };
-
+  const [selectedRow, setSelectedRow] = useState({});
   const [extra, setExtra] = useState({
     risk: "",
     index: "",
@@ -365,9 +365,7 @@ console.log(permissions);
                       onClick={getPrevForm}
                       style={{ backgroundColor: "#014d88" }}
                     >
-                      <span style={{ textTransform: "capitalize" }}>
-                        Back
-                      </span>
+                      <span style={{ textTransform: "capitalize" }}>Back</span>
                     </Button>
                     {/* </Link> */}
                   </div>
@@ -507,7 +505,7 @@ console.log(permissions);
                           </Menu.Item>
                         )}
 
-                       {patientObj.hivTestResult &&
+                      {patientObj.hivTestResult &&
                         patientObj.hivTestResult.toLowerCase() ===
                           "positive" && (
                           <Menu.Item
@@ -705,6 +703,9 @@ console.log(permissions);
                     organizationInfo={organizationInfo}
                     addNewForm={true}
                     nextButton={true}
+                    selectedRow={selectedRow}
+                    setSelectedRow={setSelectedRow}
+
                     // row={row}
                     // setAction={setAction}
                   />
@@ -724,6 +725,7 @@ console.log(permissions);
                     organizationInfo={organizationInfo}
                     addNewForm={false}
                     row={row}
+                    selectedRow={selectedRow}
                   />
                 )}
 

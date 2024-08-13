@@ -205,7 +205,6 @@ const FamilyIndexTestingForm = (props) => {
       trackerAge: "",
       trackerSex: "",
     });
-
   const [payload, setPayload] = useState({
     age:
       props &&
@@ -256,7 +255,7 @@ const FamilyIndexTestingForm = (props) => {
 
     htsClientId: props && props.patientObj ? props.patientObj?.id : "",
     htsClientUuid:
-      props && props.patientObj ? props.patientObj.htsClientUUid : "",
+      props?.patientObj?.htsClientUUid? props?.patientObj?.htsClientUUid : props?.basicInfo?.htsClientUUid,
     indexClientId: props?.patientObj?.clientCode,
     isClientCurrentlyOnHivTreatment: "",
     lga: "",

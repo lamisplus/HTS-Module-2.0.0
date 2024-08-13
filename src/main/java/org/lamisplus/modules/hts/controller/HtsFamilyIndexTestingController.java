@@ -108,4 +108,10 @@ public class HtsFamilyIndexTestingController {
         return ResponseEntity.ok(this.familyIndexTestingService.updateSingleFamilyIndex(id, req));
     }
 
+    @PutMapping("/update-index-testing-and-index/{id}")
+    public ResponseEntity<String> updateFamilyIndexTestingAndIndex(@PathVariable Long id, @RequestBody FamilyIndexTestingResponseDTO req) {
+        String response = familyIndexTestingService.updateFamilyIndexTestingAndIndex(id, req);
+        return ResponseEntity.ok(response);
+    }
+
 }

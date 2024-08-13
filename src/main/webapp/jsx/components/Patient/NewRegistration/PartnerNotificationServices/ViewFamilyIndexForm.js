@@ -1264,10 +1264,10 @@ const ViewFamilyIndexTestingForm = (props) => {
   const handleDateOfBirthChange = (e) => {
     if (e.target.value == "Actual") {
       familyIndexRequestDto.isDateOfBirthEstimated = false;
-      setAgeDisabled(true);
+      setAgeDisabled2(true);
     } else if (e.target.value == "Estimated") {
       familyIndexRequestDto.isDateOfBirthEstimated = true;
-      setAgeDisabled(false);
+      setAgeDisabled2(false);
     }
   };
   const handleAgeChange = (e) => {
@@ -2352,8 +2352,8 @@ const ViewFamilyIndexTestingForm = (props) => {
                     name="age"
                     id="age"
                     value={familyIndexRequestDto.age}
-                    disabled={ageDisabled}
-                    onChange={handleAgeChange}
+                    disabled={ageDisabled2}
+                    onChange={handleAgeChange2}
                     style={{
                       border: "1px solid #014D88",
                       borderRadius: "0.2rem",

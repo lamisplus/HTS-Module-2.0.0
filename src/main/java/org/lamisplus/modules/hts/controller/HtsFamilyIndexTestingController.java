@@ -103,5 +103,9 @@ public class HtsFamilyIndexTestingController {
         return ResponseEntity.ok(this.familyIndexTestingService.addFamilyTracker(req));
     }
 
+    @PostMapping("/update-family-index/{id}")
+    public ResponseEntity<FamilyIndexResponseDTO>  updateSingleFamilyIndex(@PathVariable Long id, @RequestBody FamilyIndexResponseDTO req) {
+        return ResponseEntity.ok(this.familyIndexTestingService.updateSingleFamilyIndex(id, req));
+    }
 
 }

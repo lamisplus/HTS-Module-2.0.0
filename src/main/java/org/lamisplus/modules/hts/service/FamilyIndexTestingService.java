@@ -465,9 +465,25 @@ public class FamilyIndexTestingService {
         FamilyTestingTracker tracker = new FamilyTestingTracker();
         BeanUtils.copyProperties(familyTestingTracker, tracker);
         tracker.setFamilyIndex(existingFamilyIndex);
+        tracker.setFamilyIndexUuid(existingFamilyIndex.getUuid());
         familyTestingTrackerRepository.save(tracker);
 
         return convertFamilyTestingTrackerToResponseDTO(tracker);
+    }
+
+    public FamilyIndexResponseDTO updateSingleFamilyIndex(Long id, FamilyIndexResponseDTO req){
+        FamilyIndex existingFamilyIndex = familyIndexRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(FamilyIndex.class, "id", id + ""));
+        if (!req.getId().equals(id) && existingFamilyIndex == null ) {
+            throw new IllegalArgumentException("The provided id does not match any saved family index");
+        }
+        BeanUtils.copyProperties(req, existingFamilyIndex);
+        existingFamilyIndex.setId(existingFamilyIndex.getId());
+        existingFamilyIndex.setUuid(existingFamilyIndex.getUuid());
+        existingFamilyIndex.setFamilyIndexTestingUuid(existingFamilyIndex.getFamilyIndexTestingUuid());
+        familyIndexRepository.save(existingFamilyIndex);
+
+        return convertFamilyIndexToResponseDTO(existingFamilyIndex);
     }
 
 }

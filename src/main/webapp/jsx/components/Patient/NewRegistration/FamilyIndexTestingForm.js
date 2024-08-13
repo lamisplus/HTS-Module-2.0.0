@@ -418,6 +418,7 @@ const FamilyIndexTestingForm = (props) => {
       //   age_now--;
       // }
       familyIndexRequestDto.age = age_now;
+      familyTestingTrackerRequestDTO.trackerAge=age_now
 
       //setBasicInfo({...basicInfo, age: age_now});
     } else {
@@ -1104,6 +1105,7 @@ const FamilyIndexTestingForm = (props) => {
   };
 
   const handleAgeChange2 = (e) => {
+
     if (!ageDisabled2 && e.target.value) {
       if (e.target.value !== "" && e.target.value >= 85) {
         toggle();
@@ -1118,11 +1120,15 @@ const FamilyIndexTestingForm = (props) => {
           dateOfBirth: moment(dobNew).format("YYYY-MM-DD"),
         });
         familyIndexRequestDto.dateOfBirth = moment(dobNew).format("YYYY-MM-DD");
+
+
+      
       }
       setFamilyIndexRequestDto({
         ...familyIndexRequestDto,
         age: e.target.value,
       });
+      setFamilyTestingTrackerRequestDTO({...familyTestingTrackerRequestDTO, trackerAge:e.target.value})
     }
   };
 
@@ -1204,6 +1210,7 @@ const FamilyIndexTestingForm = (props) => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
+    // familyIndexRequestDto.age
     familyTestingTrackerRequestDTO.facilityId =
       facilityInfo.currentOrganisationUnitId;
     payload.familyIndexRequestDto = familyIndexRequestDto;
@@ -2100,7 +2107,7 @@ const FamilyIndexTestingForm = (props) => {
                   )}
                 </FormGroup>
               </div>
-              <div className="form-group mb-2 col-md-2">
+              <div className="form-group mb-2 col-md-4">
                 <FormGroup>
                   <Label>Date Of Birth</Label>
                   <div className="radio">
@@ -2136,7 +2143,7 @@ const FamilyIndexTestingForm = (props) => {
                   </div>
                 </FormGroup>
               </div>
-              <div className="form-group mb-3 col-md-3">
+              <div className="form-group mb-3 col-md-4">
                 <FormGroup>
                   <Label>Date </Label>
                   <input
@@ -2155,7 +2162,7 @@ const FamilyIndexTestingForm = (props) => {
                   />
                 </FormGroup>
               </div>
-              <div className="form-group mb-3 col-md-3">
+              <div className="form-group mb-3 col-md-4">
                 <FormGroup>
                   <Label>Age</Label>
                   <input
@@ -2165,7 +2172,7 @@ const FamilyIndexTestingForm = (props) => {
                     id="age"
                     value={familyIndexRequestDto.age}
                     disabled={ageDisabled2}
-                    onChange={handleAgeChange}
+                    onChange={handleAgeChange2}
                     style={{
                       border: "1px solid #014D88",
                       borderRadius: "0.2rem",
@@ -2538,14 +2545,11 @@ const FamilyIndexTestingForm = (props) => {
                         border: "1px solid #014D88",
                         borderRadius: "0.2rem",
                       }}
-                      disbaled={
-                        payload.familyIndexClient === "FAMILY_INDEX_MOTHER"
-                          ? true
-                          : payload.familyIndexClient === "FAMILY_INDEX_FATHER"
-                          ? true
-                          : false
+                      disabled={
+                     true
                       }
                     />
+
                   </FormGroup>
                 </div>
                 <div className="form-group col-md-4">

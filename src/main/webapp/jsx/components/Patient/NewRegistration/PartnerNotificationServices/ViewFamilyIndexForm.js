@@ -471,13 +471,12 @@ const ViewFamilyIndexTestingForm = (props) => {
   //
 
   const AddNewByUpdateTracker = (tracker) => {
-    let userRequest = familyIndexRequestDto;
-    userRequest.familyTestingTrackerResponseDTO = tracker;
+    let userRequest= tracker;
 
     console.log("userRequest", userRequest);
     axios
-      .put(
-        `${baseUrl}hts-family-index-testing/family-indexr/${props.selectedRow.id}`,
+      .post(
+        `${baseUrl}hts-family-index-testing/family-index-tracker`,
         userRequest,
         {
           headers: {
@@ -489,7 +488,24 @@ const ViewFamilyIndexTestingForm = (props) => {
         if (response.data) {
           // setFormId(response.data.htsClientId);
           toast.success("Added New Family Index info save succesfully!");
-
+            getListOfFamilyTracker()
+                setFamilyTestingTrackerRequestDTO({
+                  attempt: "",
+                  dateEnrolledInOVC: "",
+                  dateEnrolledOnArt: "",
+                  dateTested: "",
+                  dateVisit: "",
+                  facilityId: "",
+                  familyIndexId: props.selectedRow.id,
+                  followUpAppointmentLocation: "",
+                  hiveTestResult: "",
+                  knownHivPositive: "",
+                  ovcId: "",
+                  positionOfChildEnumerated: "",
+                  scheduleVisitDate: "",
+                  trackerAge: familyIndexRequestDto.age,
+                  trackerSex: "",
+                });
         }
       })
       .catch((e) => {
@@ -618,7 +634,7 @@ const ViewFamilyIndexTestingForm = (props) => {
       //   age_now--;
       // }
       familyIndexRequestDto.age = age_now;
-
+familyTestingTrackerRequestDTO.trackerAge=age_now;
       //setBasicInfo({...basicInfo, age: age_now});
     } else {
       setFamilyIndexRequestDto({ ...familyIndexRequestDto, age: "" });
@@ -801,21 +817,38 @@ const ViewFamilyIndexTestingForm = (props) => {
   const showFamilyTrackerRow = () => {
     setViewFamilyTrackerForm(true);
     setAddNewAttempt(true);
+    setFamilyTestingTrackerRequestDTO({
+      attempt: "",
+      dateEnrolledInOVC: "",
+      dateEnrolledOnArt: "",
+      dateTested: "",
+      dateVisit: "",
+      facilityId: "",
+    familyIndexId: props.selectedRow.id,
+      followUpAppointmentLocation: "",
+      hiveTestResult: "",
+      knownHivPositive: "",
+      ovcId: "",
+      positionOfChildEnumerated: "",
+      scheduleVisitDate: "",
+      trackerAge: familyIndexRequestDto.age,
+      trackerSex: "",
+    })
   };
 
   const addFamilyTrackerRow = () => {
     setViewFamilyTrackerForm(true);
     setAddNewAttempt(true);
 
-    let newArray = [...arrayFamilyTestingTrackerRequestDTO];
+    // let newArray = [...arrayFamilyTestingTrackerRequestDTO];
         familyTestingTrackerRequestDTO.facilityId = localStorage.getItem("FacId");
 
-    newArray.push(familyTestingTrackerRequestDTO);
+    // newArray.push(familyTestingTrackerRequestDTO);
 
-    setArrayFamilyTestingTrackerRequestDTO(newArray);
+    // setArrayFamilyTestingTrackerRequestDTO(newArray);
 
     //  update the family index
-    AddNewByUpdateTracker(newArray);
+    AddNewByUpdateTracker(familyTestingTrackerRequestDTO);
   };
 
   const updateFamilyTrackerRow = () => {
@@ -1305,11 +1338,15 @@ const ViewFamilyIndexTestingForm = (props) => {
           dateOfBirth: moment(dobNew).format("YYYY-MM-DD"),
         });
         familyIndexRequestDto.dateOfBirth = moment(dobNew).format("YYYY-MM-DD");
+     
       }
       setFamilyIndexRequestDto({
         ...familyIndexRequestDto,
         age: e.target.value,
       });
+           setFamilyTestingTrackerRequestDTO({
+          ...familyTestingTrackerRequestDTO, trackerAge: e.target.value
+        })
     }
   };
 
@@ -1391,6 +1428,7 @@ const ViewFamilyIndexTestingForm = (props) => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
+
     familyTestingTrackerRequestDTO.facilityId =
       facilityInfo.currentOrganisationUnitId;
     payload.familyIndexRequestDto = familyIndexRequestDto;
@@ -1407,6 +1445,27 @@ const ViewFamilyIndexTestingForm = (props) => {
     return acceptedNumber;
   };
 
+
+  const getAttemptDisplay =(attempt)=>{
+  let ans =  indexVisitAttempt.filter((each, index)=>{
+      return each.code === attempt  
+    })
+    if(ans[0].display){
+      return ans[0].display
+    }else{
+      return attempt
+    }
+  }
+    const FollowUpDisplay =(followUp)=>{
+  let ans =  followUpAppointmentLocation.filter((each, index)=>{
+      return each.code === followUp  
+    })
+    if(ans[0].display){
+      return ans[0].display
+    }else{
+      return followUp
+    }
+  }
   const handleInputChangePhoneNumber = (e, inputName) => {
     const limit = 11;
     const NumberValue = checkNumberLimit(e.target.value.replace(/\D/g, ""));
@@ -2288,7 +2347,7 @@ const ViewFamilyIndexTestingForm = (props) => {
                   )}
                 </FormGroup>
               </div>
-              <div className="form-group mb-2 col-md-2">
+              <div className="form-group mb-2 col-md-4">
                 <FormGroup>
                   <Label>Date Of Birth</Label>
                   <div className="radio">
@@ -2324,7 +2383,7 @@ const ViewFamilyIndexTestingForm = (props) => {
                   </div>
                 </FormGroup>
               </div>
-              <div className="form-group mb-3 col-md-3">
+              <div className="form-group mb-3 col-md-4">
                 <FormGroup>
                   <Label>Date </Label>
                   <input
@@ -2343,7 +2402,7 @@ const ViewFamilyIndexTestingForm = (props) => {
                   />
                 </FormGroup>
               </div>
-              <div className="form-group mb-3 col-md-3">
+              <div className="form-group mb-3 col-md-4">
                 <FormGroup>
                   <Label>Age</Label>
                   <input
@@ -2743,13 +2802,8 @@ const ViewFamilyIndexTestingForm = (props) => {
                             border: "1px solid #014D88",
                             borderRadius: "0.2rem",
                           }}
-                          disbaled={
-                            payload.familyIndexClient === "FAMILY_INDEX_MOTHER"
-                              ? true
-                              : payload.familyIndexClient ===
-                                "FAMILY_INDEX_FATHER"
-                              ? true
-                              : false
+                          disabled={
+                            true
                           }
                         />
                       </FormGroup>
@@ -3040,8 +3094,8 @@ const ViewFamilyIndexTestingForm = (props) => {
                     <tr>
                       <th>Attempt</th>
 
-                      <th>Age</th>
-                      <th>Date of HTS</th>
+                      <th>Schedule Visit Date</th>
+                      <th>Follow Up Appointment Location</th>
                       <th>Action</th>
                     </tr>
                   </thead>
@@ -3049,10 +3103,10 @@ const ViewFamilyIndexTestingForm = (props) => {
                     {arrayFamilyTestingTrackerRequestDTO.map((each, index) => {
                       return (
                         <tr key={index}>
-                          <td>{each.attempt}</td>
-                          <td>{each.age}</td>
+                          <td>{getAttemptDisplay(each.attempt)}</td>
+                          <td>{each.scheduleVisitDate}</td>
 
-                          <td>{each.dateOfHts}</td>
+                          <td>{FollowUpDisplay(each.followUpAppointmentLocation)}</td>
                           <td>
                             {/* props.action === "update" */}
                             {true ? (

@@ -1559,8 +1559,7 @@ const BasicInfo = (props) => {
                                                {value.display}
                                            </option>
                                        ))*/}
-                    {(objValues.sex === "Female" ||
-                      objValues.sex === "female") && (
+                    {objValues?.sex.toLowerCase() === "female"  && (
                       <>
                         {" "}
                         {kP

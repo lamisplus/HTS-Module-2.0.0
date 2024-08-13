@@ -486,4 +486,72 @@ public class FamilyIndexTestingService {
         return convertFamilyIndexToResponseDTO(existingFamilyIndex);
     }
 
+    @Transactional
+    public String updateFamilyIndexTestingAndIndex(Long id, FamilyIndexTestingResponseDTO req) {
+        Optional<FamilyIndexTesting> found = familyIndexTestingRepository.findByIdAndArchived(id, UN_ARCHIVED);
+        if(!found.isPresent()){
+            throw new EntityNotFoundException(HtsClient.class, "htsClientId", "" + id);
+        }
+        if(!found.get().getId().equals(req.getId())){
+            throw new IllegalArgumentException("The provided id does not match any saved family index testing");
+        }
+
+        FamilyIndexTesting familyIndexTesting = found.get();
+        familyIndexTesting.setUuid(req.getUuid());
+        familyIndexTesting.setHtsClientUuid(req.getHtsClientUuid());
+        familyIndexTesting.setHtsClientId(req.getHtsClientId());
+        familyIndexTesting.setExtra(req.getExtra());
+        familyIndexTesting.setState(req.getState());
+        familyIndexTesting.setLga(req.getLga());
+        familyIndexTesting.setFacilityName(req.getFacilityName());
+        familyIndexTesting.setVisitDate(req.getVisitDate());
+        familyIndexTesting.setSetting(req.getSetting());
+        familyIndexTesting.setFamilyIndexClient(req.getFamilyIndexClient());
+        familyIndexTesting.setSex(req.getSex());
+        familyIndexTesting.setIndexClientId(req.getIndexClientId());
+        familyIndexTesting.setName(req.getName());
+        familyIndexTesting.setDateOfBirth(req.getDateOfBirth());
+        familyIndexTesting.setAge(req.getAge());
+        familyIndexTesting.setMaritalStatus(req.getMaritalStatus());
+        familyIndexTesting.setPhoneNumber(req.getPhoneNumber());
+        familyIndexTesting.setAlternatePhoneNumber(req.getAlternatePhoneNumber());
+        familyIndexTesting.setDateIndexClientConfirmedHivPositiveTestResult(req.getDateIndexClientConfirmedHivPositiveTestResult());
+        familyIndexTesting.setVirallyUnSuppressed(req.getVirallyUnSuppressed());
+        familyIndexTesting.setDateClientEnrolledOnTreatment(req.getDateClientEnrolledOnTreatment());
+        familyIndexTesting.setRecencyTesting(req.getRecencyTesting());
+        familyIndexTesting.setWillingToHaveChildrenTestedElseWhere(req.getWillingToHaveChildrenTestedElseWhere());
+
+        // Update familyIndexList
+        if (req.getFamilyIndexList() != null && !req.getFamilyIndexList().isEmpty()) {
+            req.getFamilyIndexList().forEach(familyIndex -> {
+                FamilyIndex existingFamilyIndex = familyIndexTesting.getFamilyIndices().stream()
+                        .filter(fi -> fi.getId().equals(familyIndex.getId()))
+                        .findFirst()
+                        .orElseGet(() -> new FamilyIndex());
+                existingFamilyIndex.setId(familyIndex.getId());
+                existingFamilyIndex.setUuid(familyIndex.getUuid());
+                existingFamilyIndex.setFamilyRelationship(familyIndex.getFamilyRelationship());
+                existingFamilyIndex.setStatusOfContact(familyIndex.getStatusOfContact());
+                existingFamilyIndex.setChildNumber(familyIndex.getChildNumber());
+                existingFamilyIndex.setMotherDead(familyIndex.getMotherDead());
+                existingFamilyIndex.setUAN(familyIndex.getUAN());
+                existingFamilyIndex.setYearMotherDead(familyIndex.getYearMotherDead());
+                existingFamilyIndex.setFamilyIndexTestingUuid(familyIndex.getFamilyIndexTestingUuid());
+                existingFamilyIndex.setDateOfHts(familyIndex.getDateOfHts());
+                existingFamilyIndex.setDateOfBirth(familyIndex.getDateOfBirth());
+                existingFamilyIndex.setAge(familyIndex.getAge());
+                existingFamilyIndex.setFirstName(familyIndex.getFirstName());
+                existingFamilyIndex.setLastName(familyIndex.getLastName());
+                existingFamilyIndex.setMiddleName(familyIndex.getMiddleName());
+                existingFamilyIndex.setChildDead(familyIndex.getChildDead());
+                existingFamilyIndex.setYearChildDead(familyIndex.getYearChildDead());
+                existingFamilyIndex.setLiveWithParent(familyIndex.getLiveWithParent());
+                existingFamilyIndex.setIsDateOfBirthEstimated(familyIndex.getIsDateOfBirthEstimated());
+                familyIndexRepository.save(existingFamilyIndex);
+            });
+        }
+        familyIndexTestingRepository.save(familyIndexTesting);
+        return "Family Index Testing updated successfully";
+    }
+
 }

@@ -567,6 +567,45 @@ const ViewFamilyIndexTestingForm = (props) => {
   };
 
 
+
+
+
+
+const updateFamilyIndexDTO = (payload) => {
+  axios
+    .put(
+      `${baseUrl}hts-family-index-testing/family-indexr/${props.selectedRow.id}`,
+      payload,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    )
+    .then((response) => {
+      setSaving(false);
+
+      toast.success("Family Index form save succesfully!");
+      handleItemClick("fit-history", "fit");
+    })
+    .catch((error) => {
+      setSaving(false);
+      if (error.response && error.response.data) {
+        let errorMessage =
+          error.response.data.apierror &&
+          error.response.data.apierror.message !== ""
+            ? error.response.data.apierror.message
+            : "Something went wrong, please try again";
+        toast.error(errorMessage, {
+          position: toast.POSITION.BOTTOM_CENTER,
+        });
+      } else {
+        toast.error("Something went wrong. Please try again...", {
+          position: toast.POSITION.BOTTOM_CENTER,
+        });
+      }
+    });
+};
+
+
   // delete  tracker 
 
 
@@ -1305,6 +1344,7 @@ familyTestingTrackerRequestDTO.trackerAge=age_now;
     }
   };
   const handleAgeChange = (e) => {
+    e.preventDefault();
     if (!ageDisabled && e.target.value) {
       if (e.target.value !== "" && e.target.value >= 85) {
         toggle();
@@ -1325,6 +1365,8 @@ familyTestingTrackerRequestDTO.trackerAge=age_now;
   };
 
   const handleAgeChange2 = (e) => {
+        e.preventDefault();
+
     if (!ageDisabled2 && e.target.value) {
       if (e.target.value !== "" && e.target.value >= 85) {
         toggle();
@@ -1386,7 +1428,7 @@ familyTestingTrackerRequestDTO.trackerAge=age_now;
 
   const postPayload = (payload) => {
     axios
-      .post(`${baseUrl}hts-family-index-testing`, payload, {
+      .put(`${baseUrl}hts-family-index-testing/update-index-testing-and-index/${payload.id}`, payload, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
@@ -1438,6 +1480,7 @@ familyTestingTrackerRequestDTO.trackerAge=age_now;
     payload.state = stateInfo;
     payload.lga = lgaInfo;
     postPayload(payload);
+    // updateFamilyIndexDTO( payload.familyIndexRequestDto)
   };
 
   const checkNumberLimit = (e) => {

@@ -110,7 +110,7 @@ const Home = () => {
                   <Tab eventKey="home" title="Patients">
                     <Dashboard />
                   </Tab>
-                  <Tab eventKey="checkedin" title="CheckedIn Patients">
+                  <Tab eventKey="checkedin" title="Checked-In Patients">
                     <CheckedInPatients />
                   </Tab>
                   <Tab eventKey="hts" title="HTS Patients">

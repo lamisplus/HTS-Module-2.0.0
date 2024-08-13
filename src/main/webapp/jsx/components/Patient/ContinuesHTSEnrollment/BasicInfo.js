@@ -646,6 +646,15 @@ const BasicInfo = (props) => {
                   </Label>
 
                   {console.log("targetGroup", objValues.targetGroup, props)}
+                  {console.log("Kp", kP)}
+                  {console.log(
+                    "!== MSM",
+                    kP.filter((x) => x.display !== "MSM")
+                  )}
+                  {console.log(
+                    "!== FSW",
+                    kP.filter((x) => x.display !== "FSW")
+                  )}
                   <select
                     className="form-control"
                     name="targetGroup"
@@ -658,13 +667,12 @@ const BasicInfo = (props) => {
                       borderRadius: "0.2rem",
                     }}
                   >
-                    {/* <option value={""}></option>
-                                        {kP.map((value) => (
-                                            <option key={value.id} value={value.code}>
-                                                {value.display}
-                                            </option>
-                                        ))} */}
-                    {props?.sex && props?.sex.toLowerCase() === "female" && (
+                    {kP.map((value) => (
+                      <option key={value.id} value={value.code}>
+                        {value.display}
+                      </option>
+                    ))}
+                    {/* {props?.sex && props?.sex.toLowerCase() === "female" && (
                       <>
                         {" "}
                         {kP
@@ -675,8 +683,8 @@ const BasicInfo = (props) => {
                             </option>
                           ))}
                       </>
-                    )}
-
+                    )} */}
+                    {/* 
                     {props?.sex && props?.sex.toLowerCase() === "male" && (
                       <>
                         {" "}
@@ -688,7 +696,7 @@ const BasicInfo = (props) => {
                             </option>
                           ))}{" "}
                       </>
-                    )}
+                    )} */}
                   </select>
                   {errors.targetGroup !== "" ? (
                     <span className={classes.error}>{errors.targetGroup}</span>
@@ -958,13 +966,13 @@ const BasicInfo = (props) => {
                           </option>
                         ))}
                       </select>
-                       {errors.relationWithIndexClient !== "" ? (
-                          <span className={classes.error}>
-                            {errors.relationWithIndexClient}
-                          </span>
-                        ) : (
-                          ""
-                        )}
+                      {errors.relationWithIndexClient !== "" ? (
+                        <span className={classes.error}>
+                          {errors.relationWithIndexClient}
+                        </span>
+                      ) : (
+                        ""
+                      )}
                     </FormGroup>
                   </div>
                   <div className="form-group  col-md-4">
@@ -990,13 +998,13 @@ const BasicInfo = (props) => {
                       ) : (
                         ""
                       )} */}
-                       {errors.indexClientCode !== "" ? (
-                          <span className={classes.error}>
-                            {errors.indexClientCode}
-                          </span>
-                        ) : (
-                          ""
-                        )}
+                      {errors.indexClientCode !== "" ? (
+                        <span className={classes.error}>
+                          {errors.indexClientCode}
+                        </span>
+                      ) : (
+                        ""
+                      )}
                     </FormGroup>
                   </div>
                 </>

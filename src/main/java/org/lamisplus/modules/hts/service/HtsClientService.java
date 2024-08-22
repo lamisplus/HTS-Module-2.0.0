@@ -49,13 +49,19 @@ public class HtsClientService {
     private final RiskStratificationService riskStratificationService;
     private final ModuleService moduleService;
     public HtsClientDto save(HtsClientRequestDto htsClientRequestDto){
+        System.out.println("i am inside the save method");
         if(htsClientRequestDto.getRiskStratificationCode() != null){
+            System.out.println("getRiskStratificationCode() != null");
+
+
             if(htsClientRepository.existsByRiskStratificationCode(htsClientRequestDto.getRiskStratificationCode())){
                 throw new IllegalTypeException(HtsClientRequestDto.class, "RiskStratificationCode is ", "already exist for an hts client");
             }
         }
 
         if(htsClientRequestDto.getSource().equalsIgnoreCase(Source.Mobile.toString())){
+            System.out.println("i am inside the mobile check");
+
             Optional<HtsClient> htsClientExists = htsClientRepository.findByUuid(htsClientRequestDto.getUuid());
             if (htsClientExists.isPresent()) {
                 LOG.info("HTS Client with code {} has already been synced", htsClientRequestDto.getClientCode());
@@ -67,19 +73,42 @@ public class HtsClientService {
         Person person;
         //when it is a new person
         if(htsClientRequestDto.getPersonId() == null){
+            System.out.println("getPersonId() == null");
+
             if(htsClientRequestDto.getPersonDto() == null) throw new EntityNotFoundException(PersonDto.class, "PersonDTO is ", " empty");
             personResponseDto = personService.createPerson(htsClientRequestDto.getPersonDto());
+            System.out.println("createPerson successully" + personResponseDto);
+
             person = personRepository.findById(personResponseDto.getId()).get();
+            System.out.println("person found "  + person);
+
             String personUuid = person.getUuid();
+            System.out.println("personUuid found "  + personUuid);
+
             htsClient = this.htsClientRequestDtoToHtsClient(htsClientRequestDto, personUuid);
+            System.out.println(" After htsClientRequestDtoToHtsClient " );
+
         } else {
             //already existing person
+
             person = this.getPerson(htsClientRequestDto.getPersonId());
+            System.out.println("already existing person " );
+
             htsClient = this.htsClientRequestDtoToHtsClient(htsClientRequestDto, person.getUuid());
+            System.out.println("insode already exist   htsClientRequestDtoToHtsClient" );
+
         }
         htsClient.setFacilityId(currentUserOrganizationService.getCurrentUserOrganization());
+        System.out.println("After setting facility id" );
+
+
         htsClient = htsClientRepository.save(htsClient);
+        System.out.println("After saving in htsClientRepository" );
+
+
         htsClient.setPerson(person);
+        System.out.println("After settting Person" );
+
         //LOG.info("Person is - {}", htsClient.getPerson());
         return this.htsClientToHtsClientDto(htsClient);
     }
@@ -229,7 +258,7 @@ public class HtsClientService {
         return updatableHtsClient;
     }
 
-    public HtsClient htsClientRequestDtoToHtsClient(HtsClientRequestDto htsClientRequestDto, @NotNull String personUuid) {
+    public HtsClient htsClientRequestDtoToHtsClient(HtsClientRequestDto htsClientRequestDto, String personUuid) {
         if ( htsClientRequestDto == null ) {
             return null;
         }
@@ -264,7 +293,7 @@ public class HtsClientService {
         return htsClient;
     }
 
-    public HtsClient htsClientDtoToHtsClient(HtsClientDto htsClientDto, @NotNull String personUuid) {
+    public HtsClient htsClientDtoToHtsClient(HtsClientDto htsClientDto,  String personUuid) {
         if ( htsClientDto == null ) {
             return null;
         }

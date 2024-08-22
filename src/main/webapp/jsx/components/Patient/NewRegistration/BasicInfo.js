@@ -648,12 +648,17 @@ const BasicInfo = (props) => {
         relationWithIndexClient: "",
         indexClientCode: "",
       });
+      setErrors({...errors, relationWithIndexClient: "", indexClientCode: "" })
+
     } else {
       setObjValues({ ...objValues, [e.target.name]: e.target.value });
     }
 
     if (e.target.name === "sex" && e.target.value.toLowerCase() === "female") {
+
       setShowPregnancy(true);
+      setErrors({ ...errors, pregnant: "" });
+
     }
   };
   //checkClientCode
@@ -771,8 +776,8 @@ const BasicInfo = (props) => {
     temp.dateVisit = objValues.dateVisit ? "" : "This field is required.";
     temp.dob = objValues.dob ? "" : "This field is required.";
     temp.age = objValues.age ? "" : "This field is required.";
-         props?.patientObject?.gender &&
-           props?.patientObject?.gender.toLowerCase() === "female" &&
+
+          objValues.sex === "Female" &&
            (temp.pregnant =
              objValues.pregnant !== "" ? "" : "This field is required.");
 
@@ -1689,7 +1694,6 @@ const BasicInfo = (props) => {
                   </div>
                 </>
               )}
-
               {showPregancy && objValues.sex === "Female" && (
                 <>
                   <div className="form-group  col-md-4">

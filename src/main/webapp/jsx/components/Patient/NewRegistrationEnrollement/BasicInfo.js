@@ -283,6 +283,8 @@ const BasicInfo = (props) => {
         relationWithIndexClient: "",
         indexClientCode:"",
       });
+      setErrors({...errors, relationWithIndexClient: "", indexClientCode: "" })
+
     } else if (e.target.name === "numWives") {
       if (e.target.value >= 0) {
         setObjValues({ ...objValues, [e.target.name]: e.target.value });

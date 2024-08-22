@@ -298,6 +298,13 @@ const Recency = (props) => {
         setRecency({ ...recency, [e.target.name]: e.target.value });
       }
     }
+
+    if(e.target.name === "controlLine" || e.target.name === "verififcationLine" ||   e.target.name === "longTermLine"){
+      setErrors({...errors, hasViralLoad: ""})
+        // hasViralLoad
+      
+      }
+      
     if (e.target.name === "viralLoadResultClassification") {
       if (e.target.value === ">=1000") {
         recency.finalRecencyResult = "RITA Recent";
@@ -606,7 +613,8 @@ const Recency = (props) => {
                   {recency.rencencyInterpretation === "RTRI Recent" && (
                     <div className="form-group  col-md-4">
                       <FormGroup>
-                        <Label>Has Viral Load been ordered? </Label>
+                        <Label>Has Viral Load been ordered?                           <span style={{ color: "red" }}> *</span>
+                        </Label>
                         <select
                           className="form-control"
                           name="hasViralLoad"
@@ -623,6 +631,11 @@ const Recency = (props) => {
                           <option value="true">Yes</option>
                           <option value="false">No</option>
                         </select>
+                        {errors.hasViralLoad !== "" ? (
+                      <span className={classes.error}>{errors.hasViralLoad}</span>
+                    ) : (
+                      ""
+                    )}
                       </FormGroup>
                     </div>
                   )}

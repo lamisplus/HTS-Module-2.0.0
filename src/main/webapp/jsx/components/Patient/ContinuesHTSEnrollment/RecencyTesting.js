@@ -284,6 +284,7 @@ const Recency = (props) => {
   const handleInputChangeRecency = (e) => {
     setErrors({ ...temp, [e.target.name]: "" });
     if (e.target.name === "viralLoadConfirmationResult") {
+      
       if (e.target.value >= 1000) {
         recency.viralLoadResultClassification = ">=1000";
         recency.finalRecencyResult = "RITA Recent";
@@ -294,6 +295,14 @@ const Recency = (props) => {
         setRecency({ ...recency, [e.target.name]: e.target.value });
       }
     }
+
+if(e.target.name === "controlLine" || e.target.name === "verififcationLine" ||   e.target.name === "longTermLine"){
+setErrors({...errors, hasViralLoad: ""})
+  // hasViralLoad
+
+}
+
+
     if (e.target.name === "viralLoadResultClassification") {
       if (e.target.value === ">=1000") {
         recency.finalRecencyResult = "RITA Recent";
@@ -610,6 +619,11 @@ const Recency = (props) => {
                           <option value="true">Yes</option>
                           <option value="false">No</option>
                         </select>
+                        {errors.hasViralLoad !== "" ? (
+                      <span className={classes.error}>{errors.hasViralLoad}</span>
+                    ) : (
+                      ""
+                    )}
                       </FormGroup>
                     </div>
                   )}

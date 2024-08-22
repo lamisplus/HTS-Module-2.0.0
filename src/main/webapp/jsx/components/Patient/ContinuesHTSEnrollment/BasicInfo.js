@@ -24,6 +24,7 @@ import "react-phone-input-2/lib/style.css";
 import { Modal } from "react-bootstrap";
 import { getCheckModality } from "../../../../utility";
 import { getNextForm } from "../../../../utility";
+import { error } from "highcharts";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -406,6 +407,7 @@ const BasicInfo = (props) => {
           indexClientCode: "",
         });
 
+        setErrors({...errors, relationWithIndexClient: "", indexClientCode: "" })
     } else if (e.target.name === "numChildren") {
       if (e.target.value >= 0) {
         setObjValues({ ...objValues, [e.target.name]: e.target.value });

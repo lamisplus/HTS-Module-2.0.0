@@ -260,14 +260,12 @@ const UserRegistration = (props) => {
     //setCompleted({...completed, ...completedMenu})
   };
 
-  console.log("patientObj2",patientObj2);
     const getPrevForm = (e) => {
       e.preventDefault();
       let age = calculate_age(patientObj2?.personResponseDto?.dateOfBirth);
 
       let hivStatus = patientObj2?.hivTestResult;
       let answer = getPreviousForm("Nigeria_PNS_Form", age, "", hivStatus);
-      console.log("previous => ", answer);
       if (answer[0] && answer[1]) {
         handleItemClick(answer[0]);
       } else {

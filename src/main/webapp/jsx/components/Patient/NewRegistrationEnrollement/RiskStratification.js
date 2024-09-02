@@ -685,7 +685,8 @@ const RiskStratification = (props) => {
                       Visit Date <span style={{ color: "red" }}> *</span>{" "}
                     </Label>
                     <Input
-                      type="date"
+                      type="date"                       onKeyPress={(e)=>{e.preventDefault()}}
+
                       name="visitDate"
                       id="visitDate"
                       value={objValues.visitDate}

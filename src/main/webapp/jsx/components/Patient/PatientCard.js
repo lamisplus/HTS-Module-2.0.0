@@ -62,7 +62,6 @@ const styles = (theme) => ({
 
 function PatientCard(props) {
   const { classes } = props;
-  console.log(props.patientObj);
   //const patientCurrentStatus=props.patientObj && props.patientObj.currentStatus==="Died (Confirmed)" ? true : false ;
   const patientObjs = props.patientObj ? props.patientObj : {};
   //const permissions= props.permissions ? props.permissions : [];
@@ -74,7 +73,6 @@ function PatientCard(props) {
 
   useEffect(() => {
     PatientCurrentObject();
-    console.log("look for me props", props);
   }, []);
 
   ///GET LIST OF Patients
@@ -89,7 +87,6 @@ function PatientCard(props) {
         }
       )
       .then((response) => {
-        //console.log("data", response.data);
         setPatientObj(response.data);
 
         setHtscount(response.data.htsCount);

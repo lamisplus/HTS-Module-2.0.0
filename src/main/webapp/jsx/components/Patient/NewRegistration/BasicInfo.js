@@ -776,6 +776,8 @@ const BasicInfo = (props) => {
     temp.dateVisit = objValues.dateVisit ? "" : "This field is required.";
     temp.dob = objValues.dob ? "" : "This field is required.";
     temp.age = objValues.age ? "" : "This field is required.";
+    temp.lga = objValues.lga ? "" : "This field is required.";
+    temp.stateId = objValues.stateId ? "" : "This field is required.";
 
           objValues.sex === "Female" &&
            (temp.pregnant =
@@ -1012,7 +1014,8 @@ const BasicInfo = (props) => {
                                 <FormGroup>
                                 <Label for=""> Date Of Registration </Label>
                                 <Input
-                                    type="date"
+                                    type="date"                       onKeyPress={(e)=>{e.preventDefault()}}
+
                                     name="dateOfRegistration"
                                     id="dateOfRegistration"
                                     value={objValues.dateOfRegistration}
@@ -1095,7 +1098,8 @@ const BasicInfo = (props) => {
                     Visit Date <span style={{ color: "red" }}> *</span>{" "}
                   </Label>
                   <Input
-                    type="date"
+                    type="date"                       onKeyPress={(e)=>{e.preventDefault()}}
+
                     name="dateVisit"
                     id="dateVisit"
                     value={objValues.dateVisit}
@@ -1222,7 +1226,8 @@ const BasicInfo = (props) => {
                   <Label>Date</Label>
                   <input
                     className="form-control"
-                    type="date"
+                    type="date"                       onKeyPress={(e)=>{e.preventDefault()}}
+
                     name="dob"
                     id="dob"
                     min={objValues.dateVisit}
@@ -1319,7 +1324,7 @@ const BasicInfo = (props) => {
                   </Label>
                   <select
                     className="form-control"
-                    name="state"
+                    name="stateId"
                     id="state"
                     onChange={getProvinces}
                     value={objValues.stateId}
@@ -1661,7 +1666,10 @@ const BasicInfo = (props) => {
                   </div>
                   <div className="form-group  col-md-4">
                     <FormGroup>
-                      <Label>Index Client Code/ID</Label>
+                      <Label>Index Client Code/ID
+                      <span style={{ color: "red" }}> *</span>
+
+                      </Label>
                       <Input
                         type="text"
                         name="indexClientCode"
@@ -1698,7 +1706,7 @@ const BasicInfo = (props) => {
                 <>
                   <div className="form-group  col-md-4">
                     <FormGroup>
-                      <Label>Pregnant Status</Label>
+                      <Label>Pregnant Status   <span style={{ color: "red" }}> *</span></Label>
                       <select
                         className="form-control"
                         name="pregnant"

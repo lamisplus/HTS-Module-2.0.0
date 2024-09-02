@@ -150,7 +150,9 @@ public class FamilyIndexTestingService {
                         BeanUtils.copyProperties(familyTestingTracker, familyTestingTrackerResponseDTO);
                         familyTestingTrackerResponseDTO.setFamilyIndexUuid(familyIndex.getUuid());
                         familyTestingTrackerResponseDTO.setFamilyIndex(familyIndex.getId());
+                        familyTestingTrackerResponseDTO.setFamilyIndex(familyIndex.getId());
                         familyTestingTrackerResponseDTOList.add(familyTestingTrackerResponseDTO);
+
                     }
                     newFam.setFamilyTestingTrackerResponseDTO(familyTestingTrackerResponseDTOList);
                 }
@@ -306,8 +308,9 @@ public class FamilyIndexTestingService {
     public void addFamilyIndexTracker(FamilyTestingTrackerRequestDTO req, FamilyIndex familyIndex) {
         if (req != null && familyIndex != null) {
             FamilyTestingTracker familyTestingTracker = new FamilyTestingTracker();
-            BeanUtils.copyProperties(req, familyTestingTracker); // moved this line up
+            BeanUtils.copyProperties(req, familyTestingTracker);
             familyTestingTracker.setFamilyIndex(familyIndex);
+            familyTestingTracker.setFamilyIndexTestingId(familyIndex.getFamilyIndexTesting().getId());
             familyTestingTracker.setFamilyIndexUuid(familyIndex.getUuid());
             familyTestingTrackerRepository.save(familyTestingTracker);
         } else {
@@ -397,6 +400,7 @@ public class FamilyIndexTestingService {
         BeanUtils.copyProperties(familyTestingTrackerRequestDTO, familyTestingTracker);
         familyTestingTracker.setFamilyIndexUuid(familyTestingTracker.getFamilyIndex().getUuid());
         familyTestingTracker.setFamilyIndex(familyTestingTracker.getFamilyIndex());
+        familyTestingTracker.setFamilyIndexTestingId(familyTestingTracker.getFamilyIndexTestingId());
         familyTestingTrackerRepository.save(familyTestingTracker);
         return convertFamilyTestingTrackerToResponseDTO(familyTestingTracker);
     }

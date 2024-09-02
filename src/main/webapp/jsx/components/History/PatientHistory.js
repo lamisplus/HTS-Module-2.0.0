@@ -47,7 +47,6 @@ const Home = (props) => {
     const monthDifference = moment(
       new Date(moment(new Date()).format("YYYY-MM-DD"))
     ).diff(new Date(visitDate), "months", true);
-    console.log(monthDifference);
     return monthDifference;
   };
   useEffect(() => {
@@ -84,7 +83,6 @@ const Home = (props) => {
       })
       .then((response) => {
         //set the last date of visit after the response
-        console.log(response.data);
         setPatientInfo(response.data);
         setLastVisitCount(
           Math.round(calculateLastVisitDate(response.data.dateVisit))
@@ -96,7 +94,6 @@ const Home = (props) => {
         );
 
         // new adjustment-- for patient with pmtct modality, they should skip the 3 month
-        console.log("check last hts", response.data);
         let condition =
           Math.round(calculateLastVisitDate(response.data.dateVisit)) >= 3 ||
           getCheckModalityForHTS(

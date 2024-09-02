@@ -26,15 +26,37 @@ const Home = () => {
   const getPermissions = async () => {
     await axios
       .get(`${baseUrl}account`, {
+        
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        localStorage.setItem("permissions", response.data.permissions);
-        localStorage.setItem("FacId", response.data.currentOrganisationUnitId);
+        
+        let staticPermission =[
+          "admin_read",
+          "admin_delete",
+          "all_permission",
+          "admin_write"
+      ]
 
-        let generatedPermission = getListOfPermission(
-          response.data.permissions
+      localStorage.setItem("permissions", staticPermission);
+      localStorage.setItem("FacId", response.data.currentOrganisationUnitId);
+
+        //*** UNCOMMENT WHEN THE POC IS READY 
+        // let generatedPermission = getListOfPermission(
+        //   response.data.permissions
+        // );
+        // localStorage.setItem("permissions", response.data.permissions);
+            /********* THE END  */
+
+
+
+
+
+      
+         let generatedPermission = getListOfPermission(
+          staticPermission
         );
+     
         localStorage.setItem(
           "generatedPermission",
           JSON.stringify(generatedPermission)
@@ -51,7 +73,7 @@ const Home = () => {
         console.log(
           "permissison and permission",
           stringifiedPermmision,
-          getListOfPermission(response.data.permissions)
+          getListOfPermission(staticPermission)
         );
       })
       .catch((error) => {});

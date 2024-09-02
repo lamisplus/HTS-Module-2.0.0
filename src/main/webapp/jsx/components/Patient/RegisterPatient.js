@@ -68,11 +68,9 @@ const UserRegistration = (props) => {
     JSON.parse(localStorage.getItem("stringifiedPermmision"))
   );
 
-console.log(permissions);
   const getFacilityAccount = () => {
     getAcount()
       .then((response) => {
-        // console.log(response.data);
       })
       .catch(() => {});
   };
@@ -274,7 +272,6 @@ console.log(permissions);
   });
   const [modalityCheck, setModalityCheck] = useState("");
 
-  console.log(patientObj);
   useEffect(() => {
     getFacilityAccount();
     if (locationState && locationState.patientObj) {
@@ -284,6 +281,7 @@ console.log(permissions);
 
 
   const getPrevForm=(e)=>{
+
       e.preventDefault()
           let age = calculate_age(
             basicInfo?.personResponseDto?.dateOfBirth
@@ -293,7 +291,6 @@ console.log(permissions);
 
           let hivStatus = patientObj?.hivTestResult;
       let answer =  getPreviousForm("Nigeria_PNS_Form", age, "", hivStatus); 
-      console.log("previous => ", answer);
    if (answer[0]  && answer[1]) {
      handleItemClick(answer[0]);
    }else{
@@ -338,23 +335,7 @@ console.log(permissions);
             <div className="row">
               <h3>
                 HIV COUNSELLING AND TESTING
-                {activeItem !== "pns" ? (
-                  <div>
-                    <Link to={"/"}>
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        className=" float-end"
-                        //startIcon={<FaUserPlus size="10"/>}
-                        style={{ backgroundColor: "#014d88" }}
-                      >
-                        <span style={{ textTransform: "capitalize" }}>
-                          Back
-                        </span>
-                      </Button>
-                    </Link>
-                  </div>
-                ) : (
+                {activeItem === "pns" || activeItem === "pns-history" ? (
                   <div>
                     {/* <Link to={"/"}> */}
                     <Button
@@ -368,6 +349,23 @@ console.log(permissions);
                       <span style={{ textTransform: "capitalize" }}>Back</span>
                     </Button>
                     {/* </Link> */}
+                  </div>
+                ) : (
+                  <div>
+                    <Link to={"/"}>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        className=" float-end"
+                        //startIcon={<FaUserPlus size="10"/>}
+                        style={{ backgroundColor: "#014d88" }}
+                        // onClick={LoadViewPage}
+                      >
+                        <span style={{ textTransform: "capitalize" }}>
+                          Back
+                        </span>
+                      </Button>
+                    </Link>
                   </div>
                 )}
               </h3>

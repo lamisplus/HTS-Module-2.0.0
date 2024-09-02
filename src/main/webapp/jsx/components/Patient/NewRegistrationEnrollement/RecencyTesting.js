@@ -479,7 +479,8 @@ const Recency = (props) => {
                         Test Date <span style={{ color: "red" }}> *</span>
                       </Label>
                       <Input
-                        type="date"
+                        type="date"                       onKeyPress={(e)=>{e.preventDefault()}}
+
                         name="optOutRTRITestDate"
                         id="optOutRTRITestDate"
                         value={recency.optOutRTRITestDate}
@@ -613,7 +614,7 @@ const Recency = (props) => {
                   {recency.rencencyInterpretation === "RTRI Recent" && (
                     <div className="form-group  col-md-4">
                       <FormGroup>
-                        <Label>Has Viral Load been ordered?                           <span style={{ color: "red" }}> *</span>
+                        <Label>Has Viral Load been ordered? <span style={{ color: "red" }}> *</span>
                         </Label>
                         <select
                           className="form-control"
@@ -651,7 +652,8 @@ const Recency = (props) => {
                               className="form-control"
                               name="sampleCollectedDate"
                               id="sampleCollectedDate"
-                              type="date"
+                              type="date"                       onKeyPress={(e)=>{e.preventDefault()}}
+
                               value={recency.sampleCollectedDate}
                               min={recency.optOutRTRITestDate}
                               max={moment(new Date()).format("YYYY-MM-DD")}
@@ -730,7 +732,8 @@ const Recency = (props) => {
                                 className="form-control"
                                 name="dateSampleSentToPCRLab"
                                 id="dateSampleSentToPCRLab"
-                                type="date"
+                                type="date"                       onKeyPress={(e)=>{e.preventDefault()}}
+
                                 // min={recency.optOutRTRITestDate}
                                 min={recency.sampleCollectedDate}
                                 value={recency.dateSampleSentToPCRLab}
@@ -758,7 +761,8 @@ const Recency = (props) => {
                                 className="form-control"
                                 name="sampleTestDate"
                                 id="sampleTestDate"
-                                type="date"
+                                type="date"                       onKeyPress={(e)=>{e.preventDefault()}}
+
                                 // min={recency.optOutRTRITestDate}
                                 min={recency.dateSampleSentToPCRLab}
                                 max={moment(new Date()).format("YYYY-MM-DD")}
@@ -820,7 +824,8 @@ const Recency = (props) => {
                                 className="form-control"
                                 name="receivedResultDate"
                                 id="receivedResultDate"
-                                type="date"
+                                type="date"                       onKeyPress={(e)=>{e.preventDefault()}}
+
                                 // min={recency.optOutRTRITestDate}
                                 min={recency.sampleTestDate}
                                 max={moment(new Date()).format("YYYY-MM-DD")}

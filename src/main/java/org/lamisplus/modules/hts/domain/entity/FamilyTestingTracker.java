@@ -117,6 +117,8 @@ public class FamilyTestingTracker extends Audit implements Serializable {
     @Column(name = "attempt")
     private String  attempt;
 
+    @Column(name = "family_index_testing_id")
+    private Long familyIndexTestingId;
     @PrePersist
     public void setFields(){
         if(StringUtils.isEmpty(uuid)){

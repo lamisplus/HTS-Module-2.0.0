@@ -112,13 +112,11 @@ const PatientnHistory = (props) => {
   };
 
   const handleHTSDelete = (row) => {
-    console.log(props.patientList);
     axios
       .delete(`${baseUrl}hts/${row.id}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        console.log(response);
         toast.success(
           `HTS patient with client code ${row.clientCode}, deleted successfully`
         );

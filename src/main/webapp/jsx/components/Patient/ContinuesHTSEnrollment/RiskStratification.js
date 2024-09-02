@@ -99,7 +99,6 @@ const useStyles = makeStyles((theme) => ({
 const RiskStratification = (props) => {
   const classes = useStyles();
   const history = useHistory();
-  console.log("Risk Props", props);
   const [enrollSetting, setEnrollSetting] = useState([]);
   const [entryPoint, setEntryPoint] = useState([]);
   const [entryPointCommunity, setEntryPointCommunity] = useState([]);
@@ -171,11 +170,9 @@ const RiskStratification = (props) => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        //console.log(response.data);
         setEnrollSetting(response.data);
       })
       .catch((error) => {
-        //console.log(error);
       });
   };
   const EntryPoint = () => {
@@ -184,11 +181,9 @@ const RiskStratification = (props) => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        //console.log(response.data);
         setEntryPoint(response.data);
       })
       .catch((error) => {
-        //console.log(error);
       });
   };
   const HTS_ENTRY_POINT_COMMUNITY = () => {
@@ -197,11 +192,9 @@ const RiskStratification = (props) => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        //console.log(response.data);
         setEntryPointCommunity(response.data);
       })
       .catch((error) => {
-        //console.log(error);
       });
   };
   //Get list of KP
@@ -214,7 +207,6 @@ const RiskStratification = (props) => {
         setKP(response.data);
       })
       .catch((error) => {
-        //console.log(error);
       });
   };
 
@@ -314,16 +306,7 @@ const RiskStratification = (props) => {
   const displayRiskAssessment = (lastVisit, age, isPMTCTModalityValue) => {
     let SecAge = age !== "" ? age : 0;
     let ans;
-    console.log(
-      "variable lastVisit",
-      lastVisit,
-      "objValues.age",
-      objValues.age,
-      "isPMTCTModality",
-      isPMTCTModalityValue,
-      "SecAge",
-      SecAge
-    );
+
     // for the section to show
     //  Conditions are : age > 15, riskAssessment.lastHivTestBasedOnRequest === "false" and PMTCT Modality === true
     if (lastVisit === "false") {
@@ -443,6 +426,8 @@ const RiskStratification = (props) => {
   // Getting the number count of riskAssessment True
   const actualRiskCountTrue = Object.values(riskAssessment);
   riskCountQuestion = actualRiskCountTrue.filter((x) => x === "true");
+
+  
   const handleInputChangeRiskAssessment = (e) => {
     setErrors({ ...temp, [e.target.name]: "" });
     setRiskAssessment({ ...riskAssessment, [e.target.name]: e.target.value });
@@ -641,7 +626,8 @@ const RiskStratification = (props) => {
                       Visit Date <span style={{ color: "red" }}> *</span>{" "}
                     </Label>
                     <Input
-                      type="date"
+                      type="date"                       onKeyPress={(e)=>{e.preventDefault()}}
+
                       name="visitDate"
                       id="visitDate"
                       value={objValues.visitDate}

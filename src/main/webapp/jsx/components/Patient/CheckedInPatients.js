@@ -131,7 +131,6 @@ const CheckedInPatients = (props) => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        console.log("look for me ", response.data);
 
         setPatientList(response.data.reverse());
       })

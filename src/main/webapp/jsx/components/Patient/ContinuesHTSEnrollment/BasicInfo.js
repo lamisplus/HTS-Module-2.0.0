@@ -99,7 +99,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 // THIS IS THE CREATE FORM
 const BasicInfo = (props) => {
-  console.log("BasicInfo porps", props);
   const classes = useStyles();
   const history = useHistory();
   const [errors, setErrors] = useState({});
@@ -195,7 +194,6 @@ const BasicInfo = (props) => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        // console.log('Response Facility Short Code **** ', response.data);
         setFacilityCode(response.data);
       })
       .catch((error) => {
@@ -829,7 +827,9 @@ const BasicInfo = (props) => {
                     Visit Date <span style={{ color: "red" }}> *</span>
                   </Label>
                   <Input
-                    type="date"
+                    type="date"               
+                    onKeyPress={(e)=>{e.preventDefault()}}
+
                     name="dateVisit"
                     id="dateVisit"
                     value={objValues.dateVisit}

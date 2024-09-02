@@ -105,7 +105,6 @@ const UserRegistration = (props) => {
 
    let hivStatus = patientObj?.hivTestResult;
    let answer = getPreviousForm("Nigeria_PNS_Form", age, "", hivStatus);
-   console.log("previous => ", answer);
    if (answer[0] && answer[1]) {
      handleItemClick(answer[0]);
    } else {
@@ -113,12 +112,10 @@ const UserRegistration = (props) => {
    }
  }; 
   useEffect(() => {
-    console.log("hts enrollment")
     setModalityCheck(
       getCheckModality(patientObj?.riskStratificationResponseDto?.modality)
     );
   }, [patientObj]);
-  console.log(familyIndexList);
   return (
     <>
       <ToastContainer autoClose={3000} hideProgressBar />

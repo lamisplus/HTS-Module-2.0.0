@@ -363,16 +363,7 @@ if (objValues.age !== "") {
   const displayRiskAssessment = (lastVisit, age, isPMTCTModalityValue) => {
     let SecAge = age !== "" ? age : 0;
     let ans;
-    console.log(
-      "variable lastVisit",
-      lastVisit,
-      "objValues.age",
-      objValues.age,
-      "isPMTCTModality",
-      isPMTCTModalityValue,
-      "SecAge",
-      SecAge
-    );
+
     // for the section to show
     //  Conditions are : age > 15, riskAssessment.lastHivTestBasedOnRequest === "false" and PMTCT Modality === true
     if (lastVisit === "false") {
@@ -559,9 +550,14 @@ if (objValues.age !== "") {
   riskCountQuestion = actualRiskCountTrue.filter((x) => x === "true");
 
   const handleInputChangeRiskAssessment = (e) => {
-    console.log(e.target.name, e.target.value);
     displayRiskAssessment(e.target.value, objValues.age, isPMTCTModality);
 
+    setErrors({ ...temp, [e.target.name]: "" });
+    setRiskAssessment({ ...riskAssessment, [e.target.name]: e.target.value });
+  };
+
+
+  const handleInputChangeRiskAssessment2 = (e) => {
     setErrors({ ...temp, [e.target.name]: "" });
     setRiskAssessment({ ...riskAssessment, [e.target.name]: e.target.value });
   };
@@ -847,7 +843,8 @@ if (objValues.age !== "") {
                       Visit Date <span style={{ color: "red" }}> *</span>{" "}
                     </Label>
                     <Input
-                      type="date"
+                      type="date"                       onKeyPress={(e)=>{e.preventDefault()}}
+
                       name="visitDate"
                       id="visitDate"
                       value={objValues.visitDate}
@@ -1031,7 +1028,8 @@ if (objValues.age !== "") {
                   </Label>
                   <input
                     className="form-control"
-                    type="date"
+                    type="date"                       onKeyPress={(e)=>{e.preventDefault()}}
+
                     name="dob"
                     id="dob"
                     min="1929-12-31"
@@ -1134,7 +1132,7 @@ if (objValues.age !== "") {
                         name="lastHivTestDone"
                         id="lastHivTestDone"
                         value={riskAssessment.lastHivTestDone}
-                        onChange={handleInputChangeRiskAssessment}
+                        onChange={handleInputChangeRiskAssessment2}
                         style={{
                           border: "1px solid #014D88",
                           borderRadius: "0.2rem",
@@ -1169,7 +1167,7 @@ if (objValues.age !== "") {
                             name="whatWasTheResult"
                             id="whatWasTheResult"
                             value={riskAssessment.whatWasTheResult}
-                            onChange={handleInputChangeRiskAssessment}
+                            onChange={handleInputChangeRiskAssessment2}
                             style={{
                               border: "1px solid #014D88",
                               borderRadius: "0.2rem",
@@ -1202,7 +1200,7 @@ if (objValues.age !== "") {
                         name="lastHivTestVaginalOral"
                         id="lastHivTestVaginalOral"
                         value={riskAssessment.lastHivTestVaginalOral}
-                        onChange={handleInputChangeRiskAssessment}
+                        onChange={handleInputChangeRiskAssessment2}
                         style={{
                           border: "1px solid #014D88",
                           borderRadius: "0.2rem",
@@ -1233,7 +1231,7 @@ if (objValues.age !== "") {
                         name="lastHivTestBloodTransfusion"
                         id="lastHivTestBloodTransfusion"
                         value={riskAssessment.lastHivTestBloodTransfusion}
-                        onChange={handleInputChangeRiskAssessment}
+                        onChange={handleInputChangeRiskAssessment2}
                         style={{
                           border: "1px solid #014D88",
                           borderRadius: "0.2rem",
@@ -1267,7 +1265,7 @@ if (objValues.age !== "") {
                         name="lastHivTestPainfulUrination"
                         id="lastHivTestPainfulUrination"
                         value={riskAssessment.lastHivTestPainfulUrination}
-                        onChange={handleInputChangeRiskAssessment}
+                        onChange={handleInputChangeRiskAssessment2}
                         style={{
                           border: "1px solid #014D88",
                           borderRadius: "0.2rem",
@@ -1298,7 +1296,7 @@ if (objValues.age !== "") {
                         name="diagnosedWithTb"
                         id="diagnosedWithTb"
                         value={riskAssessment.diagnosedWithTb}
-                        onChange={handleInputChangeRiskAssessment}
+                        onChange={handleInputChangeRiskAssessment2}
                         style={{
                           border: "1px solid #014D88",
                           borderRadius: "0.2rem",
@@ -1330,7 +1328,7 @@ if (objValues.age !== "") {
                         name="lastHivTestInjectedDrugs"
                         //id="sexUnderInfluence"
                         value={riskAssessment.lastHivTestInjectedDrugs}
-                        onChange={handleInputChangeRiskAssessment}
+                        onChange={handleInputChangeRiskAssessment2}
                         style={{
                           border: "1px solid #014D88",
                           borderRadius: "0.2rem",
@@ -1361,7 +1359,7 @@ if (objValues.age !== "") {
                         name="lastHivTestHadAnal"
                         id="lastHivTestHadAnal"
                         value={riskAssessment.lastHivTestHadAnal}
-                        onChange={handleInputChangeRiskAssessment}
+                        onChange={handleInputChangeRiskAssessment2}
                         style={{
                           border: "1px solid #014D88",
                           borderRadius: "0.2rem",
@@ -1390,7 +1388,7 @@ if (objValues.age !== "") {
                         className="form-control"
                         name="lastHivTestForceToHaveSex"
                         value={riskAssessment.lastHivTestForceToHaveSex}
-                        onChange={handleInputChangeRiskAssessment}
+                        onChange={handleInputChangeRiskAssessment2}
                         style={{
                           border: "1px solid #014D88",
                           borderRadius: "0.2rem",

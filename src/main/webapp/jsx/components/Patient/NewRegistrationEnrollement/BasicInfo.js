@@ -566,7 +566,8 @@ const BasicInfo = (props) => {
                     Visit Date <span style={{ color: "red" }}> *</span>
                   </Label>
                   <Input
-                    type="date"
+                    type="date"                       onKeyPress={(e)=>{e.preventDefault()}}
+
                     name="dateVisit"
                     id="dateVisit"
                     value={objValues.dateVisit}
@@ -715,7 +716,10 @@ const BasicInfo = (props) => {
                   </div>
                   <div className="form-group  col-md-4">
                     <FormGroup>
-                      <Label>Index Client Code/ID</Label>
+                      <Label>Index Client Code/ID
+                      <span style={{ color: "red" }}> *</span>
+
+                      </Label>
                       <Input
                         type="text"
                         name="indexClientCode"

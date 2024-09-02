@@ -130,7 +130,6 @@ const Patients = (props) => {
                         <div>
                           {row.htsCount >= 0 && (
                             <>
-                              {console.log(row)}
                               <Link
                                 to={{
                                   pathname: "/patient-history",

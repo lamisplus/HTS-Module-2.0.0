@@ -26,5 +26,6 @@ public class FamilyTestingTrackerRequestDTO {
     private Long facilityId;
     private String attempt;
     private Long familyIndexId;
+    private Long familyIndexTestingId;
 
 }

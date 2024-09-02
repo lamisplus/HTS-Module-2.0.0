@@ -236,8 +236,8 @@ const FamilyIndexHistory = (props) => {
           icons={tableIcons}
           // title=''
           columns={[
-            { title: "HTS ID", field: "id" },
-            { title: "Date", field: "date" },
+            { title: "ID", field: "id" },
+            { title: "Date Of Birth", field: "date" },
             { title: "family Relationship", field: "familyRelationship" },
             // { title: "Index Notification", field: "indexNotifiation", filtering: false },
 
@@ -246,7 +246,7 @@ const FamilyIndexHistory = (props) => {
           isLoading={props.loading}
           data={familyIndexList.map((row) => ({
             id: row.id,
-            date: row.dateOfHts,
+            date: row.dateOfBirth,
             familyRelationship: convertRelationship(row.familyRelationship),
 
             //indexNotifiation:row.indexNotificationServicesElicitation ? "Filled":"Not Filled ",
@@ -255,13 +255,11 @@ const FamilyIndexHistory = (props) => {
               <div>
                 <Menu.Menu position="right">
                   <Menu.Item>
-                    {/* <Button
-                    style={{ backgroundColor: "rgb(153,46,98)" }}
+                    <div
+                    style={{ backgroundColor: "rgb(153,46,98)", color: "white", borderRadius:"5px", width: "100px" }}
                     primary
-                    onClick={(e) => {
-                      e.preventDefault();
-                    }}
-                  > */}
+                   className="px-3 py-2"
+                  >
                     <Dropdown item text="Action">
                       <Dropdown.Menu style={{ marginTop: "10px" }}>
                         <Dropdown.Item
@@ -283,7 +281,7 @@ const FamilyIndexHistory = (props) => {
                         </Dropdown.Item>
                       </Dropdown.Menu>
                     </Dropdown>
-                    {/* </Button> */}
+                    </div>
                   </Menu.Item>
                 </Menu.Menu>
               </div>

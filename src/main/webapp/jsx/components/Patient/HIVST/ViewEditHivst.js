@@ -776,7 +776,8 @@ const ViewEditHivst = (props) => {
                                         Visit Date <span style={{color: "red"}}> *</span>
                                     </Label>
                                     <Input
-                                        type="date"
+                                        type="date"                       onKeyPress={(e)=>{e.preventDefault()}}
+
                                         name="dateOfVisit"
                                         id="dateOfVisit"
                                         // value={objValues.dateOfVisit}
@@ -1112,7 +1113,8 @@ const ViewEditHivst = (props) => {
                                         {/*<span style={{color: "red"}}> *</span>*/}
                                     </Label>
                                     <Input
-                                        type="date"
+                                        type="date"                       onKeyPress={(e)=>{e.preventDefault()}}
+
                                         name="expiryDate"
                                         id="expirtyDate"
                                         value={objValues.expiryDate}
@@ -1261,7 +1263,8 @@ const ViewEditHivst = (props) => {
                                                       {/*<span style={{color: "red"}}> *</span>*/}
                                                   </Label>
                                                   <Input
-                                                      type="date"
+                                                      type="date"                       onKeyPress={(e)=>{e.preventDefault()}}
+
                                                       name="dateOfRegistration"
                                                       id="dateOfRegistration"
                                                       min="1929-12-31"
@@ -1495,7 +1498,8 @@ const ViewEditHivst = (props) => {
                                                   </Label>
                                                   <input
                                                       className="form-control"
-                                                      type="date"
+                                                      type="date"                       onKeyPress={(e)=>{e.preventDefault()}}
+
                                                       name="dob"
                                                       id="dob"
                                                       min="1929-12-31"
@@ -1958,7 +1962,8 @@ const ViewEditHivst = (props) => {
                                                                         {/*<span style={{color: "red"}}> *</span>*/}
                                                                     </Label>
                                                                     <Input
-                                                                        type="date"
+                                                                        type="date"                       onKeyPress={(e)=>{e.preventDefault()}}
+
                                                                         name="dateReferredForConfirmatoryHts"
                                                                         id="dateReferredForConfirmatoryHts"
                                                                         value={testKitUserDetails.postTestAssessment.referralInformation.dateReferredForConfirmatoryHts}
@@ -2009,7 +2014,8 @@ const ViewEditHivst = (props) => {
                                                                         {/*<span style={{color: "red"}}> *</span>*/}
                                                                     </Label>
                                                                     <Input
-                                                                        type="date"
+                                                                        type="date"                       onKeyPress={(e)=>{e.preventDefault()}}
+
                                                                         name="dateReferredForPreventionServices"
                                                                         id="dateReferredForPreventionServices"
                                                                         value={testKitUserDetails.postTestAssessment.referralInformation.dateReferredForPreventionServices}

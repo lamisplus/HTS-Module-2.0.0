@@ -1395,7 +1395,8 @@ const ViewFamilyIndexTestingForm = (props) => {
                       Date <span style={{ color: "red" }}> *</span>{" "}
                     </Label>
                     <Input
-                      type="date"
+                      type="date"                       onKeyPress={(e)=>{e.preventDefault()}}
+
                       name="visitDate"
                       id="visitDate"
                       value={payload.visitDate}
@@ -1625,7 +1626,8 @@ const ViewFamilyIndexTestingForm = (props) => {
                     </Label>
                     <input
                       className="form-control"
-                      type="date"
+                      type="date"                       onKeyPress={(e)=>{e.preventDefault()}}
+
                       name="dateOfBirth"
                       id="dateOfBirth"
                       min="1929-12-31"
@@ -1830,7 +1832,8 @@ const ViewFamilyIndexTestingForm = (props) => {
                       <span style={{ color: "red" }}> *</span>{" "}
                     </Label>
                     <Input
-                      type="date"
+                      type="date"                       onKeyPress={(e)=>{e.preventDefault()}}
+
                       name="dateIndexClientConfirmedHivPositiveTestResult"
                       id="dateIndexClientConfirmedHivPositiveTestResult"
                       value={
@@ -1959,7 +1962,8 @@ const ViewFamilyIndexTestingForm = (props) => {
                           <span style={{ color: "red" }}> *</span>{" "}
                         </Label>
                         <Input
-                          type="date"
+                          type="date"                       onKeyPress={(e)=>{e.preventDefault()}}
+
                           name="dateClientEnrolledOnTreatment"
                           id="dateClientEnrolledOnTreatment"
                           value={payload.dateClientEnrolledOnTreatment}
@@ -2202,7 +2206,8 @@ const ViewFamilyIndexTestingForm = (props) => {
                             <input
                               className="form-control"
                               id="yearMotherDied"
-                              type="date"
+                              type="date"                       onKeyPress={(e)=>{e.preventDefault()}}
+
                               min="1929-12-31"
                               max={moment(new Date()).format("YYYY-MM-DD")}
                               name="yearMotherDead"
@@ -2339,7 +2344,7 @@ const ViewFamilyIndexTestingForm = (props) => {
                       <div className="form-group col-md-4">
                         <FormGroup>
                           <Label for="positionOfChildEnumerated">
-                            Position of the Child Enumerator
+                            Position of the Child Enumerated
                           </Label>
                           <input
                             className="form-control"
@@ -2420,7 +2425,8 @@ const ViewFamilyIndexTestingForm = (props) => {
                         <FormGroup>
                           <Label for="">Schedule Visit Date </Label>
                           <Input
-                            type="date"
+                            type="date"                       onKeyPress={(e)=>{e.preventDefault()}}
+
                             name="scheduleVisitDate"
                             id="scheduleVisitDate"
                             value={
@@ -2451,7 +2457,8 @@ const ViewFamilyIndexTestingForm = (props) => {
                             {/* <span style={{ color: "red" }}> *</span>{" "} */}
                           </Label>
                           <Input
-                            type="date"
+                            type="date"                       onKeyPress={(e)=>{e.preventDefault()}}
+
                             name="dateVisit"
                             id="dateVisit"
                             value={familyTestingTrackerRequestDTO?.dateVisit}
@@ -2529,7 +2536,8 @@ const ViewFamilyIndexTestingForm = (props) => {
                             <FormGroup>
                               <Label for="">Date Tested</Label>
                               <Input
-                                type="date"
+                                type="date"                       onKeyPress={(e)=>{e.preventDefault()}}
+
                                 name="dateTested"
                                 id="dateTested"
                                 value={
@@ -2594,7 +2602,8 @@ const ViewFamilyIndexTestingForm = (props) => {
                           <FormGroup>
                             <Label for="">Date Enrolled In Ovc</Label>
                             <Input
-                              type="date"
+                              type="date"                       onKeyPress={(e)=>{e.preventDefault()}}
+
                               name="dateEnrolledInOVC"
                               id="dateEnrolledInOVC"
                               value={
@@ -2623,7 +2632,8 @@ const ViewFamilyIndexTestingForm = (props) => {
                         <FormGroup>
                           <Label for="">Date Enrolled On ART</Label>
                           <Input
-                            type="date"
+                            type="date"                       onKeyPress={(e)=>{e.preventDefault()}}
+
                             name="dateEnrolledOnArt"
                             id="dateEnrolledOnArt"
                             value={

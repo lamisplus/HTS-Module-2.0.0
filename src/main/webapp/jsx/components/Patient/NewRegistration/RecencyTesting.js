@@ -347,7 +347,52 @@ const Recency = (props) => {
       } else {
         setRecency({ ...recency, [e.target.name]: e.target.value });
       }
-    } else if (e.target.name === "rencencyId" && e.target.value !== "") {
+    }else if(e.target.name === "optOutRTRI"){
+      setRecency({
+        // optOutRTRI: "false",
+        optOutRTRITestName: "",
+        optOutRTRITestDate: "",
+        rencencyId: "",
+        controlLine: "",
+        verififcationLine: "",
+        longTermLine: "",
+        rencencyInterpretation: "",
+        hasViralLoad: "",
+        sampleCollectedDate: "",
+        sampleReferanceNumber: "",
+        dateSampleSentToPCRLab: "",
+        sampleTestDate: "",
+        sampleType: "",
+        receivingPcrLab: "",
+        viralLoadResultClassification: "",
+        recencyResult: "",
+        finalRecencyResult: "",
+        viralLoadConfirmationResult: "",
+         [e.target.name]: e.target.value });
+
+         
+         setErrors({ ...temp,
+          optOutRTRITestName: "",
+          optOutRTRITestDate: "",
+          rencencyId: "",
+          controlLine: "",
+          verififcationLine: "",
+          longTermLine: "",
+          rencencyInterpretation: "",
+          hasViralLoad: "",
+          sampleCollectedDate: "",
+          sampleReferanceNumber: "",
+          dateSampleSentToPCRLab: "",
+          sampleTestDate: "",
+          sampleType: "",
+          receivingPcrLab: "",
+          viralLoadResultClassification: "",
+          recencyResult: "",
+          finalRecencyResult: "",
+          viralLoadConfirmationResult: "", [e.target.name]: "" });
+
+
+    }  else if (e.target.name === "rencencyId" && e.target.value !== "") {
       const recencyIdNumberValue = checkRecencyLimit(e.target.value);
       setRecency({ ...recency, [e.target.name]: recencyIdNumberValue });
     } else {
@@ -364,6 +409,50 @@ const Recency = (props) => {
   const validate = () => {
     //HTS FORM VALIDATION
     
+
+    recency.optOutRTRI === "false" &&
+    (temp.optOutRTRITestName = recency.optOutRTRITestName
+      ? ""
+      : "This field is required.");
+
+
+     recency.optOutRTRI === "false" &&
+      (temp.optOutRTRITestDate = recency.optOutRTRITestDate
+        ? ""
+        : "This field is required.");
+
+  
+      recency.optOutRTRI === "false" &&
+        (temp.rencencyId = recency.rencencyId
+          ? ""
+          : "This field is required.");
+
+         recency.optOutRTRI === "false" &&
+          (temp.controlLine = recency.controlLine
+            ? ""
+            : "This field is required.")
+
+            
+  
+          recency.optOutRTRI === "false" &&
+          (temp.verififcationLine = recency.verififcationLine
+            ? ""
+            : "This field is required.");
+
+
+            recency.optOutRTRI === "false" &&
+            (temp.longTermLine = recency.longTermLine
+              ? ""
+              : "This field is required.")
+
+
+
+              recency.optOutRTRI === "false" &&
+              (temp.rencencyInterpretation = recency.rencencyInterpretation
+                ? ""
+                : "This field is required.")
+
+
       recency.hasViralLoad == "true" &&
         (temp.sampleReferanceNumber = recency.sampleReferanceNumber
           ? ""
@@ -500,6 +589,11 @@ const Recency = (props) => {
                         <option value="Asante">Asante</option>
                         <option value="Others">Others</option>
                       </select>
+                      {errors.optOutRTRITestName !== "" ? (
+                      <span className={classes.error}>{errors.optOutRTRITestName}</span>
+                    ) : (
+                      ""
+                    )}
                     </FormGroup>
                   </div>
                   <div className="form-group  col-md-4">
@@ -508,7 +602,8 @@ const Recency = (props) => {
                         Test Date <span style={{ color: "red" }}> *</span>
                       </Label>
                       <Input
-                        type="date"                       onKeyPress={(e)=>{e.preventDefault()}}
+                        type="date"                 
+                       onKeyPress={(e)=>{e.preventDefault()}}
 
                         name="optOutRTRITestDate"
                         id="optOutRTRITestDate"
@@ -525,6 +620,11 @@ const Recency = (props) => {
                           borderRadius: "0.25rem",
                         }}
                       />
+                       {errors.optOutRTRITestDate !== "" ? (
+                      <span className={classes.error}>{errors.optOutRTRITestDate}</span>
+                    ) : (
+                      ""
+                    )}
                     </FormGroup>
                   </div>
                   <div className="form-group  col-md-4">
@@ -544,6 +644,11 @@ const Recency = (props) => {
                           borderRadius: "0.2rem",
                         }}
                       />
+                           {errors.rencencyId !== "" ? (
+                      <span className={classes.error}>{errors.rencencyId}</span>
+                    ) : (
+                      ""
+                    )}
                     </FormGroup>
                   </div>
                   <div className="form-group  col-md-4">
@@ -566,6 +671,11 @@ const Recency = (props) => {
                         <option value="true">Yes</option>
                         <option value="false">No</option>
                       </select>
+                      {errors.controlLine !== "" ? (
+                      <span className={classes.error}>{errors.controlLine}</span>
+                    ) : (
+                      ""
+                    )}
                     </FormGroup>
                   </div>
                   <div className="form-group  col-md-4">
@@ -589,6 +699,11 @@ const Recency = (props) => {
                         <option value="true">Yes</option>
                         <option value="false">No</option>
                       </select>
+                      {errors.verififcationLine !== "" ? (
+                      <span className={classes.error}>{errors.verififcationLine}</span>
+                    ) : (
+                      ""
+                    )}
                     </FormGroup>
                   </div>
                   <div className="form-group  col-md-4">
@@ -611,6 +726,11 @@ const Recency = (props) => {
                         <option value="true">Yes</option>
                         <option value="false">No</option>
                       </select>
+                      {errors.longTermLine !== "" ? (
+                      <span className={classes.error}>{errors.longTermLine}</span>
+                    ) : (
+                      ""
+                    )}
                     </FormGroup>
                   </div>
 
@@ -632,6 +752,11 @@ const Recency = (props) => {
                           borderRadius: "0.2rem",
                         }}
                       />
+                       {errors.rencencyInterpretation !== "" ? (
+                      <span className={classes.error}>{errors.rencencyInterpretation}</span>
+                    ) : (
+                      ""
+                    )}
                     </FormGroup>
                   </div>
                   {recency.rencencyInterpretation === "RTRI Recent" && (

@@ -16,6 +16,7 @@ import org.lamisplus.modules.hts.domain.entity.RiskStratification;
 import org.lamisplus.modules.hts.domain.enums.Source;
 import org.lamisplus.modules.hts.repository.HtsClientRepository;
 import org.lamisplus.modules.hts.repository.IndexElicitationRepository;
+import org.lamisplus.modules.hts.util.Constants;
 import org.lamisplus.modules.hts.util.RandomCodeGenerator;
 import org.lamisplus.modules.patient.domain.dto.PersonDto;
 import org.lamisplus.modules.patient.domain.dto.PersonResponseDto;
@@ -99,9 +100,10 @@ public class HtsClientService {
 
         }
         htsClient.setFacilityId(currentUserOrganizationService.getCurrentUserOrganization());
-        System.out.println("After setting facility id" );
-
-
+        htsClient.setLatitude(htsClientRequestDto.getLatitude());
+        htsClient.setLongitude(htsClientRequestDto.getLongitude());
+        String sourceSupport = htsClientRequestDto.getSource() == null || htsClientRequestDto.getSource().isEmpty() ? Constants.WEB_SOURCE : Constants.MOBILE_SOURCE;
+        htsClient.setSource(sourceSupport);
         htsClient = htsClientRepository.save(htsClient);
         System.out.println("After saving in htsClientRepository" );
 

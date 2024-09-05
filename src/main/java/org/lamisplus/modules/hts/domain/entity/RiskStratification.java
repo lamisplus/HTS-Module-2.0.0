@@ -16,6 +16,7 @@ import org.hibernate.annotations.Where;
 import org.lamisplus.modules.base.domain.entities.Audit;
 import org.lamisplus.modules.hts.domain.dto.RiskStratificationDto;
 import org.lamisplus.modules.hts.domain.dto.RiskStratificationResponseDto;
+import org.lamisplus.modules.hts.util.Constants;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -99,6 +100,14 @@ public class RiskStratification extends Audit implements Serializable {
     @Column(name = "source")
     private String source;
 
+    @Basic
+    @Column(name = "longitude")
+    private String longitude;
+
+    @Basic
+    @Column(name = "latitude")
+    private  String latitude;
+
     @PrePersist
     public void setFields(){
         if(StringUtils.isEmpty(code)){
@@ -124,6 +133,10 @@ public class RiskStratification extends Audit implements Serializable {
         riskStratification.setDob(riskStratificationDTO.getDob());
         riskStratification.setRiskAssessment( riskStratificationDTO.getRiskAssessment() );
         riskStratification.setCommunityEntryPoint( riskStratificationDTO.getCommunityEntryPoint() );
+        riskStratification.setLatitude(riskStratificationDTO.getLongitude());
+        riskStratification.setLatitude(riskStratificationDTO.getLatitude());
+        String sourceSupport = riskStratificationDTO.getSource() == null || riskStratificationDTO.getSource().isEmpty() ? Constants.WEB_SOURCE : Constants.MOBILE_SOURCE;
+        riskStratificationDTO.setSource(sourceSupport);
 
         riskStratification.setEntryPoint( riskStratificationDTO.getEntryPoint());
 

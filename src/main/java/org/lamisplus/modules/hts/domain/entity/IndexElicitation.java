@@ -158,4 +158,12 @@ public class IndexElicitation extends Audit implements Serializable {
     @Column(name = "source")
     private String source;
 
+    @Basic
+    @Column(name = "longitude")
+    private String longitude;
+
+    @Basic
+    @Column(name = "latitude")
+    private  String latitude;
+
 }

@@ -5,6 +5,7 @@ import lombok.Data;
 import org.lamisplus.modules.hts.domain.enums.Source;
 import org.lamisplus.modules.patient.domain.dto.PersonDto;
 
+import javax.persistence.Basic;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -51,4 +52,8 @@ public class HtsClientRequestDto {
     private String uuid;
     private String referredForSti;
     private String comment;
+    @Basic
+    private String longitude;
+    @Basic
+    private  String latitude;
 }

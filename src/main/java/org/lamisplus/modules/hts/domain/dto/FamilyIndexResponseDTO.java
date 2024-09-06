@@ -35,4 +35,5 @@ public class FamilyIndexResponseDTO {
     private String liveWithParent;
     private List<FamilyTestingTrackerResponseDTO> familyTestingTrackerResponseDTO;
     private Boolean isDateOfBirthEstimated;
+    private String isHtsClient;
 }

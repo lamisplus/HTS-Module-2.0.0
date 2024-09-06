@@ -40,6 +40,7 @@ public class FamilyIndexRequestDto {
     private LocalDate yearChildDead;
     private String liveWithParent;
     private Boolean isDateOfBirthEstimated;
+    private String isHtsClient;
     private FamilyTestingTrackerRequestDTO familyTestingTrackerRequestDTO;
 
 }

@@ -122,6 +122,10 @@ public class FamilyIndex extends Audit implements Serializable  {
     @Column(name ="is_date_of_birth_estimated")
     private Boolean isDateOfBirthEstimated;
 
+    @Basic
+    @Column(name="is_htsclient")
+    private String isHtsClient;
+
 
     @OneToMany(mappedBy = "familyIndex", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FamilyTestingTracker> familyTestingTrackers;

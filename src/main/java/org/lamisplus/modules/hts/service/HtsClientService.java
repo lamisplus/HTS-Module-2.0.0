@@ -49,6 +49,7 @@ public class HtsClientService {
     private final IndexElicitationRepository indexElicitationRepository;
     private final RiskStratificationService riskStratificationService;
     private final ModuleService moduleService;
+    private final FamilyIndexTestingService familyIndexTestingService;
     public HtsClientDto save(HtsClientRequestDto htsClientRequestDto){
         System.out.println("i am inside the save method");
         if(htsClientRequestDto.getRiskStratificationCode() != null){
@@ -78,26 +79,16 @@ public class HtsClientService {
 
             if(htsClientRequestDto.getPersonDto() == null) throw new EntityNotFoundException(PersonDto.class, "PersonDTO is ", " empty");
             personResponseDto = personService.createPerson(htsClientRequestDto.getPersonDto());
-            System.out.println("createPerson successully" + personResponseDto);
-
             person = personRepository.findById(personResponseDto.getId()).get();
-            System.out.println("person found "  + person);
-
             String personUuid = person.getUuid();
-            System.out.println("personUuid found "  + personUuid);
-
             htsClient = this.htsClientRequestDtoToHtsClient(htsClientRequestDto, personUuid);
-            System.out.println(" After htsClientRequestDtoToHtsClient " );
-
         } else {
-            //already existing person
-
             person = this.getPerson(htsClientRequestDto.getPersonId());
-            System.out.println("already existing person " );
-
             htsClient = this.htsClientRequestDtoToHtsClient(htsClientRequestDto, person.getUuid());
-            System.out.println("insode already exist   htsClientRequestDtoToHtsClient" );
-
+        }
+//       for elicited client
+        if(!htsClientRequestDto.getFamilyIndex().isEmpty()){
+            familyIndexTestingService.updateIndexStatus(htsClientRequestDto.getFamilyIndex());
         }
         htsClient.setFacilityId(currentUserOrganizationService.getCurrentUserOrganization());
         htsClient.setLatitude(htsClientRequestDto.getLatitude());
@@ -107,13 +98,8 @@ public class HtsClientService {
         htsClient.setFamilyIndex(htsClientRequestDto.getFamilyIndex());
         htsClient.setPartnerNotificationService(htsClientRequestDto.getPartnerNotificationService());
         htsClient = htsClientRepository.save(htsClient);
-        System.out.println("After saving in htsClientRepository" );
-
-
         htsClient.setPerson(person);
-        System.out.println("After settting Person" );
 
-        //LOG.info("Person is - {}", htsClient.getPerson());
         return this.htsClientToHtsClientDto(htsClient);
     }
 

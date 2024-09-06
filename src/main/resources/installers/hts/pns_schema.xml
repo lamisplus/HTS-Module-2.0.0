@@ -303,5 +303,15 @@
             ALTER TABLE hts_family_index ADD COLUMN is_htcleint varchar(255);
         </sql>
     </changeSet>
+    <changeSet failOnError="false" author="Taiwo Gboyegun" id="isHtsClient-001">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="hts_pns_index_client_partner" columnName="is_htsclient" />
+            </not>
+        </preConditions>
+        <sql>
+            ALTER TABLE hts_pns_index_client_partner ADD COLUMN is_htcleint varchar(255);
+        </sql>
+    </changeSet>
 
 </databaseChangeLog>

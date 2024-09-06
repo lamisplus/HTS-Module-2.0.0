@@ -50,6 +50,7 @@ public class HtsClientService {
     private final RiskStratificationService riskStratificationService;
     private final ModuleService moduleService;
     private final FamilyIndexTestingService familyIndexTestingService;
+    private PNSService pnsService;
     public HtsClientDto save(HtsClientRequestDto htsClientRequestDto){
         System.out.println("i am inside the save method");
         if(htsClientRequestDto.getRiskStratificationCode() != null){
@@ -88,7 +89,10 @@ public class HtsClientService {
         }
 //       for elicited client
         if(!htsClientRequestDto.getFamilyIndex().isEmpty()){
-            familyIndexTestingService.updateIndexStatus(htsClientRequestDto.getFamilyIndex());
+            familyIndexTestingService.updateIndexClientStatus(htsClientRequestDto.getFamilyIndex());
+        }
+        if(!htsClientRequestDto.getPartnerNotificationService().isEmpty()){
+            pnsService.updateIndexClientStatus(htsClientRequestDto.getPartnerNotificationService());
         }
         htsClient.setFacilityId(currentUserOrganizationService.getCurrentUserOrganization());
         htsClient.setLatitude(htsClientRequestDto.getLatitude());

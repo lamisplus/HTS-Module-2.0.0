@@ -559,7 +559,7 @@ public class FamilyIndexTestingService {
         return "Family Index Testing updated successfully";
     }
 
-    public void updateIndexStatus(String uuid) {
+    public void updateIndexClientStatus(String uuid) {
         if (!uuid.isEmpty()) {
             FamilyIndex existingFamilyIndex = familyIndexRepository.findByUuidAndArchived(uuid, 0)
                     .orElseThrow(() -> new EntityNotFoundException(FamilyIndex.class, "uuid", uuid + ""));

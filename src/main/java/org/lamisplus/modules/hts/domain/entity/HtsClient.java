@@ -315,6 +315,13 @@ public class HtsClient extends Audit implements Serializable {
     @Basic
     @Column(name = "latitude")
     private  String latitude;
-    
+
+    @Basic
+    @Column(name = "family_index")
+    private  String familyIndex;
+
+    @Basic
+    @Column(name ="partner_notification_service")
+    private String partnerNotificationService;
 
 }

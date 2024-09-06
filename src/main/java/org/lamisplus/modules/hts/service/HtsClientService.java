@@ -104,6 +104,8 @@ public class HtsClientService {
         htsClient.setLongitude(htsClientRequestDto.getLongitude());
         String sourceSupport = htsClientRequestDto.getSource() == null || htsClientRequestDto.getSource().isEmpty() ? Constants.WEB_SOURCE : Constants.MOBILE_SOURCE;
         htsClient.setSource(sourceSupport);
+        htsClient.setFamilyIndex(htsClientRequestDto.getFamilyIndex());
+        htsClient.setPartnerNotificationService(htsClientRequestDto.getPartnerNotificationService());
         htsClient = htsClientRepository.save(htsClient);
         System.out.println("After saving in htsClientRepository" );
 

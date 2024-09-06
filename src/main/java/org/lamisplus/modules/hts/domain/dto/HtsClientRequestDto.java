@@ -56,4 +56,8 @@ public class HtsClientRequestDto {
     private String longitude;
     @Basic
     private  String latitude;
+    @Basic
+    private String familyIndex;
+    @Basic
+    private String partnerNotificationService;
 }

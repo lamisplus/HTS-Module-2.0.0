@@ -300,7 +300,7 @@
             </not>
         </preConditions>
         <sql>
-            ALTER TABLE hts_family_index ADD COLUMN is_htcleint varchar(255);
+            ALTER TABLE hts_family_index ADD COLUMN is_htsclient varchar(255);
         </sql>
     </changeSet>
     <changeSet failOnError="false" author="Taiwo Gboyegun" id="isHtsClient-001">
@@ -310,7 +310,7 @@
             </not>
         </preConditions>
         <sql>
-            ALTER TABLE hts_pns_index_client_partner ADD COLUMN is_htcleint varchar(255);
+            ALTER TABLE hts_pns_index_client_partner ADD COLUMN is_htsclient varchar(255);
         </sql>
     </changeSet>
 

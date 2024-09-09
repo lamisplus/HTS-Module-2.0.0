@@ -44,6 +44,7 @@ public class PersonalNotificationServiceResponseDTO {
     private LocalDate dateEnrollmentOnART;
     private Object htsClientInformation;
     private String partnerId;
-
+    private String familyIndex;
+    private String partnerNotificationService;
     private PersonResponseDto personResponseDto;
 }

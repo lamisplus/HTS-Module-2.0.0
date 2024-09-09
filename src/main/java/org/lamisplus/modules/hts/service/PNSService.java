@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.lamisplus.modules.base.controller.apierror.EntityNotFoundException;
 import org.lamisplus.modules.hts.domain.dto.PersonalNotificationServiceRequestDTO;
 import org.lamisplus.modules.hts.domain.dto.PersonalNotificationServiceResponseDTO;
+import org.lamisplus.modules.hts.domain.entity.FamilyIndex;
 import org.lamisplus.modules.hts.domain.entity.HtsClient;
 import org.lamisplus.modules.hts.domain.entity.PersonalNotificationService;
 import org.lamisplus.modules.hts.repository.HtsClientRepository;
@@ -171,6 +172,7 @@ public class PNSService {
         pns.setHtsClientInformation(req.getHtsClientInformation());
         pns.setPartnerId(req.getPartnerId());
         pns.setReasonForDecline(req.getReasonForDecline());
+        pns.setIsHtsClient("No");
         pns.setOtherReasonForDecline(req.getOtherReasonForDecline());
 
         return pns;
@@ -228,5 +230,14 @@ public class PNSService {
 
     public PersonalNotificationServiceResponseDTO getPnsIndexClientPartnerById(Long id) {
         return convertPnsToResponseDto(null, getPnsById(id));
+    }
+
+    public void updateIndexClientStatus(String uuid) {
+        if (!uuid.isEmpty()) {
+            PersonalNotificationService pns = personalNotificationServiceRepository.findByUuidAndArchived(uuid, 0)
+                    .orElseThrow(() -> new EntityNotFoundException(FamilyIndex.class, "uuid", uuid + ""));
+            pns.setIsHtsClient("Yes");
+            personalNotificationServiceRepository.save(pns);
+        }
     }
 }

@@ -2,6 +2,7 @@ package org.lamisplus.modules.hts.domain.dto;
 
 import lombok.*;
 
+import javax.persistence.Basic;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -26,4 +27,8 @@ public class RiskStratificationResponseDto {
     private String communityEntryPoint ;
     private  Object riskAssessment;
     private String source;
+    @Basic
+    private String longitude;
+    @Basic
+    private  String latitude;
 }

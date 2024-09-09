@@ -326,9 +326,54 @@
             ALTER TABLE IF EXISTS hts_client ADD COLUMN referred_for_sti character varying;
         </sql>
     </changeSet>
-
-
-
+    <changeSet failOnError="false" author="Taiwo Gboyegun" id="addSourceMobileQuery-005">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="hts_client" columnName="latitude" />
+                <columnExists tableName="hts_client" columnName="longitude" />
+            </not>
+        </preConditions>
+        <sql>
+            ALTER TABLE hts_client ADD COLUMN latitude varchar(255);
+            ALTER TABLE hts_client ADD COLUMN longitude varchar(255);
+        </sql>
+    </changeSet>
+    <changeSet failOnError="false" author="Taiwo Gboyegun" id="addSourceMobileQuery-006">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="hts_risk_stratification" columnName="latitude" />
+                <columnExists tableName="hts_risk_stratification" columnName="longitude" />
+            </not>
+        </preConditions>
+        <sql>
+            ALTER TABLE hts_risk_stratification ADD COLUMN latitude varchar(255);
+            ALTER TABLE hts_risk_stratification ADD COLUMN longitude varchar(255);
+        </sql>
+    </changeSet>
+    <changeSet failOnError="false" author="Taiwo Gboyegun" id="addSourceMobileQuery-007">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="hts_index_elicitation" columnName="latitude" />
+                <columnExists tableName="hts_index_elicitation" columnName="longitude" />
+            </not>
+        </preConditions>
+        <sql>
+            ALTER TABLE hts_index_elicitation ADD COLUMN latitude varchar(255);
+            ALTER TABLE hts_index_elicitation ADD COLUMN longitude varchar(255);
+        </sql>
+    </changeSet>
+    <changeSet failOnError="false" author="Taiwo Gboyegun" id="added-pns-fit">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="hts_client" columnName="family_index" />
+                <columnExists tableName="hts_client" columnName="partner_notification_service" />
+            </not>
+        </preConditions>
+        <sql>
+            ALTER TABLE hts_client ADD COLUMN family_index varchar(255);
+            ALTER TABLE hts_client ADD COLUMN partner_notification_service varchar(255);
+        </sql>
+    </changeSet>
 
 
 </databaseChangeLog>

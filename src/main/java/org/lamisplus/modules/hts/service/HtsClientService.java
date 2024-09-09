@@ -16,6 +16,7 @@ import org.lamisplus.modules.hts.domain.entity.RiskStratification;
 import org.lamisplus.modules.hts.domain.enums.Source;
 import org.lamisplus.modules.hts.repository.HtsClientRepository;
 import org.lamisplus.modules.hts.repository.IndexElicitationRepository;
+import org.lamisplus.modules.hts.util.Constants;
 import org.lamisplus.modules.hts.util.RandomCodeGenerator;
 import org.lamisplus.modules.patient.domain.dto.PersonDto;
 import org.lamisplus.modules.patient.domain.dto.PersonResponseDto;
@@ -48,6 +49,8 @@ public class HtsClientService {
     private final IndexElicitationRepository indexElicitationRepository;
     private final RiskStratificationService riskStratificationService;
     private final ModuleService moduleService;
+    private final FamilyIndexTestingService familyIndexTestingService;
+    private PNSService pnsService;
     public HtsClientDto save(HtsClientRequestDto htsClientRequestDto){
         System.out.println("i am inside the save method");
         if(htsClientRequestDto.getRiskStratificationCode() != null){
@@ -77,39 +80,30 @@ public class HtsClientService {
 
             if(htsClientRequestDto.getPersonDto() == null) throw new EntityNotFoundException(PersonDto.class, "PersonDTO is ", " empty");
             personResponseDto = personService.createPerson(htsClientRequestDto.getPersonDto());
-            System.out.println("createPerson successully" + personResponseDto);
-
             person = personRepository.findById(personResponseDto.getId()).get();
-            System.out.println("person found "  + person);
-
             String personUuid = person.getUuid();
-            System.out.println("personUuid found "  + personUuid);
-
             htsClient = this.htsClientRequestDtoToHtsClient(htsClientRequestDto, personUuid);
-            System.out.println(" After htsClientRequestDtoToHtsClient " );
-
         } else {
-            //already existing person
-
             person = this.getPerson(htsClientRequestDto.getPersonId());
-            System.out.println("already existing person " );
-
             htsClient = this.htsClientRequestDtoToHtsClient(htsClientRequestDto, person.getUuid());
-            System.out.println("insode already exist   htsClientRequestDtoToHtsClient" );
-
+        }
+//       for elicited client
+        if(!htsClientRequestDto.getFamilyIndex().isEmpty()){
+            familyIndexTestingService.updateIndexClientStatus(htsClientRequestDto.getFamilyIndex());
+        }
+        if(!htsClientRequestDto.getPartnerNotificationService().isEmpty()){
+            pnsService.updateIndexClientStatus(htsClientRequestDto.getPartnerNotificationService());
         }
         htsClient.setFacilityId(currentUserOrganizationService.getCurrentUserOrganization());
-        System.out.println("After setting facility id" );
-
-
+        htsClient.setLatitude(htsClientRequestDto.getLatitude());
+        htsClient.setLongitude(htsClientRequestDto.getLongitude());
+        String sourceSupport = htsClientRequestDto.getSource() == null || htsClientRequestDto.getSource().isEmpty() ? Constants.WEB_SOURCE : Constants.MOBILE_SOURCE;
+        htsClient.setSource(sourceSupport);
+        htsClient.setFamilyIndex(htsClientRequestDto.getFamilyIndex());
+        htsClient.setPartnerNotificationService(htsClientRequestDto.getPartnerNotificationService());
         htsClient = htsClientRepository.save(htsClient);
-        System.out.println("After saving in htsClientRepository" );
-
-
         htsClient.setPerson(person);
-        System.out.println("After settting Person" );
 
-        //LOG.info("Person is - {}", htsClient.getPerson());
         return this.htsClientToHtsClientDto(htsClient);
     }
 

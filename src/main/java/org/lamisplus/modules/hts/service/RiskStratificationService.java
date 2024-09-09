@@ -40,7 +40,7 @@ public class RiskStratificationService {
 
             Optional<RiskStratification> riskStratificationExists = stratificationRepository.findByCode(riskStratificationDTO.getCode());
             if (riskStratificationExists.isPresent()) {
-                LOG.info("Risk stratification with code {} has already been synced.", riskStratificationDTO.getCode());
+//                LOG.info("Risk stratification with code {} has already been synced.", riskStratificationDTO.getCode());
                 return toRiskStratificationResponseDTO(riskStratificationExists.get());
             }
         }

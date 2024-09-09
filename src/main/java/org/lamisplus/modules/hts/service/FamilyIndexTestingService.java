@@ -290,6 +290,7 @@ public class FamilyIndexTestingService {
         familyIndex.setFamilyIndexTesting(familyIndexTesting);
         familyIndex.setFamilyIndexTestingUuid(familyIndexTesting.getUuid());
         familyIndex.setIsDateOfBirthEstimated(familyIndexRequestDto.getIsDateOfBirthEstimated());
+        familyIndex.setIsHtsClient("No");
         familyIndex = familyIndexRepository.save(familyIndex);
 
         return familyIndex;
@@ -558,4 +559,12 @@ public class FamilyIndexTestingService {
         return "Family Index Testing updated successfully";
     }
 
+    public void updateIndexClientStatus(String uuid) {
+        if (!uuid.isEmpty()) {
+            FamilyIndex existingFamilyIndex = familyIndexRepository.findByUuidAndArchived(uuid, 0)
+                    .orElseThrow(() -> new EntityNotFoundException(FamilyIndex.class, "uuid", uuid + ""));
+            existingFamilyIndex.setIsHtsClient("Yes");
+            familyIndexRepository.save(existingFamilyIndex);
+        }
+    }
 }

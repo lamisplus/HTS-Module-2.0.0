@@ -38,4 +38,8 @@ public class IndexElicitationDto {
     private String acceptedIns;
     private String source = Source.Web.toString();
     private  String uuid;
+    @Basic
+    private String longitude;
+    @Basic
+    private  String latitude;
 }

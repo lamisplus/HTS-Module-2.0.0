@@ -569,7 +569,6 @@ if (objValues.age !== "") {
 
   let latestForm =  getNextForm("Risk_Stratification", objValues.age, newModality, "unknown")
  
-
     getMenuLogic(objValues);
     props.patientObj.riskStratificationResponseDto = objValues;
     props.patientObj.personResponseDto.dob = objValues.dob;

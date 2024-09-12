@@ -31,7 +31,7 @@ import FamilyIndexHistory from "./NewRegistration/PartnerNotificationServices/Fa
 import ViewFamilyIndexTestingForm from "./NewRegistration/PartnerNotificationServices/ViewFamilyIndexForm";
 import { getPreviousForm } from "../../../utility";
 import { calculate_age } from "../utils";
-
+import PNSHistory from "./NewRegistration/PartnerNotificationServices/PNSHistory";
 const useStyles = makeStyles((theme) => ({
   error: {
     color: "#f85032",
@@ -57,7 +57,9 @@ const UserRegistration = (props) => {
   const [hideOtherMenu, setHideOtherMenu] = useState(true);
   const [row, setRow] = useState({});
   const [showBackButton, setShowBackButton] = useState(false);
-
+  const [indexInfo, setIndexInfo] = useState(
+    JSON.parse(localStorage.getItem("index"))
+  );
   const handleItemClick = (activeItem) => {
     setactiveItem(activeItem);
 
@@ -298,6 +300,209 @@ const UserRegistration = (props) => {
 
    }
   } 
+
+const clearInfo=()=>{
+  setCompleted([])
+  setPatientObj({
+    breastFeeding: "",
+    capturedBy: "",
+    riskStratificationCode: "",
+    cd4: {},
+    clientCode: "",
+    confirmatoryTest: {},
+    dateVisit: "",
+    extra: {},
+    firstTimeVisit: "",
+    hepatitisTesting: {},
+    hivTestResult: "",
+    id: "",
+    indexClient: "",
+    indexClientCode: "",
+    indexElicitation: [
+      {
+        address: "",
+        altPhoneNumber: "",
+        archived: 0,
+        currentlyLiveWithPartner: true,
+        datePartnerCameForTesting: "",
+        dob: "",
+        extra: {},
+        facilityId: 0,
+        firstName: "",
+        hangOutSpots: "",
+        htsClient: {
+          archived: 0,
+          breastFeeding: 0,
+          capturedBy: "",
+          cd4: {},
+          clientCode: "",
+          confirmatoryTest: {},
+          dateVisit: "",
+          extra: {},
+          facilityId: 0,
+          firstTimeVisit: true,
+          hepatitisTesting: {},
+          hivTestResult: "",
+          id: 0,
+          indexClient: true,
+          indexClientCode: "",
+          indexNotificationServicesElicitation: {},
+          knowledgeAssessment: {},
+          numChildren: 0,
+          numWives: 0,
+          others: {},
+          person: {
+            active: "",
+            address: {},
+            archived: 0,
+            contact: {},
+            contactPoint: {},
+            createdDate: "",
+            dateOfBirth: "",
+            dateOfRegistration: "",
+            deceased: true,
+            deceasedDateTime: "",
+            education: {},
+            employmentStatus: {},
+            emrId: "",
+            facilityId: 0,
+            firstName: "string",
+            gender: {},
+            hospitalNumber: "",
+            id: "",
+            identifier: {},
+            isDateOfBirthEstimated: true,
+            lastModifiedDate: "",
+            maritalStatus: {},
+            new: true,
+            ninNumber: "",
+            organization: {},
+            otherName: "",
+            sex: "",
+            surname: "",
+            uuid: "",
+          },
+          personUuid: "",
+          postTestCounselingKnowledgeAssessment: {},
+          pregnant: "",
+          previouslyTested: true,
+          recency: {},
+          referredFrom: "",
+          relationWithIndexClient: "",
+          riskAssessment: {},
+          sexPartnerRiskAssessment: {},
+          stiScreening: {},
+          syphilisTesting: {},
+          targetGroup: 0,
+          tbScreening: {},
+          test1: {},
+          testingSetting: "",
+          tieBreakerTest: {},
+          typeCounseling: "",
+          uuid: "",
+        },
+        htsClientUuid: "",
+        id: "",
+        isDateOfBirthEstimated: true,
+        lastName: "",
+        middleName: "",
+        notificationMethod: "",
+        partnerTestedPositive: "",
+        phoneNumber: "",
+        physicalHurt: "",
+        relationshipToIndexClient: "",
+        sex: "",
+        sexuallyUncomfortable: "",
+        threatenToHurt: "",
+        uuid: "",
+      },
+    ],
+    indexNotificationServicesElicitation: {},
+    knowledgeAssessment: {},
+    numChildren: "",
+    numWives: "",
+    others: {},
+    personId: "",
+    personResponseDto: {
+      active: true,
+
+      address: {
+        address: [
+          {
+            city: "",
+            line: [""],
+            stateId: "",
+            district: "",
+            countryId: 1,
+            postalCode: "",
+            organisationUnitId: 0,
+          },
+        ],
+      },
+      biometricStatus: true,
+      checkInDate: "",
+      contact: {},
+      contactPoint: {
+        contactPoint: [
+          {
+            type: "phone",
+            value: "",
+          },
+        ],
+      },
+      dateOfBirth: "",
+      dateOfRegistration: "",
+      deceased: true,
+      deceasedDateTime: "",
+      education: {},
+      employmentStatus: {},
+      emrId: "",
+      encounterDate: "",
+      facilityId: "",
+      firstName: "",
+      gender: {},
+      id: "",
+      identifier: {},
+      isDateOfBirthEstimated: true,
+      maritalStatus: {},
+      ninNumber: "",
+      organization: {},
+      otherName: "",
+      sex: "",
+      surname: "",
+      visitId: "",
+    },
+    postTestCounselingKnowledgeAssessment: {},
+    pregnant: "",
+    previouslyTested: "",
+    recency: {},
+    referredFrom: "",
+    relationWithIndexClient: "",
+    riskAssessment: {},
+    sexPartnerRiskAssessment: {},
+    stiScreening: {},
+    syphilisTesting: {},
+    targetGroup: "",
+    tbScreening: {},
+    test1: {},
+    testingSetting: "",
+    tieBreakerTest: {},
+    typeCounseling: "",
+    riskStratificationResponseDto: null,
+  })
+  setPatientObjAge(0)
+  setHideOtherMenu(true)
+  setExtra({
+    risk: "",
+    index: "",
+    pre: "",
+    post: "",
+    recency: "",
+    elicitation: "",
+  })
+  setOrganizationInfo({})
+}
+
 
   useEffect(() => {
   
@@ -605,6 +810,7 @@ const UserRegistration = (props) => {
                     setExtra={setExtra}
                     extra={extra}
                     setBasicInfo={setBasicInfo}
+                    indexInfo={indexInfo}
                   />
                 )}
                 {activeItem === "pre-test-counsel" && (
@@ -703,7 +909,7 @@ const UserRegistration = (props) => {
                     nextButton={true}
                     selectedRow={selectedRow}
                     setSelectedRow={setSelectedRow}
-
+                    clearInfo={clearInfo}
                     // row={row}
                     setAction={setAction}
                   />

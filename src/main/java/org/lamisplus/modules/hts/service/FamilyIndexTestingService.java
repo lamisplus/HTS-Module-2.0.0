@@ -16,6 +16,7 @@ import org.lamisplus.modules.hts.repository.FamilyIndexTestingRepository;
 import org.lamisplus.modules.hts.repository.FamilyTestingTrackerRepository;
 import org.lamisplus.modules.hts.repository.HtsClientRepository;
 import org.springframework.beans.BeanUtils;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -538,6 +539,7 @@ public class FamilyIndexTestingService {
                 existingFamilyIndex.setFamilyRelationship(familyIndex.getFamilyRelationship());
                 existingFamilyIndex.setStatusOfContact(familyIndex.getStatusOfContact());
                 existingFamilyIndex.setChildNumber(familyIndex.getChildNumber());
+                existingFamilyIndex.setOtherChildNumber(familyIndex.getOtherChildNumber());
                 existingFamilyIndex.setMotherDead(familyIndex.getMotherDead());
                 existingFamilyIndex.setUAN(familyIndex.getUAN());
                 existingFamilyIndex.setYearMotherDead(familyIndex.getYearMotherDead());
@@ -561,10 +563,39 @@ public class FamilyIndexTestingService {
 
     public void updateIndexClientStatus(String uuid) {
         if (!uuid.isEmpty()) {
-            FamilyIndex existingFamilyIndex = familyIndexRepository.findByUuidAndArchived(uuid, 0)
-                    .orElseThrow(() -> new EntityNotFoundException(FamilyIndex.class, "uuid", uuid + ""));
-            existingFamilyIndex.setIsHtsClient("Yes");
-            familyIndexRepository.save(existingFamilyIndex);
+            Optional<FamilyIndex> existingFamilyIndex = familyIndexRepository.findByUuidAndArchived(uuid, 0);
+            if (existingFamilyIndex.isPresent()) {
+                FamilyIndex familyIndex = existingFamilyIndex.get();
+                familyIndex.setIsHtsClient("Yes");
+                familyIndexRepository.save(familyIndex);
+            }
         }
+    }
+
+    public String getCurrentTreatmentAndDate(String personUuid) {
+
+        String Result = familyIndexRepository.getCurrentHIVByPersonUuid(personUuid);
+        System.out.println(Result);
+        if(Result != null) {
+            return Result;
+        }else{
+
+            return"";
+        }
+
+
+
+    }
+
+    public String getVirallySuppressedByPersonUuid(String personUuid) {
+        String Result =   familyIndexRepository.getVirallySuppressedByPersonUuid(personUuid);
+        if(Result != null) {
+            return Result;
+        }else{
+
+            return"";
+        }
+
+
     }
 }

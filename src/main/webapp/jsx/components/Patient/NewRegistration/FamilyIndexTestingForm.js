@@ -112,6 +112,7 @@ const useStyles = makeStyles((theme) => ({
 const FamilyIndexTestingForm = (props) => {
   const classes = useStyles();
   let history = useHistory();
+    let VL =""
   const [errors, setErrors] = useState({});
   const [ageDisabled2, setAgeDisabled2] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -135,10 +136,12 @@ const FamilyIndexTestingForm = (props) => {
   const [familyIndex, setFamilyIndex] = useState([]);
   const [followUpAppointmentLocation, setFollowUpAppointmentLocation] =
     useState([]);
+  const [childNumber, setChildNumber] = useState([]);
   const [indexVisitAttempt, setIndexVisitAttempt] = useState([]);
   const [isWillingToHaveChildrenTested, setIsWillingToHaveChildrenTested] =
     useState(false);
   const [ageDisabled, setAgeDisabled] = useState(true);
+  const [retrieveFromIdToCode, setRetrieveFromIdToCode] = useState(true);
 
   const [stateInfo, setStateInfo] = useState(
     props?.basicInfo?.personResponseDto?.address?.address[0]?.stateId
@@ -148,6 +151,7 @@ const FamilyIndexTestingForm = (props) => {
   const [permissions, setPermission] = useState(
     localStorage.getItem("permissions")?.split(",")
   );
+
   const [lgaInfo, setLgaInfo] = useState(
     props?.basicInfo?.personResponseDto?.address?.address[0].district
       ? props?.basicInfo?.personResponseDto?.address?.address[0].district
@@ -158,6 +162,7 @@ const FamilyIndexTestingForm = (props) => {
 
   const [familyIndexRequestDto, setFamilyIndexRequestDto] = useState({
     childNumber: "",
+    otherChildNumber: "",
     age: "",
     childDead: "",
     dateOfBirth: "",
@@ -187,6 +192,8 @@ const FamilyIndexTestingForm = (props) => {
 
   const [addIndexTracker, setaAddIndexTracker] = useState(false);
   const [addIndexTracker2, setaAddIndexTracker2] = useState(false);
+  const [disableCurrenTreatment, setDisableCurrenTreatment] = useState(false);
+  const [disableVL, setDisableVL] = useState(false);
 
   const [familyTestingTrackerRequestDTO, setFamilyTestingTrackerRequestDTO] =
     useState({
@@ -223,6 +230,7 @@ const FamilyIndexTestingForm = (props) => {
     familyIndexClient: "",
     familyIndexRequestDto: {
       childNumber: 0,
+      otherChildNumber: 0,
       familyRelationship: "",
       motherDead: "",
       yearMotherDead: "",
@@ -254,8 +262,9 @@ const FamilyIndexTestingForm = (props) => {
     },
 
     htsClientId: props && props.patientObj ? props.patientObj?.id : "",
-    htsClientUuid:
-      props?.patientObj?.htsClientUUid? props?.patientObj?.htsClientUUid : props?.basicInfo?.htsClientUUid,
+    htsClientUuid: props?.patientObj?.htsClientUUid
+      ? props?.patientObj?.htsClientUUid
+      : props?.basicInfo?.htsClientUUid,
     indexClientId: props?.patientObj?.clientCode,
     isClientCurrentlyOnHivTreatment: "",
     lga: "",
@@ -270,16 +279,19 @@ const FamilyIndexTestingForm = (props) => {
     setting: props.patientObj.testingSetting,
     // chnage position
     visitDate: "",
-
     sex: props?.patientObj?.personResponseDto?.gender?.id,
     state: "",
-    virallyUnSuppressed: "",
     willingToHaveChildrenTestedElseWhere: "",
 
     reasonForIndexClientDateHivConfirmedNotSelected: "",
     address: props?.patientObj?.personResponseDto?.address?.address[0].city,
     // recencyTesting: "",
+    virallyUnSuppressed: "",
+
   });
+
+
+
 
   const [lgas, setLGAs] = useState([]);
   const [facilities, setFacilities1] = useState([]);
@@ -287,9 +299,7 @@ const FamilyIndexTestingForm = (props) => {
   const [selectedFacility, setSelectedFacility] = useState({});
   const [selectedLga, setSelectedLga] = useState({});
   const [showHTSDate, setShowHTSDate] = useState(false);
-
-  
-
+  const [showOther, setShowOther] = useState(false);
 
   const loadStates = () => {
     axios
@@ -336,12 +346,10 @@ const FamilyIndexTestingForm = (props) => {
       props.setCompleted([...props.completed, present]);
     }
   };
-  
 
- 
   //Date of Birth and Age handle
   const handleDobChange2 = (e) => {
-    setErrors({...errors, [e.target.value]:  ""})
+    setErrors({ ...errors, [e.target.value]: "" });
     if (e.target.value) {
       const today = new Date();
       const birthDate = new Date(e.target.value);
@@ -354,7 +362,7 @@ const FamilyIndexTestingForm = (props) => {
       //   age_now--;
       // }
       familyIndexRequestDto.age = age_now;
-      familyTestingTrackerRequestDTO.trackerAge=age_now
+      familyTestingTrackerRequestDTO.trackerAge = age_now;
 
       //setBasicInfo({...basicInfo, age: age_now});
     } else {
@@ -387,6 +395,28 @@ const FamilyIndexTestingForm = (props) => {
       });
   };
 
+  const getIntPosition = (ex) => {
+    let code =[]
+
+ let main =  childNumber.map((each,index )=>{
+if(each.code !==  "CHILD_NUMBER_OTHERS"){
+  code.push({ id: each.id,
+    value : index+ 1,})
+}
+
+    })
+
+  if(ex){
+      let ans =  code.filter((each)=>{
+        return  each.id === parseInt(ex)
+        })
+
+  let  result = ans.length > 0 ? ans[0].value: ""
+   return  result
+  }else{
+    return ""
+  }
+  };
   const TargetGroupSetup = () => {
     axios
       .get(`${baseUrl}account`, {
@@ -468,6 +498,23 @@ const FamilyIndexTestingForm = (props) => {
       .catch((error) => {});
   };
 
+  const GET_CHILD_NUMBER = () => {
+    axios
+      .get(`${baseUrl}application-codesets/v2/CHILD_NUMBER`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        setChildNumber(response.data);
+
+        let ans = response.data.filter((each) => {
+          return each.code === "CHILD_NUMBER_OTHERS";
+        });
+
+        setRetrieveFromIdToCode(ans[0]?.id);
+      })
+      .catch((error) => {});
+  };
+
   // GET
   const INDEX_VISIT_ATTEMPTS = () => {
     axios
@@ -485,8 +532,6 @@ const FamilyIndexTestingForm = (props) => {
     const indexClientId = Math.floor(1000 + Math.random() * 9000);
   };
 
-
-
   const loadGenders = useCallback(async () => {
     getAllGenders()
       .then((response) => {
@@ -496,7 +541,7 @@ const FamilyIndexTestingForm = (props) => {
   }, []);
 
   useEffect(() => {
-    console.log(props.patientObj)
+
     loadGenders();
     loadStates();
     loadFamilyIndexSetting();
@@ -508,6 +553,9 @@ const FamilyIndexTestingForm = (props) => {
     FAMILY_INDEX();
     FOLLOW_UP_APPOINTMENT_LOCATION();
     INDEX_VISIT_ATTEMPTS();
+    GET_CHILD_NUMBER();
+    getVL();
+    getCurrentTreatment();
 
     if (
       props?.basicInfo?.personResponseDto?.address?.address[0]?.stateId ||
@@ -520,8 +568,6 @@ const FamilyIndexTestingForm = (props) => {
       );
     }
 
-
-   
     if (props.organizationInfo) {
       TargetGroupSetup();
     }
@@ -568,36 +614,81 @@ const FamilyIndexTestingForm = (props) => {
     // setSelectedLga(e.parentOrganisationUnitName);
   };
 
+  const convertIdToCode = (id) => {
+    if (id) {
+      let ans = childNumber.filter((each) => {
+        return each.code === "CHILD_NUMBER_OTHERS";
+      });
+
+      if (ans[0].id === parseInt(id)) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  };
+
   // handlefamilyIndexRequestDto
   const handlefamilyIndexRequestDto = (e) => {
-    setErrors({...errors,[e.target.name] : ""})
+    setErrors({ ...errors, [e.target.name]: "" });
     setErrorFamilyIndexDTO({ ...errorFamilyIndexDTO, [e.target.name]: "" });
     setaAddIndexTracker(false);
     // console.log(e);
+
     if (e.target.name === "childNumber") {
+      setErrors({ ...errors, otherChildNumber: "" });
+
+      let res = convertIdToCode(e.target.value);
+      setFamilyIndexRequestDto({
+        ...familyIndexRequestDto,
+        [e.target.name]: e.target.value,
+        otherChildNumber: "",
+      });     
+      
+      if (res) {
+        setShowOther(true);
+      } else {
+      let deductedValue =   getIntPosition(e.target.value)
+             //set position to child number
+             console.log("deductedValue", deductedValue)
+      setFamilyTestingTrackerRequestDTO({
+        ...familyTestingTrackerRequestDTO,
+        positionOfChildEnumerated: deductedValue,
+      });
+        setShowOther(false);
+      }
+
+  
+
+ 
+    } else if (e.target.name === "otherChildNumber") {
       setFamilyIndexRequestDto({
         ...familyIndexRequestDto,
         [e.target.name]: e.target.value,
       });
-      console.log(e.target.value);
-
-      //set position to child number
       setFamilyTestingTrackerRequestDTO({
         ...familyTestingTrackerRequestDTO,
         positionOfChildEnumerated: e.target.value,
       });
-    } else if(e.target.name === "statusOfContact"){
+    } else if (e.target.name === "statusOfContact") {
       setFamilyIndexRequestDto({
         ...familyIndexRequestDto,
         [e.target.name]: e.target.value,
       });
 
-          if(e.target.value ===  "FAMILY_INDEX_HIV_STATUS_CURRENT_ON_ART" || e.target.value ===  "FAMILY_INDEX_HIV_STATUS_HIV_POSITIVE" || e.target.value ===  "FAMILY_INDEX_HIV_STATUS_HIV_POSITIVE" || e.target.value ===  "FAMILY_INDEX_HIV_STATUS_HIV_POSITIVE" || e.target.value ===  "FAMILY_INDEX_HIV_STATUS_REFERRED_ESCORTED_FOR_ART_INITIATION"){
-    setShowHTSDate(true)
-          
-          }
-
-    }else {
+      if (
+        e.target.value === "FAMILY_INDEX_HIV_STATUS_CURRENT_ON_ART" ||
+        e.target.value === "FAMILY_INDEX_HIV_STATUS_HIV_POSITIVE" ||
+        e.target.value === "FAMILY_INDEX_HIV_STATUS_HIV_POSITIVE" ||
+        e.target.value === "FAMILY_INDEX_HIV_STATUS_HIV_POSITIVE" ||
+        e.target.value ===
+          "FAMILY_INDEX_HIV_STATUS_REFERRED_ESCORTED_FOR_ART_INITIATION"
+      ) {
+        setShowHTSDate(true);
+      }
+    } else {
       setFamilyIndexRequestDto({
         ...familyIndexRequestDto,
         [e.target.name]: e.target.value,
@@ -623,16 +714,12 @@ const FamilyIndexTestingForm = (props) => {
         });
       }
     } else if (e.target.name === "trackerAge") {
-
-      
       if (e.target.value > -1) {
         setFamilyTestingTrackerRequestDTO({
           ...familyTestingTrackerRequestDTO,
           [e.target.name]: e.target.value,
         });
       }
-
-      
     } else {
       setFamilyTestingTrackerRequestDTO({
         ...familyTestingTrackerRequestDTO,
@@ -676,14 +763,12 @@ const FamilyIndexTestingForm = (props) => {
     }
     // setSaving(true);
     if (permissions.includes("Nigeria_PNS_Form")) {
-          handleItemClick("pns", "fit");
-          toggle();
-
-    }else if (permissions.includes("Referral_Form")) {
-            handleItemClick("pns", "client-referral");
-            toggle();
-
-          }
+      handleItemClick("pns", "fit");
+      toggle();
+    } else if (permissions.includes("Referral_Form")) {
+      handleItemClick("pns", "client-referral");
+      toggle();
+    }
   };
 
   //fetch province
@@ -968,59 +1053,114 @@ const FamilyIndexTestingForm = (props) => {
       // if (e.target.value !== "" && e.target.value >= 85) {
       //   toggle();
       // }
-        const currentDate = new Date();
-        currentDate.setDate(15);
-        currentDate.setMonth(5);
-        const estDob = moment(currentDate.toISOString());
-        const dobNew = estDob.add(e.target.value * -1, "years");
-        setPayload({
-          ...payload,
-          dateOfBirth: moment(dobNew).format("YYYY-MM-DD"),
-        });
-        payload.dateOfBirth = moment(dobNew).format("YYYY-MM-DD");
-      
+      const currentDate = new Date();
+      currentDate.setDate(15);
+      currentDate.setMonth(5);
+      const estDob = moment(currentDate.toISOString());
+      const dobNew = estDob.add(e.target.value * -1, "years");
+      setPayload({
+        ...payload,
+        dateOfBirth: moment(dobNew).format("YYYY-MM-DD"),
+      });
+      payload.dateOfBirth = moment(dobNew).format("YYYY-MM-DD");
+
       setPayload({ ...payload, age: e.target.value });
     }
   };
 
+  const getCurrentTreatment = async() => {
+   await  axios
+      .get(
+        `${baseUrl}hts-family-index-testing/getCurrentTreatment?personUuid=${props.patientObj.personResponseDto.uuid}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((response) => {
+        console.log(response);
+        if (response.data) {
+          setPayload({
+            ...payload,
+            isClientCurrentlyOnHivTreatment: "Yes",
+            dateClientEnrolledOnTreatment: response.data,
+            virallyUnSuppressed:VL, 
+          });
+          setDisableCurrenTreatment(true);
+
+        }
+      })
+      .catch((e) => {
+        // console.log("Fetch Facilities error" + e);
+      });
+  };
+
+  const getVL = async() => {
+  await  axios
+      .get(
+        `${baseUrl}hts-family-index-testing/getViralLoad?personUuid=${props.patientObj.personResponseDto.uuid}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((response) => {
+        if (response.data) {
+
+          if (parseInt(response.data) >= 0) {
+            if (parseInt(response.data) > 1000) {
+              setPayload({ ...payload, virallyUnSuppressed: "Yes" });
+              setDisableVL(true);
+              VL= "Yes"
+            } else if (parseInt(response.data) < 1000) {
+              setPayload({ ...payload, virallyUnSuppressed: "No",  });
+              setDisableVL(true);
+              VL=  "No"
 
 
+            }
+          }
+        }
+      })
+      .catch((e) => {
+        // console.log("Fetch Facilities error" + e);
+      });
+  };
 
 
+  // NU-23-0064
 
   const handleAgeChange2 = (e) => {
-
     e.preventDefault();
 
-    console.log(e)
-    console.log(e.target.value)
-
-setErrors({...errors, [e.target.name]: ""})
+    setErrors({ ...errors, [e.target.name]: "" });
     if (!ageDisabled2) {
       // if (e.target.value !== "" && e.target.value >= 85) {
       //   toggle();
-    
+
       // }
-        const currentDate = new Date();
-        currentDate.setDate(15);
-        currentDate.setMonth(5);
-        const estDob = moment(currentDate.toISOString());
-        const dobNew = estDob.add(e.target.value * -1, "years");
-        setFamilyIndexRequestDto({
-          ...familyIndexRequestDto,
-          dateOfBirth: moment(dobNew).format("YYYY-MM-DD"),
-        });
-        familyIndexRequestDto.dateOfBirth = moment(dobNew).format("YYYY-MM-DD");
+      const currentDate = new Date();
+      currentDate.setDate(15);
+      currentDate.setMonth(5);
+      const estDob = moment(currentDate.toISOString());
+      const dobNew = estDob.add(e.target.value * -1, "years");
+      setFamilyIndexRequestDto({
+        ...familyIndexRequestDto,
+        dateOfBirth: moment(dobNew).format("YYYY-MM-DD"),
+      });
+      familyIndexRequestDto.dateOfBirth = moment(dobNew).format("YYYY-MM-DD");
 
-
-  
       setFamilyIndexRequestDto({
         ...familyIndexRequestDto,
         age: e.target.value,
       });
-      setFamilyTestingTrackerRequestDTO({...familyTestingTrackerRequestDTO, trackerAge:e.target.value})
+      setFamilyTestingTrackerRequestDTO({
+        ...familyTestingTrackerRequestDTO,
+        trackerAge: e.target.value,
+      });
     }
-
   };
 
   //End of Date of Birth and Age handling
@@ -1030,20 +1170,21 @@ setErrors({...errors, [e.target.name]: ""})
       ? ""
       : "This field is required.";
 
-
-      temp.familyRelationship = familyIndexRequestDto.familyRelationship
+    temp.familyRelationship = familyIndexRequestDto.familyRelationship
       ? ""
       : "This field is required.";
 
-      temp.dateOfBirth = familyIndexRequestDto.dateOfBirth
+    temp.dateOfBirth = familyIndexRequestDto.dateOfBirth
       ? ""
       : "This field is required.";
 
-
-      temp.statusOfContact = familyIndexRequestDto.statusOfContact
+    temp.statusOfContact = familyIndexRequestDto.statusOfContact
       ? ""
       : "This field is required.";
 
+    //  familyIndexRequestDto.childNumber == retrieveFromIdToCode && ( temp.otherChildNumber= familyIndexRequestDto.otherChildNumber
+    //       ? ""
+    //       : "This field is required.")
 
     setErrors({ ...temp });
     return Object.values(temp).every((x) => x == "");
@@ -1103,11 +1244,10 @@ setErrors({...errors, [e.target.name]: ""})
     payload.state = stateInfo;
     payload.lga = lgaInfo;
 
-    
-    if(validate()){
-  postPayload(payload);
-
-}  };
+    if (validate()) {
+      postPayload(payload);
+    }
+  };
 
   const checkNumberLimit = (e) => {
     const limit = 11;
@@ -1134,10 +1274,8 @@ setErrors({...errors, [e.target.name]: ""})
           <h2 style={{ color: "#000" }}> Family Index Testing Form</h2>
           <br />
 
-         
           <form>
             <div className="row">
-           
               <div
                 className="form-group  col-md-12 text-center pt-2 mb-4"
                 style={{
@@ -1313,8 +1451,10 @@ setErrors({...errors, [e.target.name]: ""})
                       Date <span style={{ color: "red" }}> *</span>{" "}
                     </Label>
                     <Input
-                      type="date"                       onKeyPress={(e)=>{e.preventDefault()}}
-
+                      type="date"
+                      onKeyPress={(e) => {
+                        e.preventDefault();
+                      }}
                       name="visitDate"
                       id="visitDate"
                       value={payload.visitDate}
@@ -1394,7 +1534,9 @@ setErrors({...errors, [e.target.name]: ""})
                         ))}
                     </select>
                     {errors.familyIndexClient !== "" ? (
-                      <span className={classes.error}>{errors.familyIndexClient}</span>
+                      <span className={classes.error}>
+                        {errors.familyIndexClient}
+                      </span>
                     ) : (
                       ""
                     )}
@@ -1544,8 +1686,10 @@ setErrors({...errors, [e.target.name]: ""})
                     </Label>
                     <input
                       className="form-control"
-                      type="date"                       onKeyPress={(e)=>{e.preventDefault()}}
-
+                      type="date"
+                      onKeyPress={(e) => {
+                        e.preventDefault();
+                      }}
                       name="dateOfBirth"
                       id="dateOfBirth"
                       min="1929-12-31"
@@ -1707,8 +1851,10 @@ setErrors({...errors, [e.target.name]: ""})
                       <span style={{ color: "red" }}> *</span>{" "}
                     </Label>
                     <Input
-                      type="date"                       onKeyPress={(e)=>{e.preventDefault()}}
-
+                      type="date"
+                      onKeyPress={(e) => {
+                        e.preventDefault();
+                      }}
                       name="dateIndexClientConfirmedHivPositiveTestResult"
                       id="dateIndexClientConfirmedHivPositiveTestResult"
                       value={
@@ -1850,6 +1996,7 @@ setErrors({...errors, [e.target.name]: ""})
                         border: "1px solid #014D88",
                         borderRadius: "0.2rem",
                       }}
+                      disabled={disableCurrenTreatment}
                     >
                       <option value="">Select</option>
                       <option value="Yes">Yes</option>
@@ -1867,8 +2014,10 @@ setErrors({...errors, [e.target.name]: ""})
                           <span style={{ color: "red" }}> *</span>{" "}
                         </Label>
                         <Input
-                          type="date"                       onKeyPress={(e)=>{e.preventDefault()}}
-
+                          type="date"
+                          onKeyPress={(e) => {
+                            e.preventDefault();
+                          }}
                           name="dateClientEnrolledOnTreatment"
                           id="dateClientEnrolledOnTreatment"
                           value={payload.dateClientEnrolledOnTreatment}
@@ -1881,7 +2030,7 @@ setErrors({...errors, [e.target.name]: ""})
                             border: "1px solid #014D88",
                             borderRadius: "0.25rem",
                           }}
-                          //   disabledg
+                          disabled={disableCurrenTreatment}
                         />
                         {errors.treatmentDate !== "" ? (
                           <span className={classes.error}>
@@ -1908,6 +2057,7 @@ setErrors({...errors, [e.target.name]: ""})
                             border: "1px solid #014D88",
                             borderRadius: "0.2rem",
                           }}
+                          disabled={disableVL}
                         >
                           <option value="">Select</option>
                           <option value="Yes">Yes</option>
@@ -1956,12 +2106,15 @@ setErrors({...errors, [e.target.name]: ""})
             <div className="row">
               <div className="form-group col-md-4">
                 <FormGroup>
-                  <Label for="familyRelationship">Family Relationship                       
-                   <span style={{ color: "red" }}> *</span>{" "}
+                  <Label for="familyRelationship">
+                    Family Relationship
+                    <span style={{ color: "red" }}> *</span>{" "}
                   </Label>
                   <select
                     className="form-control"
-                    onKeyPress={(e)=>{e.preventDefault()}}
+                    onKeyPress={(e) => {
+                      e.preventDefault();
+                    }}
                     id="familyRelationship"
                     name="familyRelationship"
                     onChange={handlefamilyIndexRequestDto}
@@ -2019,12 +2172,15 @@ setErrors({...errors, [e.target.name]: ""})
               </div>
               <div className="form-group mb-3 col-md-4">
                 <FormGroup>
-                  <Label>Date                    <span style={{ color: "red" }}> *</span>{" "}
+                  <Label>
+                    Date <span style={{ color: "red" }}> *</span>{" "}
                   </Label>
                   <input
                     className="form-control"
-                    type="date"                       onKeyPress={(e)=>{e.preventDefault()}}
-
+                    type="date"
+                    onKeyPress={(e) => {
+                      e.preventDefault();
+                    }}
                     name="dateOfBirth"
                     id="dateOfBirth"
                     // min={familyIndexRequestDto.dateVisit}
@@ -2037,10 +2193,8 @@ setErrors({...errors, [e.target.name]: ""})
                     }}
                   />
                   {errors.dateOfBirth && (
-                      <span className={classes.error}>
-                        {errors.dateOfBirth}
-                      </span>
-                    )}
+                    <span className={classes.error}>{errors.dateOfBirth}</span>
+                  )}
                 </FormGroup>
               </div>
               <div className="form-group mb-3 col-md-4">
@@ -2056,7 +2210,7 @@ setErrors({...errors, [e.target.name]: ""})
                     // onKeyUp={handleSubmitForm}
                     //  onKeyDown={testing}
                     // onKeyPress={testing}
-                  onChange={handleAgeChange2}
+                    onChange={handleAgeChange2}
                     style={{
                       border: "1px solid #014D88",
                       borderRadius: "0.2rem",
@@ -2078,19 +2232,47 @@ setErrors({...errors, [e.target.name]: ""})
                       value={familyIndexRequestDto.childNumber}
                     >
                       <option value="">Select</option>
-                      <option value="1">1st Child</option>
-                      <option value="2">2nd Child</option>
-                      <option value="3">3rd Child</option>
-                      <option value="4">4th Child</option>
-                      <option value="5">5th Child</option>
-                      <option value="6">6th Child</option>
-                      <option value="7">7th Child</option>
+                      {childNumber.map((each) => (
+                        <option key={each.id} value={each.id}>
+                          {each.display}
+                        </option>
+                      ))}
+
                       {/* <option value="others">Others</option> */}
                     </select>
                     {errorFamilyIndexDTO.childNumber && (
                       <span className={classes.error}>
                         {errorFamilyIndexDTO.childNumber}
                       </span>
+                    )}
+                  </FormGroup>
+                </div>
+              )}
+
+              {showOther && (
+                <div className="form-group  col-md-4">
+                  <FormGroup>
+                    <Label>
+                      Others
+                      <span style={{ color: "red" }}> *</span>
+                    </Label>
+                    <Input
+                      type="number"
+                      name="otherChildNumber"
+                      id="otherChildNumber"
+                      onChange={handlefamilyIndexRequestDto}
+                      value={familyIndexRequestDto.otherChildNumber}
+                      style={{
+                        border: "1px solid #014D88",
+                        borderRadius: "0.2rem",
+                      }}
+                    />
+                    {errors.otherChildNumber !== "" ? (
+                      <span className={classes.error}>
+                        {errors.otherChildNumber}
+                      </span>
+                    ) : (
+                      ""
                     )}
                   </FormGroup>
                 </div>
@@ -2166,7 +2348,8 @@ setErrors({...errors, [e.target.name]: ""})
 
               <div className="form-group col-md-4">
                 <FormGroup>
-                  <Label for="statusOfContact">Contact HIV Status                    <span style={{ color: "red" }}> *</span>{" "}
+                  <Label for="statusOfContact">
+                    Contact HIV Status <span style={{ color: "red" }}> *</span>{" "}
                   </Label>
                   <select
                     className="form-control"
@@ -2189,31 +2372,35 @@ setErrors({...errors, [e.target.name]: ""})
                   )}
                 </FormGroup>
               </div>
-            { showHTSDate && <div className="form-group col-md-4">
-                <FormGroup>
-                  <Label for="DateofHTS">Date of HTS</Label>
-                  <Input
-                    type="date"                       onKeyPress={(e)=>{e.preventDefault()}}
-
-                    name="dateOfHts"
-                    id="dateOfHts"
-                    value={familyIndexRequestDto.dateOfHts}
-                    onChange={handlefamilyIndexRequestDto}
-                    min="1929-12-31"
-                    max={moment(new Date()).format("YYYY-MM-DD")}
-                    style={{
-                      border: "1px solid #014D88",
-                      borderRadius: "0.25rem",
-                    }}
-                    // disabled
-                  />
-                  {errorFamilyIndexDTO.familyRelationship && (
-                    <span className={classes.error}>
-                      {errorFamilyIndexDTO.familyRelationship}
-                    </span>
-                  )}
-                </FormGroup>
-              </div>}
+              {showHTSDate && (
+                <div className="form-group col-md-4">
+                  <FormGroup>
+                    <Label for="DateofHTS">Date of HTS</Label>
+                    <Input
+                      type="date"
+                      onKeyPress={(e) => {
+                        e.preventDefault();
+                      }}
+                      name="dateOfHts"
+                      id="dateOfHts"
+                      value={familyIndexRequestDto.dateOfHts}
+                      onChange={handlefamilyIndexRequestDto}
+                      min="1929-12-31"
+                      max={moment(new Date()).format("YYYY-MM-DD")}
+                      style={{
+                        border: "1px solid #014D88",
+                        borderRadius: "0.25rem",
+                      }}
+                      // disabled
+                    />
+                    {errorFamilyIndexDTO.familyRelationship && (
+                      <span className={classes.error}>
+                        {errorFamilyIndexDTO.familyRelationship}
+                      </span>
+                    )}
+                  </FormGroup>
+                </div>
+              )}
 
               {familyIndexRequestDto.statusOfContact &&
                 familyIndexRequestDto.statusOfContact ===
@@ -2273,8 +2460,10 @@ setErrors({...errors, [e.target.name]: ""})
                     <input
                       className="form-control"
                       id="yearMotherDied"
-                      type="date"                       onKeyPress={(e)=>{e.preventDefault()}}
-
+                      type="date"
+                      onKeyPress={(e) => {
+                        e.preventDefault();
+                      }}
                       min="1929-12-31"
                       max={moment(new Date()).format("YYYY-MM-DD")}
                       name="yearMotherDead"
@@ -2297,8 +2486,10 @@ setErrors({...errors, [e.target.name]: ""})
                     <input
                       className="form-control"
                       id="yearMotherDied"
-                      type="date"                       onKeyPress={(e)=>{e.preventDefault()}}
-
+                      type="date"
+                      onKeyPress={(e) => {
+                        e.preventDefault();
+                      }}
                       min="1929-12-31"
                       max={moment(new Date()).format("YYYY-MM-DD")}
                       name="yearChildDead"
@@ -2458,11 +2649,8 @@ setErrors({...errors, [e.target.name]: ""})
                         border: "1px solid #014D88",
                         borderRadius: "0.2rem",
                       }}
-                      disabled={
-                     true
-                      }
+                      disabled={true}
                     />
-
                   </FormGroup>
                 </div>
                 <div className="form-group col-md-4">
@@ -2495,8 +2683,10 @@ setErrors({...errors, [e.target.name]: ""})
                       {/* <span style={{ color: "red" }}> *</span>{" "} */}
                     </Label>
                     <Input
-                      type="date"                       onKeyPress={(e)=>{e.preventDefault()}}
-
+                      type="date"
+                      onKeyPress={(e) => {
+                        e.preventDefault();
+                      }}
                       name="scheduleVisitDate"
                       id="scheduleVisitDate"
                       value={familyTestingTrackerRequestDTO?.scheduleVisitDate}
@@ -2522,8 +2712,10 @@ setErrors({...errors, [e.target.name]: ""})
                   <FormGroup>
                     <Label for="">Date visited</Label>
                     <Input
-                      type="date"                       onKeyPress={(e)=>{e.preventDefault()}}
-
+                      type="date"
+                      onKeyPress={(e) => {
+                        e.preventDefault();
+                      }}
                       name="dateVisit"
                       id="dateVisit"
                       value={familyTestingTrackerRequestDTO?.dateVisit}
@@ -2597,8 +2789,10 @@ setErrors({...errors, [e.target.name]: ""})
                       <FormGroup>
                         <Label for="">Date Tested</Label>
                         <Input
-                          type="date"                       onKeyPress={(e)=>{e.preventDefault()}}
-
+                          type="date"
+                          onKeyPress={(e) => {
+                            e.preventDefault();
+                          }}
                           name="dateTested"
                           id="dateTested"
                           value={familyTestingTrackerRequestDTO?.dateTested}
@@ -2638,23 +2832,21 @@ setErrors({...errors, [e.target.name]: ""})
                           }}
                         >
                           <option value="">Select</option>
-                          <option value="Positive">
-                            Tested Positive
-                          </option>
-                          <option value="Negative">
-                            Tested Negative
-                          </option>
+                          <option value="Positive">Tested Positive</option>
+                          <option value="Negative">Tested Negative</option>
                         </select>
                       </FormGroup>
                     </div>
                   )}
-                           {familyTestingTrackerRequestDTO?.knownHivPositive === "Yes" && (
+                {familyTestingTrackerRequestDTO?.knownHivPositive === "Yes" && (
                   <div className="form-group mb-3 col-md-4">
                     <FormGroup>
                       <Label for="">Date Enrolled On ART</Label>
                       <Input
-                        type="date"                       onKeyPress={(e)=>{e.preventDefault()}}
-
+                        type="date"
+                        onKeyPress={(e) => {
+                          e.preventDefault();
+                        }}
                         name="dateEnrolledOnArt"
                         id="dateEnrolledOnArt"
                         value={
@@ -2684,8 +2876,10 @@ setErrors({...errors, [e.target.name]: ""})
                     <FormGroup>
                       <Label for="">Date Enrolled In Ovc</Label>
                       <Input
-                        type="date"                       onKeyPress={(e)=>{e.preventDefault()}}
-
+                        type="date"
+                        onKeyPress={(e) => {
+                          e.preventDefault();
+                        }}
                         name="dateEnrolledInOVC"
                         id="dateEnrolledInOVC"
                         value={
@@ -2710,7 +2904,7 @@ setErrors({...errors, [e.target.name]: ""})
                     </FormGroup>
                   </div>
                 )}
-       
+
                 {/* {addIndexTracker2 && (
                   <div className="form-group mb-3 col-md-12">
                     <p style={{ color: "red" }}>
@@ -2797,7 +2991,6 @@ setErrors({...errors, [e.target.name]: ""})
             </div>
           </form>
         </CardBody>
-   
       </Card>
       <Modal
         show={open}

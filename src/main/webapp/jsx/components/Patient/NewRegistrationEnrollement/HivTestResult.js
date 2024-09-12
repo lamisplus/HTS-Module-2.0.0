@@ -564,7 +564,7 @@ const HivTestResult = (props) => {
     
     //if confirmatory = "non reactive"or "No", Tie breaker should be compulsory 
     confirmatoryTest.result === "Yes"  && initialTest12.result2  === "Yes" && (temp.confirmatoryTest2Date2 = confirmatoryTest2.date2? "" : "This field is required.")
-    confirmatoryTest.result === "Yes"  && initialTest12.result2   === "Yes" && (temp.confirmatoryTestResult2  = confirmatoryTest2.Result2? "" : "This field is required.")
+    confirmatoryTest.result === "Yes"  && initialTest12.result2   === "Yes" && (temp.confirmatoryTestResult2  = confirmatoryTest2.result2? "" : "This field is required.")
 
 
         

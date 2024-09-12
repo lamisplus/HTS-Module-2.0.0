@@ -162,7 +162,30 @@ const FamilyIndexHistory = (props) => {
         // console.log("Fetch Facilities error" + e);
       });
   };
+  const enrollEllicitedPatient = (row, actionType) => {
+    console.log(row);
+    let obj = {
+      uuid: row.uuid,
+      type: "family",
+      clientCode: props?.patientObj?.clientCode,
+    };
+    localStorage.setItem("index", JSON.stringify(obj));
 
+
+
+    if(history.location.pathname === "/register-patient"){
+
+      props.clearInfo()
+ 
+      props.handleItemClick("risk")
+ 
+    }else{
+      history.push("/register-patient");
+    }
+
+
+
+  };
   useEffect(() => {
     getListoFFamilyIndexInfo();
   }, [props.patientObj]);
@@ -175,6 +198,9 @@ const FamilyIndexHistory = (props) => {
     props.setSelectedRow(row);
     props.setAction(actionType);
   };
+
+
+
 
   const LoadModal = (row) => {
     toggle();
@@ -256,31 +282,47 @@ const FamilyIndexHistory = (props) => {
                 <Menu.Menu position="right">
                   <Menu.Item>
                     <div
-                    style={{ backgroundColor: "rgb(153,46,98)", color: "white", borderRadius:"5px", width: "100px" }}
-                    primary
-                   className="px-3 py-2"
-                  >
-                    <Dropdown item text="Action">
-                      <Dropdown.Menu style={{ marginTop: "10px" }}>
-                        <Dropdown.Item
-                          onClick={() => LoadViewPage(row, "view")}
-                        >
-                          {" "}
-                          <Icon name="eye" />
-                          View
-                        </Dropdown.Item>
-                        <Dropdown.Item
-                          onClick={() => LoadViewPage(row, "update")}
-                        >
-                          <Icon name="edit" />
-                          Edit
-                        </Dropdown.Item>
-                        <Dropdown.Item onClick={() => LoadModal(row)}>
-                          <Icon name="delete" />
-                          Delete
-                        </Dropdown.Item>
-                      </Dropdown.Menu>
-                    </Dropdown>
+                      style={{
+                        backgroundColor: "rgb(153,46,98)",
+                        color: "white",
+                        borderRadius: "5px",
+                        width: "100px",
+                      }}
+                      primary
+                      className="px-3 py-2"
+                    >
+                      <Dropdown item text="Action">
+                        <Dropdown.Menu style={{ marginTop: "10px" }}>
+                        {row?.isHtsClient === "No"&&  
+                        <>
+                        <Dropdown.Item onClick={() =>
+                              enrollEllicitedPatient(row, "enroll")
+                            }>       
+                               <Icon name="save" />
+  
+                              Enroll
+                          </Dropdown.Item>
+                          
+                          </>}
+                          <Dropdown.Item
+                            onClick={() => LoadViewPage(row, "view")}
+                          >
+                            {" "}
+                            <Icon name="eye" />
+                            View
+                          </Dropdown.Item>
+                          <Dropdown.Item
+                            onClick={() => LoadViewPage(row, "update")}
+                          >
+                            <Icon name="edit" />
+                            Edit
+                          </Dropdown.Item>
+                          <Dropdown.Item onClick={() => LoadModal(row)}>
+                            <Icon name="delete" />
+                            Delete
+                          </Dropdown.Item>
+                        </Dropdown.Menu>
+                      </Dropdown>
                     </div>
                   </Menu.Item>
                 </Menu.Menu>

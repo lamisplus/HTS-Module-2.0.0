@@ -14,7 +14,7 @@ import HIVSTPatient from "./Patient/HIVST/HIVSTPatient";
 import CheckedInPatients from "./Patient/CheckedInPatients";
 import { getListOfPermission } from "../../utility";
 import { getAcount } from "../../utility";
-
+import HTSml from "./Patient/HTSML";
 const divStyle = {
   borderRadius: "2px",
   fontSize: 14,
@@ -83,6 +83,12 @@ const Home = () => {
     getPermissions();
     const permissions = localStorage.getItem("permissions")?.split(",");
     console.log("perms", permissions);
+    let obj = {
+      uuid: "",
+      type: "",
+      clientCode: "",
+    };
+    localStorage.setItem("index", JSON.stringify(obj));
   }, []);
 
   return (
@@ -147,6 +153,10 @@ const Home = () => {
                   <Tab eventKey="hivst" title="HIVST Patients">
                     <HIVSTPatient />
                   </Tab>
+{/* 
+                  <Tab eventKey="hts-ml" title="HTS ML">
+                    <HTSml />
+                  </Tab> */}
                 </Tabs>
               </div>
             </Card.Body>

@@ -780,6 +780,8 @@ console.log(temp)
   const handleSubmit = (e) => {
     e.preventDefault();
 
+
+    //GET NEXT FORM
     let latestForm = getNextForm(
       "Request_and_Result_Form",
       objValues.age,
@@ -787,10 +789,9 @@ console.log(temp)
       "unknown"
     );
 
-    // if (finalResult === "") {
-    //   toast.error("Final result is required for submission.");
-    //   return;
-    // }
+
+        //SUBMIT FORM
+
     if (validate()) {
    
 

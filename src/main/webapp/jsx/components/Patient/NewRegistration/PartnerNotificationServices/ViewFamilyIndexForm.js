@@ -186,6 +186,8 @@ const ViewFamilyIndexTestingForm = (props) => {
     middleName: props?.patientObj?.personResponseDto?.otherName,
     lastName: props?.patientObj?.personResponseDto?.surname,
   });
+  const [childNumber, setChildNumber] = useState([]);
+  const [showOther, setShowOther] = useState(false);
 
   const [arrayFamilyIndexRequestDto, setArrayFamilyIndexRequestDto] = useState(
     []
@@ -300,7 +302,9 @@ const ViewFamilyIndexTestingForm = (props) => {
   const [selectedState, setSelectedState] = useState({});
   const [selectedFacility, setSelectedFacility] = useState({});
   const [selectedLga, setSelectedLga] = useState({});
-
+  const [retrieveFromIdToCode, setRetrieveFromIdToCode] = useState(true);
+  
+  
   const loadStates = () => {
     axios
       .get(`${baseUrl}organisation-units/parent-organisation-units/1`, {
@@ -731,7 +735,22 @@ familyTestingTrackerRequestDTO.trackerAge=age_now;
   };
 
   // get family index
+  const GET_CHILD_NUMBER = () => {
+    axios
+      .get(`${baseUrl}application-codesets/v2/CHILD_NUMBER`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        setChildNumber(response.data);
 
+        let ans = response.data.filter((each) => {
+          return each.code === "CHILD_NUMBER_OTHERS";
+        });
+
+        setRetrieveFromIdToCode(ans[0]?.id);
+      })
+      .catch((error) => {});
+  };
   const FAMILY_INDEX = () => {
     axios
       .get(`${baseUrl}application-codesets/v2/FAMILY_INDEX`, {
@@ -790,6 +809,7 @@ familyTestingTrackerRequestDTO.trackerAge=age_now;
 
   useEffect(() => {
     console.log(props.patientObj);
+    GET_CHILD_NUMBER()
     loadGenders();
     loadStates();
     loadFamilyIndexSetting();
@@ -857,7 +877,45 @@ familyTestingTrackerRequestDTO.trackerAge=age_now;
     //  update the family index
     AddNewByUpdateTracker(familyTestingTrackerRequestDTO);
   };
+  const convertIdToCode = (id) => {
+    if (id) {
+      let ans = childNumber.filter((each) => {
+        return each.code === "CHILD_NUMBER_OTHERS";
+      });
 
+      if (ans[0].id === parseInt(id)) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  };
+
+  const getIntPosition = (ex) => {
+    let code =[]
+
+    console.log()
+ let main =  childNumber.map((each,index )=>{
+if(each.code !==  "CHILD_NUMBER_OTHERS"){
+  code.push({ id: each.id,
+    value : index+ 1,})
+}
+
+    })
+
+  if(ex){
+      let ans =  code.filter((each)=>{
+        return  each.id === parseInt(ex)
+        })
+
+  let  result = ans.length > 0 ? ans[0].value: ""
+   return  result
+  }else{
+    return ""
+  }
+  };
   const updateFamilyTrackerRow = () => {
     setViewFamilyTrackerForm(false);
     let newArray = [...arrayFamilyTestingTrackerRequestDTO];
@@ -915,13 +973,34 @@ familyTestingTrackerRequestDTO.trackerAge=age_now;
     setaAddIndexTracker(false);
     // console.log(e);
     if (e.target.name === "childNumber") {
+      let res = convertIdToCode(e.target.value);
+
+      setFamilyIndexRequestDto({
+        ...familyIndexRequestDto,
+        [e.target.name]: e.target.value,
+        otherChildNumber: "",
+
+      });
+      console.log(e.target.value);
+
+      if (res) {
+        setShowOther(true);
+      } else {
+      let deductedValue =   getIntPosition(e.target.value)
+             //set position to child number
+             console.log("deductedValue", deductedValue)
+      setFamilyTestingTrackerRequestDTO({
+        ...familyTestingTrackerRequestDTO,
+        positionOfChildEnumerated: deductedValue,
+      });
+        setShowOther(false);
+      }
+
+    }else if (e.target.name === "otherChildNumber") {
       setFamilyIndexRequestDto({
         ...familyIndexRequestDto,
         [e.target.name]: e.target.value,
       });
-      console.log(e.target.value);
-
-      //set position to child number
       setFamilyTestingTrackerRequestDTO({
         ...familyTestingTrackerRequestDTO,
         positionOfChildEnumerated: e.target.value,
@@ -2467,19 +2546,47 @@ if(followUp){
 
                     >
                       <option value="">Select</option>
-                      <option value="1">1st Child</option>
-                      <option value="2">2nd Child</option>
-                      <option value="3">3rd Child</option>
-                      <option value="4">4th Child</option>
-                      <option value="5">5th Child</option>
-                      <option value="6">6th Child</option>
-                      <option value="7">7th Child</option>
+                      {childNumber.map((each) => (
+                        <option key={each.id} value={each.id}>
+                          {each.display}
+                        </option>
+                      ))}
+
                       {/* <option value="others">Others</option> */}
                     </select>
                     {errorFamilyIndexDTO.childNumber && (
                       <span className={classes.error}>
                         {errorFamilyIndexDTO.childNumber}
                       </span>
+                    )}
+                  </FormGroup>
+                </div>
+              )}
+
+{showOther && (
+                <div className="form-group  col-md-4">
+                  <FormGroup>
+                    <Label>
+                      Others
+                      <span style={{ color: "red" }}> *</span>
+                    </Label>
+                    <Input
+                      type="number"
+                      name="otherChildNumber"
+                      id="otherChildNumber"
+                      onChange={handlefamilyIndexRequestDto}
+                      value={familyIndexRequestDto.otherChildNumber}
+                      style={{
+                        border: "1px solid #014D88",
+                        borderRadius: "0.2rem",
+                      }}
+                    />
+                    {errors.otherChildNumber !== "" ? (
+                      <span className={classes.error}>
+                        {errors.otherChildNumber}
+                      </span>
+                    ) : (
+                      ""
                     )}
                   </FormGroup>
                 </div>

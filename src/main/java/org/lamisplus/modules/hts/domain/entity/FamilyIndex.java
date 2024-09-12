@@ -79,6 +79,10 @@ public class FamilyIndex extends Audit implements Serializable  {
     private int childNumber;
 
     @Basic
+    @Column(name = "other_child_number")
+    private int otherChildNumber;
+
+    @Basic
     @Column(name = "child_dead")
     private String childDead;
 

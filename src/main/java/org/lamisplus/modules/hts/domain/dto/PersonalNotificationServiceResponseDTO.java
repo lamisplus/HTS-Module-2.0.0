@@ -47,4 +47,6 @@ public class PersonalNotificationServiceResponseDTO {
     private String familyIndex;
     private String partnerNotificationService;
     private PersonResponseDto personResponseDto;
+    private String isHtsClient;
+
 }

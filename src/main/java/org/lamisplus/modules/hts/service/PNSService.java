@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.lamisplus.modules.base.util.Constants.ArchiveStatus.UN_ARCHIVED;
@@ -143,7 +144,7 @@ public class PNSService {
         pnsDTO.setPartnerId(pns.getPartnerId());
         pnsDTO.setReasonForDecline(pns.getReasonForDecline());
         pnsDTO.setOtherReasonForDecline(pns.getOtherReasonForDecline());
-
+        pnsDTO.setIsHtsClient(pns.getIsHtsClient());
         return pnsDTO;
     }
 
@@ -232,12 +233,20 @@ public class PNSService {
         return convertPnsToResponseDto(null, getPnsById(id));
     }
 
+
     public void updateIndexClientStatus(String uuid) {
+        System.out.println("inside updateIndexClientStatus");
+
+        System.out.println("uuid " + uuid);
+
         if (!uuid.isEmpty()) {
-            PersonalNotificationService pns = personalNotificationServiceRepository.findByUuidAndArchived(uuid, 0)
-                    .orElseThrow(() -> new EntityNotFoundException(FamilyIndex.class, "uuid", uuid + ""));
-            pns.setIsHtsClient("Yes");
-            personalNotificationServiceRepository.save(pns);
+            Optional<PersonalNotificationService> pns = personalNotificationServiceRepository.findByUuidAndArchived(uuid, 0);
+            System.out.println(pns);
+            if (pns.isPresent()) {
+                PersonalNotificationService existingPns = pns.get();
+                existingPns.setIsHtsClient("Yes");
+                personalNotificationServiceRepository.save(existingPns);
+            }
         }
     }
 }

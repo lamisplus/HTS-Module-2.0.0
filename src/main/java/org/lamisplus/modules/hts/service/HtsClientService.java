@@ -89,11 +89,14 @@ public class HtsClientService {
         }
 //       for elicited client
         if(!htsClientRequestDto.getFamilyIndex().isEmpty()){
+            System.out.println("inside family index");
+
             familyIndexTestingService.updateIndexClientStatus(htsClientRequestDto.getFamilyIndex());
         }
-        if(!htsClientRequestDto.getPartnerNotificationService().isEmpty()){
-            pnsService.updateIndexClientStatus(htsClientRequestDto.getPartnerNotificationService());
-        }
+//        if(!htsClientRequestDto.getPartnerNotificationService().isEmpty()){
+//            System.out.println("inside pns");
+//            pnsService.updateIndexClientStatus(htsClientRequestDto.getPartnerNotificationService());
+//        }
         htsClient.setFacilityId(currentUserOrganizationService.getCurrentUserOrganization());
         htsClient.setLatitude(htsClientRequestDto.getLatitude());
         htsClient.setLongitude(htsClientRequestDto.getLongitude());

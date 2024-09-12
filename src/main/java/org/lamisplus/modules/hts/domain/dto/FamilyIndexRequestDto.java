@@ -23,6 +23,7 @@ public class FamilyIndexRequestDto {
 
     @NotNull(message = "Child number is required")
     private int childNumber;
+    private int otherChildNumber;
 
     private String motherDead;
 

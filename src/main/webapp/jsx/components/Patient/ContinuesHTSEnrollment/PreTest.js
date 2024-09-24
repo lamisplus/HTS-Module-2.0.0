@@ -171,12 +171,25 @@ const BasicInfo = (props) => {
     useEffect(() => { 
 
         if(props.patientObj){
+            let knowledgeAsses = props?.patientObj?.knowledgeAssessment
+
           setKnowledgeAssessment(
             props.patientObj.knowledgeAssessment &&
               props.patientObj.knowledgeAssessment !== null
               ? props.patientObj.knowledgeAssessment
               : {}
           );
+
+          if (props?.patientObj?.pregnant) {
+            checkPregnantPatient(props.patientObj.pregnant).then((res) => {
+              console.log("my result", res);
+              setKnowledgeAssessment({
+                ...knowledgeAsses,
+                clientPregnant: res ? "true" : "false",
+              });
+            });  
+         }
+
           setRiskAssessment(
             props.patientObj.riskAssessment &&
               props.patientObj.riskAssessment !== null
@@ -204,15 +217,6 @@ const BasicInfo = (props) => {
           //patientAge=calculate_age(moment(props.patientObj.personResponseDto.dateOfBirth).format("DD-MM-YYYY"))
           //console.log(props.patientObj.riskStratificationResponseDto.riskAssessment)
           
-          if (props?.patientObj?.pregnant) {
-             checkPregnantPatient(props.patientObj.pregnant).then((res) => {
-               console.log("my result", res);
-               setKnowledgeAssessment({
-                 ...knowledgeAssessment,
-                 clientPregnant: res ? "true" : "false",
-               });
-             });  
-          }
 
           if (
             props.patientObj.riskStratificationResponseDto &&
@@ -381,8 +385,15 @@ const BasicInfo = (props) => {
             )
             .then(response => {
                 setSaving(false);
-                props.setPatientObj(response.data)
-                //toast.success("Risk Assesment successful");
+                props.setPatientObj({...props.patientObj, 
+                    knowledgeAssessment: response.data.knowledgeAssessment,
+                    riskAssessment: response.data.riskAssessment,
+                    stiScreening: response.data.stiScreening,
+                    tbScreening: response.data.tbScreening,
+                    sexPartnerRiskAssessment: response.data.sexPartnerRiskAssessment,
+                  }
+                  );             
+                     //toast.success("Risk Assesment successful");
                 handleItemClick(latestForm[0], latestForm[1]);
 
             })

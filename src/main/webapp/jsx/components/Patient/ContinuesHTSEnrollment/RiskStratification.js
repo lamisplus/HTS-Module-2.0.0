@@ -471,7 +471,9 @@ const RiskStratification = (props) => {
           props.patientObj.riskStratificationResponseDto = response.data;
           objValues.code = response.data.code;
           props.setExtra(objValues);
-          //toast.success("Risk stratification save succesfully!");
+          props.setHideOtherMenu(false);
+          handleItemClick(latestForm[0], latestForm[1]);
+          toast.success("Risk stratification save succesfully!");
         })
         .catch((error) => {
           console.log(error);
@@ -504,7 +506,7 @@ const RiskStratification = (props) => {
             props.setExtra(objValues);
            handleItemClick(latestForm[0], latestForm[1]);
             props.setHideOtherMenu(false);
-            //toast.success("Risk stratification save succesfully!");
+            toast.success("Risk stratification save succesfully!");
           })
           .catch((error) => {
             setSaving(false);

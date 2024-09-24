@@ -149,7 +149,10 @@ const BasicInfo = (props) => {
     relationWithIndexClient:
       props.activePage?.activeObject?.relationWithIndexClient,
     indexClientCode: "",
-    comment: "",
+    comment: "",  
+    partnerNotificationService: "",
+    familyIndex: "",
+
   });
 
   useEffect(() => {
@@ -394,6 +397,9 @@ const BasicInfo = (props) => {
         pregnant: objValues.pregnant,
         relationWithIndexClient: objValues.relationWithIndexClient,
         comment: objValues.comment,
+        partnerNotificationService: objValues.partnerNotificationService,
+        familyIndex: objValues.familyIndex,
+
       };
 
       if (validate()) {

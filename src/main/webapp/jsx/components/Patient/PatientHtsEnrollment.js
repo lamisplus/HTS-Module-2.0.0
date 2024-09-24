@@ -66,6 +66,8 @@ const UserRegistration = (props) => {
     familyIndexTesting: "",
     pns: "",
   });
+  const [showBackButton, setShowBackButton] = useState(true);
+
   const [modalityCheck, setModalityCheck] = useState("");
   const [permissions, setPermission] = useState(
     JSON.parse(localStorage.getItem("stringifiedPermmision"))
@@ -95,22 +97,91 @@ const UserRegistration = (props) => {
       actionType: actionType,
     });
   };
- const getPrevForm = (e) => {
-   e.preventDefault();
-   let age = calculate_age(
-     basicInfo?.personResponseDto?.dateOfBirth
-       ? basicInfo?.personResponseDto?.dateOfBirth
-       : patientObj?.personResponseDto?.dateOfBirth
-   );
+  const getCurentForm=(activeItem)=>{
 
-   let hivStatus = patientObj?.hivTestResult;
-   let answer = getPreviousForm("Nigeria_PNS_Form", age, "", hivStatus);
-   if (answer[0] && answer[1]) {
-     handleItemClick(answer[0]);
-   } else {
-     history.push("/");
-   }
- }; 
+    switch(activeItem){
+      case  "risk": 
+      return "Risk_Stratification";
+      break;
+      case  "basic": 
+      return "Client_intake_form"; 
+
+      case  "pre-test-counsel": 
+      return "Pre_Test_Counseling";
+
+      case  "hiv-test": 
+      return "Request_and_Result_Form";
+
+      case  "post-test": 
+      return "Post_Test_Counseling";
+
+      case  "recency-testing": 
+      return "HIV_Recency_Testing";
+
+      case  "fit": 
+      return "Family_Index_Testing_Form";
+
+      case  "fit-history": 
+      return "Family_Index_Testing_Form";
+
+      case  "view-fit": 
+      return "Family_Index_Testing_Form";
+
+      case  "pns": 
+      return "Nigeria_PNS_Form";
+
+      case  "pns-history": 
+      return "Nigeria_PNS_Form";
+
+
+      case  "client-referral": 
+      return "";
+
+      case  "refferal-history": 
+      return "Referral_Form";
+
+      case  "view-referral": 
+      return "Referral_Form";
+
+      default:
+        return "";    }
+
+  }
+  const getPrevForm=(e)=>{
+          if( activeItem === "risk"){
+            history.push("/");
+
+          }else{
+            e.preventDefault()
+          let currentForm =   getCurentForm(activeItem)
+
+            let age = calculate_age(
+              basicInfo?.personResponseDto?.dateOfBirth
+                ? basicInfo?.personResponseDto?.dateOfBirth
+                : patientObj?.personResponseDto?.dateOfBirth
+            );
+
+            let hivStatus = patientObj?.hivTestResult;
+          let answer =  getPreviousForm(currentForm, age, "", hivStatus); 
+          console.log("answer", answer)
+          if (answer[0]  && answer[1]) {
+            if(answer[0] === "fit"){
+              handleItemClick("fit-history");
+
+            }else if(answer[0] === "pns"){
+
+              handleItemClick("pns-history");
+
+            }else{
+              handleItemClick(answer[0]);
+
+            }
+          }else{
+          history.push("/");
+
+          }
+}
+  } 
   useEffect(() => {
     setModalityCheck(
       getCheckModality(patientObj?.riskStratificationResponseDto?.modality)
@@ -127,8 +198,7 @@ const UserRegistration = (props) => {
               <h3>
                 HIV COUNSELLING AND TESTING -{" "}
                 {patientObj && patientObj.dateVisit ? patientObj.dateVisit : ""}
-                {activeItem === "pns" || activeItem === "pns-history" ? (
-                  <div>
+                {showBackButton &&  <div>
                     {/* <Link to={"/"}> */}
                     <Button
                       variant="contained"
@@ -141,25 +211,8 @@ const UserRegistration = (props) => {
                       <span style={{ textTransform: "capitalize" }}>Back</span>
                     </Button>
                     {/* </Link> */}
-                  </div>
-                ) : (
-                  <div>
-                    <Link to={"/"}>
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        className=" float-end"
-                        //startIcon={<FaUserPlus size="10"/>}
-                        style={{ backgroundColor: "#014d88" }}
-                        onClick={LoadViewPage}
-                      >
-                        <span style={{ textTransform: "capitalize" }}>
-                          Back
-                        </span>
-                      </Button>
-                    </Link>
-                  </div>
-                )}
+                  </div>}
+            
               </h3>
               <br />
               <br />

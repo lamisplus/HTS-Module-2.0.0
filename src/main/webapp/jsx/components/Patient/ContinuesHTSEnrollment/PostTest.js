@@ -131,60 +131,50 @@ const PostTest = (props) => {
     condomProvidedToClientCount: "",
     lubricantProvidedToClientCount: "",
   });
-  useEffect(() => {
-    setPostTest({
-      ...postTest,
-      ...props.patientObj.postTestCounselingKnowledgeAssessment,
-    });
 
+  console.log("postTest", postTest)
+  useEffect(() => {
     if (
-      props.patientObj?.hivTestResult2?.length > 0 &&
-      props.patientObj.hivTestResult2 === "Positive"
+      props.patientObj &&
+      props.patientObj.postTestCounselingKnowledgeAssessment
     ) {
-      postTest.hivTestResult = "true";
-      setPostTest({ ...postTest, hivTestResult: "true" });
-    } else if (
-      props.patientObj?.hivTestResult2?.length > 0 &&
-      props.patientObj.hivTestResult2 === "Negative"
-    ) {
-      postTest.hivTestResult = "false";
-      setPostTest({ ...postTest, hivTestResult: "false" });
-    } else if (
-      props.patientObj?.hivTestResult?.length > 0 &&
-      props.patientObj.hivTestResult === "Positive"
-    ) {
-      postTest.hivTestResult = "true";
-      setPostTest({ ...postTest, hivTestResult: "true" });
-    } else if (
-      props.patientObj?.hivTestResult?.length > 0 &&
-      props.patientObj.hivTestResult === "Negative"
-    ) {
-      postTest.hivTestResult = "false";
-      setPostTest({ ...postTest, hivTestResult: "false" });
+      setPostTest(props.patientObj.postTestCounselingKnowledgeAssessment);
+    } else {
+      ///setPostTest(props.patientObj && props.patientObj.postTestCounselingKnowledgeAssessment!==null ? props.patientObj.postTestCounselingKnowledgeAssessment : {})
+      if (
+        postTest.hivTestResult === "" &&
+        props.patientObj.hivTestResult2 !== "" &&
+        props.patientObj.hivTestResult2 !== null &&
+        props.patientObj.hivTestResult2 === "Positive"
+      ) {
+        postTest.hivTestResult = "true";
+        setPostTest({ ...postTest, hivTestResult: "true" });
+      } else if (
+        postTest.hivTestResult === "" &&
+        props.patientObj.hivTestResult2 !== "" &&
+        props.patientObj.hivTestResult2 !== null &&
+        props.patientObj.hivTestResult2 === "Negative"
+      ) {
+        postTest.hivTestResult = "false";
+        setPostTest({ ...postTest, hivTestResult: "false" });
+      } else if (
+        postTest.hivTestResult === "" &&
+        props.patientObj.hivTestResult !== "" &&
+        props.patientObj.hivTestResult !== null &&
+        props.patientObj.hivTestResult === "Positive"
+      ) {
+        postTest.hivTestResult = "true";
+        setPostTest({ ...postTest, hivTestResult: "true" });
+      } else if (
+        postTest.hivTestResult === "" &&
+        props.patientObj.hivTestResult !== "" &&
+        props.patientObj.hivTestResult !== null &&
+        props.patientObj.hivTestResult === "Negative"
+      ) {
+        postTest.hivTestResult = "false";
+        setPostTest({ ...postTest, hivTestResult: "false" });
+      }
     }
-    // if(props.patientObj && props.patientObj.postTestCounselingKnowledgeAssessment){
-    //     setPostTest(props.patientObj.postTestCounselingKnowledgeAssessment)
-    // }else{
-    //     if (postTest.hivTestResult==="" && props.patientObj.hivTestResult2!==""
-    //     && props.patientObj.hivTestResult2!==null && props.patientObj.hivTestResult2==='Positive') {
-    //         postTest.hivTestResult='true'
-    //         setPostTest({...postTest, hivTestResult:'true' })
-    //     }else if (postTest.hivTestResult==="" && props.patientObj.hivTestResult2!==""
-    //     && props.patientObj.hivTestResult2!==null && props.patientObj.hivTestResult2==='Negative') {
-    //         postTest.hivTestResult='false'
-    //         setPostTest({...postTest, hivTestResult:'false' })
-    //     }
-    //     else if (postTest.hivTestResult==="" && props.patientObj.hivTestResult!==""
-    //     && props.patientObj.hivTestResult!==null && props.patientObj.hivTestResult==='Positive') {
-    //         postTest.hivTestResult='true'
-    //         setPostTest({...postTest, hivTestResult:'true' })
-    //     }
-    //     else if (postTest.hivTestResult==="" && props.patientObj.hivTestResult!==""
-    //     && props.patientObj.hivTestResult!==null && props.patientObj.hivTestResult==='Negative') {
-    //         postTest.hivTestResult='false'
-    //         setPostTest({...postTest, hivTestResult:'false' })
-    //     }
-    // }
   }, [props.patientObj, postTest.hivTestResult]);
   const handleInputChangePostTest = (e) => {
     //setErrors({...temp, [e.target.name]:""})

@@ -137,22 +137,7 @@ const BasicInfo = (props) => {
     communityEntryPoint: "",
   });
   const [riskAssessment, setRiskAssessment] = useState({
-    // everHadSexualIntercourse:"",
-    // bloodtransInlastThreeMonths:"",
-    // uprotectedSexWithCasualLastThreeMonths:"",
-    // uprotectedSexWithRegularPartnerLastThreeMonths:"",
-    // unprotectedVaginalSex:"",
-    // uprotectedAnalSex:"",
-    // stiLastThreeMonths:"",
-    // sexUnderInfluence :"",
-    // moreThanOneSexPartnerLastThreeMonths:"",
-    // experiencePain:"",
-    // haveSexWithoutCondom:"",
-    // abuseDrug:"",
-    // bloodTransfusion:"",
-    // consistentWeightFeverNightCough:"",
-    // soldPaidVaginalSex:"",
-    //New Question
+
     lastHivTestForceToHaveSex: "",
     lastHivTestHadAnal: "",
     lastHivTestInjectedDrugs: "",
@@ -252,6 +237,7 @@ if (objValues.age !== "") {
         //console.log(error);
       });
   };
+
 
 
 
@@ -428,13 +414,7 @@ if (objValues.age !== "") {
       if (e.target.value !== "" && e.target.value >= 85) {
         toggle();
       }
-      // if (e.target.value !== "" && e.target.value <= 15) {
-      //   props.setHideOtherMenu(false);
-      // } else if (e.target.value !== "" && e.target.value > 15) {
-      //   props.setHideOtherMenu(true);
-      // } else {
-      //   props.setHideOtherMenu(true);
-      // }
+     
 
       const currentDate = new Date();
       currentDate.setDate(15);
@@ -582,11 +562,13 @@ if (objValues.age !== "") {
 
     //props.patientObj.riskAssessment =riskAssessment
     objValues.riskAssessment = riskAssessment;
+
+    console.log(props.completed)
     //Check if riskStratificationResponseDto is null or empty then call the update method
     if (
       props.patientObj.riskStratificationResponseDto &&
       props.patientObj.riskStratificationResponseDto !== null &&
-      props.patientObj.riskStratificationResponseDto.code !== ""
+      props.patientObj.riskStratificationResponseDto.id !== ""
     ) {
       if (validate()) {
         setSaving(true);
@@ -603,7 +585,9 @@ if (objValues.age !== "") {
             props.patientObj.riskStratificationResponseDto = response.data;
             objValues.code = response.data.code;
             props.setExtra(objValues);
-            //toast.success("Risk stratification save succesfully!");
+            handleItemClick(latestForm[0], latestForm[1]);
+
+            toast.success("Risk stratification save succesfully!");
           })
           .catch((error) => {
             setSaving(false);
@@ -646,7 +630,7 @@ if (objValues.age !== "") {
 
               handleItemClick(latestForm[0], latestForm[1]);
 
-              //toast.success("Risk stratification save succesfully!");
+              toast.success("Risk stratification save succesfully!");
             })
             .catch((error) => {
               setSaving(false);

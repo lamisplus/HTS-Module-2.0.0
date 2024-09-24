@@ -264,7 +264,8 @@ const FamilyIndexTestingForm = (props) => {
     htsClientId: props && props.patientObj ? props.patientObj?.id : "",
     htsClientUuid: props?.patientObj?.htsClientUUid
       ? props?.patientObj?.htsClientUUid
-      : props?.basicInfo?.htsClientUUid,
+      : props?.basicInfo?.htsClientUUid?  props?.basicInfo?.htsClientUUid: JSON.parse(localStorage.getItem("htsClientUUid"))
+      ,
     indexClientId: props?.patientObj?.clientCode,
     isClientCurrentlyOnHivTreatment: "",
     lga: "",
@@ -1199,7 +1200,7 @@ if(each.code !==  "CHILD_NUMBER_OTHERS"){
         setSaving(false);
 
         toast.success("Family Index form save succesfully!");
-        handleItemClick("fit-history", "risk");
+        handleItemClick("fit-history", "fit");
 
         // if (props.history) {
         //   handleItemClick("pns-history", "fit");

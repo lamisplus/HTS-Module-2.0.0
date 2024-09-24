@@ -298,7 +298,6 @@ const handleInputChangeInitial2 = (e) => {
     });
 
  // clear all the input fields that follows the confirmatoryTest, if there changes in confirmatoryTest result is changes.
-
         if(e.target.name === 'result'){
             setInitailTest2({
                 date2: "",
@@ -384,7 +383,11 @@ const handleInputChangeConfirmatory2 = (e) => {
         date2: "",
         result2: "",
     });
-
+    // added
+    setInitailTest2({
+      date2: "",
+      result2: "",
+    });
 
     
     setErrors({...temp, [e.target.id]:"", 
@@ -693,89 +696,91 @@ console.log(temp)
     tieBreakerTest2.result2,
   ]);
   // clear the all other fields if there changes in initialTest1 result is changes
-  useEffect(() => {
-    setConfirmatoryTest({
-      date: "",
-      result: "",
-    });
-    setTieBreakerTest({
-      date: "",
-      result: "",
-    });
-    setInitailTest2({
-      date2: "",
-      result2: "",
-    });
-    setConfirmatoryTest2({
-      date2: "",
-      result2: "",
-    });
-    setTieBreakerTest2({
-      date2: "",
-      result2: "",
-    });
-    // clear the prepOffered and prepAccepted fields
-    setObjValues({ ...objValues, prepOffered: "", prepAccepted: "" });
-  }, [initialTest1.result]);
+  // useEffect(() => {
+  //   setConfirmatoryTest({
+  //     date: "",
+  //     result: "",
+  //   });
+  //   setTieBreakerTest({
+  //     date: "",
+  //     result: "",
+  //   });
+  //   setInitailTest2({
+  //     date2: "",
+  //     result2: "",
+  //   });
+  //   setConfirmatoryTest2({
+  //     date2: "",
+  //     result2: "",
+  //   });
+  //   setTieBreakerTest2({
+  //     date2: "",
+  //     result2: "",
+  //   });
+  //   // clear the prepOffered and prepAccepted fields
+  //   setObjValues({ ...objValues, prepOffered: "", prepAccepted: "" });
+  // }, [initialTest1.result]);
 
   // clear the all other the input fields that follows the initialTest2, if there changes in initialTest12 result is changes
 
-  useEffect(() => {
-    setTieBreakerTest({
-      date: "",
-      result: "",
-    });
-    setInitailTest2({
-      date2: "",
-      result2: "",
-    });
-    setConfirmatoryTest2({
-      date2: "",
-      result2: "",
-    });
-    setTieBreakerTest2({
-      date2: "",
-      result2: "",
-    });
-    setObjValues({ ...objValues, prepOffered: "", prepAccepted: "" });
-  }, [confirmatoryTest.result]);
+  // useEffect(() => {
+  //   setTieBreakerTest({
+  //     date: "",
+  //     result: "",
+  //   });
+  //   setInitailTest2({
+  //     date2: "",
+  //     result2: "",
+  //   });
+  //   setConfirmatoryTest2({
+  //     date2: "",
+  //     result2: "",
+  //   });
+  //   setTieBreakerTest2({
+  //     date2: "",
+  //     result2: "",
+  //   });
+  //   setObjValues({ ...objValues, prepOffered: "", prepAccepted: "" });
+  // }, [confirmatoryTest.result]);
 
   // clear all the input fields that follows the confirmatoryTest, if there changes in confirmatoryTest result is changes.
-  useEffect(() => {
-    setInitailTest2({
-      date2: "",
-      result2: "",
-    });
-    setConfirmatoryTest2({
-      date2: "",
-      result2: "",
-    });
-    setTieBreakerTest2({
-      date2: "",
-      result2: "",
-    });
-    setObjValues({ ...objValues, prepOffered: "", prepAccepted: "" });
-  }, [tieBreakerTest.result]);
+  // useEffect(() => {
+  //   setInitailTest2({
+  //     date2: "",
+  //     result2: "",
+  //   });
 
-  useEffect(() => {
-    setConfirmatoryTest2({
-      date2: "",
-      result2: "",
-    });
-    setTieBreakerTest2({
-      date2: "",
-      result2: "",
-    });
-    setObjValues({ ...objValues, prepOffered: "", prepAccepted: "" });
-  }, [initialTest12.result2]);
+  //   setConfirmatoryTest2({
+  //     date2: "",
+  //     result2: "",
+  //   });
 
-  useEffect(() => {
-    setTieBreakerTest2({
-      date2: "",
-      result2: "",
-    });
-    setObjValues({ ...objValues, prepOffered: "", prepAccepted: "" });
-  }, [confirmatoryTest2.result2]);
+  //   setTieBreakerTest2({
+  //     date2: "",
+  //     result2: "",
+  //   });
+  //   setObjValues({ ...objValues, prepOffered: "", prepAccepted: "" });
+  // }, [tieBreakerTest.result]);
+
+  // useEffect(() => {
+  //   setConfirmatoryTest2({
+  //     date2: "",
+  //     result2: "",
+  //   });
+  //   setTieBreakerTest2({
+  //     date2: "",
+  //     result2: "",
+  //   });
+  //   setObjValues({ ...objValues, prepOffered: "", prepAccepted: "" });
+  // }, [initialTest12.result2]);
+
+  // useEffect(() => {
+  //   setTieBreakerTest2({
+  //     date2: "",
+  //     result2: "",
+  //   });
+  //   setObjValues({ ...objValues, prepOffered: "", prepAccepted: "" });
+  // }, [confirmatoryTest2.result2]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -916,7 +921,8 @@ console.log(temp)
                 <FormGroup>
                   <Label for=""> Date </Label>
                   <Input
-                    type="date"                       onKeyPress={(e)=>{e.preventDefault()}}
+                    type="date"                  
+                    onKeyPress={(e)=>{e.preventDefault()}}
 
                     name="date"
                     id="initialDate"

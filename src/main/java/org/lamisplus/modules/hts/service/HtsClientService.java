@@ -39,10 +39,10 @@ import static org.lamisplus.modules.base.util.Constants.ArchiveStatus.ARCHIVED;
 import static org.lamisplus.modules.base.util.Constants.ArchiveStatus.UN_ARCHIVED;
 
 @Service
+
 @Slf4j
 @RequiredArgsConstructor
 public class HtsClientService {
-    private final HtsClientRepository htsClientRepository;
     private final PersonRepository personRepository;
     private final PersonService personService;
     private final CurrentUserOrganizationService currentUserOrganizationService;
@@ -50,6 +50,7 @@ public class HtsClientService {
     private final RiskStratificationService riskStratificationService;
     private final ModuleService moduleService;
     private final FamilyIndexTestingService familyIndexTestingService;
+    private final HtsClientRepository htsClientRepository;
     private PNSService pnsService;
     public HtsClientDto save(HtsClientRequestDto htsClientRequestDto){
         System.out.println("i am inside the save method");
@@ -88,6 +89,7 @@ public class HtsClientService {
             htsClient = this.htsClientRequestDtoToHtsClient(htsClientRequestDto, person.getUuid());
         }
 //       for elicited client
+        System.out.println(htsClientRequestDto.getFamilyIndex());
         if(!htsClientRequestDto.getFamilyIndex().isEmpty()){
             System.out.println("inside family index");
 

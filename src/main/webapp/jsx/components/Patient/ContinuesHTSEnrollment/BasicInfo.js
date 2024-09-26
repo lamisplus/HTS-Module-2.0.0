@@ -242,7 +242,6 @@ const BasicInfo = (props) => {
   };
 
   useEffect(() => {
-    // console.log("############# Continues model")
 
     KP();
     EnrollmentSetting();
@@ -529,7 +528,6 @@ const BasicInfo = (props) => {
     // getIndexClientCode();
   };
   const handleSubmit = (e) => {
-    console.log(props.patientObject);
     e.preventDefault();
     // check next form
     let latestForm = getNextForm(

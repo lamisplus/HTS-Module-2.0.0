@@ -90,7 +90,7 @@ export const checkPregnantPatient =  async(id) => {
      });
      //compare the object id with  parameter
 
-     console.log(result[0].id, id, Number(result[0].id) === Number(id));
+    //  console.log(result[0].id, id, Number(result[0].id) === Number(id));
 
     //  return result[0].id;
      if (Number(result[0].id) === Number(id)) {
@@ -115,7 +115,6 @@ export const checkPregnantPatient =  async(id) => {
 
 //check modality
 export const getCheckModality = (patientObj) => {
-  console.log("MODALITY CHECK UP ", patientObj);
   if (
     patientObj === "TEST_SETTING_STI_STI" ||
     patientObj === "TEST_SETTING_TB_TB" ||
@@ -138,11 +137,7 @@ export const getCheckModality = (patientObj) => {
     patientObj === "TEST_SETTING_OTHERS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
     patientObj === "TEST_SETTING_STANDALONE_HTS_POST_ANC1_PREGNANT_L&D ? 72hrs"
   ) {
-    console.log("IT IS SKIP");
-            localStorage.setItem(
-              "modality",
-              "skip")
-            
+
 
     return "skip";
   } else {
@@ -153,7 +148,6 @@ export const getCheckModality = (patientObj) => {
 
 //check modality for new HTS
 export const getCheckModalityForHTS = (patientObj) => {
-  console.log(patientObj);
   if (
     patientObj === "TEST_SETTING_CT_PMTCT" ||
     patientObj === "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||
@@ -355,8 +349,7 @@ export const getNextForm = (formName, age, pmtctModality, hivStatus) => {
 
     let nextForm = authorizedForm[nextPage];
 
-    console.log(nextForm);
-    console.log([nextForm.code, authorizedForm[IndexOfForm].code]);
+    // console.log([nextForm.code, authorizedForm[IndexOfForm].code]);
 
     //  confirm if there are no condition on the  NEXT form
     if (nextForm.condition.length === 0) {
@@ -402,8 +395,7 @@ export const getDoubleSkipForm = (code) => {
 
     let nextForm = authorizedForm[nextPage];
 
-    console.log(nextForm);
-    console.log([nextForm.code, authorizedForm[IndexOfForm].code]);
+    // console.log([nextForm.code, authorizedForm[IndexOfForm].code]);
 
     return [nextForm.code, authorizedForm[IndexOfForm].code];
   } else {
@@ -423,20 +415,9 @@ export const checkNextPageCondition = (
   let pmctctModalityCondition = undefined;
   let HivStatuscondition = undefined;
 let authorizedForm = JSON.parse(localStorage.getItem("generatedPermission"));
-console.log(
-  "length of the authorized form checkNextPageCondition ",
-  authorizedForm.length
-);
 
-  console.log(
-    "nextform",
-    nextForm,
-    currentForm,
-    IndexOfForm,
-    age,
-    pmtctModality,
-    hivStatus
-  );
+
+ 
 
  if (nextForm.condition.length === 0) {
 
@@ -468,7 +449,7 @@ console.log(
      return each !== undefined;
    });
 
-   console.log("total condition seen", confirmedFormType);
+  //  console.log("total condition seen", confirmedFormType);
    // check if any condition is true
    let answer = confirmedFormType.some((each) => {
      return each === true;
@@ -494,7 +475,7 @@ export const loopThroughForms = (
   hivStatus
 ) => {
 let authorizedForm = JSON.parse(localStorage.getItem("generatedPermission"));
-console.log("length of the authorized form ", authorizedForm.length);
+// console.log("length of the authorized form ", authorizedForm.length);
 let latestNextForm = nextForm;
 let nextFormIndex =
   authorizedForm.length > IndexOfForm + 1 ? IndexOfForm + 1 : IndexOfForm;
@@ -513,7 +494,7 @@ let nextFormIndex =
     );
 
     if (theNextPage.includes("recall")) {
-      console.log(authorizedForm[i]);
+      // console.log(authorizedForm[i]);
     } else {
       return theNextPage;
     }
@@ -530,7 +511,7 @@ export const loopThroughFormBackward = (
   hivStatus
 ) => {
   let authorizedForm = JSON.parse(localStorage.getItem("generatedPermission"));
-  console.log("length of the authorized form ", authorizedForm.length);
+  // console.log("length of the authorized form ", authorizedForm.length);
   let nextFormIndex =
   IndexOfForm - 1 >= 0 ? IndexOfForm - 1 : IndexOfForm;
 
@@ -547,7 +528,7 @@ export const loopThroughFormBackward = (
     );
 
     if (theNextPage.includes("recall")) {
-      console.log(authorizedForm[i]);
+      // console.log(authorizedForm[i]);
     } else {
       return theNextPage;
     }
@@ -579,8 +560,8 @@ export const getPreviousForm = (formName, age, pmtctModality, hivStatus) => {
 
     let nextForm = authorizedForm[prevPage];
 
-    console.log(nextForm);
-    console.log([nextForm.code, authorizedForm[IndexOfForm].code]);
+   
+    // console.log([nextForm.code, authorizedForm[IndexOfForm].code]);
 
     //  confirm if there are no condition on the  NEXT form
     if (nextForm.condition.length === 0) {

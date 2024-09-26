@@ -95,7 +95,6 @@ const PostTest = (props) => {
     props.patientObj && props.patientObj ? props.patientObj.id : "";
   const [saving, setSaving] = useState(false);
 
-  console.log("data3", props.patientObj);
   ///const [errors, setErrors] = useState({});
   const [objValues, setObjValues] = useState({
     htsClientId: clientId,
@@ -132,7 +131,6 @@ const PostTest = (props) => {
     lubricantProvidedToClientCount: "",
   });
 
-  console.log("postTest", postTest)
   useEffect(() => {
     if (
       props.patientObj &&
@@ -248,7 +246,6 @@ const PostTest = (props) => {
     // }
   };
 
-  //console.log(postTest.hivTestResult)
 
   return (
     <>

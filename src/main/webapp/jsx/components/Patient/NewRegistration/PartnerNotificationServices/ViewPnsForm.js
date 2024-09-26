@@ -267,7 +267,6 @@ const ViewPNSForm = (props) => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        console.log(response.data);
         setFacilityInfo(response.data.currentOrganisationUnitName);
       })
       .catch((error) => {

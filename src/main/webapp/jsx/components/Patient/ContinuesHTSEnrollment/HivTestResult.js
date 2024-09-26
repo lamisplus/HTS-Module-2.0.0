@@ -439,7 +439,6 @@ const handleInputChangeTie2 = (e) => {
     adhocCode: "",
   });
   useEffect(() => {
-    //console.log(props.patientObj)
     if (props.patientObj) {
       if (props.patientObj.dateVisit && props.patientObj.dateVisit !== "") {
         setHivTestDate(props.patientObj.dateVisit);

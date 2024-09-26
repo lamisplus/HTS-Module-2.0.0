@@ -151,19 +151,11 @@ const handlePayload=(e)=>{
 
 
 
- 
-  useEffect(() => {
-   
-  }, []);
+
 
   const handleSubmit = (e) => {
    e.preventDefault();
 
-   if(validate()){
-    console.log("validation passed" ,payload)
-
-   }
-    console.log(payload)
   };
   
   return (

@@ -543,7 +543,6 @@ const UserRegistration = (props) => {
 
       let hivStatus = patientObj2?.hivTestResult;
     let answer =  getPreviousForm(currentForm, age, "", hivStatus); 
-    console.log("answer", answer)
     if (answer[0]  && answer[1]) {
       if(answer[0] === "fit"){
         handleItemClick("fit-history");
@@ -564,7 +563,6 @@ const UserRegistration = (props) => {
 } 
 
 
-console.log(patientObj2)
 
 
   useEffect(() => {

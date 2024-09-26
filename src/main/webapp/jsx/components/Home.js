@@ -70,11 +70,7 @@ const Home = () => {
           JSON.stringify(stringifiedPermmision)
         );
 
-        console.log(
-          "permissison and permission",
-          stringifiedPermmision,
-          getListOfPermission(staticPermission)
-        );
+     
       })
       .catch((error) => {});
   };
@@ -82,7 +78,6 @@ const Home = () => {
   useEffect(() => {
     getPermissions();
     const permissions = localStorage.getItem("permissions")?.split(",");
-    console.log("perms", permissions);
     let obj = {
       uuid: "",
       type: "",

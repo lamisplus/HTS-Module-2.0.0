@@ -1764,7 +1764,7 @@ confirmatoryTest.result === "Yes"  && initialTest12.result2   === "Yes" && (temp
                         <option value="Semi-Quantitative">
                           Semi-Quantitative
                         </option>
-                        <option value="Flow Cyteometry">Flow Cyteometry</option>
+                        <option value="Flow Cyteometry">Flow cytometry</option>
                       </select>
                     </FormGroup>
                   </div>
@@ -1795,7 +1795,7 @@ confirmatoryTest.result === "Yes"  && initialTest12.result2   === "Yes" && (temp
                       <FormGroup>
                         <Label for="">CD4 Count Value</Label>
                         <Input
-                          type="text"
+                          type="number"
                           name="cd4FlowCyteometry"
                           id="cd4FlowCyteometry"
                           value={cd4Count.cd4FlowCyteometry}

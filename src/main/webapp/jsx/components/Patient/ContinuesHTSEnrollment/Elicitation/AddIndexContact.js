@@ -211,7 +211,6 @@ const AddIndexContact = (props) => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        //console.log(response.data);
         setSexs(response.data);
       })
       .catch((error) => {
@@ -250,7 +249,6 @@ const AddIndexContact = (props) => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        //console.log(response.data);
         setNotificationContact(response.data);
       })
       .catch((error) => {

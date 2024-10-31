@@ -96,7 +96,6 @@ const BasicInfo = (props) => {
 
 
     let temp = { ...errors }
-    //console.log("data1", props.patientObj)
     const [riskAssessmentPartner, setRiskAssessmentPartner]= useState(
         {
             sexPartnerHivPositive:"",
@@ -168,6 +167,10 @@ const BasicInfo = (props) => {
             nightSweats :"",
         }
     )
+
+
+
+  
     useEffect(() => { 
 
         if(props.patientObj){
@@ -182,7 +185,6 @@ const BasicInfo = (props) => {
 
           if (props?.patientObj?.pregnant) {
             checkPregnantPatient(props.patientObj.pregnant).then((res) => {
-              console.log("my result", res);
               setKnowledgeAssessment({
                 ...knowledgeAsses,
                 clientPregnant: res ? "true" : "false",
@@ -215,7 +217,6 @@ const BasicInfo = (props) => {
               : {}
           );
           //patientAge=calculate_age(moment(props.patientObj.personResponseDto.dateOfBirth).format("DD-MM-YYYY"))
-          //console.log(props.patientObj.riskStratificationResponseDto.riskAssessment)
           
 
           if (
@@ -294,7 +295,6 @@ const BasicInfo = (props) => {
         if(e.target.value==='false') {
             const newcount = tbCount -1
             //settbCount(newcount)
-            //console.log(newcount)
             if(newcount <=0 ){
                 
                 settbCount(0)
@@ -412,7 +412,6 @@ const BasicInfo = (props) => {
                 
         }
     }
-    //console.log(riskAssessmentPartner)
 
     return (
         <>

@@ -89,6 +89,7 @@ function PatientCard(props) {
       .then((response) => {
         setPatientObj(response.data);
 
+        props.setPersonInfo(response.data)
         setHtscount(response.data.htsCount);
         setHtsResult(
           response.data.htsClientDtoList[

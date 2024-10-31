@@ -97,8 +97,7 @@ const useStyles = makeStyles((theme) => ({
 const RiskStratification = (props) => {
   const classes = useStyles();
   const history = useHistory();
-  //console.log("active", props.activePage.activeObject);
-  //console.log("con", props.patientObj);
+  
   const [enrollSetting, setEnrollSetting] = useState([]);
   const [entryPoint, setEntryPoint] = useState([]);
   const [entryPointCommunity, setEntryPointCommunity] = useState([]);
@@ -116,9 +115,9 @@ const RiskStratification = (props) => {
 
   const [objValues, setObjValues] = useState({
     age: props.patientAge,
-    dob: props.patientObj.dateOfBirth,
+    dob: props.patientObj.dateOfBirth? props.patientObj.dateOfBirth: props?.personInfopersonResponseDto?.dateOfBirth,
     visitDate: "",
-    dateOfBirth: props.patientObj.dateOfBirth,
+    dateOfBirth: props.patientObj.dateOfBirth? props.patientObj.dateOfBirth: props?.personInfopersonResponseDto?.dateOfBirth,
     dateOfRegistration: "", //props.patientObj.dateOfRegistration,
     isDateOfBirthEstimated: "", //props.patientObj.personResponseDto.isDateOfBirthEstimated
     targetGroup: "",
@@ -180,9 +179,7 @@ const RiskStratification = (props) => {
             .riskAssessment
       );
     }
-    console.log("risk props", props)
   }, [props.patientObj]);
-
   //Get list of HIV STATUS ENROLLMENT
   const EnrollmentSetting = () => {
     axios
@@ -230,12 +227,46 @@ const RiskStratification = (props) => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        setKP(response.data);
+
+
+if(props.patientObject.gender){
+  let kpList =[]
+
+let gender = props.patientObject.gender.toLowerCase()
+
+
+if(gender === "female"){
+
+  response.data.map((each, index )=>{
+
+        if(each.code !==  "TARGET_GROUP_MSM"){
+          kpList.push(each )
+        }
+
+  })
+
+}else if(gender === "male"){
+  response.data.map((each, index )=>{
+    if(each.code !==  "TARGET_GROUP_FSW"){
+      kpList.push(each )
+    }
+
+})
+}
+
+setKP(kpList)
+
+}else{
+  setKP(response.data);
+
+}
+
+
       })
       .catch((error) => {
-        //console.log(error);
       });
   };
+
   //Set HTS menu registration
   const getMenuLogic = () => {
     // first logic
@@ -256,7 +287,6 @@ const RiskStratification = (props) => {
   };
 
   const checkPMTCTModality = (modality) => {
-    console.log("modality", modality);
     if (
       modality === "TEST_SETTING_CT_PMTCT" ||
       modality === "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||
@@ -264,13 +294,35 @@ const RiskStratification = (props) => {
       modality === "TEST_SETTING_OTHERS_POST_ANC1_PREGNANT_L&D" ||
       modality === "TEST_SETTING_STANDALONE_HTS_PMTCT_(ANC1_ONLY)" ||
       modality === "TEST_SETTING_STANDALONE_HTS_POST_ANC1_BREASTFEEDING" ||
-      modality === "TEST_SETTING_STANDALONE_HTS_POST_ANC1_PREGNANT_L&D"
+      modality === "TEST_SETTING_STANDALONE_HTS_POST_ANC1_PREGNANT_L&D" ||
+      modality === "PMTCT (Post ANC1: Pregnancy/L&D/BF)" ||
+      modality === "Post ANC1 Pregnant/L&D ? 72hrs" ||
+      modality ===
+        "TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
+      modality === "TEST_SETTING_OTHERS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
+      modality ===
+        "TEST_SETTING_STANDALONE_HTS_POST_ANC1_PREGNANT_L&D ? 72hrs"   
+        ||
+        modality ===
+          "TEST_SETTING_STANDALONE_HTS_POST_ANC1_PREGNANT_L&D < 72hrs"   
+          ||
+          modality ===
+            "TEST_SETTING_STANDALONE_HTS_POST_ANC1_PREGNANT_L&D > 72hrs"  
     ) {
-      console.log("it is PMTCT MODALITY ");
       setIsPMTCTModality(true);
+      setErrors({...errors,
+        lastHivTestDone: "",
+        whatWasTheResult: "",
+        lastHivTestVaginalOral: "",
+        lastHivTestBloodTransfusion: "",
+        lastHivTestPainfulUrination: "",
+        diagnosedWithTb: "",
+        lastHivTestInjectedDrugs: "",
+        lastHivTestHadAnal: "",
+        lastHivTestForceToHaveSex: "",
+       })
       return true;
     } else {
-      console.log("it is NOT pmtct modality ");
 
       setIsPMTCTModality(false);
       return false;
@@ -399,74 +451,81 @@ const RiskStratification = (props) => {
   const validate = () => {
     //HTS FORM VALIDATION
     temp.dateVisit = objValues.visitDate ? "" : "This field is required.";
+    temp.entryPoint = objValues.entryPoint ? "" : "This field is required.";
     temp.testingSetting = objValues.testingSetting
       ? ""
       : "This field is required.";
-    temp.entryPoint = objValues.entryPoint ? "" : "This field is required.";
     temp.modality = objValues.modality ? "" : "This field is required.";
+    temp.lastHivTestBasedOnRequest = riskAssessment.lastHivTestBasedOnRequest
+    ? ""
+    : "This field is required.";
+
+   
+   
     props.patientAge > 15 &&
       (temp.targetGroup = objValues.targetGroup
         ? ""
         : "This field is required.");
-    temp.lastHivTestBasedOnRequest = riskAssessment.lastHivTestBasedOnRequest
-      ? ""
-      : "This field is required.";
-    //Risk Assement section
-    objValues.age > 15 &&
-      riskAssessment.lastHivTestBasedOnRequest === "false" &&
-      (temp.lastHivTestDone = riskAssessment.lastHivTestDone
-        ? ""
-        : "This field is required.");
-    //objValues.age>15 && riskAssessment.lastHivTestBasedOnRequest==='false' && riskAssessment.lastHivTestDone!=="" && riskAssessment.lastHivTestDone!=='Never' && (temp.whatWasTheResult = riskAssessment.whatWasTheResult ? "" : "This field is required." )
+   
     objValues.entryPoint !== "" &&
-      objValues.entryPoint === "HTS_ENTRY_POINT_COMMUNITY" &&
-      (temp.communityEntryPoint = objValues.communityEntryPoint
-        ? ""
-        : "This field is required.");
-
-    if (
-      objValues.age > 15 &&
-      riskAssessment.lastHivTestBasedOnRequest === "false" &&
-      showRiskAssessment
-    ) {
-      riskAssessment.lastHivTestDone !== "" &&
-        riskAssessment.lastHivTestDone !== "Never" &&
-        (temp.whatWasTheResult = riskAssessment.whatWasTheResult
+        objValues.entryPoint === "HTS_ENTRY_POINT_COMMUNITY" &&
+        (temp.communityEntryPoint = objValues.communityEntryPoint
           ? ""
           : "This field is required.");
+   
+ 
+  
+    //objValues.age>15 && riskAssessment.lastHivTestBasedOnRequest==='false' && riskAssessment.lastHivTestDone!=="" && riskAssessment.lastHivTestDone!=='Never' && (temp.whatWasTheResult = riskAssessment.whatWasTheResult ? "" : "This field is required." )
 
-      temp.lastHivTestVaginalOral = riskAssessment.lastHivTestVaginalOral
-        ? ""
-        : "This field is required.";
 
-      temp.lastHivTestBloodTransfusion =
-        riskAssessment.lastHivTestBloodTransfusion
+      //Risk Assement section
+      if (
+        objValues.age > 15 &&
+        riskAssessment.lastHivTestBasedOnRequest === "false" &&
+        showRiskAssessment
+      ) {
+        temp.lastHivTestDone = riskAssessment.lastHivTestDone
           ? ""
           : "This field is required.";
-
-      temp.lastHivTestPainfulUrination =
-        riskAssessment.lastHivTestPainfulUrination
+        riskAssessment.lastHivTestDone !== "" &&
+          riskAssessment.lastHivTestDone !== "Never" &&
+          (temp.whatWasTheResult = riskAssessment.whatWasTheResult
+            ? ""
+            : "This field is required.");
+  
+        temp.lastHivTestVaginalOral = riskAssessment.lastHivTestVaginalOral
           ? ""
           : "This field is required.";
-
-      temp.diagnosedWithTb = riskAssessment.diagnosedWithTb
-        ? ""
-        : "This field is required.";
-
-      temp.lastHivTestInjectedDrugs = riskAssessment.lastHivTestInjectedDrugs
-        ? ""
-        : "This field is required.";
-
-      temp.lastHivTestHadAnal = riskAssessment.lastHivTestHadAnal
-        ? ""
-        : "This field is required.";
-
-      temp.lastHivTestForceToHaveSex = riskAssessment.lastHivTestForceToHaveSex
-        ? ""
-        : "This field is required.";
-    }
-
+  
+        temp.lastHivTestBloodTransfusion =
+          riskAssessment.lastHivTestBloodTransfusion
+            ? ""
+            : "This field is required.";
+  
+        temp.lastHivTestPainfulUrination =
+          riskAssessment.lastHivTestPainfulUrination
+            ? ""
+            : "This field is required.";
+  
+        temp.diagnosedWithTb = riskAssessment.diagnosedWithTb
+          ? ""
+          : "This field is required.";
+  
+        temp.lastHivTestInjectedDrugs = riskAssessment.lastHivTestInjectedDrugs
+          ? ""
+          : "This field is required.";
+  
+        temp.lastHivTestHadAnal = riskAssessment.lastHivTestHadAnal
+          ? ""
+          : "This field is required.";
+  
+        temp.lastHivTestForceToHaveSex = riskAssessment.lastHivTestForceToHaveSex
+          ? ""
+          : "This field is required.";
+      }
     //targetGroup
+
+    console.log("error", temp)
     setErrors({ ...temp });
     return Object.values(temp).every((x) => x == "");
   };
@@ -482,6 +541,7 @@ const RiskStratification = (props) => {
   const actualRiskCountTrue = Object.values(riskAssessment);
   riskCountQuestion = actualRiskCountTrue.filter((x) => x === "true");
   const handleInputChangeRiskAssessment = (e) => {
+    displayRiskAssessment(e.target.value, objValues.age, isPMTCTModality);
 
     setErrors({ ...temp, [e.target.name]: "" });
     setRiskAssessment({ ...riskAssessment, [e.target.name]: e.target.value });
@@ -553,7 +613,9 @@ const RiskStratification = (props) => {
     } else {
       //console.log("post");
       if (validate()) {
-        setSaving(true);
+        setSaving(true); 
+        objValues.dob = props.patientObj.dateOfBirth? props.patientObj.dateOfBirth: props?.personInfopersonResponseDto?.dateOfBirth
+       
         axios
           .post(`${baseUrl}risk-stratification`, objValues, {
             headers: { Authorization: `Bearer ${token}` },
@@ -863,7 +925,6 @@ const RiskStratification = (props) => {
                 </div>
               </div>
               <br />
-
               {showRiskAssessment && (
                   <>
                     <div

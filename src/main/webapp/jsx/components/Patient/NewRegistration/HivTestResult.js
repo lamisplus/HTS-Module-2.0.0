@@ -89,7 +89,6 @@ const HivTestResult = (props) => {
   const [saving, setSaving] = useState(false);
   const [errors, setErrors] = useState({});
   let temp = { ...errors };
-  console.log("data2", props.patientObj);
   const patientID =
     props.patientObj && props.patientObj.personResponseDto
       ? props.patientObj.personResponseDto.id
@@ -444,7 +443,6 @@ const handleInputChangeTie2 = (e) => {
     adhocCode: "",
   });
   useEffect(() => {
-    //console.log(props.patientObj)
 
     if (props.patientObj) {
       if (props.patientObj.dateVisit && props.patientObj.dateVisit !== "") {
@@ -617,7 +615,6 @@ const handleInputChangeTie2 = (e) => {
        ? ""
        : "This field is required."); 
   
-console.log(temp)
     setErrors({ ...temp });
     return Object.values(temp).every((x) => x == "");
   };
@@ -793,14 +790,9 @@ console.log(temp)
       "",
       "unknown"
     );
-
-
         //SUBMIT FORM
 
     if (validate()) {
-   
-
-      console.log(finalResult)
 
     if (finalResult === "") {
       toast.error("Final result is required for submission.");
@@ -878,9 +870,7 @@ console.log(temp)
         .then((response) => {
           setSaving(false);
           props.setPatientObj(response.data);
-          //console.log(response.data)
-          //props.setPatientObj(props && props.patientObj ? props.patientObj : "")
-          //toast.success("HIV test successful");
+      
           handleItemClick(latestForm[0], latestForm[1]);
         })
         .catch((error) => {
@@ -1828,7 +1818,7 @@ console.log(temp)
                         <option value="Semi-Quantitative">
                           Semi-Quantitative
                         </option>
-                        <option value="Flow Cyteometry">Flow Cyteometry</option>
+                        <option value="Flow Cyteometry">Flow cytometry</option>
                       </select>
                     </FormGroup>
                   </div>
@@ -1859,7 +1849,7 @@ console.log(temp)
                       <FormGroup>
                         <Label for="">CD4 Count Value</Label>
                         <Input
-                          type="text"
+                          type="number"
                           name="cd4FlowCyteometry"
                           id="cd4FlowCyteometry"
                           value={cd4Count.cd4FlowCyteometry}

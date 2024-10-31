@@ -225,7 +225,6 @@ const PostTest = (props) => {
       })
       .catch((error) => {
         setSaving(false);
-        console.log(error);
         if (error.response && error.response.data) {
           let errorMessage =
             error.response.data.apierror &&

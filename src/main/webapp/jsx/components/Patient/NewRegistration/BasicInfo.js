@@ -316,9 +316,7 @@ const BasicInfo = (props) => {
     let ans = indexTesting.filter((each, index) => {
       return each.code === code;
     });
-
-
-    console.log(ans)
+    
     if(ans[0]?.id){
       return ans[0].id;
     }

@@ -148,11 +148,13 @@ const Home = (props) => {
                         patientObj={patientInfo}
                         activePage={props.activePage}
                         setActivePage={props.setActivePage}
+                        patientInfo={props.patientInfo}
                         clientCode={props.clientCode}
                         patientAge={props.patientAge}
                         patients={patients}
                         patientList={patientList}
                         checkedInPatient={props.checkedInPatient}
+                        personInfo={props.personInfo}
                       />
                     </Tab>
                   )}

@@ -457,7 +457,7 @@ const UserRegistration = (props) => {
         riskStratificationResponseDto: null,
       }
   )
-  setPatientObj2(0)
+  // setPatientObj2(0)
     setHideOtherMenu(true)
     setExtra({
       risk: "",
@@ -642,7 +642,7 @@ const UserRegistration = (props) => {
                           )}
                         </span>
                       </Menu.Item>
-                      {patientObj2.riskStratificationResponseDto?.age &&
+                      {patientObj2.riskStratificationResponseDto?.age >= 15  &&
                         modalityCheck == "fill" && (
                           <Menu.Item
                             name="spam"
@@ -655,8 +655,9 @@ const UserRegistration = (props) => {
                             disabled={
                               activeItem !== "pre-test-counsel" ? true : false
                             }
+                            
                           >
-                            {/* <Label>2</Label> */}
+                         {/* <Label>2</Label> */}
                             <span style={{ color: "#fff" }}>
                               Pre Test Counseling
                               {completed.includes("pre-test-counsel") && (
@@ -665,6 +666,9 @@ const UserRegistration = (props) => {
                             </span>
                           </Menu.Item>
                         )}
+
+
+
                       {permissions.includes("Request_and_Result_Form") && (
                         <Menu.Item
                           name="inbox"
@@ -820,6 +824,7 @@ const UserRegistration = (props) => {
                     activePage={props.activePage}
                     setActivePage={props.setActivePage}
                     setOrganizationInfo={setOrganizationInfo}
+                    personInfo={props.personInfo}
                   />
                 )}
                 {activeItem === "basic" && (
@@ -840,6 +845,9 @@ const UserRegistration = (props) => {
                     checkedInPatient={props.checkedInPatient}
                   />
                 )}
+
+
+
                 {activeItem === "pre-test-counsel" && (
                   <PreTest
                     handleItemClick={handleItemClick}

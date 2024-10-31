@@ -320,7 +320,18 @@
         </sql>
     </changeSet>
 
+    <changeSet failOnError="true" author="Ganiyat Yakub" id="20109754755-071">
 
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="hts_family_index" columnName="other_child_number" />
+            </not>
+        </preConditions>
+
+        <sql>
+            ALTER TABLE hts_family_index ADD COLUMN other_child_number varchar(255);
+        </sql>
+    </changeSet>
 
 
 

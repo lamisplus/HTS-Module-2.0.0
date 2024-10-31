@@ -52,6 +52,8 @@ const styles = (theme) => ({
 function PatientCard(props) {
   const { classes } = props;
   let history = useHistory();
+
+
   const patientObject =
     history.location && history.location.state
       ? history.location.state.patientObject
@@ -60,11 +62,15 @@ function PatientCard(props) {
     history.location && history.location.state
       ? history.location.state.patientObj
       : {};
+
+   
   const clientCode =
     history.location && history.location.state
       ? history.location.state.clientCode
       : "";
 
+
+      const [personInfo, setPersonInfo]=useState({})
   const [activePage, setActivePage] = useState({
     activePage: "home",
     activeObject: {},
@@ -96,6 +102,7 @@ function PatientCard(props) {
             patientObj={patientObj}
             clientCode={clientCode}
             patientObject={patientObject}
+            setPersonInfo={setPersonInfo}
           />
           {activePage.activePage === "home" && (
             <PatientHistory
@@ -112,8 +119,9 @@ function PatientCard(props) {
               }
               setActivePage={setActivePage}
               clientCode={clientCode}
-              patientAge={patientAge}
+              patientAge={patientObj.age}
               patientObject={patientObject}
+              personInfo={personInfo}
             />
           )}
           {activePage.activePage === "view" && (
@@ -122,7 +130,7 @@ function PatientCard(props) {
               activePage={activePage}
               setActivePage={setActivePage}
               clientCode={clientCode}
-              patientAge={patientAge}
+              patientAge={patientObj.age}
               patientObject={patientObject}
             />
           )}

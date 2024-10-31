@@ -2127,7 +2127,7 @@ if(followUp){
                 <div className="form-group  col-md-4">
                   <FormGroup>
                     <Label>
-                      Descriptiven Residential Address{" "}
+                             Descriptive Residential Address{" "}
                       <span style={{ color: "red" }}> *</span>
                     </Label>
                     <input

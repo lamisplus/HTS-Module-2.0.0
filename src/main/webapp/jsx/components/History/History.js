@@ -135,6 +135,7 @@ const PatientnHistory = (props) => {
         columns={[
           // { title: "HTS ID", field: "id" },
           { title: "Date", field: "date" },
+          { title: "Client Code", field: "clientCode" },
           { title: "Pre Test Counseling", field: "pre" },
           { title: "Recency Test", field: "rencency" },
           { title: "Post Test", field: "post" },
@@ -150,6 +151,8 @@ const PatientnHistory = (props) => {
         data={props.patientList.map((row) => ({
           // id: row.id,
           date: row.dateVisit,
+          clientCode: row.clientCode,
+
           pre: row.knowledgeAssessment ? "Filled" : "Not Filled ",
           requestResult: row.confirmatoryTest ? "Filled" : "Not Filled ",
           rencency: row.recency ? "Filled" : "Not Filled ",

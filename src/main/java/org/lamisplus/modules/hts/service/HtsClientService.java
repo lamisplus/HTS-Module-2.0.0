@@ -52,6 +52,8 @@ public class HtsClientService {
     private final FamilyIndexTestingService familyIndexTestingService;
     private final HtsClientRepository htsClientRepository;
     private PNSService pnsService;
+
+
     public HtsClientDto save(HtsClientRequestDto htsClientRequestDto){
         System.out.println("i am inside the save method");
         if(htsClientRequestDto.getRiskStratificationCode() != null){
@@ -78,9 +80,14 @@ public class HtsClientService {
         //when it is a new person
         if(htsClientRequestDto.getPersonId() == null){
             System.out.println("getPersonId() == null");
-
+            System.out.println(htsClientRequestDto.getPersonDto().toString());
             if(htsClientRequestDto.getPersonDto() == null) throw new EntityNotFoundException(PersonDto.class, "PersonDTO is ", " empty");
+            System.out.println("about to be saved ");
+            System.out.println(htsClientRequestDto.getPersonDto().toString());
+
             personResponseDto = personService.createPerson(htsClientRequestDto.getPersonDto());
+            System.out.println("created person " + personResponseDto.toString());
+
             person = personRepository.findById(personResponseDto.getId()).get();
             String personUuid = person.getUuid();
             htsClient = this.htsClientRequestDtoToHtsClient(htsClientRequestDto, personUuid);
@@ -102,7 +109,8 @@ public class HtsClientService {
         htsClient.setFacilityId(currentUserOrganizationService.getCurrentUserOrganization());
         htsClient.setLatitude(htsClientRequestDto.getLatitude());
         htsClient.setLongitude(htsClientRequestDto.getLongitude());
-        String sourceSupport = htsClientRequestDto.getSource() == null || htsClientRequestDto.getSource().isEmpty() ? Constants.WEB_SOURCE : Constants.MOBILE_SOURCE;
+        String sourceSupport = (htsClientRequestDto.getSource() != null && !htsClientRequestDto.getSource().trim().isEmpty()) ? htsClientRequestDto.getSource()  : "Web";
+//                htsClientRequestDto.getSource() == null || htsClientRequestDto.getSource().isEmpty() ? Constants.WEB_SOURCE : Constants.MOBILE_SOURCE;
         htsClient.setSource(sourceSupport);
         htsClient.setFamilyIndex(htsClientRequestDto.getFamilyIndex());
         htsClient.setPartnerNotificationService(htsClientRequestDto.getPartnerNotificationService());

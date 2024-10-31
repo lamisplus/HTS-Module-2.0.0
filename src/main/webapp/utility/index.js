@@ -475,7 +475,6 @@ export const loopThroughForms = (
   hivStatus
 ) => {
 let authorizedForm = JSON.parse(localStorage.getItem("generatedPermission"));
-// console.log("length of the authorized form ", authorizedForm.length);
 let latestNextForm = nextForm;
 let nextFormIndex =
   authorizedForm.length > IndexOfForm + 1 ? IndexOfForm + 1 : IndexOfForm;
@@ -561,7 +560,6 @@ export const getPreviousForm = (formName, age, pmtctModality, hivStatus) => {
     let nextForm = authorizedForm[prevPage];
 
    
-    // console.log([nextForm.code, authorizedForm[IndexOfForm].code]);
 
     //  confirm if there are no condition on the  NEXT form
     if (nextForm.condition.length === 0) {

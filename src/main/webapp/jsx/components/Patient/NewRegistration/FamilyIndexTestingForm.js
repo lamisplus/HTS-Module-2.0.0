@@ -653,7 +653,6 @@ if(each.code !==  "CHILD_NUMBER_OTHERS"){
       } else {
       let deductedValue =   getIntPosition(e.target.value)
              //set position to child number
-             console.log("deductedValue", deductedValue)
       setFamilyTestingTrackerRequestDTO({
         ...familyTestingTrackerRequestDTO,
         positionOfChildEnumerated: deductedValue,
@@ -794,7 +793,6 @@ if(each.code !==  "CHILD_NUMBER_OTHERS"){
         console.log(e);
       });
 
-    // console.log(response);
   };
 
   const handleFamilyRelationshipChange = (e) => {
@@ -1001,7 +999,6 @@ if(each.code !==  "CHILD_NUMBER_OTHERS"){
             : "",
       });
     } else {
-      console.log(e.target.name, e.target.value);
       setPayload({ ...payload, [e.target.name]: e.target.value });
     }
   };
@@ -1080,7 +1077,6 @@ if(each.code !==  "CHILD_NUMBER_OTHERS"){
         }
       )
       .then((response) => {
-        console.log(response);
         if (response.data) {
           setPayload({
             ...payload,
@@ -1821,7 +1817,7 @@ if(each.code !==  "CHILD_NUMBER_OTHERS"){
                 <div className="form-group  col-md-4">
                   <FormGroup>
                     <Label>
-                      Descriptiven Residential Address{" "}
+                    Descriptive Residential Address{" "}
                       <span style={{ color: "red" }}> *</span>
                     </Label>
                     <input

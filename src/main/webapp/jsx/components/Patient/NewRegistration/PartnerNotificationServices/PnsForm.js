@@ -287,7 +287,7 @@ const PnsForm = (props) => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        console.log(response.data);
+   
         setFacilityInfo(response.data.currentOrganisationUnitName);
       })
       .catch((error) => {
@@ -2248,7 +2248,7 @@ const PnsForm = (props) => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <h4>Would you like to fill the Refferal form ?</h4>
+          <h4>Would you like to fill the Referral form ?</h4>
         </Modal.Body>
         <Modal.Footer>
           <Button

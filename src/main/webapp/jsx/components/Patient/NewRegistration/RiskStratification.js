@@ -263,9 +263,27 @@ if (objValues.age !== "") {
         "TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
       modality === "TEST_SETTING_OTHERS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
       modality ===
-        "TEST_SETTING_STANDALONE_HTS_POST_ANC1_PREGNANT_L&D ? 72hrs"
+        "TEST_SETTING_STANDALONE_HTS_POST_ANC1_PREGNANT_L&D ? 72hrs"   
+        ||
+        modality ===
+          "TEST_SETTING_STANDALONE_HTS_POST_ANC1_PREGNANT_L&D < 72hrs"   
+          ||
+          modality ===
+            "TEST_SETTING_STANDALONE_HTS_POST_ANC1_PREGNANT_L&D > 72hrs"  
+ 
     ) {
       console.log("it is PMTCT MODALITY ");
+      setErrors({...errors,
+        lastHivTestDone: "",
+        whatWasTheResult: "",
+        lastHivTestVaginalOral: "",
+        lastHivTestBloodTransfusion: "",
+        lastHivTestPainfulUrination: "",
+        diagnosedWithTb: "",
+        lastHivTestInjectedDrugs: "",
+        lastHivTestHadAnal: "",
+        lastHivTestForceToHaveSex: "",
+       })
       setIsPMTCTModality(true);
       return true;
     } else {
@@ -452,8 +470,10 @@ if (objValues.age !== "") {
       : "This field is required.";
     temp.entryPoint = objValues.entryPoint ? "" : "This field is required.";
     temp.modality = objValues.modality ? "" : "This field is required.";
+  //  
     temp.dob = objValues.dob ? "" : "This field is required.";
     temp.age = objValues.age ? "" : "This field is required.";
+    // 
     temp.lastHivTestBasedOnRequest = riskAssessment.lastHivTestBasedOnRequest
       ? ""
       : "This field is required.";

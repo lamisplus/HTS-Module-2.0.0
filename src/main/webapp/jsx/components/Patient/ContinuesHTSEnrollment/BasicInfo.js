@@ -121,18 +121,20 @@ const BasicInfo = (props) => {
   const [facilityCode, setFacilityCode] = useState("");
   const [serialNumber, setSerialNumber] = useState(null);
   const [disableModality, setDisableModality] = useState(props.extra.modality ===
-                              "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||
-                            props.extra.modality ===
-                              "TEST_SETTING_STANDALONE_HTS_POST_ANC1_BREASTFEEDING" ||
-                            props.extra.modality ===
-                              "TEST_SETTING_OTHERS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
-                            props.extra.modality === "TEST_SETTING_CPMTCT" ||
-                            props.extra.modality ===
-                              "TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)"
+    "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||
+  // props.extra.modality ===
+  //   "TEST_SETTING_STANDALONE_HTS_POST_ANC1_BREASTFEEDING" ||
+  props.extra.modality ===
+    "TEST_SETTING_OTHERS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
+  // props.extra.modality === "TEST_SETTING_CPMTCT" ||
+  props.extra.modality ===
+    "TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||  props.extra.modality === "TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||  props.extra.modality === "TEST_SETTING_STANDALONE_HTS_PMTCT_(ANC1_ONLY)"
                               ? true
                               : false);
 
   const [modalityCheck, setModality] = useState("");
+  const [showPregancy, setShowPregnancy] = useState(false);
+
   const [objValues, setObjValues] = useState({
     active: true,
     personId: props.patientObj.personId,
@@ -258,6 +260,25 @@ const BasicInfo = (props) => {
         props?.patientObj?.riskStratificationResponseDto?.modality
       )
     );
+    // (props.patientObj.riskStratificationResponseDto
+    //   .modality ===
+    //   "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||
+    //   props.patientObj.riskStratificationResponseDto
+    //     .modality ===
+    //     "TEST_SETTING_OTHERS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
+    //   props.patientObj.riskStratificationResponseDto
+    //     .testingSetting === "TEST_SETTING_CPMTCT" ||
+    //   props.patientObj.riskStratificationResponseDto
+    //     .modality ===
+    //     "TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
+    //   props.patientObj.riskStratificationResponseDto
+    //     .modality ===
+    //     "TEST_SETTING_STANDALONE_HTS_POST_ANC1_BREASTFEEDING") &&
+    // value.code === "PREGANACY_STATUS_NOT_PREGNANT" ? (
+    //   <></>
+    // )
+
+
   }, [props.patientObj, facilityCode]);
 
   const handleSubmitCheckOut = () => {
@@ -314,6 +335,28 @@ const BasicInfo = (props) => {
       })
       .then((response) => {
         setPregnancyStatus(response.data);
+               let pregnancyCode = response.data.filter((each, index)=>{
+
+                return each.code === "PREGANACY_STATUS_PREGNANT"
+               })                                                        
+
+
+        if (props?.patientObject?.gender.toLowerCase() === "female" ) {
+            if( props.extra.modality ===
+              "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||
+            // props.extra.modality ===
+            //   "TEST_SETTING_STANDALONE_HTS_POST_ANC1_BREASTFEEDING" ||
+            props.extra.modality ===
+              "TEST_SETTING_OTHERS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
+            // props.extra.modality === "TEST_SETTING_CPMTCT" ||
+            props.extra.modality ===
+              "TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||  props.extra.modality === "TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||  props.extra.modality === "TEST_SETTING_STANDALONE_HTS_PMTCT_(ANC1_ONLY)"){
+              setShowPregnancy(true);
+
+
+              setObjValues({...objValues, pregnant:pregnancyCode[0].id })
+            }
+          }
       })
       .catch((error) => {
         //console.log(error);
@@ -508,7 +551,6 @@ const BasicInfo = (props) => {
       setSerialNumber(e.target.value )
 
       // setCreatedCode(code);
-      // console.log("Code created is &&&& ", createdCode);
       setObjValues({ ...objValues, clientCode: code });
       await handleClientCodeCheck(code);
     }
@@ -668,7 +710,6 @@ const BasicInfo = (props) => {
   // },[objValues.clientCode])
 
   const handleClientCodeCheck = async (code) => {
-    // console.log("VALUE", e.target.value);
     const data = { clientCode: code };
     axios
       .post(`${baseUrl}hts/clientCodeCheck`, data, {
@@ -682,7 +723,6 @@ const BasicInfo = (props) => {
         setErrors({ ...temp });
       })
       .catch((error) => {
-        console.log("error", error);
         setClientCodeCheck(false);
       });
   };
@@ -1078,32 +1118,16 @@ const BasicInfo = (props) => {
                             border: "1px solid #014D88",
                             borderRadius: "0.2rem",
                           }}
-                          disabled={disableModality}
+                        disabled={disableModality}
                         >
                           <option value={""}></option>
-                          {pregnancyStatus.map((value) =>
-                            (props.patientObj.riskStratificationResponseDto
-                              .modality ===
-                              "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||
-                              props.patientObj.riskStratificationResponseDto
-                                .modality ===
-                                "TEST_SETTING_OTHERS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
-                              props.patientObj.riskStratificationResponseDto
-                                .testingSetting === "TEST_SETTING_CPMTCT" ||
-                              props.patientObj.riskStratificationResponseDto
-                                .modality ===
-                                "TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
-                              props.patientObj.riskStratificationResponseDto
-                                .modality ===
-                                "TEST_SETTING_STANDALONE_HTS_POST_ANC1_BREASTFEEDING") &&
-                            value.code === "PREGANACY_STATUS_NOT_PREGNANT" ? (
-                              <></>
-                            ) : (
-                              <option key={value.id} value={value.id}>
+                          {pregnancyStatus.map((value) =>{
+                       
+                           return    <option key={value.id} value={value.id}>
                                 {value.display}
-                              </option>
+                              </option>}
                             )
-                          )}
+                          }
                         </select>
                         {errors.pregnant !== "" ? (
                           <span className={classes.error}>

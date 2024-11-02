@@ -64,6 +64,16 @@ public class RiskStratification extends Audit implements Serializable {
     @Basic
     @Column(name = "modality")
     private String modality;
+
+    @Basic
+    @Column(name = "spoke_facility")
+    private String  spokeFacility;
+
+
+    @Basic
+    @Column(name = "other_site")
+    private String  otherSite;
+
     @Basic
     @Column(name = "code", updatable = false)
     private String code;

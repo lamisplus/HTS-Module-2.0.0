@@ -23,6 +23,9 @@ import "react-phone-input-2/lib/style.css";
 import { Button } from "semantic-ui-react";
 import { Modal } from "react-bootstrap";
 import { Label as LabelRibbon, Message } from "semantic-ui-react";
+import Cookies from "js-cookie";
+
+
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -101,6 +104,8 @@ const BasicInfo = (props) => {
   const [enrollSetting, setEnrollSetting] = useState([]);
   const [entryPoint, setEntryPoint] = useState([]);
   const [entryPointCommunity, setEntryPointCommunity] = useState([]);
+  const [entryPointSetting, setEntryPointSetting] = useState([]);
+
   let riskCountQuestion = [];
   const [kP, setKP] = useState([]);
   const [errors, setErrors] = useState({});
@@ -116,6 +121,7 @@ const BasicInfo = (props) => {
   const [permissions, setPermission] = useState(
     localStorage.getItem("stringifiedPermmision")?.split(",")
   );
+  const [spokeFacList, setSpokeFacList] = useState([]);
   const [nextForm, setNextForm] = useState([]);
   const [targetGroupValue, setTargetGroupValue] = useState(null);
   const [objValues, setObjValues] = useState({
@@ -135,6 +141,8 @@ const BasicInfo = (props) => {
     riskAssessment: {},
     entryPoint: "",
     communityEntryPoint: "",
+    spokeFacility: ""
+    
   });
   const [riskAssessment, setRiskAssessment] = useState({
 
@@ -152,9 +160,9 @@ const BasicInfo = (props) => {
   useEffect(() => {
     KP();
     TargetGroupSetup();
-    EnrollmentSetting();
+    // EnrollmentSetting();
     EntryPoint();
-    HTS_ENTRY_POINT_COMMUNITY();
+    // HTS_ENTRY_POINT_COMMUNITY();
 
 if (objValues.age !== "") {
       props.setPatientObjAge(objValues.age);
@@ -196,14 +204,76 @@ if (objValues.age !== "") {
         //console.log(error);
       });
   };
+
+
+  const GET_SPOKE_FACLITY = () => {
+    axios
+      .get(`${baseUrl}application-codesets/v2/FACILITY_HTS_TEST_SETTING`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        //Remove retesting from the codeset
+          let facilityList = []
+        response.data.map((each, index)=>{
+              if(each.code !=="FACILITY_HTS_TEST_SETTING_RETESTING"){
+                facilityList.push(each);
+              }
+
+        })
+        setEntryPointSetting(facilityList);
+      })
+      .catch((error) => {
+        //console.log(error);
+      });
+  };
+
+  const getSpokeFaclityByHubSite = () => {
+    let facility =Cookies.get("facilityName")
+    axios
+      .get(`${baseUrl}hts/spoke-site?hubSite=${facility}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        console.log("setSpokeFacList", response.data)
+        setSpokeFacList(response.data)
+      })
+      .catch((error) => {
+        //console.log(error);
+      });
+  };
+
+
+  const HTS_ENTRY_POINT_FACILITY = () => {
+    axios
+      .get(`${baseUrl}application-codesets/v2/FACILITY_HTS_TEST_SETTING`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        //Remove retesting from the codeset
+          let facilityList = []
+        response.data.map((each, index)=>{
+              if(each.code !=="FACILITY_HTS_TEST_SETTING_RETESTING"){
+                facilityList.push(each);
+              }
+
+        })
+        setEntryPointSetting(facilityList);
+      })
+      .catch((error) => {
+        //console.log(error);
+      });
+  };
+
+
   const HTS_ENTRY_POINT_COMMUNITY = () => {
     axios
-      .get(`${baseUrl}application-codesets/v2/HTS_ENTRY_POINT_COMMUNITY`, {
+      .get(`${baseUrl}application-codesets/v2/COMMUNITY_HTS_TEST_SETTING
+ `, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
         //console.log(response.data);
-        setEntryPointCommunity(response.data);
+        setEntryPointSetting(response.data);
       })
       .catch((error) => {
         //console.log(error);
@@ -299,6 +369,10 @@ if (objValues.age !== "") {
     if (e.target.name === "testingSetting" && e.target.value !== "") {
       SettingModality(e.target.value);
       setObjValues({ ...objValues, [e.target.name]: e.target.value });
+      if(e.target.value === "FACILITY_HTS_TEST_SETTING_SPOKE_HEALTH_FACILITY"){
+
+        getSpokeFaclityByHubSite();
+      }
     }
     if (e.target.name === "modality" && e.target.value !== "") {
       //SettingModality(e.target.value)
@@ -357,6 +431,21 @@ if (objValues.age !== "") {
         objValues.age,
         ans
       );
+    }
+    
+    if(e.target.name === "entryPoint"){
+
+      console.log("e.target.value", e.target.value )
+          if(e.target.value === "HTS_ENTRY_POINT_COMMUNITY"){
+            HTS_ENTRY_POINT_COMMUNITY()
+          }else if(e.target.value === "HTS_ENTRY_POINT_FACILITY"){
+
+            HTS_ENTRY_POINT_FACILITY()
+          }else{
+            setEntryPointSetting([]);
+
+          }
+
     }
 
     setObjValues({ ...objValues, [e.target.name]: e.target.value });
@@ -469,7 +558,7 @@ if (objValues.age !== "") {
       ? ""
       : "This field is required.";
     temp.entryPoint = objValues.entryPoint ? "" : "This field is required.";
-    temp.modality = objValues.modality ? "" : "This field is required.";
+    // temp.modality = objValues.modality ? "" : "This field is required.";
   //  
     temp.dob = objValues.dob ? "" : "This field is required.";
     temp.age = objValues.age ? "" : "This field is required.";
@@ -482,11 +571,11 @@ if (objValues.age !== "") {
       (temp.targetGroup = objValues.targetGroup
         ? ""
         : "This field is required.");
-    objValues.entryPoint !== "" &&
-      objValues.entryPoint === "HTS_ENTRY_POINT_COMMUNITY" &&
-      (temp.communityEntryPoint = objValues.communityEntryPoint
-        ? ""
-        : "This field is required.");
+    // objValues.entryPoint !== "" &&
+    //   objValues.entryPoint === "HTS_ENTRY_POINT_COMMUNITY" &&
+    //   (temp.communityEntryPoint = objValues.communityEntryPoint
+    //     ? ""
+    //     : "This field is required.");
 
     //Risk Assement section
     if (
@@ -805,7 +894,7 @@ if (objValues.age !== "") {
                     )}
                   </FormGroup>
                 </div>
-                {objValues.entryPoint === "HTS_ENTRY_POINT_COMMUNITY" && (
+                {/* {objValues.entryPoint === "HTS_ENTRY_POINT_COMMUNITY" && (
                   <div className="form-group  col-md-6">
                     <FormGroup>
                       <Label>
@@ -839,14 +928,16 @@ if (objValues.age !== "") {
                       )}
                     </FormGroup>
                   </div>
-                )}
+                )} */}
                 <div className="form-group mb-3 col-md-6">
                   <FormGroup>
                     <Label for="">
                       Visit Date <span style={{ color: "red" }}> *</span>{" "}
                     </Label>
                     <Input
-                      type="date"                       onKeyPress={(e)=>{e.preventDefault()}}
+                      type="date"         
+                      
+                      onKeyPress={(e)=>{e.preventDefault()}}
 
                       name="visitDate"
                       id="visitDate"
@@ -886,33 +977,15 @@ if (objValues.age !== "") {
                         {" "}
                         Select
                       </option>
-                      {objValues.communityEntryPoint ===
-                        "HTS_ENTRY_POINT_COMMUNITY_CPMTCT" &&
-                      objValues.entryPoint === "HTS_ENTRY_POINT_COMMUNITY"
-                        ? enrollSetting.map((value) =>
-                            value.code === "TEST_SETTING_CPMTCT" ? (
+                      {entryPointSetting && entryPointSetting.map((value) =>
+                          
                               <option key={value.id} value={value.code}>
                                 {value.display}
                               </option>
-                            ) : (
-                              <></>
-                            )
+                            
                           )
-                        : enrollSetting.map((value) => (
-                            <option key={value.id} value={value.code}>
-                              {value.display}
-                            </option>
-                          ))}
-                      {/* <option value="TEST_SETTING_CT">CT</option>
-                                        <option value="TEST_SETTING_TB">TB</option>
-                                        <option value="TEST_SETTING_STI">STI</option>
-                                        <option value="TEST_SETTING_OPD">OPD</option>
-                                        <option value="TEST_SETTING_WARD">WARD</option>
-                                        <option value="TEST_SETTING_STANDALONE_HTS">STANDALONE HTS</option>
-                                        
-                                        <option value="TEST_SETTING_FP">FP</option>
-                                        <option value="TEST_SETTING_OUTREACH">OUTREACH</option>
-                                        <option value="TEST_SETTING_OTHERS">OTHERS</option> */}
+                        }
+
                     </select>
                     {errors.testingSetting !== "" ? (
                       <span className={classes.error}>
@@ -923,7 +996,40 @@ if (objValues.age !== "") {
                     )}
                   </FormGroup>
                 </div>
-                <div className="form-group  col-md-6">
+                {/*  */}
+              { <div className="form-group  col-md-6">
+                  <FormGroup>
+                    <Label>
+                    Spoke health facility <span style={{ color: "red" }}> *</span>
+                    </Label>
+                    <select
+                      className="form-control"
+                      name="spokeFacility"
+                      id="spokeFacility"
+                      value={objValues.spokeFacility}
+                      onChange={handleInputChange}
+                      style={{
+                        border: "1px solid #014D88",
+                        borderRadius: "0.2rem",
+                        textTransform:"capitalize  !important"
+                      }}
+                    >
+                      <option value={""}>Select</option>
+                      {spokeFacList.map((value) => (
+                        <option key={value.id} value={value.spokeSite}       
+                     >
+                          {value.spokeSite}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.spokeFacility !== "" ? (
+                      <span className={classes.error}>{errors.spokeFacility}</span>
+                    ) : (
+                      ""
+                    )}
+                  </FormGroup>
+                </div>}
+                {/* <div className="form-group  col-md-6">
                   <FormGroup>
                     <Label>
                       Modality <span style={{ color: "red" }}> *</span>
@@ -952,7 +1058,7 @@ if (objValues.age !== "") {
                       ""
                     )}
                   </FormGroup>
-                </div>
+                </div> */}
               </div>
               <br />
 

@@ -97,9 +97,8 @@ public class HtsClientService {
         }
 //       for elicited client
         System.out.println(htsClientRequestDto.getFamilyIndex());
-        if(!htsClientRequestDto.getFamilyIndex().isEmpty()){
+        if( htsClientRequestDto.getFamilyIndex() != null && !htsClientRequestDto.getFamilyIndex().isEmpty()){
             System.out.println("inside family index");
-
             familyIndexTestingService.updateIndexClientStatus(htsClientRequestDto.getFamilyIndex());
         }
 //        if(!htsClientRequestDto.getPartnerNotificationService().isEmpty()){
@@ -113,7 +112,9 @@ public class HtsClientService {
 //                htsClientRequestDto.getSource() == null || htsClientRequestDto.getSource().isEmpty() ? Constants.WEB_SOURCE : Constants.MOBILE_SOURCE;
         htsClient.setSource(sourceSupport);
         htsClient.setFamilyIndex(htsClientRequestDto.getFamilyIndex());
-        htsClient.setPartnerNotificationService(htsClientRequestDto.getPartnerNotificationService());
+        if( htsClientRequestDto.getPartnerNotificationService() != null && !htsClientRequestDto.getPartnerNotificationService().isEmpty()){
+            htsClient.setPartnerNotificationService(htsClientRequestDto.getPartnerNotificationService());
+        }
         htsClient = htsClientRepository.save(htsClient);
         htsClient.setPerson(person);
 

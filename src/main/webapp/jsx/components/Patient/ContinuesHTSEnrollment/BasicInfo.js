@@ -120,17 +120,7 @@ const BasicInfo = (props) => {
   const [createdCode, setCreatedCode] = useState("");
   const [facilityCode, setFacilityCode] = useState("");
   const [serialNumber, setSerialNumber] = useState(null);
-  const [disableModality, setDisableModality] = useState(props.extra.modality ===
-    "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||
-  // props.extra.modality ===
-  //   "TEST_SETTING_STANDALONE_HTS_POST_ANC1_BREASTFEEDING" ||
-  props.extra.modality ===
-    "TEST_SETTING_OTHERS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
-  // props.extra.modality === "TEST_SETTING_CPMTCT" ||
-  props.extra.modality ===
-    "TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||  props.extra.modality === "TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||  props.extra.modality === "TEST_SETTING_STANDALONE_HTS_PMTCT_(ANC1_ONLY)"
-                              ? true
-                              : false);
+  const [disableModality, setDisableModality] = useState(props.extra.testingSetting === "FACILITY_HTS_TEST_SETTING_ANC" ? true: false);
 
   const [modalityCheck, setModality] = useState("");
   const [showPregancy, setShowPregnancy] = useState(false);
@@ -206,7 +196,7 @@ const BasicInfo = (props) => {
 
     let visitDate = new Date(props.patientObj.dateVisit);
 
-    let modality = props.patientObj.modality;
+    let modality = props.patientObj.testingSetting;
     let modalityCode = "";
     if (modality?.includes("STI")) {
       modalityCode = "STI";
@@ -257,26 +247,11 @@ const BasicInfo = (props) => {
 
     setModality(
       getCheckModality(
-        props?.patientObj?.riskStratificationResponseDto?.modality
+        props?.patientObj?.riskStratificationResponseDto?.testingSetting
       )
     );
-    // (props.patientObj.riskStratificationResponseDto
-    //   .modality ===
-    //   "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||
-    //   props.patientObj.riskStratificationResponseDto
-    //     .modality ===
-    //     "TEST_SETTING_OTHERS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
-    //   props.patientObj.riskStratificationResponseDto
-    //     .testingSetting === "TEST_SETTING_CPMTCT" ||
-    //   props.patientObj.riskStratificationResponseDto
-    //     .modality ===
-    //     "TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
-    //   props.patientObj.riskStratificationResponseDto
-    //     .modality ===
-    //     "TEST_SETTING_STANDALONE_HTS_POST_ANC1_BREASTFEEDING") &&
-    // value.code === "PREGANACY_STATUS_NOT_PREGNANT" ? (
-    //   <></>
-    // )
+
+
 
 
   }, [props.patientObj, facilityCode]);
@@ -342,15 +317,9 @@ const BasicInfo = (props) => {
 
 
         if (props?.patientObject?.gender.toLowerCase() === "female" ) {
-            if( props.extra.modality ===
-              "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||
-            // props.extra.modality ===
-            //   "TEST_SETTING_STANDALONE_HTS_POST_ANC1_BREASTFEEDING" ||
-            props.extra.modality ===
-              "TEST_SETTING_OTHERS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
-            // props.extra.modality === "TEST_SETTING_CPMTCT" ||
-            props.extra.modality ===
-              "TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||  props.extra.modality === "TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||  props.extra.modality === "TEST_SETTING_STANDALONE_HTS_PMTCT_(ANC1_ONLY)"){
+            if( props.extra.testingSetting ===
+              "FACILITY_HTS_TEST_SETTING_ANC" 
+           ){
               setShowPregnancy(true);
 
 

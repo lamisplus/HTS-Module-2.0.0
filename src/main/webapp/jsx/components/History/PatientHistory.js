@@ -89,7 +89,7 @@ const Home = (props) => {
         );
         setCheckModality(
           getCheckModalityForHTS(
-            response.data.riskStratificationResponseDto?.modality
+            response.data.riskStratificationResponseDto?.testingSetting
           )
         );
 
@@ -97,7 +97,7 @@ const Home = (props) => {
         let condition =
           Math.round(calculateLastVisitDate(response.data.dateVisit)) >= 3 ||
           getCheckModalityForHTS(
-            response.data.riskStratificationResponseDto?.modality
+            response.data.riskStratificationResponseDto?.testingSetting
           ) === "show"
             ? true
             : false;

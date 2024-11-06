@@ -23,6 +23,9 @@ import { Button } from "semantic-ui-react";
 import { Modal } from "react-bootstrap";
 import { Label as LabelRibbon, Message } from "semantic-ui-react";
 import { getNextForm } from "../../../../utility";
+import Cookies from "js-cookie";
+
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -106,11 +109,16 @@ const RiskStratification = (props) => {
   const [kP, setKP] = useState([]);
   const [errors, setErrors] = useState({});
   const [saving, setSaving] = useState(false);
+  const [entryPointSetting, setEntryPointSetting] = useState([]);
+  const [spokeFacList, setSpokeFacList] = useState([]);
+
   let temp = { ...errors };
   const [open, setOpen] = React.useState(false);
   const toggle = () => setOpen(!open);
   const [setting, setSetting] = useState([]);
   const [riskCount, setRiskCount] = useState(0);
+  const [showHealthFacility, setShowHealthFacility] = useState(false);
+
   const [objValues, setObjValues] = useState({
     age: props.patientAge,
     dob: props.patientObj.dateOfBirth?  props.patientObj.dateOfBirth :props?.personInfo?.personResponseDto?.dateOfBirth,
@@ -128,6 +136,8 @@ const RiskStratification = (props) => {
     entryPoint: "",
     careProvider: "",
     communityEntryPoint: "",
+    spokeFacility: "",
+    healthFacility: ""
   });
   const [riskAssessment, setRiskAssessment] = useState({
     // soldPaidVaginalSex:"",
@@ -186,17 +196,65 @@ const RiskStratification = (props) => {
       .catch((error) => {
       });
   };
-  const HTS_ENTRY_POINT_COMMUNITY = () => {
+
+
+  const getSpokeFaclityByHubSite = () => {
+    let facility =Cookies.get("facilityName")
     axios
-      .get(`${baseUrl}application-codesets/v2/HTS_ENTRY_POINT_COMMUNITY`, {
+      .get(`${baseUrl}hts/spoke-site?hubSite=${facility}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        setEntryPointCommunity(response.data);
+        console.log("setSpokeFacList", response.data)
+        setSpokeFacList(response.data)
       })
       .catch((error) => {
+        //console.log(error);
       });
   };
+
+
+
+
+  const HTS_ENTRY_POINT_FACILITY = () => {
+    axios
+      .get(`${baseUrl}application-codesets/v2/FACILITY_HTS_TEST_SETTING`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        //Remove retesting from the codeset
+          let facilityList = []
+        response.data.map((each, index)=>{
+              if(each.code !=="FACILITY_HTS_TEST_SETTING_RETESTING"){
+                facilityList.push(each);
+              }
+
+        })
+        setEntryPointSetting(facilityList);
+      })
+      .catch((error) => {
+        //console.log(error);
+      });
+  };
+
+
+
+  const HTS_ENTRY_POINT_COMMUNITY = () => {
+    axios
+      .get(`${baseUrl}application-codesets/v2/COMMUNITY_HTS_TEST_SETTING
+ `, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        //console.log(response.data);
+        setEntryPointSetting(response.data);
+      })
+      .catch((error) => {
+        //console.log(error);
+      });
+  };
+
+
   //Get list of KP
   const KP = () => {
     axios
@@ -205,13 +263,9 @@ const RiskStratification = (props) => {
       })
       .then((response) => {
 
-
 if(props.patientObject.gender){
   let kpList =[]
-
 let gender = props.patientObject.gender.toLowerCase()
-
-
 if(gender === "female"){
 
   response.data.map((each, index )=>{
@@ -253,26 +307,9 @@ setKP(kpList)
   const checkPMTCTModality = (modality) => {
 
     if (
-      modality === "TEST_SETTING_CT_PMTCT" ||
-      modality === "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||
-      modality === "TEST_SETTING_OTHERS_POST_ANC1_BREASTFEEDING" ||
-      modality === "TEST_SETTING_OTHERS_POST_ANC1_PREGNANT_L&D" ||
-      modality === "TEST_SETTING_STANDALONE_HTS_PMTCT_(ANC1_ONLY)" ||
-      modality === "TEST_SETTING_STANDALONE_HTS_POST_ANC1_BREASTFEEDING" ||
-      modality === "TEST_SETTING_STANDALONE_HTS_POST_ANC1_PREGNANT_L&D" ||
-      modality === "PMTCT (Post ANC1: Pregnancy/L&D/BF)" ||
-      modality === "Post ANC1 Pregnant/L&D ? 72hrs" ||
-      modality ===
-        "TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
-      modality === "TEST_SETTING_OTHERS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
-      modality ===
-        "TEST_SETTING_STANDALONE_HTS_POST_ANC1_PREGNANT_L&D ? 72hrs"   
-        ||
-        modality ===
-          "TEST_SETTING_STANDALONE_HTS_POST_ANC1_PREGNANT_L&D < 72hrs"   
-          ||
-          modality ===
-            "TEST_SETTING_STANDALONE_HTS_POST_ANC1_PREGNANT_L&D > 72hrs"  
+      setting === "FACILITY_HTS_TEST_SETTING_ANC" ||
+      setting === "FACILITY_HTS_TEST_SETTING_L&D" ||
+      setting === "FACILITY_HTS_TEST_SETTING_POST_NATAL_WARD_BREASTFEEDING" 
  
       ) {
       setIsPMTCTModality(true);
@@ -298,67 +335,68 @@ setKP(kpList)
   const handleInputChange = (e) => {
     setErrors({ ...temp, [e.target.name]: "" });
     if (e.target.name === "testingSetting" && e.target.value !== "") {
+      setErrors({ ...temp, spokeFacility: "",  healthFacility: ""});
+
       SettingModality(e.target.value);
       setObjValues({ ...objValues, [e.target.name]: e.target.value });
-    }
-    if (e.target.name === "modality" && e.target.value !== "") {
-      //SettingModality(e.target.value)
-      if (e.target.value === "TEST_SETTING_STANDALONE_HTS_PMTCT_(ANC1_ONLY)") {
-        setRiskCount(1);
-        setObjValues({ ...objValues, [e.target.name]: e.target.value });
-      } else if (e.target.value === "TEST_SETTING_STANDALONE_HTS_EMERGENCY") {
-        //setRiskCount(1)
-        setObjValues({ ...objValues, [e.target.name]: e.target.value });
-      } else if (e.target.value === "TEST_SETTING_STANDALONE_HTS_INDEX") {
-        setRiskCount(1);
-        setObjValues({ ...objValues, [e.target.name]: e.target.value });
-      } else if (
-        e.target.value ===
-        "TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)"
-      ) {
-        setRiskCount(1);
-        setObjValues({ ...objValues, [e.target.name]: e.target.value });
-      } else if (e.target.value === "TEST_SETTING_STANDALONE_HTS_STI") {
-        setRiskCount(1);
-        setObjValues({ ...objValues, [e.target.name]: e.target.value });
-      } else if (e.target.value === "TEST_SETTING_STANDALONE_HTS_TB") {
-        setRiskCount(1);
-        setObjValues({ ...objValues, [e.target.name]: e.target.value });
-      } else if (e.target.value === "TEST_SETTING_CT_STI") {
-        setRiskCount(1);
-        setObjValues({ ...objValues, [e.target.name]: e.target.value });
-      } else if (e.target.value === "TEST_SETTING_CT_PMTCT") {
-        setRiskCount(1);
-        setObjValues({ ...objValues, [e.target.name]: e.target.value });
-      } else if (e.target.value === "TEST_SETTING_CT_TB") {
-        setRiskCount(1);
-        setObjValues({ ...objValues, [e.target.name]: e.target.value });
-      } else if (e.target.value === "TEST_SETTING_TB_TB") {
-        setRiskCount(1);
-        setObjValues({ ...objValues, [e.target.name]: e.target.value });
-      } else if (e.target.value === "TEST_SETTING_STI_STI") {
-        setRiskCount(1);
-        setObjValues({ ...objValues, [e.target.name]: e.target.value });
-      } else if (e.target.value === "TEST_SETTING_OPD_STI") {
-        //setRiskCount(1)
-        setObjValues({ ...objValues, [e.target.name]: e.target.value });
-      } else if (e.target.value === "TEST_SETTING_OUTREACH_INDEX") {
-        setRiskCount(1);
-        setObjValues({ ...objValues, [e.target.name]: e.target.value });
-      } else {
-        setRiskCount(0);
-        setObjValues({ ...objValues, [e.target.name]: e.target.value });
-      }
       let ans = checkPMTCTModality(e.target.value);
 
+     if(e.target.value === "COMMUNITY_HTS_TEST_SETTING_CONGREGATIONAL_SETTING" ||  e.target.value === "COMMUNITY_HTS_TEST_SETTING_DELIVERY_HOMES" || e.target.value === "COMMUNITY_HTS_TEST_SETTING_TBA_ORTHODOX" || e.target.value === "COMMUNITY_HTS_TEST_SETTING_TBA_RT-HCW" ){
+            setShowHealthFacility(true)
+      }else{
+            setShowHealthFacility(false)
 
+       }
+      
       displayRiskAssessment(
         riskAssessment.lastHivTestBasedOnRequest,
         objValues.age,
         ans
       );
-    }
 
+      
+      //get spoke sites
+      if(e.target.value === "FACILITY_HTS_TEST_SETTING_SPOKE_HEALTH_FACILITY" || e.target.value === "COMMUNITY_HTS_TEST_SETTING_CONGREGATIONAL_SETTING" ||  e.target.value === "COMMUNITY_HTS_TEST_SETTING_DELIVERY_HOMES" || e.target.value === "COMMUNITY_HTS_TEST_SETTING_TBA_ORTHODOX" || e.target.value === "COMMUNITY_HTS_TEST_SETTING_TBA_RT-HCW" ){
+
+        getSpokeFaclityByHubSite();
+      }
+
+      //set risk count
+              if (e.target.value === "COMMUNITY_HTS_TEST_SETTING_STANDALONE_HTS"   || e.target.value === "FACILITY_HTS_TEST_SETTING_STANDALONE_HTS") {
+                setRiskCount(1);
+              }   else if (e.target.value === "COMMUNITY_HTS_TEST_SETTING_CT"  || e.target.value === "FACILITY_HTS_TEST_SETTING_CT") {
+                setRiskCount(1);
+              } else if (e.target.value ==="FACILITY_HTS_TEST_SETTING_TB") {
+                setRiskCount(1);
+              } else if (e.target.value === "FACILITY_HTS_TEST_SETTING_STI") {
+                setRiskCount(1);
+              } else if (e.target.value === "COMMUNITY_HTS_TEST_SETTING_OUTREACH") {
+                setRiskCount(1);
+              } else {
+                setRiskCount(0);
+              }
+        
+ 
+    }
+   
+
+
+
+   if(e.target.name === "entryPoint"){
+
+      console.log("e.target.value", e.target.value )
+          if(e.target.value === "HTS_ENTRY_POINT_COMMUNITY"){
+            HTS_ENTRY_POINT_COMMUNITY()
+          }else if(e.target.value === "HTS_ENTRY_POINT_FACILITY"){
+
+            HTS_ENTRY_POINT_FACILITY()
+          }else{
+            setEntryPointSetting([]);
+
+          }
+
+    }
+    
     setObjValues({ ...objValues, [e.target.name]: e.target.value });
   };
 
@@ -410,7 +448,9 @@ setKP(kpList)
     temp.testingSetting = objValues.testingSetting
       ? ""
       : "This field is required.";
-    temp.modality = objValues.modality ? "" : "This field is required.";
+    // temp.modality = objValues.modality ? "" : "This field is required.";
+   
+   
     temp.lastHivTestBasedOnRequest = riskAssessment.lastHivTestBasedOnRequest
     ? ""
     : "This field is required.";
@@ -428,8 +468,18 @@ setKP(kpList)
           ? ""
           : "This field is required.");
    
- 
-  
+ // 
+      objValues.testingSetting ===  "FACILITY_HTS_TEST_SETTING_SPOKE_HEALTH_FACILITY" &&
+      (temp.spokeFacility = objValues.spokeFacility
+        ? ""
+        : "This field is required.");
+        
+        showHealthFacility &&
+        (temp.healthFacility = objValues.healthFacility
+          ? ""
+          : "This field is required.");
+        //
+        
     //objValues.age>15 && riskAssessment.lastHivTestBasedOnRequest==='false' && riskAssessment.lastHivTestDone!=="" && riskAssessment.lastHivTestDone!=='Never' && (temp.whatWasTheResult = riskAssessment.whatWasTheResult ? "" : "This field is required." )
 
 
@@ -479,7 +529,6 @@ setKP(kpList)
           : "This field is required.";
       }
     //targetGroup
-
     setErrors({ ...temp });
     return Object.values(temp).every((x) => x == "");
   };
@@ -504,7 +553,6 @@ setKP(kpList)
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-
     getMenuLogic();
       let newModality = isPMTCTModality ? "skip" : "fill";
 
@@ -655,7 +703,7 @@ setKP(kpList)
                     )}
                   </FormGroup>
                 </div>
-                {objValues.entryPoint === "HTS_ENTRY_POINT_COMMUNITY" && (
+                {/* {objValues.entryPoint === "HTS_ENTRY_POINT_COMMUNITY" && (
                   <div className="form-group  col-md-6">
                     <FormGroup>
                       <Label>
@@ -689,7 +737,7 @@ setKP(kpList)
                       )}
                     </FormGroup>
                   </div>
-                )}
+                )} */}
                 <div className="form-group mb-3 col-md-6">
                   <FormGroup>
                     <Label for="">
@@ -733,11 +781,14 @@ setKP(kpList)
                       }}
                     >
                       <option value={""}>Select</option>
-                      {enrollSetting.map((value) => (
-                        <option key={value.id} value={value.code}>
-                          {value.display}
-                        </option>
-                      ))}
+                      {entryPointSetting && entryPointSetting.map((value) =>
+                          
+                          <option key={value.id} value={value.code}>
+                            {value.display}
+                          </option>
+                        
+                      )
+                    }
                       {/* <option value="TEST_SETTING_CT">CT</option>
                                         <option value="TEST_SETTING_TB">TB</option>
                                         <option value="TEST_SETTING_STI">STI</option>
@@ -758,7 +809,7 @@ setKP(kpList)
                     )}
                   </FormGroup>
                 </div>
-                <div className="form-group  col-md-6">
+                {/* <div className="form-group  col-md-6">
                   <FormGroup>
                     <Label>
                       Modality <span style={{ color: "red" }}> *</span>
@@ -787,7 +838,75 @@ setKP(kpList)
                       ""
                     )}
                   </FormGroup>
-                </div>
+                </div> */}
+
+{ objValues.testingSetting ===  "FACILITY_HTS_TEST_SETTING_SPOKE_HEALTH_FACILITY" && <div className="form-group  col-md-6">
+                  <FormGroup>
+                    <Label>
+                    Spoke Health Facility <span style={{ color: "red" }}> *</span>
+                    </Label>
+                    <select
+                      className="form-control"
+                      name="spokeFacility"
+                      id="spokeFacility"
+                      value={objValues.spokeFacility}
+                      onChange={handleInputChange}
+                      style={{
+                        border: "1px solid #014D88",
+                        borderRadius: "0.2rem",
+                        textTransform:"capitalize  !important"
+                      }}
+                    >
+                      <option value={""}>Select</option>
+                      {spokeFacList.map((value) => (
+                        <option key={value.id} value={value.spokeSite}       
+                     >
+                          {value.spokeSite}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.spokeFacility !== "" ? (
+                      <span className={classes.error}>{errors.spokeFacility}</span>
+                    ) : (
+                      ""
+                    )}
+                  </FormGroup>
+                </div>} 
+
+
+
+                {showHealthFacility && <div className="form-group  col-md-6">
+                  <FormGroup>
+                    <Label>
+                     Health Facility <span style={{ color: "red" }}> *</span>
+                    </Label>
+                    <select
+                      className="form-control"
+                      name="healthFacility"
+                      id="healthFacility"
+                      value={objValues.healthFacility}
+                      onChange={handleInputChange}
+                      style={{
+                        border: "1px solid #014D88",
+                        borderRadius: "0.2rem",
+                        textTransform:"capitalize  !important"
+                      }}
+                    >
+                      <option value={""}>Select</option>
+                      {spokeFacList.map((value) => (
+                        <option key={value.id} value={value.spokeSite}       
+                     >
+                          {value.spokeSite}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.healthFacility !== "" ? (
+                      <span className={classes.error}>{errors.healthFacility}</span>
+                    ) : (
+                      ""
+                    )}
+                  </FormGroup>
+                </div>}
                 <div className="form-group  col-md-6">
                   <FormGroup>
                     <Label>
@@ -804,12 +923,12 @@ setKP(kpList)
                         borderRadius: "0.2rem",
                       }}
                     >
-                      <option value={""}></option>
-                      {kP.map((value) => (
-                        <option key={value.id} value={value.code}>
+                      <option value={""}>Select</option>
+                      {kP.map((value) => {
+                      return  <option key={value.id} value={value.code}>
                           {value.display}
                         </option>
-                      ))}
+                      })}
                     </select>
                     {errors.targetGroup !== "" ? (
                       <span className={classes.error}>

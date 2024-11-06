@@ -19,8 +19,8 @@ public class RiskStratificationResponseDto {
     private String entryPoint;
     private String testingSetting;
     private String modality;
-    private String  spokeFacility;
-    private String  otherSite;
+    private String spokeFacility;
+    private String healthFacility;
 
     private String targetGroup;
     private LocalDate dob;

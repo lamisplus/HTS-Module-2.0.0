@@ -567,7 +567,7 @@ const UserRegistration = (props) => {
 
   useEffect(() => {
     setModalityCheck(
-      getCheckModality(patientObj2?.riskStratificationResponseDto?.modality)
+      getCheckModality(patientObj2?.riskStratificationResponseDto?.testingSetting)
     );
   }, [patientObj2]);
 

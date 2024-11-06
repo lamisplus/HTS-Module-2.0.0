@@ -223,7 +223,7 @@
         </sql>
     </changeSet>
 
-    <changeSet failOnError="true" author="Ganiyat" id="2024-11-02-02454033">
+    <changeSet failOnError="true" author="Ganiyat" id="2024-11-034-954033">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="hts_spoke_sites"/>
@@ -2934,5 +2934,15 @@
         </sql>
     </changeSet>
 
+    <changeSet failOnError="false" author="Ganiyat" id="remove-con-2024-11-03">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="hts_risk_stratification" columnName="modality" />
+            </not>
+        </preConditions>
+        <sql>
 
+            ALTER TABLE hts_risk_stratification DROP CONSTRAINT modality_fk
+        </sql>
+    </changeSet>
 </databaseChangeLog>

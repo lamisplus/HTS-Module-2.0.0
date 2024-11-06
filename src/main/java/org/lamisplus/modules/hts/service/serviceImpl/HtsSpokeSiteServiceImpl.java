@@ -25,7 +25,7 @@ public class HtsSpokeSiteServiceImpl implements HtsSpokeSiteService {
         String queryParam = hubSite+"%";
         System.out.println("queryParam" + queryParam);
         List<HtsSpokeSiteEntity>  optSpokeList = htsSpokeSiteRepository.getAllByHubSite(queryParam);
-
+        System.out.println("optSpokeList " + optSpokeList);
 
         for (HtsSpokeSiteEntity htsSpokeSiteEntity : optSpokeList) {
             spokeList.add(this.convertSpokeEntityToDTO(htsSpokeSiteEntity));

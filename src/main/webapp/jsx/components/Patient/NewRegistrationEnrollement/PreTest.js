@@ -314,7 +314,7 @@ const BasicInfo = (props) => {
         e.preventDefault();
 
        let modality = getCheckModality(
-         props.patientObj?.riskStratificationResponseDto?.modality
+         props.patientObj?.riskStratificationResponseDto?.testingSetting
        );    
             let latestForm = getNextForm(
               "Pre_Test_Counseling",

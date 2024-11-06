@@ -171,7 +171,7 @@ const BasicInfo = (props) => {
     //objValues.genderId = props.patientObj && props.patientObj.personResponseDto ? props.patientObj.personResponseDto.gender.id : ""
     setModalityCheck(
       getCheckModality(
-        props?.patientObj?.riskStratificationResponseDto?.modality
+        props?.patientObj?.riskStratificationResponseDto?.testingSetting
       )
     );
   }, [props.patientObj]);
@@ -771,19 +771,8 @@ const BasicInfo = (props) => {
                           }}
                           disabled={
                             props.patientObj.riskStratificationResponseDto
-                              .modality ===
-                              "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||
-                            props.patientObj.riskStratificationResponseDto
-                              .modality ===
-                              "TEST_SETTING_STANDALONE_HTS_POST_ANC1_BREASTFEEDING" ||
-                            props.patientObj.riskStratificationResponseDto
-                              .modality ===
-                              "TEST_SETTING_OTHERS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
-                            props.patientObj.riskStratificationResponseDto
-                              .modality === "TEST_SETTING_CPMTCT" ||
-                            props.patientObj.riskStratificationResponseDto
-                              .modality ===
-                              "TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)"
+                              .testingSetting ===
+                              "FACILITY_HTS_TEST_SETTING_ANC"
                               ? true
                               : props.activePage.actionType === "view"
                               ? true
@@ -793,19 +782,9 @@ const BasicInfo = (props) => {
                           <option value={""}></option>
                           {pregnancyStatus.map((value) =>
                             (props.patientObj.riskStratificationResponseDto
-                              .modality ===
-                              "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||
-                              props.patientObj.riskStratificationResponseDto
-                                .modality ===
-                                "TEST_SETTING_OTHERS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
-                              props.patientObj.riskStratificationResponseDto
-                                .testingSetting === "TEST_SETTING_CPMTCT" ||
-                              props.patientObj.riskStratificationResponseDto
-                                .modality ===
-                                "TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
-                              props.patientObj.riskStratificationResponseDto
-                                .modality ===
-                                "TEST_SETTING_STANDALONE_HTS_POST_ANC1_BREASTFEEDING") &&
+                              .testingSetting ===
+                              "FACILITY_HTS_TEST_SETTING_ANC") 
+                              &&
                             value.code === "PREGANACY_STATUS_NOT_PREGNANT" ? (
                               <></>
                             ) : (

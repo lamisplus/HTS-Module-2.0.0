@@ -111,12 +111,12 @@
         </sql>
     </changeSet>
 
-    <changeSet failOnError="true" author="Ganiyat Yakub" id="20241102-03431-001">
+    <changeSet failOnError="true" author="Ganiyat Yakub" id="2024-0781">
         <preConditions onFail="MARK_RAN">
             <tableExists tableName="hts_risk_stratification"/>
         </preConditions>
         <sql>
-            ALTER TABLE hts_risk_stratification ADD COLUMN other_site varchar(255);
+            ALTER TABLE hts_risk_stratification ADD COLUMN health_facility varchar(255);
 
         </sql>
     </changeSet>

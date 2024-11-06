@@ -14,13 +14,10 @@ import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
 import org.hibernate.annotations.Where;
 import org.lamisplus.modules.base.domain.entities.Audit;
-import org.lamisplus.modules.hts.domain.dto.RiskStratificationDto;
 import org.lamisplus.modules.hts.domain.dto.RiskStratificationResponseDto;
 import org.lamisplus.modules.hts.util.Constants;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.UUID;
@@ -61,18 +58,15 @@ public class RiskStratification extends Audit implements Serializable {
     @Column(name = "testing_setting")
     private String testingSetting;
 
-    @Basic
     @Column(name = "modality")
     private String modality;
 
-    @Basic
     @Column(name = "spoke_facility")
     private String  spokeFacility;
 
 
-    @Basic
-    @Column(name = "other_site")
-    private String  otherSite;
+    @Column(name = "health_facility")
+    private String healthFacility;
 
     @Basic
     @Column(name = "code", updatable = false)

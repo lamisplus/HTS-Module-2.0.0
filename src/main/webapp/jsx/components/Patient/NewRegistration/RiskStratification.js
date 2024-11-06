@@ -122,6 +122,8 @@ const BasicInfo = (props) => {
     localStorage.getItem("stringifiedPermmision")?.split(",")
   );
   const [spokeFacList, setSpokeFacList] = useState([]);
+  const [showHealthFacility, setShowHealthFacility] = useState(false);
+
   const [nextForm, setNextForm] = useState([]);
   const [targetGroupValue, setTargetGroupValue] = useState(null);
   const [objValues, setObjValues] = useState({
@@ -141,7 +143,8 @@ const BasicInfo = (props) => {
     riskAssessment: {},
     entryPoint: "",
     communityEntryPoint: "",
-    spokeFacility: ""
+    spokeFacility: "",
+    healthFacility: ""
     
   });
   const [riskAssessment, setRiskAssessment] = useState({
@@ -206,26 +209,7 @@ if (objValues.age !== "") {
   };
 
 
-  const GET_SPOKE_FACLITY = () => {
-    axios
-      .get(`${baseUrl}application-codesets/v2/FACILITY_HTS_TEST_SETTING`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((response) => {
-        //Remove retesting from the codeset
-          let facilityList = []
-        response.data.map((each, index)=>{
-              if(each.code !=="FACILITY_HTS_TEST_SETTING_RETESTING"){
-                facilityList.push(each);
-              }
 
-        })
-        setEntryPointSetting(facilityList);
-      })
-      .catch((error) => {
-        //console.log(error);
-      });
-  };
 
   const getSpokeFaclityByHubSite = () => {
     let facility =Cookies.get("facilityName")
@@ -279,6 +263,9 @@ if (objValues.age !== "") {
         //console.log(error);
       });
   };
+
+
+  
   const TargetGroupSetup = () => {
     axios
       .get(`${baseUrl}account`, {
@@ -317,32 +304,13 @@ if (objValues.age !== "") {
     props.setHideOtherMenu(false);
   };
 
-  const checkPMTCTModality = (modality) => {
-    console.log("modality", modality);
+  const checkPMTCTModality = (setting) => {
     if (
-      modality === "TEST_SETTING_CT_PMTCT" ||
-      modality === "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||
-      modality === "TEST_SETTING_OTHERS_POST_ANC1_BREASTFEEDING" ||
-      modality === "TEST_SETTING_OTHERS_POST_ANC1_PREGNANT_L&D" ||
-      modality === "TEST_SETTING_STANDALONE_HTS_PMTCT_(ANC1_ONLY)" ||
-      modality === "TEST_SETTING_STANDALONE_HTS_POST_ANC1_BREASTFEEDING" ||
-      modality === "TEST_SETTING_STANDALONE_HTS_POST_ANC1_PREGNANT_L&D" ||
-      modality === "PMTCT (Post ANC1: Pregnancy/L&D/BF)" ||
-      modality === "Post ANC1 Pregnant/L&D ? 72hrs" ||
-      modality ===
-        "TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
-      modality === "TEST_SETTING_OTHERS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
-      modality ===
-        "TEST_SETTING_STANDALONE_HTS_POST_ANC1_PREGNANT_L&D ? 72hrs"   
-        ||
-        modality ===
-          "TEST_SETTING_STANDALONE_HTS_POST_ANC1_PREGNANT_L&D < 72hrs"   
-          ||
-          modality ===
-            "TEST_SETTING_STANDALONE_HTS_POST_ANC1_PREGNANT_L&D > 72hrs"  
+      setting === "FACILITY_HTS_TEST_SETTING_ANC" ||
+      setting === "FACILITY_HTS_TEST_SETTING_L&D" ||
+      setting === "FACILITY_HTS_TEST_SETTING_POST_NATAL_WARD_BREASTFEEDING" 
  
     ) {
-      console.log("it is PMTCT MODALITY ");
       setErrors({...errors,
         lastHivTestDone: "",
         whatWasTheResult: "",
@@ -357,7 +325,6 @@ if (objValues.age !== "") {
       setIsPMTCTModality(true);
       return true;
     } else {
-      console.log("it is NOT pmtct modality ");
 
       setIsPMTCTModality(false);
       return false;
@@ -367,71 +334,63 @@ if (objValues.age !== "") {
   const handleInputChange = (e) => {
     setErrors({ ...temp, [e.target.name]: "" });
     if (e.target.name === "testingSetting" && e.target.value !== "") {
+      setErrors({ ...temp, spokeFacility: "",  healthFacility: ""});
+
       SettingModality(e.target.value);
       setObjValues({ ...objValues, [e.target.name]: e.target.value });
-      if(e.target.value === "FACILITY_HTS_TEST_SETTING_SPOKE_HEALTH_FACILITY"){
-
-        getSpokeFaclityByHubSite();
-      }
-    }
-    if (e.target.name === "modality" && e.target.value !== "") {
-      //SettingModality(e.target.value)
-      if (e.target.value === "TEST_SETTING_STANDALONE_HTS_PMTCT_(ANC1_ONLY)") {
-        setRiskCount(1);
-        setObjValues({ ...objValues, [e.target.name]: e.target.value });
-      } else if (e.target.value === "TEST_SETTING_STANDALONE_HTS_EMERGENCY") {
-        //setRiskCount(1)
-        setObjValues({ ...objValues, [e.target.name]: e.target.value });
-      } else if (e.target.value === "TEST_SETTING_STANDALONE_HTS_INDEX") {
-        setRiskCount(1);
-        setObjValues({ ...objValues, [e.target.name]: e.target.value });
-      } else if (
-        e.target.value ===
-        "TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)"
-      ) {
-        setRiskCount(1);
-        setObjValues({ ...objValues, [e.target.name]: e.target.value });
-      } else if (e.target.value === "TEST_SETTING_STANDALONE_HTS_STI") {
-        setRiskCount(1);
-        setObjValues({ ...objValues, [e.target.name]: e.target.value });
-      } else if (e.target.value === "TEST_SETTING_STANDALONE_HTS_TB") {
-        setRiskCount(1);
-        setObjValues({ ...objValues, [e.target.name]: e.target.value });
-      } else if (e.target.value === "TEST_SETTING_CT_STI") {
-        setRiskCount(1);
-        setObjValues({ ...objValues, [e.target.name]: e.target.value });
-      } else if (e.target.value === "TEST_SETTING_CT_PMTCT") {
-        setRiskCount(1);
-        setObjValues({ ...objValues, [e.target.name]: e.target.value });
-      } else if (e.target.value === "TEST_SETTING_CT_TB") {
-        setRiskCount(1);
-        setObjValues({ ...objValues, [e.target.name]: e.target.value });
-      } else if (e.target.value === "TEST_SETTING_TB_TB") {
-        setRiskCount(1);
-        setObjValues({ ...objValues, [e.target.name]: e.target.value });
-      } else if (e.target.value === "TEST_SETTING_STI_STI") {
-        setRiskCount(1);
-        setObjValues({ ...objValues, [e.target.name]: e.target.value });
-      } else if (e.target.value === "TEST_SETTING_OPD_STI") {
-        //setRiskCount(1)
-        setObjValues({ ...objValues, [e.target.name]: e.target.value });
-      } else if (e.target.value === "TEST_SETTING_OUTREACH_INDEX") {
-        setRiskCount(1);
-        setObjValues({ ...objValues, [e.target.name]: e.target.value });
-      } else {
-        setRiskCount(0);
-        setObjValues({ ...objValues, [e.target.name]: e.target.value });
-      }
-
       let ans = checkPMTCTModality(e.target.value);
 
-      console.log("answerrrr", ans);
+     if(e.target.value === "COMMUNITY_HTS_TEST_SETTING_CONGREGATIONAL_SETTING" ||  e.target.value === "COMMUNITY_HTS_TEST_SETTING_DELIVERY_HOMES" || e.target.value === "COMMUNITY_HTS_TEST_SETTING_TBA_ORTHODOX" || e.target.value === "COMMUNITY_HTS_TEST_SETTING_TBA_RT-HCW" ){
+            setShowHealthFacility(true)
+      }else{
+            setShowHealthFacility(false)
+
+       }
+      
       displayRiskAssessment(
         riskAssessment.lastHivTestBasedOnRequest,
         objValues.age,
         ans
       );
+
+      
+      //get spoke sites
+      if(e.target.value === "FACILITY_HTS_TEST_SETTING_SPOKE_HEALTH_FACILITY" || e.target.value === "COMMUNITY_HTS_TEST_SETTING_CONGREGATIONAL_SETTING" ||  e.target.value === "COMMUNITY_HTS_TEST_SETTING_DELIVERY_HOMES" || e.target.value === "COMMUNITY_HTS_TEST_SETTING_TBA_ORTHODOX" || e.target.value === "COMMUNITY_HTS_TEST_SETTING_TBA_RT-HCW" ){
+
+        getSpokeFaclityByHubSite();
+      }
+
+      //set risk count
+
+        //  "TEST_SETTING_STANDALONE_HTS_PMTCT_(ANC1_ONLY)"
+        // "TEST_SETTING_STANDALONE_HTS_EMERGENCY"
+        //  "TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)"
+        // "TEST_SETTING_STANDALONE_HTS_TB"
+        // "TEST_SETTING_STANDALONE_HTS_STI"
+        // "TEST_SETTING_CT_STI"
+        // "TEST_SETTING_CT_PMTCT"
+        // "TEST_SETTING_CT_TB"
+        // "TEST_SETTING_TB_TB"
+        // "TEST_SETTING_STI_STI"
+        // "TEST_SETTING_OPD_STI"
+        // "TEST_SETTING_OUTREACH_INDEX"
+              if (e.target.value === "COMMUNITY_HTS_TEST_SETTING_STANDALONE_HTS"   || e.target.value === "FACILITY_HTS_TEST_SETTING_STANDALONE_HTS") {
+                setRiskCount(1);
+              }   else if (e.target.value === "COMMUNITY_HTS_TEST_SETTING_CT"  || e.target.value === "FACILITY_HTS_TEST_SETTING_CT") {
+                setRiskCount(1);
+              } else if (e.target.value ==="FACILITY_HTS_TEST_SETTING_TB") {
+                setRiskCount(1);
+              } else if (e.target.value === "FACILITY_HTS_TEST_SETTING_STI") {
+                setRiskCount(1);
+              } else if (e.target.value === "COMMUNITY_HTS_TEST_SETTING_OUTREACH") {
+                setRiskCount(1);
+              } else {
+                setRiskCount(0);
+              }
+        
+ 
     }
+
     
     if(e.target.name === "entryPoint"){
 
@@ -571,6 +530,18 @@ if (objValues.age !== "") {
       (temp.targetGroup = objValues.targetGroup
         ? ""
         : "This field is required.");
+
+// 
+      objValues.testingSetting ===  "FACILITY_HTS_TEST_SETTING_SPOKE_HEALTH_FACILITY" &&
+      (temp.spokeFacility = objValues.spokeFacility
+        ? ""
+        : "This field is required.");
+        
+        showHealthFacility &&
+        (temp.healthFacility = objValues.healthFacility
+          ? ""
+          : "This field is required.");
+        // 
     // objValues.entryPoint !== "" &&
     //   objValues.entryPoint === "HTS_ENTRY_POINT_COMMUNITY" &&
     //   (temp.communityEntryPoint = objValues.communityEntryPoint
@@ -997,10 +968,10 @@ if (objValues.age !== "") {
                   </FormGroup>
                 </div>
                 {/*  */}
-              { <div className="form-group  col-md-6">
+              { objValues.testingSetting ===  "FACILITY_HTS_TEST_SETTING_SPOKE_HEALTH_FACILITY" && <div className="form-group  col-md-6">
                   <FormGroup>
                     <Label>
-                    Spoke health facility <span style={{ color: "red" }}> *</span>
+                    Spoke Health Facility <span style={{ color: "red" }}> *</span>
                     </Label>
                     <select
                       className="form-control"
@@ -1024,6 +995,40 @@ if (objValues.age !== "") {
                     </select>
                     {errors.spokeFacility !== "" ? (
                       <span className={classes.error}>{errors.spokeFacility}</span>
+                    ) : (
+                      ""
+                    )}
+                  </FormGroup>
+                </div>}
+
+
+                {showHealthFacility && <div className="form-group  col-md-6">
+                  <FormGroup>
+                    <Label>
+                     Health Facility <span style={{ color: "red" }}> *</span>
+                    </Label>
+                    <select
+                      className="form-control"
+                      name="healthFacility"
+                      id="healthFacility"
+                      value={objValues.healthFacility}
+                      onChange={handleInputChange}
+                      style={{
+                        border: "1px solid #014D88",
+                        borderRadius: "0.2rem",
+                        textTransform:"capitalize  !important"
+                      }}
+                    >
+                      <option value={""}>Select</option>
+                      {spokeFacList.map((value) => (
+                        <option key={value.id} value={value.spokeSite}       
+                     >
+                          {value.spokeSite}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.healthFacility !== "" ? (
+                      <span className={classes.error}>{errors.healthFacility}</span>
                     ) : (
                       ""
                     )}

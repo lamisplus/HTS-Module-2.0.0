@@ -116,26 +116,9 @@ export const checkPregnantPatient =  async(id) => {
 //check modality
 export const getCheckModality = (patientObj) => {
   if (
-    patientObj === "TEST_SETTING_STI_STI" ||
-    patientObj === "TEST_SETTING_TB_TB" ||
-    patientObj === "TEST_SETTING_CT_TB" ||
-    patientObj === "TEST_SETTING_CT_STI" ||
-    patientObj === "TEST_SETTING_CT_PMTCT" ||
-    patientObj === "TEST_SETTING_OPD_STI" ||
-    patientObj === "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||
-    patientObj === "TEST_SETTING_OTHERS_POST_ANC1_BREASTFEEDING" ||
-    patientObj === "TEST_SETTING_OTHERS_POST_ANC1_PREGNANT_L&D" ||
-    patientObj === "TEST_SETTING_STANDALONE_HTS_PMTCT_(ANC1_ONLY)" ||
-    patientObj === "TEST_SETTING_STANDALONE_HTS_POST_ANC1_BREASTFEEDING" ||
-    patientObj === "TEST_SETTING_STANDALONE_HTS_POST_ANC1_PREGNANT_L&D" ||
-    patientObj === "TEST_SETTING_STANDALONE_HTS_STI" ||
-    patientObj === "TEST_SETTING_STANDALONE_HTS_TB" ||
-    patientObj === "PMTCT (Post ANC1: Pregnancy/L&D/BF)" ||
-    patientObj === "Post ANC1 Pregnant/L&D ? 72hrs" ||
-    patientObj ===
-      "TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
-    patientObj === "TEST_SETTING_OTHERS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
-    patientObj === "TEST_SETTING_STANDALONE_HTS_POST_ANC1_PREGNANT_L&D ? 72hrs"
+    patientObj ===  "FACILITY_HTS_TEST_SETTING_ANC" ||
+    patientObj === "FACILITY_HTS_TEST_SETTING_L&D" ||
+    patientObj === "FACILITY_HTS_TEST_SETTING_POST_NATAL_WARD_BREASTFEEDING" 
   ) {
 
 
@@ -149,21 +132,9 @@ export const getCheckModality = (patientObj) => {
 //check modality for new HTS
 export const getCheckModalityForHTS = (patientObj) => {
   if (
-    patientObj === "TEST_SETTING_CT_PMTCT" ||
-    patientObj === "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||
-    patientObj === "TEST_SETTING_OTHERS_POST_ANC1_BREASTFEEDING" ||
-    patientObj === "TEST_SETTING_OTHERS_POST_ANC1_PREGNANT_L&D" ||
-    patientObj === "TEST_SETTING_STANDALONE_HTS_PMTCT_(ANC1_ONLY)" ||
-    patientObj === "TEST_SETTING_STANDALONE_HTS_POST_ANC1_BREASTFEEDING" ||
-    patientObj === "TEST_SETTING_STANDALONE_HTS_POST_ANC1_PREGNANT_L&D" ||
-    patientObj === "PMTCT (Post ANC1: Pregnancy/L&D/BF)" ||
-    patientObj === "Post ANC1 Pregnant/L&D ? 72hrs" ||
-    patientObj ===
-      "TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
-    patientObj ===
-      "TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
-    patientObj === "TEST_SETTING_OTHERS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
-    patientObj === "TEST_SETTING_STANDALONE_HTS_POST_ANC1_PREGNANT_L&D ? 72hrs"
+    patientObj ===  "FACILITY_HTS_TEST_SETTING_ANC" ||
+    patientObj === "FACILITY_HTS_TEST_SETTING_L&D" ||
+    patientObj === "FACILITY_HTS_TEST_SETTING_POST_NATAL_WARD_BREASTFEEDING" 
   ) {
     return "show";
   } else {

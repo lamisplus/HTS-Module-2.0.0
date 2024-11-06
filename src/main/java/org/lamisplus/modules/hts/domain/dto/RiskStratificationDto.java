@@ -24,7 +24,7 @@ public class RiskStratificationDto {
     private String modality;
 
     private String  spokeFacility;
-    private String  otherSite;
+    private String healthFacility;
 
     @NotBlank(message = "targetGroup is mandatory")
     private String targetGroup;

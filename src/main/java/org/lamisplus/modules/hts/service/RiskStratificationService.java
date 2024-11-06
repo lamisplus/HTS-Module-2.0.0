@@ -2,11 +2,9 @@ package org.lamisplus.modules.hts.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.audit4j.core.util.Log;
 import org.lamisplus.modules.base.controller.apierror.EntityNotFoundException;
 import org.lamisplus.modules.hts.domain.dto.RiskStratificationDto;
 import org.lamisplus.modules.hts.domain.dto.RiskStratificationResponseDto;
-import org.lamisplus.modules.hts.domain.entity.HtsClient;
 import org.lamisplus.modules.hts.domain.entity.RiskStratification;
 import org.lamisplus.modules.hts.domain.enums.Source;
 import org.lamisplus.modules.hts.repository.RiskStratificationRepository;
@@ -101,6 +99,10 @@ public class RiskStratificationService {
         riskStratificationDto.setRiskAssessment( riskStratification.getRiskAssessment() );
         riskStratificationDto.setCommunityEntryPoint( riskStratification.getCommunityEntryPoint() );
         riskStratificationDto.setCode(riskStratification.getCode());
+        riskStratificationDto.setSpokeFacility( riskStratification.getSpokeFacility() );
+        riskStratificationDto.setHealthFacility( riskStratification.getHealthFacility());
+
+
         /*riskStratificationDto.setPersonId(personRepository
                         .findByUuid(riskStratification.getPersonUuid())
                         .orElse(null).getId());*/
@@ -127,7 +129,8 @@ public class RiskStratificationService {
         responseDto.setVisitDate( riskStratification.getVisitDate() );
         responseDto.setRiskAssessment( riskStratification.getRiskAssessment() );
         responseDto.setCommunityEntryPoint( riskStratification.getCommunityEntryPoint() );
-
+        responseDto.setSpokeFacility( riskStratification.getSpokeFacility() );
+        responseDto.setHealthFacility( riskStratification.getHealthFacility() );
         return responseDto;
     }
     private RiskStratification toRiskStratification(RiskStratificationDto riskStratificationDTO, String personUuid) {
@@ -148,7 +151,8 @@ public class RiskStratificationService {
         riskStratification.setDob(riskStratificationDTO.getDob());
         riskStratification.setRiskAssessment( riskStratificationDTO.getRiskAssessment() );
         riskStratification.setCommunityEntryPoint( riskStratificationDTO.getCommunityEntryPoint() );
-
+        riskStratification.setSpokeFacility( riskStratificationDTO.getSpokeFacility() );
+        riskStratification.setHealthFacility( riskStratificationDTO.getHealthFacility() );
         riskStratification.setEntryPoint( riskStratificationDTO.getEntryPoint());
 
 

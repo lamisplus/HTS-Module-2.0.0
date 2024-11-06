@@ -237,7 +237,7 @@ const BasicInfo = (props) => {
 
       setModalityCheck(
         getCheckModality(
-          props.patientObj?.riskStratificationResponseDto?.modality
+          props.patientObj?.riskStratificationResponseDto?.testingSetting
         )
       );
     }

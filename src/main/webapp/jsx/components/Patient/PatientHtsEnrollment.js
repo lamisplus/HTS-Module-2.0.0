@@ -2,6 +2,8 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Button } from "semantic-ui-react";
 import { Card, CardBody } from "reactstrap";
 import { makeStyles } from "@material-ui/core/styles";
+import { useLocation } from "react-router-dom";
+
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
@@ -51,7 +53,9 @@ const useStyles = makeStyles((theme) => ({
 const UserRegistration = (props) => {
   const classes = useStyles();
   const history = useHistory();
+  const location = useLocation();
 
+  const locationState = location.state;
   const [activeItem, setactiveItem] = useState("basic");
   const [completed, setCompleted] = useState([]);
   const [hideOtherMenu, setHideOtherMenu] = useState(true);
@@ -183,7 +187,7 @@ const UserRegistration = (props) => {
   } 
   useEffect(() => {
     setModalityCheck(
-      getCheckModality(patientObj?.riskStratificationResponseDto?.modality)
+      getCheckModality(patientObj?.riskStratificationResponseDto?.testingSetting)
     );
   }, [patientObj]);
   return (
@@ -473,6 +477,8 @@ const UserRegistration = (props) => {
                     setExtra={setExtra}
                     extra={extra}
                     activePage={props.activePage}
+                    patientObject={locationState.patientObject}
+
                     setActivePage={props.setActivePage}
                     patientAge={props.patientAge}
                     setOrganizationInfo={setOrganizationInfo}

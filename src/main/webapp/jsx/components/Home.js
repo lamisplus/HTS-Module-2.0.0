@@ -51,8 +51,6 @@ const Home = () => {
 
 
 
-
-      
          let generatedPermission = getListOfPermission(
           staticPermission
         );
@@ -75,8 +73,18 @@ const Home = () => {
       .catch((error) => {});
   };
 
+
+  const getFacilityAccount = () => {
+    getAcount()
+      .then((response) => {
+      })
+      .catch(() => {});
+  };
+
+
   useEffect(() => {
     getPermissions();
+    getFacilityAccount()
     const permissions = localStorage.getItem("permissions")?.split(",");
     let obj = {
       uuid: "",

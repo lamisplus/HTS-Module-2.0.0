@@ -578,7 +578,7 @@ const clearInfo=()=>{
   useEffect(() => {
   
     setModalityCheck(
-      getCheckModality(patientObj?.riskStratificationResponseDto?.modality)
+      getCheckModality(patientObj?.riskStratificationResponseDto?.testingSetting)
     );
   }, [patientObj]);
   return (

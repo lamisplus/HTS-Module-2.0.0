@@ -239,8 +239,7 @@ const BasicInfo = (props) => {
               ...props.patientObj.riskAssessment,
             });
           }
-          knowledgeAssessment.clientPregnant =
-            props.patientObj.pregnant === 73 ? "true" : "";
+       
         }
     }, [props.patientObj]);
     const handleItemClick =(page, completedMenu)=>{        

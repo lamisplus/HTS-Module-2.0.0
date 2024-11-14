@@ -2934,14 +2934,12 @@
         </sql>
     </changeSet>
 
-    <changeSet failOnError="false" author="Ganiyat" id="remove-con-2024-11-03">
+    <changeSet failOnError="false" author="Ganiyat" id="remove-con-2024-11-1212">
         <preConditions onFail="MARK_RAN">
-            <not>
+
                 <columnExists tableName="hts_risk_stratification" columnName="modality" />
-            </not>
         </preConditions>
         <sql>
-
             ALTER TABLE hts_risk_stratification DROP CONSTRAINT modality_fk
         </sql>
     </changeSet>

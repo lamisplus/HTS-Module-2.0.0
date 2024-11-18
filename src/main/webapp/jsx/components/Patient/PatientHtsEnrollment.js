@@ -164,9 +164,14 @@ const UserRegistration = (props) => {
                 ? basicInfo?.personResponseDto?.dateOfBirth
                 : patientObj?.personResponseDto?.dateOfBirth
             );
+            let checkModality = patientObj?.riskStratificationResponseDto?.modality? patientObj.riskStratificationResponseDto.modality: "";
+            let isPMTCTModality =getCheckModality(checkModality)
+          
+
+
 
             let hivStatus = patientObj?.hivTestResult;
-          let answer =  getPreviousForm(currentForm, age, "", hivStatus); 
+          let answer =  getPreviousForm(currentForm, age, isPMTCTModality, hivStatus); 
           if (answer[0]  && answer[1]) {
             if(answer[0] === "fit"){
               handleItemClick("fit-history");

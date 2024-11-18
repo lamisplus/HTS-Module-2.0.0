@@ -233,7 +233,7 @@ const BasicInfo = (props) => {
         });
       }
       knowledgeAssessment.clientPregnant =
-        props.patientObj.pregnant === 73 ? "true" : "";
+        props.patientObj.pregnant === 73 ? "true" : "false";
 
       setModalityCheck(
         getCheckModality(

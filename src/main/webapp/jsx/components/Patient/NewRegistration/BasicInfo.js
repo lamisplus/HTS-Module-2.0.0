@@ -360,7 +360,48 @@ const BasicInfo = (props) => {
       settingCode = "SNS";
     } else if (setting?.includes("OTHER")) {
       settingCode = "OTH";
-    }
+    }else if (setting?.includes("ANC")) {
+      settingCode = "ANC";
+    }else if (setting?.includes("RETESTING")) {
+      settingCode = "RET";
+    }else if (setting?.includes("L&D")) {
+      settingCode = "L&D";
+    }else if (setting?.includes("POST_NATAL_WARD_BREASTFEEDING")) {
+      settingCode = "PNWB";
+    }else if (setting?.includes("NPATIENT")) {
+      settingCode = "INP";
+    }else if (setting?.includes("SETTING_CT")) {
+      settingCode = "CT";
+    }else if (setting?.includes("FP")) {
+      settingCode = "FP";
+    }else if (setting?.includes("BLOOD_BANK")) {
+      settingCode = "BB";
+    }else if (setting?.includes("PEDIATRIC")) {
+      settingCode = "PED";
+    }else if (setting?.includes("MALNUTRITION")) {
+      settingCode = "Mal";
+    }else if (setting?.includes("PREP_TESTING")) {
+      settingCode = "PrEPT";
+    }else if (setting?.includes("SPOKE_HEALTH_FACILITY")) {
+      settingCode = "SPHF";
+    }else if (setting?.includes("STANDALONE")) {
+      settingCode = "STAN";
+    }else if (setting?.includes("CONGREGATIONAL")) {
+      settingCode = "CON";
+    }else if (setting?.includes("DELIVERY_HOMES")) {
+      settingCode = "DEL";
+    }    else if (setting?.includes("TBA_ORTHODOX")) {
+      settingCode = "TBAO";
+    }    else if (setting?.includes("TBA_RT-HCW")) {
+      settingCode = "TBAH";
+    }    else if (setting?.includes("OVC")) {
+      settingCode = "OVC";
+    }    else if (setting?.includes("OUTREACH")) {
+      settingCode = "OUT";
+    }  
+
+
+
 
     let month = visitDate.getMonth();
     let year = visitDate.getFullYear();

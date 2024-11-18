@@ -197,33 +197,71 @@ const BasicInfo = (props) => {
     let visitDate = new Date(props.patientObj.dateVisit);
 
     let modality = props.patientObj.testingSetting;
-    let modalityCode = "";
-    if (modality?.includes("STI")) {
-      modalityCode = "STI";
-    } else if (modality?.includes("EMERGENCY")) {
-      modalityCode = "EME";
-    } else if (modality?.includes("INDEX")) {
-      modalityCode = "IND";
-    } else if (modality?.includes("INPATIENT")) {
-      modalityCode = "INP";
-    } else if (modality?.includes("PMTCT")) {
-      modalityCode = "PMTCT";
-    } else if (modality?.includes("TB")) {
-      modalityCode = "TB";
-    } else if (modality?.includes("VCT")) {
-      modalityCode = "VCT";
-    } else if (modality?.includes("MOBILE")) {
-      modalityCode = "MOB";
-    } else if (modality?.includes("SNS")) {
-      modalityCode = "SNS";
-    } else if (modality?.includes("OTHER")) {
-      modalityCode = "OTH";
-    }
+    let settingCode = "";
+    if (setting?.includes("STI")) {
+      settingCode = "STI";
+    } else if (setting?.includes("EMERGENCY")) {
+      settingCode = "EME";
+    } else if (setting?.includes("INDEX")) {
+      settingCode = "IND";
+    } else if (setting?.includes("INPATIENT")) {
+      settingCode = "INP";
+    } else if (setting?.includes("PMTCT")) {
+      settingCode = "PMTCT";
+    } else if (setting?.includes("TB")) {
+      settingCode = "TB";
+    } else if (setting?.includes("VCT")) {
+      settingCode = "VCT";
+    } else if (setting?.includes("MOBILE")) {
+      settingCode = "MOB";
+    } else if (setting?.includes("SNS")) {
+      settingCode = "SNS";
+    } else if (setting?.includes("OTHER")) {
+      settingCode = "OTH";
+    }else if (setting?.includes("ANC")) {
+      settingCode = "ANC";
+    }else if (setting?.includes("RETESTING")) {
+      settingCode = "RET";
+    }else if (setting?.includes("L&D")) {
+      settingCode = "L&D";
+    }else if (setting?.includes("POST_NATAL_WARD_BREASTFEEDING")) {
+      settingCode = "PNWB";
+    }else if (setting?.includes("NPATIENT")) {
+      settingCode = "INP";
+    }else if (setting?.includes("SETTING_CT")) {
+      settingCode = "CT";
+    }else if (setting?.includes("FP")) {
+      settingCode = "FP";
+    }else if (setting?.includes("BLOOD_BANK")) {
+      settingCode = "BB";
+    }else if (setting?.includes("PEDIATRIC")) {
+      settingCode = "PED";
+    }else if (setting?.includes("MALNUTRITION")) {
+      settingCode = "Mal";
+    }else if (setting?.includes("PREP_TESTING")) {
+      settingCode = "PrEPT";
+    }else if (setting?.includes("SPOKE_HEALTH_FACILITY")) {
+      settingCode = "SPHF";
+    }else if (setting?.includes("STANDALONE")) {
+      settingCode = "STAN";
+    }else if (setting?.includes("CONGREGATIONAL")) {
+      settingCode = "CON";
+    }else if (setting?.includes("DELIVERY_HOMES")) {
+      settingCode = "DEL";
+    }    else if (setting?.includes("TBA_ORTHODOX")) {
+      settingCode = "TBAO";
+    }    else if (setting?.includes("TBA_RT-HCW")) {
+      settingCode = "TBAH";
+    }    else if (setting?.includes("OVC")) {
+      settingCode = "OVC";
+    }    else if (setting?.includes("OUTREACH")) {
+      settingCode = "OUT";
+    }  
 
     let month = visitDate.getMonth();
     let year = visitDate.getFullYear();
     let codeCreated =
-      "C" + facilityCode + "/" + modalityCode + "/" + month + "/" + year + "/";
+      "C" + facilityCode + "/" + settingCode + "/" + month + "/" + year + "/";
     setCreatedCode(codeCreated);
     if(!props.patientObj.id){
       setObjValues({ ...objValues, clientCode: createdCode });

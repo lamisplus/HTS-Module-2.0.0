@@ -1,10 +1,10 @@
 export const url =
   process.env.NODE_ENV === "development"
-    ? "http://localhost:8383/api/v1/"
+    ? "http://localhost:8380/api/v1/"
     : "/api/v1/";
 export const token =
   process.env.NODE_ENV === "development"
-    ? "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJndWVzdEBsYW1pc3BsdXMub3JnIiwiYXV0aCI6IlN1cGVyIEFkbWluIiwibmFtZSI6Ikd1ZXN0IEd1ZXN0IiwiZXhwIjoxNzMxNjEwNTU0fQ.wwCgAkYVRpOSLaCH0dN3gBvV0G8rANidd3IQ6Oa_1tlGvm7KuYeZYmbjSFyZN_IgGmOAez0a7Guj1k5oZDHIRg"
+    ? "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJndWVzdEBsYW1pc3BsdXMub3JnIiwiYXV0aCI6IlN1cGVyIEFkbWluIiwibmFtZSI6Ikd1ZXN0IEd1ZXN0IiwiZXhwIjoxNzMxOTcxMDAzfQ.FeBIPU9qN_ssUJAXxTIeaVm77oM8ppmi6XFt9vyX54ZCgqv8oySu8gMcHAZSvdY78f9xYy7KOmhzrVEpJyFOqQ"
     : new URLSearchParams(window.location.search).get("jwt");
 
 let props = {
@@ -263,8 +263,3 @@ let props = {
     clientCode: "",
   },
 };
-
-
-
-
-

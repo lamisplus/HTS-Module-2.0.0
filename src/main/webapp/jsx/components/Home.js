@@ -138,9 +138,9 @@ const Home = () => {
                   <Tab eventKey="home" title="Patients">
                     <Dashboard />
                   </Tab>
-                  <Tab eventKey="checkedin" title="Checked-In Patients">
+                  {/* <Tab eventKey="checkedin" title="Checked-In Patients">
                     <CheckedInPatients />
-                  </Tab>
+                  </Tab> */}
                   <Tab eventKey="hts" title="HTS Patients">
                     <HTSList />
                   </Tab>

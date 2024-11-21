@@ -133,6 +133,7 @@ const BasicInfo = (props) => {
   const [modalityCheck, setModalityCheck] = useState("");
 
   let dataObj = props.patientObj;
+  //console.log("data", dataObj);
   const [permissions, setPermission] = useState(
     localStorage.getItem("stringifiedPermmision")?.split(",")
   );
@@ -200,6 +201,12 @@ const BasicInfo = (props) => {
     urethralDischarge: "",
     complaintsOfScrotal: "",
     complaintsGenitalSore: "",
+  });
+
+  const [mlResultObj, setMlResultObj] = useState({
+    htsClientId: clientId,
+    status: "",
+    score: "",
   });
 
   useEffect(() => {
@@ -315,7 +322,8 @@ const BasicInfo = (props) => {
           bloodTransfusionInLast3Months:
             dataObj?.riskStratificationResponseDto?.riskAssessment
               ?.lastHivTestBloodTransfusion === "true" ||
-            riskAssessment.bloodTransfusion === "true"
+            riskAssessment.bloodTransfusion === "true" ||
+            riskAssessment.bloodtransInlastThreeMonths === "true"
               ? 1
               : 0,
           clientPregnant:
@@ -333,6 +341,7 @@ const BasicInfo = (props) => {
               ? 0
               : -1000,
           everHadSexualIntercourse:
+            riskAssessment?.everHadSexualIntercourse === "true" ||
             riskAssessment?.soldPaidVaginalSex === "true" ||
             riskAssessmentPartner?.uprotectedAnalSex === "true" ||
             riskAssessment?.haveCondomBurst === "true" ||
@@ -373,7 +382,10 @@ const BasicInfo = (props) => {
               ? 1
               : 0,
           moreThan1SexPartnerDuringLast3Months:
-            riskAssessment?.soldPaidVaginalSex === "true" ? 1 : 0,
+            riskAssessment?.soldPaidVaginalSex === "true" ||
+            riskAssessment?.moreThanOneSexPartnerLastThreeMonths === "true"
+              ? 1
+              : 0,
           previously_tested: dataObj?.previouslyTested === true ? 1 : 0,
           referred_from_Community_Mobilization:
             dataObj?.referredFrom === 1015 ? 1 : 0,
@@ -395,7 +407,15 @@ const BasicInfo = (props) => {
             dataObj?.referredFrom === 448 ? 1 : 0,
           referred_from_Self: dataObj?.referredFrom === 43 ? 1 : 0,
           stiInLast3Months:
-            riskAssessment?.stiLastThreeMonths === "true" ? 1 : 0,
+            riskAssessment?.stiLastThreeMonths === "true" ||
+            riskAssessment?.experiencePain === "true" ||
+            riskAssessmentPartner?.sexPartnerHivPositive === "true" ||
+            riskAssessmentPartner?.newDiagnosedHivlastThreeMonths === "true" ||
+            riskAssessmentPartner?.currentlyArvForPmtct === "true" ||
+            riskAssessmentPartner?.knowHivPositiveOnArv === "true" ||
+            riskAssessmentPartner?.knowHivPositiveAfterLostToFollowUp === "true"
+              ? 1
+              : 0,
           sti_symptoms:
             (stiScreening?.lowerAbdominalPains === "true" &&
               stiScreening?.vaginalDischarge === "true") ||
@@ -541,11 +561,14 @@ const BasicInfo = (props) => {
               ? 1
               : 0,
           unprotectedSexWithCasualPartnerInLast3Months:
+            riskAssessment?.uprotectedSexWithCasualLastThreeMonths === "true" ||
             riskAssessment?.soldPaidVaginalSex === "true" ||
             riskAssessmentPartner?.uprotectedAnalSex === "true"
               ? 1
               : 0,
           unprotectedSexWithRegularPartnerInLast3Months:
+            riskAssessment?.uprotectedSexWithRegularPartnerLastThreeMonths ===
+              "true" ||
             riskAssessment?.haveCondomBurst === "true" ||
             riskAssessment?.haveSexWithoutCondom === "true"
               ? 1
@@ -553,7 +576,6 @@ const BasicInfo = (props) => {
         },
       };
 
-      //console.log("ML:", mlData);
       setMlresult(true);
 
       axios
@@ -564,6 +586,32 @@ const BasicInfo = (props) => {
           console.log("ML", resp);
           let predictions = Object.values(resp.data.result.predictions);
           setPredictionValue(predictions);
+          let statusVal = "";
+
+          if (parseFloat(predictions[1]) <= 0.2) {
+            statusVal = "Low Risk";
+          } else if (
+            parseFloat(predictions[1]) >= 0.21 &&
+            parseFloat(predictions[1]) <= 0.4
+          ) {
+            statusVal = "Medium Risk";
+          } else if (
+            parseFloat(predictions[1]) >= 0.41 &&
+            parseFloat(predictions[1]) <= 0.8
+          ) {
+            statusVal = "High Risk";
+          } else if (parseFloat(predictions[1]) >= 0.81) {
+            statusVal = "Highest Risk";
+          } else {
+            statusVal = "No Prediction Result";
+          }
+
+          setMlResultObj({
+            htsClientId: clientId,
+            status: statusVal,
+            score: predictionValue[1],
+          });
+
           setSavingPrediction(true);
           setSavingRsult(false);
         })
@@ -1919,6 +1967,21 @@ const BasicInfo = (props) => {
               ) : (
                 " "
               )}
+              {savingPrediction ? (
+                <Stack sx={{ width: "50%" }} spacing={2}>
+                  <Alert
+                    severity="info"
+                    style={{ fontSize: "16px", color: "000" }}
+                  >
+                    <b>ML Prediction Result for HTS Patient :</b>{" "}
+                    {predictionRanges(predictionValue[1])}
+                  </Alert>
+                  <br />
+                </Stack>
+              ) : (
+                ""
+              )}
+
               <div
                 className="form-group  col-md-12 text-center pt-2 mb-4"
                 style={{

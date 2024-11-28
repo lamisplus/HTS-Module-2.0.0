@@ -17,7 +17,7 @@ import Stack from "@mui/material/Stack";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
-
+import FeedbackModal from "./FeedbackModal";
 import { token, url as baseUrl } from "../../../../api";
 import "react-phone-input-2/lib/style.css";
 import { Label as LabelRibbon, Button, Message } from "semantic-ui-react";
@@ -95,21 +95,26 @@ const useStyles = makeStyles((theme) => ({
 
 const BasicInfo = (props) => {
   const [predictionValue, setPredictionValue] = useState(0);
+  const [openModal, setOpenModal] = React.useState(false);
+  const toggleModal = (event) => {
+    event.preventDefault();
+    setOpenModal(!openModal);
+  };
 
   const predictionRanges = (prediction) => {
-    if (parseFloat(prediction) <= 0.2) {
+    if (parseFloat(prediction) < 0.005575358) {
       return <Badge color="success">Low Risk</Badge>;
     } else if (
-      parseFloat(prediction) >= 0.21 &&
-      parseFloat(prediction) <= 0.4
+      parseFloat(prediction) > 0.005575358 &&
+      parseFloat(prediction) < 0.02719647
     ) {
       return <Badge color="info">Medium Risk</Badge>;
     } else if (
-      parseFloat(prediction) >= 0.41 &&
-      parseFloat(prediction) <= 0.8
+      parseFloat(prediction) > 0.02719647 &&
+      parseFloat(prediction) < 0.08083864
     ) {
       return <Badge color="warning">High Risk</Badge>;
-    } else if (parseFloat(prediction) >= 0.81) {
+    } else if (parseFloat(prediction) > 0.08083864) {
       return <Badge color="danger">Highest Risk</Badge>;
     } else {
       return <Badge color="dark">No Prediction Result</Badge>;
@@ -588,19 +593,19 @@ const BasicInfo = (props) => {
           setPredictionValue(predictions);
           let statusVal = "";
 
-          if (parseFloat(predictions[1]) <= 0.2) {
+          if (parseFloat(predictions[1]) < 0.005575358) {
             statusVal = "Low Risk";
           } else if (
-            parseFloat(predictions[1]) >= 0.21 &&
-            parseFloat(predictions[1]) <= 0.4
+            parseFloat(predictions[1]) > 0.005575358 &&
+            parseFloat(predictions[1]) < 0.02719647
           ) {
             statusVal = "Medium Risk";
           } else if (
-            parseFloat(predictions[1]) >= 0.41 &&
-            parseFloat(predictions[1]) <= 0.8
+            parseFloat(predictions[1]) > 0.02719647 &&
+            parseFloat(predictions[1]) < 0.08083864
           ) {
             statusVal = "High Risk";
-          } else if (parseFloat(predictions[1]) >= 0.81) {
+          } else if (parseFloat(predictions[1]) > 0.08083864) {
             statusVal = "Highest Risk";
           } else {
             statusVal = "No Prediction Result";
@@ -1968,7 +1973,7 @@ const BasicInfo = (props) => {
                 " "
               )}
               {savingPrediction ? (
-                <Stack sx={{ width: "50%" }} spacing={2}>
+                <Stack sx={{ width: "70%" }} spacing={2}>
                   <Alert
                     severity="info"
                     style={{ fontSize: "16px", color: "000" }}
@@ -1976,6 +1981,17 @@ const BasicInfo = (props) => {
                     <b>ML Prediction Result for HTS Patient :</b>{" "}
                     {predictionRanges(predictionValue[1])}
                   </Alert>
+                  {/* <Button
+                    onClick={toggleModal}
+                    style={{ backgroundColor: "#014d88", color: "#fff" }}
+                  >
+                    Provide Feedbck
+                  </Button> */}
+                  <Button
+                    content="Provide Feedbck"
+                    style={{ backgroundColor: "#014d88", color: "#fff" }}
+                    onClick={toggleModal}
+                  />
                   <br />
                 </Stack>
               ) : (
@@ -2186,6 +2202,13 @@ const BasicInfo = (props) => {
           </form>
         </CardBody>
       </Card>
+      <FeedbackModal
+        toggleModal={toggleModal}
+        openModal={openModal}
+        setOpenModal={setOpenModal}
+        predictionValue={predictionValue[1]}
+        clientId={clientId}
+      />
     </>
   );
 };

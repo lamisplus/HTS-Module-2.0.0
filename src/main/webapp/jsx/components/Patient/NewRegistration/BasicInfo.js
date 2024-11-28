@@ -131,6 +131,7 @@ const BasicInfo = (props) => {
     localStorage.getItem("stringifiedPermmision")?.split(",")
   );
   const [disableIndexInfo, setDisableIndexInfo] = useState(false);
+  const [disableSex, setdisableSex] = useState(false);
 
   const getPhoneNumber = (identifier) => {
     const identifiers = identifier;
@@ -323,28 +324,24 @@ const BasicInfo = (props) => {
     
   };
 
-  const CreateClientCode = () => {
+  const CreateClientCode = async() => {
     let facilityShortCode = "";
-    axios
+   let response = await  axios
       .get(`${baseUrl}hts/get-facility-code`, {
         headers: { Authorization: `Bearer ${token}` },
       })
-      .then((response) => {
-        setFacilityCode(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
 
+      setFacilityCode(response.data);
+      facilityShortCode= response.data
     let visitDate = new Date(props.patientObj.dateVisit);
 
     let setting = props.patientObj.testingSetting;
     let settingCode = "";
-    if (setting?.includes("STI")) {
+    if (setting?.includes("SETTING_STI")) {
       settingCode = "STI";
     } else if (setting?.includes("EMERGENCY")) {
       settingCode = "EME";
-    } else if (setting?.includes("INDEX")) {
+    } else if (setting?.includes("SETTING_INDEX")) {
       settingCode = "IND";
     } else if (setting?.includes("INPATIENT")) {
       settingCode = "INP";
@@ -356,15 +353,15 @@ const BasicInfo = (props) => {
       settingCode = "VCT";
     } else if (setting?.includes("MOBILE")) {
       settingCode = "MOB";
-    } else if (setting?.includes("SNS")) {
+    } else if (setting?.includes("SETTING_SNS")) {
       settingCode = "SNS";
     } else if (setting?.includes("OTHER")) {
       settingCode = "OTH";
-    }else if (setting?.includes("ANC")) {
+    }else if (setting?.includes("SETTING_ANC")) {
       settingCode = "ANC";
     }else if (setting?.includes("RETESTING")) {
       settingCode = "RET";
-    }else if (setting?.includes("L&D")) {
+    }else if (setting?.includes("SETTING_L&D")) {
       settingCode = "L&D";
     }else if (setting?.includes("POST_NATAL_WARD_BREASTFEEDING")) {
       settingCode = "PNWB";
@@ -372,7 +369,7 @@ const BasicInfo = (props) => {
       settingCode = "INP";
     }else if (setting?.includes("SETTING_CT")) {
       settingCode = "CT";
-    }else if (setting?.includes("FP")) {
+    }else if (setting?.includes("SETTING_FP")) {
       settingCode = "FP";
     }else if (setting?.includes("BLOOD_BANK")) {
       settingCode = "BB";
@@ -394,13 +391,11 @@ const BasicInfo = (props) => {
       settingCode = "TBAO";
     }    else if (setting?.includes("TBA_RT-HCW")) {
       settingCode = "TBAH";
-    }    else if (setting?.includes("OVC")) {
+    }    else if (setting?.includes("SETTING_OVC")) {
       settingCode = "OVC";
     }    else if (setting?.includes("OUTREACH")) {
       settingCode = "OUT";
     }  
-
-
 
 
     let month = visitDate.getMonth();
@@ -409,8 +404,9 @@ const BasicInfo = (props) => {
       "C" + facilityCode + "/" + settingCode + "/" + month + "/" + year + "/";
     setCreatedCode(codeCreated);
 
+
     if(!props.patientObj.id){
-      setObjValues({ ...objValues, clientCode: createdCode });
+      setObjValues({ ...objValues, clientCode: codeCreated });
     }else{
           setSerialNumber(Cookies.get("serial-number"))
           setDisableVitals(true)
@@ -431,13 +427,14 @@ const BasicInfo = (props) => {
     Genders();
     getStates();
     MaterialStatus();
-    Sex();
+   
     CounselingType();
+   
+    Sex();
     PregnancyStatus();
     IndexTesting();
     CreateClientCode();
-
-
+ 
     //ellicited patient
 
 
@@ -484,26 +481,8 @@ const BasicInfo = (props) => {
     if (country && country.stateId !== "") {
       getProvincesId(country.stateId);
     }
-    if (
-       props.patientObj.riskStratificationResponseDto.targetGroup === "TARGET_GROUP_FSW"
-    ) {
-      setShowPregnancy(true);
-    }
-    if (
-      props.patientObj.riskStratificationResponseDto.testingSetting === "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" 
+ 
 
-    ) {
-      let sexDetetrmined = "Female";
-      setObjValues({ ...objValues, sex: "Female", pregnant: 73 });
-
-      if (
-        sexDetetrmined.toLowerCase() === "female" ||
-        props.patientObj.riskStratificationResponseDto.testingSetting === "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" 
-      
-      ) {
-        setShowPregnancy(true);
-      }
-    }
       // Cleanup logic here
 
   }, [objValues.age, props.patientObj, props.extra.age, facilityCode]);
@@ -541,6 +520,7 @@ const BasicInfo = (props) => {
       })
       .then((response) => {
         setPregnancyStatus(response.data);
+        determinPregnancy(response.data)
       })
       .catch((error) => {
         //console.log(error);
@@ -609,7 +589,6 @@ const BasicInfo = (props) => {
       })
       .then((response) => {
 
-                  
         if(props.patientObj.riskStratificationResponseDto.entryPoint === "HTS_ENTRY_POINT_COMMUNITY"){
                 HTS_ENTRY_POINT_COMMUNITY()
               }else if(props.patientObj.riskStratificationResponseDto.entryPoint === "HTS_ENTRY_POINT_FACILITY"){
@@ -678,6 +657,9 @@ const BasicInfo = (props) => {
       .then((response) => {
         //console.log(response.data);
         setSexs(response.data);
+      
+        determinSex(response.data);
+
       })
       .catch((error) => {
         //console.log(error);
@@ -742,7 +724,11 @@ const BasicInfo = (props) => {
     if (e.target.name === "firstName" && e.target.value !== "") {
       const name = alphabetOnly(e.target.value);
       setObjValues({ ...objValues, [e.target.name]: name });
-    } else if (e.target.name === "lastName" && e.target.value !== "") {
+    }else if(e.target.name === "serialNumber" ){
+
+      checkClientCode(e)
+
+    }else if (e.target.name === "lastName" && e.target.value !== "") {
       const name = alphabetOnly(e.target.value);
       setObjValues({ ...objValues, [e.target.name]: name });
     } else if (e.target.name === "middleName" && e.target.value !== "") {
@@ -801,28 +787,35 @@ const BasicInfo = (props) => {
         relationWithIndexClient: "",
         indexClientCode: "",
       });
-    } else {
+    } else if(e.target.name === "sex"){
+      setObjValues({ ...objValues, pregnant: "", [e.target.name]: e.target.value});
+
+    }else {
       setObjValues({ ...objValues, [e.target.name]: e.target.value });
     }
 
     if (e.target.name === "sex" && e.target.value.toLowerCase() === "female") {
       setShowPregnancy(true);
+  
+
       setErrors({ ...errors, pregnant: "" });
     }
   };
+
+
   //checkClientCode
   const checkClientCode = (e) => {
     let code = "";
+
     if (e.target.name === "serialNumber") {
       // setSerialNumber(e.target.value )
       code = createdCode + e.target.value;
-      setCreatedCode(code);
+
       setObjValues({ ...objValues, clientCode: code });
     }
     async function getIndexClientCode() {
-      const indexClientCode = objValues.clientCode;
       const response = await axios.get(
-        `${baseUrl}hts/client/${indexClientCode}`,
+        `${baseUrl}hts/get-client-code?code=${code}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -830,11 +823,13 @@ const BasicInfo = (props) => {
           },
         }
       );
-      // if(response.data!=='Record Not Found'){
-      //     setClientCodeCheck("Client code already exist")
-      // }else{
-      //     setClientCodeCheck("")
-      // }
+      if(response.data ==='Client code already exist'){
+        // setErrors({...errors,clientCode: "Client code already exist" })
+         setClientCodeCheck("Client code already exist")
+     
+      }else {
+          setClientCodeCheck("")
+      }
     }
     getIndexClientCode();
   };
@@ -874,18 +869,64 @@ const BasicInfo = (props) => {
     }
   };
 
-  const determinSex= ()=>{
+
+  const determinPregnancy =(pregList)=>{
+   // get  the value of pregnancy being used   
+   let pregnancyUsed  =""
+   if(pregList.length > 0){
+    pregList.map((each, index)=>{
+
+       if(each.code === "PREGANACY_STATUS_PREGNANT"){
+        pregnancyUsed =each.id 
+       }
+     })
+   }
+   if (
+    props.patientObj.riskStratificationResponseDto.testingSetting ===   "FACILITY_HTS_TEST_SETTING_ANC"
+
+  ) {
+    objValues.pregnant= pregnancyUsed
+    // setObjValues({ ...objValues, pregnant: pregnancyUsed });
+
+
+  }
+  }
+
+  const determinSex= (sexList)=>{
+// get  the value of sex being used 
+let sexUsed= ""
+    if(sexList.length > 0){
+      sexList.map((each, index)=>{
+
+        if(each.display === "Female"){
+          sexUsed =each.display 
+        }
+      })
+    }
+
     if(props.patientObj.riskStratificationResponseDto.testingSetting ===
       "FACILITY_HTS_TEST_SETTING_ANC" || props.patientObj.riskStratificationResponseDto.testingSetting ===
       "FACILITY_HTS_TEST_SETTING_L&D" || props.patientObj.riskStratificationResponseDto.testingSetting ===
       "FACILITY_HTS_TEST_SETTING_POST_NATAL_WARD_BREASTFEEDING"
     ){
-    
-        return true
-      
+      setShowPregnancy(true)
+      setdisableSex(true)      
     }else{
-      return false
+      setdisableSex(false)      
     }
+
+    // assign the sex
+    if ( props.patientObj.riskStratificationResponseDto.targetGroup === "TARGET_GROUP_FSW" || props.patientObj.riskStratificationResponseDto.testingSetting === "FACILITY_HTS_TEST_SETTING_ANC" || props.patientObj.riskStratificationResponseDto.testingSetting ===
+      "FACILITY_HTS_TEST_SETTING_L&D" || props.patientObj.riskStratificationResponseDto.testingSetting ===
+      "FACILITY_HTS_TEST_SETTING_POST_NATAL_WARD_BREASTFEEDING") {
+
+        setShowPregnancy(true)
+        objValues.sex =sexUsed
+        // setObjValues({...objValues, sex: sexUsed });
+   }
+
+
+ 
       }
   const handleAgeChange = (e) => {
     if (!ageDisabled && e.target.value) {
@@ -915,6 +956,7 @@ const BasicInfo = (props) => {
   /*****  Validation  */
   const validate = () => {
     //HTS FORM VALIDATION
+
     temp.typeCounseling = objValues.typeCounseling
       ? ""
       : "This field is required.";
@@ -992,7 +1034,7 @@ const BasicInfo = (props) => {
       "unknown"
     );
 
-    if (validate()) {
+    if (validate() && clientCodeCheck === "") {
       setSaving(true);
 
 
@@ -1186,7 +1228,6 @@ const BasicInfo = (props) => {
                       id="serialNumber"
                       value={serialNumber}
                       //value={Math.floor(Math.random() * 1093328)}
-                      onBlur={checkClientCode}
                       onChange={handleInputChange}
                       style={{
                         border: "1px solid #014D88",
@@ -1195,6 +1236,11 @@ const BasicInfo = (props) => {
                       disabled={disableVitals}
                     />
                   </FormGroup>
+                  {errors.serialNumber !== "" ? (
+                      <span className={classes.error}>{errors.serialNumber}</span>
+                    ) : (
+                      ""
+                    )}
                 </div>
                 <div className="form-group mb-3 col-md-4">
                   <FormGroup>
@@ -1208,19 +1254,20 @@ const BasicInfo = (props) => {
                       value={objValues.clientCode}
                       disabled={true}
                       //value={Math.floor(Math.random() * 1093328)}
-                      onBlur={checkClientCode}
+                      // onBlur={checkClientCode}
                       onChange={handleInputChange}
                       style={{
                         border: "1px solid #014D88",
                         borderRadius: "0.25rem",
                       }}
                     />
-                    {errors.clientCode !== "" ? (
+               
+                  </FormGroup>
+                  {/* {errors.clientCode !== "" ? (
                       <span className={classes.error}>{errors.clientCode}</span>
                     ) : (
                       ""
-                    )}
-                  </FormGroup>
+                    )} */}
                   {clientCodeCheck !== "" ? (
                     <span className={classes.error}>{clientCodeCheck}</span>
                   ) : (
@@ -1641,7 +1688,7 @@ const BasicInfo = (props) => {
                       borderRadius: "0.2rem",
                     }}
                     disabled={
-                      determinSex()
+                      disableSex
                     }
                   >
                     <option value={""}></option>
@@ -1909,7 +1956,7 @@ const BasicInfo = (props) => {
                   </div>
                 </>
               )}
-              {showPregancy && objValues.sex === "Female" && (
+              {showPregancy  && (
                 <>
                   <div className="form-group  col-md-4">
                     <FormGroup>
@@ -1935,16 +1982,11 @@ const BasicInfo = (props) => {
                       >
                         <option value={""}></option>
                         {pregnancyStatus.map((value) =>
-                          (props.patientObj.riskStratificationResponseDto
-                            .testingSetting ===
-                           "FACILITY_HTS_TEST_SETTING_ANC"  ) &&
-                          value.code === "PREGANACY_STATUS_NOT_PREGNANT" ? (
-                            <></>
-                          ) : (
+                        
                             <option key={value.id} value={value.id}>
                               {value.display}
                             </option>
-                          )
+                        
                         )}
                       </select>
                       {errors.pregnant !== "" ? (

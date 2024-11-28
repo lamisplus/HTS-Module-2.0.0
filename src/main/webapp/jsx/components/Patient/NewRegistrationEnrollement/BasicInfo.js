@@ -170,7 +170,7 @@ const BasicInfo = (props) => {
     //setObjValues({...objectValues, genderId: props.patientObj.personResponseDto.gender.id})
     //objValues.genderId = props.patientObj && props.patientObj.personResponseDto ? props.patientObj.personResponseDto.gender.id : ""
     setModalityCheck(
-      getCheckModality(
+      getCheckModality( 
         props?.patientObj?.riskStratificationResponseDto?.testingSetting
       )
     );
@@ -214,6 +214,46 @@ const BasicInfo = (props) => {
         //console.log(error);
       });
   };
+
+
+  
+  const HTS_ENTRY_POINT_COMMUNITY = () => {
+    axios
+      .get(`${baseUrl}application-codesets/v2/COMMUNITY_HTS_TEST_SETTING
+ `, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        //console.log(response.data);
+        setEnrollSetting(response.data);
+      })
+      .catch((error) => {
+        //console.log(error);
+      });
+  };
+
+  const HTS_ENTRY_POINT_FACILITY = () => {
+    axios
+      .get(`${baseUrl}application-codesets/v2/FACILITY_HTS_TEST_SETTING`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        //Remove retesting from the codeset
+          let facilityList = []
+        response.data.map((each, index)=>{
+              if(each.code !=="FACILITY_HTS_TEST_SETTING_RETESTING"){
+                facilityList.push(each);
+              }
+
+        })
+
+        setEnrollSetting(facilityList);
+      })
+      .catch((error) => {
+        //console.log(error);
+      });
+  };
+
   //Get list of KP
   const CounselingType = () => {
     axios
@@ -235,12 +275,22 @@ const BasicInfo = (props) => {
       })
       .then((response) => {
         //console.log(response.data);
-        setEnrollSetting(response.data);
+        if(props.patientObj.riskStratificationResponseDto.entryPoint.includes("Community")){
+          HTS_ENTRY_POINT_COMMUNITY()
+        }else if(props.patientObj.riskStratificationResponseDto.entryPoint.includes("Community")){
+
+          HTS_ENTRY_POINT_FACILITY()
+        }else{
+          setEnrollSetting([]);
+
+        }
       })
       .catch((error) => {
         //console.log(error);
       });
   };
+
+
   //Get list of Source of Referral
   const SourceReferral = () => {
     axios

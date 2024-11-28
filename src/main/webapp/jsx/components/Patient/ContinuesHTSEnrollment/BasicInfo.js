@@ -118,6 +118,7 @@ const BasicInfo = (props) => {
   const [clientCodeetail2, setclientCodeetail2] = useState("");
   const [clientCodeCheck, setClientCodeCheck] = useState("");
   const [createdCode, setCreatedCode] = useState("");
+
   const [facilityCode, setFacilityCode] = useState("");
   const [serialNumber, setSerialNumber] = useState(null);
   const [disableModality, setDisableModality] = useState(props.extra.testingSetting === "FACILITY_HTS_TEST_SETTING_ANC" ? true: false);
@@ -196,13 +197,13 @@ const BasicInfo = (props) => {
 
     let visitDate = new Date(props.patientObj.dateVisit);
 
-    let modality = props.patientObj.testingSetting;
+    let setting = props.patientObj.testingSetting;
     let settingCode = "";
-    if (setting?.includes("STI")) {
+    if (setting?.includes("SETTING_STI")) {
       settingCode = "STI";
     } else if (setting?.includes("EMERGENCY")) {
       settingCode = "EME";
-    } else if (setting?.includes("INDEX")) {
+    } else if (setting?.includes("SETTING_INDEX")) {
       settingCode = "IND";
     } else if (setting?.includes("INPATIENT")) {
       settingCode = "INP";
@@ -214,15 +215,15 @@ const BasicInfo = (props) => {
       settingCode = "VCT";
     } else if (setting?.includes("MOBILE")) {
       settingCode = "MOB";
-    } else if (setting?.includes("SNS")) {
+    } else if (setting?.includes("SETTING_SNS")) {
       settingCode = "SNS";
     } else if (setting?.includes("OTHER")) {
       settingCode = "OTH";
-    }else if (setting?.includes("ANC")) {
+    }else if (setting?.includes("SETTING_ANC")) {
       settingCode = "ANC";
     }else if (setting?.includes("RETESTING")) {
       settingCode = "RET";
-    }else if (setting?.includes("L&D")) {
+    }else if (setting?.includes("SETTING_L&D")) {
       settingCode = "L&D";
     }else if (setting?.includes("POST_NATAL_WARD_BREASTFEEDING")) {
       settingCode = "PNWB";
@@ -230,7 +231,7 @@ const BasicInfo = (props) => {
       settingCode = "INP";
     }else if (setting?.includes("SETTING_CT")) {
       settingCode = "CT";
-    }else if (setting?.includes("FP")) {
+    }else if (setting?.includes("SETTING_FP")) {
       settingCode = "FP";
     }else if (setting?.includes("BLOOD_BANK")) {
       settingCode = "BB";
@@ -252,7 +253,7 @@ const BasicInfo = (props) => {
       settingCode = "TBAO";
     }    else if (setting?.includes("TBA_RT-HCW")) {
       settingCode = "TBAH";
-    }    else if (setting?.includes("OVC")) {
+    }    else if (setting?.includes("SETTING_OVC")) {
       settingCode = "OVC";
     }    else if (setting?.includes("OUTREACH")) {
       settingCode = "OUT";
@@ -260,16 +261,38 @@ const BasicInfo = (props) => {
 
     let month = visitDate.getMonth();
     let year = visitDate.getFullYear();
-    let codeCreated =
+    let generatedCode =
       "C" + facilityCode + "/" + settingCode + "/" + month + "/" + year + "/";
-    setCreatedCode(codeCreated);
+    setCreatedCode(generatedCode);
     if(!props.patientObj.id){
-      setObjValues({ ...objValues, clientCode: createdCode });
+      setObjValues({ ...objValues, clientCode: generatedCode });
     }else{
           setSerialNumber(Cookies.get("serial-number"))
           setDisableVitals(true)
     }
   };
+
+
+
+  const getSettingList=()=>{
+
+    if(props.patientObj.riskStratificationResponseDto.entryPoint === "HTS_ENTRY_POINT_COMMUNITY"){
+      HTS_ENTRY_POINT_COMMUNITY()
+    }else if(props.patientObj.riskStratificationResponseDto.entryPoint === "HTS_ENTRY_POINT_FACILITY"){
+
+      HTS_ENTRY_POINT_FACILITY()
+    }else{
+      setEnrollSetting([]);
+
+    }
+
+    setModality(
+      getCheckModality(
+        props?.patientObj?.riskStratificationResponseDto?.testingSetting
+      )
+    );
+  }
+
 
   useEffect(() => {
 
@@ -282,14 +305,10 @@ const BasicInfo = (props) => {
     IndexTesting();
 
     CreateClientCode();
-
-    setModality(
-      getCheckModality(
-        props?.patientObj?.riskStratificationResponseDto?.testingSetting
-      )
-    );
+    getSettingList()
 
 
+   
 
 
   }, [props.patientObj, facilityCode]);
@@ -313,6 +332,48 @@ const BasicInfo = (props) => {
         });
     }
   };
+
+
+
+  const HTS_ENTRY_POINT_COMMUNITY = () => {
+    axios
+      .get(`${baseUrl}application-codesets/v2/COMMUNITY_HTS_TEST_SETTING
+ `, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        //console.log(response.data);
+        setEnrollSetting(response.data);
+      })
+      .catch((error) => {
+        //console.log(error);
+      });
+  };
+
+
+
+  const HTS_ENTRY_POINT_FACILITY = () => {
+    axios
+      .get(`${baseUrl}application-codesets/v2/FACILITY_HTS_TEST_SETTING`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        //Remove retesting from the codeset
+          let facilityList = []
+        response.data.map((each, index)=>{
+              if(each.code !=="FACILITY_HTS_TEST_SETTING_RETESTING"){
+                facilityList.push(each);
+              }
+
+        })
+
+        setEnrollSetting(facilityList);
+      })
+      .catch((error) => {
+        //console.log(error);
+      });
+  };
+
 
   //Get list of KP
   const KP = () => {
@@ -448,6 +509,10 @@ const BasicInfo = (props) => {
         [e.target.name]: e.target.value,
    
       });
+    }else if(e.target.name === "serialNumber" ){
+
+      checkClientCode(e)
+
     } else if (e.target.name === "indexClient") {
         setObjValues({
           ...objValues,
@@ -551,30 +616,36 @@ const BasicInfo = (props) => {
   //     getIndexClientCode();
   //   };
   //checkClientCode
-  const checkClientCode = async (e) => {
-    // let code = "";
-    if (e.target.name === "serialNumber") {
-      const code = createdCode + e.target.value;
-      setSerialNumber(e.target.value )
+  const checkClientCode = (e) => {
+    let code = "";
 
-      // setCreatedCode(code);
+
+    if (e.target.name === "serialNumber") {
+      // setSerialNumber(e.target.value )
+      code = createdCode + e.target.value;
+
       setObjValues({ ...objValues, clientCode: code });
-      await handleClientCodeCheck(code);
     }
-    // async function getIndexClientCode() {
-    //   const indexClientCode = objValues.clientCode;
-    //   console.log(indexClientCode);
-    //   const response = await axios.get(
-    //     `${baseUrl}hts/client/${indexClientCode}`,
-    //     {
-    //       headers: {
-    //         Authorization: `Bearer ${token}`,
-    //         "Content-Type": "text/plain",
-    //       },
-    //     }
-    //   );
-    // }
-    // getIndexClientCode();
+    async function getIndexClientCode() {
+      const response = await axios.get(
+        `${baseUrl}hts/get-client-code?code=${code}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "text/plain",
+          },
+        }
+      );
+      if(response.data ==='Client code already exist'){
+        // setErrors({...errors,clientCode: "Client code already exist" })
+         setClientCodeCheck("Client code already exist")
+         
+      }else {
+          setClientCodeCheck("")
+     
+      }
+    }
+    getIndexClientCode();
   };
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -617,7 +688,7 @@ const BasicInfo = (props) => {
     props.setPatientObj({ ...props.patientObj, ...objValues });
     Cookies.set("serial-number", serialNumber)
 
-    if (validate()) {
+    if (validate() && clientCodeCheck === "") {
       setSaving(true);
 
       if(props.patientObj.id && props.completed.includes("basic") ){
@@ -716,23 +787,7 @@ const BasicInfo = (props) => {
 
   // },[objValues.clientCode])
 
-  const handleClientCodeCheck = async (code) => {
-    const data = { clientCode: code };
-    axios
-      .post(`${baseUrl}hts/clientCodeCheck`, data, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((response) => {
-        // console.log(response.data)
-        setClientCodeCheck(response.data);
-        temp.clientCodeCheck =
-          response.data === true ? "" : "This client code already exists.";
-        setErrors({ ...temp });
-      })
-      .catch((error) => {
-        setClientCodeCheck(false);
-      });
-  };
+
 
   return (
     <>
@@ -810,7 +865,7 @@ const BasicInfo = (props) => {
                     id="serialNumber"
                     value={serialNumber}
                     //value={Math.floor(Math.random() * 1093328)}
-                    onBlur={checkClientCode}
+                    // onBlur={checkClientCode}
                     onChange={handleInputChange}
                     style={{
                       border: "1px solid #014D88",
@@ -831,25 +886,23 @@ const BasicInfo = (props) => {
                     id="clientCode"
                     // value={createdCode + (serialNumber ? serialNumber : "")}
                     value={objValues.clientCode}
-                    onChange={(e) => {
-                      // handleInputChange(e);
-                      // handleClientCodeCheck(e);
-                    }}
+                    onChange={handleInputChange}
+
                     style={{
                       border: "1px solid #014D88",
                       borderRadius: "0.25rem",
                     }}
                     readOnly
                   />
-                  {errors.clientCode !== "" ? (
+                  {/* {errors.clientCode !== "" ? (
                     <span className={classes.error}>{errors.clientCode}</span>
                   ) : (
                     ""
-                  )}
-                  {errors.clientCode !== "" ? (
+                  )} */}
+                  {clientCodeCheck !== "" ? (
                     <span className={classes.error}>
                       {" "}
-                      {errors.clientCodeCheck}
+                      {clientCodeCheck}
                     </span>
                   ) : (
                     ""
@@ -1083,7 +1136,6 @@ const BasicInfo = (props) => {
                         name="indexClientCode"
                         id="indexClientCode"
                         value={objValues.indexClientCode}
-                        onBlur={checkClientCode}
                         onChange={handleInputChange}
                         style={{
                           border: "1px solid #014D88",

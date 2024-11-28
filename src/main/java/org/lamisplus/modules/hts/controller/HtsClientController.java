@@ -75,8 +75,8 @@ public class HtsClientController {
     public ResponseEntity<String> getGenerateHtsClientCode() {
         return ResponseEntity.ok(this.htsClientService.getGenerateHtsClientCode());
     }
-    @GetMapping(HTS_URL_VERSION_ONE + "/client/{code}")
-    public ResponseEntity<String> getClientNameByCode(@PathVariable String code) {
+    @GetMapping(HTS_URL_VERSION_ONE + "/get-client-code")
+    public ResponseEntity<String> getClientNameByCode(@RequestParam String code) {
         return ResponseEntity.ok(this.htsClientService.getClientNameByCode(code));
     }
 

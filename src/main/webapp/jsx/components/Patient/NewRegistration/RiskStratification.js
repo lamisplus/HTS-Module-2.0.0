@@ -161,25 +161,36 @@ const BasicInfo = (props) => {
     lastHivTestBasedOnRequest: "",
   });
   useEffect(() => {
-    KP();
-    TargetGroupSetup();
-    // EnrollmentSetting();
-    EntryPoint();
+ 
     // HTS_ENTRY_POINT_COMMUNITY();
 
 if (objValues.age !== "") {
       props.setPatientObjAge(objValues.age);
     }
     if (props.patientObj.riskStratificationResponseDto !== null) {
+      if(props.activePage.activeObject.riskStratificationResponseDto.entryPoint === "HTS_ENTRY_POINT_COMMUNITY"){
+        HTS_ENTRY_POINT_COMMUNITY()
+      }else if(props.activePage.activeObject.riskStratificationResponseDto.entryPoint=== "HTS_ENTRY_POINT_FACILITY"){
+
+        HTS_ENTRY_POINT_FACILITY()
+      }
       setObjValues(props.patientObj.riskStratificationResponseDto);
-      SettingModality(
-        props.patientObj.riskStratificationResponseDto.testingSetting
-      );
+      // SettingModality(
+      //   props.patientObj.riskStratificationResponseDto.testingSetting
+      // );
       setRiskAssessment(
         props.patientObj.riskStratificationResponseDto.riskAssessment
       );
     }
   }, [objValues.age]);
+
+
+  useEffect(()=>{
+    KP();
+    TargetGroupSetup();
+    // EnrollmentSetting();
+    EntryPoint();
+  }, [])
   //Get list of HIV STATUS ENROLLMENT
   const EnrollmentSetting = () => {
     axios
@@ -202,6 +213,15 @@ if (objValues.age !== "") {
       .then((response) => {
         //console.log(response.data);
         setEntryPoint(response.data);
+        if(props?.patientObj?.riskStratificationResponseDto?.entryPoint === "HTS_ENTRY_POINT_COMMUNITY"){
+          HTS_ENTRY_POINT_COMMUNITY()
+        }else if(props?.patientObj?.riskStratificationResponseDto?.entryPoint === "HTS_ENTRY_POINT_FACILITY"){
+
+          HTS_ENTRY_POINT_FACILITY()
+        }else{
+          setEntryPointSetting([]);
+
+        }
       })
       .catch((error) => {
         //console.log(error);
@@ -218,8 +238,9 @@ if (objValues.age !== "") {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        console.log("setSpokeFacList", response.data)
         setSpokeFacList(response.data)
+     
+
       })
       .catch((error) => {
         //console.log(error);
@@ -361,19 +382,6 @@ if (objValues.age !== "") {
       }
 
       //set risk count
-
-        //  "TEST_SETTING_STANDALONE_HTS_PMTCT_(ANC1_ONLY)"
-        // "TEST_SETTING_STANDALONE_HTS_EMERGENCY"
-        //  "TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)"
-        // "TEST_SETTING_STANDALONE_HTS_TB"
-        // "TEST_SETTING_STANDALONE_HTS_STI"
-        // "TEST_SETTING_CT_STI"
-        // "TEST_SETTING_CT_PMTCT"
-        // "TEST_SETTING_CT_TB"
-        // "TEST_SETTING_TB_TB"
-        // "TEST_SETTING_STI_STI"
-        // "TEST_SETTING_OPD_STI"
-        // "TEST_SETTING_OUTREACH_INDEX"
               if (e.target.value === "COMMUNITY_HTS_TEST_SETTING_STANDALONE_HTS"   || e.target.value === "FACILITY_HTS_TEST_SETTING_STANDALONE_HTS") {
                 setRiskCount(1);
               }   else if (e.target.value === "COMMUNITY_HTS_TEST_SETTING_CT"  || e.target.value === "FACILITY_HTS_TEST_SETTING_CT") {
@@ -394,7 +402,6 @@ if (objValues.age !== "") {
     
     if(e.target.name === "entryPoint"){
 
-      console.log("e.target.value", e.target.value )
           if(e.target.value === "HTS_ENTRY_POINT_COMMUNITY"){
             HTS_ENTRY_POINT_COMMUNITY()
           }else if(e.target.value === "HTS_ENTRY_POINT_FACILITY"){
@@ -433,7 +440,6 @@ if (objValues.age !== "") {
       setShowRiskAssessment(false);
       ans = false;
     }
-    console.log("This is the answer", ans);
   };
   //Date of Birth and Age handle
   const handleDobChange = (e) => {
@@ -643,7 +649,6 @@ if (objValues.age !== "") {
     //props.patientObj.riskAssessment =riskAssessment
     objValues.riskAssessment = riskAssessment;
 
-    console.log(props.completed)
     //Check if riskStratificationResponseDto is null or empty then call the update method
     if (
       props.patientObj.riskStratificationResponseDto &&
@@ -706,7 +711,6 @@ if (objValues.age !== "") {
               props.patientObj.riskStratificationResponseDto = response.data;
               objValues.code = response.data.code;
               props.setExtra(objValues);
-              console.log("nextForm", nextForm);
 
               handleItemClick(latestForm[0], latestForm[1]);
 
@@ -968,12 +972,15 @@ if (objValues.age !== "") {
                   </FormGroup>
                 </div>
                 {/*  */}
-              { objValues.testingSetting ===  "FACILITY_HTS_TEST_SETTING_SPOKE_HEALTH_FACILITY" && <div className="form-group  col-md-6">
+           
+{ objValues.testingSetting ===  "FACILITY_HTS_TEST_SETTING_SPOKE_HEALTH_FACILITY" && <div className="form-group  col-md-6">
                   <FormGroup>
                     <Label>
                     Spoke Health Facility <span style={{ color: "red" }}> *</span>
                     </Label>
-                    <select
+
+
+                   { spokeFacList.length > 0 ?   <> <select
                       className="form-control"
                       name="spokeFacility"
                       id="spokeFacility"
@@ -992,14 +999,27 @@ if (objValues.age !== "") {
                           {value.spokeSite}
                         </option>
                       ))}
-                    </select>
+                    </select></>: <Input
+                    type="text"
+                    name="spokeFacility"
+                    id="spokeFacility"
+                    value={objValues.spokeFacility}
+                    //value={Math.floor(Math.random() * 1093328)}
+                    // onBlur={checkClientCode}
+                    onChange={handleInputChange}
+                    style={{
+                      border: "1px solid #014D88",
+                      borderRadius: "0.25rem",
+                    }}
+                  /> }
                     {errors.spokeFacility !== "" ? (
                       <span className={classes.error}>{errors.spokeFacility}</span>
                     ) : (
                       ""
                     )}
                   </FormGroup>
-                </div>}
+                </div>} 
+
 
 
                 {showHealthFacility && <div className="form-group  col-md-6">
@@ -1007,7 +1027,7 @@ if (objValues.age !== "") {
                     <Label>
                      Health Facility <span style={{ color: "red" }}> *</span>
                     </Label>
-                    <select
+                    { spokeFacList.length > 0 ?    <select
                       className="form-control"
                       name="healthFacility"
                       id="healthFacility"
@@ -1026,7 +1046,19 @@ if (objValues.age !== "") {
                           {value.spokeSite}
                         </option>
                       ))}
-                    </select>
+                    </select>:  <Input
+                    type="text"
+                    name="healthFacility"
+                    id="healthFacility"
+                    value={objValues.healthFacility}
+                    //value={Math.floor(Math.random() * 1093328)}
+                    // onBlur={checkClientCode}
+                    onChange={handleInputChange}
+                    style={{
+                      border: "1px solid #014D88",
+                      borderRadius: "0.25rem",
+                    }}
+                  /> }
                     {errors.healthFacility !== "" ? (
                       <span className={classes.error}>{errors.healthFacility}</span>
                     ) : (
@@ -1034,6 +1066,7 @@ if (objValues.age !== "") {
                     )}
                   </FormGroup>
                 </div>}
+     
                 {/* <div className="form-group  col-md-6">
                   <FormGroup>
                     <Label>
@@ -1142,7 +1175,9 @@ if (objValues.age !== "") {
                   </Label>
                   <input
                     className="form-control"
-                    type="date"                       onKeyPress={(e)=>{e.preventDefault()}}
+                    type="date"                     
+                    
+                    onKeyPress={(e)=>{e.preventDefault()}}
 
                     name="dob"
                     id="dob"

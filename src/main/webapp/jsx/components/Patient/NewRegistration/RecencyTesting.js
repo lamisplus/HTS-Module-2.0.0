@@ -86,7 +86,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Recency = (props) => {
-  console.log("recency new", props.patientObj);
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const toggle = () => setOpen(!open);
@@ -1128,7 +1127,7 @@ const Recency = (props) => {
         </Modal.Header>
         <Modal.Body>
           <h4>
-            Would you like to fill the next form ?
+            Would you like to fill the Family Index form ?
             {/* <b>{row && record.activityName}</b> */}
           </h4>
         </Modal.Body>

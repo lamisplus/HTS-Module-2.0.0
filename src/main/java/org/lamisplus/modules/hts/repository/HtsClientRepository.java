@@ -137,7 +137,7 @@ public interface HtsClientRepository extends JpaRepository<HtsClient, Long> {
 //            "ORDER BY p.id DESC", nativeQuery = true)
 
 
-    @Query(value = "SELECT DISTINCT hc.client_code AS clientCode, p.id as personId, p.first_name as firstName, p.surname as surname, p.other_name as otherName,  \n" +
+    @Query(value = "SELECT DISTINCT  hc.id, hc.client_code AS clientCode, p.id as personId, p.first_name as firstName, p.surname as surname, p.other_name as otherName,  \n" +
             "p.hospital_number as hospitalNumber, CAST (EXTRACT(YEAR from AGE(NOW(),  date_of_birth)) AS INTEGER) as age,  \n" +
             "INITCAP(p.sex) as gender, p.date_of_birth as dateOfBirth,mini.person_uuid,mini.hts_count htsCount\n" +
             "FROM patient_person p\n" +
@@ -146,7 +146,7 @@ public interface HtsClientRepository extends JpaRepository<HtsClient, Long> {
             "FROM hts_client\n" +
             "WHERE person_uuid IS NOT NULL AND archived = ?1 AND facility_id=?2 \n" +
             "GROUP BY 1) mini\n" +
-            "ON hc.person_uuid=mini.person_uuid AND hc.date_created=mini.first_hts_registration", nativeQuery = true)
+            "ON hc.person_uuid=mini.person_uuid AND hc.date_created=mini.first_hts_registration  ORDER BY hc.id DESC", nativeQuery = true)
     Page<HtsPerson> findOnlyPersonHts(Integer archived, Long facilityId, Pageable pageable);
 
 

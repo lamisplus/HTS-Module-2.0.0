@@ -438,7 +438,6 @@ const HivTestResult = (props) => {
     });
     useEffect(() => {
 
-        console.log('props.patientObj', props.patientObj)
         if (props.patientObj) {
             setCd4Count(
                 props.patientObj && props.patientObj.cd4 !== null

@@ -267,7 +267,6 @@ const ViewPNSForm = (props) => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        console.log(response.data);
         setFacilityInfo(response.data.currentOrganisationUnitName);
       })
       .catch((error) => {
@@ -1067,7 +1066,8 @@ const ViewPNSForm = (props) => {
                         <Label>Date</Label>
                         <input
                           className="form-control"
-                          type="date"
+                          type="date"                       onKeyPress={(e)=>{e.preventDefault()}}
+
                           name="dob"
                           id="dob"
                           max={moment(new Date()).format("YYYY-MM-DD")}
@@ -1332,7 +1332,8 @@ const ViewPNSForm = (props) => {
                         <Label>Date Of Birth</Label>
                         <input
                           className="form-control"
-                          type="date"
+                          type="date"                       onKeyPress={(e)=>{e.preventDefault()}}
+
                           name="dob"
                           id="dob"
                           max={moment(new Date()).format("YYYY-MM-DD")}
@@ -1541,7 +1542,8 @@ const ViewPNSForm = (props) => {
                           results <span style={{ color: "red" }}> *</span>{" "}
                         </Label>
                         <Input
-                          type="date"
+                          type="date"                       onKeyPress={(e)=>{e.preventDefault()}}
+
                           name="dateIndexClientConfirmedHiv"
                           id="dateIndexClientConfirmedHiv"
                           value={
@@ -1599,7 +1601,8 @@ const ViewPNSForm = (props) => {
                               <span style={{ color: "red" }}> *</span>{" "}
                             </Label>
                             <Input
-                              type="date"
+                              type="date"                       onKeyPress={(e)=>{e.preventDefault()}}
+
                               name="DateOfTreatmentInitiation"
                               id="DateOfTreatmentInitiation"
                               value={
@@ -2134,7 +2137,8 @@ const ViewPNSForm = (props) => {
                               <span style={{ color: "red" }}> *</span>
                             </Label>
                             <Input
-                              type="date"
+                              type="date"                       onKeyPress={(e)=>{e.preventDefault()}}
+
                               name="datePartnerTested"
                               id="datePartnerTested"
                               value={objValues.datePartnerTested}
@@ -2155,7 +2159,8 @@ const ViewPNSForm = (props) => {
                       <FormGroup>
                         <Label for="">Date Enrolled On ART</Label>
                         <Input
-                          type="date"
+                          type="date"                       onKeyPress={(e)=>{e.preventDefault()}}
+
                           name="dateEnrollmentOnART"
                           id="dateEnrollmentOnART"
                           value={objValues.dateEnrollmentOnART}

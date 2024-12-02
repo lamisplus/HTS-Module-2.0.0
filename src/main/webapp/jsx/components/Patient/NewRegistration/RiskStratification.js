@@ -17,6 +17,7 @@ import "react-phone-input-2/lib/style.css";
 import "semantic-ui-css/semantic.min.css";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
+import { getNextForm } from "../../../../utility";
 //import PhoneInput from 'react-phone-input-2'
 import "react-phone-input-2/lib/style.css";
 import { Button } from "semantic-ui-react";
@@ -112,7 +113,10 @@ const BasicInfo = (props) => {
   const [riskCount, setRiskCount] = useState(0);
   const [isPMTCTModality, setIsPMTCTModality] = useState(false);
   const [showRiskAssessment, setShowRiskAssessment] = useState(false);
-
+  const [permissions, setPermission] = useState(
+    localStorage.getItem("stringifiedPermmision")?.split(",")
+  );
+  const [nextForm, setNextForm] = useState([]);
   const [targetGroupValue, setTargetGroupValue] = useState(null);
   const [objValues, setObjValues] = useState({
     age: "",
@@ -133,22 +137,7 @@ const BasicInfo = (props) => {
     communityEntryPoint: "",
   });
   const [riskAssessment, setRiskAssessment] = useState({
-    // everHadSexualIntercourse:"",
-    // bloodtransInlastThreeMonths:"",
-    // uprotectedSexWithCasualLastThreeMonths:"",
-    // uprotectedSexWithRegularPartnerLastThreeMonths:"",
-    // unprotectedVaginalSex:"",
-    // uprotectedAnalSex:"",
-    // stiLastThreeMonths:"",
-    // sexUnderInfluence :"",
-    // moreThanOneSexPartnerLastThreeMonths:"",
-    // experiencePain:"",
-    // haveSexWithoutCondom:"",
-    // abuseDrug:"",
-    // bloodTransfusion:"",
-    // consistentWeightFeverNightCough:"",
-    // soldPaidVaginalSex:"",
-    //New Question
+
     lastHivTestForceToHaveSex: "",
     lastHivTestHadAnal: "",
     lastHivTestInjectedDrugs: "",
@@ -166,8 +155,8 @@ const BasicInfo = (props) => {
     EnrollmentSetting();
     EntryPoint();
     HTS_ENTRY_POINT_COMMUNITY();
-    //objValues.dateVisit=moment(new Date()).format("YYYY-MM-DD")
-    if (objValues.age !== "") {
+
+if (objValues.age !== "") {
       props.setPatientObjAge(objValues.age);
     }
     if (props.patientObj.riskStratificationResponseDto !== null) {
@@ -249,22 +238,12 @@ const BasicInfo = (props) => {
       });
   };
 
+
+
+
+  
   //Set HTS menu registration
   const getMenuLogic = () => {
-    // first logic
-    // if (objValues.age !== "" && objValues.age <= 15) {
-    //   props.setHideOtherMenu(true);
-    // } else if (objValues.age !== "" && objValues.age > 15) {
-    //   props.setHideOtherMenu(true);
-    // } else {
-    //   props.setHideOtherMenu(true);
-    // }
-
-    // if (objValues.age !== "" && objValues.age >= 85) {
-    //   toggle();
-    // }
-
-    //secound logic
     props.setHideOtherMenu(false);
   };
 
@@ -284,9 +263,27 @@ const BasicInfo = (props) => {
         "TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
       modality === "TEST_SETTING_OTHERS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
       modality ===
-        "TEST_SETTING_STANDALONE_HTS_POST_ANC1_PREGNANT_L&D ? 72hrs"
+        "TEST_SETTING_STANDALONE_HTS_POST_ANC1_PREGNANT_L&D ? 72hrs"   
+        ||
+        modality ===
+          "TEST_SETTING_STANDALONE_HTS_POST_ANC1_PREGNANT_L&D < 72hrs"   
+          ||
+          modality ===
+            "TEST_SETTING_STANDALONE_HTS_POST_ANC1_PREGNANT_L&D > 72hrs"  
+ 
     ) {
       console.log("it is PMTCT MODALITY ");
+      setErrors({...errors,
+        lastHivTestDone: "",
+        whatWasTheResult: "",
+        lastHivTestVaginalOral: "",
+        lastHivTestBloodTransfusion: "",
+        lastHivTestPainfulUrination: "",
+        diagnosedWithTb: "",
+        lastHivTestInjectedDrugs: "",
+        lastHivTestHadAnal: "",
+        lastHivTestForceToHaveSex: "",
+       })
       setIsPMTCTModality(true);
       return true;
     } else {
@@ -370,16 +367,7 @@ const BasicInfo = (props) => {
   const displayRiskAssessment = (lastVisit, age, isPMTCTModalityValue) => {
     let SecAge = age !== "" ? age : 0;
     let ans;
-    console.log(
-      "variable lastVisit",
-      lastVisit,
-      "objValues.age",
-      objValues.age,
-      "isPMTCTModality",
-      isPMTCTModalityValue,
-      "SecAge",
-      SecAge
-    );
+
     // for the section to show
     //  Conditions are : age > 15, riskAssessment.lastHivTestBasedOnRequest === "false" and PMTCT Modality === true
     if (lastVisit === "false") {
@@ -444,13 +432,7 @@ const BasicInfo = (props) => {
       if (e.target.value !== "" && e.target.value >= 85) {
         toggle();
       }
-      // if (e.target.value !== "" && e.target.value <= 15) {
-      //   props.setHideOtherMenu(false);
-      // } else if (e.target.value !== "" && e.target.value > 15) {
-      //   props.setHideOtherMenu(true);
-      // } else {
-      //   props.setHideOtherMenu(true);
-      // }
+     
 
       const currentDate = new Date();
       currentDate.setDate(15);
@@ -488,8 +470,10 @@ const BasicInfo = (props) => {
       : "This field is required.";
     temp.entryPoint = objValues.entryPoint ? "" : "This field is required.";
     temp.modality = objValues.modality ? "" : "This field is required.";
+  //  
     temp.dob = objValues.dob ? "" : "This field is required.";
     temp.age = objValues.age ? "" : "This field is required.";
+    // 
     temp.lastHivTestBasedOnRequest = riskAssessment.lastHivTestBasedOnRequest
       ? ""
       : "This field is required.";
@@ -566,15 +550,25 @@ const BasicInfo = (props) => {
   riskCountQuestion = actualRiskCountTrue.filter((x) => x === "true");
 
   const handleInputChangeRiskAssessment = (e) => {
-    console.log(e.target.name, e.target.value);
     displayRiskAssessment(e.target.value, objValues.age, isPMTCTModality);
 
     setErrors({ ...temp, [e.target.name]: "" });
     setRiskAssessment({ ...riskAssessment, [e.target.name]: e.target.value });
   };
 
+
+  const handleInputChangeRiskAssessment2 = (e) => {
+    setErrors({ ...temp, [e.target.name]: "" });
+    setRiskAssessment({ ...riskAssessment, [e.target.name]: e.target.value });
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    // get next form
+    let newModality = isPMTCTModality ? "skip" : "fill";
+
+  let latestForm =  getNextForm("Risk_Stratification", objValues.age, newModality, "unknown")
+ 
     getMenuLogic(objValues);
     props.patientObj.riskStratificationResponseDto = objValues;
     props.patientObj.personResponseDto.dob = objValues.dob;
@@ -588,11 +582,13 @@ const BasicInfo = (props) => {
 
     //props.patientObj.riskAssessment =riskAssessment
     objValues.riskAssessment = riskAssessment;
+
+    console.log(props.completed)
     //Check if riskStratificationResponseDto is null or empty then call the update method
     if (
       props.patientObj.riskStratificationResponseDto &&
       props.patientObj.riskStratificationResponseDto !== null &&
-      props.patientObj.riskStratificationResponseDto.code !== ""
+      props.patientObj.riskStratificationResponseDto.id !== ""
     ) {
       if (validate()) {
         setSaving(true);
@@ -609,7 +605,9 @@ const BasicInfo = (props) => {
             props.patientObj.riskStratificationResponseDto = response.data;
             objValues.code = response.data.code;
             props.setExtra(objValues);
-            //toast.success("Risk stratification save succesfully!");
+            handleItemClick(latestForm[0], latestForm[1]);
+
+            toast.success("Risk stratification save succesfully!");
           })
           .catch((error) => {
             setSaving(false);
@@ -637,7 +635,6 @@ const BasicInfo = (props) => {
       ) {
         if (validate()) {
           setSaving(true);
-          handleItemClick("basic", "risk");
 
           props.setHideOtherMenu(false);
           axios
@@ -649,7 +646,11 @@ const BasicInfo = (props) => {
               props.patientObj.riskStratificationResponseDto = response.data;
               objValues.code = response.data.code;
               props.setExtra(objValues);
-              //toast.success("Risk stratification save succesfully!");
+              console.log("nextForm", nextForm);
+
+              handleItemClick(latestForm[0], latestForm[1]);
+
+              toast.success("Risk stratification save succesfully!");
             })
             .catch((error) => {
               setSaving(false);
@@ -685,7 +686,7 @@ const BasicInfo = (props) => {
               props.patientObj.riskStratificationResponseDto = response.data;
               objValues.code = response.data.code;
               props.setExtra(objValues);
-              handleItemClick("basic", "risk");
+              handleItemClick(latestForm[0], latestForm[1]);
               //toast.success("Risk stratification save succesfully!");
             })
             .catch((error) => {
@@ -725,7 +726,7 @@ const BasicInfo = (props) => {
               objValues.code = response.data.code;
               props.setExtra(objValues);
               toast.success("Risk stratification save succesfully!");
-              handleItemClick("basic", "risk");
+              handleItemClick(latestForm[0], latestForm[1]);
             })
             .catch((error) => {
               setSaving(false);
@@ -845,7 +846,8 @@ const BasicInfo = (props) => {
                       Visit Date <span style={{ color: "red" }}> *</span>{" "}
                     </Label>
                     <Input
-                      type="date"
+                      type="date"                       onKeyPress={(e)=>{e.preventDefault()}}
+
                       name="visitDate"
                       id="visitDate"
                       value={objValues.visitDate}
@@ -1029,7 +1031,8 @@ const BasicInfo = (props) => {
                   </Label>
                   <input
                     className="form-control"
-                    type="date"
+                    type="date"                       onKeyPress={(e)=>{e.preventDefault()}}
+
                     name="dob"
                     id="dob"
                     min="1929-12-31"
@@ -1132,7 +1135,7 @@ const BasicInfo = (props) => {
                         name="lastHivTestDone"
                         id="lastHivTestDone"
                         value={riskAssessment.lastHivTestDone}
-                        onChange={handleInputChangeRiskAssessment}
+                        onChange={handleInputChangeRiskAssessment2}
                         style={{
                           border: "1px solid #014D88",
                           borderRadius: "0.2rem",
@@ -1167,7 +1170,7 @@ const BasicInfo = (props) => {
                             name="whatWasTheResult"
                             id="whatWasTheResult"
                             value={riskAssessment.whatWasTheResult}
-                            onChange={handleInputChangeRiskAssessment}
+                            onChange={handleInputChangeRiskAssessment2}
                             style={{
                               border: "1px solid #014D88",
                               borderRadius: "0.2rem",
@@ -1200,7 +1203,7 @@ const BasicInfo = (props) => {
                         name="lastHivTestVaginalOral"
                         id="lastHivTestVaginalOral"
                         value={riskAssessment.lastHivTestVaginalOral}
-                        onChange={handleInputChangeRiskAssessment}
+                        onChange={handleInputChangeRiskAssessment2}
                         style={{
                           border: "1px solid #014D88",
                           borderRadius: "0.2rem",
@@ -1231,7 +1234,7 @@ const BasicInfo = (props) => {
                         name="lastHivTestBloodTransfusion"
                         id="lastHivTestBloodTransfusion"
                         value={riskAssessment.lastHivTestBloodTransfusion}
-                        onChange={handleInputChangeRiskAssessment}
+                        onChange={handleInputChangeRiskAssessment2}
                         style={{
                           border: "1px solid #014D88",
                           borderRadius: "0.2rem",
@@ -1265,7 +1268,7 @@ const BasicInfo = (props) => {
                         name="lastHivTestPainfulUrination"
                         id="lastHivTestPainfulUrination"
                         value={riskAssessment.lastHivTestPainfulUrination}
-                        onChange={handleInputChangeRiskAssessment}
+                        onChange={handleInputChangeRiskAssessment2}
                         style={{
                           border: "1px solid #014D88",
                           borderRadius: "0.2rem",
@@ -1296,7 +1299,7 @@ const BasicInfo = (props) => {
                         name="diagnosedWithTb"
                         id="diagnosedWithTb"
                         value={riskAssessment.diagnosedWithTb}
-                        onChange={handleInputChangeRiskAssessment}
+                        onChange={handleInputChangeRiskAssessment2}
                         style={{
                           border: "1px solid #014D88",
                           borderRadius: "0.2rem",
@@ -1328,7 +1331,7 @@ const BasicInfo = (props) => {
                         name="lastHivTestInjectedDrugs"
                         //id="sexUnderInfluence"
                         value={riskAssessment.lastHivTestInjectedDrugs}
-                        onChange={handleInputChangeRiskAssessment}
+                        onChange={handleInputChangeRiskAssessment2}
                         style={{
                           border: "1px solid #014D88",
                           borderRadius: "0.2rem",
@@ -1359,7 +1362,7 @@ const BasicInfo = (props) => {
                         name="lastHivTestHadAnal"
                         id="lastHivTestHadAnal"
                         value={riskAssessment.lastHivTestHadAnal}
-                        onChange={handleInputChangeRiskAssessment}
+                        onChange={handleInputChangeRiskAssessment2}
                         style={{
                           border: "1px solid #014D88",
                           borderRadius: "0.2rem",
@@ -1388,7 +1391,7 @@ const BasicInfo = (props) => {
                         className="form-control"
                         name="lastHivTestForceToHaveSex"
                         value={riskAssessment.lastHivTestForceToHaveSex}
-                        onChange={handleInputChangeRiskAssessment}
+                        onChange={handleInputChangeRiskAssessment2}
                         style={{
                           border: "1px solid #014D88",
                           borderRadius: "0.2rem",

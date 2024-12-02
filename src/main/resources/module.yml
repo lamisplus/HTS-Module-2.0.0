@@ -1,6 +1,6 @@
 basePackage: org.lamisplus.modules.hts
 name: HtsModule
-dependencies: {PatientModule: 2.0.4}
+dependencies: { PatientModule: 2.0.4 }
 menus:
   - icon: fa-solid fa-microscope
     disabled: false
@@ -17,4 +17,31 @@ webModules:
 permissions:
   - name: hts_view
     description: View hts
+    moduleName: HtsModule
+  - name: Request_and_Result_Form
+    description: Request and Result Form
+    moduleName: HtsModule
+  - name: Client_intake_form
+    description: Client intake form
+    moduleName: HtsModule
+  - name: Daily_HIV_Worksheet
+    description: Daily HIV Worksheet
+    moduleName: HtsModule
+  - name: HTS_Register
+    description: HTS Register
+    moduleName: HtsModule
+  - name: Referral_Form
+    description: Referral Form
+    moduleName: HtsModule
+  - name: Referral_Register
+    description: Referral Register
+    moduleName: HtsModule
+  - name: Family_Index_Testing_Form
+    description: Family Index Testing Form
+    moduleName: HtsModule
+  - name: Nigeria_PNS_Form
+    description: Nigeria PNS Form
+    moduleName: HtsModule
+  - name: Index_Testing_register
+    description: Index Testing register
     moduleName: HtsModule

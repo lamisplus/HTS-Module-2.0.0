@@ -184,7 +184,7 @@ const RefferralUnit = (props) => {
     htsClientUuid: props && props.patientObj ? props.patientObj?.uuid : "",
   });
   const loadGenders = useCallback(async () => {
-    getSex()
+    getAllGenders()
       .then((response) => {
         setGenders(response);
       })
@@ -194,6 +194,7 @@ const RefferralUnit = (props) => {
   const getProvincesWithId = (id) => {
     getAllProvinces(id)
       .then((res) => {
+        setProvinces(res);
         let ans = res.filter((each, index) => {
           return (
             each.name ===
@@ -204,7 +205,7 @@ const RefferralUnit = (props) => {
           ...payload,
           province: ans[0].id,
         });
-        setProvinces(res);
+        
       })
       .catch((e) => {});
   };
@@ -645,7 +646,8 @@ const RefferralUnit = (props) => {
                       Date <span style={{ color: "red" }}> *</span>{" "}
                     </Label>
                     <Input
-                      type="date"
+                      type="date"                       onKeyPress={(e)=>{e.preventDefault()}}
+
                       name="dateVisit"
                       id="dateVisit"
                       value={payload.dateVisit}
@@ -832,7 +834,6 @@ const RefferralUnit = (props) => {
                     )}
                   </FormGroup>
                 </div>
-                {console.log(payload.province, payload.province)}
 
                 <div className="form-group  col-md-4">
                   <FormGroup>
@@ -1008,7 +1009,8 @@ const RefferralUnit = (props) => {
                     </Label>
                     <input
                       className="form-control"
-                      type="date"
+                      type="date"                       onKeyPress={(e)=>{e.preventDefault()}}
+
                       name="dob"
                       id="dob"
                       min="1929-12-31"
@@ -1690,7 +1692,7 @@ const RefferralUnit = (props) => {
                     disabled={saving}
                   />
                   <Button
-                    content="Add Form"
+                    content="Submit"
                     type="submit"
                     // icon="right arrow"
                     // labelPosition="right"

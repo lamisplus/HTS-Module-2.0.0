@@ -87,6 +87,7 @@ public class HtsClientDto {
     private String source;
     private String referredForSti;
     private String comment;
+    private String htsClientUUid;
 
 
 }

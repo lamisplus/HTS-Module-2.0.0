@@ -23,6 +23,9 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { Modal } from "react-bootstrap";
 import { getCheckModality } from "../../../../utility";
+import { getNextForm } from "../../../../utility";
+import { error } from "highcharts";
+import Cookies from "js-cookie";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -109,13 +112,29 @@ const BasicInfo = (props) => {
   const [pregnancyStatus, setPregnancyStatus] = useState([]);
   const [indexTesting, setIndexTesting] = useState([]);
   let temp = { ...errors };
+  const [disableVitals, setDisableVitals] = useState(false)
+
   const [clientCodeetail, setclientCodeetail] = useState("");
   const [clientCodeetail2, setclientCodeetail2] = useState("");
   const [clientCodeCheck, setClientCodeCheck] = useState("");
   const [createdCode, setCreatedCode] = useState("");
   const [facilityCode, setFacilityCode] = useState("");
   const [serialNumber, setSerialNumber] = useState(null);
- const [modalityCheck, setModality]=useState("")
+  const [disableModality, setDisableModality] = useState(props.extra.modality ===
+    "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||
+  // props.extra.modality ===
+  //   "TEST_SETTING_STANDALONE_HTS_POST_ANC1_BREASTFEEDING" ||
+  props.extra.modality ===
+    "TEST_SETTING_OTHERS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
+  // props.extra.modality === "TEST_SETTING_CPMTCT" ||
+  props.extra.modality ===
+    "TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||  props.extra.modality === "TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||  props.extra.modality === "TEST_SETTING_STANDALONE_HTS_PMTCT_(ANC1_ONLY)"
+                              ? true
+                              : false);
+
+  const [modalityCheck, setModality] = useState("");
+  const [showPregancy, setShowPregnancy] = useState(false);
+
   const [objValues, setObjValues] = useState({
     active: true,
     personId: props.patientObj.personId,
@@ -132,13 +151,10 @@ const BasicInfo = (props) => {
         ? props.patientObj.dateVisit
         : "",
     firstTimeVisit:
-      props.patientObj && props.patientObj.firstTimeVisit
-        ? props.patientObj.firstTimeVisit
-        : "",
-    indexClient:
-      props.patientObj && props.patientObj.indexClient
-        ? props.patientObj.indexClient
-        : "",
+       props?.patientObj?.firstTimeVisit
+       ,
+    indexClient: props?.patientObj?.indexClient
+        ,
     numChildren:
       props.patientObj && props.patientObj.numChildren
         ? props.patientObj.numChildren
@@ -151,7 +167,7 @@ const BasicInfo = (props) => {
       props.patientObj && props.patientObj.pregnant
         ? props.patientObj.pregnant
         : "",
-    previouslyTested: props.patientObj ? props.patientObj.previouslyTested : "",
+    previouslyTested:  props?.patientObj?.previouslyTested ,
     referredFrom: props.patientObj ? props.patientObj.referredFrom : "",
     riskAssessment:
       props.patientObj && props.patientObj.riskAssessment
@@ -169,7 +185,10 @@ const BasicInfo = (props) => {
       ? props.patientObj.relationWithIndexClient
       : "",
     indexClientCode: "",
-    comment: ""
+    comment: props?.patientObj?.comment,
+    partnerNotificationService: "",
+    familyIndex: "",
+
   });
 
   const CreateClientCode = () => {
@@ -179,7 +198,6 @@ const BasicInfo = (props) => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        // console.log('Response Facility Short Code **** ', response.data);
         setFacilityCode(response.data);
       })
       .catch((error) => {
@@ -217,13 +235,15 @@ const BasicInfo = (props) => {
     let codeCreated =
       "C" + facilityCode + "/" + modalityCode + "/" + month + "/" + year + "/";
     setCreatedCode(codeCreated);
-    setObjValues({ ...objValues, clientCode: createdCode });
-    //setObjValues({ ...objValues, clientCode: props.clientCode });
-    // console.log('Created Code **** ', createdCode);
+    if(!props.patientObj.id){
+      setObjValues({ ...objValues, clientCode: createdCode });
+    }else{
+          setSerialNumber(Cookies.get("serial-number"))
+          setDisableVitals(true)
+    }
   };
 
   useEffect(() => {
-    // console.log("############# Continues model")
 
     KP();
     EnrollmentSetting();
@@ -232,14 +252,55 @@ const BasicInfo = (props) => {
     CounselingType();
     PregnancyStatus();
     IndexTesting();
-    setObjValues({
-      ...props.patientObj,
-      clientCode: props.patientObj.clientCode,
-    });
+
     CreateClientCode();
 
-    setModality(getCheckModality(props?.patientObj?.riskStratificationResponseDto?.modality));
+    setModality(
+      getCheckModality(
+        props?.patientObj?.riskStratificationResponseDto?.modality
+      )
+    );
+    // (props.patientObj.riskStratificationResponseDto
+    //   .modality ===
+    //   "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||
+    //   props.patientObj.riskStratificationResponseDto
+    //     .modality ===
+    //     "TEST_SETTING_OTHERS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
+    //   props.patientObj.riskStratificationResponseDto
+    //     .testingSetting === "TEST_SETTING_CPMTCT" ||
+    //   props.patientObj.riskStratificationResponseDto
+    //     .modality ===
+    //     "TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
+    //   props.patientObj.riskStratificationResponseDto
+    //     .modality ===
+    //     "TEST_SETTING_STANDALONE_HTS_POST_ANC1_BREASTFEEDING") &&
+    // value.code === "PREGANACY_STATUS_NOT_PREGNANT" ? (
+    //   <></>
+    // )
+
+
   }, [props.patientObj, facilityCode]);
+
+  const handleSubmitCheckOut = () => {
+    if (
+      props.patientObject.visitId !== null &&
+      props.patientObject.status === "PENDING"
+    ) {
+      axios
+        .put(
+          `${baseUrl}patient/visit/checkout/${props.patientObject.visitId}`,
+          props.patientObject.visitId,
+          { headers: { Authorization: `Bearer ${token}` } }
+        )
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  };
+
   //Get list of KP
   const KP = () => {
     axios
@@ -274,6 +335,28 @@ const BasicInfo = (props) => {
       })
       .then((response) => {
         setPregnancyStatus(response.data);
+               let pregnancyCode = response.data.filter((each, index)=>{
+
+                return each.code === "PREGANACY_STATUS_PREGNANT"
+               })                                                        
+
+
+        if (props?.patientObject?.gender.toLowerCase() === "female" ) {
+            if( props.extra.modality ===
+              "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||
+            // props.extra.modality ===
+            //   "TEST_SETTING_STANDALONE_HTS_POST_ANC1_BREASTFEEDING" ||
+            props.extra.modality ===
+              "TEST_SETTING_OTHERS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
+            // props.extra.modality === "TEST_SETTING_CPMTCT" ||
+            props.extra.modality ===
+              "TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||  props.extra.modality === "TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||  props.extra.modality === "TEST_SETTING_STANDALONE_HTS_PMTCT_(ANC1_ONLY)"){
+              setShowPregnancy(true);
+
+
+              setObjValues({...objValues, pregnant:pregnancyCode[0].id })
+            }
+          }
       })
       .catch((error) => {
         //console.log(error);
@@ -317,8 +400,7 @@ const BasicInfo = (props) => {
       .then((response) => {
         setSourceReferral(response.data);
       })
-      .catch((error) => {
-      });
+      .catch((error) => {});
   };
   //Get list of Genders from
   const Genders = () => {
@@ -329,8 +411,7 @@ const BasicInfo = (props) => {
       .then((response) => {
         setGender(response.data);
       })
-      .catch((error) => {
-      });
+      .catch((error) => {});
   };
   const handleInputChange = (e) => {
     setErrors({ ...temp, [e.target.name]: "" });
@@ -355,9 +436,21 @@ const BasicInfo = (props) => {
         }
       }
       getIndexClientCode();
-          setObjValues({ ...objValues, [e.target.name]: e.target.value });
+      setObjValues({
+        ...objValues,
+        [e.target.name]: e.target.value,
+   
+      });
+    } else if (e.target.name === "indexClient") {
+        setObjValues({
+          ...objValues,
+          [e.target.name]: e.target.value,
+          relationWithIndexClient: "",
+          indexClientCode: "",
+        });
 
-    }else if (e.target.name === "numChildren") {
+        setErrors({...errors, relationWithIndexClient: "", indexClientCode: "" })
+    } else if (e.target.name === "numChildren") {
       if (e.target.value >= 0) {
         setObjValues({ ...objValues, [e.target.name]: e.target.value });
       } else {
@@ -393,14 +486,32 @@ const BasicInfo = (props) => {
       : "This field is required.";
     temp.targetGroup = objValues.targetGroup ? "" : "This field is required.";
     temp.referredFrom = objValues.referredFrom ? "" : "This field is required.";
-    temp.previouslyTested = objValues.previouslyTested
+    temp.previouslyTested = objValues.previouslyTested !== ""
       ? ""
       : "This field is required.";
-    temp.indexClient = objValues.indexClient ? "" : "This field is required.";
-    temp.firstTimeVisit = objValues.firstTimeVisit
+    temp.indexClient = objValues.indexClient !== "" ? "" : "This field is required.";
+    temp.firstTimeVisit = objValues.firstTimeVisit !== ""
       ? ""
       : "This field is required.";
     temp.dateVisit = objValues.dateVisit ? "" : "This field is required.";
+        
+
+    
+      props?.patientObject?.gender &&
+      props?.patientObject?.gender.toLowerCase() === "female" &&
+     ( temp.pregnant =
+        objValues.pregnant !== "" ? "" : "This field is required.");
+
+      objValues.indexClient === "true"  &&
+      (temp.relationWithIndexClient =
+              objValues.relationWithIndexClient !== ""
+                ? ""
+                : "This field is required.");
+
+    objValues.indexClient === "true" &&
+                  (temp.indexClientCode =
+          objValues.indexClientCode !== "" ? "" : "This field is required.");
+
     setErrors({ ...temp });
     return Object.values(temp).every((x) => x == "");
   };
@@ -437,8 +548,9 @@ const BasicInfo = (props) => {
     // let code = "";
     if (e.target.name === "serialNumber") {
       const code = createdCode + e.target.value;
+      setSerialNumber(e.target.value )
+
       // setCreatedCode(code);
-      // console.log("Code created is &&&& ", createdCode);
       setObjValues({ ...objValues, clientCode: code });
       await handleClientCodeCheck(code);
     }
@@ -459,6 +571,14 @@ const BasicInfo = (props) => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
+    // check next form
+    let latestForm = getNextForm(
+      "Client_intake_form",
+      props.patientAge,
+      modalityCheck,
+      "unknown"
+    );
+
     const patientForm = {
       clientCode: objValues.clientCode,
       dateVisit: objValues.dateVisit,
@@ -467,7 +587,9 @@ const BasicInfo = (props) => {
       indexClient: objValues.indexClient,
       numChildren: objValues.numChildren,
       numWives: objValues.numWives,
-      personId: props.patientObject.personId,
+      personId: props?.patientObject?.personId
+        ? props?.patientObject?.personId
+        : props?.patientObject?.id,
       hospitalNumber: objValues.clientCode,
       previouslyTested: objValues.previouslyTested,
       referredFrom: objValues.referredFrom,
@@ -480,26 +602,74 @@ const BasicInfo = (props) => {
       relationWithIndexClient: objValues.relationWithIndexClient,
       riskStratificationCode:
         props.extra && props.extra.code !== "" ? props.extra.code : "",
-      comment: objValues.comment
+      comment: objValues.comment,
+      partnerNotificationService: objValues.partnerNotificationService,
+      familyIndex: objValues.familyIndex,
 
     };
-
+    props.setPatientObj({ ...props.patientObj, ...objValues });
+    Cookies.set("serial-number", serialNumber)
 
     if (validate()) {
       setSaving(true);
-      axios
-        .post(`${baseUrl}hts`, patientForm, {
+
+      if(props.patientObj.id && props.completed.includes("basic") ){
+        patientForm.id= props?.patientObj?.id
+        patientForm.personId= props?.patientObj?.personId
+
+        axios
+        .put(`${baseUrl}hts/${props.patientObj.id}`, patientForm, {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((response) => {
           setSaving(false);
+          let obj = {
+            uuid: "",
+            type: "",
+            clientCode: "",
+          };
+          localStorage.setItem("index", JSON.stringify(obj));
+
           props.setPatientObj(response.data);
-          //toast.success("HTS Test successful");
-          if (props.patientAge > 15 && modalityCheck === "fill") {
-            handleItemClick("pre-test-counsel", "basic");
+          props.setBasicInfo(response.data);
+          toast.success("Form submitted successfully");
+
+          handleItemClick(latestForm[0], latestForm[1]);
+        })
+        .catch((error) => {
+          setSaving(false);
+          console.log(error);
+          if (error.response && error.response.data) {
+            let errorMessage =
+              error.response.data.apierror &&
+              error.response.data.apierror.message !== ""
+                ? error.response.data.apierror.message
+                : "Something went wrong, please try again";
+            toast.error(errorMessage, {
+              position: toast.POSITION.BOTTOM_CENTER,
+            });
           } else {
-            handleItemClick("hiv-test", "basic");
+            toast.error("Something went wrong. Please try again...", {
+              position: toast.POSITION.BOTTOM_CENTER,
+            });
           }
+        });
+
+      }else{
+        axios
+        .post(`${baseUrl}hts`, patientForm, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((response) => {
+          if (props.checkedInPatient) {
+            handleSubmitCheckOut();
+          }
+
+          setSaving(false);
+          props.setPatientObj(response.data);
+          localStorage.setItem("htsClientUUid", JSON.stringify(response.data.htsClientUUid));
+          handleItemClick(latestForm[0], latestForm[1]);
+
         })
         .catch((error) => {
           setSaving(false);
@@ -518,6 +688,13 @@ const BasicInfo = (props) => {
             });
           }
         });
+
+      }
+
+
+     
+
+    
     } else {
       toast.error("All fields are required", {
         position: toast.POSITION.BOTTOM_CENTER,
@@ -529,29 +706,26 @@ const BasicInfo = (props) => {
 
   //   await handleClientCodeCheck();
   //   temp.clientCode = clientCodeCheck === true ? "" : "This field is required.";
-    
 
   // },[objValues.clientCode])
 
   const handleClientCodeCheck = async (code) => {
-    // console.log("VALUE", e.target.value);
-    const data = {clientCode : code};
+    const data = { clientCode: code };
     axios
-        .post(`${baseUrl}hts/clientCodeCheck`, data, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((response) => {
-          // console.log(response.data)
-          setClientCodeCheck(response.data)
-          temp.clientCodeCheck = response.data === true ? "" : "This client code already exists.";
-          setErrors({ ...temp });
-        })
-        .catch((error)=>{
-          console.log("error", error);
-          setClientCodeCheck(false)
-        })
-    
-  }
+      .post(`${baseUrl}hts/clientCodeCheck`, data, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        // console.log(response.data)
+        setClientCodeCheck(response.data);
+        temp.clientCodeCheck =
+          response.data === true ? "" : "This client code already exists.";
+        setErrors({ ...temp });
+      })
+      .catch((error) => {
+        setClientCodeCheck(false);
+      });
+  };
 
   return (
     <>
@@ -566,6 +740,8 @@ const BasicInfo = (props) => {
                   <Label>
                     Target Group <span style={{ color: "red" }}> *</span>
                   </Label>
+
+                  
                   <select
                     className="form-control"
                     name="targetGroup"
@@ -578,13 +754,12 @@ const BasicInfo = (props) => {
                       borderRadius: "0.2rem",
                     }}
                   >
-                    {/* <option value={""}></option>
-                                        {kP.map((value) => (
-                                            <option key={value.id} value={value.code}>
-                                                {value.display}
-                                            </option>
-                                        ))} */}
-                    {(props.sex === "Female" || props.sex === "female") && (
+                    {kP.map((value) => (
+                      <option key={value.id} value={value.code}>
+                        {value.display}
+                      </option>
+                    ))}
+                    {/* {props?.sex && props?.sex.toLowerCase() === "female" && (
                       <>
                         {" "}
                         {kP
@@ -595,9 +770,9 @@ const BasicInfo = (props) => {
                             </option>
                           ))}
                       </>
-                    )}
-
-                    {(props.sex === "Male" || props.sex === "male") && (
+                    )} */}
+                    {/* 
+                    {props?.sex && props?.sex.toLowerCase() === "male" && (
                       <>
                         {" "}
                         {kP
@@ -608,7 +783,7 @@ const BasicInfo = (props) => {
                             </option>
                           ))}{" "}
                       </>
-                    )}
+                    )} */}
                   </select>
                   {errors.targetGroup !== "" ? (
                     <span className={classes.error}>{errors.targetGroup}</span>
@@ -634,6 +809,7 @@ const BasicInfo = (props) => {
                       border: "1px solid #014D88",
                       borderRadius: "0.25rem",
                     }}
+                    disabled={disableVitals}
                   />
                 </FormGroup>
               </div>
@@ -664,7 +840,10 @@ const BasicInfo = (props) => {
                     ""
                   )}
                   {errors.clientCode !== "" ? (
-                    <span className={classes.error}> {errors.clientCodeCheck}</span>
+                    <span className={classes.error}>
+                      {" "}
+                      {errors.clientCodeCheck}
+                    </span>
                   ) : (
                     ""
                   )}
@@ -738,7 +917,9 @@ const BasicInfo = (props) => {
                     Visit Date <span style={{ color: "red" }}> *</span>
                   </Label>
                   <Input
-                    type="date"
+                    type="date"               
+                    onKeyPress={(e)=>{e.preventDefault()}}
+
                     name="dateVisit"
                     id="dateVisit"
                     value={objValues.dateVisit}
@@ -801,10 +982,9 @@ const BasicInfo = (props) => {
                   </FormGroup>
                 </div>
               )}
-              {props.patientAge > 9 &&
-                (props.patientObject.gender === "Male" ||
-                  props.patientObject.gender === "MALE" ||
-                  props.patientObject.gender === "male") && (
+              {props?.patientAge > 9 &&
+                props?.patientObject?.gender &&
+                props?.patientObject?.gender.toLowerCase() === "male" && (
                   <div className="form-group  col-md-4">
                     <FormGroup>
                       <Label>Number of wives/co-wives</Label>
@@ -854,7 +1034,10 @@ const BasicInfo = (props) => {
                 <>
                   <div className="form-group  col-md-4">
                     <FormGroup>
-                      <Label>Relationship of the index client</Label>
+                      <Label>
+                        Relationship of the index client{" "}
+                        <span style={{ color: "red" }}> *</span>
+                      </Label>
                       <select
                         className="form-control"
                         name="relationWithIndexClient"
@@ -873,11 +1056,21 @@ const BasicInfo = (props) => {
                           </option>
                         ))}
                       </select>
+                      {errors.relationWithIndexClient !== "" ? (
+                        <span className={classes.error}>
+                          {errors.relationWithIndexClient}
+                        </span>
+                      ) : (
+                        ""
+                      )}
                     </FormGroup>
                   </div>
                   <div className="form-group  col-md-4">
                     <FormGroup>
-                      <Label>Index Client Code/ID</Label>
+                      <Label>
+                        Index Client Code/ID{" "}
+                        <span style={{ color: "red" }}> *</span>
+                      </Label>
                       <Input
                         type="text"
                         name="indexClientCode"
@@ -895,69 +1088,57 @@ const BasicInfo = (props) => {
                       ) : (
                         ""
                       )} */}
+                      {errors.indexClientCode !== "" ? (
+                        <span className={classes.error}>
+                          {errors.indexClientCode}
+                        </span>
+                      ) : (
+                        ""
+                      )}
                     </FormGroup>
                   </div>
                 </>
               )}
-              {(props.patientObject.gender === "female" ||
-                props.patientObject.gender === "FEMALE" ||
-                props.patientObject.gender === "Female") && (
-                <>
-                  <div className="form-group  col-md-4">
-                    <FormGroup>
-                      <Label>Pregnant Status</Label>
-                      <select
-                        className="form-control"
-                        name="pregnant"
-                        id="pregnant"
-                        value={objValues.pregnant}
-                        onChange={handleInputChange}
-                        style={{
-                          border: "1px solid #014D88",
-                          borderRadius: "0.2rem",
-                        }}
-                        disabled={
-                          props.extra.modality ===
-                            "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||
-                          props.extra.modality ===
-                            "TEST_SETTING_STANDALONE_HTS_POST_ANC1_BREASTFEEDING" ||
-                          props.extra.modality ===
-                            "TEST_SETTING_OTHERS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
-                          props.extra.modality === "TEST_SETTING_CPMTCT" ||
-                          props.extra.modality ===
-                            "TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)"
-                            ? true
-                            : false
-                        }
-                      >
-                        <option value={""}></option>
-                        {pregnancyStatus.map((value) =>
-                          (props.patientObj.riskStratificationResponseDto
-                            .modality ===
-                            "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||
-                            props.patientObj.riskStratificationResponseDto
-                              .modality ===
-                              "TEST_SETTING_OTHERS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
-                            props.patientObj.riskStratificationResponseDto
-                              .testingSetting === "TEST_SETTING_CPMTCT" ||
-                            props.patientObj.riskStratificationResponseDto
-                              .modality ===
-                              "TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
-                            props.patientObj.riskStratificationResponseDto
-                              .modality ===
-                              "TEST_SETTING_STANDALONE_HTS_POST_ANC1_BREASTFEEDING") &&
-                          value.code === "PREGANACY_STATUS_NOT_PREGNANT" ? (
-                            <></>
-                          ) : (
-                            <option key={value.id} value={value.id}>
-                              {value.display}
-                            </option>
-                          )
+              {props?.patientObject?.gender &&
+                props?.patientObject?.gender.toLowerCase() === "female" && (
+                  <>
+                    <div className="form-group  col-md-4">
+                      <FormGroup>
+                        <Label>
+                          Pregnant Status{" "}
+                          <span style={{ color: "red" }}> *</span>
+                        </Label>
+                        <select
+                          className="form-control"
+                          name="pregnant"
+                          id="pregnant"
+                          value={objValues.pregnant}
+                          onChange={handleInputChange}
+                          style={{
+                            border: "1px solid #014D88",
+                            borderRadius: "0.2rem",
+                          }}
+                        disabled={disableModality}
+                        >
+                          <option value={""}></option>
+                          {pregnancyStatus.map((value) =>{
+                       
+                           return    <option key={value.id} value={value.id}>
+                                {value.display}
+                              </option>}
+                            )
+                          }
+                        </select>
+                        {errors.pregnant !== "" ? (
+                          <span className={classes.error}>
+                            {errors.pregnant}
+                          </span>
+                        ) : (
+                          ""
                         )}
-                      </select>
-                    </FormGroup>
-                  </div>
-                  {/* objValues.pregnant === "" && (objValues.pregnant!== 73 || objValues.pregnant!== '73') && (
+                      </FormGroup>
+                    </div>
+                    {/* objValues.pregnant === "" && (objValues.pregnant!== 73 || objValues.pregnant!== '73') && (
                             <div className="form-group  col-md-4">
                                 <FormGroup>
                                     <Label>Breast Feeding</Label>
@@ -977,8 +1158,8 @@ const BasicInfo = (props) => {
                                 </FormGroup>
                             </div>
                             )*/}
-                </>
-              )}
+                  </>
+                )}
 
               <div className="form-group  col-md-4">
                 <FormGroup>
@@ -1098,13 +1279,13 @@ const BasicInfo = (props) => {
               <br />
               <div className="row">
                 <div className="form-group mb-3 col-md-12">
-                  <Button
+                  {/* <Button
                     content="Back"
                     icon="left arrow"
                     labelPosition="left"
                     style={{ backgroundColor: "#992E62", color: "#fff" }}
                     onClick={() => handleItemClick("risk", "risk")}
-                  />
+                  /> */}
                   <Button
                     content="Save & Continue"
                     type="submit"

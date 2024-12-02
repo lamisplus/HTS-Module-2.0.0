@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.sql.SQLOutput;
 import java.util.List;
 
 import static org.lamisplus.modules.base.util.Constants.ArchiveStatus.UN_ARCHIVED;
@@ -55,6 +56,30 @@ public class HtsFamilyIndexTestingController {
         return ResponseEntity.ok(familyIndices);
     }
 
+
+    //
+
+    @GetMapping("/getCurrentTreatment")
+    public ResponseEntity<String> getCurrentTreatment(@RequestParam String personUuid) {
+
+      String Result =  familyIndexTestingService.getCurrentTreatmentAndDate(personUuid);
+
+        return ResponseEntity.ok(Result);
+
+
+    }
+
+
+
+    @GetMapping("/getViralLoad")
+    public ResponseEntity<String> getViralLoad(@RequestParam String personUuid) {
+
+        String Result =  familyIndexTestingService.getVirallySuppressedByPersonUuid(personUuid);
+        return ResponseEntity.ok(Result);
+
+
+
+    }
 //    @PutMapping("/family-index/{id}")
 //    public ResponseEntity<FamilyIndexResponseDTO> updateFamilyIndex(@PathVariable Long id, @Valid @RequestBody FamilyIndexRequestDto familyIndexRequestDto) {
 //        return ResponseEntity.ok(this.familyIndexTestingService.updateFamilyIndex(id, familyIndexRequestDto));
@@ -98,5 +123,20 @@ public class HtsFamilyIndexTestingController {
         return ResponseEntity.ok(this.familyIndexTestingService.updateFamilyIndex(id, req));
     }
 
+    @PostMapping("/family-index-tracker")
+    public ResponseEntity<FamilyTestingTrackerResponseDTO> addFamilyIndexTracker(@Valid @RequestBody FamilyTestingTrackerRequestDTO req) {
+        return ResponseEntity.ok(this.familyIndexTestingService.addFamilyTracker(req));
+    }
+
+    @PostMapping("/update-family-index/{id}")
+    public ResponseEntity<FamilyIndexResponseDTO>  updateSingleFamilyIndex(@PathVariable Long id, @RequestBody FamilyIndexResponseDTO req) {
+        return ResponseEntity.ok(this.familyIndexTestingService.updateSingleFamilyIndex(id, req));
+    }
+
+    @PutMapping("/update-index-testing-and-index/{id}")
+    public ResponseEntity<String> updateFamilyIndexTestingAndIndex(@PathVariable Long id, @RequestBody FamilyIndexTestingResponseDTO req) {
+        String response = familyIndexTestingService.updateFamilyIndexTestingAndIndex(id, req);
+        return ResponseEntity.ok(response);
+    }
 
 }

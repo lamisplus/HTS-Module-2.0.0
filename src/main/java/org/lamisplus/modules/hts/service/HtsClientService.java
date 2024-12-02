@@ -16,6 +16,7 @@ import org.lamisplus.modules.hts.domain.entity.RiskStratification;
 import org.lamisplus.modules.hts.domain.enums.Source;
 import org.lamisplus.modules.hts.repository.HtsClientRepository;
 import org.lamisplus.modules.hts.repository.IndexElicitationRepository;
+import org.lamisplus.modules.hts.util.Constants;
 import org.lamisplus.modules.hts.util.RandomCodeGenerator;
 import org.lamisplus.modules.patient.domain.dto.PersonDto;
 import org.lamisplus.modules.patient.domain.dto.PersonResponseDto;
@@ -38,24 +39,35 @@ import static org.lamisplus.modules.base.util.Constants.ArchiveStatus.ARCHIVED;
 import static org.lamisplus.modules.base.util.Constants.ArchiveStatus.UN_ARCHIVED;
 
 @Service
+
 @Slf4j
 @RequiredArgsConstructor
 public class HtsClientService {
-    private final HtsClientRepository htsClientRepository;
     private final PersonRepository personRepository;
     private final PersonService personService;
     private final CurrentUserOrganizationService currentUserOrganizationService;
     private final IndexElicitationRepository indexElicitationRepository;
     private final RiskStratificationService riskStratificationService;
     private final ModuleService moduleService;
+    private final FamilyIndexTestingService familyIndexTestingService;
+    private final HtsClientRepository htsClientRepository;
+    private PNSService pnsService;
+
+
     public HtsClientDto save(HtsClientRequestDto htsClientRequestDto){
+        System.out.println("i am inside the save method");
         if(htsClientRequestDto.getRiskStratificationCode() != null){
+            System.out.println("getRiskStratificationCode() != null");
+
+
             if(htsClientRepository.existsByRiskStratificationCode(htsClientRequestDto.getRiskStratificationCode())){
                 throw new IllegalTypeException(HtsClientRequestDto.class, "RiskStratificationCode is ", "already exist for an hts client");
             }
         }
 
         if(htsClientRequestDto.getSource().equalsIgnoreCase(Source.Mobile.toString())){
+            System.out.println("i am inside the mobile check");
+
             Optional<HtsClient> htsClientExists = htsClientRepository.findByUuid(htsClientRequestDto.getUuid());
             if (htsClientExists.isPresent()) {
                 LOG.info("HTS Client with code {} has already been synced", htsClientRequestDto.getClientCode());
@@ -67,20 +79,45 @@ public class HtsClientService {
         Person person;
         //when it is a new person
         if(htsClientRequestDto.getPersonId() == null){
+            System.out.println("getPersonId() == null");
+            System.out.println(htsClientRequestDto.getPersonDto().toString());
             if(htsClientRequestDto.getPersonDto() == null) throw new EntityNotFoundException(PersonDto.class, "PersonDTO is ", " empty");
+            System.out.println("about to be saved ");
+            System.out.println(htsClientRequestDto.getPersonDto().toString());
+
             personResponseDto = personService.createPerson(htsClientRequestDto.getPersonDto());
+            System.out.println("created person " + personResponseDto.toString());
+
             person = personRepository.findById(personResponseDto.getId()).get();
             String personUuid = person.getUuid();
             htsClient = this.htsClientRequestDtoToHtsClient(htsClientRequestDto, personUuid);
         } else {
-            //already existing person
             person = this.getPerson(htsClientRequestDto.getPersonId());
             htsClient = this.htsClientRequestDtoToHtsClient(htsClientRequestDto, person.getUuid());
         }
+//       for elicited client
+        System.out.println(htsClientRequestDto.getFamilyIndex());
+        if( htsClientRequestDto.getFamilyIndex() != null && !htsClientRequestDto.getFamilyIndex().isEmpty()){
+            System.out.println("inside family index");
+            familyIndexTestingService.updateIndexClientStatus(htsClientRequestDto.getFamilyIndex());
+        }
+//        if(!htsClientRequestDto.getPartnerNotificationService().isEmpty()){
+//            System.out.println("inside pns");
+//            pnsService.updateIndexClientStatus(htsClientRequestDto.getPartnerNotificationService());
+//        }
         htsClient.setFacilityId(currentUserOrganizationService.getCurrentUserOrganization());
+        htsClient.setLatitude(htsClientRequestDto.getLatitude());
+        htsClient.setLongitude(htsClientRequestDto.getLongitude());
+        String sourceSupport = (htsClientRequestDto.getSource() != null && !htsClientRequestDto.getSource().trim().isEmpty()) ? htsClientRequestDto.getSource()  : "Web";
+//                htsClientRequestDto.getSource() == null || htsClientRequestDto.getSource().isEmpty() ? Constants.WEB_SOURCE : Constants.MOBILE_SOURCE;
+        htsClient.setSource(sourceSupport);
+        htsClient.setFamilyIndex(htsClientRequestDto.getFamilyIndex());
+        if( htsClientRequestDto.getPartnerNotificationService() != null && !htsClientRequestDto.getPartnerNotificationService().isEmpty()){
+            htsClient.setPartnerNotificationService(htsClientRequestDto.getPartnerNotificationService());
+        }
         htsClient = htsClientRepository.save(htsClient);
         htsClient.setPerson(person);
-        //LOG.info("Person is - {}", htsClient.getPerson());
+
         return this.htsClientToHtsClientDto(htsClient);
     }
 
@@ -229,7 +266,7 @@ public class HtsClientService {
         return updatableHtsClient;
     }
 
-    public HtsClient htsClientRequestDtoToHtsClient(HtsClientRequestDto htsClientRequestDto, @NotNull String personUuid) {
+    public HtsClient htsClientRequestDtoToHtsClient(HtsClientRequestDto htsClientRequestDto, String personUuid) {
         if ( htsClientRequestDto == null ) {
             return null;
         }
@@ -264,7 +301,7 @@ public class HtsClientService {
         return htsClient;
     }
 
-    public HtsClient htsClientDtoToHtsClient(HtsClientDto htsClientDto, @NotNull String personUuid) {
+    public HtsClient htsClientDtoToHtsClient(HtsClientDto htsClientDto,  String personUuid) {
         if ( htsClientDto == null ) {
             return null;
         }
@@ -485,6 +522,7 @@ public class HtsClientService {
         htsClientDto.setPrepOffered(htsClient.getPrepOffered());
         htsClientDto.setPrepAccepted(htsClient.getPrepAccepted());
         htsClientDto.setComment(htsClient.getComment());
+        htsClientDto.setHtsClientUUid(htsClient.getUuid());
 
         htsClientDto.setSource(htsClient.getSource());
         htsClientDto.setReferredForSti(htsClient.getReferredForSti());

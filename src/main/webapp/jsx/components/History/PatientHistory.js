@@ -18,24 +18,35 @@ const divStyle = {
 };
 
 const Home = (props) => {
-  console.log(props.patientObj);
   const [patientList, setPatientList] = useState([]);
   const [loading, setLoading] = useState(true);
+
   const patientId =
     props.patientObj && props.patientObj.personId
       ? props.patientObj.personId
-      : null;
-  const [key, setKey] = useState("home");
+      : props.patientObj.id
+      ? props.patientObj.id
+      : "";
+
+  const [key, setKey] = useState(
+    props.activePage === "NEW HTS" ? "new" : "home"
+  );
+
+  const [patientInfo, setPatientInfo] = useState(null);
+  const [permissions, setPermission] = useState(
+    JSON.parse(localStorage.getItem("stringifiedPermmision"))
+  );
   const [lastVisitCount, setLastVisitCount] = useState(null);
   const [checkModality, setCheckModality] = useState("");
   const [lastVistAndModality, setLastVistAndModality] = useState("");
+  const [lastVisitModalityAndCheckedIn, setLastVisitModalityAndCheckedIn] =
+    useState(lastVistAndModality || props.checkedInPatient ? true : false);
 
   //Calculate last date of visit
   const calculateLastVisitDate = (visitDate) => {
     const monthDifference = moment(
       new Date(moment(new Date()).format("YYYY-MM-DD"))
     ).diff(new Date(visitDate), "months", true);
-    console.log(monthDifference);
     return monthDifference;
   };
   useEffect(() => {
@@ -44,8 +55,12 @@ const Home = (props) => {
     if (props.activePage.activePage === "home") {
       setKey("home");
     }
+    if (props.activePage.activePage === "NEW HTS") {
+      setKey("new");
+    }
   }, [props.patientObj, props.activePage]);
   ///GET LIST OF Patients
+
   async function patients() {
     setLoading(true);
     axios
@@ -68,8 +83,7 @@ const Home = (props) => {
       })
       .then((response) => {
         //set the last date of visit after the response
-        console.log(response.data);
-
+        setPatientInfo(response.data);
         setLastVisitCount(
           Math.round(calculateLastVisitDate(response.data.dateVisit))
         );
@@ -80,7 +94,6 @@ const Home = (props) => {
         );
 
         // new adjustment-- for patient with pmtct modality, they should skip the 3 month
-
         let condition =
           Math.round(calculateLastVisitDate(response.data.dateVisit)) >= 3 ||
           getCheckModalityForHTS(
@@ -89,15 +102,10 @@ const Home = (props) => {
             ? true
             : false;
 
-        console.log(
-          "tessssssssssssssssting",
-          condition,
-          calculateLastVisitDate(response.data.dateVisit),
-          getCheckModalityForHTS(
-            response.data.riskStratificationResponseDto?.modality
-          )
-        );
         setLastVistAndModality(condition);
+        setLastVisitModalityAndCheckedIn(
+          condition || props.checkedInPatient ? true : false
+        );
       })
       .catch((error) => {
         //setLoading(false)
@@ -132,16 +140,21 @@ const Home = (props) => {
                       loading={loading}
                     />
                   </Tab>
+                  {/* lastVistAndModality */}
 
-                  {lastVistAndModality && (
+                  {lastVisitModalityAndCheckedIn && (
                     <Tab eventKey="new" title="NEW HTS">
                       <ContineousRegistrationTesting
-                        patientObj={props.patientObj}
+                        patientObj={patientInfo}
                         activePage={props.activePage}
                         setActivePage={props.setActivePage}
+                        patientInfo={props.patientInfo}
                         clientCode={props.clientCode}
                         patientAge={props.patientAge}
                         patients={patients}
+                        patientList={patientList}
+                        checkedInPatient={props.checkedInPatient}
+                        personInfo={props.personInfo}
                       />
                     </Tab>
                   )}
@@ -159,7 +172,6 @@ const Home = (props) => {
                       loading={loading}
                     />
                   </Tab>
-
                   <Tab eventKey="new-hivst" title="NEW HIVST">
                     <ExistenceClientHIVSTRegistration
                       patientObj={props.patientObj}

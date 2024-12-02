@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.lamisplus.modules.base.controller.apierror.EntityNotFoundException;
 import org.lamisplus.modules.hts.domain.dto.PersonalNotificationServiceRequestDTO;
 import org.lamisplus.modules.hts.domain.dto.PersonalNotificationServiceResponseDTO;
+import org.lamisplus.modules.hts.domain.entity.FamilyIndex;
 import org.lamisplus.modules.hts.domain.entity.HtsClient;
 import org.lamisplus.modules.hts.domain.entity.PersonalNotificationService;
 import org.lamisplus.modules.hts.repository.HtsClientRepository;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.lamisplus.modules.base.util.Constants.ArchiveStatus.UN_ARCHIVED;
@@ -142,7 +144,7 @@ public class PNSService {
         pnsDTO.setPartnerId(pns.getPartnerId());
         pnsDTO.setReasonForDecline(pns.getReasonForDecline());
         pnsDTO.setOtherReasonForDecline(pns.getOtherReasonForDecline());
-
+        pnsDTO.setIsHtsClient(pns.getIsHtsClient());
         return pnsDTO;
     }
 
@@ -171,6 +173,7 @@ public class PNSService {
         pns.setHtsClientInformation(req.getHtsClientInformation());
         pns.setPartnerId(req.getPartnerId());
         pns.setReasonForDecline(req.getReasonForDecline());
+        pns.setIsHtsClient("No");
         pns.setOtherReasonForDecline(req.getOtherReasonForDecline());
 
         return pns;
@@ -228,5 +231,22 @@ public class PNSService {
 
     public PersonalNotificationServiceResponseDTO getPnsIndexClientPartnerById(Long id) {
         return convertPnsToResponseDto(null, getPnsById(id));
+    }
+
+
+    public void updateIndexClientStatus(String uuid) {
+        System.out.println("inside updateIndexClientStatus");
+
+        System.out.println("uuid " + uuid);
+
+        if (!uuid.isEmpty()) {
+            Optional<PersonalNotificationService> pns = personalNotificationServiceRepository.findByUuidAndArchived(uuid, 0);
+            System.out.println(pns);
+            if (pns.isPresent()) {
+                PersonalNotificationService existingPns = pns.get();
+                existingPns.setIsHtsClient("Yes");
+                personalNotificationServiceRepository.save(existingPns);
+            }
+        }
     }
 }

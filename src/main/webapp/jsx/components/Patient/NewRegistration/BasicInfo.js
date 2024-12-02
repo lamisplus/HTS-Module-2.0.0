@@ -23,6 +23,9 @@ import { Button } from "semantic-ui-react";
 import { Modal } from "react-bootstrap";
 import { fontWeight } from "@mui/system";
 import { getCheckModality } from "../../../../utility";
+import { getDoubleSkipForm } from "../../../../utility";
+import { getNextForm } from "../../../../utility";
+import Cookies from "js-cookie";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -124,6 +127,10 @@ const BasicInfo = (props) => {
   const [facilityCode, setFacilityCode] = useState("");
   const [serialNumber, setSerialNumber] = useState(null);
   const [showPregancy, setShowPregnancy] = useState(false);
+  const [permissions, setPermission] = useState(
+    localStorage.getItem("stringifiedPermmision")?.split(",")
+  );
+  const [disableIndexInfo, setDisableIndexInfo] = useState(false);
 
   const getPhoneNumber = (identifier) => {
     const identifiers = identifier;
@@ -165,6 +172,7 @@ const BasicInfo = (props) => {
     //moment(props.patientObj.personResponseDto.dateOfBirth).format("DD-MM-YYYY")
     props.patientObj.personResponseDto.dateOfBirth
   );
+  const [disableVitals, setDisableVitals] = useState(false)
 
   const [objValues, setObjValues] = useState({
     active: true,
@@ -191,13 +199,9 @@ const BasicInfo = (props) => {
         ? props.patientObj.dateVisit
         : "",
     firstTimeVisit:
-      props.patientObj && props.patientObj.firstTimeVisit
-        ? props.patientObj.firstTimeVisit
-        : "",
+    props?.patientObj?.firstTimeVisit,
     indexClient:
-      props.patientObj && props.patientObj.indexClient
-        ? props.patientObj.indexClient
-        : "",
+    props?.patientObj?.indexClient,
     numChildren:
       props.patientObj && props.patientObj.numChildren
         ? props.patientObj.numChildren
@@ -275,7 +279,8 @@ const BasicInfo = (props) => {
       props.patientObj.personResponseDto &&
       props.patientObj.personResponseDto.sex
         ? props.patientObj.personResponseDto.sex
-        : "",
+        : props.patientObj.riskStratificationResponseDto.targetGroup === "TARGET_GROUP_FSW"?  
+        "Female":  props.patientObj.riskStratificationResponseDto.targetGroup === "TARGET_GROUP_MSM"? "Male": "",
     stateId: country && country.stateId ? country.stateId : "",
     riskAssessment:
       props.extra && props.extra.riskAssessment
@@ -301,8 +306,22 @@ const BasicInfo = (props) => {
       ? props.patientObj.relationWithIndexClient
       : "",
     indexClientCode: "",
-    comment: "",
+    comment: props?.patientObj?.comment,
+    partnerNotificationService: "",
+    familyIndex: "",
   });
+
+
+  const convertFromIdToDisplay = (code) => {
+    let ans = indexTesting.filter((each, index) => {
+      return each.code === code;
+    });
+    
+    if(ans[0]?.id){
+      return ans[0].id;
+    }
+    
+  };
 
   const CreateClientCode = () => {
     let facilityShortCode = "";
@@ -348,7 +367,13 @@ const BasicInfo = (props) => {
     let codeCreated =
       "C" + facilityCode + "/" + modalityCode + "/" + month + "/" + year + "/";
     setCreatedCode(codeCreated);
-    setObjValues({ ...objValues, clientCode: createdCode });
+
+    if(!props.patientObj.id){
+      setObjValues({ ...objValues, clientCode: createdCode });
+    }else{
+          setSerialNumber(Cookies.get("serial-number"))
+          setDisableVitals(true)
+    }
   };
 
   useEffect(() => {
@@ -363,8 +388,42 @@ const BasicInfo = (props) => {
     PregnancyStatus();
     IndexTesting();
     CreateClientCode();
-    //objValues.dateVisit=moment(new Date()).format("YYYY-MM-DD")
-    //setObjValues(props.patientObj)
+
+
+
+
+    //for ellicited patient
+
+
+    let checkEnrollIndex =  JSON.parse(localStorage.getItem("index"))
+    if (checkEnrollIndex&& checkEnrollIndex?.type === "family" && checkEnrollIndex?.clientCode) {
+      setObjValues({
+        ...objValues,
+        familyIndex: checkEnrollIndex.uuid,
+        indexClient: "true",
+        relationWithIndexClient: convertFromIdToDisplay(
+          "INDEX_TESTING_BIOLOGICAL"
+        ),
+        indexClientCode: checkEnrollIndex.clientCode,
+      });
+      setDisableIndexInfo(true);
+    }
+    if (checkEnrollIndex?.type === "partner" && checkEnrollIndex?.clientCode) {
+      setObjValues({
+        ...objValues,
+        partnerNotificationService: checkEnrollIndex.uuid,
+        indexClient: "true",
+        relationWithIndexClient: convertFromIdToDisplay(
+         "INDEX_TESTING_SEXUAL"
+        ),
+        indexClientCode: checkEnrollIndex.clientCode,
+      });
+      setDisableIndexInfo(true);
+    }
+
+    if(props.patientObj.id && props.completed.includes("basic") ){
+      setDisableVitals(true)
+    }
     setModalityCheck(
       getCheckModality(
         props?.patientObj?.riskStratificationResponseDto?.modality
@@ -379,7 +438,11 @@ const BasicInfo = (props) => {
     if (country && country.stateId !== "") {
       getProvincesId(country.stateId);
     }
-
+    if (
+       props.patientObj.riskStratificationResponseDto.targetGroup === "TARGET_GROUP_FSW"
+    ) {
+      setShowPregnancy(true);
+    }
     if (
       props.extra.modality === "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||
       props.extra.modality ===
@@ -404,11 +467,23 @@ const BasicInfo = (props) => {
         sexDetetrmined.toLowerCase() === "female" ||
         props.extra.modality !==
           "TEST_SETTING_OTHERS_POST_ANC1_BREASTFEEDING" ||
-        props.extra.modality !== "TEST_SETTING_STANDALONE_HTS_PMTCT_(ANC1_ONLY)"
+        props.extra.modality !== "TEST_SETTING_STANDALONE_HTS_PMTCT_(ANC1_ONLY)" 
+      
       ) {
         setShowPregnancy(true);
       }
     }
+      // Cleanup logic here
+
+    // return () => {
+    //   let obj = {
+    //     uuid: "",
+    //     type: "",
+    //     clientCode: "",
+    //   };
+    //   localStorage.setItem("index", JSON.stringify(obj));
+
+    // };
   }, [objValues.age, props.patientObj, props.extra.age, facilityCode]);
   //Get list of KP
   const KP = () => {
@@ -635,18 +710,32 @@ const BasicInfo = (props) => {
         }
       }
       getIndexClientCode();
+    } else if (e.target.name === "indexClient") {
+      setObjValues({
+        ...objValues,
+        [e.target.name]: e.target.value,
+        relationWithIndexClient: "",
+        indexClientCode: "",
+      });
+      setErrors({
+        ...errors,
+        relationWithIndexClient: "",
+        indexClientCode: "",
+      });
     } else {
       setObjValues({ ...objValues, [e.target.name]: e.target.value });
     }
 
     if (e.target.name === "sex" && e.target.value.toLowerCase() === "female") {
       setShowPregnancy(true);
+      setErrors({ ...errors, pregnant: "" });
     }
   };
   //checkClientCode
   const checkClientCode = (e) => {
     let code = "";
     if (e.target.name === "serialNumber") {
+      setSerialNumber(e.target.value )
       code = createdCode + e.target.value;
       setCreatedCode(code);
       setObjValues({ ...objValues, clientCode: code });
@@ -705,6 +794,38 @@ const BasicInfo = (props) => {
       setAgeDisabled(false);
     }
   };
+
+  const determinSex= ()=>{
+    if(props.extra.modality ===
+      "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||
+    props.extra.modality ===
+      "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||
+    props.extra.modality ===
+      "TEST_SETTING_STANDALONE_HTS_PMTCT_(ANC1_ONLY)" ||
+    props.extra.modality ===
+      "TEST_SETTING_OTHERS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
+    props.extra.modality === "TEST_SETTING_CPMTCT" ||
+    props.extra.modality ===
+      "TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
+    props.extra.modality ===
+      "TEST_SETTING_STANDALONE_HTS_PMTCT_(ANC1_ONLY)" ||
+    props.extra.modality ===
+      "TEST_SETTING_OTHERS_POST_ANC1_PREGNANT_L&D" ||
+    props.extra.modality ===
+      "TEST_SETTING_OTHERS_POST_ANC1_BREASTFEEDING" ||
+    props.extra.modality ===
+      "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||
+    props.extra.modality ===
+      "TEST_SETTING_STANDALONE_HTS_POST_ANC1_BREASTFEEDING"   ||  props.patientObj.riskStratificationResponseDto.targetGroup === 
+      "TARGET_GROUP_FSW" || props.patientObj.riskStratificationResponseDto.targetGroup === 
+      "TARGET_GROUP_MSM"){
+    
+        return true
+      
+    }else{
+      return false
+    }
+      }
   const handleAgeChange = (e) => {
     if (!ageDisabled && e.target.value) {
       if (e.target.value !== "" && e.target.value >= 85) {
@@ -736,10 +857,12 @@ const BasicInfo = (props) => {
     temp.typeCounseling = objValues.typeCounseling
       ? ""
       : "This field is required.";
-    temp.testingx = objValues.testingSetting ? "" : "This field is required.";
+    temp.testingSetting = objValues.testingSetting
+      ? ""
+      : "This field is required.";
     temp.targetGroup = objValues.targetGroup ? "" : "This field is required.";
     temp.referredFrom = objValues.referredFrom ? "" : "This field is required.";
-    temp.previouslyTested = objValues.previouslyTested
+    temp.previouslyTested = objValues.previouslyTested !== ""
       ? ""
       : "This field is required.";
     temp.surname = objValues.surname ? "" : "This field is required.";
@@ -751,13 +874,30 @@ const BasicInfo = (props) => {
     //temp.dateOfRegistration = objValues.dateOfRegistration ? "" : "This field is required."
     //temp.numChildren = objValues.numChildren ? "" : "This field is required."
     temp.address = objValues.address ? "" : "This field is required.";
-    temp.indexClient = objValues.indexClient ? "" : "This field is required.";
-    temp.firstTimeVisit = objValues.firstTimeVisit
+    temp.indexClient = objValues.indexClient !== "" ? "" : "This field is required.";
+    temp.firstTimeVisit = objValues.firstTimeVisit !== ""
       ? ""
       : "This field is required.";
     temp.dateVisit = objValues.dateVisit ? "" : "This field is required.";
     temp.dob = objValues.dob ? "" : "This field is required.";
     temp.age = objValues.age ? "" : "This field is required.";
+    temp.lga = objValues.lga ? "" : "This field is required.";
+    temp.stateId = objValues.stateId ? "" : "This field is required.";
+
+    objValues.sex === "Female" &&
+      (temp.pregnant =
+        objValues.pregnant !== "" ? "" : "This field is required.");
+
+    objValues.indexClient === "true" &&
+      (temp.relationWithIndexClient =
+        objValues.relationWithIndexClient !== ""
+          ? ""
+          : "This field is required.");
+
+    objValues.indexClient === "true" &&
+      (temp.indexClientCode =
+        objValues.indexClientCode !== "" ? "" : "This field is required.");
+
     setErrors({ ...temp });
     return Object.values(temp).every((x) => x == "");
   };
@@ -782,8 +922,19 @@ const BasicInfo = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // check next form
+    let latestForm = getNextForm(
+      "Client_intake_form",
+      objValues.age,
+      modalityCheck,
+      "unknown"
+    );
+
     if (validate()) {
       setSaving(true);
+
+
       const getSexId = sexs.find((x) => x.display === objValues.sex); //get patient sex ID by filtering the request
       //basicInfo.sexId=getSexId.id
       const patientForm = {
@@ -837,6 +988,7 @@ const BasicInfo = (props) => {
           otherName: objValues.otherName,
           sexId: getSexId.id,
           surname: objValues.surname,
+          
         },
         personId: "",
         hospitalNumber: objValues.clientCode,
@@ -852,29 +1004,40 @@ const BasicInfo = (props) => {
         riskStratificationCode:
           props.extra && props.extra.code !== "" ? props.extra.code : "",
         comment: objValues.comment,
+        partnerNotificationService: objValues.partnerNotificationService,
+        familyIndex: objValues.familyIndex,
       };
-      props.setPatientObj({ ...props.patientObj, ...objValues });
 
-      axios
-        .post(`${baseUrl}hts`, patientForm, {
+      props.setPatientObj({ ...props.patientObj, ...objValues });
+      Cookies.set("serial-number", serialNumber)
+
+
+      if(props.patientObj.id && props.completed.includes("basic") ){
+        patientForm.id= props?.patientObj?.id
+        patientForm.personId= props?.patientObj?.personId
+
+        axios
+        .put(`${baseUrl}hts/${props.patientObj.id}`, patientForm, {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((response) => {
           setSaving(false);
+          let obj = {
+            uuid: "",
+            type: "",
+            clientCode: "",
+          };
+          localStorage.setItem("index", JSON.stringify(obj));
+
           props.setPatientObj(response.data);
           props.setBasicInfo(response.data);
+          toast.success("Form submitted successfully");
 
-          //props.patientObj.personResponseDto=patientForm.personDto
-          //props.setPatientObj({...patientObj, })
-          //toast.success("HTS Test successful");
-          if (objValues.age <= 15 || modalityCheck === "skip") {
-            handleItemClick("hiv-test", "basic");
-          } else {
-            handleItemClick("pre-test-counsel", "basic");
-          }
+          handleItemClick(latestForm[0], latestForm[1]);
         })
         .catch((error) => {
           setSaving(false);
+          console.log(error);
           if (error.response && error.response.data) {
             let errorMessage =
               error.response.data.apierror &&
@@ -890,6 +1053,51 @@ const BasicInfo = (props) => {
             });
           }
         });
+      
+      }else{
+        axios
+        .post(`${baseUrl}hts`, patientForm, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((response) => {
+          setSaving(false);
+          let obj = {
+            uuid: "",
+            type: "",
+            clientCode: "",
+          };
+          localStorage.setItem("index", JSON.stringify(obj));
+
+          props.setPatientObj(response.data);
+          props.setBasicInfo(response.data);
+          toast.success("Form submitted successfully");
+
+          handleItemClick(latestForm[0], latestForm[1]);
+        })
+        .catch((error) => {
+          setSaving(false);
+          console.log(error);
+          if (error.response && error.response.data) {
+            let errorMessage =
+              error.response.data.apierror &&
+              error.response.data.apierror.message !== ""
+                ? error.response.data.apierror.message
+                : "Something went wrong, please try again";
+            toast.error(errorMessage, {
+              position: toast.POSITION.BOTTOM_CENTER,
+            });
+          } else {
+            toast.error("Something went wrong. Please try again...", {
+              position: toast.POSITION.BOTTOM_CENTER,
+            });
+          }
+        });
+
+      }
+  
+
+
+
     } else {
       toast.error("All fields are required", {
         position: toast.POSITION.BOTTOM_CENTER,
@@ -923,6 +1131,7 @@ const BasicInfo = (props) => {
                         border: "1px solid #014D88",
                         borderRadius: "0.25rem",
                       }}
+                      disabled={disableVitals}
                     />
                   </FormGroup>
                 </div>
@@ -961,7 +1170,8 @@ const BasicInfo = (props) => {
                                 <FormGroup>
                                 <Label for=""> Date Of Registration </Label>
                                 <Input
-                                    type="date"
+                                    type="date"                       onKeyPress={(e)=>{e.preventDefault()}}
+
                                     name="dateOfRegistration"
                                     id="dateOfRegistration"
                                     value={objValues.dateOfRegistration}
@@ -1045,6 +1255,9 @@ const BasicInfo = (props) => {
                   </Label>
                   <Input
                     type="date"
+                    onKeyPress={(e) => {
+                      e.preventDefault();
+                    }}
                     name="dateVisit"
                     id="dateVisit"
                     value={objValues.dateVisit}
@@ -1078,6 +1291,7 @@ const BasicInfo = (props) => {
                       border: "1px solid #014D88",
                       borderRadius: "0.25rem",
                     }}
+                    disabled={disableVitals}
                   />
                   {errors.firstName !== "" ? (
                     <span className={classes.error}>{errors.firstName}</span>
@@ -1099,6 +1313,7 @@ const BasicInfo = (props) => {
                       border: "1px solid #014D88",
                       borderRadius: "0.25rem",
                     }}
+                    disabled={disableVitals}
                   />
                   {errors.otherName !== "" ? (
                     <span className={classes.error}>{errors.otherName}</span>
@@ -1122,6 +1337,7 @@ const BasicInfo = (props) => {
                       border: "1px solid #014D88",
                       borderRadius: "0.25rem",
                     }}
+                    disabled={disableVitals}
                   />
                   {errors.surname !== "" ? (
                     <span className={classes.error}>{errors.surname}</span>
@@ -1172,6 +1388,9 @@ const BasicInfo = (props) => {
                   <input
                     className="form-control"
                     type="date"
+                    onKeyPress={(e) => {
+                      e.preventDefault();
+                    }}
                     name="dob"
                     id="dob"
                     min={objValues.dateVisit}
@@ -1268,7 +1487,7 @@ const BasicInfo = (props) => {
                   </Label>
                   <select
                     className="form-control"
-                    name="state"
+                    name="stateId"
                     id="state"
                     onChange={getProvinces}
                     value={objValues.stateId}
@@ -1361,29 +1580,7 @@ const BasicInfo = (props) => {
                       borderRadius: "0.2rem",
                     }}
                     disabled={
-                      props.extra.modality ===
-                        "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||
-                      props.extra.modality ===
-                        "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||
-                      props.extra.modality ===
-                        "TEST_SETTING_STANDALONE_HTS_PMTCT_(ANC1_ONLY)" ||
-                      props.extra.modality ===
-                        "TEST_SETTING_OTHERS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
-                      props.extra.modality === "TEST_SETTING_CPMTCT" ||
-                      props.extra.modality ===
-                        "TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)" ||
-                      props.extra.modality ===
-                        "TEST_SETTING_STANDALONE_HTS_PMTCT_(ANC1_ONLY)" ||
-                      props.extra.modality ===
-                        "TEST_SETTING_OTHERS_POST_ANC1_PREGNANT_L&D" ||
-                      props.extra.modality ===
-                        "TEST_SETTING_OTHERS_POST_ANC1_BREASTFEEDING" ||
-                      props.extra.modality ===
-                        "TEST_SETTING_OTHERS_PMTCT_(ANC1_ONLY)" ||
-                      props.extra.modality ===
-                        "TEST_SETTING_STANDALONE_HTS_POST_ANC1_BREASTFEEDING"
-                        ? true
-                        : false
+                      determinSex()
                     }
                   >
                     <option value={""}></option>
@@ -1513,8 +1710,7 @@ const BasicInfo = (props) => {
                                                {value.display}
                                            </option>
                                        ))*/}
-                    {(objValues.sex === "Female" ||
-                      objValues.sex === "female") && (
+                    {objValues?.sex.toLowerCase() === "female" && (
                       <>
                         {" "}
                         {kP
@@ -1562,6 +1758,7 @@ const BasicInfo = (props) => {
                       border: "1px solid #014D88",
                       borderRadius: "0.2rem",
                     }}
+                    disabled={disableIndexInfo}
                   >
                     <option value={""}>Select</option>
                     <option value="true">YES</option>
@@ -1592,6 +1789,8 @@ const BasicInfo = (props) => {
                           border: "1px solid #014D88",
                           borderRadius: "0.2rem",
                         }}
+                        disabled={disableIndexInfo}
+
                       >
                         <option value={""}></option>
                         {indexTesting.map((value) => (
@@ -1600,11 +1799,21 @@ const BasicInfo = (props) => {
                           </option>
                         ))}
                       </select>
+                      {errors.relationWithIndexClient !== "" ? (
+                        <span className={classes.error}>
+                          {errors.relationWithIndexClient}
+                        </span>
+                      ) : (
+                        ""
+                      )}
                     </FormGroup>
                   </div>
                   <div className="form-group  col-md-4">
                     <FormGroup>
-                      <Label>Index Client Code/ID</Label>
+                      <Label>
+                        Index Client Code/ID
+                        <span style={{ color: "red" }}> *</span>
+                      </Label>
                       <Input
                         type="text"
                         name="indexClientCode"
@@ -1615,7 +1824,16 @@ const BasicInfo = (props) => {
                           border: "1px solid #014D88",
                           borderRadius: "0.25rem",
                         }}
+                        disabled={disableIndexInfo}
+
                       />
+                      {errors.indexClientCode !== "" ? (
+                        <span className={classes.error}>
+                          {errors.indexClientCode}
+                        </span>
+                      ) : (
+                        ""
+                      )}
                     </FormGroup>
                     {clientCodeetail2 !== "" ? (
                       <span className={classes.error}>{clientCodeetail2}</span>
@@ -1630,12 +1848,13 @@ const BasicInfo = (props) => {
                   </div>
                 </>
               )}
-
-              {showPregancy && (
+              {showPregancy && objValues.sex === "Female" && (
                 <>
                   <div className="form-group  col-md-4">
                     <FormGroup>
-                      <Label>Pregnant Status</Label>
+                      <Label>
+                        Pregnant Status <span style={{ color: "red" }}> *</span>
+                      </Label>
                       <select
                         className="form-control"
                         name="pregnant"
@@ -1696,6 +1915,11 @@ const BasicInfo = (props) => {
                           )
                         )}
                       </select>
+                      {errors.pregnant !== "" ? (
+                        <span className={classes.error}>{errors.pregnant}</span>
+                      ) : (
+                        ""
+                      )}
                     </FormGroup>
                   </div>
                   {/*objValues.pregnant === "" &&
@@ -1843,13 +2067,13 @@ const BasicInfo = (props) => {
               <br />
               <div className="row">
                 <div className="form-group mb-3 col-md-12">
-                  <Button
+                  {/* <Button
                     content="Back"
                     icon="left arrow"
                     labelPosition="left"
                     style={{ backgroundColor: "#992E62", color: "#fff" }}
                     onClick={() => handleItemClick("risk", "risk")}
-                  />
+                  /> */}
                   <Button
                     content="Save & Continue"
                     type="submit"

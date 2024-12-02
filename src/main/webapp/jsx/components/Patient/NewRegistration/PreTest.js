@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import axios from "axios";
+import { checkPregnantPatient } from "../../../../utility";
 import {
   FormGroup,
   Label,
@@ -27,6 +28,7 @@ import "react-widgets/dist/css/react-widgets.css";
 import PanToolIcon from "@mui/icons-material/PanTool";
 //import * as moment from 'moment';
 import { getCheckModality } from "../../../../utility";
+import { getNextForm } from "../../../../utility";
 const useStyles = makeStyles((theme) => ({
   card: {
     margin: theme.spacing(20),
@@ -146,6 +148,9 @@ const BasicInfo = (props) => {
   //             }
   //             return age_now ;
   // };
+  const [permissions, setPermission] = useState(
+    localStorage.getItem("stringifiedPermmision")?.split(",")
+  );
   const [knowledgeAssessment, setKnowledgeAssessment] = useState({
     previousTestedHIVNegative: "",
     timeLastHIVNegativeTestResult: "",
@@ -157,13 +162,30 @@ const BasicInfo = (props) => {
     informConsentHivTest: "",
   });
   useEffect(() => {
+
+
+
     if (props.patientObj) {
+      let knowledgeAsses = props?.patientObj?.knowledgeAssessment
       setKnowledgeAssessment(
         props.patientObj.knowledgeAssessment &&
           props.patientObj.knowledgeAssessment !== null
           ? props.patientObj.knowledgeAssessment
           : {}
       );
+
+
+      if (props?.patientObj?.pregnant) {
+        checkPregnantPatient(props.patientObj.pregnant).then(
+          (res) => {
+            console.log("my result", res);
+            setKnowledgeAssessment({
+              ...knowledgeAsses,
+              clientPregnant: res ? "true" : "false",
+            });
+          }
+        );
+      }   
       setRiskAssessment(
         props.patientObj.riskAssessment &&
           props.patientObj.riskAssessment !== null
@@ -186,6 +208,8 @@ const BasicInfo = (props) => {
           ? props.patientObj.tbScreening
           : {}
       );
+
+                
       //patientAge=calculate_age(moment(props.patientObj.personResponseDto.dateOfBirth).format("DD-MM-YYYY"))
       //console.log(props.patientObj.riskStratificationResponseDto.riskAssessment)
       if (
@@ -209,7 +233,7 @@ const BasicInfo = (props) => {
         });
       }
       knowledgeAssessment.clientPregnant =
-        props.patientObj.pregnant === 73 ? "true" : "";
+        props.patientObj.pregnant === 73 ? "true" : "false";
 
       setModalityCheck(
         getCheckModality(
@@ -464,6 +488,12 @@ const BasicInfo = (props) => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
+      let latestForm = getNextForm(
+        "Pre_Test_Counseling",
+        objValues.age,
+        modalityCheck,
+        "unknown"
+      );
     if (validate()) {
       setSaving(true);
       objValues.htsClientId = clientId;
@@ -480,12 +510,16 @@ const BasicInfo = (props) => {
         })
         .then((response) => {
           setSaving(false);
-          props.setPatientObj(response.data);
-          //toast.success("Risk Assesment successful");
-
-          if (modalityCheck == "fill") {
-            handleItemClick("hiv-test", "pre-test-counsel");
+          props.setPatientObj({...props.patientObj, 
+            knowledgeAssessment: response.data.knowledgeAssessment,
+            riskAssessment: response.data.riskAssessment,
+            stiScreening: response.data.stiScreening,
+            tbScreening: response.data.tbScreening,
+            sexPartnerRiskAssessment: response.data.sexPartnerRiskAssessment,
           }
+          );    
+          handleItemClick(latestForm[0], latestForm[1]);
+          
         })
         .catch((error) => {
           setSaving(false);
@@ -618,6 +652,7 @@ const BasicInfo = (props) => {
                           border: "1px solid #014D88",
                           borderRadius: "0.2rem",
                         }}
+                        disabled={true}
                       >
                         <option value={""}></option>
                         <option value="true">Yes</option>
@@ -1892,13 +1927,13 @@ const BasicInfo = (props) => {
               <br />
               <div className="row">
                 <div className="form-group mb-3 col-md-12">
-                  <Button
+                  {/* <Button
                     content="Back"
                     icon="left arrow"
                     labelPosition="left"
                     style={{ backgroundColor: "#992E62", color: "#fff" }}
                     onClick={() => handleItemClick("basic", "basic")}
-                  />
+                  /> */}
                   <Button
                     content="Save & Continue"
                     icon="right arrow"

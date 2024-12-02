@@ -1045,6 +1045,8 @@ const UserRegistration = (props) => {
                     activePage={props.activePage}
                     setActivePage={props.setActivePage}
                     setRow={setRow}
+                    status={"existing"}
+
                   />
                 )}
                 {activeItem === "view-referral" && (

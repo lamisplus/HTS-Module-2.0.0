@@ -1052,6 +1052,7 @@ const clearInfo=()=>{
                     activePage={props.activePage}
                     setActivePage={props.setActivePage}
                     setRow={setRow}
+                    status={"newUser"}
                   />
                 )}
                 {activeItem === "view-referral" && (

@@ -29,7 +29,7 @@ public class PNSService {
     private final PersonalNotificationServiceRepository personalNotificationServiceRepository;
     private final CurrentUserOrganizationService currentUserOrganizationService;
     private final PersonService personService;
-
+    private final  String clientID = "htsClientId"; 
     public PersonalNotificationServiceResponseDTO save(PersonalNotificationServiceRequestDTO req) {
         if(req == null) {
             throw new IllegalArgumentException("PersonalNotification request cannot be null");
@@ -37,7 +37,7 @@ public class PNSService {
         Long facilityId = currentUserOrganizationService.getCurrentUserOrganization();
         HtsClient htsClient = htsClientRepository
                 .findByIdAndArchivedAndFacilityId(req.getHtsClientId(), UN_ARCHIVED, facilityId)
-                .orElseThrow(() -> new EntityNotFoundException(HtsClient.class, "htsClientId", "" + req.getHtsClientId()));
+                .orElseThrow(() -> new EntityNotFoundException(HtsClient.class, clientID, "" + req.getHtsClientId()));
         htsClient.setOfferedPns(req.getOfferedPns());
         htsClient.setAcceptedPns(req.getAcceptedPns());
         htsClientRepository.save(htsClient);
@@ -59,7 +59,7 @@ public class PNSService {
 
         HtsClient htsClient = htsClientRepository
                 .findByIdAndArchivedAndFacilityId(htsClientId, UN_ARCHIVED, currentUserOrganizationService.getCurrentUserOrganization())
-                .orElseThrow(() -> new EntityNotFoundException(HtsClient.class, "htsClientId", "" + htsClientId));
+                .orElseThrow(() -> new EntityNotFoundException(HtsClient.class, clientID, "" + htsClientId));
         // Check if the retrieved HTS client matches the provided ID and client code
         if (!htsClient.getId().equals(htsClientId) || !htsClient.getClientCode().equals(clientCode)) {
             throw new IllegalArgumentException("HTS client ID or client code does not match the provided values");
@@ -97,7 +97,7 @@ public class PNSService {
     }
 
     public List<PersonalNotificationServiceResponseDTO> getAllPnsIndexClientByHtsClient(Long htsClientId) {
-        HtsClient htsClient = htsClientRepository.findById(htsClientId).orElseThrow(() -> new EntityNotFoundException(HtsClient.class, "htsClientId", "" + htsClientId));
+        HtsClient htsClient = htsClientRepository.findById(htsClientId).orElseThrow(() -> new EntityNotFoundException(HtsClient.class, clientID, "" + htsClientId));
         List<PersonalNotificationService> indesClientList = personalNotificationServiceRepository.findAllByHtsClient(htsClient);
         if(indesClientList.isEmpty()) {
                return new ArrayList<>();

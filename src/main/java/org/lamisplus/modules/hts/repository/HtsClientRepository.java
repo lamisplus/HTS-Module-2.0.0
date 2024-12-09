@@ -51,7 +51,7 @@ public interface HtsClientRepository extends JpaRepository<HtsClient, Long> {
 //            "            )\n", nativeQuery = true)
 
 
-    @Query(value =  "SELECT p.hospital_number AS hospitalNumber,  p.uuid, p.id AS personId,  p.first_name AS firstName, p.surname AS surname,  p.other_name AS otherName, CAST(EXTRACT(YEAR FROM AGE(NOW(), p.date_of_birth)) AS INTEGER) AS age, INITCAP(p.sex) AS gender  " +
+    @Query(value =  "SELECT p.hospital_number AS hospitalNumber,  p.id AS personId, p.uuid as personUuid, p.first_name AS firstName, p.surname AS surname,  p.other_name AS otherName, CAST(EXTRACT(YEAR FROM AGE(NOW(), p.date_of_birth)) AS INTEGER) AS age, INITCAP(p.sex) AS gender  " +
             "FROM patient_person p  " +
             "WHERE  p.archived =  ?1 \n" +
             "and ( p.first_name ILIKE ?3 \n" +
@@ -77,7 +77,7 @@ public interface HtsClientRepository extends JpaRepository<HtsClient, Long> {
 
 //
 
-    @Query(value = "SELECT DISTINCT hc.client_code AS clientCode, p.id as personId, p.first_name as firstName, p.surname as surname, p.other_name as otherName,  \n" +
+    @Query(value = "SELECT DISTINCT hc.client_code AS clientCode, p.id as personId,p.uuid as personUuid, p.first_name as firstName, p.surname as surname, p.other_name as otherName,  \n" +
             "p.hospital_number as hospitalNumber, CAST (EXTRACT(YEAR from AGE(NOW(),  date_of_birth)) AS INTEGER) as age,  \n" +
             "INITCAP(p.sex) as gender, p.date_of_birth as dateOfBirth,mini.person_uuid,mini.hts_count htsCount \n" +
             "FROM patient_person p \n" +
@@ -105,7 +105,7 @@ public interface HtsClientRepository extends JpaRepository<HtsClient, Long> {
 
 
 
-    @Query(value = "SELECT p.hospital_number AS hospitalNumber,  p.uuid, p.id AS personId,  p.first_name AS firstName, p.surname AS surname,  p.other_name AS otherName, CAST(EXTRACT(YEAR FROM AGE(NOW(), p.date_of_birth)) AS INTEGER) AS age, INITCAP(p.sex) AS gender  " +
+    @Query(value = "SELECT p.hospital_number AS hospitalNumber, p.uuid as personUuid, p.id AS personId,  p.first_name AS firstName, p.surname AS surname,  p.other_name AS otherName, CAST(EXTRACT(YEAR FROM AGE(NOW(), p.date_of_birth)) AS INTEGER) AS age, INITCAP(p.sex) AS gender  " +
             "FROM patient_person p  " +
             "WHERE  p.archived =  ?1 \n" +
             "AND NOT EXISTS (\n" +
@@ -137,7 +137,7 @@ public interface HtsClientRepository extends JpaRepository<HtsClient, Long> {
 //            "ORDER BY p.id DESC", nativeQuery = true)
 
 
-    @Query(value = "SELECT DISTINCT  hc.id, hc.client_code AS clientCode, p.id as personId, p.first_name as firstName, p.surname as surname, p.other_name as otherName,  \n" +
+    @Query(value = "SELECT DISTINCT  hc.id, hc.client_code AS clientCode, p.id as personId,p.uuid as personUuid, p.first_name as firstName, p.surname as surname, p.other_name as otherName,  \n" +
             "p.hospital_number as hospitalNumber, CAST (EXTRACT(YEAR from AGE(NOW(),  date_of_birth)) AS INTEGER) as age,  \n" +
             "INITCAP(p.sex) as gender, p.date_of_birth as dateOfBirth,mini.person_uuid,mini.hts_count htsCount\n" +
             "FROM patient_person p\n" +
@@ -177,4 +177,7 @@ public interface HtsClientRepository extends JpaRepository<HtsClient, Long> {
     boolean existsByRiskStratificationCode(String  riskStratificationCode);
 
     boolean existsByClientCode(String clientCode);
+
+    @Query(value = "SELECT lmp FROM pmtct_anc WHERE person_uuid=?1", nativeQuery = true)
+    Optional<String> getLmpDate(String personUuid);
 }

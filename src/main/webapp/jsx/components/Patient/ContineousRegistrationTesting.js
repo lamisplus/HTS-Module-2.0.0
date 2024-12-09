@@ -543,7 +543,7 @@ const UserRegistration = (props) => {
 
       let hivStatus = patientObj2?.hivTestResult;
 
-      let checkModality = patientObj2?.riskStratificationResponseDto?.modality? patientObj2.riskStratificationResponseDto.modality: "";
+      let checkModality = patientObj2?.riskStratificationResponseDto?.testingSetting? patientObj2.riskStratificationResponseDto.testingSetting: "";
       let isPMTCTModality =getCheckModality(checkModality)
 
     let answer =  getPreviousForm(currentForm, age, isPMTCTModality, hivStatus); 
@@ -829,8 +829,10 @@ const UserRegistration = (props) => {
                     setActivePage={props.setActivePage}
                     setOrganizationInfo={setOrganizationInfo}
                     personInfo={props.personInfo}
+                    newHTSType={props.newHTSType}
                   />
                 )}
+
                 {activeItem === "basic" && (
                   <BasicInfo
                     handleItemClick={handleItemClick}

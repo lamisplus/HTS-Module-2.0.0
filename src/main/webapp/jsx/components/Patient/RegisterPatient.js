@@ -356,7 +356,7 @@ const UserRegistration = (props) => {
 
             let hivStatus = patientObj?.hivTestResult;
 
-            let checkModality = patientObj?.riskStratificationResponseDto?.modality? patientObj.riskStratificationResponseDto.modality: "";
+            let checkModality = patientObj?.riskStratificationResponseDto?.testingSetting? patientObj.riskStratificationResponseDto.testingSetting: "";
             let isPMTCTModality =getCheckModality(checkModality)
 
 

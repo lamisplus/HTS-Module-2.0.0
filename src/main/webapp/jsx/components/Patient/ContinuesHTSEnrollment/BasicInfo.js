@@ -359,15 +359,15 @@ const BasicInfo = (props) => {
       })
       .then((response) => {
         //Remove retesting from the codeset
-          let facilityList = []
-        response.data.map((each, index)=>{
-              if(each.code !=="FACILITY_HTS_TEST_SETTING_RETESTING"){
-                facilityList.push(each);
-              }
+        //   let facilityList = []
+        // response.data.map((each, index)=>{
+        //       if(each.code !=="FACILITY_HTS_TEST_SETTING_RETESTING"){
+        //         facilityList.push(each);
+        //       }
 
-        })
+        // })
 
-        setEnrollSetting(facilityList);
+        setEnrollSetting(response.data);
       })
       .catch((error) => {
         //console.log(error);
@@ -510,7 +510,7 @@ const BasicInfo = (props) => {
    
       });
     }else if(e.target.name === "serialNumber" ){
-
+      setSerialNumber(e.target.value )
       checkClientCode(e)
 
     } else if (e.target.name === "indexClient") {
@@ -621,7 +621,7 @@ const BasicInfo = (props) => {
 
 
     if (e.target.name === "serialNumber") {
-      // setSerialNumber(e.target.value )
+      // 
       code = createdCode + e.target.value;
 
       setObjValues({ ...objValues, clientCode: code });

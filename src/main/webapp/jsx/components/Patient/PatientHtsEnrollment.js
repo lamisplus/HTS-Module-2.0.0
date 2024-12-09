@@ -164,7 +164,7 @@ const UserRegistration = (props) => {
                 ? basicInfo?.personResponseDto?.dateOfBirth
                 : patientObj?.personResponseDto?.dateOfBirth
             );
-            let checkModality = patientObj?.riskStratificationResponseDto?.modality? patientObj.riskStratificationResponseDto.modality: "";
+            let checkModality = patientObj?.riskStratificationResponseDto?.testingSetting? patientObj.riskStratificationResponseDto.testingSetting: "";
             let isPMTCTModality =getCheckModality(checkModality)
           
 

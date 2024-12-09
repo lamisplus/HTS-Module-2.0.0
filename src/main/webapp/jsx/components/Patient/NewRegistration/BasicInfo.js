@@ -125,8 +125,10 @@ const BasicInfo = (props) => {
   const [clientCodeCheck, setClientCodeCheck] = useState("");
   const [createdCode, setCreatedCode] = useState("");
   const [facilityCode, setFacilityCode] = useState("");
-  const [serialNumber, setSerialNumber] = useState(null);
+  const [serialNumber, setSerialNumber] = useState("");
   const [showPregancy, setShowPregnancy] = useState(false);
+  const [pregnancyCode, setPregnancyCode] = useState("");
+
   const [permissions, setPermission] = useState(
     localStorage.getItem("stringifiedPermmision")?.split(",")
   );
@@ -173,6 +175,9 @@ const BasicInfo = (props) => {
     //moment(props.patientObj.personResponseDto.dateOfBirth).format("DD-MM-YYYY")
     props.patientObj.personResponseDto.dateOfBirth
   );
+
+  const [pmtctSetting , setPmtctSetting] = useState(["FACILITY_HTS_TEST_SETTING_ANC", "FACILITY_HTS_TEST_SETTING_L&D", "FACILITY_HTS_TEST_SETTING_POST_NATAL_WARD_BREASTFEEDING"]);
+
   const [disableVitals, setDisableVitals] = useState(false)
 
   const [objValues, setObjValues] = useState({
@@ -214,7 +219,7 @@ const BasicInfo = (props) => {
     pregnant:
       props.patientObj && props.patientObj.pregnant
         ? props.patientObj.pregnant
-        : "",
+        : ""  ,
     dateOfBirth:
       props.patientObj.personResponseDto &&
       props.patientObj.personResponseDto.dateOfBirth
@@ -280,8 +285,7 @@ const BasicInfo = (props) => {
       props.patientObj.personResponseDto &&
       props.patientObj.personResponseDto.sex
         ? props.patientObj.personResponseDto.sex
-        : props.patientObj.riskStratificationResponseDto.targetGroup === "TARGET_GROUP_FSW"?  
-        "Female":  props.patientObj.riskStratificationResponseDto.targetGroup === "TARGET_GROUP_MSM"? "Male": "",
+        : pmtctSetting.includes(props.patientObj.riskStratificationResponseDto.testingSetting)? "Female": "",
     stateId: country && country.stateId ? country.stateId : "",
     riskAssessment:
       props.extra && props.extra.riskAssessment
@@ -427,14 +431,14 @@ const BasicInfo = (props) => {
     Genders();
     getStates();
     MaterialStatus();
-   
+    determinSex();
     CounselingType();
    
     Sex();
     PregnancyStatus();
     IndexTesting();
     CreateClientCode();
- 
+
     //ellicited patient
 
 
@@ -466,6 +470,9 @@ const BasicInfo = (props) => {
 
     if(props.patientObj.id && props.completed.includes("basic") ){
       setDisableVitals(true)
+      setSerialNumber(Cookies.get(("serial-number")))
+
+
     }
     setModalityCheck(
       getCheckModality(
@@ -564,14 +571,14 @@ const BasicInfo = (props) => {
       .then((response) => {
         //Remove retesting from the codeset
           let facilityList = []
-        response.data.map((each, index)=>{
-              if(each.code !=="FACILITY_HTS_TEST_SETTING_RETESTING"){
-                facilityList.push(each);
-              }
+        // response.data.map((each, index)=>{
+        //       if(each.code !=="FACILITY_HTS_TEST_SETTING_RETESTING"){
+        //         facilityList.push(each);
+        //       }
 
-        })
+        // })
 
-        setEnrollSetting(facilityList);
+        setEnrollSetting(response.data);
       })
       .catch((error) => {
         //console.log(error);
@@ -657,8 +664,7 @@ const BasicInfo = (props) => {
       .then((response) => {
         //console.log(response.data);
         setSexs(response.data);
-      
-        determinSex(response.data);
+        // determinSex()
 
       })
       .catch((error) => {
@@ -725,7 +731,7 @@ const BasicInfo = (props) => {
       const name = alphabetOnly(e.target.value);
       setObjValues({ ...objValues, [e.target.name]: name });
     }else if(e.target.name === "serialNumber" ){
-
+      setSerialNumber(e.target.value)
       checkClientCode(e)
 
     }else if (e.target.name === "lastName" && e.target.value !== "") {
@@ -794,12 +800,12 @@ const BasicInfo = (props) => {
       setObjValues({ ...objValues, [e.target.name]: e.target.value });
     }
 
-    if (e.target.name === "sex" && e.target.value.toLowerCase() === "female") {
-      setShowPregnancy(true);
+    // if (e.target.name === "sex" && e.target.value.toLowerCase() === "female") {
+    //   setShowPregnancy(true);
   
 
-      setErrors({ ...errors, pregnant: "" });
-    }
+    //   setErrors({ ...errors, pregnant: "" });
+    // }
   };
 
 
@@ -808,7 +814,6 @@ const BasicInfo = (props) => {
     let code = "";
 
     if (e.target.name === "serialNumber") {
-      // setSerialNumber(e.target.value )
       code = createdCode + e.target.value;
 
       setObjValues({ ...objValues, clientCode: code });
@@ -881,53 +886,30 @@ const BasicInfo = (props) => {
        }
      })
    }
-   if (
-    props.patientObj.riskStratificationResponseDto.testingSetting ===   "FACILITY_HTS_TEST_SETTING_ANC"
 
-  ) {
-    objValues.pregnant= pregnancyUsed
-    // setObjValues({ ...objValues, pregnant: pregnancyUsed });
-
+   if(props.patientObj.riskStratificationResponseDto.testingSetting ===
+    "FACILITY_HTS_TEST_SETTING_ANC" 
+  ){
+    setObjValues({...objValues, pregnant: pregnancyUsed})
 
   }
   }
 
-  const determinSex= (sexList)=>{
-// get  the value of sex being used 
-let sexUsed= ""
-    if(sexList.length > 0){
-      sexList.map((each, index)=>{
+  const determinSex= ()=>{  
+      if(props.patientObj.riskStratificationResponseDto.testingSetting ===
+    "FACILITY_HTS_TEST_SETTING_ANC" || props.patientObj.riskStratificationResponseDto.testingSetting ===
+    "FACILITY_HTS_TEST_SETTING_L&D" || props.patientObj.riskStratificationResponseDto.testingSetting ===
+    "FACILITY_HTS_TEST_SETTING_POST_NATAL_WARD_BREASTFEEDING"
+  ){
+    setShowPregnancy(true)
+      setdisableSex(true)
+  }else{
+    setShowPregnancy(false)
+    setdisableSex(false)
 
-        if(each.display === "Female"){
-          sexUsed =each.display 
-        }
-      })
-    }
-
-    if(props.patientObj.riskStratificationResponseDto.testingSetting ===
-      "FACILITY_HTS_TEST_SETTING_ANC" || props.patientObj.riskStratificationResponseDto.testingSetting ===
-      "FACILITY_HTS_TEST_SETTING_L&D" || props.patientObj.riskStratificationResponseDto.testingSetting ===
-      "FACILITY_HTS_TEST_SETTING_POST_NATAL_WARD_BREASTFEEDING"
-    ){
-      setShowPregnancy(true)
-      setdisableSex(true)      
-    }else{
-      setdisableSex(false)      
-    }
-
-    // assign the sex
-    if ( props.patientObj.riskStratificationResponseDto.targetGroup === "TARGET_GROUP_FSW" || props.patientObj.riskStratificationResponseDto.testingSetting === "FACILITY_HTS_TEST_SETTING_ANC" || props.patientObj.riskStratificationResponseDto.testingSetting ===
-      "FACILITY_HTS_TEST_SETTING_L&D" || props.patientObj.riskStratificationResponseDto.testingSetting ===
-      "FACILITY_HTS_TEST_SETTING_POST_NATAL_WARD_BREASTFEEDING") {
-
-        setShowPregnancy(true)
-        objValues.sex =sexUsed
-        // setObjValues({...objValues, sex: sexUsed });
-   }
+  }}
 
 
- 
-      }
   const handleAgeChange = (e) => {
     if (!ageDisabled && e.target.value) {
       if (e.target.value !== "" && e.target.value >= 85) {
@@ -1025,7 +1007,7 @@ let sexUsed= ""
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
+    Cookies.set("serial-number", serialNumber)
     // check next form
     let latestForm = getNextForm(
       "Client_intake_form",
@@ -1112,7 +1094,7 @@ let sexUsed= ""
       };
 
       props.setPatientObj({ ...props.patientObj, ...objValues });
-      Cookies.set("serial-number", serialNumber)
+
 
 
       if(props.patientObj.id && props.completed.includes("basic") ){
@@ -1692,6 +1674,7 @@ let sexUsed= ""
                     }
                   >
                     <option value={""}></option>
+                    {console.log("objValues.sex", objValues.sex)}
                     {sexs.map((value) => (
                       <option key={value.id} value={value.display}>
                         {value.display}
@@ -1795,6 +1778,7 @@ let sexUsed= ""
                 </div>
               )}
               {/* objValues.maritalStatusId==='6' && */}
+              {console.log(objValues.targetGroup)}
               <div className="form-group  col-md-4">
                 <FormGroup>
                   <Label>
@@ -1813,11 +1797,11 @@ let sexUsed= ""
                     //disabled
                   >
                     <option value={""}></option>
-                    {/*kP.map((value) => (
+                    {/* {kP.map((value) => (
                                            <option key={value.id} value={value.code}>
                                                {value.display}
                                            </option>
-                                       ))*/}
+                                       ))} */}
                     {objValues?.sex.toLowerCase() === "female" && (
                       <>
                         {" "}

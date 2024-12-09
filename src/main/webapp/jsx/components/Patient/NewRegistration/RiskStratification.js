@@ -167,10 +167,10 @@ const BasicInfo = (props) => {
 if (objValues.age !== "") {
       props.setPatientObjAge(objValues.age);
     }
-    if (props.patientObj.riskStratificationResponseDto !== null) {
-      if(props.activePage.activeObject.riskStratificationResponseDto.entryPoint === "HTS_ENTRY_POINT_COMMUNITY"){
+    if (props?.patientObj?.riskStratificationResponseDto !== null) {
+      if(props?.activePage?.activeObject?.riskStratificationResponseDto?.entryPoint === "HTS_ENTRY_POINT_COMMUNITY"){
         HTS_ENTRY_POINT_COMMUNITY()
-      }else if(props.activePage.activeObject.riskStratificationResponseDto.entryPoint=== "HTS_ENTRY_POINT_FACILITY"){
+      }else if(props?.activePage?.activeObject?.riskStratificationResponseDto?.entryPoint=== "HTS_ENTRY_POINT_FACILITY"){
 
         HTS_ENTRY_POINT_FACILITY()
       }
@@ -256,13 +256,13 @@ if (objValues.age !== "") {
       .then((response) => {
         //Remove retesting from the codeset
           let facilityList = []
-        response.data.map((each, index)=>{
-              if(each.code !=="FACILITY_HTS_TEST_SETTING_RETESTING"){
-                facilityList.push(each);
-              }
+        // response.data.map((each, index)=>{
+        //       if(each.code !=="FACILITY_HTS_TEST_SETTING_RETESTING"){
+        //         facilityList.push(each);
+        //       }
 
-        })
-        setEntryPointSetting(facilityList);
+        // })
+        setEntryPointSetting(response.data);
       })
       .catch((error) => {
         //console.log(error);
@@ -293,7 +293,6 @@ if (objValues.age !== "") {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        console.log(response.data);
         setTargetGroupValue(response.data);
 
         props.setOrganizationInfo(response.data);
@@ -309,6 +308,7 @@ if (objValues.age !== "") {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
+        // console.log("KP",response.data)
         setKP(response.data);
       })
       .catch((error) => {

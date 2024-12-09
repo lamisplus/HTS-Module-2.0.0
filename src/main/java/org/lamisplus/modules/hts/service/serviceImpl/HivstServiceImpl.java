@@ -49,7 +49,6 @@ public class HivstServiceImpl implements HivstService {
         LOG.info("Validating HivstDto: {}", hivstDto.toString());
         validateHasPatient(hivstDto);
         validateTestKitUserCategories(hivstDto.getTestKitUserDetails(), hivstDto.getTestKitUsers());
-//        validateTestKitsAccountedFor(hivstDto.getTestKitUserDetails().size(), hivstDto.getNumberOfHivstKitsReceived());
 
         LOG.info("Processing HivstDto");
         List<Hivst> processedHivstList = new ArrayList<>();
@@ -87,8 +86,7 @@ public class HivstServiceImpl implements HivstService {
                 hivst.setPatientId(getOrCreatePatientId(hivstDto));
                 hivst.setPostTestAssessment(objectMapper.valueToTree(userInfo.getPostTestAssessment()));
                 hivst.setReferralInformation(objectMapper.valueToTree(userInfo.getPostTestAssessment().getReferralInformation()));
-//                hivst.setTestKitUserDetails(userInfo);
-//                hivstList.add(hivst);
+
                 updatedUserInfo.add(userInfo);
                 myselfHivst = hivst;
             } else {
@@ -215,14 +213,8 @@ public class HivstServiceImpl implements HivstService {
 
         Hivst hivstUpdate = Hivst.fromDto(hivstDto);
         List<Hivst> toBeUpdated = editHivstForPrimaryAndSecondaryPatients(hivstDto);
-//            hivstUpdate.setTestKitUserDetails(hivst.getTestKitUserDetails());
-//            hivstUpdate.setTestKitUsers(objectMapper.valueToTree(hivst.getTestKitUsers()));
-//            hivstUpdate.setNumberOfHivstKitsReceived(hivst.getNumberOfHivstKitsReceived());
-//            hivstUpdate.setOtherTestKitUserInfoAvailable(hivst.getOtherTestKitUserInfoAvailable());
-//            hivstUpdate.setUserType(hivst.getUserType());
-//            hivstUpdate.setArchived(0);
 
-//            return HivstDto.fromEntity(hivstRepository.save(hivstUpdate));
+
         List<Hivst> savedHivst = hivstRepository.saveAll(toBeUpdated);
 
         return savedHivst.stream().map(each -> {

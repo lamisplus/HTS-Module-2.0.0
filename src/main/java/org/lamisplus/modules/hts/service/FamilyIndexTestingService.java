@@ -36,6 +36,7 @@ public class FamilyIndexTestingService {
     private final FamilyIndexTestingRepository familyIndexTestingRepository;
     private final FamilyIndexRepository familyIndexRepository;
     private final FamilyTestingTrackerRepository familyTestingTrackerRepository;
+    private final  String successMessage = " deleted successfully"; 
 
     private HtsClient getHtsClient(Long htsClientId, String htsClientUuid) {
         Long facilityId = currentUserOrganizationService.getCurrentUserOrganization();
@@ -324,7 +325,7 @@ public class FamilyIndexTestingService {
                 .orElseThrow(() -> new EntityNotFoundException(FamilyIndexTesting.class, "id", id + ""));
         familyIndexTesting.setArchived(1);
         familyIndexTestingRepository.save(familyIndexTesting);
-        return "Family Index Testing with the id " + id + " deleted successfully";
+        return "Family Index Testing with the id " + id + successMessage;
     }
 
     public FamilyIndex findFamilyIndexById(Long id) {
@@ -379,7 +380,7 @@ public class FamilyIndexTestingService {
         FamilyIndex familyIndex = findFamilyIndexById(id);
         familyIndex.setArchived(1);
         familyIndexRepository.save(familyIndex);
-        return "Family Index with the id " + id + " deleted successfully";
+        return "Family Index with the id " + id + successMessage;
     }
 
     public FamilyTestingTracker findFamilyTrackerById(Long id) {
@@ -411,7 +412,7 @@ public class FamilyIndexTestingService {
         FamilyTestingTracker familyTestingTracker = findFamilyTrackerById(id);
         familyTestingTracker.setArchived(1);
         familyTestingTrackerRepository.save(familyTestingTracker);
-        return "Family Testing Tracker with the id " + id + " deleted successfully";
+        return "Family Testing Tracker with the id " + id + successMessage;
     }
 
 

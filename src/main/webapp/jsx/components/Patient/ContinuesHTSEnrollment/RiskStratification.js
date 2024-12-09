@@ -118,6 +118,7 @@ const RiskStratification = (props) => {
   const [setting, setSetting] = useState([]);
   const [riskCount, setRiskCount] = useState(0);
   const [showHealthFacility, setShowHealthFacility] = useState(false);
+  const [disableInput, setDisableInput] = useState(false);
 
   const [objValues, setObjValues] = useState({
     age: props.patientAge,
@@ -156,21 +157,31 @@ const RiskStratification = (props) => {
   const [isPMTCTModality, setIsPMTCTModality] = useState(false);
   const [showRiskAssessment, setShowRiskAssessment] = useState(false);
 
+
+
+  const retestingInfo= ()=>{
+      if(props.newHTSType ===  "RETESTING"){ 
+
+        setObjValues({...objValues,entryPoint: "HTS_ENTRY_POINT_FACILITY", testingSetting: "FACILITY_HTS_TEST_SETTING_RETESTING"})
+        setDisableInput(true)
+      }
+  }
   useEffect(() => {
     KP();
     EnrollmentSetting();
     EntryPoint();
-    HTS_ENTRY_POINT_COMMUNITY();
-    if (props.patientObj.riskStratificationResponseDto !== null) {
-      if(props.activePage.activeObject.riskStratificationResponseDto.entryPoint === "HTS_ENTRY_POINT_COMMUNITY"){
+    HTS_ENTRY_POINT_FACILITY();
+
+    if (props?.patientObj?.riskStratificationResponseDto !== null) {
+      if(props?.activePage?.activeObject?.riskStratificationResponseDto?.entryPoint === "HTS_ENTRY_POINT_COMMUNITY"){
         HTS_ENTRY_POINT_COMMUNITY()
-      }else if(props.activePage.activeObject.riskStratificationResponseDto.entryPoint=== "HTS_ENTRY_POINT_FACILITY"){
+      }else if(props?.activePage?.activeObject?.riskStratificationResponseDto?.entryPoint=== "HTS_ENTRY_POINT_FACILITY"){
 
         HTS_ENTRY_POINT_FACILITY()
       }
-      setObjValues(props.patientObj.riskStratificationResponseDto);
+      setObjValues(props?.patientObj?.riskStratificationResponseDto);
       SettingModality(
-        props.patientObj.riskStratificationResponseDto.testingSetting
+        props?.patientObj?.riskStratificationResponseDto?.testingSetting
       );
    
       setRiskAssessment(
@@ -180,6 +191,11 @@ const RiskStratification = (props) => {
     }
   }, [props.patientObj]);
 
+
+  useEffect(()=>{
+    retestingInfo()
+
+  }, [entryPointSetting, entryPoint, props.newHTSType])
   //Get list of HIV STATUS ENROLLMENT
   const EnrollmentSetting = () => {
     axios
@@ -229,14 +245,15 @@ const RiskStratification = (props) => {
       })
       .then((response) => {
         //Remove retesting from the codeset
-          let facilityList = []
-        response.data.map((each, index)=>{
-              if(each.code !=="FACILITY_HTS_TEST_SETTING_RETESTING"){
-                facilityList.push(each);
-              }
+        //   let facilityList = []
+        // response.data.map((each, index)=>{
+        //       if(each.code !=="FACILITY_HTS_TEST_SETTING_RETESTING"){
+        //         facilityList.push(each);
+        //       }
 
-        })
-        setEntryPointSetting(facilityList);
+        // })
+        setEntryPointSetting(response.data);
+
       })
       .catch((error) => {
         //console.log(error);
@@ -693,6 +710,8 @@ setKP(kpList)
                         border: "1px solid #014D88",
                         borderRadius: "0.2rem",
                       }}
+                      disabled={disableInput}
+
                     >
                       <option value={""}>Select</option>
                       {entryPoint.map((value) => (
@@ -784,6 +803,7 @@ setKP(kpList)
                         border: "1px solid #014D88",
                         borderRadius: "0.2rem",
                       }}
+                      disabled={disableInput}
                     >
                       <option value={""}>Select</option>
                       {entryPointSetting && entryPointSetting.map((value) =>

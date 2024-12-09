@@ -176,7 +176,7 @@ public class HtsClientService {
 
     public HtsClientDto updatePreTestCounseling(Long id, HtsPreTestCounselingDto htsPreTestCounselingDto){
         HtsClient htsClient = this.getById(id);
-        if(!this.getPersonId(htsClient).equals(htsPreTestCounselingDto.getPersonId())) throw new IllegalTypeException(Person.class, "Person", "id not match");
+        if(!this.getPersonId(htsClient).equals(htsPreTestCounselingDto.getPersonId())) throw new IllegalTypeException(Person.class, "Person ", "id not match");
         htsClient.setKnowledgeAssessment(htsPreTestCounselingDto.getKnowledgeAssessment());
         htsClient.setRiskAssessment(htsPreTestCounselingDto.getRiskAssessment());
         htsClient.setTbScreening(htsPreTestCounselingDto.getTbScreening());
@@ -225,7 +225,7 @@ public class HtsClientService {
     public HtsClientDto updateRecency(Long id, HtsRecencyDto htsRecencyDto){
         HtsClient htsClient = this.getById(id);
         if(!this.getPersonId(htsClient).equals(htsRecencyDto.getPersonId())) {
-            throw new IllegalTypeException(Person.class, "Person", "id does not match with supplied personId");
+            throw new IllegalTypeException(Person.class, "Person  ", "id does not match with supplied personId");
         }
         htsClient.setRecency(htsRecencyDto.getRecency());
 
@@ -741,5 +741,23 @@ public class HtsClientService {
         // should return false to indicate that
         // this client code doesn't pass the check, else true
         return !htsClientRepository.existsByClientCode(clientCode);
+    }
+
+
+    public ResponseDTO getLmpFromANC (String personUuid){
+        Optional<String>   result=  htsClientRepository.getLmpDate(personUuid);
+        ResponseDTO   res=    new ResponseDTO();
+
+        if(result.isPresent()){
+           String opResult=  result.get();
+            res.setResult(opResult);
+            res.setMessage("Lmp result found");
+
+
+        }else{
+            res.setResult("");
+            res.setMessage("Lmp result not found");
+        }
+        return res;
     }
 }

@@ -1929,7 +1929,7 @@ if(followUp){
                 <div className="form-group mb-3 col-md-4">
                   <FormGroup>
                     <Label for="lastName">
-                      Middle Name <span style={{ color: "red" }}> *</span>
+                      Middle Name 
                     </Label>
                     <Input
                       className="form-control"

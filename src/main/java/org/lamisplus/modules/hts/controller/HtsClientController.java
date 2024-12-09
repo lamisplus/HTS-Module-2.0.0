@@ -129,4 +129,12 @@ public class HtsClientController {
             @RequestBody ClientCodeCheckRequestDto clientCode){
         return ResponseEntity.ok(htsClientService.checkForClientCode(clientCode.getClientCode()));
     }
+
+
+
+    @GetMapping(HTS_URL_VERSION_ONE + "/get-anc-lmp")
+    public ResponseEntity<ResponseDTO> checkLmpFromANC(@RequestParam String personUuid) {
+        return ResponseEntity.ok(this.htsClientService.getLmpFromANC(personUuid));
+    }
+
 }

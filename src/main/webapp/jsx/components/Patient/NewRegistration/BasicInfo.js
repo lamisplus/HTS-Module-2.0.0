@@ -285,7 +285,7 @@ const BasicInfo = (props) => {
       props.patientObj.personResponseDto &&
       props.patientObj.personResponseDto.sex
         ? props.patientObj.personResponseDto.sex
-        : pmtctSetting.includes(props.patientObj.riskStratificationResponseDto.testingSetting)? "Female": "",
+        : pmtctSetting.includes(props.patientObj.riskStratificationResponseDto.testingSetting)? "Female": props.patientObj.targetGroup === "TARGET_GROUP_FSW"? "Female":props.patientObj.targetGroup === "TARGET_GROUP_MSM"? "Male": "",
     stateId: country && country.stateId ? country.stateId : "",
     riskAssessment:
       props.extra && props.extra.riskAssessment
@@ -800,12 +800,12 @@ const BasicInfo = (props) => {
       setObjValues({ ...objValues, [e.target.name]: e.target.value });
     }
 
-    // if (e.target.name === "sex" && e.target.value.toLowerCase() === "female") {
-    //   setShowPregnancy(true);
+    if (e.target.name === "sex" && e.target.value.toLowerCase() === "female") {
+      setShowPregnancy(true);
   
 
-    //   setErrors({ ...errors, pregnant: "" });
-    // }
+      setErrors({ ...errors, pregnant: "" });
+    }
   };
 
 
@@ -1674,7 +1674,7 @@ const BasicInfo = (props) => {
                     }
                   >
                     <option value={""}></option>
-                    {console.log("objValues.sex", objValues.sex)}
+                   
                     {sexs.map((value) => (
                       <option key={value.id} value={value.display}>
                         {value.display}
@@ -1778,7 +1778,7 @@ const BasicInfo = (props) => {
                 </div>
               )}
               {/* objValues.maritalStatusId==='6' && */}
-              {console.log(objValues.targetGroup)}
+          
               <div className="form-group  col-md-4">
                 <FormGroup>
                   <Label>
@@ -1797,12 +1797,12 @@ const BasicInfo = (props) => {
                     //disabled
                   >
                     <option value={""}></option>
-                    {/* {kP.map((value) => (
+                    {kP.map((value) => (
                                            <option key={value.id} value={value.code}>
                                                {value.display}
                                            </option>
-                                       ))} */}
-                    {objValues?.sex.toLowerCase() === "female" && (
+                                       ))}
+                    {/* {objValues?.sex.toLowerCase() === "female" && (
                       <>
                         {" "}
                         {kP
@@ -1813,8 +1813,8 @@ const BasicInfo = (props) => {
                             </option>
                           ))}
                       </>
-                    )}
-
+                    )} */}
+{/* 
                     {(objValues.sex === "Male" || objValues.sex === "male") && (
                       <>
                         {" "}
@@ -1826,7 +1826,7 @@ const BasicInfo = (props) => {
                             </option>
                           ))}{" "}
                       </>
-                    )}
+                    )} */}
                   </select>
                   {errors.targetGroup !== "" ? (
                     <span className={classes.error}>{errors.targetGroup}</span>
@@ -1940,7 +1940,7 @@ const BasicInfo = (props) => {
                   </div>
                 </>
               )}
-              {showPregancy  && (
+              {objValues.sex  === "Female"  && (
                 <>
                   <div className="form-group  col-md-4">
                     <FormGroup>

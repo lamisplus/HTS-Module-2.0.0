@@ -297,7 +297,6 @@ const BasicInfo = (props) => {
   };
 
   const handleInputChangeKnowledgeAssessment = (e) => {
-    //setErrors({...temp, [e.target.name]:""})
 
     setKnowledgeAssessment({
       ...knowledgeAssessment,
@@ -715,7 +714,7 @@ const BasicInfo = (props) => {
     );
     if (validate()) {
       setSaving(true);
-      console.log(mlResultObj);
+
       riskAssessment.mlStatus = mlResultObj.status;
       riskAssessment.mlScore = mlResultObj.score;
 
@@ -1977,12 +1976,7 @@ const BasicInfo = (props) => {
                     <b>ML Prediction Result for HTS Patient :</b>{" "}
                     {predictionRanges(predictionValue[1])}
                   </Alert>
-                  {/* <Button
-                    onClick={toggleModal}
-                    style={{ backgroundColor: "#014d88", color: "#fff" }}
-                  >
-                    Provide Feedbck
-                  </Button> */}
+
                   <Button
                     content="Provide Feedbck"
                     style={{ backgroundColor: "#014d88", color: "#fff" }}

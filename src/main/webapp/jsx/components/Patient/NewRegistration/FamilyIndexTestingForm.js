@@ -541,6 +541,54 @@ if(each.code !==  "CHILD_NUMBER_OTHERS"){
       .catch(() => {});
   }, []);
 
+
+  
+
+  const HTS_ENTRY_POINT_FACILITY = () => {
+    axios
+      .get(`${baseUrl}application-codesets/v2/FACILITY_HTS_TEST_SETTING`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        console.log("HTS_ENTRY_POINT_FACILITY",response.data);
+
+        setSetting(response.data);
+      })
+      .catch((error) => {
+        //console.log(error);
+      });
+  };
+
+
+
+  
+
+  const HTS_ENTRY_POINT_COMMUNITY = () => {
+    axios
+      .get(`${baseUrl}application-codesets/v2/COMMUNITY_HTS_TEST_SETTING
+ `, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        console.log("HTS_ENTRY_POINT_COMMUNITY",response.data);
+        setSetting(response.data);
+      })
+      .catch((error) => {
+        //console.log(error);
+      });
+  };
+const getSettings=()=>{
+   console.log("HTS_ENTRY_POINT_COMMUNITY",props.patientObj.testingSetting);
+
+  if(  props.patientObj.testingSetting.includes("FACILITY")){
+    HTS_ENTRY_POINT_FACILITY()
+  }else if(props.patientObj.testingSetting.includes("COMMUNITY")){
+    HTS_ENTRY_POINT_COMMUNITY()
+  }
+  }
+
+
+
   useEffect(() => {
 
     loadGenders();
@@ -557,7 +605,7 @@ if(each.code !==  "CHILD_NUMBER_OTHERS"){
     GET_CHILD_NUMBER();
     getVL();
     getCurrentTreatment();
-
+    getSettings()
     if (
       props?.basicInfo?.personResponseDto?.address?.address[0]?.stateId ||
       props?.patientObj?.personResponseDto?.address?.address[0]?.stateId
@@ -1567,7 +1615,7 @@ if(each.code !==  "CHILD_NUMBER_OTHERS"){
                 <div className="form-group mb-3 col-md-4">
                   <FormGroup>
                     <Label for="lastName">
-                      Middle Name <span style={{ color: "red" }}> *</span>
+                      Middle Name 
                     </Label>
                     <Input
                       className="form-control"

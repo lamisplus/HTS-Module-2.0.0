@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react"
 import axios from "axios";
 import { FormGroup, Label, CardBody, Spinner, Input, Form } from "reactstrap";
 import * as moment from "moment";
@@ -118,8 +118,10 @@ const RiskStratification = (props) => {
   const [riskCount, setRiskCount] = useState(0);
   const [isPMTCTModality, setIsPMTCTModality] = useState(false);
   const [showRiskAssessment, setShowRiskAssessment] = useState(false);
-  const [spokeFacList, setSpokeFacList] = useState([]);
-  const [showHealthFacility, setShowHealthFacility] = useState(false);
+let communitySpokeList= ["COMMUNITY_HTS_TEST_SETTING_CONGREGATIONAL_SETTING" ,"COMMUNITY_HTS_TEST_SETTING_DELIVERY_HOMES", "COMMUNITY_HTS_TEST_SETTING_TBA_ORTHODOX","COMMUNITY_HTS_TEST_SETTING_TBA_RT-HCW" ]
+
+const [spokeFacList, setSpokeFacList] = useState([]);
+  const [showHealthFacility, setShowHealthFacility] = useState(communitySpokeList.includes(props?.activePage?.activeObject?.riskStratificationResponseDto.testingSetting)? true: false);
 
   const [objValues, setObjValues] = useState({
     age: props.patientAge,
@@ -171,18 +173,25 @@ const RiskStratification = (props) => {
   });
   useEffect(() => {
     KP();
-    EnrollmentSetting();
+    // EnrollmentSetting();
     EntryPoint();
     // HTS_ENTRY_POINT_COMMUNITY();
+//
 
     if (props.activePage.activeObject.riskStratificationResponseDto !== null) {
+      
+      if(props.activePage.activeObject.riskStratificationResponseDto.entryPoint === "HTS_ENTRY_POINT_COMMUNITY"){
+        HTS_ENTRY_POINT_COMMUNITY()
+      }else if(props.activePage.activeObject.riskStratificationResponseDto.entryPoint=== "HTS_ENTRY_POINT_FACILITY"){
+
+        HTS_ENTRY_POINT_FACILITY()
+      }
       setObjValues(props.activePage.activeObject.riskStratificationResponseDto);
 
       SettingModality(
         props.activePage.activeObject.riskStratificationResponseDto
           .testingSetting
       );
-
       setRiskAssessment(
         props.activePage.activeObject.riskStratificationResponseDto &&
           props.activePage.activeObject.riskStratificationResponseDto
@@ -317,14 +326,14 @@ setKP(kpList)
       })
       .then((response) => {
         //Remove retesting from the codeset
-          let facilityList = []
-        response.data.map((each, index)=>{
-              if(each.code !=="FACILITY_HTS_TEST_SETTING_RETESTING"){
-                facilityList.push(each);
-              }
+        //   let facilityList = []
+        // response.data.map((each, index)=>{
+        //       if(each.code !=="FACILITY_HTS_TEST_SETTING_RETESTING"){
+        //         facilityList.push(each);
+        //       }
 
-        })
-        setEntryPointSetting(facilityList);
+        // })
+        setEntryPointSetting(response.data);
       })
       .catch((error) => {
         //console.log(error);
@@ -432,11 +441,7 @@ setKP(kpList)
           }else if(e.target.value === "HTS_ENTRY_POINT_FACILITY"){
 
             HTS_ENTRY_POINT_FACILITY()
-          }else{
-            setEntryPointSetting([]);
-
           }
-
     }
 
 
@@ -502,11 +507,11 @@ setKP(kpList)
         ? ""
         : "This field is required.");
    
-    objValues.entryPoint !== "" &&
-        objValues.entryPoint === "HTS_ENTRY_POINT_COMMUNITY" &&
-        (temp.communityEntryPoint = objValues.communityEntryPoint
-          ? ""
-          : "This field is required.");
+    // objValues.entryPoint !== "" &&
+    //     objValues.entryPoint === "HTS_ENTRY_POINT_COMMUNITY" &&
+    //     (temp.communityEntryPoint = objValues.communityEntryPoint
+    //       ? ""
+    //       : "This field is required.");
    
  
           objValues.testingSetting ===  "FACILITY_HTS_TEST_SETTING_SPOKE_HEALTH_FACILITY" &&
@@ -593,6 +598,7 @@ setKP(kpList)
     e.preventDefault();
    getMenuLogic(objValues);
  let newModality = isPMTCTModality ? "skip" : "fill";
+    
 
  let latestForm = getNextForm(
    "Risk_Stratification",
@@ -888,12 +894,15 @@ setKP(kpList)
                     )}
                   </FormGroup>
                 </div> */}
-              { objValues.testingSetting ===  "FACILITY_HTS_TEST_SETTING_SPOKE_HEALTH_FACILITY" && <div className="form-group  col-md-6">
+       
+{ objValues.testingSetting ===  "FACILITY_HTS_TEST_SETTING_SPOKE_HEALTH_FACILITY" && <div className="form-group  col-md-6">
                   <FormGroup>
                     <Label>
                     Spoke Health Facility <span style={{ color: "red" }}> *</span>
                     </Label>
-                    <select
+
+
+                   { spokeFacList.length > 0 ?   <> <select
                       className="form-control"
                       name="spokeFacility"
                       id="spokeFacility"
@@ -912,14 +921,26 @@ setKP(kpList)
                           {value.spokeSite}
                         </option>
                       ))}
-                    </select>
+                    </select></>: <Input
+                    type="text"
+                    name="spokeFacility"
+                    id="spokeFacility"
+                    value={objValues.spokeFacility}
+                    //value={Math.floor(Math.random() * 1093328)}
+                    // onBlur={checkClientCode}
+                    onChange={handleInputChange}
+                    style={{
+                      border: "1px solid #014D88",
+                      borderRadius: "0.25rem",
+                    }}
+                  /> }
                     {errors.spokeFacility !== "" ? (
                       <span className={classes.error}>{errors.spokeFacility}</span>
                     ) : (
                       ""
                     )}
                   </FormGroup>
-                </div>}
+                </div>} 
 
 
                 {showHealthFacility && <div className="form-group  col-md-6">
@@ -927,7 +948,7 @@ setKP(kpList)
                     <Label>
                      Health Facility <span style={{ color: "red" }}> *</span>
                     </Label>
-                    <select
+                    { spokeFacList.length > 0 ?    <select
                       className="form-control"
                       name="healthFacility"
                       id="healthFacility"
@@ -946,7 +967,19 @@ setKP(kpList)
                           {value.spokeSite}
                         </option>
                       ))}
-                    </select>
+                    </select>:  <Input
+                    type="text"
+                    name="healthFacility"
+                    id="healthFacility"
+                    value={objValues.healthFacility}
+                    //value={Math.floor(Math.random() * 1093328)}
+                    // onBlur={checkClientCode}
+                    onChange={handleInputChange}
+                    style={{
+                      border: "1px solid #014D88",
+                      borderRadius: "0.25rem",
+                    }}
+                  /> }
                     {errors.healthFacility !== "" ? (
                       <span className={classes.error}>{errors.healthFacility}</span>
                     ) : (

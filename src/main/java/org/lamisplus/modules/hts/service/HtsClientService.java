@@ -176,7 +176,7 @@ public class HtsClientService {
 
     public HtsClientDto updatePreTestCounseling(Long id, HtsPreTestCounselingDto htsPreTestCounselingDto){
         HtsClient htsClient = this.getById(id);
-        if(!this.getPersonId(htsClient).equals(htsPreTestCounselingDto.getPersonId())) throw new IllegalTypeException(Person.class, "Person", "id not match");
+        if(!this.getPersonId(htsClient).equals(htsPreTestCounselingDto.getPersonId())) throw new IllegalTypeException(Person.class, "Person ", "id not match");
         htsClient.setKnowledgeAssessment(htsPreTestCounselingDto.getKnowledgeAssessment());
         htsClient.setRiskAssessment(htsPreTestCounselingDto.getRiskAssessment());
         htsClient.setTbScreening(htsPreTestCounselingDto.getTbScreening());
@@ -225,7 +225,7 @@ public class HtsClientService {
     public HtsClientDto updateRecency(Long id, HtsRecencyDto htsRecencyDto){
         HtsClient htsClient = this.getById(id);
         if(!this.getPersonId(htsClient).equals(htsRecencyDto.getPersonId())) {
-            throw new IllegalTypeException(Person.class, "Person", "id does not match with supplied personId");
+            throw new IllegalTypeException(Person.class, "Person  ", "id does not match with supplied personId");
         }
         htsClient.setRecency(htsRecencyDto.getRecency());
 
@@ -704,19 +704,30 @@ public class HtsClientService {
 
     public String getClientNameByCode(String code) {
         List<HtsClient> htsClients = htsClientRepository.findAllByClientCode(code);
-        String name = "Record Not Found";
+//        String name = "Record Not Found";
 
-        if(moduleService.exist("PatientModule")){
-            Optional<String> firstName = htsClientRepository.findInPatientByHospitalNumber(code);
-            if(firstName.isPresent()){
-                return firstName.get();
-            }
+
+        if(!htsClients.isEmpty()){
+            return  "Client code already exist";
+        }else{
+            return "Client code does not exist";
         }
-        if(!htsClients.isEmpty() && name.equals("Record Not Found")){
-            Person person = htsClients.stream().findFirst().get().getPerson();
-            return person.getFirstName() + " " + person.getSurname();
-        }
-        return name;
+
+
+
+
+
+//        if(moduleService.exist("PatientModule")){
+//            Optional<String> firstName = htsClientRepository.findInPatientByHospitalNumber(code);
+//            if(firstName.isPresent()){
+//                return firstName.get();
+//            }
+//        }
+//        if(!htsClients.isEmpty() && name.equals("Record Not Found")){
+//            Person person = htsClients.stream().findFirst().get().getPerson();
+//            return person.getFirstName() + " " + person.getSurname();
+//        }
+//        return name;
     }
 
     public HtsClientDtos getRiskStratificationHtsClients(Long personId) {
@@ -730,5 +741,23 @@ public class HtsClientService {
         // should return false to indicate that
         // this client code doesn't pass the check, else true
         return !htsClientRepository.existsByClientCode(clientCode);
+    }
+
+
+    public ResponseDTO getLmpFromANC (String personUuid){
+        Optional<String>   result=  htsClientRepository.getLmpDate(personUuid);
+        ResponseDTO   res=    new ResponseDTO();
+
+        if(result.isPresent()){
+           String opResult=  result.get();
+            res.setResult(opResult);
+            res.setMessage("Lmp result found");
+
+
+        }else{
+            res.setResult("");
+            res.setMessage("Lmp result not found");
+        }
+        return res;
     }
 }

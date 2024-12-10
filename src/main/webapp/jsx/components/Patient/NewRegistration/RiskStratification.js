@@ -5,25 +5,26 @@ import * as moment from "moment";
 import { makeStyles } from "@material-ui/core/styles";
 import { Card } from "@material-ui/core";
 import SaveIcon from "@material-ui/icons/Save";
-// import AddIcon from "@material-ui/icons/Add";
-// import CancelIcon from "@material-ui/icons/Cancel";
+
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
 import { useHistory } from "react-router-dom";
-// import {TiArrowBack} from 'react-icons/ti'
+
 import { token, url as baseUrl } from "../../../../api";
 import "react-phone-input-2/lib/style.css";
 import "semantic-ui-css/semantic.min.css";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
 import { getNextForm } from "../../../../utility";
-//import PhoneInput from 'react-phone-input-2'
+
 import "react-phone-input-2/lib/style.css";
 import { Button } from "semantic-ui-react";
 import { Modal } from "react-bootstrap";
 import { Label as LabelRibbon, Message } from "semantic-ui-react";
 import Cookies from "js-cookie";
+
+
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -128,13 +129,13 @@ const BasicInfo = (props) => {
     age: "",
     dob: "",
     code: "",
-    visitDate: "", //
+    visitDate: "",
     dateOfBirth: null,
     dateOfRegistration: null,
     isDateOfBirthEstimated: "",
     targetGroup: "",
-    testingSetting: "", //
-    modality: "", //
+    testingSetting: "",
+    modality: "",
     careProvider: "",
     personId: "",
     id: "",
@@ -142,9 +143,11 @@ const BasicInfo = (props) => {
     entryPoint: "",
     communityEntryPoint: "",
     spokeFacility: "",
-    healthFacility: "",
+    healthFacility: ""
+
   });
   const [riskAssessment, setRiskAssessment] = useState({
+
     lastHivTestForceToHaveSex: "",
     lastHivTestHadAnal: "",
     lastHivTestInjectedDrugs: "",
@@ -157,25 +160,33 @@ const BasicInfo = (props) => {
     lastHivTestBasedOnRequest: "",
   });
   useEffect(() => {
-    KP();
-    TargetGroupSetup();
-    // EnrollmentSetting();
-    EntryPoint();
-    // HTS_ENTRY_POINT_COMMUNITY();
 
-    if (objValues.age !== "") {
+
+if (objValues.age !== "") {
       props.setPatientObjAge(objValues.age);
     }
-    if (props.patientObj.riskStratificationResponseDto !== null) {
+    if (props?.patientObj?.riskStratificationResponseDto !== null) {
+      if(props?.activePage?.activeObject?.riskStratificationResponseDto?.entryPoint === "HTS_ENTRY_POINT_COMMUNITY"){
+        HTS_ENTRY_POINT_COMMUNITY()
+      }else if(props?.activePage?.activeObject?.riskStratificationResponseDto?.entryPoint=== "HTS_ENTRY_POINT_FACILITY"){
+
+        HTS_ENTRY_POINT_FACILITY()
+      }
       setObjValues(props.patientObj.riskStratificationResponseDto);
-      SettingModality(
-        props.patientObj.riskStratificationResponseDto.testingSetting
-      );
+
       setRiskAssessment(
         props.patientObj.riskStratificationResponseDto.riskAssessment
       );
     }
   }, [objValues.age]);
+
+
+  useEffect(()=>{
+    KP();
+    TargetGroupSetup();
+
+    EntryPoint();
+  }, [])
   //Get list of HIV STATUS ENROLLMENT
   const EnrollmentSetting = () => {
     axios
@@ -183,11 +194,11 @@ const BasicInfo = (props) => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        //console.log(response.data);
+
         setEnrollSetting(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+
       });
   };
   const EntryPoint = () => {
@@ -196,28 +207,42 @@ const BasicInfo = (props) => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        //console.log(response.data);
+
         setEntryPoint(response.data);
+        if(props?.patientObj?.riskStratificationResponseDto?.entryPoint === "HTS_ENTRY_POINT_COMMUNITY"){
+          HTS_ENTRY_POINT_COMMUNITY()
+        }else if(props?.patientObj?.riskStratificationResponseDto?.entryPoint === "HTS_ENTRY_POINT_FACILITY"){
+
+          HTS_ENTRY_POINT_FACILITY()
+        }else{
+          setEntryPointSetting([]);
+
+        }
       })
       .catch((error) => {
-        //console.log(error);
+
       });
   };
 
+
+
+
   const getSpokeFaclityByHubSite = () => {
-    let facility = Cookies.get("facilityName");
+    let facility =Cookies.get("facilityName")
     axios
       .get(`${baseUrl}hts/spoke-site?hubSite=${facility}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        console.log("setSpokeFacList", response.data);
-        setSpokeFacList(response.data);
+        setSpokeFacList(response.data)
+
+
       })
       .catch((error) => {
-        //console.log(error);
+
       });
   };
+
 
   const HTS_ENTRY_POINT_FACILITY = () => {
     axios
@@ -225,37 +250,33 @@ const BasicInfo = (props) => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        //Remove retesting from the codeset
-        let facilityList = [];
-        response.data.map((each, index) => {
-          if (each.code !== "FACILITY_HTS_TEST_SETTING_RETESTING") {
-            facilityList.push(each);
-          }
-        });
-        setEntryPointSetting(facilityList);
-      })
-      .catch((error) => {
-        //console.log(error);
-      });
-  };
 
-  const HTS_ENTRY_POINT_COMMUNITY = () => {
-    axios
-      .get(
-        `${baseUrl}application-codesets/v2/COMMUNITY_HTS_TEST_SETTING
- `,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      )
-      .then((response) => {
-        //console.log(response.data);
+          let facilityList = []
+
         setEntryPointSetting(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+
       });
   };
+
+
+  const HTS_ENTRY_POINT_COMMUNITY = () => {
+    axios
+      .get(`${baseUrl}application-codesets/v2/COMMUNITY_HTS_TEST_SETTING
+ `, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+
+        setEntryPointSetting(response.data);
+      })
+      .catch((error) => {
+
+      });
+  };
+
+
 
   const TargetGroupSetup = () => {
     axios
@@ -263,13 +284,12 @@ const BasicInfo = (props) => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        console.log(response.data);
         setTargetGroupValue(response.data);
 
         props.setOrganizationInfo(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+
       });
   };
   //Get list of KP
@@ -279,12 +299,17 @@ const BasicInfo = (props) => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
+
         setKP(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+
       });
   };
+
+
+
+
 
   //Set HTS menu registration
   const getMenuLogic = () => {
@@ -296,9 +321,9 @@ const BasicInfo = (props) => {
       setting === "FACILITY_HTS_TEST_SETTING_ANC" ||
       setting === "FACILITY_HTS_TEST_SETTING_L&D" ||
       setting === "FACILITY_HTS_TEST_SETTING_POST_NATAL_WARD_BREASTFEEDING"
+
     ) {
-      setErrors({
-        ...errors,
+      setErrors({...errors,
         lastHivTestDone: "",
         whatWasTheResult: "",
         lastHivTestVaginalOral: "",
@@ -308,10 +333,11 @@ const BasicInfo = (props) => {
         lastHivTestInjectedDrugs: "",
         lastHivTestHadAnal: "",
         lastHivTestForceToHaveSex: "",
-      });
+       })
       setIsPMTCTModality(true);
       return true;
     } else {
+
       setIsPMTCTModality(false);
       return false;
     }
@@ -320,23 +346,18 @@ const BasicInfo = (props) => {
   const handleInputChange = (e) => {
     setErrors({ ...temp, [e.target.name]: "" });
     if (e.target.name === "testingSetting" && e.target.value !== "") {
-      setErrors({ ...temp, spokeFacility: "", healthFacility: "" });
+      setErrors({ ...temp, spokeFacility: "",  healthFacility: ""});
 
       SettingModality(e.target.value);
       setObjValues({ ...objValues, [e.target.name]: e.target.value });
       let ans = checkPMTCTModality(e.target.value);
 
-      if (
-        e.target.value ===
-          "COMMUNITY_HTS_TEST_SETTING_CONGREGATIONAL_SETTING" ||
-        e.target.value === "COMMUNITY_HTS_TEST_SETTING_DELIVERY_HOMES" ||
-        e.target.value === "COMMUNITY_HTS_TEST_SETTING_TBA_ORTHODOX" ||
-        e.target.value === "COMMUNITY_HTS_TEST_SETTING_TBA_RT-HCW"
-      ) {
-        setShowHealthFacility(true);
-      } else {
-        setShowHealthFacility(false);
-      }
+     if(e.target.value === "COMMUNITY_HTS_TEST_SETTING_CONGREGATIONAL_SETTING" ||  e.target.value === "COMMUNITY_HTS_TEST_SETTING_DELIVERY_HOMES" || e.target.value === "COMMUNITY_HTS_TEST_SETTING_TBA_ORTHODOX" || e.target.value === "COMMUNITY_HTS_TEST_SETTING_TBA_RT-HCW" ){
+            setShowHealthFacility(true)
+      }else{
+            setShowHealthFacility(false)
+
+       }
 
       displayRiskAssessment(
         riskAssessment.lastHivTestBasedOnRequest,
@@ -344,62 +365,44 @@ const BasicInfo = (props) => {
         ans
       );
 
+
       //get spoke sites
-      if (
-        e.target.value === "FACILITY_HTS_TEST_SETTING_SPOKE_HEALTH_FACILITY" ||
-        e.target.value ===
-          "COMMUNITY_HTS_TEST_SETTING_CONGREGATIONAL_SETTING" ||
-        e.target.value === "COMMUNITY_HTS_TEST_SETTING_DELIVERY_HOMES" ||
-        e.target.value === "COMMUNITY_HTS_TEST_SETTING_TBA_ORTHODOX" ||
-        e.target.value === "COMMUNITY_HTS_TEST_SETTING_TBA_RT-HCW"
-      ) {
+      if(e.target.value === "FACILITY_HTS_TEST_SETTING_SPOKE_HEALTH_FACILITY" || e.target.value === "COMMUNITY_HTS_TEST_SETTING_CONGREGATIONAL_SETTING" ||  e.target.value === "COMMUNITY_HTS_TEST_SETTING_DELIVERY_HOMES" || e.target.value === "COMMUNITY_HTS_TEST_SETTING_TBA_ORTHODOX" || e.target.value === "COMMUNITY_HTS_TEST_SETTING_TBA_RT-HCW" ){
+
         getSpokeFaclityByHubSite();
       }
 
       //set risk count
+              if (e.target.value === "COMMUNITY_HTS_TEST_SETTING_STANDALONE_HTS"   || e.target.value === "FACILITY_HTS_TEST_SETTING_STANDALONE_HTS") {
+                setRiskCount(1);
+              }   else if (e.target.value === "COMMUNITY_HTS_TEST_SETTING_CT"  || e.target.value === "FACILITY_HTS_TEST_SETTING_CT") {
+                setRiskCount(1);
+              } else if (e.target.value ==="FACILITY_HTS_TEST_SETTING_TB") {
+                setRiskCount(1);
+              } else if (e.target.value === "FACILITY_HTS_TEST_SETTING_STI") {
+                setRiskCount(1);
+              } else if (e.target.value === "COMMUNITY_HTS_TEST_SETTING_OUTREACH") {
+                setRiskCount(1);
+              } else {
+                setRiskCount(0);
+              }
 
-      //  "TEST_SETTING_STANDALONE_HTS_PMTCT_(ANC1_ONLY)"
-      // "TEST_SETTING_STANDALONE_HTS_EMERGENCY"
-      //  "TEST_SETTING_STANDALONE_HTS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)"
-      // "TEST_SETTING_STANDALONE_HTS_TB"
-      // "TEST_SETTING_STANDALONE_HTS_STI"
-      // "TEST_SETTING_CT_STI"
-      // "TEST_SETTING_CT_PMTCT"
-      // "TEST_SETTING_CT_TB"
-      // "TEST_SETTING_TB_TB"
-      // "TEST_SETTING_STI_STI"
-      // "TEST_SETTING_OPD_STI"
-      // "TEST_SETTING_OUTREACH_INDEX"
-      if (
-        e.target.value === "COMMUNITY_HTS_TEST_SETTING_STANDALONE_HTS" ||
-        e.target.value === "FACILITY_HTS_TEST_SETTING_STANDALONE_HTS"
-      ) {
-        setRiskCount(1);
-      } else if (
-        e.target.value === "COMMUNITY_HTS_TEST_SETTING_CT" ||
-        e.target.value === "FACILITY_HTS_TEST_SETTING_CT"
-      ) {
-        setRiskCount(1);
-      } else if (e.target.value === "FACILITY_HTS_TEST_SETTING_TB") {
-        setRiskCount(1);
-      } else if (e.target.value === "FACILITY_HTS_TEST_SETTING_STI") {
-        setRiskCount(1);
-      } else if (e.target.value === "COMMUNITY_HTS_TEST_SETTING_OUTREACH") {
-        setRiskCount(1);
-      } else {
-        setRiskCount(0);
-      }
+
     }
 
-    if (e.target.name === "entryPoint") {
-      console.log("e.target.value", e.target.value);
-      if (e.target.value === "HTS_ENTRY_POINT_COMMUNITY") {
-        HTS_ENTRY_POINT_COMMUNITY();
-      } else if (e.target.value === "HTS_ENTRY_POINT_FACILITY") {
-        HTS_ENTRY_POINT_FACILITY();
-      } else {
-        setEntryPointSetting([]);
-      }
+
+    if(e.target.name === "entryPoint"){
+
+          if(e.target.value === "HTS_ENTRY_POINT_COMMUNITY"){
+            HTS_ENTRY_POINT_COMMUNITY()
+          }else if(e.target.value === "HTS_ENTRY_POINT_FACILITY"){
+
+            HTS_ENTRY_POINT_FACILITY()
+          }else{
+            setEntryPointSetting([]);
+
+          }
+
     }
 
     setObjValues({ ...objValues, [e.target.name]: e.target.value });
@@ -412,7 +415,7 @@ const BasicInfo = (props) => {
     let ans;
 
     // for the section to show
-    //  Conditions are : age > 15, riskAssessment.lastHivTestBasedOnRequest === "false" and PMTCT Modality === true
+
     if (lastVisit === "false") {
       if (SecAge > 15 && isPMTCTModalityValue) {
         setShowRiskAssessment(false);
@@ -428,7 +431,6 @@ const BasicInfo = (props) => {
       setShowRiskAssessment(false);
       ans = false;
     }
-    console.log("This is the answer", ans);
   };
   //Date of Birth and Age handle
   const handleDobChange = (e) => {
@@ -440,16 +442,14 @@ const BasicInfo = (props) => {
       if (age_now <= 0 && m < 0 && today.getDate() < birthDate.getDate()) {
         age_now--;
       }
-      // if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-      //   age_now--;
-      // }
+
       objValues.age = age_now;
       displayRiskAssessment(
         riskAssessment.lastHivTestBasedOnRequest,
         age_now,
         isPMTCTModality
       );
-      //setBasicInfo({...basicInfo, age: age_now});
+;
     } else {
       setObjValues({ ...objValues, age: "" });
     }
@@ -475,6 +475,7 @@ const BasicInfo = (props) => {
       if (e.target.value !== "" && e.target.value >= 85) {
         toggle();
       }
+
 
       const currentDate = new Date();
       currentDate.setDate(15);
@@ -511,8 +512,7 @@ const BasicInfo = (props) => {
       ? ""
       : "This field is required.";
     temp.entryPoint = objValues.entryPoint ? "" : "This field is required.";
-    // temp.modality = objValues.modality ? "" : "This field is required.";
-    //
+
     temp.dob = objValues.dob ? "" : "This field is required.";
     temp.age = objValues.age ? "" : "This field is required.";
     //
@@ -525,23 +525,17 @@ const BasicInfo = (props) => {
         ? ""
         : "This field is required.");
 
-    //
-    objValues.testingSetting ===
-      "FACILITY_HTS_TEST_SETTING_SPOKE_HEALTH_FACILITY" &&
+//
+      objValues.testingSetting ===  "FACILITY_HTS_TEST_SETTING_SPOKE_HEALTH_FACILITY" &&
       (temp.spokeFacility = objValues.spokeFacility
         ? ""
         : "This field is required.");
 
-    showHealthFacility &&
-      (temp.healthFacility = objValues.healthFacility
-        ? ""
-        : "This field is required.");
-    //
-    // objValues.entryPoint !== "" &&
-    //   objValues.entryPoint === "HTS_ENTRY_POINT_COMMUNITY" &&
-    //   (temp.communityEntryPoint = objValues.communityEntryPoint
-    //     ? ""
-    //     : "This field is required.");
+        showHealthFacility &&
+        (temp.healthFacility = objValues.healthFacility
+          ? ""
+          : "This field is required.");
+
 
     //Risk Assement section
     if (
@@ -611,6 +605,7 @@ const BasicInfo = (props) => {
     setRiskAssessment({ ...riskAssessment, [e.target.name]: e.target.value });
   };
 
+
   const handleInputChangeRiskAssessment2 = (e) => {
     setErrors({ ...temp, [e.target.name]: "" });
     setRiskAssessment({ ...riskAssessment, [e.target.name]: e.target.value });
@@ -621,12 +616,7 @@ const BasicInfo = (props) => {
     // get next form
     let newModality = isPMTCTModality ? "skip" : "fill";
 
-    let latestForm = getNextForm(
-      "Risk_Stratification",
-      objValues.age,
-      newModality,
-      "unknown"
-    );
+  let latestForm =  getNextForm("Risk_Stratification", objValues.age, newModality, "unknown")
 
     getMenuLogic(objValues);
     props.patientObj.riskStratificationResponseDto = objValues;
@@ -642,7 +632,6 @@ const BasicInfo = (props) => {
     //props.patientObj.riskAssessment =riskAssessment
     objValues.riskAssessment = riskAssessment;
 
-    console.log(props.completed);
     //Check if riskStratificationResponseDto is null or empty then call the update method
     if (
       props.patientObj.riskStratificationResponseDto &&
@@ -705,7 +694,6 @@ const BasicInfo = (props) => {
               props.patientObj.riskStratificationResponseDto = response.data;
               objValues.code = response.data.code;
               props.setExtra(objValues);
-              console.log("nextForm", nextForm);
 
               handleItemClick(latestForm[0], latestForm[1]);
 
@@ -864,41 +852,7 @@ const BasicInfo = (props) => {
                     )}
                   </FormGroup>
                 </div>
-                {/* {objValues.entryPoint === "HTS_ENTRY_POINT_COMMUNITY" && (
-                  <div className="form-group  col-md-6">
-                    <FormGroup>
-                      <Label>
-                        Community Entry Point{" "}
-                        <span style={{ color: "red" }}> *</span>
-                      </Label>
-                      <select
-                        className="form-control"
-                        name="communityEntryPoint"
-                        id="communityEntryPoint"
-                        value={objValues.communityEntryPoint}
-                        onChange={handleInputChange}
-                        style={{
-                          border: "1px solid #014D88",
-                          borderRadius: "0.2rem",
-                        }}
-                      >
-                        <option value={""}>Select</option>
-                        {entryPointCommunity.map((value) => (
-                          <option key={value.id} value={value.code}>
-                            {value.display}
-                          </option>
-                        ))}
-                      </select>
-                      {errors.communityEntryPoint !== "" ? (
-                        <span className={classes.error}>
-                          {errors.communityEntryPoint}
-                        </span>
-                      ) : (
-                        ""
-                      )}
-                    </FormGroup>
-                  </div>
-                )} */}
+
                 <div className="form-group mb-3 col-md-6">
                   <FormGroup>
                     <Label for="">
@@ -906,9 +860,9 @@ const BasicInfo = (props) => {
                     </Label>
                     <Input
                       type="date"
-                      onKeyPress={(e) => {
-                        e.preventDefault();
-                      }}
+
+                      onKeyPress={(e)=>{e.preventDefault()}}
+
                       name="visitDate"
                       id="visitDate"
                       value={objValues.visitDate}
@@ -947,12 +901,15 @@ const BasicInfo = (props) => {
                         {" "}
                         Select
                       </option>
-                      {entryPointSetting &&
-                        entryPointSetting.map((value) => (
-                          <option key={value.id} value={value.code}>
-                            {value.display}
-                          </option>
-                        ))}
+                      {entryPointSetting && entryPointSetting.map((value) =>
+
+                              <option key={value.id} value={value.code}>
+                                {value.display}
+                              </option>
+
+                          )
+                        }
+
                     </select>
                     {errors.testingSetting !== "" ? (
                       <span className={classes.error}>
@@ -964,110 +921,100 @@ const BasicInfo = (props) => {
                   </FormGroup>
                 </div>
                 {/*  */}
-                {objValues.testingSetting ===
-                  "FACILITY_HTS_TEST_SETTING_SPOKE_HEALTH_FACILITY" && (
-                  <div className="form-group  col-md-6">
-                    <FormGroup>
-                      <Label>
-                        Spoke Health Facility{" "}
-                        <span style={{ color: "red" }}> *</span>
-                      </Label>
-                      <select
-                        className="form-control"
-                        name="spokeFacility"
-                        id="spokeFacility"
-                        value={objValues.spokeFacility}
-                        onChange={handleInputChange}
-                        style={{
-                          border: "1px solid #014D88",
-                          borderRadius: "0.2rem",
-                          textTransform: "capitalize  !important",
-                        }}
-                      >
-                        <option value={""}>Select</option>
-                        {spokeFacList.map((value) => (
-                          <option key={value.id} value={value.spokeSite}>
-                            {value.spokeSite}
-                          </option>
-                        ))}
-                      </select>
-                      {errors.spokeFacility !== "" ? (
-                        <span className={classes.error}>
-                          {errors.spokeFacility}
-                        </span>
-                      ) : (
-                        ""
-                      )}
-                    </FormGroup>
-                  </div>
-                )}
 
-                {showHealthFacility && (
-                  <div className="form-group  col-md-6">
-                    <FormGroup>
-                      <Label>
-                        Health Facility <span style={{ color: "red" }}> *</span>
-                      </Label>
-                      <select
-                        className="form-control"
-                        name="healthFacility"
-                        id="healthFacility"
-                        value={objValues.healthFacility}
-                        onChange={handleInputChange}
-                        style={{
-                          border: "1px solid #014D88",
-                          borderRadius: "0.2rem",
-                          textTransform: "capitalize  !important",
-                        }}
-                      >
-                        <option value={""}>Select</option>
-                        {spokeFacList.map((value) => (
-                          <option key={value.id} value={value.spokeSite}>
-                            {value.spokeSite}
-                          </option>
-                        ))}
-                      </select>
-                      {errors.healthFacility !== "" ? (
-                        <span className={classes.error}>
-                          {errors.healthFacility}
-                        </span>
-                      ) : (
-                        ""
-                      )}
-                    </FormGroup>
-                  </div>
-                )}
-
-                {/* <div className="form-group  col-md-6">
+{ objValues.testingSetting ===  "FACILITY_HTS_TEST_SETTING_SPOKE_HEALTH_FACILITY" && <div className="form-group  col-md-6">
                   <FormGroup>
                     <Label>
-                      Modality <span style={{ color: "red" }}> *</span>
+                    Spoke Health Facility <span style={{ color: "red" }}> *</span>
                     </Label>
-                    <select
+
+
+                   { spokeFacList.length > 0 ?   <> <select
                       className="form-control"
-                      name="modality"
-                      id="modality"
-                      value={objValues.modality}
+                      name="spokeFacility"
+                      id="spokeFacility"
+                      value={objValues.spokeFacility}
                       onChange={handleInputChange}
                       style={{
                         border: "1px solid #014D88",
                         borderRadius: "0.2rem",
+                        textTransform:"capitalize  !important"
                       }}
                     >
                       <option value={""}>Select</option>
-                      {setting.map((value) => (
-                        <option key={value.code} value={value.code}>
-                          {value.display}
+                      {spokeFacList.map((value) => (
+                        <option key={value.id} value={value.spokeSite}
+                     >
+                          {value.spokeSite}
                         </option>
                       ))}
-                    </select>
-                    {errors.modality !== "" ? (
-                      <span className={classes.error}>{errors.modality}</span>
+                    </select></>: <Input
+                    type="text"
+                    name="spokeFacility"
+                    id="spokeFacility"
+                    value={objValues.spokeFacility}
+                    //value={Math.floor(Math.random() * 1093328)}
+                    // onBlur={checkClientCode}
+                    onChange={handleInputChange}
+                    style={{
+                      border: "1px solid #014D88",
+                      borderRadius: "0.25rem",
+                    }}
+                  /> }
+                    {errors.spokeFacility !== "" ? (
+                      <span className={classes.error}>{errors.spokeFacility}</span>
                     ) : (
                       ""
                     )}
                   </FormGroup>
-                </div> */}
+                </div>}
+
+
+
+                {showHealthFacility && <div className="form-group  col-md-6">
+                  <FormGroup>
+                    <Label>
+                     Health Facility <span style={{ color: "red" }}> *</span>
+                    </Label>
+                    { spokeFacList.length > 0 ?    <select
+                      className="form-control"
+                      name="healthFacility"
+                      id="healthFacility"
+                      value={objValues.healthFacility}
+                      onChange={handleInputChange}
+                      style={{
+                        border: "1px solid #014D88",
+                        borderRadius: "0.2rem",
+                        textTransform:"capitalize  !important"
+                      }}
+                    >
+                      <option value={""}>Select</option>
+                      {spokeFacList.map((value) => (
+                        <option key={value.id} value={value.spokeSite}
+                     >
+                          {value.spokeSite}
+                        </option>
+                      ))}
+                    </select>:  <Input
+                    type="text"
+                    name="healthFacility"
+                    id="healthFacility"
+                    value={objValues.healthFacility}
+
+                    onChange={handleInputChange}
+                    style={{
+                      border: "1px solid #014D88",
+                      borderRadius: "0.25rem",
+                    }}
+                  /> }
+                    {errors.healthFacility !== "" ? (
+                      <span className={classes.error}>{errors.healthFacility}</span>
+                    ) : (
+                      ""
+                    )}
+                  </FormGroup>
+                </div>}
+
               </div>
               <br />
 
@@ -1147,9 +1094,9 @@ const BasicInfo = (props) => {
                   <input
                     className="form-control"
                     type="date"
-                    onKeyPress={(e) => {
-                      e.preventDefault();
-                    }}
+
+                    onKeyPress={(e)=>{e.preventDefault()}}
+
                     name="dob"
                     id="dob"
                     min="1929-12-31"
@@ -1446,7 +1393,7 @@ const BasicInfo = (props) => {
                       <select
                         className="form-control"
                         name="lastHivTestInjectedDrugs"
-                        //id="sexUnderInfluence"
+
                         value={riskAssessment.lastHivTestInjectedDrugs}
                         onChange={handleInputChangeRiskAssessment2}
                         style={{

@@ -20,6 +20,8 @@ const divStyle = {
 const Home = (props) => {
   const [patientList, setPatientList] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [newHTSType, setNewHTSType] = useState("NEW HTS");
+  const [LMP, setLMP] = useState("");
 
   const patientId =
     props.patientObj && props.patientObj.personId
@@ -31,6 +33,8 @@ const Home = (props) => {
   const [key, setKey] = useState(
     props.activePage === "NEW HTS" ? "new" : "home"
   );
+
+  const [lastHts, setLastHTS] = useState({});
 
   const [patientInfo, setPatientInfo] = useState(null);
   const [permissions, setPermission] = useState(
@@ -49,7 +53,100 @@ const Home = (props) => {
     ).diff(new Date(visitDate), "months", true);
     return monthDifference;
   };
+
+
+
+
+const getRetestingStatus= (lastRecord)=>{
+  let hivResult = lastRecord?.hivTestResult? lastRecord?.hivTestResult: lastRecord?.hivTestResult2
+  let weekRange = 40 + 52;
+  console.log("hivResult", hivResult)
+  console.log(lastRecord);
+
+// does the patient has HTS record
+
+  if(lastRecord?.id){
+      //is the record negative
+    if(hivResult){
+     let hasHivNegative = hivResult.toLowerCase() === "negative"? true : false;
+
+        if(hasHivNegative){
+     //is the patient on ANC table  and get the lmp 
+     async  function getLmpFromANC(){
+      await  axios
+        .get(`${baseUrl}hts/get-anc-lmp?personUuid=${props.patientObj.personUuid}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((response) => {
+          if(response.data.result ){
+          let lmpDate = moment(response.data.result).format("YYYY-MM-DD")
+          console.log("lmpDate",lmpDate)  
+          // let EDD =moment(response.data.result).add(40, 'weeks').format("YYYY-MM-DD")
+
+          // get retesting range date 
+          let retestingRangeDate = moment(response.data.result).add(40 + 52, 'weeks').format("YYYY-MM-DD")
+           console.log("EDD",retestingRangeDate  )  
+          let today = moment()
+
+          let r =moment(retestingRangeDate)
+
+          console.log("r", r.format("YYYY-MM-DD") , today.format("YYYY-MM-DD"))  
+
+          console.log("EDD 2", r.diff(today, 'days')   )  
+
+              if( r.diff(today, 'days')> 0){
+
+                setNewHTSType("RETESTING");
+
+              }else{
+                setNewHTSType("NEW HTS");
+
+              }
+
+          }else{
+            setNewHTSType("NEW HTS");
+
+          }
+
+          //  return response.data
+    
+          setLMP(response.data)
+        })
+        .catch((error) => {
+          return "";
+        });
+    }
+      
+    
+    getLmpFromANC()
+ 
+
+
+        }else{
+          setNewHTSType("NEW HTS");
+
+        }
+
+    }else{
+       setNewHTSType("NEW HTS");
+    }
+  }else{
+    setNewHTSType("NEW HTS");
+  }
+
+
+
+
+ 
+
+
+
+
+}
+
+
   useEffect(() => {
+// 
     patients();
     patientsCurrentHts();
     if (props.activePage.activePage === "home") {
@@ -76,6 +173,7 @@ const Home = (props) => {
       });
   }
   async function patientsCurrentHts() {
+ 
     setLoading(true);
     axios
       .get(`${baseUrl}hts/persons/${patientId}/current-hts`, {
@@ -106,6 +204,12 @@ const Home = (props) => {
         setLastVisitModalityAndCheckedIn(
           condition || props.checkedInPatient ? true : false
         );
+
+        //get the last HTS 
+
+      getRetestingStatus(response.data);
+
+        setLastHTS(response.data)
       })
       .catch((error) => {
         //setLoading(false)
@@ -127,6 +231,7 @@ const Home = (props) => {
                   onSelect={(k) => setKey(k)}
                   className="mb-3"
                 >
+
                   <Tab eventKey="home" title="HTS HISTORY">
                     <History
                       patientObj={props.patientObj}
@@ -143,7 +248,7 @@ const Home = (props) => {
                   {/* lastVistAndModality */}
 
                   {lastVisitModalityAndCheckedIn && (
-                    <Tab eventKey="new" title="NEW HTS">
+                    <Tab eventKey="new" title={newHTSType}>
                       <ContineousRegistrationTesting
                         patientObj={patientInfo}
                         activePage={props.activePage}
@@ -155,6 +260,7 @@ const Home = (props) => {
                         patientList={patientList}
                         checkedInPatient={props.checkedInPatient}
                         personInfo={props.personInfo}
+                        newHTSType={newHTSType}
                       />
                     </Tab>
                   )}

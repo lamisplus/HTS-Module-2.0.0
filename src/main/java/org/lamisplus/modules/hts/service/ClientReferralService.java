@@ -27,6 +27,7 @@ public class ClientReferralService {
     private final CurrentUserOrganizationService currentUserOrganizationService;
     private final HtsClientReferralRepository htsClientReferralRepository;
     private final HtsClientRepository htsClientRepository;
+    private final  String clientID = "htsClientId"; 
 
     @Transactional
     public HtsClientReferralDTO registerClientReferralForm(HtsClientReferralRequestDTO requestDTO) {
@@ -36,7 +37,7 @@ public class ClientReferralService {
         Long facilityId = currentUserOrganizationService.getCurrentUserOrganization();
         HtsClient htsClient = htsClientRepository
                 .findByIdAndArchivedAndFacilityId(requestDTO.getHtsClientId(), UN_ARCHIVED, facilityId)
-                .orElseThrow(() -> new EntityNotFoundException(HtsClient.class, "htsClientId", "" + requestDTO.getHtsClientId()));
+                .orElseThrow(() -> new EntityNotFoundException(HtsClient.class, clientID, "" + requestDTO.getHtsClientId()));
         // create a new referral for the client
         HtsClientReferral htsClientReferral = convertToHtsClientReferral(requestDTO, htsClient);
         HtsClientReferral savedReferral = htsClientReferralRepository.save(htsClientReferral);
@@ -96,7 +97,7 @@ public class ClientReferralService {
     public HtsClientReferralDTO updateClientReferralWithServiceOrganizationProvider(Long referralId, ReceivingOrganizationDTO receivingOrganizationDTO) {
         // get htsClientReferral using id
         HtsClientReferral existingHtsClientReferral = htsClientReferralRepository.findById(referralId).orElseThrow(() ->
-                new EntityNotFoundException(HtsClientReferral.class, "htsClientId", "" + referralId));
+                new EntityNotFoundException(HtsClientReferral.class, clientID, "" + referralId));
         System.out.println("Existing htsClientReferral: " + existingHtsClientReferral);
         if (existingHtsClientReferral.getId().equals(receivingOrganizationDTO.getHtsClientReferralId())) {
             existingHtsClientReferral.setReceivingOrganization(receivingOrganizationDTO.getReceivingOrganizationDTO());
@@ -109,11 +110,11 @@ public class ClientReferralService {
 
     public HtsClientReferral findHtsClientReferralById(Long referralId) {
         return htsClientReferralRepository.findById(referralId).orElseThrow(() ->
-                new EntityNotFoundException(HtsClientReferral.class, "htsClientId", "" + referralId));
+                new EntityNotFoundException(HtsClientReferral.class, clientID, "" + referralId));
     }
     public HtsClientReferralDTO getHtsClientReferralById(Long referralId) {
         HtsClientReferral existingHtsClientReferral = htsClientReferralRepository.findById(referralId).orElseThrow(() ->
-                new EntityNotFoundException(HtsClientReferral.class, "htsClientId", "" + referralId));
+                new EntityNotFoundException(HtsClientReferral.class, clientID, "" + referralId));
         return convertToHtsClientReferralToDTO(existingHtsClientReferral);
     }
 
@@ -127,7 +128,7 @@ public class ClientReferralService {
     public HtsClientReferralDTO updateHtsClientReferral(Long referralId, HtsClientReferralRequestDTO requestDTO) {
         HtsClientReferral existingHtsClientReferral = findHtsClientReferralById(referralId);
         HtsClient htsClient = htsClientRepository.findById(requestDTO.getHtsClientId()).orElseThrow(() ->
-                new EntityNotFoundException(HtsClient.class, "htsClientId", "" + requestDTO.getHtsClientId()));
+                new EntityNotFoundException(HtsClient.class, clientID, "" + requestDTO.getHtsClientId()));
          // check if existing htsClientReferral htsClientId matches the requestDTO htsClientId
         if (!existingHtsClientReferral.getHtsClientId().equals(requestDTO.getHtsClientId())) {
              throw new IllegalArgumentException("Existing htsClientReferral htsClientId: " +
@@ -157,14 +158,14 @@ public class ClientReferralService {
 
 //    public HtsClientReferralDTO getHtsClientReferralByHtsClientId(Long htsClientId) {
 //        HtsClientReferral existingHtsClientReferral = htsClientReferralRepository.findByHtsClientId(htsClientId).orElseThrow(() ->
-//                new EntityNotFoundException(HtsClientReferral.class, "htsClientId", "" + htsClientId));
+//                new EntityNotFoundException(HtsClientReferral.class, clientID, "" + htsClientId));
 //        return convertToHtsClientReferralToDTO(existingHtsClientReferral);
 //    }
 
 
     public List<HtsClientReferralDTO> getAllHtsClientReferral(Long htsClientId) {
         HtsClient htsClient = htsClientRepository.findById(htsClientId).orElseThrow(() ->
-                new EntityNotFoundException(HtsClient.class, "htsClientId", "" + htsClientId));
+                new EntityNotFoundException(HtsClient.class, clientID, "" + htsClientId));
         List<HtsClientReferral> htsClientReferrals = htsClientReferralRepository.findHtsClientReferralByHtsClientId(htsClientId, UN_ARCHIVED);
         if(htsClientReferrals == null || htsClientReferrals.isEmpty()){
             return Collections.emptyList();

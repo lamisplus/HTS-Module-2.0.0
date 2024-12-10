@@ -542,7 +542,11 @@ const UserRegistration = (props) => {
       );
 
       let hivStatus = patientObj2?.hivTestResult;
-    let answer =  getPreviousForm(currentForm, age, "", hivStatus); 
+
+      let checkModality = patientObj2?.riskStratificationResponseDto?.testingSetting? patientObj2.riskStratificationResponseDto.testingSetting: "";
+      let isPMTCTModality =getCheckModality(checkModality)
+
+    let answer =  getPreviousForm(currentForm, age, isPMTCTModality, hivStatus); 
     if (answer[0]  && answer[1]) {
       if(answer[0] === "fit"){
         handleItemClick("fit-history");
@@ -825,8 +829,10 @@ const UserRegistration = (props) => {
                     setActivePage={props.setActivePage}
                     setOrganizationInfo={setOrganizationInfo}
                     personInfo={props.personInfo}
+                    newHTSType={props.newHTSType}
                   />
                 )}
+
                 {activeItem === "basic" && (
                   <BasicInfo
                     handleItemClick={handleItemClick}
@@ -1041,6 +1047,8 @@ const UserRegistration = (props) => {
                     activePage={props.activePage}
                     setActivePage={props.setActivePage}
                     setRow={setRow}
+                    status={"existing"}
+
                   />
                 )}
                 {activeItem === "view-referral" && (

@@ -92,7 +92,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 // THIS IS THE VIEW AND UPDATE PAGE
 const BasicInfo = (props) => {
-  console.log("#############", props.patientObj);
   const classes = useStyles();
   const history = useHistory();
   //console.log("enr", props.activePage.activeObject);
@@ -163,14 +162,16 @@ const BasicInfo = (props) => {
     CounselingType();
     PregnancyStatus();
     IndexTesting();
-    setObjValues(props.activePage.activeObject);
+    setObjValues({...props.activePage.activeObject, testingSetting: props.activePage.activeObject.riskStratificationResponseDto.testingSetting });
+
+
     // if(props.patientObj){
     //     objValues.referredFrom=props.patientObj.referredFrom
     // }
     //setObjValues({...objectValues, genderId: props.patientObj.personResponseDto.gender.id})
     //objValues.genderId = props.patientObj && props.patientObj.personResponseDto ? props.patientObj.personResponseDto.gender.id : ""
     setModalityCheck(
-      getCheckModality(
+      getCheckModality( 
         props?.patientObj?.riskStratificationResponseDto?.testingSetting
       )
     );
@@ -214,6 +215,46 @@ const BasicInfo = (props) => {
         //console.log(error);
       });
   };
+
+
+  
+  const HTS_ENTRY_POINT_COMMUNITY = () => {
+    axios
+      .get(`${baseUrl}application-codesets/v2/COMMUNITY_HTS_TEST_SETTING
+ `, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        //console.log(response.data);
+        setEnrollSetting(response.data);
+      })
+      .catch((error) => {
+        //console.log(error);
+      });
+  };
+
+  const HTS_ENTRY_POINT_FACILITY = () => {
+    axios
+      .get(`${baseUrl}application-codesets/v2/FACILITY_HTS_TEST_SETTING`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        //Remove retesting from the codeset
+        //   let facilityList = []
+        // response.data.map((each, index)=>{
+        //       if(each.code !=="FACILITY_HTS_TEST_SETTING_RETESTING"){
+        //         facilityList.push(each);
+        //       }
+
+        // })
+
+        setEnrollSetting(response.data);
+      })
+      .catch((error) => {
+        //console.log(error);
+      });
+  };
+
   //Get list of KP
   const CounselingType = () => {
     axios
@@ -229,18 +270,19 @@ const BasicInfo = (props) => {
   };
   //Get list of HIV STATUS ENROLLMENT
   const EnrollmentSetting = () => {
-    axios
-      .get(`${baseUrl}application-codesets/v2/TEST_SETTING`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((response) => {
-        //console.log(response.data);
-        setEnrollSetting(response.data);
-      })
-      .catch((error) => {
-        //console.log(error);
-      });
+
+    if(props.patientObj.riskStratificationResponseDto.entryPoint.includes("HTS_ENTRY_POINT_COMMUNITY")){
+      HTS_ENTRY_POINT_COMMUNITY()
+    }else if(props.patientObj.riskStratificationResponseDto.entryPoint.includes("HTS_ENTRY_POINT_FACILITY")){
+
+      HTS_ENTRY_POINT_FACILITY()
+    }else{
+      setEnrollSetting([]);
+
+    }
   };
+
+
   //Get list of Source of Referral
   const SourceReferral = () => {
     axios
@@ -550,6 +592,8 @@ const BasicInfo = (props) => {
                     }}
                     disabled={props.activePage.actionType === "view"}
                   >
+                     
+
                     <option value={""}></option>
                     {enrollSetting.map((value) => (
                       <option key={value.id} value={value.code}>

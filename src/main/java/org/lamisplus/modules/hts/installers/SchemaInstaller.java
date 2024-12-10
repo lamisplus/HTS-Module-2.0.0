@@ -4,7 +4,7 @@ import com.foreach.across.core.annotations.Installer;
 import com.foreach.across.core.installers.AcrossLiquibaseInstaller;
 import org.springframework.core.annotation.Order;
 
-@Order(1)
+@Order(2)
 @Installer(name = "schema-installer",
         description = "Installs the required database for hts tables",
         version = 15)

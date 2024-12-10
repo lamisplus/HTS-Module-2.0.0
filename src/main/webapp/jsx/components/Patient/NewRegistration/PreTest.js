@@ -181,6 +181,8 @@ const BasicInfo = (props) => {
     consistentWeightFeverNightCough: "",
     soldPaidVaginalSex: "",
     haveCondomBurst: "",
+    mlStatus: "",
+    mlScore: "",
   });
 
   const [riskAssessmentPartner, setRiskAssessmentPartner] = useState({
@@ -614,7 +616,7 @@ const BasicInfo = (props) => {
           setMlResultObj({
             htsClientId: clientId,
             status: statusVal,
-            score: predictionValue[1],
+            score: predictions[1],
           });
 
           setSavingPrediction(true);
@@ -639,16 +641,6 @@ const BasicInfo = (props) => {
       ...riskAssessmentPartner,
       [e.target.name]: e.target.value,
     });
-    // if(riskAssessmentPartner.sexPartnerHivPositive==='false' || (e.target.name==='sexPartnerHivPositive' &&  e.target.value==='false')){
-    //     setRiskAssessmentPartner ({
-    //         sexPartnerHivPositive:'false',
-    //         newDiagnosedHivlastThreeMonths:"",
-    //         currentlyArvForPmtct :"",
-    //         knowHivPositiveOnArv :"",
-    //         knowHivPositiveAfterLostToFollowUp:"",
-    //         uprotectedAnalSex  :"",
-    //     })
-    // }
   };
   // Getting the number count of sexPartRiskCount True
   const actualSexPartRiskCountTrue = Object.values(riskAssessmentPartner);
@@ -723,6 +715,10 @@ const BasicInfo = (props) => {
     );
     if (validate()) {
       setSaving(true);
+      console.log(mlResultObj);
+      riskAssessment.mlStatus = mlResultObj.status;
+      riskAssessment.mlScore = mlResultObj.score;
+
       objValues.htsClientId = clientId;
       objValues.knowledgeAssessment = knowledgeAssessment;
       objValues.personId = patientID;

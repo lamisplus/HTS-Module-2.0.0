@@ -7,7 +7,7 @@ import org.springframework.core.annotation.Order;
 @Order(1)
 @Installer(name = "schema-installer-feedback",
         description = "Installs the required database for hts feedback table",
-        version = 1)
+        version = 2)
 public class SchemaInstallerFeedback extends AcrossLiquibaseInstaller {
     public SchemaInstallerFeedback() {
         super("classpath:installers/hts/schema_feedback.xml");

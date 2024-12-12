@@ -8,7 +8,7 @@ menus:
     state: hts
     url: /across/resources/static/hts/index.html
 umdLocation: /across/resources/static/hts/index.html
-gitHubLink: https://api.github.com/repos/lamisplus/HTS-Module/releases/latest
+#gitHubLink: https://api.github.com/repos/lamisplus/HTS-Module/releases/latest
 webModules:
   - breadcrumb: HTS
     name: HtsModule

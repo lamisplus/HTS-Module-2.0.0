@@ -245,8 +245,8 @@
 //             columns={columns}
 //             data={getData}
 //             icons={tableIcons}
-            // showPPI={showPPI}
-            // onPPIChange={handleCheckBox}
+// showPPI={showPPI}
+// onPPIChange={handleCheckBox}
 //           />
 //         </CardBody>
 //       </Card>
@@ -316,52 +316,12 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
 };
 
-const useStyles = makeStyles((theme) => ({
-  card: {
-    margin: theme.spacing(20),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  form: {
-    width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(3),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-  cardBottom: {
-    marginBottom: 20,
-  },
-  Select: {
-    height: 45,
-    width: 350,
-  },
-  button: {
-    margin: theme.spacing(1),
-  },
 
-  root: {
-    "& > *": {
-      margin: theme.spacing(1),
-    },
-  },
-  input: {
-    display: "none",
-  },
-  error: {
-    color: "#f85032",
-    fontSize: "11px",
-  },
-  success: {
-    color: "#4BB543 ",
-    fontSize: "11px",
-  },
-}));
 
 const CheckedInPatients = (props) => {
   const permissions = localStorage.getItem("permissions")?.split(",");
   const [patientList, setPatientList] = useState([]);
+  
 
   const getServiceCode = () => {
     axios
@@ -377,13 +337,13 @@ const CheckedInPatients = (props) => {
           patients(htsCode);
         }
       })
-      .catch((error) => {});
+      .catch((error) => { });
   };
 
   useEffect(() => {
     getServiceCode();
   }, []);
-  ///GET LIST OF Patients
+
   async function patients(htsCode) {
     axios
       .get(`${baseUrl}patient/checked-in-by-service/${htsCode}`, {
@@ -393,7 +353,7 @@ const CheckedInPatients = (props) => {
 
         setPatientList(response.data.reverse());
       })
-      .catch((error) => {});
+      .catch((error) => { });
   }
 
   const getHospitalNumber = (identifier) => {
@@ -426,16 +386,16 @@ const CheckedInPatients = (props) => {
           { title: "Actions", field: "actions", filtering: false },
         ]}
         data={patientList.map((row) => ({
-          name: row.fullname,
-          hospital_number: row.hospitalNumber,
-          gender: row.sex,
+          name: (row?.firstName + " " + row?.surname) || row?.fullname,
+          hospital_number: getHospitalNumber(row?.identifier) || row?.hospitalNumber,
+          gender: row?.sex || row?.gender?.display || "",
           age:
-            row.dateOfBirth === 0 ||
-            row.dateOfBirth === undefined ||
-            row.dateOfBirth === null ||
-            row.dateOfBirth === ""
+            row?.dateOfBirth === 0 ||
+              row?.dateOfBirth === undefined ||
+              row?.dateOfBirth === null ||
+              row?.dateOfBirth === ""
               ? 0
-              : calculate_age(row.dateOfBirth),
+              : calculate_age(row?.dateOfBirth || row?.dob),
 
           actions: (
             <div>

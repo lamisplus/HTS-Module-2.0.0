@@ -30,6 +30,7 @@ import { Label } from "semantic-ui-react";
 import { usePermissions } from "../../../hooks/usePermissions";
 import { useCheckedInPatientData } from "../../../hooks/useCheckedInPatientData";
 import CustomTable from "../../../reuseables/CustomTable";
+import { calculate_age } from "../../components/utils";
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -69,22 +70,13 @@ const CheckedInPatients = (props) => {
     [hasPermission]
   );
 
-
-
- // comment: link to the new hts page with the props format 
-//   <Link
-//   to={{
-//     pathname: "/patient-history",
-//     state: {
-//       patientObject: row,
-//       patientObj: row,
-//       clientCode: row?.clientCode,
-//       activepage: "NEW HTS",
-//       checkedInPatient: true
-//     },
-//   }}
-// >
-
+  const getHospitalNumber = (identifier) => {
+    const identifiers = identifier;
+    const hospitalNumber = identifiers.identifier.find(
+      (obj) => obj.type == "HospitalNumber"
+    );
+    return hospitalNumber ? hospitalNumber.value : "";
+  };
 
 
   const handleCheckBox = (e) => {
@@ -97,13 +89,38 @@ const CheckedInPatients = (props) => {
         title: "Patient Name",
         field: "fullname",
         hidden: showPPI,
+        render: (rowData) => (
+          <p>
+            {`${rowData?.firstName} ${rowData?.surname || rowData?.lastName}`}
+          </p>
+        ),
       },
       {
         title: "Hospital Number",
         field: "hospitalNumber",
+        render: (rowData) => (
+          <p>
+            {getHospitalNumber(rowData?.identifier) || rowData?.hospitalNumber || ""}
+          </p>
+        ),
       },
       { title: "Sex", field: "sex" },
-      { title: "Age", field: "age" },
+      {
+        title: "Age", field: "age",
+        render: (rowData) => (
+          <p>
+            {
+              rowData?.dateOfBirth === 0 ||
+                rowData?.dateOfBirth === undefined ||
+                rowData?.dateOfBirth === null ||
+                rowData?.dateOfBirth === ""
+                ? 0
+                : calculate_age(rowData?.dateOfBirth)
+            }
+          </p>
+        )
+      },
+
       {
         title: "Biometrics",
         field: "biometricStatus",
@@ -123,7 +140,7 @@ const CheckedInPatients = (props) => {
         field: "currentStatus",
         render: (rowData) => (
           <Label color="blue" size="mini">
-            {rowData.currentStatus || "Not Enrolled"}
+            {rowData?.currentStatus || "Not Enrolled"}
           </Label>
         ),
       },

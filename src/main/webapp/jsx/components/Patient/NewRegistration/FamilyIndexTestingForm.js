@@ -5,7 +5,6 @@ import { FormGroup, Label, CardBody, Spinner, Input, Form } from "reactstrap";
 import * as moment from "moment";
 import { makeStyles } from "@material-ui/core/styles";
 import { Card } from "@material-ui/core";
-import SaveIcon from "@material-ui/icons/Save";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
@@ -17,16 +16,9 @@ import "react-widgets/dist/css/react-widgets.css";
 import "react-phone-input-2/lib/style.css";
 import { Button } from "semantic-ui-react";
 import { Modal } from "react-bootstrap";
-import { Label as LabelRibbon, Message } from "semantic-ui-react";
-import PhoneInput from "react-phone-input-2";
-import { Table } from "react-bootstrap";
-import { Icon, List, Label as LabelSui } from "semantic-ui-react";
-import IconButton from "@mui/material/IconButton";
-import DeleteIcon from "@material-ui/icons/Delete";
-
-import Select from "react-select";
-// import { getAcount } from "../../../../utility";
 import Cookies from "js-cookie";
+
+
 import {
   getAllStateByCountryId,
   getAllCountry,
@@ -34,9 +26,7 @@ import {
   getAllGenders,
   alphabetOnly,
 } from "../../../../utility";
-
 import { calculate_age } from "../../utils/index.js";
-import { LiveHelp } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -121,34 +111,32 @@ const FamilyIndexTestingForm = (props) => {
   const toggle = () => setOpen(!open);
   const [setting, setSetting] = useState([]);
   const [maritalStatus, setMaritalStatus] = useState([]);
-  const [hospitalNumStatus, setHospitalNumStatus] = useState(false);
-  const [countries, setCountries] = useState([]);
-  const [provinces, setProvinces] = useState([]);
-  const [isClientCurrentlyOnHiv, setClientCurrentlyOnHiv] = useState(true);
+  const [, setHospitalNumStatus] = useState(false);
+  const [, setCountries] = useState([]);
+  const [, setProvinces] = useState([]);
+  const [, setClientCurrentlyOnHiv] = useState(true);
   const [states, setStates] = useState([]);
   const [genders, setGenders] = useState([]);
-  const [hivStatus, setHivStatus] = useState([]);
+  const [, setHivStatus] = useState([]);
   const [indexClientConfirmedHivPositive, setIndexClientConfirmedHivPositive] =
     useState(false);
   const [familyRelationship, setFamilyRelationship] = useState([]);
-  const [selectedFamilyIndex, setSelectedFamilyIndex] = useState({});
+  const [, setSelectedFamilyIndex] = useState({});
   const [statusOfContact, setFamilyIndexHivStatus] = useState([]);
   const [familyIndex, setFamilyIndex] = useState([]);
   const [followUpAppointmentLocation, setFollowUpAppointmentLocation] =
     useState([]);
   const [childNumber, setChildNumber] = useState([]);
   const [indexVisitAttempt, setIndexVisitAttempt] = useState([]);
-  const [isWillingToHaveChildrenTested, setIsWillingToHaveChildrenTested] =
-    useState(false);
   const [ageDisabled, setAgeDisabled] = useState(true);
-  const [retrieveFromIdToCode, setRetrieveFromIdToCode] = useState(true);
+  const [, setRetrieveFromIdToCode] = useState(true);
 
   const [stateInfo, setStateInfo] = useState(
     props?.basicInfo?.personResponseDto?.address?.address[0]?.stateId
       ? props?.basicInfo?.personResponseDto?.address?.address[0]?.stateId
       : props?.patientObj?.personResponseDto?.address?.address[0]?.stateId
   );
-  const [permissions, setPermission] = useState(
+  const [permissions] = useState(
     localStorage.getItem("permissions")?.split(",")
   );
 
@@ -157,7 +145,7 @@ const FamilyIndexTestingForm = (props) => {
       ? props?.basicInfo?.personResponseDto?.address?.address[0].district
       : props?.patientObj?.personResponseDto?.address?.address[0].district
   );
-  const [facilityName, setFacilityName] = useState(Cookies.get("facilityName"));
+  const [, setFacilityName] = useState(Cookies.get("facilityName"));
   const [facilityInfo, setFacilityInfo] = useState(props?.organizationInfo);
 
   const [familyIndexRequestDto, setFamilyIndexRequestDto] = useState({
@@ -190,8 +178,8 @@ const FamilyIndexTestingForm = (props) => {
   const [errorFamilyIndexDTO, setErrorFamilyIndexDTO] = useState({});
   const [errorFamilyIndexTracker, setErrorFamilyIndexDTOTracker] = useState({});
 
-  const [addIndexTracker, setaAddIndexTracker] = useState(false);
-  const [addIndexTracker2, setaAddIndexTracker2] = useState(false);
+  const [, setaAddIndexTracker] = useState(false);
+  const [, setaAddIndexTracker2] = useState(false);
   const [disableCurrenTreatment, setDisableCurrenTreatment] = useState(false);
   const [disableVL, setDisableVL] = useState(false);
 
@@ -291,14 +279,11 @@ const FamilyIndexTestingForm = (props) => {
 
   });
 
-
-
-
   const [lgas, setLGAs] = useState([]);
   const [facilities, setFacilities1] = useState([]);
-  const [selectedState, setSelectedState] = useState({});
-  const [selectedFacility, setSelectedFacility] = useState({});
-  const [selectedLga, setSelectedLga] = useState({});
+  const [, setSelectedState] = useState({});
+  const [, setSelectedFacility] = useState({});
+  const [, setSelectedLga] = useState({});
   const [showHTSDate, setShowHTSDate] = useState(false);
   const [showOther, setShowOther] = useState(false);
 
@@ -318,8 +303,6 @@ const FamilyIndexTestingForm = (props) => {
   };
 
   const loadOtherForm = (row) => {
-    // setSaving(true);
-    //props.setActiveContent({...props.activeContent, route:'mental-health-view', id:row.id})
     toggle();
   };
   const loadLGA = (id) => {
@@ -332,8 +315,6 @@ const FamilyIndexTestingForm = (props) => {
       .then((response) => {
         if (response.data) {
           setLGAs(response.data);
-          // const selectedLga = response.data.find(lga => lga.id === id);
-          // setPayload(prevPayload => ({ ...prevPayload, lgaTransferTo: selectedLga ? selectedLga.name : "" }));
         }
       })
       .catch((e) => {
@@ -359,13 +340,10 @@ const FamilyIndexTestingForm = (props) => {
       if (age_now <= 0 && m < 0 && today.getDate() < birthDate.getDate()) {
         age_now--;
       }
-      // if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-      //   age_now--;
-      // }
+      
       familyIndexRequestDto.age = age_now;
       familyTestingTrackerRequestDTO.trackerAge = age_now;
 
-      //setBasicInfo({...basicInfo, age: age_now});
     } else {
       setFamilyIndexRequestDto({ ...familyIndexRequestDto, age: "" });
     }
@@ -399,13 +377,12 @@ const FamilyIndexTestingForm = (props) => {
   const getIntPosition = (ex) => {
     let code =[]
 
- let main =  childNumber.map((each,index )=>{
+let main =  childNumber.map((each,index )=>{
 if(each.code !==  "CHILD_NUMBER_OTHERS"){
   code.push({ id: each.id,
     value : index+ 1,})
 }
-
-    })
+})
 
   if(ex){
       let ans =  code.filter((each)=>{
@@ -427,7 +404,6 @@ if(each.code !==  "CHILD_NUMBER_OTHERS"){
         setFacilityInfo(response.data);
       })
       .catch((error) => {
-        //console.log(error);
       });
   };
   const loadFamilyIndexSetting = () => {
@@ -528,10 +504,6 @@ if(each.code !==  "CHILD_NUMBER_OTHERS"){
       .catch((error) => {});
   };
 
-  // generate index client Id using the HTS client code/family index client unique ART number
-  const generateIndexClientId = () => {
-    const indexClientId = Math.floor(1000 + Math.random() * 9000);
-  };
 
   const loadGenders = useCallback(async () => {
     getAllGenders()
@@ -540,9 +512,6 @@ if(each.code !==  "CHILD_NUMBER_OTHERS"){
       })
       .catch(() => {});
   }, []);
-
-
-  
 
   const HTS_ENTRY_POINT_FACILITY = () => {
     axios
@@ -559,10 +528,6 @@ if(each.code !==  "CHILD_NUMBER_OTHERS"){
       });
   };
 
-
-
-  
-
   const HTS_ENTRY_POINT_COMMUNITY = () => {
     axios
       .get(`${baseUrl}application-codesets/v2/COMMUNITY_HTS_TEST_SETTING
@@ -577,8 +542,7 @@ if(each.code !==  "CHILD_NUMBER_OTHERS"){
         //console.log(error);
       });
   };
-const getSettings=()=>{
-   console.log("HTS_ENTRY_POINT_COMMUNITY",props.patientObj.testingSetting);
+ const getSettings=()=>{
 
   if(  props.patientObj.testingSetting.includes("FACILITY")){
     HTS_ENTRY_POINT_FACILITY()

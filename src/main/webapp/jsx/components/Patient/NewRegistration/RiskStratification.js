@@ -124,7 +124,7 @@ const BasicInfo = (props) => {
   const [showHealthFacility, setShowHealthFacility] = useState(false);
 
   const [nextForm, setNextForm] = useState([]);
-  const [targetGroupValue, setTargetGroupValue] = useState(null);
+  const [, setTargetGroupValue] = useState(null);
   const [objValues, setObjValues] = useState({
     age: "",
     dob: "",

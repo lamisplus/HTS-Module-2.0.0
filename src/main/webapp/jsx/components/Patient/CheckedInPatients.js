@@ -245,8 +245,8 @@
 //             columns={columns}
 //             data={getData}
 //             icons={tableIcons}
-//             showPPI={showPPI}
-//             onPPIChange={handleCheckBox}
+            // showPPI={showPPI}
+            // onPPIChange={handleCheckBox}
 //           />
 //         </CardBody>
 //       </Card>

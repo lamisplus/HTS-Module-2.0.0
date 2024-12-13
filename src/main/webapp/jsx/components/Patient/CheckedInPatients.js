@@ -30,6 +30,7 @@ import { Label } from "semantic-ui-react";
 import { usePermissions } from "../../../hooks/usePermissions";
 import { useCheckedInPatientData } from "../../../hooks/useCheckedInPatientData";
 import CustomTable from "../../../reuseables/CustomTable";
+import { calculate_age } from "../../components/utils";
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -55,48 +56,7 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
 };
 
-const useStyles = makeStyles((theme) => ({
-  card: {
-    margin: theme.spacing(20),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  form: {
-    width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(3),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-  cardBottom: {
-    marginBottom: 20,
-  },
-  Select: {
-    height: 45,
-    width: 350,
-  },
-  button: {
-    margin: theme.spacing(1),
-  },
 
-  root: {
-    "& > *": {
-      margin: theme.spacing(1),
-    },
-  },
-  input: {
-    display: "none",
-  },
-  error: {
-    color: "#f85032",
-    fontSize: "11px",
-  },
-  success: {
-    color: "#4BB543 ",
-    fontSize: "11px",
-  },
-}));
 
 const CheckedInPatients = (props) => {
   const { hasPermission } = usePermissions();
@@ -110,22 +70,13 @@ const CheckedInPatients = (props) => {
     [hasPermission]
   );
 
-
-
- // comment: link to the new hts page with the props format 
-//   <Link
-//   to={{
-//     pathname: "/patient-history",
-//     state: {
-//       patientObject: row,
-//       patientObj: row,
-//       clientCode: row?.clientCode,
-//       activepage: "NEW HTS",
-//       checkedInPatient: true
-//     },
-//   }}
-// >
-
+  const getHospitalNumber = (identifier) => {
+    const identifiers = identifier;
+    const hospitalNumber = identifiers.identifier.find(
+      (obj) => obj.type == "HospitalNumber"
+    );
+    return hospitalNumber ? hospitalNumber.value : "";
+  };
 
 
   const handleCheckBox = (e) => {
@@ -138,13 +89,38 @@ const CheckedInPatients = (props) => {
         title: "Patient Name",
         field: "fullname",
         hidden: showPPI,
+        render: (rowData) => (
+          <p>
+            {`${rowData?.firstName} ${rowData?.surname || rowData?.lastName}`}
+          </p>
+        ),
       },
       {
         title: "Hospital Number",
         field: "hospitalNumber",
+        render: (rowData) => (
+          <p>
+            {getHospitalNumber(rowData?.identifier) || rowData?.hospitalNumber || ""}
+          </p>
+        ),
       },
       { title: "Sex", field: "sex" },
-      { title: "Age", field: "age" },
+      {
+        title: "Age", field: "age",
+        render: (rowData) => (
+          <p>
+            {
+              rowData?.dateOfBirth === 0 ||
+                rowData?.dateOfBirth === undefined ||
+                rowData?.dateOfBirth === null ||
+                rowData?.dateOfBirth === ""
+                ? 0
+                : calculate_age(rowData?.dateOfBirth)
+            }
+          </p>
+        )
+      },
+
       {
         title: "Biometrics",
         field: "biometricStatus",
@@ -164,7 +140,7 @@ const CheckedInPatients = (props) => {
         field: "currentStatus",
         render: (rowData) => (
           <Label color="blue" size="mini">
-            {rowData.currentStatus || "Not Enrolled"}
+            {rowData?.currentStatus || "Not Enrolled"}
           </Label>
         ),
       },

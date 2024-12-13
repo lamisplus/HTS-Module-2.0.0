@@ -21,9 +21,9 @@ export default function App() {
         <Route path="/patient-history">
           <PatientDetail />
         </Route>
-        <Route path="/register-patient">
+        {/* <Route path="/register-patient">
           <RegisterPatient />
-        </Route>
+        </Route> */}
         <Route path="/register-hivst-patient">
           <HIVSTPatient />
         </Route>

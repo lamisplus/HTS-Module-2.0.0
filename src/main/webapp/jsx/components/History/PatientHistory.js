@@ -1,4 +1,4 @@
-import React, { useState, Fragment, useEffect } from "react";
+import React, { useState, Suspense, Fragment, useEffect, useMemo } from "react";
 import axios from "axios";
 import { url as baseUrl } from "./../../../api";
 import { token as token } from "./../../../api";
@@ -11,6 +11,9 @@ import * as moment from "moment";
 import ExistenceClientHIVSTRegistration from "../Patient/HIVST/ExistenceClientHIVSTRegistration";
 import HIVSTPatientHistory from "../Patient/HIVST/HIVSTPatientHistory";
 import { getCheckModalityForHTS } from "../../../utility";
+import { usePermissions } from "../../../hooks/usePermissions";
+import PatientVisits from "../Patient/PatientVisits";
+import LoadingSpinner from "../../../reuseables/Loading";
 
 const divStyle = {
   borderRadius: "2px",
@@ -22,13 +25,14 @@ const Home = (props) => {
   const [loading, setLoading] = useState(true);
   const [newHTSType, setNewHTSType] = useState("NEW HTS");
   const [LMP, setLMP] = useState("");
+  const { hasPermission, hasAnyPermission, } = usePermissions();
 
   const patientId =
     props.patientObj && props.patientObj.personId
       ? props.patientObj.personId
       : props.patientObj.id
-      ? props.patientObj.id
-      : "";
+        ? props.patientObj.id
+        : "";
 
   const [key, setKey] = useState(
     props.activePage === "NEW HTS" ? "new" : "home"
@@ -37,9 +41,9 @@ const Home = (props) => {
   const [lastHts, setLastHTS] = useState({});
 
   const [patientInfo, setPatientInfo] = useState(null);
-  const [permissions, setPermission] = useState(
-    JSON.parse(localStorage.getItem("stringifiedPermmision"))
-  );
+  // const [permissions, setPermission] = useState(
+  //   JSON.parse(localStorage.getItem("stringifiedPermmision"))
+  // );
   const [lastVisitCount, setLastVisitCount] = useState(null);
   const [checkModality, setCheckModality] = useState("");
   const [lastVistAndModality, setLastVistAndModality] = useState("");
@@ -57,96 +61,87 @@ const Home = (props) => {
 
 
 
-const getRetestingStatus= (lastRecord)=>{
-  let hivResult = lastRecord?.hivTestResult? lastRecord?.hivTestResult: lastRecord?.hivTestResult2
-  let weekRange = 40 + 52;
-  console.log("hivResult", hivResult)
-  console.log(lastRecord);
+  const getRetestingStatus = (lastRecord) => {
+    let hivResult = lastRecord?.hivTestResult ? lastRecord?.hivTestResult : lastRecord?.hivTestResult2
+    let weekRange = 40 + 52;
+    console.log("hivResult", hivResult)
+    console.log(lastRecord);
 
-// does the patient has HTS record
+    // does the patient has HTS record
 
-  if(lastRecord?.id){
+    if (lastRecord?.id) {
       //is the record negative
-    if(hivResult){
-     let hasHivNegative = hivResult.toLowerCase() === "negative"? true : false;
+      if (hivResult) {
+        let hasHivNegative = hivResult.toLowerCase() === "negative" ? true : false;
 
-        if(hasHivNegative){
-     //is the patient on ANC table  and get the lmp 
-     async  function getLmpFromANC(){
-      await  axios
-        .get(`${baseUrl}hts/get-anc-lmp?personUuid=${props.patientObj.personUuid}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((response) => {
-          if(response.data.result ){
-          let lmpDate = moment(response.data.result).format("YYYY-MM-DD")
-          console.log("lmpDate",lmpDate)  
-          // let EDD =moment(response.data.result).add(40, 'weeks').format("YYYY-MM-DD")
+        if (hasHivNegative) {
+          //is the patient on ANC table  and get the lmp 
+          async function getLmpFromANC() {
+            await axios
+              .get(`${baseUrl}hts/get-anc-lmp?personUuid=${props.patientObj.personUuid}`, {
+                headers: { Authorization: `Bearer ${token}` },
+              })
+              .then((response) => {
+                if (response.data.result) {
+                  let lmpDate = moment(response.data.result).format("YYYY-MM-DD")
+                  console.log("lmpDate", lmpDate)
+                  // let EDD =moment(response.data.result).add(40, 'weeks').format("YYYY-MM-DD")
 
-          // get retesting range date 
-          let retestingRangeDate = moment(response.data.result).add(40 + 52, 'weeks').format("YYYY-MM-DD")
-           console.log("EDD",retestingRangeDate  )  
-          let today = moment()
+                  // get retesting range date 
+                  let retestingRangeDate = moment(response.data.result).add(40 + 52, 'weeks').format("YYYY-MM-DD")
+                  console.log("EDD", retestingRangeDate)
+                  let today = moment()
 
-          let r =moment(retestingRangeDate)
+                  let r = moment(retestingRangeDate)
 
-          console.log("r", r.format("YYYY-MM-DD") , today.format("YYYY-MM-DD"))  
+                  console.log("r", r.format("YYYY-MM-DD"), today.format("YYYY-MM-DD"))
 
-          console.log("EDD 2", r.diff(today, 'days')   )  
+                  console.log("EDD 2", r.diff(today, 'days'))
 
-              if( r.diff(today, 'days')> 0){
+                  if (r.diff(today, 'days') > 0) {
 
-                setNewHTSType("RETESTING");
+                    setNewHTSType("RETESTING");
 
-              }else{
-                setNewHTSType("NEW HTS");
+                  } else {
+                    setNewHTSType("NEW HTS");
 
-              }
+                  }
 
-          }else{
-            setNewHTSType("NEW HTS");
+                } else {
+                  setNewHTSType("NEW HTS");
 
+                }
+
+                //  return response.data
+
+                setLMP(response.data)
+              })
+              .catch((error) => {
+                return "";
+              });
           }
 
-          //  return response.data
-    
-          setLMP(response.data)
-        })
-        .catch((error) => {
-          return "";
-        });
-    }
-      
-    
-    getLmpFromANC()
- 
+
+          getLmpFromANC()
 
 
-        }else{
+
+        } else {
           setNewHTSType("NEW HTS");
 
         }
 
-    }else{
-       setNewHTSType("NEW HTS");
+      } else {
+        setNewHTSType("NEW HTS");
+      }
+    } else {
+      setNewHTSType("NEW HTS");
     }
-  }else{
-    setNewHTSType("NEW HTS");
   }
 
 
-
-
- 
-
-
-
-
-}
-
-
   useEffect(() => {
-// 
+    // 
     patients();
     patientsCurrentHts();
     if (props.activePage.activePage === "home") {
@@ -173,7 +168,7 @@ const getRetestingStatus= (lastRecord)=>{
       });
   }
   async function patientsCurrentHts() {
- 
+
     setLoading(true);
     axios
       .get(`${baseUrl}hts/persons/${patientId}/current-hts`, {
@@ -194,9 +189,9 @@ const getRetestingStatus= (lastRecord)=>{
         // new adjustment-- for patient with pmtct modality, they should skip the 3 month
         let condition =
           Math.round(calculateLastVisitDate(response.data.dateVisit)) >= 3 ||
-          getCheckModalityForHTS(
-            response.data.riskStratificationResponseDto?.testingSetting
-          ) === "show"
+            getCheckModalityForHTS(
+              response.data.riskStratificationResponseDto?.testingSetting
+            ) === "show"
             ? true
             : false;
 
@@ -207,7 +202,7 @@ const getRetestingStatus= (lastRecord)=>{
 
         //get the last HTS 
 
-      getRetestingStatus(response.data);
+        getRetestingStatus(response.data);
 
         setLastHTS(response.data)
       })
@@ -215,6 +210,15 @@ const getRetestingStatus= (lastRecord)=>{
         //setLoading(false)
       });
   }
+
+
+  // Memoized permission checks
+  const permissions = useMemo(
+    () => ({
+      canSeePatientVisit: hasAnyPermission("view_patient", "all_permissions"),
+    }),
+    [hasAnyPermission, props?.patientObj]
+  );
 
   return (
     <Fragment>
@@ -249,44 +253,67 @@ const getRetestingStatus= (lastRecord)=>{
 
                   {lastVisitModalityAndCheckedIn && (
                     <Tab eventKey="new" title={newHTSType}>
-                      <ContineousRegistrationTesting
-                        patientObj={patientInfo}
-                        activePage={props.activePage}
-                        setActivePage={props.setActivePage}
-                        patientInfo={props.patientInfo}
-                        clientCode={props.clientCode}
-                        patientAge={props.patientAge}
-                        patients={patients}
-                        patientList={patientList}
-                        checkedInPatient={props.checkedInPatient}
-                        personInfo={props.personInfo}
-                        newHTSType={newHTSType}
-                      />
+                      <Suspense fallback={<LoadingSpinner />}>
+                        {key === "new" && <ContineousRegistrationTesting
+                          patientObj={patientInfo}
+                          activePage={props.activePage}
+                          setActivePage={props.setActivePage}
+                          patientInfo={props.patientInfo}
+                          clientCode={props.clientCode}
+                          patientAge={props.patientAge}
+                          patients={patients}
+                          patientList={patientList}
+                          checkedInPatient={props.checkedInPatient}
+                          personInfo={props.personInfo}
+                          newHTSType={newHTSType}
+                        />}
+                      </Suspense>
                     </Tab>
                   )}
                   {/* uncomment E001 */}
                   <Tab eventKey="hivst-history" title="HIVST HISTORY">
-                    <HIVSTPatientHistory
-                      patientObj={props.patientObj}
-                      setPatientObj={props.setPatientObj}
-                      activePage={props.activePage}
-                      setActivePage={props.setActivePage}
-                      clientCode={props.clientCode}
-                      patientAge={props.patientAge}
-                      patients={patients}
-                      patientList={patientList}
-                      loading={loading}
-                    />
+
+                    <Suspense fallback={<LoadingSpinner />}>
+                      {key === "hivst-history" && <HIVSTPatientHistory
+                        patientObj={props.patientObj}
+                        setPatientObj={props.setPatientObj}
+                        activePage={props.activePage}
+                        setActivePage={props.setActivePage}
+                        clientCode={props.clientCode}
+                        patientAge={props.patientAge}
+                        patients={patients}
+                        patientList={patientList}
+                        loading={loading}
+                      />}
+                    </Suspense>
                   </Tab>
                   <Tab eventKey="new-hivst" title="NEW HIVST">
-                    <ExistenceClientHIVSTRegistration
-                      patientObj={props.patientObj}
-                      activePage={props.activePage}
-                      setActivePage={props.setActivePage}
-                      clientCode={props.clientCode}
-                      patientAge={props.patientAge}
-                      patients={patients}
-                    />
+                    <Suspense fallback={<LoadingSpinner />}>
+                      {key === "new-hivst" &&
+                        <ExistenceClientHIVSTRegistration
+                          patientObj={props.patientObj}
+                          activePage={props.activePage}
+                          setActivePage={props.setActivePage}
+                          clientCode={props.clientCode}
+                          patientAge={props.patientAge}
+                          patients={patients}
+                        />
+                      }
+                    </Suspense>
+                  </Tab>
+                  <Tab eventKey="patient-visits" title="Patient Visits">
+                    {permissions.canSeePatientVisit && (
+
+                      <Suspense fallback={<LoadingSpinner />}>
+                        {key === "patient-visits" &&
+                          <PatientVisits
+                            patientObj={props?.patientObj}
+                            setActiveContent={props.setActivePage}
+                            activeContent={props.activePage}
+                          />
+                        }
+                      </Suspense>
+                    )}
                   </Tab>
                 </Tabs>
               </div>

@@ -62,9 +62,7 @@ const styles = (theme) => ({
 
 function PatientCard(props) {
   const { classes } = props;
-  //const patientCurrentStatus=props.patientObj && props.patientObj.currentStatus==="Died (Confirmed)" ? true : false ;
   const patientObjs = props.patientObj ? props.patientObj : {};
-  //const permissions= props.permissions ? props.permissions : [];
   const [patientObj, setPatientObj] = useState(null);
   const [hivStatus, setHivStatus] = useState("false");
   const [htscount, setHtscount] = useState(0);

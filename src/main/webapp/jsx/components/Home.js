@@ -47,9 +47,6 @@ const Home = () => {
         // localStorage.setItem("permissions", response.data.permissions);
         /********* THE END  */
 
-
-
-
         let generatedPermission = getListOfPermission(
           staticPermission
         );

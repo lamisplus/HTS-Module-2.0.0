@@ -11,12 +11,13 @@ import RegisterPatient from "./main/webapp/jsx/components/Patient/RegisterPatien
 import PatientDetail from "./main/webapp/jsx/components/Patient/PatientDetail";
 // import HIVSTPatientRegistration from './main/webapp/jsx/components/Patient/HIVST/HIVSTPatientRegistration';
 import HIVSTPatient from "./main/webapp/jsx/components/Patient/HIVST/HIVSTPatient";
+import CheckedInPatientsAlert from "./main/webapp/jsx/components/Globals/CheckinPatientsAlert";
 
 export default function App() {
   return (
     <div>
       <ToastContainer />
-     
+      <CheckedInPatientsAlert/>
       <Switch>
         <Route path="/patient-history">
           <PatientDetail />

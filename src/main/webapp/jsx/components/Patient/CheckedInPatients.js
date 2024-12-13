@@ -180,12 +180,17 @@ const CheckedInPatients = (props) => {
                 rowData.biometricStatus === true && (
                   <Link
                     to={{
-                      pathname: isEnrolled
-                        ? "/patient-history"
-                        : "/enroll-patient",
+                       pathname: "/patient-history",
                       state: isEnrolled
                         ? { patientObj: rowData }
                         : { patientId: rowData.id, patientObj: rowData },
+                        state: {
+                                patientObject: rowData,
+                                patientObj: rowData,
+                                clientCode: rowData?.clientCode,
+                                activepage: "NEW HTS",
+                                checkedInPatient: true
+                              },
                     }}
                   >
                     <ButtonGroup

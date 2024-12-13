@@ -100,7 +100,7 @@ const CheckedInPatients = (props) => {
         field: "hospitalNumber",
         render: (rowData) => (
           <p>
-            {getHospitalNumber(rowData?.identifier) || rowData?.hospitalNumber || ""}
+            {rowData?.hospitalNumber || getHospitalNumber?.(rowData?.identifier) || ""}
           </p>
         ),
       },

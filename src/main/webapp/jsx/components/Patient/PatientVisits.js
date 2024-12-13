@@ -102,7 +102,7 @@ const PatientVisits = (props) => {
   const fetchPatientVisits = useCallback(async () => {
     try {
       const response = await axios.get(
-        `${baseUrl}patient/visit/visit-by-patient/${patientObj.id}`,
+        `${baseUrl}patient/visit/visit-by-patient/${patientObj?.id || patientObj?.personId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 

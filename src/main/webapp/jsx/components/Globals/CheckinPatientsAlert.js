@@ -8,15 +8,25 @@ import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import VolumeOffIcon from '@mui/icons-material/VolumeOff';
 import { Fab } from '@material-ui/core';
 
+
 const CheckedInPatientsAlert = () => {
+    const lastToastRef = useRef(null);
+    const hiddenButtonRef = useRef(null); // Reference to the hidden button
+
     const [soundEnabled, setSoundEnabled] = useState(true);
     const audioRefs = useRef({
-        connected: new Audio('/incoming.wav'),
-        messageReceived: new Audio('/incoming.wav'),
-        disconnected: new Audio('/incoming.wav'),
+        connected: new Audio(`${process.env.PUBLIC_URL}/incoming.wav`),
+        messageReceived: new Audio(`${process.env.PUBLIC_URL}/incoming.wav`),
+        disconnected: new Audio(`${process.env.PUBLIC_URL}/incoming.wav`),
     });
 
     useEffect(() => {
+
+        // Simulate a user interaction by programmatically clicking the hidden button
+        if (hiddenButtonRef.current) {
+            hiddenButtonRef.current.click();
+        }
+
         // Preload sounds when enabled
         if (soundEnabled) {
             Object.values(audioRefs.current).forEach((audio) => {
@@ -37,15 +47,15 @@ const CheckedInPatientsAlert = () => {
     };
 
     const showToast = (message, soundKey) => {
-        toast(
-            <div className="toast-content">
-                <p className="toast-message">{message}</p>
-                <button className="toast-button" onClick={() => setSoundEnabled(!soundEnabled)}>
-                    {soundEnabled ? 'Disable Sound' : 'Enable Sound'}
-                </button>
-            </div>,
-            { autoClose: 5000, className: 'light-toast' }
-        );
+        if (lastToastRef.current !== message) {
+            lastToastRef.current = message;
+            toast(
+                <div className="toast-content">
+                    <p className="toast-message">{message}</p>
+                </div>,
+                { autoClose: 5000, className: 'light-toast' }
+            );
+        }
         playSound(soundKey);
     };
 
@@ -54,7 +64,7 @@ const CheckedInPatientsAlert = () => {
     };
 
     const onMessageReceived = (msg) => {
-        if (msg) {
+        if (msg && msg?.toLowerCase()?.includes("check")) {
             showToast(msg, 'messageReceived');
         }
     };
@@ -89,6 +99,14 @@ const CheckedInPatientsAlert = () => {
                 onMessage={onMessageReceived}
                 debug={true}
             />
+
+            <button
+                ref={hiddenButtonRef}
+                style={{ display: 'none' }}
+                onClick={()=>playSound("connected")}
+            >
+                Hidden Play Button
+            </button>
         </div>
     );
 };

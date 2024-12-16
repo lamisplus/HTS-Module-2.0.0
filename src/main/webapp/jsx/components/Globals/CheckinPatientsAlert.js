@@ -60,7 +60,7 @@ const CheckedInPatientsAlert = () => {
     };
 
     const onConnected = () => {
-        showToast('Connected to server', 'connected');
+        console.log("Connected to the server")
     };
 
     const onMessageReceived = (msg) => {
@@ -70,7 +70,7 @@ const CheckedInPatientsAlert = () => {
     };
 
     const onDisconnected = () => {
-        showToast('Disconnected from server', 'disconnected');
+        console.log("Disconnected from the server")
     };
 
     return (

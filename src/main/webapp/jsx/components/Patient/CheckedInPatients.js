@@ -157,15 +157,13 @@ const CheckedInPatients = (props) => {
                   <Link
                     to={{
                        pathname: "/patient-history",
-                      state: isEnrolled
-                        ? { 
-                          patientObj: rowData,
-                          clientCode: rowData?.clientCode,
-                          patientObject: rowData,
-                          activepage: "NEW HTS",
-                          checkedInPatient: true
-                        }
-                        : { patientId: rowData.id, patientObj: rowData,  },
+                       state: {
+                        patientObject: rowData,
+                        patientObj: rowData,
+                        clientCode: rowData?.clientCode,
+                        activepage: "NEW HTS",
+                        checkedInPatient: true
+                      },
                        
                     }}
                   >

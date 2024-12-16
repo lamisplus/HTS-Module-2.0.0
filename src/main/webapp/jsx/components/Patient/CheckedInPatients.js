@@ -158,15 +158,15 @@ const CheckedInPatients = (props) => {
                     to={{
                        pathname: "/patient-history",
                       state: isEnrolled
-                        ? { patientObj: rowData }
-                        : { patientId: rowData.id, patientObj: rowData },
-                        state: {
-                                patientObject: rowData,
-                                patientObj: rowData,
-                                clientCode: rowData?.clientCode,
-                                activepage: "NEW HTS",
-                                checkedInPatient: true
-                              },
+                        ? { 
+                          patientObj: rowData,
+                          clientCode: rowData?.clientCode,
+                          patientObject: rowData,
+                          activepage: "NEW HTS",
+                          checkedInPatient: true
+                        }
+                        : { patientId: rowData.id, patientObj: rowData,  },
+                       
                     }}
                   >
                     <ButtonGroup

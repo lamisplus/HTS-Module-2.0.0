@@ -10,19 +10,19 @@ export const useCheckedInPatientData = (baseUrl, token) => {
       });
 
       const data = response.data;
-      const hivCode = data.find(
-        (item) => item.moduleServiceName.toUpperCase() === "HIV"
+      const htsCode = data.find(
+        (item) => item.moduleServiceName.toUpperCase() === "HTS"
       )?.moduleServiceCode;
 
-      if (hivCode) {
+      if (htsCode) {
         const patientResponse = await axios.get(
-          `${baseUrl}patient/checked-in-by-service/${hivCode}`,
+          `${baseUrl}patient/checked-in-by-service/${htsCode}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
 
-        return patientResponse.data;
+        return patientResponse?.data;
       }
     } catch (error) {
       console.error("Failed to fetch patients:", error);

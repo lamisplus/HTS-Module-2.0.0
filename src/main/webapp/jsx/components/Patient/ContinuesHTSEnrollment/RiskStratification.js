@@ -330,9 +330,9 @@ setKP(kpList)
   const checkPMTCTModality = (modality) => {
 
     if (
-      setting === "FACILITY_HTS_TEST_SETTING_ANC" ||
-      setting === "FACILITY_HTS_TEST_SETTING_L&D" ||
-      setting === "FACILITY_HTS_TEST_SETTING_POST_NATAL_WARD_BREASTFEEDING" 
+      modality === "FACILITY_HTS_TEST_SETTING_ANC" ||
+      modality === "FACILITY_HTS_TEST_SETTING_L&D" ||
+      modality === "FACILITY_HTS_TEST_SETTING_POST_NATAL_WARD_BREASTFEEDING" 
  
       ) {
       setIsPMTCTModality(true);
@@ -363,19 +363,18 @@ setKP(kpList)
       SettingModality(e.target.value);
       setObjValues({ ...objValues, [e.target.name]: e.target.value });
       let ans = checkPMTCTModality(e.target.value);
-
+      displayRiskAssessment(
+        riskAssessment.lastHivTestBasedOnRequest,
+        objValues.age,
+        ans
+      );
      if(e.target.value === "COMMUNITY_HTS_TEST_SETTING_CONGREGATIONAL_SETTING" ||  e.target.value === "COMMUNITY_HTS_TEST_SETTING_DELIVERY_HOMES" || e.target.value === "COMMUNITY_HTS_TEST_SETTING_TBA_ORTHODOX" || e.target.value === "COMMUNITY_HTS_TEST_SETTING_TBA_RT-HCW" ){
             setShowHealthFacility(true)
       }else{
             setShowHealthFacility(false)
 
        }
-      
-      displayRiskAssessment(
-        riskAssessment.lastHivTestBasedOnRequest,
-        objValues.age,
-        ans
-      );
+    
 
       
       //get spoke sites
@@ -430,12 +429,33 @@ setKP(kpList)
     // for the section to show
     //  Conditions are : age > 15, riskAssessment.lastHivTestBasedOnRequest === "false" and PMTCT Modality === true
     if (lastVisit === "false") {
-      if (SecAge > 15 && isPMTCTModalityValue) {
+      if (SecAge < 15 || isPMTCTModalityValue) {
         setShowRiskAssessment(false);
         ans = false;
-      } else if (SecAge > 15) {
+
+       // 
+        setRiskAssessment({...riskAssessment,
+          lastHivTestForceToHaveSex: "",
+          lastHivTestHadAnal: "",
+          lastHivTestInjectedDrugs: "",
+          whatWasTheResult: "",
+          lastHivTestDone: "",
+          diagnosedWithTb: "",
+          lastHivTestPainfulUrination: "",
+          lastHivTestBloodTransfusion: "",
+          lastHivTestVaginalOral: "",
+        })
+
+        // 
+      } else if (SecAge > 15 ) {
         setShowRiskAssessment(true);
         ans = true;
+
+       
+      }else if(lastVisit === "false"){
+        setShowRiskAssessment(true);
+        ans = true;
+
       } else {
         setShowRiskAssessment(false);
         ans = false;
@@ -444,7 +464,11 @@ setKP(kpList)
       setShowRiskAssessment(false);
       ans = false;
     }
+
+
   };
+
+
 
   //Date of Birth and Age handle
   //Get list of DSD Model Type
@@ -568,10 +592,15 @@ setKP(kpList)
 
 
   const handleInputChangeRiskAssessment = (e) => {
-    displayRiskAssessment(e.target.value, objValues.age, isPMTCTModality);
-
+ 
     setErrors({ ...temp, [e.target.name]: "" });
     setRiskAssessment({ ...riskAssessment, [e.target.name]: e.target.value });
+
+    if(e.target.name === "lastHivTestBasedOnRequest"){
+      displayRiskAssessment(e.target.value, objValues.age, isPMTCTModality);
+  
+      }
+  
   };
   const handleSubmit = (e) => {
     e.preventDefault();

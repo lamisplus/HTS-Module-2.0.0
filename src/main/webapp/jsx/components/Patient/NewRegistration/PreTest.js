@@ -1978,7 +1978,7 @@ const BasicInfo = (props) => {
                   </Alert>
 
                   <Button
-                    content="Provide Feedbck"
+                    content="Provide Feedback"
                     style={{ backgroundColor: "#014d88", color: "#fff" }}
                     onClick={toggleModal}
                   />

@@ -92,6 +92,7 @@ const FeedbackModal = ({
   setOpenModal,
   predictionValue,
   clientId,
+  setSavingFeedback,
 }) => {
   const classes = useStyles();
   const [saving, setSaving] = useState(false);
@@ -197,6 +198,7 @@ const FeedbackModal = ({
         });
         setSaving(false);
         setOpenModal(!openModal);
+        setSavingFeedback(true);
       })
       .catch((err) => {
         toast.error(`Something went wrong. Please try again...${err}`, {

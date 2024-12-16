@@ -279,18 +279,19 @@ if (objValues.age !== "") {
 
 
   const TargetGroupSetup = () => {
-    axios
-      .get(`${baseUrl}account`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((response) => {
-        setTargetGroupValue(response.data);
-
-        props.setOrganizationInfo(response.data);
-      })
-      .catch((error) => {
-
-      });
+    const userAccountData = localStorage.getItem('user_account');
+    if (userAccountData) {
+        try {
+          const storedValues = JSON.parse(userAccountData);
+          props.setOrganizationInfo(storedValues);
+          setTargetGroupValue(storedValues);
+          return storedValues
+        } catch (error) {
+            console.error('Error parsing user_account JSON:', error);
+            return null; // Return null if parsing fails
+        }
+    }
+    return null; 
   };
   //Get list of KP
   const KP = () => {

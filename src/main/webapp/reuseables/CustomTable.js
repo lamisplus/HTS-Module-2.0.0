@@ -90,7 +90,7 @@ const CustomTable = ({ title, columns, data, icons, showPPI, onPPIChange,
 
   return (
     <MaterialTable
-      icons={icons? icons :tableIcons}
+      icons={icons? icons : tableIcons}
       title={title}
       columns={columns}
       isLoading={isLoading}

@@ -103,7 +103,7 @@ const CheckedInPatientsAlert = () => {
             <button
                 ref={hiddenButtonRef}
                 style={{ display: 'none' }}
-                onClick={()=>playSound("connected")}
+                onClick={()=> playSound("connected")}
             >
                 Hidden Play Button
             </button>

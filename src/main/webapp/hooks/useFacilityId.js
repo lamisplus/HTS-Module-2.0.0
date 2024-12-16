@@ -4,26 +4,17 @@ import axios from "axios";
 const useFacilityId = (baseUrl, token,) => {
   const [facilityId, setFacilityId] = useState(null);
 
-   const fetchFacilityId = async () => {
-     try {
-       const response = await axios.get(`${baseUrl}account`, {
-         headers: { Authorization: `Bearer ${token}` },
-       });
-
-       const organisationUnitId = response.data.currentOrganisationUnitId;
-       // localStorage.setItem("facId", organisationUnitId);
-       setFacilityId(organisationUnitId);
-     } catch (error) {
-       console.error("Error fetching facility ID:", error);
-     }
-   };
-  console.log("facilityId", facilityId);
-
-  useEffect(() => {
-    fetchFacilityId()
-  }, []);
-
-  return facilityId;
+  const userAccountData = localStorage.getItem('user_account');
+  if (userAccountData) {
+    try {
+      const storedValues = JSON.parse(userAccountData);
+      setFacilityId(storedValues?.currentOrganisationUnitId)
+      return facilityId
+    } catch (error) {
+      console.error('Error parsing user_account JSON:', error);
+      return null; // Return null if parsing fails
+    }
+  }
 };
 
 export default useFacilityId;

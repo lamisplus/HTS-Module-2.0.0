@@ -396,16 +396,22 @@ if(each.code !==  "CHILD_NUMBER_OTHERS"){
   }
   };
   const TargetGroupSetup = () => {
-    axios
-      .get(`${baseUrl}account`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((response) => {
-        setFacilityInfo(response.data);
-      })
-      .catch((error) => {
-      });
+
+    const userAccountData = localStorage.getItem('user_account');
+    if (userAccountData) {
+        try {
+          const storedValues = JSON.parse(userAccountData);
+          setFacilityInfo(storedValues)
+          return storedValues
+        } catch (error) {
+            console.error('Error parsing user_account JSON:', error);
+            return null; // Return null if parsing fails
+        }
+    }
+    return null; 
   };
+
+
   const loadFamilyIndexSetting = () => {
     axios
       .get(`${baseUrl}application-codesets/v2/TEST_SETTING`, {
@@ -1191,10 +1197,6 @@ if(each.code !==  "CHILD_NUMBER_OTHERS"){
       ? ""
       : "This field is required.";
 
-    //  familyIndexRequestDto.childNumber == retrieveFromIdToCode && ( temp.otherChildNumber= familyIndexRequestDto.otherChildNumber
-    //       ? ""
-    //       : "This field is required.")
-
     setErrors({ ...temp });
     return Object.values(temp).every((x) => x == "");
   };
@@ -1210,19 +1212,7 @@ if(each.code !==  "CHILD_NUMBER_OTHERS"){
         toast.success("Family Index form save succesfully!");
         handleItemClick("fit-history", "fit");
 
-        // if (props.history) {
-        //   handleItemClick("pns-history", "fit");
-        // } else {
-        //   loadOtherForm();
-        // }
-
-        // history.push({pathName: "/patient-history",
-        //   state: {
-        //     patientObject: props.basicInfo,
-        //     patientObj: props.basicInfo,
-        //     clientCode: props.basicInfo.clientCode,
-        //   },}
-        // );
+       
       })
       .catch((error) => {
         setSaving(false);

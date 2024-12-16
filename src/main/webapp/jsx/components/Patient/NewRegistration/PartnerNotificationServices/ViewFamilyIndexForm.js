@@ -678,16 +678,19 @@ familyTestingTrackerRequestDTO.trackerAge=age_now;
   };
 
   const TargetGroupSetup = () => {
-    axios
-      .get(`${baseUrl}account`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((response) => {
-        setFacilityInfo(response.data);
-      })
-      .catch((error) => {
-        //console.log(error);
-      });
+
+    const userAccountData = localStorage.getItem('user_account');
+    if (userAccountData) {
+        try {
+          const storedValues = JSON.parse(userAccountData);
+          setFacilityInfo(storedValues);
+          return storedValues
+        } catch (error) {
+            console.error('Error parsing user_account JSON:', error);
+            return null; 
+        }
+    }
+    return null; 
   };
   const loadFamilyIndexSetting = () => {
     axios
@@ -751,6 +754,7 @@ familyTestingTrackerRequestDTO.trackerAge=age_now;
       })
       .catch((error) => {});
   };
+
   const FAMILY_INDEX = () => {
     axios
       .get(`${baseUrl}application-codesets/v2/FAMILY_INDEX`, {
@@ -785,19 +789,6 @@ familyTestingTrackerRequestDTO.trackerAge=age_now;
       .catch((error) => {});
   };
 
-  // generate index client Id using the HTS client code/family index client unique ART number
-  const generateIndexClientId = () => {
-    const indexClientId = Math.floor(1000 + Math.random() * 9000);
-  };
-
-  // show reason for not selecting hiv confirm date, if the hiv confirm date is not selected and hide it when it is selected
-  // const showReasonForNotSelectingHivConfirmDate = () => {
-  //        if(payload.dateIndexClientConfirmedHiv === ""){
-  //            setIndexClientConfirmedHivPositive(true);
-  //        }else{
-  //            setIndexClientConfirmedHivPositive(false);
-  //        }
-  // }
 
   const loadGenders = useCallback(async () => {
     getAllGenders()

@@ -1,5 +1,5 @@
 import { useState, useMemo, memo } from "react";
-import { url as baseUrl, token } from "./../../../api";
+import { url as baseUrl, token, wsUrl } from "./../../../api";
 import { forwardRef } from "react";
 import "semantic-ui-css/semantic.min.css";
 import { Link } from "react-router-dom";
@@ -20,7 +20,6 @@ import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
 import { Card, CardBody } from "reactstrap";
 import "react-toastify/dist/ReactToastify.css";
-import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import { TiArrowForward } from "react-icons/ti";
@@ -31,6 +30,7 @@ import { usePermissions } from "../../../hooks/usePermissions";
 import { useCheckedInPatientData } from "../../../hooks/useCheckedInPatientData";
 import CustomTable from "../../../reuseables/CustomTable";
 import { calculate_age } from "../../components/utils";
+import SockJsClient from "react-stomp";
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -56,12 +56,11 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
 };
 
-
-
 const CheckedInPatients = (props) => {
   const { hasPermission } = usePermissions();
   const [showPPI, setShowPPI] = useState(true);
   const { fetchPatients } = useCheckedInPatientData(baseUrl, token);
+  const [tableRefreshTrigger, setTableRefreshTrigger] = useState(0);
 
   const permissions = useMemo(
     () => ({
@@ -77,7 +76,6 @@ const CheckedInPatients = (props) => {
     );
     return hospitalNumber ? hospitalNumber.value : "";
   };
-
 
   const handleCheckBox = (e) => {
     setShowPPI(!e.target.checked);
@@ -233,11 +231,24 @@ const CheckedInPatients = (props) => {
     }
   };
 
+  const onMessageReceived = (msg) => {
+    if (msg && msg?.toLowerCase()?.includes("check")) {
+      setTableRefreshTrigger((prev) => prev + 1);
+    }
+  };
+
   return (
     <div>
+       <SockJsClient
+        url={wsUrl}
+        topics={["/topic/checking-in-out-process"]}
+        onMessage={onMessageReceived}
+        debug={true}
+      />
       <Card>
         <CardBody>
           <CustomTable
+            key={tableRefreshTrigger}
             title="HTS Checked In Patients"
             columns={columns}
             data={getData}

@@ -282,17 +282,18 @@ const PnsForm = (props) => {
   };
 
   const TargetGroupSetup = () => {
-    axios
-      .get(`${baseUrl}account`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((response) => {
-   
-        setFacilityInfo(response.data.currentOrganisationUnitName);
-      })
-      .catch((error) => {
-        //console.log(error);
-      });
+    const userAccountData = localStorage.getItem('user_account');
+    if (userAccountData) {
+        try {
+          const storedValues = JSON.parse(userAccountData);
+          setFacilityInfo(storedValues?.currentOrganisationUnitName);
+          return storedValues
+        } catch (error) {
+            console.error('Error parsing user_account JSON:', error);
+            return null;
+        }
+    }
+    return null; 
   };
 
   useEffect(() => {

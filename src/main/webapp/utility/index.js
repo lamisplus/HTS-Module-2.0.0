@@ -2,6 +2,8 @@ import { token, url as baseUrl } from "../api";
 import axios from "axios";
 import Cookies from "js-cookie";
 //To make a text field accept alphabet value only
+
+
 export const alphabetOnly = (value) => {
   const result = value.replace(/[^a-z]/gi, "");
   return result;
@@ -63,16 +65,21 @@ export const getAllProvinces = async (stateId) => {
 
 //Get all state by province by state Id (it needs stateId as parameter)
 export const getAcount = async () => {
-  try {
-    const response = await axios.get(`${baseUrl}account`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    Cookies.set("facilityName", response.data.currentOrganisationUnitName);
 
-    return response.data;
-  } catch (e) {}
+  const userAccountData = localStorage.getItem('user_account');
+  if (userAccountData) {
+      try {
+        const storedValues = JSON.parse(userAccountData);
+        Cookies.set("facilityName", storedValues?.currentOrganisationUnitName);
+        return storedValues
+      } catch (error) {
+          console.error('Error parsing user_account JSON:', error);
+          return null; // Return null if parsing fails
+      }
+  }
+  return null; 
 };
-//get if patient is pregnant
+
 
 
 

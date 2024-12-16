@@ -18,30 +18,30 @@ permissions:
   - name: hts_view
     description: View hts
     moduleName: HtsModule
-  - name: Request_and_Result_Form
+  - name: request_and_result_Form
     description: Request and Result Form
     moduleName: HtsModule
-  - name: Client_intake_form
+  - name: client_intake_form
     description: Client intake form
     moduleName: HtsModule
-  - name: Daily_HIV_Worksheet
+  - name: daily_hiv_worksheet
     description: Daily HIV Worksheet
     moduleName: HtsModule
-  - name: HTS_Register
+  - name: hts_register
     description: HTS Register
     moduleName: HtsModule
-  - name: Referral_Form
+  - name: referral_form
     description: Referral Form
     moduleName: HtsModule
-  - name: Referral_Register
+  - name: referral_register
     description: Referral Register
     moduleName: HtsModule
-  - name: Family_Index_Testing_Form
+  - name: family_index_testing_form
     description: Family Index Testing Form
     moduleName: HtsModule
-  - name: Nigeria_PNS_Form
+  - name: nigeria_pns_form
     description: Nigeria PNS Form
     moduleName: HtsModule
-  - name: Index_Testing_register
+  - name: index_testing_register
     description: Index Testing register
     moduleName: HtsModule

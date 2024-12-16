@@ -133,6 +133,7 @@ const BasicInfo = (props) => {
   const [mlresult, setMlresult] = useState(false);
   const [savingPrediction, setSavingPrediction] = useState(false);
   const [savingResult, setSavingRsult] = useState(false);
+  const [savingFeedback, setSavingFeedback] = useState(false);
   const [errors, setErrors] = useState({});
   let temp = { ...errors };
   const [modalityCheck, setModalityCheck] = useState("");
@@ -297,7 +298,6 @@ const BasicInfo = (props) => {
   };
 
   const handleInputChangeKnowledgeAssessment = (e) => {
-
     setKnowledgeAssessment({
       ...knowledgeAssessment,
       [e.target.name]: e.target.value,
@@ -308,10 +308,12 @@ const BasicInfo = (props) => {
     e.preventDefault();
     setSavingRsult(true);
 
-    if (dataObj?.riskStratificationResponseDto?.age <= 15) {
+    if (dataObj?.riskStratificationResponseDto?.age < 15) {
       toast.info(`No risk score for client less than 15 years`, {
         position: toast.POSITION.BOTTOM_CENTER,
       });
+      setMlresult(true);
+      setSavingRsult(false);
     } else {
       let mlData = {
         modelConfigs: {
@@ -345,7 +347,7 @@ const BasicInfo = (props) => {
               : dataObj?.pregnant === "" &&
                 dataObj?.personResponseDto?.sex === "Female"
               ? 0
-              : -1000,
+              : 0,
           everHadSexualIntercourse:
             riskAssessment?.everHadSexualIntercourse === "true" ||
             riskAssessment?.soldPaidVaginalSex === "true" ||
@@ -1981,6 +1983,7 @@ const BasicInfo = (props) => {
                     content="Provide Feedback"
                     style={{ backgroundColor: "#014d88", color: "#fff" }}
                     onClick={toggleModal}
+                    disabled={savingFeedback ? true : false}
                   />
                   <br />
                 </Stack>
@@ -2198,6 +2201,7 @@ const BasicInfo = (props) => {
         setOpenModal={setOpenModal}
         predictionValue={predictionValue[1]}
         clientId={clientId}
+        setSavingFeedback={setSavingFeedback}
       />
     </>
   );

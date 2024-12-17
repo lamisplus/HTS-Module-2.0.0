@@ -146,7 +146,7 @@ const CheckedInPatients = (props) => {
         title: "Actions",
         field: "actions",
         render: (rowData) => {
-          const isEnrolled = rowData.isEnrolled;
+          const isEnrolled = rowData?.isEnrolled;
 
           return (
             <div>
@@ -159,7 +159,7 @@ const CheckedInPatients = (props) => {
                         patientObject: rowData,
                         patientObj: rowData,
                         clientCode: rowData?.clientCode,
-                        activepage: "NEW HTS",
+                        activepage:  isEnrolled ? "home": "NEW HTS",
                         checkedInPatient: true
                       },
                        

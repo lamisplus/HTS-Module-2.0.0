@@ -28,9 +28,9 @@ const Home = (props) => {
   const { hasPermission, hasAnyPermission, } = usePermissions();
 
   const patientId =
-    props.patientObj && props.patientObj.personId
-      ? props.patientObj.personId
-      : props.patientObj.id
+    props?.patientObj && props?.patientObj?.personId
+      ? props?.patientObj?.personId
+      : props?.patientObj?.id
         ? props.patientObj.id
         : "";
 

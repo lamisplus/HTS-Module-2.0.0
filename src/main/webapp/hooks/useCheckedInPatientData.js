@@ -22,7 +22,7 @@ export const useCheckedInPatientData = (baseUrl, token) => {
           }
         );
 
-        return patientResponse?.data;
+        return patientResponse?.data?.sort?.((a, b) => a.visitId - b.visitId);
       }
     } catch (error) {
       console.error("Failed to fetch patients:", error);

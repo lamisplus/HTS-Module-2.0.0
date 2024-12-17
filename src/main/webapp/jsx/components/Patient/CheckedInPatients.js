@@ -64,7 +64,7 @@ const CheckedInPatients = (props) => {
 
   const permissions = useMemo(
     () => ({
-      canSeeEnrollButton: hasPermission("HTS_Register"),
+      canSeeEnrollButton: hasPermission("hts_register"),
     }),
     [hasPermission]
   );
@@ -72,7 +72,7 @@ const CheckedInPatients = (props) => {
   const getHospitalNumber = (identifier) => {
     const identifiers = identifier;
     const hospitalNumber = identifiers.identifier.find(
-      (obj) => obj.type == "HospitalNumber"
+      (obj) => obj?.type == "HospitalNumber"
     );
     return hospitalNumber ? hospitalNumber.value : "";
   };

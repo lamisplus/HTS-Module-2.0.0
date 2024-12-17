@@ -7,7 +7,7 @@ import { usePermissions } from "../../../hooks/usePermissions";
 
 const FindPatientActions = memo(({ row }) => {
   const { hasPermission } = usePermissions();
-  const canEnroll = hasPermission("HIV Enrollment Register");
+  const canEnroll = hasPermission("hiv_enrollment_register");
 
   if (!canEnroll) return null;
 

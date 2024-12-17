@@ -112,12 +112,6 @@ export const checkPregnantPatient =  async(id) => {
   
 
 };
-
-
-
-
-
-
 // TEST_SETTING_OTHERS_PMTCT_(POST_ANC1:_PREGNANCYL&DBF)
 
 //check modality
@@ -272,9 +266,6 @@ let ArrayOfAllForms = [
   },
 ];
 
-
-
-
 export const getListOfPermission = (permittedForms) => {
 
   let newListOfForms = [];
@@ -310,7 +301,7 @@ export const getNextForm = (formName, age, pmtctModality, hivStatus) => {
      ? pmtctModality
      : localStorage.getItem("modality");
 
-  let authorizedForm = JSON.parse(localStorage.getItem("generatedPermission"));
+  let authorizedForm = JSON.parse(localStorage.getItem("currentUser_Permission"));
 
   let lengthOfAuthForm = authorizedForm.length;
 
@@ -353,10 +344,8 @@ export const getNextForm = (formName, age, pmtctModality, hivStatus) => {
   }
 };
 
-//function to double skip a form due to other condition
-
 export const getDoubleSkipForm = (code) => {
-  let authorizedForm = JSON.parse(localStorage.getItem("generatedPermission"));
+  let authorizedForm = JSON.parse(localStorage.getItem("currentUser_Permission"));
 
   let lengthOfAuthForm = authorizedForm.length;
 
@@ -392,7 +381,7 @@ export const checkNextPageCondition = (
   let ageCondition = undefined;
   let pmctctModalityCondition = undefined;
   let HivStatuscondition = undefined;
-let authorizedForm = JSON.parse(localStorage.getItem("generatedPermission"));
+let authorizedForm = JSON.parse(localStorage.getItem("currentUser_Permission"));
 
 
  
@@ -452,7 +441,7 @@ export const loopThroughForms = (
   pmtctModality,
   hivStatus
 ) => {
-let authorizedForm = JSON.parse(localStorage.getItem("generatedPermission"));
+let authorizedForm = JSON.parse(localStorage.getItem("currentUser_Permission"));
 let latestNextForm = nextForm;
 let nextFormIndex =
   authorizedForm.length > IndexOfForm + 1 ? IndexOfForm + 1 : IndexOfForm;
@@ -487,7 +476,7 @@ export const loopThroughFormBackward = (
   pmtctModality,
   hivStatus
 ) => {
-  let authorizedForm = JSON.parse(localStorage.getItem("generatedPermission"));
+  let authorizedForm = JSON.parse(localStorage.getItem("currentUser_Permission"));
   // console.log("length of the authorized form ", authorizedForm.length);
   let nextFormIndex =
   IndexOfForm - 1 >= 0 ? IndexOfForm - 1 : IndexOfForm;
@@ -521,7 +510,7 @@ export const getPreviousForm = (formName, age, pmtctModality, hivStatus) => {
     ? pmtctModality
     : localStorage.getItem("modality");
 
-  let authorizedForm = JSON.parse(localStorage.getItem("generatedPermission"));
+  let authorizedForm = JSON.parse(localStorage.getItem("currentUser_Permission"));
 
   let lengthOfAuthForm = authorizedForm.length;
 

@@ -214,11 +214,7 @@ const RefferralUnit = (props) => {
     loadGenders();
     getCountry();
     getStateByCountryId();
-    console.log(props?.patientObj);
 
-    console.log(
-      props?.patientObj?.personResponseDto?.address?.address[0]?.district
-    );
     if (props?.patientObj?.personResponseDto?.address?.address[0]?.stateId) {
       getProvincesWithId(
         props?.patientObj?.personResponseDto?.address?.address[0]?.stateId

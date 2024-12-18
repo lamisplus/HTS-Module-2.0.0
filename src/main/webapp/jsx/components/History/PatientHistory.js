@@ -61,11 +61,9 @@ const Home = (props) => {
 
 
 
-  const getRetestingStatus = (lastRecord) => {
-    let hivResult = lastRecord?.hivTestResult ? lastRecord?.hivTestResult : lastRecord?.hivTestResult2
-    let weekRange = 40 + 52;
-    console.log("hivResult", hivResult)
-    console.log(lastRecord);
+const getRetestingStatus= (lastRecord)=>{
+  let hivResult = lastRecord?.hivTestResult? lastRecord?.hivTestResult: lastRecord?.hivTestResult2
+  let weekRange = 40 + 52;
 
     // does the patient has HTS record
 
@@ -74,29 +72,24 @@ const Home = (props) => {
       if (hivResult) {
         let hasHivNegative = hivResult.toLowerCase() === "negative" ? true : false;
 
-        if (hasHivNegative) {
-          //is the patient on ANC table  and get the lmp 
-          async function getLmpFromANC() {
-            await axios
-              .get(`${baseUrl}hts/get-anc-lmp?personUuid=${props.patientObj.personUuid}`, {
-                headers: { Authorization: `Bearer ${token}` },
-              })
-              .then((response) => {
-                if (response.data.result) {
-                  let lmpDate = moment(response.data.result).format("YYYY-MM-DD")
-                  console.log("lmpDate", lmpDate)
-                  // let EDD =moment(response.data.result).add(40, 'weeks').format("YYYY-MM-DD")
+        if(hasHivNegative){
+     //is the patient on ANC table  and get the lmp 
+     async  function getLmpFromANC(){
+      await  axios
+        .get(`${baseUrl}hts/get-anc-lmp?personUuid=${props.patientObj.personUuid}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((response) => {
+          if(response.data.result ){
+          let lmpDate = moment(response.data.result).format("YYYY-MM-DD")
+          // let EDD =moment(response.data.result).add(40, 'weeks').format("YYYY-MM-DD")
 
-                  // get retesting range date 
-                  let retestingRangeDate = moment(response.data.result).add(40 + 52, 'weeks').format("YYYY-MM-DD")
-                  console.log("EDD", retestingRangeDate)
-                  let today = moment()
+          // get retesting range date 
+          let retestingRangeDate = moment(response.data.result).add(40 + 52, 'weeks').format("YYYY-MM-DD")
+          let today = moment()
 
                   let r = moment(retestingRangeDate)
 
-                  console.log("r", r.format("YYYY-MM-DD"), today.format("YYYY-MM-DD"))
-
-                  console.log("EDD 2", r.diff(today, 'days'))
 
                   if (r.diff(today, 'days') > 0) {
 

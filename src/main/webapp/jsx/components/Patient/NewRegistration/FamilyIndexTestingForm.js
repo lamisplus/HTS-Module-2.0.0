@@ -525,7 +525,6 @@ if(each.code !==  "CHILD_NUMBER_OTHERS"){
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        console.log("HTS_ENTRY_POINT_FACILITY",response.data);
 
         setSetting(response.data);
       })
@@ -541,14 +540,13 @@ if(each.code !==  "CHILD_NUMBER_OTHERS"){
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        console.log("HTS_ENTRY_POINT_COMMUNITY",response.data);
         setSetting(response.data);
       })
       .catch((error) => {
         //console.log(error);
       });
   };
- const getSettings=()=>{
+const getSettings=()=>{
 
   if(  props.patientObj.testingSetting.includes("FACILITY")){
     HTS_ENTRY_POINT_FACILITY()

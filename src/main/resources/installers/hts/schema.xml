@@ -2943,4 +2943,7 @@
             ALTER TABLE hts_risk_stratification DROP CONSTRAINT modality_fk
         </sql>
     </changeSet>
+
+
+
 </databaseChangeLog>

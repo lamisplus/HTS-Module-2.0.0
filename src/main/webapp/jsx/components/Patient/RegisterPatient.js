@@ -370,7 +370,6 @@ const UserRegistration = (props) => {
               handleItemClick("pns-history");
 
             }else{
-              console.log(answer[0] , answer[1])
               handleItemClick(answer[0]);
 
             }

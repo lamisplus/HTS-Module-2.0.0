@@ -84,7 +84,10 @@ const CheckedInPatientsAlert = () => {
                     bottom: '16px',
                     right: '16px',
                     zIndex: 1000,
-                    background: "#014d88"
+                    background: "white",
+                    color: "#014d88",
+                    height: "35px",
+                    width: "35px"
                 }}
                 onClick={() => setSoundEnabled((prev) => !prev)}
             >

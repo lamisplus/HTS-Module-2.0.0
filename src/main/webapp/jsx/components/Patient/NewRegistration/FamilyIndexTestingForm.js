@@ -576,6 +576,7 @@ if(each.code !==  "CHILD_NUMBER_OTHERS"){
       });
   };
 const getSettings=()=>{
+     console.log("Family props",props)
 
   if(  props.patientObj.testingSetting.includes("FACILITY")){
     HTS_ENTRY_POINT_FACILITY()
@@ -590,7 +591,7 @@ const getSettings=()=>{
 
     loadGenders();
     loadStates();
-    loadFamilyIndexSetting();
+    // loadFamilyIndexSetting();
     getCountry();
     getStateByCountryId();
     getMaritalStatus();

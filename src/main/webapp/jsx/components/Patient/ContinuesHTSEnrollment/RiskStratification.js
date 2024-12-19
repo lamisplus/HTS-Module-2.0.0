@@ -434,17 +434,20 @@ setKP(kpList)
         ans = false;
 
        // 
-        setRiskAssessment({...riskAssessment,
-          lastHivTestForceToHaveSex: "",
-          lastHivTestHadAnal: "",
-          lastHivTestInjectedDrugs: "",
-          whatWasTheResult: "",
-          lastHivTestDone: "",
-          diagnosedWithTb: "",
-          lastHivTestPainfulUrination: "",
-          lastHivTestBloodTransfusion: "",
-          lastHivTestVaginalOral: "",
-        })
+           // 
+           if( age !== ""){
+            setRiskAssessment({...riskAssessment,
+              lastHivTestForceToHaveSex: "",
+              lastHivTestHadAnal: "",
+              lastHivTestInjectedDrugs: "",
+              whatWasTheResult: "",
+              lastHivTestDone: "",
+              diagnosedWithTb: "",
+              lastHivTestPainfulUrination: "",
+              lastHivTestBloodTransfusion: "",
+              lastHivTestVaginalOral: "",
+            })
+          }
 
         // 
       } else if (SecAge > 15 ) {
@@ -598,7 +601,8 @@ setKP(kpList)
 
     if(e.target.name === "lastHivTestBasedOnRequest"){
       displayRiskAssessment(e.target.value, objValues.age, isPMTCTModality);
-  
+      setRiskAssessment({ ...riskAssessment, [e.target.name]: e.target.value });
+
       }
   
   };

@@ -462,7 +462,7 @@ if (objValues.age !== "") {
               })
             }
 
-        // 
+        
       } else if (SecAge > 15 ) {
         setShowRiskAssessment(true);
         ans = true;
@@ -653,8 +653,10 @@ if (objValues.age !== "") {
     setErrors({ ...temp, [e.target.name]: "" });
     setRiskAssessment({ ...riskAssessment, [e.target.name]: e.target.value });
 
+    
     if(e.target.name === "lastHivTestBasedOnRequest"){
       displayRiskAssessment(e.target.value, objValues.age, isPMTCTModality);
+      setRiskAssessment({ ...riskAssessment, [e.target.name]: e.target.value });
 
     }
 

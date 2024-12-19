@@ -845,6 +845,7 @@ familyTestingTrackerRequestDTO.trackerAge=age_now;
   };
 const getSettings=()=>{
    console.log("HTS_ENTRY_POINT_COMMUNITY",props.patientObj.testingSetting);
+   console.log("Family props",props)
 
   if(  props.patientObj.testingSetting.includes("FACILITY")){
     HTS_ENTRY_POINT_FACILITY()
@@ -863,7 +864,7 @@ const getSettings=()=>{
     GET_CHILD_NUMBER()
     loadGenders();
     loadStates();
-    loadFamilyIndexSetting();
+    // loadFamilyIndexSetting();
     getCountry();
     getStateByCountryId();
     getMaritalStatus();

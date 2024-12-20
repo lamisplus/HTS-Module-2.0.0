@@ -64,7 +64,7 @@ const CheckedInPatientsAlert = () => {
     };
 
     const onMessageReceived = (msg) => {
-        if (msg && msg?.toLowerCase()?.includes("check")) {
+        if (msg && msg?.toLowerCase()?.includes("check") && msg?.toLowerCase()?.includes("hts")) {
             showToast(msg, 'messageReceived');
         }
     };

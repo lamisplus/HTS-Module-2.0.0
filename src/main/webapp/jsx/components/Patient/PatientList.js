@@ -67,7 +67,7 @@ const Patients = (props) => {
                     ?.filter((a) => {
                       return a.personId !== null;
                     })
-                    .map((row) => ({
+                    ?.map?.((row) => ({
                       name: row.firstName + " " + row.surname,
                       clientCode: row?.hospitalNumber || "",
                       gender: row?.gender ||row?.sex,

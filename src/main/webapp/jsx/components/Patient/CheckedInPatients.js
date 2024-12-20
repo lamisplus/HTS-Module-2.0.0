@@ -232,7 +232,7 @@ const CheckedInPatients = (props) => {
   };
 
   const onMessageReceived = (msg) => {
-    if (msg && msg?.toLowerCase()?.includes("check")) {
+    if (msg && msg?.toLowerCase()?.includes("check") &&  msg?.toLowerCase()?.includes("hts")) {
       setTableRefreshTrigger((prev) => prev + 1);
     }
   };

@@ -65,7 +65,7 @@ const HTSList = (props) => {
                       .filter((client) => {
                         return client.clientCode !== null;
                       })
-                      .map((row) => ({
+                      ?.map?.((row) => ({
                         //name:   row.hivPositive && row.hivPositive===true ? ( <><sup><b style={{color:"red"}}><Icon name='circle' size="small"/></b></sup> { " " + row.personResponseDto.firstName + " " + row.personResponseDto.surname} </>) :row.personResponseDto.firstName + " " + row.personResponseDto.surname,
                         name: row.firstName + " " + row.surname,
                         // hospital_number: row.hospitalNumber,

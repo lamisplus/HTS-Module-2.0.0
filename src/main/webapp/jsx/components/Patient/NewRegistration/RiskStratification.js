@@ -387,7 +387,8 @@ if (objValues.age !== "") {
       displayRiskAssessment(
         riskAssessment.lastHivTestBasedOnRequest,
         objValues.age,
-        ans
+        ans 
+
       );
 
 

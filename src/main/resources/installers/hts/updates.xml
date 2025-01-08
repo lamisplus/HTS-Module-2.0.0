@@ -59,20 +59,7 @@
             );
         </sql>
     </changeSet>
-    <changeSet failOnError="true" author="tyav barnabas" id="hts_345">
-        <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">
-                SELECT count(column_name)
-                FROM information_schema.columns
-                WHERE table_schema = 'public'
-                  AND table_name = 'hts_client'
-                  AND column_name = 'comment';
-            </sqlCheck>
-        </preConditions>
-        <sql>
-            ALTER TABLE hts_client ADD COLUMN IF NOT EXISTS comment VARCHAR(255);
-        </sql>
-    </changeSet>
+
 
 
     <changeSet failOnError="true" author="Ganiyat" id="20247726-009">

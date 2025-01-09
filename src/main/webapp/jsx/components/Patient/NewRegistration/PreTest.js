@@ -351,6 +351,10 @@ const BasicInfo = (props) => {
           everHadSexualIntercourse:
             dataObj?.riskStratificationResponseDto?.targetGroup ===
                         "TARGET_GROUP_SEXUAL_PARTNER" ||
+            dataObj?.riskStratificationResponseDto?.targetGroup ===
+                                    "TARGET_GROUP_MSM" ||
+            dataObj?.riskStratificationResponseDto?.targetGroup ===
+                        "TARGET_GROUP_FSW" ||
             riskAssessment?.everHadSexualIntercourse === "true" ||
             riskAssessment?.soldPaidVaginalSex === "true" ||
             riskAssessmentPartner?.uprotectedAnalSex === "true" ||

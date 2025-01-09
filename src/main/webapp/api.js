@@ -1,8 +1,9 @@
 export const url =
   process.env.NODE_ENV === "development"
-    ? "http://localhost:8789/api/v1/"
+    ? "https://dev.lamisplus.org/api/v1/"
     : "/api/v1/";
 export const token =
   process.env.NODE_ENV === "development"
-    ? "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJndWVzdEBsYW1pc3BsdXMub3JnIiwiYXV0aCI6IlN1cGVyIEFkbWluIiwibmFtZSI6Ikd1ZXN0IEd1ZXN0IiwiZXhwIjoxNzIwNjI2MTI3fQ.Vw3n7B858ZO4vbY97vuDTS8d_pUH424ZNRkbkgeW-1X67bC4aK0jkFOE-tlK7achYUybveoLQrx2enygLs6c1g"
+    ? "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJndWVzdEBsYW1pc3BsdXMub3JnIiwiYXV0aCI6IlN1cGVyIEFkbWluIiwibmFtZSI6Ikd1ZXN0IEd1ZXN0IiwiZXhwIjoxNzM2NDQ3MTE0fQ.4X40rNbgZhNZL18z-0KlslhkN9Z8lXT9HQbmICWWCGaO6JaHWXWRK9r9qlCWVLSqk9hrhZjgiDbE6uxK9bl2Tg"
     : new URLSearchParams(window.location.search).get("jwt");
+

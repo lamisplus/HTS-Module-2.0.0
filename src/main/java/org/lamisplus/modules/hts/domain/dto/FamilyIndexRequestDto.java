@@ -23,6 +23,7 @@ public class FamilyIndexRequestDto {
 
     @NotNull(message = "Child number is required")
     private int childNumber;
+    private int otherChildNumber;
 
     private String motherDead;
 
@@ -40,6 +41,7 @@ public class FamilyIndexRequestDto {
     private LocalDate yearChildDead;
     private String liveWithParent;
     private Boolean isDateOfBirthEstimated;
+    private String isHtsClient;
     private FamilyTestingTrackerRequestDTO familyTestingTrackerRequestDTO;
 
 }

@@ -349,6 +349,8 @@ const BasicInfo = (props) => {
               ? 0
               : 0,
           everHadSexualIntercourse:
+            dataObj?.riskStratificationResponseDto?.targetGroup ===
+                        "TARGET_GROUP_SEXUAL_PARTNER" ||
             riskAssessment?.everHadSexualIntercourse === "true" ||
             riskAssessment?.soldPaidVaginalSex === "true" ||
             riskAssessmentPartner?.uprotectedAnalSex === "true" ||
@@ -364,8 +366,8 @@ const BasicInfo = (props) => {
                 riskAssessmentPartner?.uprotectedAnalSex === "" &&
                 riskAssessment?.haveCondomBurst === "" &&
                 riskAssessment?.haveSexWithoutCondom === ""
-              ? -1000.0
-              : -1000.0,
+              ? 0
+              : 0,
           first_time_visit: dataObj?.firstTimeVisit === true ? 1 : 0,
           gender_female: dataObj?.personResponseDto?.sex === "Female" ? 1 : 0,
           gender_male: dataObj?.personResponseDto?.sex === "Male" ? 1 : 0,

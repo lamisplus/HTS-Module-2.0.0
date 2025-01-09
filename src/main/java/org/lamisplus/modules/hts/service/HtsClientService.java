@@ -56,6 +56,16 @@ public class HtsClientService {
 
     public HtsClientDto save(HtsClientRequestDto htsClientRequestDto){
         System.out.println("i am inside the save method");
+
+        if(htsClientRequestDto.getSource().equalsIgnoreCase(Source.Mobile.toString())){
+            System.out.println("i am inside the mobile check");
+
+            Optional<HtsClient> htsClientExists = htsClientRepository.findByUuid(htsClientRequestDto.getUuid());
+            if (htsClientExists.isPresent()) {
+                LOG.info("HTS Client with code {} has already been synced", htsClientRequestDto.getClientCode());
+                return htsClientToHtsClientDto(htsClientExists.get());
+            }}
+
         if(htsClientRequestDto.getRiskStratificationCode() != null){
             System.out.println("getRiskStratificationCode() != null");
 
@@ -65,14 +75,8 @@ public class HtsClientService {
             }
         }
 
-        if(htsClientRequestDto.getSource().equalsIgnoreCase(Source.Mobile.toString())){
-            System.out.println("i am inside the mobile check");
 
-            Optional<HtsClient> htsClientExists = htsClientRepository.findByUuid(htsClientRequestDto.getUuid());
-            if (htsClientExists.isPresent()) {
-                LOG.info("HTS Client with code {} has already been synced", htsClientRequestDto.getClientCode());
-                return htsClientToHtsClientDto(htsClientExists.get());
-        }}
+
 
         HtsClient htsClient;
         PersonResponseDto personResponseDto;
@@ -298,6 +302,7 @@ public class HtsClientService {
         htsClient.setSource(htsClientRequestDto.getSource());
         htsClient.setReferredForSti(htsClientRequestDto.getReferredForSti());
         htsClient.setComment(htsClientRequestDto.getComment());
+        htsClient.setUuid(htsClientRequestDto.getUuid());
         return htsClient;
     }
 

@@ -1,6 +1,6 @@
 export const url =
   process.env.NODE_ENV === "development"
-    ? "http://localhost:8383/api/v1/"
+    ? "https://dev.lamisplus.org/api/v1/"
     : "/api/v1/";
 export const token =
   process.env.NODE_ENV === "development"

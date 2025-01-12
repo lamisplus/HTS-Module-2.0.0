@@ -206,11 +206,11 @@ const [spokeFacList, setSpokeFacList] = useState([]);
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        //console.log(response.data);
+        
         setEnrollSetting(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+        ;
       });
   };
   const EntryPoint = () => {
@@ -219,11 +219,11 @@ const [spokeFacList, setSpokeFacList] = useState([]);
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        //console.log(response.data);
+        
         setEntryPoint(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+        ;
       });
   };
   // const HTS_ENTRY_POINT_COMMUNITY = () => {
@@ -232,11 +232,11 @@ const [spokeFacList, setSpokeFacList] = useState([]);
   //       headers: { Authorization: `Bearer ${token}` },
   //     })
   //     .then((response) => {
-  //       //console.log(response.data);
+  //       
   //       setEntryPointCommunity(response.data);
   //     })
   //     .catch((error) => {
-  //       //console.log(error);
+  //       ;
   //     });
   // };
 
@@ -250,7 +250,7 @@ const [spokeFacList, setSpokeFacList] = useState([]);
         setSpokeFacList(response.data)
       })
       .catch((error) => {
-        //console.log(error);
+        ;
       });
   };
 
@@ -336,7 +336,7 @@ setKP(kpList)
         setEntryPointSetting(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+        ;
       });
   };
 
@@ -348,11 +348,11 @@ setKP(kpList)
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        //console.log(response.data);
+        
         setEntryPointSetting(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+        ;
       });
   };
 
@@ -483,7 +483,7 @@ setKP(kpList)
         setSetting(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+        ;
       });
   }
   //End of Date of Birth and Age handling
@@ -606,7 +606,7 @@ setKP(kpList)
    newModality,
    "unknown"
  );
-    //console.log(riskAssessment)
+   
     props.patientObj.targetGroup = objValues.targetGroup;
     props.patientObj.testingSetting = objValues.testingSetting;
     props.patientObj.dateVisit = objValues.visitDate;
@@ -659,7 +659,7 @@ setKP(kpList)
           });
       }
     } else {
-      //console.log("post");
+      
       if (validate()) {
         setSaving(true); 
         objValues.dob = props.patientObj.dateOfBirth? props.patientObj.dateOfBirth: props?.personInfopersonResponseDto?.dateOfBirth

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, {  useRef, useEffect } from 'react';
 import SockJsClient from 'react-stomp';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -7,13 +7,17 @@ import './CheckedInPatientsAlert.css';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import VolumeOffIcon from '@mui/icons-material/VolumeOff';
 import { Fab } from '@material-ui/core';
+import { useLocalStorage } from './useLocalStorage';
+
+// Hook
 
 
 const CheckedInPatientsAlert = () => {
     const lastToastRef = useRef(null);
     const hiddenButtonRef = useRef(null); // Reference to the hidden button
+    const [soundEnabled, setSoundEnabled] = useLocalStorage("enableAppSound", true);
 
-    const [soundEnabled, setSoundEnabled] = useState(true);
+
     const audioRefs = useRef({
         connected: new Audio(`${process.env.PUBLIC_URL}/incoming.wav`),
         messageReceived: new Audio(`${process.env.PUBLIC_URL}/incoming.wav`),
@@ -21,7 +25,6 @@ const CheckedInPatientsAlert = () => {
     });
 
     useEffect(() => {
-
         // Simulate a user interaction by programmatically clicking the hidden button
         if (hiddenButtonRef.current) {
             hiddenButtonRef.current.click();
@@ -59,9 +62,7 @@ const CheckedInPatientsAlert = () => {
         playSound(soundKey);
     };
 
-    const onConnected = () => {
-        console.log("Connected to the server")
-    };
+    
 
     const onMessageReceived = (msg) => {
         if (msg && msg?.toLowerCase()?.includes("check") && msg?.toLowerCase()?.includes("hts")) {
@@ -69,9 +70,6 @@ const CheckedInPatientsAlert = () => {
         }
     };
 
-    const onDisconnected = () => {
-        console.log("Disconnected from the server")
-    };
 
     return (
         <div>
@@ -97,8 +95,8 @@ const CheckedInPatientsAlert = () => {
             <SockJsClient
                 url={wsUrl}
                 topics={['/topic/checking-in-out-process']}
-                onConnect={onConnected}
-                onDisconnect={onDisconnected}
+                // onConnect={onConnected}
+                // onDisconnect={onDisconnected}
                 onMessage={onMessageReceived}
                 debug={true}
             />

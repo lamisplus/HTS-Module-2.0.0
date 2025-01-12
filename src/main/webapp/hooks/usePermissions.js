@@ -12,7 +12,7 @@ export const usePermissions = () => {
 
         setPermissionSet(new Set(Array.isArray(perms) ? perms : []));
       } catch (error) {
-        console.error("Error loading permissions:", error);
+      
         setPermissionSet(new Set());
       } finally {
         setLoading(false);

@@ -455,7 +455,7 @@ const Recency = (props) => {
     objValues.htsClientId = clientId;
     objValues.recency = recency;
     objValues.personId = patientID;
-    //console.log(recency)
+  
     if (validate() ) {
       setSaving(true);
       axios

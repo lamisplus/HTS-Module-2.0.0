@@ -112,7 +112,7 @@ const PNSList = (props) => {
   const patientId =
     props.patientObj && props.patientObj.id ? props.patientObj.id : null;
   //const [key, setKey] = useState('home');
-  //console.log(props)
+  
   useEffect(() => {
     patients();
   }, []);
@@ -126,7 +126,7 @@ const PNSList = (props) => {
         }
       )
       .then((response) => {
-        console.log(response.data);
+     
         setIndexClientList(response.data);
       })
       .catch((error) => {});
@@ -145,7 +145,7 @@ const PNSList = (props) => {
   };
 
   const enrollEllicitedPatient = (row, actionType) => {
-    console.log(row);
+  
     let obj = {
       uuid: row.uuid,
       type: "partner",

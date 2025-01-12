@@ -189,8 +189,7 @@ const FeedbackModal = ({
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((resp) => {
-        console.log("ML Feedback Submitted", resp);
-
+     
         toast.success(`HTS ML Feedback Submitted Sucessfully`, {
           position: toast.POSITION.BOTTOM_CENTER,
           duration: 3000,

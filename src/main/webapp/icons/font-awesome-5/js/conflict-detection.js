@@ -110,7 +110,7 @@
     var conflictsCount = Object.keys(nodesTested.conflict).length;
 
     if (conflictsCount > 0) {
-      console.info("%cConflict".concat(conflictsCount > 1 ? 's' : '', " found:"), 'color: darkred; font-size: large');
+     
       var data = {};
 
       for (var _key in nodesTested.conflict) {

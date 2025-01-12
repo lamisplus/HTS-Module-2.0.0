@@ -164,7 +164,7 @@ const AddIndexContact = (props) => {
         setStates(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+        ;
       });
   }
 
@@ -178,7 +178,7 @@ const AddIndexContact = (props) => {
         setProvinces(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+        ;
       });
   }
 
@@ -198,7 +198,7 @@ const AddIndexContact = (props) => {
         );
       })
       .catch((error) => {
-        //console.log(error);
+        ;
       });
   };
 
@@ -214,11 +214,11 @@ const AddIndexContact = (props) => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        //console.log(response.data);
+        
         setSexs(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+        ;
       });
   };
   ///CONSENT	Yes		en	CONSENT
@@ -231,7 +231,7 @@ const AddIndexContact = (props) => {
         setConsent(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+        ;
       });
   };
   //Get list of IndexTesting
@@ -244,7 +244,7 @@ const AddIndexContact = (props) => {
         setIndexTesting(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+        ;
       });
   };
   const NotificationContact = () => {
@@ -253,11 +253,11 @@ const AddIndexContact = (props) => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        //console.log(response.data);
+        
         setNotificationContact(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+        ;
       });
   };
   const handleInputChange = (e) => {
@@ -346,7 +346,6 @@ const AddIndexContact = (props) => {
       objValues.isDateOfBirthEstimated =
         objValues.isDateOfBirthEstimated == true ? 1 : 0;
 
-      //console.log("obj", objValues);
       axios
         .post(`${baseUrl}index-elicitation`, objValues, {
           headers: { Authorization: `Bearer ${token}` },

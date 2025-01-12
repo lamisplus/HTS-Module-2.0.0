@@ -378,18 +378,18 @@ const ViewFamilyIndexTestingForm = (props) => {
       )
       .then((response) => {
         if (response.data) {
-          console.log("info", response.data);
+       
 
           setArrayFamilyIndexRequestDto(response?.data);
         }
       })
       .catch((e) => {
-        console.log("Fetch Facilities error" + e);
+     
       });
   };
 
   const getListoFFamilyIndexInfo = () => {
-    console.log("reading", props);
+   
 
     axios
       .get(
@@ -404,7 +404,7 @@ const ViewFamilyIndexTestingForm = (props) => {
         if (response.data) {
           // setFormId(response.data.htsClientId);
 
-          console.log("this info", response.data);
+        
           setPayload({
             ...response.data,
           });
@@ -413,7 +413,7 @@ const ViewFamilyIndexTestingForm = (props) => {
         }
       })
       .catch((e) => {
-        console.log("Fetch Facilities error" + e);
+      
       });
   };
 
@@ -428,14 +428,14 @@ const ViewFamilyIndexTestingForm = (props) => {
         if (response.data) {
           // setFormId(response.data.htsClientId);
 
-          console.log("this info", response.data);
+         
           setFamilyTestingTrackerRequestDTO(response.data);
 
           // setArrayFamilyIndexRequestDto(response.data.familyIndexList);
         }
       })
       .catch((e) => {
-        console.log("Fetch Facilities error" + e);
+       
       });
   };
 
@@ -444,7 +444,7 @@ const ViewFamilyIndexTestingForm = (props) => {
   const AddNewByUpdateTracker = (tracker) => {
     let userRequest= tracker;
 
-    console.log("userRequest", userRequest);
+   
     axios
       .post(
         `${baseUrl}hts-family-index-testing/family-index-tracker`,
@@ -480,7 +480,7 @@ const ViewFamilyIndexTestingForm = (props) => {
         }
       })
       .catch((e) => {
-        console.log("Fetch Facilities error" + e);
+      
       });
   };
 
@@ -488,7 +488,7 @@ const ViewFamilyIndexTestingForm = (props) => {
     let userRequest = familyIndexRequestDto;
     userRequest.familyTestingTrackerResponseDTO = tracker;
 
-    console.log("userRequest", userRequest);
+  
     axios
       .put(
         `${baseUrl}hts-family-index-testing/family-indexr/${props.selectedRow.id}`,
@@ -504,11 +504,11 @@ const ViewFamilyIndexTestingForm = (props) => {
           // setFormId(response.data.htsClientId);
           toast.success("Family Index info updated succesfully!");
 
-          console.log("updateFamilyIndexTracker status", response.data);
+        
         }
       })
       .catch((e) => {
-        console.log("Fetch Facilities error" + e);
+       
       });
   };
 
@@ -527,13 +527,13 @@ const ViewFamilyIndexTestingForm = (props) => {
         if (response.data) {
           // setFormId(response.data.htsClientId);
 
-          console.log("this info for family req and tracker", response.data);
+       
 
           setArrayFamilyTestingTrackerRequestDTO(response.data);
         }
       })
       .catch((e) => {
-        console.log("Fetch Facilities error" + e);
+       
       });
   };
 
@@ -621,7 +621,6 @@ const updateFamilyIndexDTO = (payload) => {
 
   };
   const viewFamilyTrackerRow = (data, index) => {
-    console.log("This is the data ", data);
     setAddNewAttempt(false);
 
     //get the family tracker
@@ -686,7 +685,6 @@ familyTestingTrackerRequestDTO.trackerAge=age_now;
           setFacilityInfo(storedValues);
           return storedValues
         } catch (error) {
-            console.error('Error parsing user_account JSON:', error);
             return null; 
         }
     }
@@ -807,12 +805,10 @@ familyTestingTrackerRequestDTO.trackerAge=age_now;
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        console.log("HTS_ENTRY_POINT_FACILITY",response.data);
-
         setSetting(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+        ;
       });
   };
 
@@ -827,15 +823,15 @@ familyTestingTrackerRequestDTO.trackerAge=age_now;
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        console.log("HTS_ENTRY_POINT_COMMUNITY",response.data);
+      
         setSetting(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+        ;
       });
   };
 const getSettings=()=>{
-   console.log("HTS_ENTRY_POINT_COMMUNITY",props.patientObj.testingSetting);
+ 
 
   if(  props.patientObj.testingSetting.includes("FACILITY")){
     HTS_ENTRY_POINT_FACILITY()
@@ -850,7 +846,6 @@ const getSettings=()=>{
 
 
   useEffect(() => {
-    console.log(props.patientObj);
     GET_CHILD_NUMBER()
     loadGenders();
     loadStates();
@@ -1023,14 +1018,14 @@ if(each.code !==  "CHILD_NUMBER_OTHERS"){
         otherChildNumber: "",
 
       });
-      console.log(e.target.value);
+   
 
       if (res) {
         setShowOther(true);
       } else {
       let deductedValue =   getIntPosition(e.target.value)
              //set position to child number
-             console.log("deductedValue", deductedValue)
+          
       setFamilyTestingTrackerRequestDTO({
         ...familyTestingTrackerRequestDTO,
         positionOfChildEnumerated: deductedValue,
@@ -1131,7 +1126,7 @@ setShowHTSDate(true)
     let result = familyIndex.filter((each, index) => {
       return each.code === relationship;
     });
-    console.log(result);
+    
     // filter family relationship
     let result2 = familyRelationship.filter((each, index) => {
       if (
@@ -1179,7 +1174,7 @@ setShowHTSDate(true)
         setCountries(res);
       })
       .catch((e) => {
-        console.log(e);
+     
       });
 
     // console.log(response);
@@ -1393,7 +1388,7 @@ setShowHTSDate(true)
             : "",
       });
     } else {
-      console.log(e.target.name, e.target.value);
+     
       setPayload({ ...payload, [e.target.name]: e.target.value });
     }
   };
@@ -1584,7 +1579,7 @@ setShowHTSDate(true)
 
 
   const getAttemptDisplay =(attempt)=>{
-    console.log("This is an attempt",attempt)
+   
 if(attempt){  let ans =  indexVisitAttempt.filter((each, index)=>{
   return each.code === attempt  
 })

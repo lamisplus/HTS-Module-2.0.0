@@ -9,8 +9,8 @@ export const useCheckedInPatientData = (baseUrl, token) => {
 
       });
 
-      const data = response.data;
-      const htsCode = data.find(
+      const data = response?.data;
+      const htsCode = data?.find?.(
         (item) => item.moduleServiceName.toUpperCase() === "HTS"
       )?.moduleServiceCode;
 
@@ -25,7 +25,7 @@ export const useCheckedInPatientData = (baseUrl, token) => {
         return patientResponse?.data;
       }
     } catch (error) {
-      console.error("Failed to fetch patients:", error);
+   
       return [];
     }
   }, [baseUrl, token]);

@@ -11,7 +11,7 @@ const useFacilityId = (baseUrl, token,) => {
       setFacilityId(storedValues?.currentOrganisationUnitId)
       return facilityId
     } catch (error) {
-      console.error('Error parsing user_account JSON:', error);
+    
       return null; // Return null if parsing fails
     }
   }

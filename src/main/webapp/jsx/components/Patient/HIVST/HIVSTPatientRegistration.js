@@ -514,7 +514,7 @@ const HIVSTPatientRegistration = (props) => {
                 });
                 setObjValues({...objValues, hasConductedHIVST: "No"});
             } else {
-                // console.log("Cannot add more user information as it exceeds the number of HIVST kits received.");
+               
             }
         } else{
             toast.error("Please fill all the required fields");
@@ -610,11 +610,11 @@ const HIVSTPatientRegistration = (props) => {
                 headers: {Authorization: `Bearer ${token}`},
             })
             .then((response) => {
-                //// console.log(response.data);
+               
                 setSexs(response.data);
             })
             .catch((error) => {
-                //// console.log(error);
+                
             });
     };
 
@@ -624,11 +624,11 @@ const HIVSTPatientRegistration = (props) => {
                 headers: {Authorization: `Bearer ${token}`},
             })
             .then((response) => {
-                //// console.log(response.data);
+              
                 setMaritalStatus(response.data);
             })
             .catch((error) => {
-                //// console.log(error);
+               
             });
     };
 

@@ -192,7 +192,7 @@ const BasicInfo = (props) => {
         setFacilityCode(response.data);
       })
       .catch((error) => {
-        console.log(error);
+     
       });
 
     let visitDate = new Date(props.patientObj.dateVisit);
@@ -325,10 +325,10 @@ const BasicInfo = (props) => {
           { headers: { Authorization: `Bearer ${token}` } }
         )
         .then((response) => {
-          console.log(response.data);
+         
         })
         .catch((error) => {
-          console.log(error);
+         
         });
     }
   };
@@ -342,11 +342,11 @@ const BasicInfo = (props) => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        //console.log(response.data);
+      
         setEnrollSetting(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+    
       });
   };
 
@@ -370,7 +370,7 @@ const BasicInfo = (props) => {
         setEnrollSetting(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+        
       });
   };
 
@@ -385,7 +385,7 @@ const BasicInfo = (props) => {
         setKP(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+        
       });
   };
   //Get list of IndexTesting
@@ -398,7 +398,7 @@ const BasicInfo = (props) => {
         setIndexTesting(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+      
       });
   };
   //Get list of KP
@@ -427,7 +427,7 @@ const BasicInfo = (props) => {
           }
       })
       .catch((error) => {
-        //console.log(error);
+      
       });
   };
 
@@ -441,7 +441,7 @@ const BasicInfo = (props) => {
         setCounselingType(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+        
       });
   };
   //Get list of HIV STATUS ENROLLMENT
@@ -451,11 +451,11 @@ const BasicInfo = (props) => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        //console.log(response.data);
+        
         setEnrollSetting(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+       
       });
   };
 
@@ -716,7 +716,7 @@ const BasicInfo = (props) => {
         })
         .catch((error) => {
           setSaving(false);
-          console.log(error);
+
           if (error.response && error.response.data) {
             let errorMessage =
               error.response.data.apierror &&

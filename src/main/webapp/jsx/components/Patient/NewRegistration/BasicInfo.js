@@ -503,7 +503,7 @@ const BasicInfo = (props) => {
         setKP(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+        ;
       });
   };
   //Get list of IndexTesting
@@ -516,7 +516,7 @@ const BasicInfo = (props) => {
         setIndexTesting(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+        ;
       });
   };
   //Get list of KP
@@ -530,7 +530,7 @@ const BasicInfo = (props) => {
         determinPregnancy(response.data)
       })
       .catch((error) => {
-        //console.log(error);
+        ;
       });
   };
   //Get list of KP
@@ -543,7 +543,7 @@ const BasicInfo = (props) => {
         setCounselingType(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+        ;
       });
   };
 
@@ -555,11 +555,11 @@ const BasicInfo = (props) => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        //console.log(response.data);
+        
         setEnrollSetting(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+        ;
       });
   };
 
@@ -581,7 +581,7 @@ const BasicInfo = (props) => {
         setEnrollSetting(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+        ;
       });
   };
 
@@ -609,7 +609,7 @@ const BasicInfo = (props) => {
         
       })
       .catch((error) => {
-        //console.log(error);
+        ;
       });
   };
 
@@ -625,7 +625,7 @@ const BasicInfo = (props) => {
         setMaritalStatus(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+        ;
       });
   };
   //Get list of Source of Referral
@@ -638,7 +638,7 @@ const BasicInfo = (props) => {
         setSourceReferral(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+        ;
       });
   };
   //Get list of Genders from
@@ -648,11 +648,11 @@ const BasicInfo = (props) => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        //console.log(response.data);
+        
         setGender(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+        ;
       });
   };
   //Get list of Genders from
@@ -662,13 +662,13 @@ const BasicInfo = (props) => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        //console.log(response.data);
+        
         setSexs(response.data);
         // determinSex()
 
       })
       .catch((error) => {
-        //console.log(error);
+        ;
       });
   };
 
@@ -688,7 +688,7 @@ const BasicInfo = (props) => {
         setStates(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+        ;
       });
   }
   function getProvincesId(getStateId) {
@@ -701,7 +701,7 @@ const BasicInfo = (props) => {
         setProvinces(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+        ;
       });
   }
   //fetch province
@@ -721,7 +721,7 @@ const BasicInfo = (props) => {
         );
       })
       .catch((error) => {
-        //console.log(error);
+        ;
       });
   };
 

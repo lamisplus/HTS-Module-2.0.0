@@ -64,8 +64,7 @@ const Home = (props) => {
   const getRetestingStatus = (lastRecord) => {
     let hivResult = lastRecord?.hivTestResult ? lastRecord?.hivTestResult : lastRecord?.hivTestResult2
     let weekRange = 40 + 52;
-    console.log("hivResult", hivResult)
-    console.log(lastRecord);
+  
 
     // does the patient has HTS record
 
@@ -84,19 +83,17 @@ const Home = (props) => {
               .then((response) => {
                 if (response.data.result) {
                   let lmpDate = moment(response.data.result).format("YYYY-MM-DD")
-                  console.log("lmpDate", lmpDate)
+                
                   // let EDD =moment(response.data.result).add(40, 'weeks').format("YYYY-MM-DD")
 
                   // get retesting range date 
                   let retestingRangeDate = moment(response.data.result).add(40 + 52, 'weeks').format("YYYY-MM-DD")
-                  console.log("EDD", retestingRangeDate)
+                 
                   let today = moment()
 
                   let r = moment(retestingRangeDate)
 
-                  console.log("r", r.format("YYYY-MM-DD"), today.format("YYYY-MM-DD"))
-
-                  console.log("EDD 2", r.diff(today, 'days'))
+                 
 
                   if (r.diff(today, 'days') > 0) {
 
@@ -301,8 +298,8 @@ const Home = (props) => {
                       }
                     </Suspense>
                   </Tab>
-                  <Tab eventKey="patient-visits" title="Patient Visits">
-                    {permissions.canSeePatientVisit && (
+                  {permissions.canSeePatientVisit && (
+                    <Tab eventKey="patient-visits" title="Patient Visits">
 
                       <Suspense fallback={<LoadingSpinner />}>
                         {key === "patient-visits" &&
@@ -313,8 +310,8 @@ const Home = (props) => {
                           />
                         }
                       </Suspense>
-                    )}
-                  </Tab>
+                    </Tab>
+                  )}
                 </Tabs>
               </div>
             </Card.Body>

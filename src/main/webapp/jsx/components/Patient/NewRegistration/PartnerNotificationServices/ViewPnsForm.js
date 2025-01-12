@@ -270,7 +270,7 @@ const ViewPNSForm = (props) => {
           setFacilityInfo(storedValues?.currentOrganisationUnitName);
           return storedValues
         } catch (error) {
-            console.error('Error parsing user_account JSON:', error);
+          
             return null; 
         }
     }
@@ -425,7 +425,7 @@ const ViewPNSForm = (props) => {
         setStates(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+        ;
       });
   }
 
@@ -439,7 +439,7 @@ const ViewPNSForm = (props) => {
         setProvinces(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+        ;
       });
   }
 
@@ -460,7 +460,7 @@ const ViewPNSForm = (props) => {
         );
       })
       .catch((error) => {
-        //console.log(error);
+        ;
       });
   };
 
@@ -476,11 +476,11 @@ const ViewPNSForm = (props) => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        //console.log(response.data);
+        
         setSexs(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+        ;
       });
   };
   //Get list of IndexTesting
@@ -493,7 +493,7 @@ const ViewPNSForm = (props) => {
         setIndexTesting(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+        ;
       });
   };
   console.log(props);
@@ -507,7 +507,7 @@ const ViewPNSForm = (props) => {
         setIndexTesting(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+        ;
       });
   };
   //Get view pns info
@@ -522,7 +522,7 @@ const ViewPNSForm = (props) => {
         setContactTracing(response.data.contactTracing);
       })
       .catch((error) => {
-        //console.log(error);
+        ;
       });
   };
   ///CONSENT	Yes		en	CONSENT
@@ -535,7 +535,7 @@ const ViewPNSForm = (props) => {
         setConsent(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+        ;
       });
   };
   const NotificationContact = () => {
@@ -544,11 +544,11 @@ const ViewPNSForm = (props) => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        //console.log(response.data);
+        
         setNotificationContact(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+        ;
       });
   };
   const handleItemClick = (page, completedMenu) => {

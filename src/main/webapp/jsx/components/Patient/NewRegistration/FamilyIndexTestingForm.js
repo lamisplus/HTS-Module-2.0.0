@@ -530,7 +530,7 @@ if(each.code !==  "CHILD_NUMBER_OTHERS"){
         setSetting(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+        ;
       });
   };
 
@@ -545,7 +545,7 @@ if(each.code !==  "CHILD_NUMBER_OTHERS"){
         setSetting(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+        ;
       });
   };
  const getSettings=()=>{

@@ -102,7 +102,7 @@ const PatientnHistory = (props) => {
   const patientId =
     props.patientObj && props.patientObj.id ? props.patientObj.id : null;
   //const [key, setKey] = useState('home');
-  //console.log(props)
+  
   useEffect(() => {
     patients();
   }, []);

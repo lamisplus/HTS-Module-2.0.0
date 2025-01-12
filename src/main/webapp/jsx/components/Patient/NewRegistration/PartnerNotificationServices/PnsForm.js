@@ -428,7 +428,7 @@ const PnsForm = (props) => {
         setStates(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+        ;
       });
   }
 
@@ -442,7 +442,7 @@ const PnsForm = (props) => {
         setProvinces(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+        ;
       });
   }
 
@@ -463,7 +463,7 @@ const PnsForm = (props) => {
         );
       })
       .catch((error) => {
-        //console.log(error);
+        ;
       });
   };
 
@@ -479,11 +479,11 @@ const PnsForm = (props) => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        //console.log(response.data);
+        
         setSexs(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+        ;
       });
   };
   //Get list of IndexTesting
@@ -496,7 +496,7 @@ const PnsForm = (props) => {
         setIndexTesting(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+        ;
       });
   };
 
@@ -514,7 +514,7 @@ const PnsForm = (props) => {
         setIndexTesting(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+        ;
       });
   };
   //Get view pns info
@@ -527,7 +527,7 @@ const PnsForm = (props) => {
         setIndexTesting(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+        ;
       });
   };
   ///CONSENT	Yes		en	CONSENT
@@ -540,7 +540,7 @@ const PnsForm = (props) => {
         setConsent(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+        ;
       });
   };
   const NotificationContact = () => {
@@ -549,11 +549,11 @@ const PnsForm = (props) => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        //console.log(response.data);
+        
         setNotificationContact(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+        ;
       });
   };
   const handleItemClick = (page, completedMenu) => {

@@ -34,7 +34,7 @@ export const useLinkageData = (baseUrl, token) => {
           totalCount: formattedData.length,
         };
       } catch (error) {
-        console.error("Failed to fetch linkages:", error);
+       
         return {
           data: [],
           page: 0,

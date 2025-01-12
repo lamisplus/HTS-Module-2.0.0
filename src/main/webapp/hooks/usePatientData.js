@@ -23,7 +23,7 @@ export const usePatientData = (baseUrl, token) => {
           totalCount: response.totalRecords,
         };
       } catch (error) {
-        console.error("Failed to fetch patients:", error);
+       
         throw new Error("Failed to fetch patients");
       }
     },

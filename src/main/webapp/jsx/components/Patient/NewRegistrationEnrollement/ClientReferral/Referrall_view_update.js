@@ -170,7 +170,7 @@ const ViewClientReferral = (props) => {
         setFormInfo(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+        ;
       });
   };
   useEffect(() => {

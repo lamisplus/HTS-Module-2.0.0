@@ -106,7 +106,9 @@ const PatientVisits = (props) => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      setPatientVisits(response.data);
+      const htsVisits = response?.data?.filter((visit) => visit?.service?.toLowerCase() === "hts-code")
+
+      setPatientVisits(htsVisits);
       const hasActiveVisit = response.data.some(
         (visit) => !visit.checkOutTime || visit.status === "PENDING"
       );
@@ -123,23 +125,50 @@ const PatientVisits = (props) => {
   }, [fetchServices, fetchPatientVisits]);
 
 
+  // const handleCheckout = async () => {
+  //   const activeVisit = patientVisits.find(
+  //     (visit) => visit.status === "PENDING"
+  //   );
+  //   if (!activeVisit) {
+  //     toast.error("No Pending visit found");
+  //     return;
+  //   }
+
+  //   try {
+  //     await axios.put(
+  //       `${baseUrl}patient/visit/checkout/${activeVisit.id}`,
+  //       { checkOutDate: moment(checkoutDate).format("YYYY-MM-DD HH:mm") },
+  //       { headers: { Authorization: `Bearer ${token}` } }
+  //     );
+
+  //     toast.success("Check-out successful");
+  //     setCheckinStatus(false);
+  //     setIsCheckoutModalOpen(false);
+  //     fetchPatientVisits();
+  //   } catch (error) {
+  //     toast.error("Check-out failed");
+  //   }
+  // };
+
   const handleCheckout = async () => {
     const activeVisit = patientVisits.find(
-      (visit) => visit.status === "PENDING"
+      (visit) => visit.status === "PENDING" && visit.service === "HTS_code"
     );
     if (!activeVisit) {
-      toast.error("No Pending visit found");
+      toast.error("No pending HTS visit found");
       return;
     }
-
+    if (activeVisit.service !== "HTS_code") {
+      toast.error("Can only checkout HTS services");
+      return;
+    }
     try {
       await axios.put(
         `${baseUrl}patient/visit/checkout/${activeVisit.id}`,
         { checkOutDate: moment(checkoutDate).format("YYYY-MM-DD HH:mm") },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-
-      toast.success("Check-out successful");
+      toast.success("Check-out successful")
       setCheckinStatus(false);
       setIsCheckoutModalOpen(false);
       fetchPatientVisits();

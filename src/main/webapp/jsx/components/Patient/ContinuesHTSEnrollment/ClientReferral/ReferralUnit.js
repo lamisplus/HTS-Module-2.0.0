@@ -271,10 +271,10 @@ const ReferralUnit = (props) => {
         setCountries(res);
       })
       .catch((e) => {
-        // console.log(e);
+     
       });
 
-    // console.log(response);
+    
   };
 
   const checkNumberLimit = (e) => {
@@ -302,7 +302,7 @@ const ReferralUnit = (props) => {
         }
       })
       .catch((e) => {
-        // console.log("Fetch states error" + e);
+       
       });
   };
 
@@ -319,7 +319,7 @@ const ReferralUnit = (props) => {
         }
       })
       .catch((e) => {
-        // console.log("Fetch LGA error" + e);
+        
       });
   };
 
@@ -336,7 +336,7 @@ const ReferralUnit = (props) => {
         }
       })
       .catch((e) => {
-        // console.log("Fetch Facilities error" + e);
+      
       });
   };
 
@@ -353,7 +353,7 @@ const ReferralUnit = (props) => {
         }
       })
       .catch((e) => {
-        // console.log("Fetch Facilities error" + e);
+        
       });
   };
 

@@ -163,7 +163,7 @@ const FamilyIndexHistory = (props) => {
       });
   };
   const enrollEllicitedPatient = (row, actionType) => {
-    console.log(row);
+    
     let obj = {
       uuid: row.uuid,
       type: "family",
@@ -191,8 +191,7 @@ const FamilyIndexHistory = (props) => {
   }, [props.patientObj]);
 
   const LoadViewPage = (row, actionType) => {
-    console.log(row);
-    console.log(props);
+  
 
     props.handleItemClick("view-fit");
     props.setSelectedRow(row);

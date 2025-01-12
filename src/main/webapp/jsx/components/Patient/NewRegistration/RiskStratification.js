@@ -499,7 +499,7 @@ if (objValues.age !== "") {
         setSetting(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+        ;
       });
   }
   //End of Date of Birth and Age handling

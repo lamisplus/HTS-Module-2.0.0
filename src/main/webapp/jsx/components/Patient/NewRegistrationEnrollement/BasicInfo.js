@@ -94,7 +94,6 @@ const useStyles = makeStyles((theme) => ({
 const BasicInfo = (props) => {
   const classes = useStyles();
   const history = useHistory();
-  //console.log("enr", props.activePage.activeObject);
   const [errors, setErrors] = useState({});
   const [saving, setSaving] = useState(false);
   //const [hideNumChild, setHideNumChild] = useState(false);
@@ -106,7 +105,7 @@ const BasicInfo = (props) => {
   const [pregnancyStatus, setPregnancyStatus] = useState([]);
   const [indexTesting, setIndexTesting] = useState([]);
   let temp = { ...errors };
-  //console.log(props?.patientObj?.dateVisit)
+ 
   const [modalityCheck, setModalityCheck] = useState("");
   const [objValues, setObjValues] = useState({
     active: true,
@@ -186,7 +185,7 @@ const BasicInfo = (props) => {
         setKP(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+        ;
       });
   };
   //Get list of IndexTesting
@@ -199,7 +198,7 @@ const BasicInfo = (props) => {
         setIndexTesting(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+        ;
       });
   };
   //Get list of KP
@@ -212,7 +211,7 @@ const BasicInfo = (props) => {
         setPregnancyStatus(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+        ;
       });
   };
 
@@ -225,11 +224,11 @@ const BasicInfo = (props) => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        //console.log(response.data);
+        
         setEnrollSetting(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+        ;
       });
   };
 
@@ -251,7 +250,7 @@ const BasicInfo = (props) => {
         setEnrollSetting(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+        ;
       });
   };
 
@@ -265,7 +264,7 @@ const BasicInfo = (props) => {
         setCounselingType(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+        ;
       });
   };
   //Get list of HIV STATUS ENROLLMENT
@@ -290,11 +289,11 @@ const BasicInfo = (props) => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        //console.log(response.data);
+        
         setSourceReferral(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+        ;
       });
   };
   //Get list of Genders from
@@ -304,11 +303,11 @@ const BasicInfo = (props) => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        //console.log(response.data);
+        
         setGender(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+        ;
       });
   };
   const handleInputChange = (e) => {
@@ -351,7 +350,7 @@ const BasicInfo = (props) => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        //console.log(response.data);
+        
         setGender(response.data);
       })
       .catch((error) => {

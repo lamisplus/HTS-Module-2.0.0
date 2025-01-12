@@ -231,7 +231,7 @@ const RiskStratification = (props) => {
         setSpokeFacList(response.data)
       })
       .catch((error) => {
-        //console.log(error);
+        
       });
   };
 
@@ -256,7 +256,7 @@ const RiskStratification = (props) => {
 
       })
       .catch((error) => {
-        //console.log(error);
+        
       });
   };
 
@@ -269,11 +269,11 @@ const RiskStratification = (props) => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        //console.log(response.data);
+        
         setEntryPointSetting(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+        
       });
   };
 
@@ -458,7 +458,7 @@ setKP(kpList)
         setSetting(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+        
       });
   }
   //End of Date of Birth and Age handling

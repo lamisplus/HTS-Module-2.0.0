@@ -160,11 +160,11 @@ const BasicInfo = (props) => {
             { headers: {"Authorization" : `Bearer ${token}`} }
         )
         .then((response) => {
-            //console.log(response.data);
+            
             setEnrollSetting(response.data);
         })
         .catch((error) => {
-        //console.log(error);
+        ;
         });    
     }
     //Get list of KP
@@ -177,7 +177,7 @@ const BasicInfo = (props) => {
             setKP(response.data);
         })
         .catch((error) => {
-        //console.log(error);
+        ;
         });    
     }
     const handleInputChange = e => { 
@@ -313,7 +313,7 @@ const BasicInfo = (props) => {
                setSetting(response.data);
            })
            .catch((error) => {
-           //console.log(error);
+           ;
            });
        
     }

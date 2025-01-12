@@ -20,7 +20,6 @@ export const usePatientSocket = (baseUrl, token, onDataUpdate) => {
       });
 
       socketRef.current.on("connect", () => {
-        console.log("Socket Connected");
         // Clear any pending reconnection attempts
         if (reconnectTimeoutRef.current) {
           clearTimeout(reconnectTimeoutRef.current);
@@ -29,7 +28,6 @@ export const usePatientSocket = (baseUrl, token, onDataUpdate) => {
       });
 
       socketRef.current.on("disconnect", () => {
-        console.log("Socket Disconnected");
         // Only fetch data if component is still mounted
         if (isMounted) {
           onDataUpdate();
@@ -45,7 +43,7 @@ export const usePatientSocket = (baseUrl, token, onDataUpdate) => {
       });
 
       socketRef.current.on("connect_error", (error) => {
-        console.error("Socket connection error:", error);
+   
         // Clean up existing socket
         if (socketRef.current) {
           socketRef.current.disconnect();

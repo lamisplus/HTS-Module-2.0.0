@@ -171,7 +171,7 @@ const PostTest = (props) => {
     }
   };
   useEffect(() => {
-    //console.log(props.patientObj.postTestCounselingKnowledgeAssessment)
+  
     setPostTest({
       ...postTest,
       ...props.patientObj.postTestCounselingKnowledgeAssessment,

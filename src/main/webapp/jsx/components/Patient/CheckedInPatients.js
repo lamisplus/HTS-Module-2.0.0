@@ -610,7 +610,7 @@ const CheckedInPatients = (props) => {
           playSound("waiting")
         }
       }
-    }, 60000); // Check every 15 seconds
+    }, 60000); // Check every 60 seconds
 
     return () => {
       clearInterval(interval)

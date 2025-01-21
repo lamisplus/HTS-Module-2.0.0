@@ -587,12 +587,10 @@ const BasicInfo = (props) => {
     setErrors({ ...temp });
     return Object.values(temp).every((x) => x == "");
   };
+
   const handleItemClick = (page, completedMenu) => {
-    props.handleItemClick(page);
-    if (props.completed.includes(completedMenu)) {
-    } else {
-      props.setCompleted([...props.completed, completedMenu]);
-    }
+    props.handleItemClick(page, completedMenu);
+ 
   };
   //checkClientCode
   //   const checkClientCode = (e) => {
@@ -651,11 +649,13 @@ const BasicInfo = (props) => {
     e.preventDefault();
     // check next form
     let latestForm = getNextForm(
-      "Client_intake_form",
+      "client_intake_form",
       props.patientAge,
       modalityCheck,
       "unknown"
     );
+
+    console.log("latestForm", latestForm)
 
     const patientForm = {
       clientCode: objValues.clientCode,
@@ -746,6 +746,7 @@ const BasicInfo = (props) => {
           setSaving(false);
           props.setPatientObj(response.data);
           localStorage.setItem("htsClientUUid", JSON.stringify(response.data.htsClientUUid));
+
           handleItemClick(latestForm[0], latestForm[1]);
 
         })

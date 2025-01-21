@@ -447,7 +447,7 @@ const Recency = (props) => {
   const handleSubmit = (e) => {
     e.preventDefault();
       let latestForm = getNextForm(
-        "HIV_Recency_Testing",
+        "hiv_recency_testing",
         props.patientAge,
         "",
         props?.patientObj?.hivTestResult

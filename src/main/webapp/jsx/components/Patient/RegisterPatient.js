@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Button } from "semantic-ui-react";
 import ViewPNSForm from "./NewRegistration/PartnerNotificationServices/ViewPnsForm";
 import { Card, CardBody } from "reactstrap";
@@ -21,7 +21,7 @@ import PostTest from "./NewRegistration/PostTest";
 import RecencyTesting from "./NewRegistration/RecencyTesting";
 import RiskStratification from "./NewRegistration/RiskStratification";
 import ClientRefferalForm from "./NewRegistration/RefferalForm";
-import { getAcount } from "../../../utility";
+import { getAcount, getNextForm, getPreviousForm, getCurentForm } from "../../../utility";
 import { getCheckModality } from "../../../utility";
 import FamilyIndexTestingForm from "./NewRegistration/FamilyIndexTestingForm";
 import PnsForm from "./NewRegistration/PartnerNotificationServices/PnsForm";
@@ -30,10 +30,9 @@ import ClientReferralHistory from "./NewRegistrationEnrollement/ClientReferral/C
 import ViewClientReferral from "./NewRegistrationEnrollement/ClientReferral/Referrall_view_update";
 import FamilyIndexHistory from "./NewRegistration/PartnerNotificationServices/FamilyIndexhIstory";
 import ViewFamilyIndexTestingForm from "./NewRegistration/PartnerNotificationServices/ViewFamilyIndexForm";
-import { getPreviousForm } from "../../../utility";
 import { calculate_age } from "../utils";
 import PNSHistory from "./NewRegistration/PartnerNotificationServices/PNSHistory";
-
+import { usePermissions } from "../../../hooks/usePermissions";
 
 const useStyles = makeStyles((theme) => ({
   error: {
@@ -72,9 +71,9 @@ const UserRegistration = (props) => {
   const [action, setAction] = useState("");
 
 
-  const [permissions, setPermission] = useState(
-    JSON.parse(localStorage.getItem("stringifiedPermmision"))
-  );
+  // const [permissions, setPermission] = useState(
+  //   JSON.parse(localStorage.getItem("stringifiedPermmision")) || []
+  // );
 
   const getFacilityAccount = () => {
     getAcount()
@@ -82,6 +81,9 @@ const UserRegistration = (props) => {
       })
       .catch(() => {});
   };
+
+  const { hasPermission } = usePermissions();
+
   const [selectedRow, setSelectedRow] = useState({});
   const [extra, setExtra] = useState({
     risk: "",
@@ -286,100 +288,9 @@ const UserRegistration = (props) => {
       setPatientObj(locationState.patientObj);
     }
   }, []);
+  
 
-
-  const getCurentForm=(activeItem)=>{
-    
-    switch(activeItem){
-      case  "risk": 
-      return "Risk_Stratification";
-    
-      case  "basic": 
-      return "Client_intake_form"; 
-
-      case  "pre-test-counsel": 
-      return "Pre_Test_Counseling";
-
-      case  "hiv-test": 
-      return "Request_and_Result_Form";
-
-      case  "post-test": 
-      return "Post_Test_Counseling";
-
-      case  "recency-testing": 
-      return "HIV_Recency_Testing";
-
-      case  "fit": 
-      return "Family_Index_Testing_Form";
-
-      case  "fit-history": 
-      return "Family_Index_Testing_Form";
-
-      case  "view-fit": 
-      return "Family_Index_Testing_Form";
-
-      case  "pns": 
-      return "Nigeria_PNS_Form";
-
-      case  "pns-history": 
-      return "Nigeria_PNS_Form";
-
-
-      case  "client-referral": 
-      return "";
-
-      case  "refferal-history": 
-      return "Referral_Form";
-
-      case  "view-referral": 
-      return "Referral_Form";
-
-      default:
-        return "";    }
-
-  }
-
-
-  const getPrevForm=(e)=>{
-          if( activeItem === "risk"){
-            history.push("/");
-
-          }else{
-            e.preventDefault()
-          let currentForm =   getCurentForm(activeItem)
-
-            let age = calculate_age(
-              basicInfo?.personResponseDto?.dateOfBirth
-                ? basicInfo?.personResponseDto?.dateOfBirth
-                : patientObj?.personResponseDto?.dateOfBirth
-            );
-
-            let hivStatus = patientObj?.hivTestResult;
-
-            let checkModality = patientObj?.riskStratificationResponseDto?.testingSetting? patientObj.riskStratificationResponseDto.testingSetting: "";
-            let isPMTCTModality =getCheckModality(checkModality)
-
-
-          let answer =  getPreviousForm(currentForm, age, isPMTCTModality, hivStatus); 
-          if (answer[0]  && answer[1]) {
-            if(answer[0] === "fit"){
-              handleItemClick("fit-history");
-
-            }else if(answer[0] === "pns"){
-
-              handleItemClick("pns-history");
-
-            }else{
-            
-              handleItemClick(answer[0]);
-
-            }
-          }else{
-          history.push("/");
-
-          }
-}
-  } 
+ 
 
 const clearInfo=()=>{
   setCompleted([])
@@ -583,12 +494,63 @@ const clearInfo=()=>{
   setOrganizationInfo({})
 }
 
+
+const fetchPrevForm=(e)=>{
+  if( activeItem === "risk"){
+    history.push("/");
+
+  }else{
+    e.preventDefault()
+  let currentForm =   getCurentForm(activeItem)
+
+    let age = calculate_age(
+      basicInfo?.personResponseDto?.dateOfBirth
+        ? basicInfo?.personResponseDto?.dateOfBirth
+        : patientObj?.personResponseDto?.dateOfBirth
+    );
+
+    let hivStatus = patientObj?.hivTestResult;
+
+    let checkModality = patientObj?.riskStratificationResponseDto?.testingSetting? patientObj.riskStratificationResponseDto.testingSetting: "";
+    let isPMTCTModality =getCheckModality(checkModality)
+
+
+  let answer =  getPreviousForm(currentForm, age, isPMTCTModality, hivStatus);
+  if (answer[0]  && answer[1]) {
+    if(answer[0] === "fit"){
+      handleItemClick("fit-history");
+
+    }else if(answer[0] === "pns"){
+
+      handleItemClick("pns-history");
+
+    }else{
+      handleItemClick(answer[0]);
+
+    }
+  }else{
+  history.push("/");
+
+  }
+}
+}
+
   useEffect(() => {
   
     setModalityCheck(
       getCheckModality(patientObj?.riskStratificationResponseDto?.testingSetting)
     );
   }, [patientObj]);
+
+  const permissions = useMemo(
+    () => ({
+      canSeeRequestAndResultForm: hasPermission("request_and_result_form"),
+      canSeeNigeriaPnsForm: hasPermission("nigeria_pns_form"),
+      canSeeRefferalForm: hasPermission("referral_form")
+    }),
+    [hasPermission]
+  );
+
   return (
     <>
       <ToastContainer autoClose={3000} hideProgressBar />
@@ -626,7 +588,7 @@ const clearInfo=()=>{
                       color="primary"
                       className=" float-end"
                       //startIcon={<FaUserPlus size="10"/>}
-                      onClick={getPrevForm}
+                      onClick={fetchPrevForm}
                       style={{ backgroundColor: "#014d88" }}
                     >
                       <span style={{ textTransform: "capitalize" }}>Back</span>
@@ -704,8 +666,8 @@ const clearInfo=()=>{
                             </span>
                           </Menu.Item>
                         )}
-
-                      {permissions.includes("Request_and_Result_Form") && (
+                      
+                      {permissions.canSeeRequestAndResultForm && (
                         <Menu.Item
                           name="inbox"
                           active={activeItem === "hiv-test"}
@@ -790,7 +752,7 @@ const clearInfo=()=>{
                           </Menu.Item>
                         )}
 
-                      {permissions.includes("Nigeria_PNS_Form") &&
+                      {permissions.canSeeNigeriaPnsForm &&
                         patientObj.hivTestResult &&
                         patientObj.hivTestResult.toLowerCase() ===
                           "positive" && (
@@ -813,7 +775,7 @@ const clearInfo=()=>{
                           </Menu.Item>
                         )}
 
-                      {permissions.includes("Referral_Form") && (
+                      {permissions.canSeeRefferalForm && (
                         <Menu.Item
                           name="inbox"
                           active={activeItem === "refferal-history"}

@@ -23,7 +23,7 @@ export const usePermissions = () => {
 
   const checkPermissions = useMemo(
     () => ({
-      hasPermission: (permission) => permissionSet.has(permission),
+      hasPermission: (permission) => permissionSet.has(permission?.toLowerCase()),
       hasAnyPermission: (...permissions) =>
         permissions.some((p) => permissionSet.has(p)),
     }),

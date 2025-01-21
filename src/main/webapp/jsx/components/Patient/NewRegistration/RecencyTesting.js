@@ -212,8 +212,7 @@ const Recency = (props) => {
     // setSaving(true);
     handleItemClick(nextForm[0], nextForm[1]);
 
-    // else if (permissions.includes("Nigeria_PNS_Form")) {
-    // }
+   
 
     toggle();
   };
@@ -475,7 +474,7 @@ const Recency = (props) => {
 
     let  age = calculate_age(props?.patientObj?.personResponseDto?.dateOfBirth)
            let latestForm = getNextForm(
-             "HIV_Recency_Testing",
+             "hiv_recency_testing",
              age,
              "",
              props?.patientObj?.hivTestResult

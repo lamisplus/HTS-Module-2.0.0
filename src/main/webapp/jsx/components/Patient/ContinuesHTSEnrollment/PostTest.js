@@ -194,11 +194,8 @@ const PostTest = (props) => {
     }
   };
   const handleItemClick = (page, completedMenu) => {
-    props.handleItemClick(page);
-    if (props.completed.includes(completedMenu)) {
-    } else {
-      props.setCompleted([...props.completed, completedMenu]);
-    }
+    props.handleItemClick(page, completedMenu);
+ 
   };
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -206,7 +203,7 @@ const PostTest = (props) => {
     // if(!(Object.values(postTest).every(x => x === ""))){
     
    let latestForm = getNextForm(
-     "Post_Test_Counseling",
+     "post_test_counseling",
      props?.patientObj?.riskStratificationResponseDto?.age,
      "",
      props?.patientObj?.hivTestResult

@@ -659,7 +659,7 @@ const HivTestResult = (props) => {
         console.log(errors);
 
             let latestForm = getNextForm(
-        "Request_and_Result_Form",
+        "request_and_result_form",
         props.patientAge,
         "",
         "unknown"

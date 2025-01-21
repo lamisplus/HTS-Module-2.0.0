@@ -515,12 +515,12 @@ const CheckedInPatients = (props) => {
         title: "Actions",
         field: "actions",
         render: (rowData) => {
-          const isEnrolled = rowData?.isEnrolled;
+          const isOnHts = rowData?.isOnHts;
 
           return (
             <div>
               {permissions.canSeeEnrollButton &&
-                rowData.biometricStatus === true && (
+                
                   <Link
                     to={{
                       pathname: "/patient-history",
@@ -528,7 +528,7 @@ const CheckedInPatients = (props) => {
                         patientObject: rowData,
                         patientObj: rowData,
                         clientCode: rowData?.clientCode,
-                        activepage: isEnrolled ? "home" : "NEW HTS",
+                        activepage: isOnHts ? "home" : "NEW HTS",
                         checkedInPatient: true
                       },
 
@@ -553,7 +553,7 @@ const CheckedInPatients = (props) => {
                           backgroundColor: "rgb(153, 46, 98)",
                         }}
                       >
-                        {isEnrolled ? <MdDashboard /> : <TiArrowForward />}
+                        {isOnHts ? <MdDashboard /> : <TiArrowForward />}
                       </Button>
                       <Button
                         style={{
@@ -567,12 +567,12 @@ const CheckedInPatients = (props) => {
                             fontWeight: "bolder",
                           }}
                         >
-                          {isEnrolled ? "Patient Dashboard" : "Enroll Patient"}
+                          {isOnHts ? "Patient Dashboard" : "Enroll Patient"}
                         </span>
                       </Button>
                     </ButtonGroup>
                   </Link>
-                )}
+                }
             </div>
           );
         },

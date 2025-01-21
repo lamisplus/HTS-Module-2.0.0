@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { FormGroup, Label, CardBody, Spinner, Input, Form } from "reactstrap";
@@ -41,6 +41,7 @@ import {
 
 import { calculate_age } from "../../../utils/index.js";
 import { LiveHelp } from "@material-ui/icons";
+import { usePermissions } from "../../../../../hooks/usePermissions.js";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -156,9 +157,9 @@ const ViewFamilyIndexTestingForm = (props) => {
       ? props?.basicInfo?.personResponseDto?.address?.address[0]?.stateId
       : props?.patientObj?.personResponseDto?.address?.address[0]?.stateId
   );
-  const [permissions, setPermission] = useState(
-    localStorage.getItem("permissions")?.split(",")
-  );
+  // const [permissions, setPermission] = useState(
+  //   localStorage.getItem("permissions")?.split(",")
+  // );
   const [lgaInfo, setLgaInfo] = useState(
     props?.basicInfo?.personResponseDto?.address?.address[0].district
       ? props?.basicInfo?.personResponseDto?.address?.address[0].district
@@ -303,7 +304,17 @@ const ViewFamilyIndexTestingForm = (props) => {
   const [selectedFacility, setSelectedFacility] = useState({});
   const [selectedLga, setSelectedLga] = useState({});
   const [retrieveFromIdToCode, setRetrieveFromIdToCode] = useState(true);
-  
+  const { hasPermission } = usePermissions();
+
+  const permissions = useMemo(
+    () => ({
+      canSeeRequestAndResultForm: hasPermission("request_and_result_form"),
+      canSeeNigeriaPnsForm: hasPermission("nigeria_pns_form"),
+      canSeeRefferalForm: hasPermission("referral_form")
+    }),
+    [hasPermission]
+  );
+
   
   const loadStates = () => {
     axios
@@ -513,7 +524,7 @@ const ViewFamilyIndexTestingForm = (props) => {
   };
 
   // get list of family tracker
-  const getListOfFamilyTracker = () => {
+const getListOfFamilyTracker = () => {
     axios
       .get(
         `${baseUrl}hts-family-index-testing/family-index-tracker/by-family-index-uuid?familyIndexUuid=${props.selectedRow.uuid}`,
@@ -536,11 +547,6 @@ const ViewFamilyIndexTestingForm = (props) => {
        
       });
   };
-
-
-
-
-
 
 const updateFamilyIndexDTO = (payload) => {
   axios
@@ -1146,10 +1152,10 @@ setShowHTSDate(true)
       });
     }
     // setSaving(true);
-    if (permissions.includes("Nigeria_PNS_Form")) {
+    if (permissions.canSeeNigeriaPnsForm) {
       handleItemClick("pns", "fit");
       toggle();
-    } else if (permissions.includes("Referral_Form")) {
+    } else if (permissions.canSeeRefferalForm) {
       handleItemClick("pns", "client-referral");
       toggle();
     }

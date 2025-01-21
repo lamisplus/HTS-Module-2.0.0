@@ -242,14 +242,10 @@ const BasicInfo = (props) => {
        
         }
     }, [props.patientObj]);
-    const handleItemClick =(page, completedMenu)=>{        
-        if(props.completed.includes(completedMenu)) {
-        }else{
-            props.setCompleted([...props.completed, completedMenu])
-        }
-        props.handleItemClick(page)
-    }
-
+    const handleItemClick = (page, completedMenu) => {
+        props.handleItemClick(page, completedMenu);
+     
+      };
     const handleInputChangeKnowledgeAssessment = e => { 
         //setErrors({...temp, [e.target.name]:""})
         
@@ -364,7 +360,7 @@ const BasicInfo = (props) => {
           props.patientObj?.riskStratificationResponseDto?.testingSetting
         );
               let latestForm = getNextForm(
-                "Pre_Test_Counseling",
+                "pre_test_counseling",
                 props.patientAge,
                 modality,
                 "unknown"

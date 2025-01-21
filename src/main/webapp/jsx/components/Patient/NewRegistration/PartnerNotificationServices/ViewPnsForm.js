@@ -1,27 +1,26 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, {  useEffect, useState } from "react";
 import { FormGroup, Label, CardBody, Spinner, Input, Form } from "reactstrap";
 import * as moment from "moment";
 import { makeStyles } from "@material-ui/core/styles";
-import { Card, CardContent } from "@material-ui/core";
+import { Card, } from "@material-ui/core";
 import axios from "axios";
 import { token, url as baseUrl } from "../../../../../api";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
-// import {Link, useHistory, useLocation} from "react-router-dom";
-// import {TiArrowBack} from 'react-icons/ti'
-// import {token, url as baseUrl } from "../../../api";
+
 import "react-phone-input-2/lib/style.css";
 import { Button } from "semantic-ui-react";
-// import 'semantic-ui-css/semantic.min.css';
+
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
-import Badge from "@mui/material/Badge";
 
 import { calculate_age } from "../../../utils";
-import PersonIcon from "@mui/icons-material/Person";
+import { alphabetOnly } from "../../../../../utility";
+
+
 const useStyles = makeStyles((theme) => ({
   card: {
     margin: theme.spacing(20),
@@ -552,11 +551,8 @@ const ViewPNSForm = (props) => {
       });
   };
   const handleItemClick = (page, completedMenu) => {
-    props.handleItemClick(page);
-    if (props.completed.includes(completedMenu)) {
-    } else {
-      props.setCompleted([...props.completed, completedMenu]);
-    }
+    props.handleItemClick(page, completedMenu);
+ 
   };
   const handleItemClickPage = (page) => {
     props.handleIClickPage(page);
@@ -656,10 +652,7 @@ const ViewPNSForm = (props) => {
     const limit = 10;
     setObjValues({ ...objValues, [inputName]: e.slice(0, limit) });
   };
-  const alphabetOnly = (value) => {
-    const result = value.replace(/[^a-z]/gi, "");
-    return result;
-  };
+  
   const validate = () => {
     //HTS FORM VALIDATION
     // temp.stateId = objValues.stateId ? "" : "This field is required.";

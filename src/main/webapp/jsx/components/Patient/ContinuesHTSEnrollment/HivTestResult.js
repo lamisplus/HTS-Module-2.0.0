@@ -505,11 +505,8 @@ const handleInputChangeTie2 = (e) => {
     setOthers({ ...others, [e.target.name]: e.target.value });
   };
   const handleItemClick = (page, completedMenu) => {
-    props.handleItemClick(page);
-    if (props.completed.includes(completedMenu)) {
-    } else {
-      props.setCompleted([...props.completed, completedMenu]);
-    }
+    props.handleItemClick(page, completedMenu);
+ 
   };
   const validate = () => {
     //HTS FORM VALIDATION
@@ -645,7 +642,7 @@ confirmatoryTest.result === "Yes"  && initialTest12.result2   === "Yes" && (temp
     e.preventDefault();
 
       let latestForm = getNextForm(
-        "Request_and_Result_Form",
+        "request_and_result_form",
         props.patientAge,
         "",
         "unknown"

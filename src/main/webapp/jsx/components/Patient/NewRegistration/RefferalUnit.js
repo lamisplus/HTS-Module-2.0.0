@@ -515,11 +515,8 @@ const RefferralUnit = (props) => {
   /*****  Validation  */
 
   const handleItemClick = (page, completedMenu) => {
-    props.handleItemClick(page);
-    if (props.completed.includes(completedMenu)) {
-    } else {
-      props.setCompleted([...props.completed, completedMenu]);
-    }
+    props.handleItemClick(page, completedMenu);
+ 
   };
   const validate = () => {
     //HTS FORM VALIDATION

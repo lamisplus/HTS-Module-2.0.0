@@ -16,14 +16,10 @@ const Elicitation = (props) => {
     const handleIClickPage =(activeItem)=>{
         setActivePage(activeItem)
     }
-    const handleItemClick =(page, completedMenu)=>{
-        props.handleItemClick(page)
-        if(props.completed.includes(completedMenu)) {
-
-        }else{
-            props.setCompleted([...props.completed, completedMenu])
-        }
-    }
+    const handleItemClick = (page, completedMenu) => {
+      props.handleItemClick(page, completedMenu);
+   
+    };
     const handleDone=()=>{
       //window.location.reload(false);
       props.setActivePage({...props.activePage, activePage:"home"})

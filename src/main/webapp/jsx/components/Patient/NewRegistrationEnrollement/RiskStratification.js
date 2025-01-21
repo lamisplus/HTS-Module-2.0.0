@@ -601,7 +601,7 @@ setKP(kpList)
     
 
  let latestForm = getNextForm(
-   "Risk_Stratification",
+   "risk_stratification",
    objValues.age,
    newModality,
    "unknown"

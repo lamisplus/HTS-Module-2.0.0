@@ -94,14 +94,10 @@ const BasicInfo = (props) => {
     const classes = useStyles();
     const [saving, setSaving] = useState(false);
     const [errors, setErrors] = useState({});
-    const handleItemClick =(page, completedMenu)=>{
-        props.handleItemClick(page)
-        if(props.completed.includes(completedMenu)) {
-
-        }else{
-            props.setCompleted([...props.completed, completedMenu])
-        }
-    }
+    const handleItemClick = (page, completedMenu) => {
+        props.handleItemClick(page, completedMenu);
+     
+      };
 
     return (
         <>

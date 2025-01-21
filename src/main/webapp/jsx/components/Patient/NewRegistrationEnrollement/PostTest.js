@@ -208,7 +208,7 @@ const PostTest = (props) => {
     e.preventDefault();
 
       let latestForm = getNextForm(
-        "Post_Test_Counseling",
+        "post_test_counseling",
         props?.patientAge,
         "",
         props?.patientObj?.hivTestResult

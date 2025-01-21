@@ -1,16 +1,13 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "semantic-ui-react";
 import { Card, CardBody } from "reactstrap";
 import { makeStyles } from "@material-ui/core/styles";
 import { useLocation } from "react-router-dom";
-
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
-import { Link, useHistory } from "react-router-dom";
-import { getCheckModality } from "../../../utility";
-//import {TiArrowBack} from 'react-icons/ti'
-//import {token, url as baseUrl } from "../../../api";
+import { useHistory } from "react-router-dom";
+import { getCheckModality, getPreviousForm, getCurentForm} from "../../../utility";
 import "react-phone-input-2/lib/style.css";
 import { Icon, Menu, Sticky } from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
@@ -22,8 +19,6 @@ import Others from "./NewRegistrationEnrollement/Others";
 import PostTest from "./NewRegistrationEnrollement/PostTest";
 import RecencyTesting from "./NewRegistrationEnrollement/RecencyTesting";
 import RiskStratification from "./NewRegistrationEnrollement/RiskStratification";
-// import FamilyIndexTesting from "./NewRegistrationEnrollement/familyIndexTesting";
-// import PartnerNotificationService from "./NewRegistrationEnrollement/partnerNotificationService";
 import PnsForm from "./NewRegistration/PartnerNotificationServices/PnsForm";
 import PNSHistory from "./NewRegistration/PartnerNotificationServices/PNSHistory";
 import ViewPNSForm from "./NewRegistration/PartnerNotificationServices/ViewPnsForm";
@@ -33,12 +28,9 @@ import ClientReferralHistory from "./NewRegistrationEnrollement/ClientReferral/C
 import RefferralUnit from "./NewRegistration/RefferalUnit";
 import FamilyIndexHistory from "./NewRegistration/PartnerNotificationServices/FamilyIndexhIstory";
 import FamilyIndexTestingForm from "./NewRegistration/FamilyIndexTestingForm";
-import axios from "axios";
-import { token, url as baseUrl } from "../../../api";
-import { getPreviousForm } from "../../../utility";
+import { usePermissions } from "../../../hooks/usePermissions";
+import { useMemo } from "react";
 import { calculate_age } from "../utils";
-
-
 const useStyles = makeStyles((theme) => ({
   error: {
     color: "#f85032",
@@ -54,11 +46,10 @@ const UserRegistration = (props) => {
   const classes = useStyles();
   const history = useHistory();
   const location = useLocation();
-
   const locationState = location.state;
   const [activeItem, setactiveItem] = useState("basic");
   const [completed, setCompleted] = useState([]);
-  const [hideOtherMenu, setHideOtherMenu] = useState(true);
+  const [_, setHideOtherMenu] = useState(true);
   const [patientObj, setPatientObj] = useState(props.activePage.activeObject);
   const [extra, setExtra] = useState({
     risk: "",
@@ -71,134 +62,85 @@ const UserRegistration = (props) => {
     pns: "",
   });
   const [showBackButton, setShowBackButton] = useState(true);
-
   const [modalityCheck, setModalityCheck] = useState("");
-  const [permissions, setPermission] = useState(
-    JSON.parse(localStorage.getItem("stringifiedPermmision"))
-  );
   const [selectedRow, setSelectedRow] = useState({});
-
   const [basicInfo, setBasicInfo] = useState({});
   const [organizationInfo, setOrganizationInfo] = useState({});
   const [row, setRow] = useState({});
   const [action, setAction] = useState("");
-  const [familyIndexList, setFamilyIndexList] = useState([]);
   const handleItemClick = (activeItem) => {
     setactiveItem(activeItem);
-    //setCompleted({...completed, ...completedMenu})
   };
 
-  const handleAction = (activeItem) => {
-    setactiveItem(activeItem);
-    //setCompleted({...completed, ...completedMenu})
-  };
-
-  const LoadViewPage = (row, actionType) => {
-    props.setActivePage({
-      ...props.activePage,
-      activePage: "home",
-      activeObject: row,
-      actionType: actionType,
-    });
-  };
-  const getCurentForm=(activeItem)=>{
-
-    switch(activeItem){
-      case  "risk": 
-      return "Risk_Stratification";
-      break;
-      case  "basic": 
-      return "Client_intake_form"; 
-
-      case  "pre-test-counsel": 
-      return "Pre_Test_Counseling";
-
-      case  "hiv-test": 
-      return "Request_and_Result_Form";
-
-      case  "post-test": 
-      return "Post_Test_Counseling";
-
-      case  "recency-testing": 
-      return "HIV_Recency_Testing";
-
-      case  "fit": 
-      return "Family_Index_Testing_Form";
-
-      case  "fit-history": 
-      return "Family_Index_Testing_Form";
-
-      case  "view-fit": 
-      return "Family_Index_Testing_Form";
-
-      case  "pns": 
-      return "Nigeria_PNS_Form";
-
-      case  "pns-history": 
-      return "Nigeria_PNS_Form";
-
-
-      case  "client-referral": 
-      return "";
-
-      case  "refferal-history": 
-      return "Referral_Form";
-
-      case  "view-referral": 
-      return "Referral_Form";
-
-      default:
-        return "";    }
-
-  }
-  const getPrevForm=(e)=>{
-          if( activeItem === "risk"){
-            history.push("/");
-
-          }else{
-            e.preventDefault()
-          let currentForm =   getCurentForm(activeItem)
-
-            let age = calculate_age(
-              basicInfo?.personResponseDto?.dateOfBirth
-                ? basicInfo?.personResponseDto?.dateOfBirth
-                : patientObj?.personResponseDto?.dateOfBirth
-            );
-            let checkModality = patientObj?.riskStratificationResponseDto?.testingSetting? patientObj.riskStratificationResponseDto.testingSetting: "";
-            let isPMTCTModality =getCheckModality(checkModality)
-          
-
-
-
-            let hivStatus = patientObj?.hivTestResult;
-          let answer =  getPreviousForm(currentForm, age, isPMTCTModality, hivStatus); 
-          if (answer[0]  && answer[1]) {
-            if(answer[0] === "fit"){
-              handleItemClick("fit-history");
-
-            }else if(answer[0] === "pns"){
-
-              handleItemClick("pns-history");
-
-            }else{
-              handleItemClick(answer[0]);
-
-            }
-          }else{
-          history.push("/");
-
-          }
-}
-  } 
   useEffect(() => {
     setModalityCheck(
       getCheckModality(patientObj?.riskStratificationResponseDto?.testingSetting)
     );
   }, [patientObj]);
+
+  const { hasPermission } = usePermissions();
+
+  const permissions = useMemo(
+    () => ({
+      pnsForm: hasPermission("nigeria_pns_form"),
+      requestAndResultForm: hasPermission("request_and_result_form"),
+      refferalForm: hasPermission("referral_form")
+    }),
+    [hasPermission]
+  );
+  // 
+
+ 
+
+  const fetchPrevForm=(e)=>{
+
+    console.log("activeItem", activeItem)
+    if( activeItem === "risk"){
+      history.push("/");
+
+    }else{
+      e.preventDefault()
+
+      console.log("entered", activeItem)
+
+    let currentForm =   getCurentForm(activeItem)
+
+      let age = calculate_age(
+        basicInfo?.personResponseDto?.dateOfBirth
+          ? basicInfo?.personResponseDto?.dateOfBirth
+          : patientObj?.personResponseDto?.dateOfBirth
+      );
+      let checkModality = patientObj?.riskStratificationResponseDto?.testingSetting? patientObj.riskStratificationResponseDto.testingSetting: "";
+      let isPMTCTModality =getCheckModality(checkModality)
+   
+
+
+
+      let hivStatus = patientObj?.hivTestResult;
+    let answer =  getPreviousForm(currentForm, age, isPMTCTModality, hivStatus);
+    if (answer[0]  && answer[1]) {
+      if(answer[0] === "fit"){
+        handleItemClick("fit-history");
+
+      }else if(answer[0] === "pns"){
+
+        handleItemClick("pns-history");
+
+      }else{
+        handleItemClick(answer[0]);
+
+      }
+    }else{
+    history.push("/");
+
+    }
+}
+}
+
+  // 
   return (
     <>
       <ToastContainer autoClose={3000} hideProgressBar />
-
       <Card>
         <CardBody>
           <form>
@@ -206,21 +148,21 @@ const UserRegistration = (props) => {
               <h3>
                 HIV COUNSELLING AND TESTING -{" "}
                 {patientObj && patientObj.dateVisit ? patientObj.dateVisit : ""}
-                {showBackButton &&  <div>
-                    {/* <Link to={"/"}> */}
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      className=" float-end"
-                      //startIcon={<FaUserPlus size="10"/>}
-                      onClick={getPrevForm}
-                      style={{ backgroundColor: "#014d88" }}
-                    >
-                      <span style={{ textTransform: "capitalize" }}>Back</span>
-                    </Button>
-                    {/* </Link> */}
-                  </div>}
-            
+                {showBackButton && <div>
+                  {/* <Link to={"/"}> */}
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    className=" float-end"
+                    //startIcon={<FaUserPlus size="10"/>}
+                    onClick={fetchPrevForm}
+                    style={{ backgroundColor: "#014d88" }}
+                  >
+                    <span style={{ textTransform: "capitalize" }}>Back</span>
+                  </Button>
+                  {/* </Link> */}
+                </div>}
+
               </h3>
               <br />
               <br />
@@ -242,7 +184,7 @@ const UserRegistration = (props) => {
                     <span style={{ color: "#fff" }}>
                       {" "}
                       Risk Stratification
-                      {completed.includes("risk") && (
+                      {completed?.includes("risk") && (
                         <Icon name="check" color="green" />
                       )}
                     </span>
@@ -258,7 +200,7 @@ const UserRegistration = (props) => {
                     <span style={{ color: "#fff" }}>
                       {" "}
                       Basic Information
-                      {completed.includes("basic") && (
+                      {completed?.includes("basic") && (
                         <Icon name="check" color="green" />
                       )}
                     </span>
@@ -273,18 +215,18 @@ const UserRegistration = (props) => {
                         backgroundColor:
                           activeItem === "pre-test-counsel" ? "#000" : "",
                       }}
-                      //disabled={activeItem !== 'pre-test-counsel' ? true : false}
+                    //disabled={activeItem !== 'pre-test-counsel' ? true : false}
                     >
                       {/* <Label>2</Label> */}
                       <span style={{ color: "#fff" }}>
                         Pre Test Counseling
-                        {completed.includes("pre-test-counsel") && (
+                        {completed?.includes("pre-test-counsel") ? (
                           <Icon name="check" color="green" />
-                        )}
+                        ) : null}
                       </span>
                     </Menu.Item>
                   )}
-                  {permissions.includes("Request_and_Result_Form") && (
+                  {permissions?.requestAndResultForm && (
                     <Menu.Item
                       name="inbox"
                       active={activeItem === "hiv-test"}
@@ -293,11 +235,11 @@ const UserRegistration = (props) => {
                         backgroundColor:
                           activeItem === "hiv-test" ? "#000" : "",
                       }}
-                      //disabled={activeItem !== 'hiv-test' ? true : false}
+                    //disabled={activeItem !== 'hiv-test' ? true : false}
                     >
                       <span style={{ color: "#fff" }}>
                         Request {"&"} Result Form
-                        {completed.includes("hiv-test") && (
+                        {completed?.includes("hiv-test") && (
                           <Icon name="check" color="green" />
                         )}
                       </span>
@@ -311,12 +253,12 @@ const UserRegistration = (props) => {
                     style={{
                       backgroundColor: activeItem === "post-test" ? "#000" : "",
                     }}
-                    //disabled={activeItem !== 'post-test' ? true : false}
+                  //disabled={activeItem !== 'post-test' ? true : false}
                   >
                     {/* <Label>4</Label> */}
                     <span style={{ color: "#fff" }}>
                       Post Test Counseling
-                      {completed.includes("post-test") && (
+                      {completed?.includes("post-test") && (
                         <Icon name="check" color="green" />
                       )}
                     </span>
@@ -333,73 +275,20 @@ const UserRegistration = (props) => {
                           backgroundColor:
                             activeItem === "recency-testing" ? "#000" : "",
                         }}
-                        //disabled={activeItem !== 'recency-testing' ? true : false}
+                      //disabled={activeItem !== 'recency-testing' ? true : false}
                       >
                         {/* <Label>4</Label> */}
                         <span style={{ color: "#fff" }}>
                           HIV Recency Testing
-                          {completed.includes("recency-testing") && (
+                          {completed?.includes("recency-testing") && (
                             <Icon name="check" color="green" />
                           )}
                         </span>
                       </Menu.Item>
                     )}
-                  {/* 
-                  <Menu.Item
-                    name="spam"
-                    active={activeItem === "indexing"}
-                    onClick={() => handleItemClick("indexing")}
-                    style={{
-                      backgroundColor: activeItem === "indexing" ? "#000" : "",
-                    }}
-                  > */}
-                  {/* <Label>4</Label> */}
-                  {/* <span style={{ color: "#fff" }}>
-                      Index Notification Services - Elicitation
-                      {completed.includes("indexing") && (
-                        <Icon name="check" color="green" />
-                      )}
-                    </span>
-                  </Menu.Item> */}
 
-                  {/* <Menu.Item
-                    name="inbox"
-                    active={activeItem === "pns-history"}
-                    onClick={() => handleItemClick("pns-history")}
-                    style={{
-                      backgroundColor:
-                        activeItem === "pns-history" ? "#000" : "",
-                    }}
-                  >
-                    <span style={{ color: "#fff" }}>
-                      {" "}
-                      Partner Notification Services
-                      {completed.includes("pns") && (
-                        <Icon name="check" color="green" />
-                      )}
-                    </span>
-                  </Menu.Item> */}
-                  {/* Family Index Testing form */}
-                  {/* {patientObj.hivTestResult && patientObj.hivTestResult.toLowerCase() ===
-                    "positive" &&  <Menu.Item
-                    name="inbox"
-                    active={activeItem === "fit-history"}
-                    onClick={() => handleItemClick("fit-history")}
-                    style={{
-                      backgroundColor:
-                        activeItem === "fit-history" ? "#000" : "",
-                    }}
-                  >
-                    <span style={{ color: "#fff" }}>
-                      {" "}
-                      Family Index Testing form
-                      {completed.includes("fit") && (
-                        <Icon name="check" color="green" />
-                      )}
-                    </span>
-                  </Menu.Item>}  */}
 
-                  {permissions.includes("Nigeria_PNS_Form") &&
+                  {permissions.pnsForm &&
                     patientObj.hivTestResult &&
                     patientObj.hivTestResult.toLowerCase() === "positive" && (
                       <Menu.Item
@@ -414,7 +303,7 @@ const UserRegistration = (props) => {
                         <span style={{ color: "#fff" }}>
                           {" "}
                           Family Index Testing form
-                          {completed.includes("fit") && (
+                          {completed?.includes("fit") && (
                             <Icon name="check" color="green" />
                           )}
                         </span>
@@ -441,7 +330,7 @@ const UserRegistration = (props) => {
                         </span>
                       </Menu.Item>
                     )}
-                  {permissions.includes("Referral_Form") && (
+                  {permissions?.refferalForm && (
                     <Menu.Item
                       name="inbox"
                       active={activeItem === "refferal-history"}
@@ -454,7 +343,7 @@ const UserRegistration = (props) => {
                       <span style={{ color: "#fff" }}>
                         {" "}
                         Client Referral Service
-                        {completed.includes("refferal") && (
+                        {completed?.includes("refferal") && (
                           <Icon name="check" color="green" />
                         )}
                       </span>

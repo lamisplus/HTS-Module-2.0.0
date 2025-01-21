@@ -409,7 +409,7 @@ const BasicInfo = (props) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     let latestForm = getNextForm(
-      "Client_intake_form",
+      "client_intake_form",
       props.patientAge,
       modalityCheck,
       "unknown"

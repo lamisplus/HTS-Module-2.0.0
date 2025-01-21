@@ -21,9 +21,10 @@ import "react-phone-input-2/lib/style.css";
 import Badge from "@mui/material/Badge";
 import { useHistory } from "react-router-dom";
 import { Modal } from "react-bootstrap";
-import { getNextForm } from "../../../../../utility";
+import { alphabetOnly, getNextForm } from "../../../../../utility";
 import { calculate_age } from "../../../utils";
 import PersonIcon from "@mui/icons-material/Person";
+
 const useStyles = makeStyles((theme) => ({
   card: {
     margin: theme.spacing(20),
@@ -557,11 +558,8 @@ const PnsForm = (props) => {
       });
   };
   const handleItemClick = (page, completedMenu) => {
-    props.handleItemClick(page);
-    if (props.completed.includes(completedMenu)) {
-    } else {
-      props.setCompleted([...props.completed, completedMenu]);
-    }
+    props.handleItemClick(page, completedMenu);
+ 
   };
   const handleItemClickPage = (page) => {
     props.handleIClickPage(page);
@@ -684,10 +682,7 @@ const PnsForm = (props) => {
       setObjValues({ ...objValues, [inputName]: NumberValue });
     }
   };
-  const alphabetOnly = (value) => {
-    const result = value.replace(/[^a-z]/gi, "");
-    return result;
-  };
+
   const validate = () => {
     // HTS FORM VALIDATION
     temp.offeredPns = objValues.offeredPns ? "" : "This field is required.";
@@ -733,7 +728,7 @@ const PnsForm = (props) => {
     );
 
     let hivStatus = props?.patientObj?.hivTestResult;
-    let latestForm = getNextForm("Nigeria_PNS_Form", age, "", hivStatus);
+    let latestForm = getNextForm("nigeria_pns_form", age, "", hivStatus);
 
     setNextForm(latestForm);
 

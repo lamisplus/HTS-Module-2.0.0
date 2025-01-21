@@ -16,11 +16,8 @@ const PNSHistory = (props) => {
     setActivePage(activeItem);
   };
   const handleItemClick = (page, completedMenu) => {
-    props.handleItemClick(page);
-    if (props.completed.includes(completedMenu)) {
-    } else {
-      props.setCompleted([...props.completed, completedMenu]);
-    }
+    props.handleItemClick(page, completedMenu);
+ 
   };
   const handleDone = (row, actionType) => {
     props.setActivePage({

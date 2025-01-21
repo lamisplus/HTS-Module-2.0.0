@@ -616,8 +616,8 @@ if (objValues.age !== "") {
     e.preventDefault();
     // get next form
     let newModality = isPMTCTModality ? "skip" : "fill";
-
-  let latestForm =  getNextForm("Risk_Stratification", objValues.age, newModality, "unknown")
+  
+  let latestForm =  getNextForm("risk_stratification", objValues.age, newModality, "unknown")
 
     getMenuLogic(objValues);
     props.patientObj.riskStratificationResponseDto = objValues;

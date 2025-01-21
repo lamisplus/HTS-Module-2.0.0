@@ -785,7 +785,7 @@ const handleInputChangeTie2 = (e) => {
 
     //GET NEXT FORM
     let latestForm = getNextForm(
-      "Request_and_Result_Form",
+      "request_and_result_form",
       objValues.age,
       "",
       "unknown"

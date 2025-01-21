@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import { FormGroup, Label, CardBody, Spinner, Input, Form } from "reactstrap";
 import * as moment from "moment";
@@ -16,6 +16,7 @@ import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
 import { token, url as baseUrl } from "../../../../api";
 import { getNextForm } from "../../../../utility";
+import { usePermissions } from "../../../../hooks/usePermissions";
 const useStyles = makeStyles((theme) => ({
   card: {
     margin: theme.spacing(20),
@@ -84,6 +85,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Recency = (props) => {
   const classes = useStyles();
+  const { hasPermission } = usePermissions();
   const patientID =
     props.patientObj && props.patientObj.personResponseDto
       ? props.patientObj.personResponseDto.id
@@ -95,15 +97,13 @@ const Recency = (props) => {
   const [hivTestDate, setHivTestDate] = useState("");
   let temp = { ...errors };
   const handleItemClick = (page, completedMenu) => {
-    props.handleItemClick(page);
-    if (props.completed.includes(completedMenu)) {
-    } else {
-      props.setCompleted([...props.completed, completedMenu]);
-    }
+    props.handleItemClick(page, completedMenu);
+ 
   };
-  const [permissions, setPermission] = useState(
-    localStorage.getItem("permissions")?.split(",")
-  );
+  
+  // const [permissions, setPermission] = useState(
+  //   localStorage.getItem("permissions")?.split(",")
+  // );
   const [objValues, setObjValues] = useState({
     htsClientId: clientId,
     recency: {},
@@ -278,6 +278,7 @@ const Recency = (props) => {
     recency.controlLine,
     props.patientObj,
   ]);
+
   const handleInputChangeRecency = (e) => {
     setErrors({ ...temp, [e.target.name]: "" });
     if (e.target.name === "viralLoadConfirmationResult") {
@@ -366,6 +367,7 @@ setErrors({...errors, hasViralLoad: ""})
       setRecency({ ...recency, [e.target.name]: e.target.value });
     }
   };
+
   const checkRecencyLimit = (e) => {
     const limit = 10;
     const acceptedNumber = e.slice(0, limit);
@@ -437,10 +439,11 @@ setErrors({...errors, hasViralLoad: ""})
     setErrors({ ...temp });
     return Object.values(temp).every((x) => x == "");
   };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     let latestForm = getNextForm(
-      "HIV_Recency_Testing",
+      "hiv_recency_testing",
       props.patientAge,
       "",
       props?.patientObj?.hivTestResult
@@ -462,8 +465,7 @@ setErrors({...errors, hasViralLoad: ""})
           // handleItemClick("fit", "recency-testing");
           handleItemClick(latestForm[0], latestForm[1]);
 
-          // else if (permissions.includes("Nigeria_PNS_Form")) {
-          // }
+          
         })
         .catch((error) => {
           setSaving(false);
@@ -481,6 +483,15 @@ setErrors({...errors, hasViralLoad: ""})
     }
   };
 
+  const permissions = useMemo(
+    () => ({
+      canSeeRequestAndResultForm: hasPermission("Request_and_Result_Form"),
+      canSeeNigeriaPnsForm: hasPermission("Nigeria_PNS_Form"),
+      canSeeRefferalForm: hasPermission("Referral_Form")
+    }),
+    [hasPermission]
+  );
+  
   return (
     <>
       <Card className={classes.root}>

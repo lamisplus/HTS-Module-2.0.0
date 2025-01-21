@@ -34,9 +34,6 @@ export const getAllCountry = async () => {
   } catch (e) {}
 };
 
-//
-//
-
 //Get all state by state by country Id
 export const getAllStateByCountryId = async () => {
   try {
@@ -79,9 +76,6 @@ export const getAcount = async () => {
   }
   return null; 
 };
-
-
-
 
 export const checkPregnantPatient =  async(id) => {
    try {
@@ -145,67 +139,67 @@ export const getCheckModalityForHTS = (patientObj) => {
 
 // Permission implementation
 
-const generateFormCode = (formName) => {
+export const generateFormCode = (formName) => {
   switch (formName) {
-    case "Risk_Stratification":
+    case "risk_stratification":
       return {
-        name: "Risk_Stratification",
+        name: "risk_stratification",
         code: "risk",
         general: true,
         condition: [],
       };
       break;
-    case "Client_intake_form":
+    case "client_intake_form":
       return {
-        name: "Client_intake_form",
+        name: "client_intake_form",
         code: "basic",
         general: true,
         condition: [],
       };
       break;
-    case "Pre_Test_Counseling":
+    case "pre_test_counseling":
       return {
-        name: "Pre_Test_Counseling",
+        name: "pre_test_counseling",
         code: "pre-test-counsel",
         general: true,
         condition: ["age < 15", "pmtct modality"],
       };
       break;
-    case "Request_and_Result_Form":
+    case "request_and_result_form":
       return {
-        name: "Request_and_Result_Form",
+        name: "request_and_result_form",
         code: "hiv-test",
         general: true,
         condition: [],
       };
       break;
-    case "Post_Test_Counseling":
+    case "post_test_counseling":
       return {
-        name: "Post_Test_Counseling",
+        name: "post_test_counseling",
         code: "post-test",
         general: true,
         condition: [],
       };
       break;
-    case "HIV_Recency_Testing":
+    case "hiv_recency_testing":
       return {
-        name: "HIV_Recency_Testing",
+        name: "hiv_recency_testing",
         code: "recency-testing",
         general: true,
         condition: ["age < 15", "-HIV status"],
       };
       break;
-    case "Nigeria_PNS_Form":
+    case "nigeria_pns_form":
       return {
-        name: "Nigeria_PNS_Form",
+        name: "nigeria_pns_form",
         code: "pns",
         general: false,
         condition: ["-HIV status"],
       };
       break;
-    case "Referral_Form":
+    case "referral_form":
       return {
-        name: "Referral_Form",
+        name: "referral_form",
         code: "refferal-history",
         general: false,
         condition: [],
@@ -213,53 +207,55 @@ const generateFormCode = (formName) => {
   }
 };
 
+
+
 // note people with that condition will not see the form
 let ArrayOfAllForms = [
   {
-    name: "Risk_Stratification",
+    name: "risk_stratification",
     code: "risk",
     general: true,
     condition: [],
   },
-  { name: "Client_intake_form", code: "basic", general: true, condition: [] },
+  { name: "client_intake_form", code: "basic", general: true, condition: [] },
   {
-    name: "Pre_Test_Counseling",
+    name: "pre_test_counseling",  
     code: "pre-test-counsel",
     general: true,
     condition: ["age < 15", "pmtct modality"],
   },
   {
-    name: "Request_and_Result_Form",
+    name: "request_and_result_form",
     code: "hiv-test",
     general: true,
     condition: [],
   },
   {
-    name: "Post_Test_Counseling",
+    name: "post_test_counseling",
     code: "post-test",
     general: true,
     condition: [],
   },
   {
-    name: "HIV_Recency_Testing",
+    name: "hiv_recency_testing",
     code: "recency-testing",
     general: true,
     condition: ["age < 15", "-HIV status"],
   },
   {
-    name: "Family_Index_Testing_Form",
+    name: "family_index_testing_form",
     code: "fit",
     general: false,
     condition: ["-HIV status"],
   },
   {
-    name: "Nigeria_PNS_Form",
+    name: "nigeria_pns_form",
     code: "pns",
     general: false,
     condition: ["-HIV status"],
   },
   {
-    name: "Referral_Form",
+    name: "referral_form",
     code: "refferal-history",
     general: false,
     condition: [],
@@ -301,7 +297,7 @@ export const getNextForm = (formName, age, pmtctModality, hivStatus) => {
      ? pmtctModality
      : localStorage.getItem("modality");
 
-  let authorizedForm = JSON.parse(localStorage.getItem("currentUser_Permission"));
+  let authorizedForm = JSON.parse(localStorage.getItem("hts_permissions_forms"));
 
   let lengthOfAuthForm = authorizedForm.length;
 
@@ -318,7 +314,7 @@ export const getNextForm = (formName, age, pmtctModality, hivStatus) => {
 
     let nextForm = authorizedForm[nextPage];
 
-    // console.log([nextForm.code, authorizedForm[IndexOfForm].code]);
+    console.log("authorizedForm", authorizedForm);
 
     //  confirm if there are no condition on the  NEXT form
     if (nextForm.condition.length === 0) {
@@ -337,6 +333,7 @@ export const getNextForm = (formName, age, pmtctModality, hivStatus) => {
 
     //
   } else {
+
       return [
         authorizedForm[IndexOfForm].code,
         authorizedForm[IndexOfForm].code,
@@ -345,7 +342,7 @@ export const getNextForm = (formName, age, pmtctModality, hivStatus) => {
 };
 
 export const getDoubleSkipForm = (code) => {
-  let authorizedForm = JSON.parse(localStorage.getItem("currentUser_Permission"));
+  let authorizedForm = JSON.parse(localStorage.getItem("hts_permissions_forms"));
 
   let lengthOfAuthForm = authorizedForm.length;
 
@@ -381,7 +378,7 @@ export const checkNextPageCondition = (
   let ageCondition = undefined;
   let pmctctModalityCondition = undefined;
   let HivStatuscondition = undefined;
-let authorizedForm = JSON.parse(localStorage.getItem("currentUser_Permission"));
+let authorizedForm = JSON.parse(localStorage.getItem("hts_permissions_forms"));
 
 
  
@@ -428,6 +425,7 @@ let authorizedForm = JSON.parse(localStorage.getItem("currentUser_Permission"));
 
      return "recall " + IndexOfForm;
    } else {
+    console.log("recal",nextForm.code, authorizedForm[IndexOfForm].code)
      return [nextForm.code, authorizedForm[IndexOfForm].code];
    }
  }
@@ -441,7 +439,7 @@ export const loopThroughForms = (
   pmtctModality,
   hivStatus
 ) => {
-let authorizedForm = JSON.parse(localStorage.getItem("currentUser_Permission"));
+let authorizedForm = JSON.parse(localStorage.getItem("hts_permissions_forms"));
 let latestNextForm = nextForm;
 let nextFormIndex =
   authorizedForm.length > IndexOfForm + 1 ? IndexOfForm + 1 : IndexOfForm;
@@ -467,7 +465,6 @@ let nextFormIndex =
   }
 };
 
-
 export const loopThroughFormBackward = (
   nextForm,
   currentForm,
@@ -476,7 +473,7 @@ export const loopThroughFormBackward = (
   pmtctModality,
   hivStatus
 ) => {
-  let authorizedForm = JSON.parse(localStorage.getItem("currentUser_Permission"));
+  let authorizedForm = JSON.parse(localStorage.getItem("hts_permissions_forms"));
   // console.log("length of the authorized form ", authorizedForm.length);
   let nextFormIndex =
   IndexOfForm - 1 >= 0 ? IndexOfForm - 1 : IndexOfForm;
@@ -500,6 +497,7 @@ export const loopThroughFormBackward = (
     }
   }
 };
+
 export const getPreviousForm = (formName, age, pmtctModality, hivStatus) => {
 
   console.log(formName, age, pmtctModality, hivStatus  )  
@@ -510,7 +508,7 @@ export const getPreviousForm = (formName, age, pmtctModality, hivStatus) => {
     ? pmtctModality
     : localStorage.getItem("modality");
 
-  let authorizedForm = JSON.parse(localStorage.getItem("currentUser_Permission"));
+    let authorizedForm = JSON.parse(localStorage.getItem("hts_permissions_forms"));
 
   let lengthOfAuthForm = authorizedForm.length;
 
@@ -550,3 +548,54 @@ export const getPreviousForm = (formName, age, pmtctModality, hivStatus) => {
     return ["", ""];
   }
 };
+
+export const getCurentForm=(activeItem)=>{
+ 
+  switch(activeItem){
+    case  "risk":
+    return "risk_stratification";
+    break;
+    case  "basic":
+    return "client_intake_form";
+
+    case  "pre-test-counsel":
+    return "pre_test_counseling";
+
+    case  "hiv-test":
+    return "request_and_result_form";
+
+    case  "post-test":
+    return "post_test_counseling";
+
+    case  "recency-testing":
+    return "hiv_recency_testing";
+
+    case  "fit":
+    return "family_index_testing_form";
+
+    case  "fit-history":
+      return "family_index_testing_form";
+
+    case  "view-fit":
+      return "family_index_testing_form";
+
+    case  "pns":
+    return "nigeria_pns_form";
+
+    case  "pns-history":
+      return "nigeria_pns_form";
+
+
+    case  "client-referral":
+    return "";
+
+    case  "refferal-history":
+    return "referral_form";
+
+    case  "view-referral":
+    return "referral_form";
+
+    default:
+      return "";    }
+
+}

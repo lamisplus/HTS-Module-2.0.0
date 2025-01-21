@@ -106,7 +106,7 @@ const PatientVisits = (props) => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      const htsVisits = response?.data?.filter((visit) => visit?.service?.toLowerCase() === "hts-code")
+      const htsVisits = response?.data?.filter((visit) => visit?.service?.toLowerCase() === "hts_code" || visit?.service === "HTS_code")
 
       setPatientVisits(htsVisits);
       const hasActiveVisit = response.data.some(

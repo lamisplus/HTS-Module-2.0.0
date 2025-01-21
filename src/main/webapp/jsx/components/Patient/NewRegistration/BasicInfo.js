@@ -22,7 +22,7 @@ import "react-phone-input-2/lib/style.css";
 import { Button } from "semantic-ui-react";
 import { Modal } from "react-bootstrap";
 import { fontWeight } from "@mui/system";
-import { getCheckModality } from "../../../../utility";
+import { alphabetOnly, getCheckModality } from "../../../../utility";
 import { getDoubleSkipForm } from "../../../../utility";
 import { getNextForm } from "../../../../utility";
 import Cookies from "js-cookie";
@@ -930,10 +930,7 @@ const BasicInfo = (props) => {
     const limit = 10;
     setObjValues({ ...objValues, [inputName]: e.slice(0, limit) });
   };
-  const alphabetOnly = (value) => {
-    const result = value.replace(/[^a-z]/gi, "");
-    return result;
-  };
+ 
 
   /*****  Validation  */
   const validate = () => {
@@ -1010,7 +1007,7 @@ const BasicInfo = (props) => {
     Cookies.set("serial-number", serialNumber)
     // check next form
     let latestForm = getNextForm(
-      "Client_intake_form",
+      "client_intake_form",
       objValues.age,
       modalityCheck,
       "unknown"

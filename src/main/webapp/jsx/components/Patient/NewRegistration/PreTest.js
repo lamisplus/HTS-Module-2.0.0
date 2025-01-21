@@ -707,7 +707,7 @@ const BasicInfo = (props) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     let latestForm = getNextForm(
-      "Pre_Test_Counseling",
+      "pre_test_counseling",
       objValues.age,
       modalityCheck,
       "unknown"

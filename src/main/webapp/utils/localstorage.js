@@ -1,5 +1,6 @@
 import axios from "axios";
 import { token, url } from "../api";
+import { getListOfPermission } from "../utility";
 
 export const getStorageValues = (keys) => {
   try {
@@ -29,21 +30,30 @@ export const fetchAndStoreAccountData = async () => {
       headers: { Authorization: `Bearer ${token}` },
     });
 
+    
 
-    localStorage.setItem("user_account", JSON.stringify(response.data));
+    const lowerCaseArrayUserAccount = response?.data;
+    const lowerCaseArrayRoles = response?.data?.roles;
+    const lowerCaseArrayPermissions = response?.data?.permissions?.map(str => str.toLowerCase());
+
+
+    localStorage.setItem("user_account", JSON.stringify(lowerCaseArrayUserAccount));
     localStorage.setItem(
       "currentUser_Roles",
-      JSON.stringify(response.data.roles)
+      JSON.stringify(lowerCaseArrayRoles)
     );
     localStorage.setItem(
       "currentUser_Permission",
-      JSON.stringify(response.data.permissions)
+      JSON.stringify(lowerCaseArrayPermissions)
     );
 
+    const htsApprovedForms = getListOfPermission(lowerCaseArrayPermissions)
+    localStorage.setItem("hts_permissions_forms", JSON.stringify(htsApprovedForms))
+
     return {
-      user_account: response.data,
-      currentUser_Roles: response.data.roles,
-      currentUser_Permission: response.data.permissions,
+      user_account: lowerCaseArrayUserAccount,
+      currentUser_Roles: lowerCaseArrayRoles,
+      currentUser_Permission: lowerCaseArrayPermissions,
     };
   } catch (error) {
     console.error("Error fetching account data:", error);

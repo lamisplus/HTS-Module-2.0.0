@@ -316,7 +316,7 @@ const BasicInfo = (props) => {
          props.patientObj?.riskStratificationResponseDto?.testingSetting
        );    
             let latestForm = getNextForm(
-              "Pre_Test_Counseling",
+              "pre_test_counseling",
               props.patientAge,
               modality,
               "unknown"

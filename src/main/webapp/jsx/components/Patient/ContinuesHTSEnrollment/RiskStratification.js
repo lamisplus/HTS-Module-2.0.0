@@ -166,6 +166,7 @@ const RiskStratification = (props) => {
         setDisableInput(true)
       }
   }
+
   useEffect(() => {
     KP();
     EnrollmentSetting();
@@ -208,6 +209,7 @@ const RiskStratification = (props) => {
       .catch((error) => {
       });
   };
+
   const EntryPoint = () => {
     axios
       .get(`${baseUrl}application-codesets/v2/HTS_ENTRY_POINT`, {
@@ -236,24 +238,13 @@ const RiskStratification = (props) => {
   };
 
 
-
-
   const HTS_ENTRY_POINT_FACILITY = () => {
     axios
       .get(`${baseUrl}application-codesets/v2/FACILITY_HTS_TEST_SETTING`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        //Remove retesting from the codeset
-        //   let facilityList = []
-        // response.data.map((each, index)=>{
-        //       if(each.code !=="FACILITY_HTS_TEST_SETTING_RETESTING"){
-        //         facilityList.push(each);
-        //       }
-
-        // })
         setEntryPointSetting(response.data);
-
       })
       .catch((error) => {
         
@@ -314,8 +305,6 @@ setKP(kpList)
   setKP(response.data);
 
 }
-
-
       })
       .catch((error) => {
       });
@@ -355,6 +344,7 @@ setKP(kpList)
       return false;
     }
   };
+
   const handleInputChange = (e) => {
     setErrors({ ...temp, [e.target.name]: "" });
     if (e.target.name === "testingSetting" && e.target.value !== "") {
@@ -556,11 +546,8 @@ setKP(kpList)
   };
 
   const handleItemClick = (page, completedMenu) => {
-    props.handleItemClick(page);
-    if (props.completed.includes(completedMenu)) {
-    } else {
-      props.setCompleted([...props.completed, completedMenu]);
-    }
+    props.handleItemClick(page, completedMenu);
+ 
   };
   // Getting the number count of riskAssessment True
   const actualRiskCountTrue = Object.values(riskAssessment);
@@ -573,13 +560,16 @@ setKP(kpList)
     setErrors({ ...temp, [e.target.name]: "" });
     setRiskAssessment({ ...riskAssessment, [e.target.name]: e.target.value });
   };
+
+  
+
   const handleSubmit = (e) => {
     e.preventDefault();
     getMenuLogic();
       let newModality = isPMTCTModality ? "skip" : "fill";
 
         let latestForm = getNextForm(
-          "Risk_Stratification",
+          "risk_stratification",
           objValues.age,
           newModality,
           "unknown"
@@ -727,41 +717,7 @@ setKP(kpList)
                     )}
                   </FormGroup>
                 </div>
-                {/* {objValues.entryPoint === "HTS_ENTRY_POINT_COMMUNITY" && (
-                  <div className="form-group  col-md-6">
-                    <FormGroup>
-                      <Label>
-                        Community Entry Point{" "}
-                        <span style={{ color: "red" }}> *</span>
-                      </Label>
-                      <select
-                        className="form-control"
-                        name="communityEntryPoint"
-                        id="communityEntryPoint"
-                        value={objValues.communityEntryPoint}
-                        onChange={handleInputChange}
-                        style={{
-                          border: "1px solid #014D88",
-                          borderRadius: "0.2rem",
-                        }}
-                      >
-                        <option value={""}>Select</option>
-                        {entryPointCommunity.map((value) => (
-                          <option key={value.id} value={value.code}>
-                            {value.display}
-                          </option>
-                        ))}
-                      </select>
-                      {errors.communityEntryPoint !== "" ? (
-                        <span className={classes.error}>
-                          {errors.communityEntryPoint}
-                        </span>
-                      ) : (
-                        ""
-                      )}
-                    </FormGroup>
-                  </div>
-                )} */}
+                
                 <div className="form-group mb-3 col-md-6">
                   <FormGroup>
                     <Label for="">

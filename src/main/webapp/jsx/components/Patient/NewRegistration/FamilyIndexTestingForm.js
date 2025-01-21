@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { FormGroup, Label, CardBody, Spinner, Input, Form } from "reactstrap";
@@ -27,6 +27,7 @@ import {
   alphabetOnly,
 } from "../../../../utility";
 import { calculate_age } from "../../utils/index.js";
+import { usePermissions } from "../../../../hooks/usePermissions";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -101,6 +102,7 @@ const useStyles = makeStyles((theme) => ({
 
 const FamilyIndexTestingForm = (props) => {
   const classes = useStyles();
+  const { hasPermission }  = usePermissions()
   let history = useHistory();
     let VL =""
   const [errors, setErrors] = useState({});
@@ -136,9 +138,9 @@ const FamilyIndexTestingForm = (props) => {
       ? props?.basicInfo?.personResponseDto?.address?.address[0]?.stateId
       : props?.patientObj?.personResponseDto?.address?.address[0]?.stateId
   );
-  const [permissions] = useState(
-    localStorage.getItem("permissions")?.split(",")
-  );
+  // const [permissions] = useState(
+  //   localStorage.getItem("permissions")?.split(",")
+  // );
 
   const [lgaInfo, setLgaInfo] = useState(
     props?.basicInfo?.personResponseDto?.address?.address[0].district
@@ -321,12 +323,9 @@ const FamilyIndexTestingForm = (props) => {
         // console.log("Fetch LGA error" + e);
       });
   };
-  const handleItemClick = (next, present) => {
-    props.handleItemClick(next);
-    if (props.completed.includes(present)) {
-    } else {
-      props.setCompleted([...props.completed, present]);
-    }
+  const handleItemClick = (page, completedMenu) => {
+    props.handleItemClick(page, completedMenu);
+ 
   };
 
   //Date of Birth and Age handle
@@ -780,14 +779,16 @@ if(each.code !==  "CHILD_NUMBER_OTHERS"){
       });
     }
     // setSaving(true);
-    if (permissions.includes("Nigeria_PNS_Form")) {
-      handleItemClick("pns", "fit");
-      toggle();
-    } else if (permissions.includes("Referral_Form")) {
-      handleItemClick("pns", "client-referral");
-      toggle();
-    }
+    // if (permissions.canSeeNigeriaPnsForm) {
+    //   handleItemClick("pns", "fit");
+    //   toggle();
+    // } else if (permissions.canSeeRefferalForm) {
+    //   handleItemClick("pns", "client-referral");
+    //   toggle();
+    // }
   };
+
+  
 
   //fetch province
   const getProvinces = (e) => {
@@ -890,17 +891,7 @@ if(each.code !==  "CHILD_NUMBER_OTHERS"){
     }
   };
 
-  // const removeFamilyIndexRow = (index) => {
-  //   arrayFamilyIndexRequestDto.splice(index, 1);
-  //   setArrayFamilyIndexRequestDto([...arrayFamilyIndexRequestDto]);
-  // };
 
-  // const removeFamilyTrackerRow = (index) => {
-  //   arrayFamilyTestingTrackerRequestDTO.splice(index, 1);
-  //   setArrayFamilyTestingTrackerRequestDTO([
-  //     ...arrayFamilyTestingTrackerRequestDTO,
-  //   ]);
-  // };
   const handleInputChange = (e) => {
     setErrors({ ...temp, [e.target.name]: "" });
     const { name, value } = e.target;
@@ -1055,6 +1046,8 @@ if(each.code !==  "CHILD_NUMBER_OTHERS"){
     //   toggle();
     // }
   };
+
+
   const handleDateOfBirthChange = (e) => {
     if (e.target.value == "Actual") {
       familyIndexRequestDto.isDateOfBirthEstimated = false;
@@ -1232,6 +1225,8 @@ if(each.code !==  "CHILD_NUMBER_OTHERS"){
         }
       });
   };
+
+
   const handleSubmit = (e) => {
     e.preventDefault();
     // familyIndexRequestDto.age
@@ -1265,6 +1260,15 @@ if(each.code !==  "CHILD_NUMBER_OTHERS"){
       setPayload({ ...payload, [inputName]: NumberValue });
     }
   };
+
+  const permissions = useMemo(
+    () => ({
+      canSeeRequestAndResultForm: hasPermission("request_and_result_form"),
+      canSeeNigeriaPnsForm: hasPermission("nigeria_pns_form"),
+      canSeeRefferalForm: hasPermission("referral_form")
+    }),
+    [hasPermission]
+  );
 
   return (
     <>

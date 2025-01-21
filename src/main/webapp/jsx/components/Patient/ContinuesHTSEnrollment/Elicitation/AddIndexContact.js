@@ -20,6 +20,7 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import Badge from "@mui/material/Badge";
 import PersonIcon from "@mui/icons-material/Person";
+import { alphabetOnly } from "../../../../../utility";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -332,10 +333,7 @@ const AddIndexContact = (props) => {
     const limit = 10;
     setObjValues({ ...objValues, [inputName]: e.slice(0, limit) });
   };
-  const alphabetOnly = (value) => {
-    const result = value.replace(/[^a-z]/gi, "");
-    return result;
-  };
+  
   const validate = () => {
     //HTS FORM VALIDATION
     //temp.acceptedIns = objValues.acceptedIns ? "" : "This field is required."
